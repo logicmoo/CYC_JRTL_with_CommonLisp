@@ -1,0 +1,21 @@
+This is the header of the cadabra source file.
+
+;;;; The original version of this code was copyright (c) 1999-2000 Cadabra Inc.
+;;;; It was placed in the public domain by Cadabra in January 2000.
+;;;; 
+;;;; The implementors of the original version were Winton Davies
+;;;; <wdavies@cadabra.com> and William Newman <william.newman@airmail.net>.
+
+;;;; known issues:
+;;;;   * The code will leak C resources if errors occur in the the wrong
+;;;;     places, since it doesn't wrap its allocation/deallocation
+;;;;     logic in the necessary EVAL-WHENs to prevent this. (This could be
+;;;;     easily be an issue for long-running processes which recover from
+;;;;     database errors instead of simply terminating when they occur. It's
+;;;;     not an issue for programs which consider database errors so abnormal
+;;;;     that they die immediately when they encounter one.)
+;;;;   * Instead of reading Oracle header files automatically, this code
+;;;;     uses constants, types, and function signatures manually transcribed
+;;;;     from the Oracle header files. Thus, changes in the header files
+;;;;     may require manual maintenance of the code. (This version was written
+;;;;     for Oracle 8.1.5.)

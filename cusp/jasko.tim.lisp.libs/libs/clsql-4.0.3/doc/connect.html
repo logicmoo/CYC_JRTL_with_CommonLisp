@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CONNECT</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-connect.html" title="Connection and Initialisation" /><link rel="prev" href="initialized-database-types.html" title="*INITIALIZED-DATABASE-TYPES*" /><link rel="next" href="connected-databases.html" title="CONNECTED-DATABASES" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CONNECT</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="initialized-database-types.html">Prev</a> </td><th width="60%" align="center">Connection and Initialisation</th><td width="20%" align="right"> <a accesskey="n" href="connected-databases.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="connect"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>CONNECT — create a connection to a database.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387258"></a><h2>Syntax</h2><pre class="synopsis"><code class="function">connect</code> <em class="replaceable"><code>connection-spec</code></em> &amp;key <em class="replaceable"><code>if-exists</code></em> <em class="replaceable"><code>database-type</code></em> <em class="replaceable"><code>pool</code></em> <em class="replaceable"><code>make-default</code></em> =&gt; <span class="returnvalue">database</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387297"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>connection-spec</code></em></span></dt><dd><p>A vendor specific connection specification supplied
+            as a list or as a string.</p></dd><dt><span class="term"><em class="parameter"><code>if-exists</code></em></span></dt><dd><p>This indicates the action to take if a connection
+            to the same database exists already.  See below for the
+            legal values and actions.  It defaults to the value of 
+            <span class="symbol">*connect-if-exists*</span>.</p></dd><dt><span class="term"><em class="parameter"><code>database-type</code></em></span></dt><dd><p>A database type specifier, i.e. a keyword.
+            This defaults to the value of
+            <span class="symbol">*default-database-type*</span></p></dd><dt><span class="term"><em class="parameter"><code>pool</code></em></span></dt><dd><p>A boolean flag. If <code class="constant">T</code>, acquire connection from a
+            pool of open connections. If the pool is empty, a new
+            connection is created. The default is <code class="constant">NIL</code>. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>make-default</code></em></span></dt><dd><p>A boolean flag. If <code class="constant">T</code>,
+            <span class="symbol">*default-database*</span> is set to the new
+            connection, otherwise <span class="symbol">*default-database*</span>
+            is not changed. The default is <code class="constant">T</code>. 
+            </p></dd><dt><span class="term"><span class="returnvalue">database</span></span></dt><dd><p>The database object representing the connection.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387447"></a><h2>Description</h2><p>This function takes a connection specification and
+      a database type and creates a connection to the database
+      specified by those.  The type and structure of the
+      connection specification depend on the database type.</p><p>The parameter <em class="parameter"><code>if-exists</code></em> specifies
+      what to do if a connection to the database specified exists
+      already, which is checked by calling
+      <code class="function">find-database</code> on the database name
+      returned by <code class="function">database-name-from-spec</code>
+      when called with the <em class="parameter"><code>connection-spec</code></em>
+      and <em class="parameter"><code>database-type</code></em> parameters. The
+      possible values of <em class="parameter"><code>if-exists</code></em> are:
+      </p><div class="variablelist"><dl><dt><span class="term"><span class="symbol">:new</span></span></dt><dd><p>Go ahead and create a new connection.</p></dd><dt><span class="term"><span class="symbol">:warn-new</span></span></dt><dd><p>This is just like <span class="symbol">:new</span>, but
+            also signals a warning of type
+            <span class="errortype">clsql-exists-warning</span>,
+            indicating the old and newly created
+            databases.</p></dd><dt><span class="term"><span class="symbol">:error</span></span></dt><dd><p>This will cause <code class="function">connect</code> to
+            signal a correctable error of type
+            <span class="errortype">clsql-exists-error</span>.  The
+            user may choose to proceed, either by indicating
+            that a new connection shall be created, via the
+            restart <span class="symbol">create-new</span>, or by
+            indicating that the existing connection shall be
+            used, via the restart
+            <span class="symbol">use-old</span>.</p></dd><dt><span class="term"><span class="symbol">:old</span></span></dt><dd><p>This will cause <code class="function">connect</code> to
+            use an old connection if one exists.</p></dd><dt><span class="term"><span class="symbol">:warn-old</span></span></dt><dd><p>This is just like <span class="symbol">:old</span>, but
+            also signals a warning of type
+            <span class="errortype">clsql-exists-warning</span>,
+            indicating the old database used, via the slots
+            <span class="symbol">old-db</span> and
+            <span class="symbol">new-db</span></p></dd></dl></div><p>
+      </p><p>The database name of the returned database object will
+      be the same under <code class="function">string=</code> as that which
+      would be returned by a call to
+      <code class="function">database-name-from-spec</code> with the given 
+      <em class="parameter"><code>connection-spec</code></em> and
+      <em class="parameter"><code>database-type</code></em> parameters.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387661"></a><h2>Examples</h2><pre class="screen">
+(database-name-from-spec '("dent" "newesim" "dent" "dent") :mysql)
+=&gt; "dent/newesim/dent"
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48036F6D}&gt;
+(database-name *)
+=&gt; "dent/newesim/dent"
+
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+&gt;&gt; In call to CONNECT:
+&gt;&gt;   There is an existing connection #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48036F6D}&gt; to database dent/newesim/dent.
+&gt;&gt; 
+&gt;&gt; Restarts:
+&gt;&gt;   0: [CREATE-NEW] Create a new connection.
+&gt;&gt;   1: [USE-OLD   ] Use the existing connection.
+&gt;&gt;   2: [ABORT     ] Return to Top-Level.
+&gt;&gt; 
+&gt;&gt; Debug  (type H for help)
+&gt;&gt; 
+&gt;&gt; (CONNECT ("dent" "newesim" "dent" "dent") :IF-EXISTS NIL :DATABASE-TYPE ...)
+&gt;&gt; Source: 
+&gt;&gt; ; File: /prj/CLSQL/sql/sql.cl
+&gt;&gt; (RESTART-CASE (ERROR 'CLSQL-EXISTS-ERROR :OLD-DB OLD-DB)
+&gt;&gt;               (CREATE-NEW NIL :REPORT "Create a new connection."
+&gt;&gt;                (SETQ RESULT #))
+&gt;&gt;               (USE-OLD NIL :REPORT "Use the existing connection."
+&gt;&gt;                (SETQ RESULT OLD-DB)))
+&gt;&gt; 0] 0
+=&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {480451F5}&gt;
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id339816"></a><h2>Side Effects</h2><p>A database connection is established, and the resultant
+	database object is registered, so as to appear in the list
+	returned by <code class="function">connected-databases</code>.
+	<span class="symbol">*default-database*</span> may be rebound to the
+	created object.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id339644"></a><h2>Affected by</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><span class="symbol">*default-database-type*</span></td></tr><tr><td><span class="symbol">*connect-if-exists*</span></td></tr></table><p>
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387702"></a><h2>Exceptional Situations</h2><p>If the connection specification is not syntactically or
+	semantically correct for the given database type, an error of
+	type <span class="errortype">sql-user-error</span> is
+	signalled.  If during the connection attempt an error is
+	detected (e.g. because of permission problems, network trouble
+	or any other cause), an error of type
+	<span class="errortype">sql-database-error</span> is signalled.</p><p>If a connection to the database specified by
+	  <em class="parameter"><code>connection-spec</code></em> exists already,
+	  conditions are signalled according to the
+	  <em class="parameter"><code>if-exists</code></em> parameter, as described
+	  above.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387735"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="connected-databases.html" title="CONNECTED-DATABASES"><code class="function">connected-databases</code></a></td></tr><tr><td><a class="link" href="disconnect.html" title="DISCONNECT"><code class="function">disconnect</code></a></td></tr><tr><td><a class="link" href="reconnect.html" title="RECONNECT"><code class="function">reconnect</code></a></td></tr><tr><td><a class="link" href="connect-if-exists.html" title="*CONNECT-IF-EXISTS*"><code class="function">*connect-if-exists*</code></a></td></tr><tr><td><a class="link" href="find-database.html" title="FIND-DATABASE"><code class="function">find-database</code></a></td></tr><tr><td><a class="link" href="status.html" title="STATUS"><code class="function">status</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387803"></a><h2>Notes</h2><p>The <em class="parameter"><code>pool</code></em> and
+	<em class="parameter"><code>make-default</code></em> keyword arguments to
+	<code class="function">connect</code> are <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extensions.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="initialized-database-types.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-connect.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="connected-databases.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">*INITIALIZED-DATABASE-TYPES* </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> CONNECTED-DATABASES</td></tr></table></div></body></html>

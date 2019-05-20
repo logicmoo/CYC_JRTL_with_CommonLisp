@@ -1,0 +1,265 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<chapter id="introduction">
+  <title>Introduction</title>
+
+  <sect1 id="purpose">
+    <title>Purpose</title>
+    <para>&clsql; is a Common Lisp interface to <glossterm
+    linkend="gloss-sql">SQL</glossterm> databases.  A number of Common
+    Lisp implementations and SQL databases are supported. The general
+    structure of &clsql; is based on the &commonsql; package by
+    LispWorks Ltd.
+    </para>
+  </sect1>
+  
+  <sect1 id="history">
+    <title>History</title>
+    <para>
+      The &clsql; project was started by Kevin M. Rosenberg in 2001 to
+      support SQL access on multiple Common Lisp implementations using
+      the &uffi; library. The initial code was based substantially on
+      Pierre R. Mai's excellent &maisql; package. In late 2003, the
+      &usql; library was orphaned by its author, onShore Development,
+      Inc. In April 2004, Marcus Pearce ported the &usql; library to
+      &clsql;.  The &usql; library provides a &commonsql;-compatible
+      API for &clsql;.
+    </para>
+
+    <para>The main changes from &maisql; and &usql; are:
+      <itemizedlist>
+	<listitem>
+	  <para>Port from the &cmucl; FFI to &uffi; which provide
+	  compatibility with the major Common Lisp
+	  implementations.</para>
+	</listitem>
+	<listitem>
+	  <para>Optimized loading of integer and floating-point fields.</para>
+	</listitem>
+	<listitem>
+	  <para>Additional database backends: &odbc;, &aodbc;, &sqlite;
+	  and &sqlite3;.</para>
+	</listitem>
+	<listitem>
+	  <para>A compatibility layer for &cmucl; specific code.</para>
+	</listitem>
+	<listitem>
+	  <para>Much improved robustness for the &mysql; back-end
+	  along with version 4 client library support.</para>
+	</listitem>
+	<listitem>
+	  <para>Improved library loading and installation documentation.</para>
+	</listitem>
+	<listitem>
+	  <para>Improved packages and symbol export.</para>
+	</listitem>
+	<listitem>
+	  <para>Pooled connections.</para>
+	</listitem>
+	<listitem>
+	  <para>Integrated transaction support for the classic
+	  &maisql; iteration macros.</para>
+	</listitem>
+      </itemizedlist>
+    </para>
+  </sect1>
+  
+  <sect1 id="prerequisites">
+    <title>Prerequisites</title>
+    
+    <sect2>
+      <title>&asdf;</title>
+      <para>
+	&clsql; uses &asdf; to compile and load its components.
+	&asdf; is included in the <ulink
+	url="http://cclan.sourceforge.net"><citetitle>&cclan;</citetitle></ulink>
+	collection.
+      </para>
+    </sect2>
+    
+    <sect2>
+      <title>&uffi;</title>
+      <para>
+	&clsql; uses <ulink
+	url="http://uffi.b9.com/"><citetitle>&uffi;</citetitle></ulink>
+	as a <emphasis>Foreign Function Interface</emphasis>
+	(<glossterm linkend="gloss-ffi">FFI</glossterm>) to support
+	multiple &cl; implementations.
+      </para> 
+    </sect2>
+    
+    <sect2>
+      <title>&md5;</title>
+      <para>&clsql;'s postgresql-socket interface uses Pierre Mai's 
+	<ulink url="http://files.b9.com/md5/">md5</ulink>
+	module.
+      </para>       
+    </sect2>
+    <sect2>
+      <title>Supported Common Lisp Implementation</title>
+      <para>
+	The implementations that support &clsql; is governed by the supported
+	implementations of &uffi;. The following implementations are supported:
+      </para>
+      <itemizedlist mark="opencircle">
+	<listitem><para>&acl; v6.2 through 8.0 on Debian Linux x86 &amp;
+	x86_64 &amp; PowerPC, FreeBSD 4.5, and Microsoft Windows
+	XP.</para></listitem>
+	<listitem><para>&lw; v4.3 and v4.4 on Debian Linux and Microsoft
+	Windows XP.</para></listitem>
+	<listitem><para>&cmucl; 18e on Debian Linux, FreeBSD 4.5, and
+	Solaris 2.8. 19c on Debian Linux.</para></listitem>
+	<listitem><para>&sbcl; 0.8.4 through 0.9.16 on Debian
+	Linux.</para></listitem>
+	<listitem><para>&scl; 1.1.1 on Debian Linux.</para></listitem>
+	<listitem><para>&openmcl; 0.14 PowerPC and 1.0pre AMD64 on Debian Linux .</para></listitem>
+      </itemizedlist>
+    </sect2>
+    
+    <sect2>
+      <title>Supported &sql; Implementation</title>
+      <para>
+	&clsql; supports the following databases:
+      </para>
+      <itemizedlist mark="opencircle">
+	<listitem><para>&mysql; (tested v3.23.51, v4.0.18, 5.0.24).</para></listitem>
+	<listitem><para>&postgresql; (tested with v7.4 and 8.0 with both direct API and TCP
+	socket connections.</para></listitem>
+	<listitem><para>&sqlite;.</para></listitem>
+	<listitem><para>&sqlite3;.</para></listitem>
+	<listitem><para>Direct &odbc; interface.</para></listitem>
+        <listitem><para>&oracle; OCI.</para></listitem>
+	<listitem><para>Allegro's DB interface (&aodbc;).</para></listitem>
+      </itemizedlist>
+    </sect2>
+    
+  </sect1>
+  
+  <sect1 id="installation">
+    <title>Installation</title>
+    
+    <sect2>
+      <title>Ensure &asdf; is loaded</title>
+      <para>
+	Simply load the file <filename>asdf.lisp</filename>.
+	<screen>
+(load "asdf.lisp")
+	</screen>
+      </para>
+    </sect2>
+    
+    <sect2>
+      <title>Build &c; helper libraries</title>
+      <para>&clsql; uses functions that require 64-bit integer
+	parameters and return values. The &ffi; in most &clsql;
+	implementations do not support 64-bit integers. Thus, C helper
+	libraries are required to break these 64-bit integers into two compatible
+	32-bit integers. The helper libraries reside in the directories
+	<filename>uffi</filename> and <filename>db-mysql</filename>.
+      </para>
+      
+      <sect3>
+	<title>&mswindows;</title>
+	<para>
+	  Files named <filename>Makefile.msvc</filename> are supplied
+	  for building the libraries under Microsoft Windows.  Since
+	  &mswindows; does not come with that compiler, compiled
+	  <type>DLL</type> and <type>LIB</type> library files are
+	  supplied with &clsql;.
+	</para>
+      </sect3>
+
+      <sect3>
+	<title>&unix;</title>
+	<para>
+	  Files named <filename>Makefile</filename> are supplied for
+	  building the libraries under &unix;. Loading the
+	  <filename>.asd</filename> files automatically invokes
+	  <application>make</application> when necessary. So, manual
+	  building of the helper libraries is not necessary on most
+	  &unix; systems. However, the location of the &mysql; library
+	  files and include files may need to adjusted in
+	  <filename>db-mysql/Makefile</filename> on non-Debian
+	  systems.
+	</para>
+      </sect3>
+      
+    </sect2>
+    
+    <sect2>
+      <title>Add &uffi; path</title>
+      <para>
+	Unzip or untar the &uffi; distribution which creates a directory
+	for the &uffi; files. Add that directory to &asdf;'s <varname>asdf:*central-registry*</varname>.
+	You can do that by pushing the pathname of the directory onto this variable.
+	The following example code assumes the &uffi; files reside in the
+	<filename>/usr/share/lisp/uffi/</filename> 
+	directory.
+	<screen>
+(push #P"/usr/share/lisp/uffi/" asdf:*central-registry*)
+	</screen>
+      </para>
+    </sect2>
+   <sect2>
+     <title>Add &md5; path</title>
+     <para>
+       If you plan to use the clsql-postgresql-socket interface, you
+       must load the md5 module.  Unzip or untar the cl-md5
+       distribution, which creates a directory for the cl-md5 files.
+       Add that directory to &asdf;'s
+       <varname>asdf:*central-registry*</varname>.  You can do that by
+       pushing the pathname of the directory onto this variable.  The
+       following example code assumes the cl-md5 files reside in the
+       <filename>/usr/share/lisp/cl-md5/</filename> directory.
+       <screen>
+(push #P"/usr/share/lisp/cl-md5/" asdf:*central-registry*)
+       </screen>
+     </para>
+   </sect2>
+   
+   <sect2>
+     <title>Add &clsql; path and load module</title>
+     <para>
+       Unzip or untar the &clsql; distribution which creates a
+       directory for the &clsql; files. Add that directory to &asdf;'s
+       <varname>asdf:*central-registry*</varname>.  You can do that by
+       pushing the pathname of the directory onto this variable.  The
+       following example code assumes the &clsql; files reside in the
+       <filename>/usr/share/lisp/clsql/</filename> directory. You need
+       to load the <symbol>clsql</symbol> system.
+
+	<screen>
+(push #P"/usr/share/lisp/clsql/" asdf:*central-registry*)
+(asdf:operate 'asdf:load-op 'clsql)                   ; main CLSQL package
+	</screen>
+      </para>
+    </sect2>
+    
+    <sect2>
+      <title>Run test suite (optional)</title>
+      <para>
+	The test suite can be executed using the &asdf;
+	<symbol>test-op</symbol> operator. If &clsql; has not been
+	loaded with <symbol>asdf:load-op</symbol>, the
+	<symbol>asdf:test-op</symbol> operator will automatically load
+	&clsql;. A configuration file named
+	<filename>.clsql-test.config</filename> must be created in
+	your home directory. There are instructures on the format of
+	that file in the <filename>tests/README</filename>. After
+	creating <filename>.clsql-test.config</filename>, you can run
+	the test suite with &asdf;:
+	<screen>
+	  (asdf:operate 'asdf:test-op 'clsql)
+        </screen>
+      </para>
+    </sect2>
+    
+  </sect1>
+
+</chapter>
+

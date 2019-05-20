@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>UPDATE-SLOT-FROM-RECORD</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-oodml.html" title="Object Oriented Data Manipulation Language (OODML)" /><link rel="prev" href="update-instance-from-records.html" title="UPDATE-INSTANCE-FROM-RECORDS" /><link rel="next" href="update-objects-joins.html" title="UPDATE-OBJECTS-JOINS" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">UPDATE-SLOT-FROM-RECORD</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="update-instance-from-records.html">Prev</a> </td><th width="60%" align="center">Object Oriented Data Manipulation Language (OODML)</th><td width="20%" align="right"> <a accesskey="n" href="update-objects-joins.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="update-slot-from-record"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>UPDATE-SLOT-FROM-RECORD — Update objects slot from database.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413615"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">update-slot-from-record</code> <em class="replaceable"><code>object</code></em> <em class="replaceable"><code>slot</code></em> &amp;key <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue">object</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413644"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>object</code></em></span></dt><dd><p>
+	      An instance of a <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View Class</em></a>.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>slot</code></em></span></dt><dd><p>
+	      The name of a slot in <em class="parameter"><code>object</code></em>.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>
+              A <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+              object</em></a>. This will default to the value of
+              <span class="symbol">*default-database*</span>.
+	    </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413720"></a><h2>Description</h2><p>Updates the slot value, specified by the CLOS slot name
+      <em class="parameter"><code>slot</code></em>, of the <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View Class</em></a> instance
+      <em class="parameter"><code>object</code></em> using the attribute values of the
+      appropriate table of <em class="parameter"><code>database</code></em> which
+      defaults to the database associated with
+      <em class="parameter"><code>object</code></em> or, if
+      <em class="parameter"><code>object</code></em> is not associated with a database,
+      <code class="varname">*default-database*</code>.  Join slots are updated
+      but instances of the class on which the join is made are not
+      updated.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413767"></a><h2>Examples</h2><pre class="screen">
+(defvar *e1* (car (select 'employee :where [= [slot-value 'employee 'emplid] 1] :flatp t)))
+=&gt; *E1* 
+(slot-value *e1* 'email)
+=&gt; "lenin@soviet.org"
+(update-records [employee] 
+                :av-pairs '(([email] "v.lenin@soviet.org"))
+                :where [= [emplid] 1])
+=&gt; 
+(update-slot-from-record *e1* 'email)
+=&gt; #&lt;EMPLOYEE {4806B53D}&gt;
+(slot-value *e1* 'email)
+=&gt; "v.lenin@soviet.org"
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413782"></a><h2>Side Effects</h2><p>
+	Modifies the slot value of the object.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413792"></a><h2>Affected by</h2><p>
+        </p><table class="simplelist" border="0" summary="Simple list"><tr><td>Data in SQL database.</td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413810"></a><h2>Exceptional Situations</h2><p>
+	Database errors.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413819"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="update-instance-from-records.html" title="UPDATE-INSTANCE-FROM-RECORDS"><code class="function">update-instance-from-records</code></a></td></tr><tr><td><a class="link" href="update-objects-joins.html" title="UPDATE-OBJECTS-JOINS"><code class="function">update-objects-joins</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413849"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="update-instance-from-records.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-oodml.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="update-objects-joins.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">UPDATE-INSTANCE-FROM-RECORDS </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> UPDATE-OBJECTS-JOINS</td></tr></table></div></body></html>

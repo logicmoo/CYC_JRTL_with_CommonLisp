@@ -1,0 +1,117 @@
+2007-03-07  Zach Beane  <xach@gwi.net>
+
+	* Made 0.7.4 release.
+
+	* examples/png.lisp: Remove some work-in-progress cruft.
+
+2007-03-06  Zach Beane  <xach@gwi.net>
+
+	* Made 0.7.3 release.
+
+	* deflate-stream-interface.lisp (string-to-octets): Use
+	custom:*default-file-encoding* when converting a string to octets
+	on CLISP.
+
+	* zlib.lisp (zlib-write-string): Don't bypass zlib-write-sequence;
+	it's where the adler32 checksum is maintained. Thanks to Jason
+	S. Cornez for noticing the bug.
+
+2005-04-28  Zach Beane  <xach@xach.com>
+
+	* Made 0.7.2 release.
+
+	* Fixed flush-deflate-stream; when running past the end of the
+	buffer, call the callback instead of looping forever doing
+	nothing. Bug reported by Yannick Gingras.
+
+2005-04-05  Zach Beane  <xach@gwi.net>
+
+	* Made 0.7.1 release.
+
+	* Fixed adler32 not to croak when (>= start end). Thanks to Edi
+	Weitz via David Lichteblau.
+
+2005-04-01  Zach Beane  <xach@xach.com>
+
+	* Made 0.7 release.
+
+	* Made adler32 faster by working with the crc in two halves and
+	only applying the mod every 16 rounds.
+
+	* Fixed the buffer-offset declaration; array-total-size-limit and
+	array-dimension-limit differ by a large margin on LispWorks, and
+	they are exclusive bounds.
+
+	* Exported zlib-stream-buffer.
+
+	* Fixed declarations in (and slightly rearranged) the fixhash
+	functions; fixhashes no longer segfault or fill up unexpectedly.
+
+	* Added new octet-vector type and used it where appropriate.
+
+2005-03-22  Zach Beane  <xach@xach.com>
+
+	* Made 0.6 release.
+
+	* Very minor optimization declaration updates.
+
+2005-03-20  Zach Beane  <xach@xach.com>
+
+	* Made 0.5 release
+
+	* Changed declarations in many places; I mistakenly thought
+	(simple-array foo) was the same as (simple-array foo (*)). It's
+	not. Also added declarations where possible.
+
+	* Changed bit-writing functions to close over simple-vectors of
+	code and extra bits values, rather than packing things into a
+	single integer.
+
+	* Switched to a customized hash table implementation.
+
+	* Switched to a customized implementation of REPLACE for octets.
+
+	* Switched to LET binding instead of SYMBOL-MACROLET in a few places.
+
+	* Switched to LOGAND and SHIFT in some places where LDB was used.
+
+	* Switched to an (unsigned-byte 16) implementation of CRC32 to
+	avoid bignums.
+	
+2005-03-17  Zach Beane  <xach@xach.com>
+
+	* Made 0.4 release.
+
+	* zlib.lisp (compress-sequence): Fixed compress-string's interaction
+	with the callback; removed the buggy assumption that all calls
+	except the last will be on full buffers.
+
+	* Made another silent 0.3 rerelease. How long can I go without
+	anyone noticing?
+
+	* zlib.lisp (compress-string): Changed call from ZLIB:COMPRESS to
+	the newly-renamed ZLIB:COMPRESS-SEQUENCE.
+
+2005-03-16  Zach Beane  <xach@xach.com>
+
+	* Silently re-release 0.3 with brown paper bag on head.
+
+	* deflate-stream-interface.lisp (string-to-octets): Switch the
+	order of START and END when calculating the size of the result
+	sequence.
+
+	* Made 0.3 release.
+
+	* Renamed ZLIB:COMPRESS to ZLIB:COMPRESS-SEQUENCE.
+
+	* Switched to a system of callbacks for handling full buffers; the
+	condition system is used as a default if no callbacks are
+	provided.
+
+	* Added ZLIB:COMPRESS-STREAM.
+
+	* Export ZLIB:ZLIB-STREAM-CALLBACK and
+	DEFLATE:DEFLATE-STREAM-CALLBACK.
+
+	* Fix embarrassing off-by-one error in DEFLATE::STRING-TO-OCTETS.
+

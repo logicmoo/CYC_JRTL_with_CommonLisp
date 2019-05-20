@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>RECONNECT</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-connect.html" title="Connection and Initialisation" /><link rel="prev" href="initialize-database-type.html" title="INITIALIZE-DATABASE-TYPE" /><link rel="next" href="status.html" title="STATUS" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">RECONNECT</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="initialize-database-type.html">Prev</a> </td><th width="60%" align="center">Connection and Initialisation</th><td width="20%" align="right"> <a accesskey="n" href="status.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="reconnect"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>RECONNECT — Re-establishes the connection between a database object and its RDBMS.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id390006"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">reconnect</code> &amp;key <em class="parameter"><code>database</code></em> <em class="parameter"><code>error</code></em> <em class="parameter"><code>force</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id390040"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>The database to reconnect, which defaults to the
+            database indicated by
+            <span class="symbol">*default-database*</span>.</p></dd><dt><span class="term"><em class="parameter"><code>error</code></em></span></dt><dd><p>A boolean flag indicating whether to signal an error 
+            if <em class="parameter"><code>database</code></em> is non-nil but cannot 
+            be found. The default value is <code class="constant">NIL</code>. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>force</code></em></span></dt><dd><p>A Boolean indicating whether to signal an error if the 
+            database connection has been lost. The default value is <code class="constant">T</code>. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>A Boolean indicating whether the database was
+            successfully reconnected. 
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id390132"></a><h2>Description</h2><p>Reconnects <em class="parameter"><code>database</code></em> which defaults
+      to <span class="symbol">*default-database*</span> to the underlying
+      database management system. On success, <code class="constant">T</code> is returned and the
+      variable <span class="symbol">*default-database*</span> is set to the newly
+      reconnected database. If <em class="parameter"><code>database</code></em> is a
+      database instance, this object is closed. If
+      <em class="parameter"><code>database</code></em> is a string, then a connected
+      database whose name matches <em class="parameter"><code>database</code></em> is
+      sought in the list of connected databases. If no matching
+      database is found and <em class="parameter"><code>error</code></em> and
+      <em class="parameter"><code>database</code></em> are both non-<code class="constant">NIL</code> an error is
+      signaled, otherwise <code class="constant">NIL</code> is returned.</p><p> When the current database connection has been lost, if
+      <em class="parameter"><code>force</code></em> is non-<code class="constant">NIL</code> as it is by default, the
+      connection is closed and errors are suppressed. If
+      <em class="parameter"><code>force</code></em> is <code class="constant">NIL</code> and the database connection
+      cannot be closed, an error is signalled.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id390214"></a><h2>Examples</h2><pre class="screen">
+*default-database*
+=&gt; #&lt;CLSQL-SQLITE:SQLITE-DATABASE :memory: OPEN {48CFBEA5}&gt;
+(reconnect)
+=&gt; #&lt;CLSQL-SQLITE:SQLITE-DATABASE :memory: OPEN {48D64105}&gt;
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id390228"></a><h2>Side Effects</h2><p>A database connection is re-established and
+      <span class="symbol">*default-database*</span> may be rebound to the supplied
+      database object.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id390241"></a><h2>Affected by</h2><p>
+        </p><table class="simplelist" border="0" summary="Simple list"><tr><td><span class="symbol">*default-database*</span></td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id390263"></a><h2>Exceptional Situations</h2><p>
+        An error may be signalled if the specified database cannot be 
+        located or if the database cannot be closed. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id390275"></a><h2>See Also</h2><p>
+        </p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="connect.html" title="CONNECT"><code class="function">connect</code></a></td></tr><tr><td><a class="link" href="disconnect.html" title="DISCONNECT"><code class="function">disconnect</code></a></td></tr><tr><td><a class="link" href="disconnect-pooled.html" title="DISCONNECT-POOLED"><code class="function">disconnect-pooled</code></a></td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id390323"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="initialize-database-type.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-connect.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="status.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">INITIALIZE-DATABASE-TYPE </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> STATUS</td></tr></table></div></body></html>

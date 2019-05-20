@@ -1,0 +1,197 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<glossary id="glossary">
+  <note>
+    <para>This glossary is still very thinly populated, and not all
+    references in the main text have been properly linked and
+    coordinated with this glossary.  This will hopefully change in
+    future revisions.
+    </para>
+  </note>
+  <glossentry id="gloss-attribute">
+    <glossterm>Attribute</glossterm>
+    <glossdef>
+      <para> 
+        A property of objects stored in a database table. Attributes are 
+        represented as columns (or fields) in a table. 
+      </para> 
+    </glossdef> 
+  </glossentry>
+  <glossentry>
+    <glossterm>Active database</glossterm>
+    <glosssee otherterm="gloss-database-object" />
+  </glossentry>
+  <glossentry>
+    <glossterm>Connection</glossterm>
+    <glosssee otherterm="gloss-database-object" />
+  </glossentry>
+  <!-- glossentry>
+    <glossterm>Closed Database</glossterm>
+    <glossdef>
+      <para>
+	An object of type <type>closed-database</type>.  This is
+	in contrast to the terms connection, database, active
+	database or <glossterm
+	linkend="gloss-database-object">database object</glossterm>
+	which don't include objects which are closed database.
+      </para>
+    </glossdef>
+  </glossentry -->
+  <glossentry>
+    <glossterm>Column</glossterm>
+    <glosssee otherterm="gloss-attribute" />
+  </glossentry>
+  <glossentry id="gloss-ddl">
+    <glossterm>Data Definition Language (<acronym>DDL</acronym>)
+    </glossterm>
+    <glossdef>
+      <para>
+        The subset of SQL used for defining and examining the
+        structure of a database.
+      </para>
+    </glossdef>
+  </glossentry>
+  <glossentry id="gloss-dml">
+    <glossterm>Data Manipulation Language (<acronym>DML</acronym>)
+    </glossterm>
+    <glossdef>
+      <para>
+        The subset of SQL used for inserting, deleting, updating and
+        fetching data in a database. 
+      </para>
+    </glossdef>
+  </glossentry>
+  <glossentry>
+    <glossterm>database</glossterm>
+    <glosssee otherterm="gloss-database-object" />
+  </glossentry>
+  <glossentry id="gloss-database-object">
+    <glossterm>Database Object</glossterm>
+    <glossdef>
+      <para>An object of type <type>database</type>.</para>
+    </glossdef>
+  </glossentry>
+  <glossentry>
+    <glossterm>Field</glossterm>
+    <glosssee otherterm="gloss-attribute" />
+  </glossentry>
+  <glossentry id="gloss-field-types">
+    <glossterm>Field Types Specifier</glossterm>
+    <glossdef>
+      <para>A value that specifies the type of each field in a query.</para>
+    </glossdef>
+  </glossentry>
+  <glossentry id="gloss-ffi">
+    <glossterm>Foreign Function Interface 
+    (<acronym>FFI</acronym>)
+    </glossterm>
+    <glossdef>
+      <para>
+	An interface from Common Lisp to a external library which
+	contains compiled functions written in other programming
+	languages, typically C.
+      </para>
+    </glossdef>
+  </glossentry>
+  <glossentry id="gloss-query">
+    <glossterm>Query</glossterm>
+    <glossdef>
+      <para>
+        An SQL statement which returns a set of results. 
+      </para>
+    </glossdef>
+  </glossentry>
+  <glossentry>
+    <glossterm>RDBMS</glossterm>
+    <glossdef>
+      <para>
+        A Relational DataBase Management System
+        (<acronym>RDBMS</acronym>) is a software package for managing
+        a database in which the data is defined, organised and
+        accessed as rows and columns of a table.
+      </para>
+    </glossdef> 
+  </glossentry>
+  <glossentry id="gloss-record">
+    <glossterm>Record</glossterm>
+    <glossdef>
+      <para>
+        A sequence of attribute values stored in a database table. 
+      </para>
+    </glossdef>
+  </glossentry>
+  <glossentry>
+    <glossterm>Row</glossterm>
+    <glosssee otherterm="gloss-record" />
+  </glossentry>
+  <glossentry id="gloss-sql">
+    <glossterm>Structured Query Language
+    (<acronym>SQL</acronym>)
+    </glossterm>
+    <glossdef>
+      <para>
+        An ANSI standard language for storing and retrieving data
+        in a relational database.
+      </para>
+    </glossdef>
+  </glossentry>
+  <glossentry id="gloss-sql-expression">
+    <glossterm>SQL Expression</glossterm>
+    <glossdef>
+      <para>Either a string containing a valid SQL statement, or
+      an object of type <type>sql-expression</type>.
+      <!-- note>
+	<para>This has not been implemented yet, so only strings
+	are valid SQL expressions for the moment.
+	</para>
+      </note -->
+      </para>
+    </glossdef>
+  </glossentry>
+  <glossentry id="gloss-table">
+    <glossterm>Table</glossterm>
+    <glossdef>
+      <para>
+        A collection of data which is defined, stored and accessed as 
+        tuples of attribute values (i.e., rows and columns). 
+      </para>
+    </glossdef>
+  </glossentry>
+  <glossentry id="gloss-transaction">
+    <glossterm>Transaction</glossterm>
+    <glossdef>
+      <para>
+        An atomic unit of one or more SQL statements of which all or none are 
+        successfully executed. 
+      </para>
+    </glossdef>
+  </glossentry>
+  <glossentry>
+    <glossterm>Tuple</glossterm>
+    <glosssee otherterm="gloss-record" />
+  </glossentry>
+  <glossentry id="gloss-view">
+    <glossterm>View</glossterm>
+    <glossdef>
+      <para>
+        A table display whose structure and content are derived from an 
+        existing table via a query. 
+      </para>
+    </glossdef>
+  </glossentry>
+  <glossentry id="gloss-view-class">
+    <glossterm>View Class</glossterm>
+    <glossdef>
+      <para>
+        The class <function>standard-db-object</function> or one of
+        its subclasses. 
+      </para>
+    </glossdef>
+  </glossentry>
+</glossary>
+

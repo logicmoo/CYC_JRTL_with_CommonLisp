@@ -1,0 +1,408 @@
+I tested with sbcl 1.0.19 on WinXP.
+
+
+---- archive_0.7.0 - Doesn't work
+- compiled
+- doesn't works. How to test:
+1) Repl: (in-package :archive)
+2) Create folder: c:\temp\lib-testing\archive.
+3) Create two files 1.txt, 2.txt
+4) Repl: (create-tar-file "c:/temp/lib-testing/arch.tar" 
+    '("c:/temp/lib-testing/archive/1.txt" "c:/temp/lib-testing/archive/2.txt"))
+5) Archive c:\temp\lib-testing\arch.tar is created (readable by winrar)
+6) However, trying to unpack with (extract-files-from-archive "c:/temp/lib-testing/arch.tar")
+drops into debugger with 
+
+There is no primary method for the generic function
+  #<STANDARD-GENERIC-FUNCTION READ-ENTRY-FROM-ARCHIVE (5)>
+when called with arguments
+  ("c:/temp/lib-testing/arch.tar").
+
+
+----- chunga-0.4.3 - Drakma dependency - check if Drackma works
+- compiled
+- works ?
+checked by Drackma?
+
+----- cl-base64-3.3.2 - Works
+- compiled
+- works!: to check if works, try to run tests. 
+For this need ptester: compiled and loaded.
+Also need kmrcl: compiled and loaded. test package: (need rt for this one: compiled and loaded OK) - couldn't figure out how to run tests.
+now can load tests file: 
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/cl-base64-3.3.2/tests.lisp")
+(in-package :cl-base64-tests)
+(do-tests)
+Begin cl-base64 tests test
+**********************************
+End cl-base64 tests test
+Errors detected in this test: 0 
+Successes this test:7550
+T
+
+(time-routines)
+
+Test with 50000 iterations: ((INTEGER-TO-BASE64-STRING INT))
+Total time: 125.00 millisec, time per iteration: 2.50 microsec
+Test with 50000 iterations: ((STRING-TO-BASE64-STRING STR))
+Total time: 93.00 millisec, time per iteration: 1.86 microsec
+NIL
+
+----- cl-fad-0.6.2 - Works
+- compiled
+- to test: load package.
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/cl-fad-0.6.2/test.lisp")
+(cl-fad-test::test)
+Get All tests passed.
+
+----- cl-interpol-0.2.1 - Works (but some - small number - tests fail)
+- compiled
+- to test: 
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/cl-interpol-0.2.1/test/packages.lisp")
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/cl-interpol-0.2.1/test/tests.lisp")
+(cl-interpol-test:run-all-tests)
+......
+Test: Simple tests from file "simple"
+.......
+  71:
+   got an unexpected error: An exception occurred in context #.(SB-SYS:INT-SAP #X0022D7D8): #.(SB-SYS:INT-SAP #X0022D7C4). (Exception code: 3221225513)
+  72:
+   got an unexpected error: An exception occurred in context #.(SB-SYS:INT-SAP #X0022D7D0): #.(SB-SYS:INT-SAP #X0022D7BC). (Exception code: 3221225513)
+  73:
+   got an unexpected error: An exception occurred in context #.(SB-SYS:INT-SAP #X0022D7C8): #.(SB-SYS:INT-SAP #X0022D7B4). (Exception code: 3221225513)
+  74:
+   got an unexpected error: An exception occurred in context #.(SB-SYS:INT-SAP #X0022D7C0): #.(SB-SYS:INT-SAP #X0022D7AC). (Exception code: 3221225513)
+
+Some tests failed.
+
+
+----- cl-ppcre-2.0.0 - Works
+- compiled
+- to test: load package, load flexi-streams
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/cl-ppcre-2.0.0/test/packages.lisp")
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/cl-ppcre-2.0.0/test/tests.lisp")
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/cl-ppcre-2.0.0/test/perl-tests.lisp")
+(cl-ppcre-test:run-all-tests)
+
+All tests passed.
+
+
+----- cl-smtp - Need smtp server to check if it works
+- compiled
+- didn't test
+
+
+----- clsql 4.0.3 - Works (at least with sqlite3 and mysql) uses uffi, so checks that too
+- compiled
+- to test: (read: http://bc.tech.coop/blog/040606.html how to set up mysql)
+get home directory: in command prompt run: echo %UserProfile%
+downloaded and copied to clsql/examples command-line program for accessing and modifying sql databases
+run it and create empty database: sqlite3.exe ex1
+copy file .clsql-test.config into home directory (first check the path to ex1 database in it)
+
+load package
+;; copied sqlite3.dll to CLSQL-SYS:*FOREIGN-LIBRARY-SEARCH-PATHS* ;; now it is there
+;; D:\docums\code\eclipse\jasko.tim.lisp.libs\libs\clsql-4.0.3\uffi
+(asdf:oos 'asdf:test-op 'clsql)
+All tests pass. Some tests are skiped since sqlite3 does not support them.
+
+FIXME: cannot make it run with mysql! it just cannotfind clsql_mysql.dll. But people were able to run it so find out what is going on.
+- testing mysql. Download and setup mysql (full setup) (enter password for root)
+Test: c:\>mysql -u root -p. Change root pass to "secret" as in config file, or change config file.
+Also create empty database ex1:
+mysql> set password for 'root'@'localhost' = password('secret');
+mysql> create database ex1;
+;(pushnew (merge-pathnames "C:/Program Files/MySQL/MySQL Server 5.0/bin") ;clsql-sys:*foreign-library-search-paths*)
+make copy of libsql.dll and rename it to libsqlclient.dll. Copy to:
+D:\docums\code\eclipse\jasko.tim.lisp.libs\libs\clsql-4.0.3\uffi
+copied clsql_mysql.dll from clsql-4.0.3\db-mysql to clsql-4.0.3\uffi and removed its extension
+
+ok - easy: it searches for clsql_mysql.dll on d drive. i.e. instead of D:\docums\code\eclipse\jasko.tim.lisp.libs path on C:\docums\code\eclipse\jasko.tim.lisp.libs.
+So if it does not compile, check folder created on c drive and copy dll there.
+
+----- cl-unicode 0.1.1 - Works
+- compiled
+- testing: after loading library, switch to cl-who and run examples from documentation
+
+
+------ Works, but for tests requires FiveAM to test, FiveAM requires ARNESI - arnesi does not compile
+- compiled
+- to test: manually - pain. - just couple tests
+load package, change package to cl-utilities
+run tests expressions from tests.lisp
+
+----- cl-who-0.11.1 - Works
+- compiled
+- testing: after loading library run tests with:
+
+----- closure-common-2007-10-21 is dependency of cxml - don't test it directly
+
+----- cxml-2007-10-21
+- compiled
+- testing: after loading: (asdf:operate 'asdf:test-op :cxml) - did not do anything - try examples?
+(with-open-file (s "c:/temp/example.xml" :direction :output)
+    (write-string "<test a='b'><child/></test>" s))
+
+(defparameter *example* (cxml:parse-file "c:/temp/example.xml" (cxml-dom:make-dom-builder)))
+(dom:document-element *example*)
+* (dom:tag-name (dom:document-element *example*))
+"test"
+* (dom:child-nodes (dom:document-element *example*))
+#(#<DOM-IMPL::ELEMENT child @ #x722b6d8a>)
+
+* (dom:get-attribute (dom:document-element *example*) "a")
+"b"
+
+----- cffi-080216 dependency of cl+ssl - runs, but with my changes some tests fail
+- compiles
+- testing: 
+could not compile lib - remove from test files:
+ long long and other exotics from libtest.c, defcfun.lisp, callbacks.lisp, 
+
+
+
+
+----- cl+ssl-2007-07-07 dependency of drakma - need cffi, need to install openssl (to test - need trivial-sockets - but even with them, was not able to run tests in test.lisp)
+(windows installer included)
+- put libeay32.dll, libssl32.dll and ssleay32.dll into cl+ssl folder
+I am not sure if it works - it doesn't. Drakma starts OK, and most examples work, but ssl doesn't.
+probably don't need to install OpenSsl from installer.
+
+
+----- drakma-0.11.5 works (ssl doesn't work)
+- compiled
+- tested by following examples in documentation
+
+----- flexi-streams-1.0.7 works
+- compiled
+- testing:  All tests passed.
+
+------ cl-store_0.8.3 works (1 out of 127 tests failed)
+- compiled
+- testing (asdf:oos 'asdf:test-op 'cl-store)
+Test FUNCTION.2 failed
+Form: (PROGN
+       (STORE #'CL-STORE::MKSTR *TEST-FILE*)
+       (LET ((FN (RESTORE *TEST-FILE*)))
+         (EVERY
+          (LAMBDA (ARGS)
+            (STRING= (APPLY FN ARGS) (APPLY #'CL-STORE::MKSTR ARGS)))
+          '(("foobar" "baz") ("a" "b" "c") ("1 2" "ab " "f oO")))))
+Expected value: T
+Actual value: #<RESTORE-ERROR {24E479C9}>.
+ GFUNCTION.1 GFUNCTION.2 GFUNCTION.3 NOCIRC.1 STRUCT-CLASS.1
+ SERIALIZATION-UNIT.1
+1 out of 127 total tests failed: FUNCTION.2.
+
+
+----- gzip-stream_0.1 doesn't work: (testing examples depend on cl-store)
+- compiled
+- testing: (gzip "c:/temp/tt/1.log" "c:/temp/tt/1.gz") produces TYPE-ERROR
+the following also doesn't produce anything good (TYPE-ERROR)
+(defparameter foo (make-hash-table))
+(dotimes (x 1000) (setf (gethash x foo) (princ-to-string x)))
+(time (cl-store:store foo "c:/temp/foo.out"))
+(gzip-stream:with-open-gzip-file (s "c:/temp/foo.gz")
+  (cl-store:restore s))
+(gzip-stream:with-open-gzip-file (s "c:/temp/foo.gz" :direction :output
+                        :if-exists :supersede)
+  (cl-store:store "Hello" s))
+(cl-store:store "Hello" "c:/temp/foo.no-comp")
+(time (gzip-stream:gzip "c:/temp/foo.out" "c:/temp/gzipped-diff.gz"))
+(gzip-stream:with-open-gzip-file (s "c:/temp/foo.gz" :direction :output :if-exists :supersede)
+  (time (cl-store:store foo s)))
+(gzip-stream:gunzip "c:/temp/foo.gz" "E:/temp/foo.nogz")
+(cl-store:restore "c:/temp/foo.nogz")
+
+
+------ html-template-0.9.1 works
+- compiled
+- (load "d:/docums/code/eclipse/jasko.tim.lisp.libs/libs/html-template-0.9.1/test.lisp")
+Please wait a couple of seconds.
+All tests passed...
+
+------ hunchentoot-0.15.7
+- compiled with error:
+   COMPILE-FILE warned while performing #<COMPILE-OP NIL {23A5EC29}> on
+   #<CL-SOURCE-FILE "port-sbcl" {23D29D81}>.
+erred while invoking #<COMPILE-OP NIL {23A5EC29}> on
+#<CL-SOURCE-FILE "port-sbcl" {23D29D81}>
+   [Condition of type ASDF:COMPILE-FAILED]
+	0: [TRY-RECOMPILING] Try recompiling port-sbcl
+	1: [RETRY] Retry performing #<ASDF:COMPILE-OP NIL {23A5EC29}> on #<ASDF:CL-SOURCE-FILE "port-sbcl" {23D29D81}>.
+	2: [ACCEPT] Continue, treating #<ASDF:COMPILE-OP NIL {23A5EC29}> on #<ASDF:CL-SOURCE-FILE "port-sbcl" {23D29D81}> as having been successful.
+	3: [ABORT] Return to SLIME's top level.
+	4: [CLOSE-CONNECTION] Close SLIME connection
+	5: [ABORT] Exit debugger, returning to top level.
+]> 2
+hunchentoot-test compiled without errors
+- I have not figured out how to run test file.
+I used http://berlinbrowndev.blogspot.com/2008/07/enterprise-common-lisp-setting-up.html
+to test:
+(hunchentoot:start-server :port 4242) then going to http://localhost:4242/ in webbrowser shows hunchentoot default page, it doesn't stop, so need to restart sbcl
+
+------- lisp_webapp_example (requires mysql) - testing hunchentoot
+adjust the following path to path where index.html is located
+(setq html-template:*default-template-pathname* 
+	  #P"c:\\projects\\tools\\home\\projects\\aaageneralprojects\\haskellnotebook\\lisp\\webapp\\")
+see later:	  
+
+to your location
+loaded hunchentoot
+loaded clsql-mysql
+loaded ghost-trinity
+(setq html-template:*default-template-pathname* 
+	  #P"D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/lisp_webapp_example/")
+(hunchentoot:start-server :port 4242)
+point browser to http://localhost:4242
+again - doesn't stop, so need to restart sbcl (this is due to lack of thread support in sbcl+win32)
+
+----- md5-1.8.5 works
+- compiles
+- testing: (push :md5-testing *features*), delete all fasls in md5 folder
+load and compile package md5, drops into debugger about constant being redefined, select continue
+although it says aborted, run tests by: (md5::test-other), all 71 test cases succeeded
+
+----- meta don't know
+- compiles
+- don't know how to test
+
+----- ptester-2.1.2 is used in testing some included libraries (so works)
+
+----- puri-1.5.1 - works
+- compiled
+- (asdf:oos 'asdf:test-op 'puri) 126 tests - all passed
+
+----- rfc2388 - did not test, but it looks like a dependency of something else
+- compiled
+
+----- rt-20040621 - is used in testing some included libraries (so works)
+
+----- salza-0.7.4 - depricated - superceeded by salza2. This library is included because some
+other libs may depend on it
+- compiled
+
+------ salza2-2.0.4 - probably works
+- compiled
+- testing: load library, change package to salza2,  run (compress-data (sb-ext:string-to-octets "Hello, hello, hello, hello world.") 
+                 'zlib-compressor), get output, and not sure what to do with it.
+
+------ split-sequence - works
+- compiled
+- testing: load library, run examples in index.html: (split-sequence:SPLIT-SEQUENCE #\Space "A stitch in time saves nine.")
+
+------ trivial-gray-streams-2006-09-16 - used in many libraries, so works
+- compiled
+
+------ uffi-1.6.1 - used by clsql, so works
+
+------ url-rewrite-0.1.1 - works
+- compiled
+- testing: load package, change package to url-rewrite
+(defvar +session-cookie-name+ "session")
+(defun add-session-var (html session-value)
+    (with-input-from-string (*standard-input* html)
+      (with-output-to-string (*standard-output*)
+        (rewrite-urls (lambda (url)
+                        (add-get-param-to-url url
+                                              +session-cookie-name+
+                                              session-value))))))
+
+(add-session-var "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"> 
+ <HTML>
+   <BODY BGCOLOR=white>
+     This is the <A NAME=foo HREF='first.html?foo=bar'>first link</A>, and this is the <A CLASS=NOBORDER HREF=\"http://www.cliki.net/\" TITLE='bar'>second one</A>.
+     And here's a picture: <img src='/pics/cool_pic.gif' width=100 height=100>
+   </BODY>
+ </HTML>" "foo42")
+
+get:
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"> 
+ <HTML>
+   <BODY BGCOLOR=white>
+     This is the <A NAME=foo HREF='first.html?foo=bar&amp;session=foo42'>first link</A>, and this is the <A CLASS=NOBORDER HREF=\"http://www.cliki.net/\" TITLE='bar'>second one</A>.
+     And here's a picture: <img src='/pics/cool_pic.gif?session=foo42' width=100 height=100>
+   </BODY>
+ </HTML>"
+
+----- zip - works
+- compiles
+- testing: create zip file with several entries, say c:\tmp\tmp.zip
+(zip:with-zipfile (zf #p"c:/tmp/tmp.zip") (zip:zipfile-entries zf))
+get hashtable with entries in zipfile (can check using inspector)
+(zip:unzip #p"c:/tmp/tmp.zip" #p"c:/tmp/t/")
+get contents of zip in c:/tmp/t/
+
+----- zpb-exif-1.0 - works
+-compiles
+-testing (use example in .html): load package, change to package:
+put file g.jpg (preferably from a digital camera) to c:/tmp, run commands:
+(defparameter *exif* (make-exif #p"c:/tmp/g.jpg"))
+
+(exif-value "FNumber" *exif*), etc. check .html
+
+
+----- usocket-0.3.7- Works (but some tests fail)
+- compiled
+- to test: load package, load rt
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/usocket-0.3.7/test/package.lisp")
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/usocket-0.3.7/test/test-usocket.lisp")
+(usocket-test:run-usocket-tests)
+
+Doing 15 pending tests of 15 tests total.
+ USOCKET-TEST::MAKE-SOCKET.1 USOCKET-TEST::MAKE-SOCKET.2
+ USOCKET-TEST::SOCKET-NO-CONNECT.1 USOCKET-TEST::SOCKET-NO-CONNECT.2
+ USOCKET-TEST::SOCKET-NO-CONNECT.3
+#<USOCKET:UNKNOWN-ERROR {2437C029}>
+is a USOCKET:UNKNOWN-ERROR.
+Its slot values are
+(:SOCKET #<USOCKET:STREAM-USOCKET {2437BA51}> :REAL-ERROR
+ #<SB-BSD-SOCKETS:SOCKET-ERROR {2437BCB1}>).
+#<SB-BSD-SOCKETS:SOCKET-ERROR {2437BCB1}>
+is a SB-BSD-SOCKETS:SOCKET-ERROR.
+Its slot values are
+(:ERRNO 2 :SYSCALL "connect" SB-BSD-SOCKETS::ERRNO 2).
+Test USOCKET-TEST::SOCKET-FAILURE.1 failed
+Form: (USOCKET-TEST::WITH-CAUGHT-CONDITIONS
+       ('USOCKET:NETWORK-UNREACHABLE-ERROR NIL)
+       (USOCKET:SOCKET-CONNECT 2130706432
+                               USOCKET-TEST::+UNUSED-LOCAL-PORT+)
+       :UNREACH)
+Expected value: NIL
+Actual value: #<USOCKET:UNKNOWN-ERROR {2437C029}>.
+#<USOCKET:UNKNOWN-ERROR {244FE991}>
+is a USOCKET:UNKNOWN-ERROR.
+Its slot values are
+(:SOCKET #<USOCKET:STREAM-USOCKET {244FE3C1}> :REAL-ERROR
+ #<SB-BSD-SOCKETS:SOCKET-ERROR {244FE619}>).
+#<SB-BSD-SOCKETS:SOCKET-ERROR {244FE619}>
+is a SB-BSD-SOCKETS:SOCKET-ERROR.
+Its slot values are
+(:ERRNO 2 :SYSCALL "connect" SB-BSD-SOCKETS::ERRNO 2).
+Test USOCKET-TEST::SOCKET-FAILURE.2 failed
+Form: (USOCKET-TEST::WITH-CAUGHT-CONDITIONS
+       ('USOCKET:HOST-UNREACHABLE-ERROR NIL)
+       (USOCKET:SOCKET-CONNECT USOCKET-TEST::+NON-EXISTING-HOST+ 80)
+       :UNREACH)
+Expected value: NIL
+Actual value: #<USOCKET:UNKNOWN-ERROR {244FE991}>.
+ USOCKET-TEST::SOCKET-CONNECT.1 USOCKET-TEST::SOCKET-CONNECT.2
+ USOCKET-TEST::SOCKET-CONNECT.3 USOCKET-TEST::SOCKET-STREAM.1
+ USOCKET-TEST::SOCKET-NAME.1 USOCKET-TEST::SOCKET-NAME.2
+ USOCKET-TEST::SOCKET-NAME.3
+Test USOCKET-TEST::SOCKET-NAME.4 failed
+Form: (USOCKET-TEST::WITH-CAUGHT-CONDITIONS (NIL NIL)
+                                            (LET ((USOCKET-TEST::SOCK
+                                                   (USOCKET:SOCKET-CONNECT
+                                                    USOCKET-TEST::+COMMON-LISP-NET+
+                                                    80)))
+                                              (UNWIND-PROTECT
+                                                  (USOCKET:GET-LOCAL-ADDRESS
+                                                   USOCKET-TEST::SOCK)
+                                                (USOCKET:SOCKET-CLOSE
+                                                 USOCKET-TEST::SOCK))))
+Expected value: #(192 168 1 65)
+Actual value: #(192 168 1 64).
+3 out of 15 total tests failed: USOCKET-TEST::SOCKET-FAILURE.1, 
+   USOCKET-TEST::SOCKET-FAILURE.2, USOCKET-TEST::SOCKET-NAME.4.
+

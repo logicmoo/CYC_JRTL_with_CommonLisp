@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CONNECTED-DATABASES</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-connect.html" title="Connection and Initialisation" /><link rel="prev" href="connect.html" title="CONNECT" /><link rel="next" href="database-name.html" title="DATABASE-NAME" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CONNECTED-DATABASES</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="connect.html">Prev</a> </td><th width="60%" align="center">Connection and Initialisation</th><td width="20%" align="right"> <a accesskey="n" href="database-name.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="connected-databases"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>CONNECTED-DATABASES — Return the list of active database objects.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387858"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">connected-databases</code> =&gt; <span class="returnvalue">databases</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387877"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><span class="returnvalue">databases</span></span></dt><dd><p>The list of active database objects.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387901"></a><h2>Description</h2><p>This function returns the list of active database
+	  objects, i.e. all those database objects created by calls to 
+	  <code class="function">connect</code>, which have not been closed by
+	  calling <code class="function">disconnect</code> on them.</p><div class="caution" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Caution</h3><p>The consequences of modifying the list returned by
+	    <code class="function">connected-databases</code> are
+	    undefined.</p></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387934"></a><h2>Examples</h2><pre class="screen">
+(connected-databases)
+=&gt; NIL
+(connect '(nil "template1" "dent" nil) :database-type :postgresql)
+=&gt; #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {4830BC65}&gt;
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {4830C5AD}&gt;
+(connected-databases)
+=&gt; (#&lt;CLSQL-MYSQL:MYSQL-DATABASE {4830C5AD}&gt;
+    #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {4830BC65}&gt;)
+(disconnect)
+=&gt; T
+(connected-databases)
+=&gt; (#&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {4830BC65}&gt;)
+(disconnect)
+=&gt; T
+(connected-databases)
+=&gt; NIL
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387950"></a><h2>Side Effects</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387960"></a><h2>Affected By</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><code class="function">connect</code></td></tr><tr><td><code class="function">disconnect</code></td></tr></table><p>
+        </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387987"></a><h2>Exceptional Situations</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id387997"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="disconnect.html" title="DISCONNECT"><code class="function">disconnect</code></a></td></tr><tr><td><a class="link" href="connect.html" title="CONNECT"><code class="function">connect</code></a></td></tr><tr><td><a class="link" href="status.html" title="STATUS"><code class="function">status</code></a></td></tr><tr><td><a class="link" href="find-database.html" title="FIND-DATABASE"><code class="function">find-database</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388046"></a><h2>Notes</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="connect.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-connect.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="database-name.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">CONNECT </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DATABASE-NAME</td></tr></table></div></body></html>

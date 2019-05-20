@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>START-TRANSACTION</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-transaction.html" title="Transaction Handling" /><link rel="prev" href="ref-transaction.html" title="Transaction Handling" /><link rel="next" href="commit.html" title="COMMIT" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">START-TRANSACTION</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ref-transaction.html">Prev</a> </td><th width="60%" align="center">Transaction Handling</th><td width="20%" align="right"> <a accesskey="n" href="commit.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="start-transaction"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>START-TRANSACTION — Open a transaction block.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id344068"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">start-transaction</code> &amp;key <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue"><code class="constant">NIL</code></span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id344095"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to the value
+            of <span class="symbol">*default-database*</span>.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395857"></a><h2>Description</h2><p>Starts a transaction block on
+      <em class="parameter"><code>database</code></em> which defaults to
+      <span class="symbol">*default-database*</span> and which continues until
+      <code class="function">rollback</code> or <code class="function">commit</code> are
+      called.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395889"></a><h2>Examples</h2><pre class="screen">
+(in-transaction-p)
+=&gt; NIL
+(select [*] :from [foo] :field-names nil)
+=&gt; NIL
+(start-transaction)
+=&gt; NIL 
+(in-transaction-p)
+=&gt; T
+(insert-records :into [foo] :av-pairs '(([bar] 1) ([baz] "one")))
+=&gt; 
+(select [*] :from [foo] :field-names nil)
+=&gt; ((1 "one"))
+(rollback)
+=&gt; NIL 
+(in-transaction-p)
+=&gt; NIL
+(select [*] :from [foo] :field-names nil)
+=&gt; NIL
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395905"></a><h2>Side Effects</h2><p>
+        Autocommit mode is disabled and if
+        <em class="parameter"><code>database</code></em> is currently within the scope
+        of a transaction, all commit and rollback hooks are removed
+        and the transaction level associated with
+        <em class="parameter"><code>database</code></em> is modified.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id386220"></a><h2>Affected by</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id386231"></a><h2>Exceptional Situations</h2><p>
+        Signals an error of type <span class="symbol">sql-database-error</span>
+        if <em class="parameter"><code>database</code></em> is not a database object.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id386252"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="commit.html" title="COMMIT"><code class="function">commit</code></a></td></tr><tr><td><a class="link" href="rollback.html" title="ROLLBACK"><code class="function">rollback</code></a></td></tr><tr><td><a class="link" href="in-transaction-p.html" title="IN-TRANSACTION-P"><code class="function">in-transaction-p</code></a></td></tr><tr><td><a class="link" href="set-autocommit.html" title="SET-AUTOCOMMIT"><code class="function">set-autocommit</code></a></td></tr><tr><td><a class="link" href="with-transaction.html" title="WITH-TRANSACTION"><code class="function">with-transaction</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id382449"></a><h2>Notes</h2><p>
+        <code class="function">start-transaction</code> is a <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extension. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ref-transaction.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-transaction.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="commit.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Transaction Handling </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> COMMIT</td></tr></table></div></body></html>

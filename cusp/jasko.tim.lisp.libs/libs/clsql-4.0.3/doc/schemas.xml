@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<locatingRules xmlns="http://thaiopensource.com/ns/locating-rules/1.0">
+  <uri resource="ref-fddl.xml" uri="/usr/share/emacs/site-lisp/nxml-mode/schema/docbook.rnc"/>
+  <uri resource="appendix.xml" typeId="DocBook"/>
+  <uri resource="bookinfo.xml" typeId="DocBook"/>
+  <uri resource="clsql.xml" typeId="DocBook"/>
+  <uri resource="glossary.xml" typeId="DocBook"/>
+  <uri resource="intro.xml" typeId="DocBook"/>
+  <uri resource="preface.xml" typeId="DocBook"/>
+  <uri resource="ref-clsql-sys.xml" typeId="DocBook"/>
+  <uri resource="ref-clsql.xml" typeId="DocBook"/>
+  <uri resource="ref-fddl.xml" typeId="DocBook"/>
+  <uri resource="ref-fdml.xml" typeId="DocBook"/>
+  <uri resource="ref-ooddl.xml" typeId="DocBook"/>
+  <uri resource="ref-oodml.xml" typeId="DocBook"/>
+  <uri resource="ref-connect.xml" typeId="DocBook"/>
+  <uri resource="ref-lob.xml" typeId="DocBook"/>
+  <uri resource="ref-prepared.xml" typeId="DocBook"/>
+  <uri resource="ref-conditions.xml" typeId="DocBook"/>
+  <uri resource="ref-transaction.xml" typeId="DocBook"/>
+  <uri resource="ref-syntax.xml" typeId="DocBook"/>
+  <uri resource="ref-recording.xml" typeId="DocBook"/>
+  <uri resource="global-index.xml" typeId="DocBook"/>
+</locatingRules>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
+   - Resin 4.0 configuration file.
+  --><resin xmlns="http://caucho.com/ns/resin" xmlns:resin="urn:java:com.caucho.resin">
+
+  <!-- property-based Resin configuration -->
+  <resin:properties optional="true" path="${__DIR__}/resin.properties"/>
+
+  <resin:if test="${properties_import_url}">
+     <resin:properties optional="true" path="${properties_import_url}" recover="true"/>
+  </resin:if>
+
+
+  <!-- Logging configuration for the JDK logging API -->
+  <log-handler format=" {${thread}} ${log.message}" level="all" name="" path="stdout:" timestamp="[%y-%m-%d %H:%M:%S.%s]"/>
+               
+  <!-- 
+     - Alternative pseudo-TTCC log format
+     -
+     - <log-handler name="" level="all" path="stdout:"
+     -           timestamp="%y-%m-%d %H:%M:%S.%s"
+     -           format=" [${thread}] ${log.level} ${log.shortName} - ${log.message}"/>
+    -->
+   
+  <!--
+     - level='info' for production
+     - 'fine' or 'finer' for development and troubleshooting
+    -->
+  <logger level="${log_level?:'info'}" name=""/>
+
+  <logger level="config" name="com.caucho.java"/>
+  <logger level="config" name="com.caucho.loader"/>
+
+  <!--
+     - Default configuration applied to all clusters, including
+     - HTTP, HTTPS, and /resin-admin configuration.
+    -->
+  <resin:import path="${__DIR__}/cluster-default.xml"/>
+  
+  <!--
+     - health configuration
+    -->
+  <resin:import path="${__DIR__}/health.xml"/>
+
+  
+  <!--
+     - Remote management requires at least one enabled admin user.
+    -->
+  <resin:AdminAuthenticator>
+    <user name="${admin_user}" password="${admin_password}"/>
+    
+    <resin:import optional="true" path="${__DIR__}/admin-users.xml"/>
+  </resin:AdminAuthenticator>
+
+  <!--
+     - For clustered systems, create a password in as cluster_system_key
+    -->
+  <cluster-system-key>${cluster_system_key}</cluster-system-key>
+
+  <!--
+     - For production sites, change dependency-check-interval to something
+     - like 600s, so it only checks for updates every 10 minutes.
+    -->
+  <dependency-check-interval>-1</dependency-check-interval>
+
+  <!-- For resin.properties dynamic cluster joining -->
+  <home-cluster>${home_cluster}</home-cluster>
+  <home-server>${home_server}</home-server>
+  <elastic-server>${elastic_server}</elastic-server>
+  <elastic-dns>${elastic_dns}</elastic-dns>
+
+  <!--
+     - JSSE default properties
+    -->
+  <system-property jdk.tls.ephemeralDHKeySize="2048" jdk.tls.rejectClientInitiatedRenegotiation="true" sun.security.ssl.allowLegacyHelloMessages="false" sun.security.ssl.allowUnsafeRenegotiation="false"/>
+     
+
+  <!--
+     - Configures the main application cluster.  Load-balancing configurations
+     - will also have a web cluster.
+    -->
+  <cluster id="app">
+    <!-- define the servers in the cluster -->
+    <server-multi address-list="${app_servers}" id-prefix="app-" port="6800"/>
+
+    <host-default>
+      <!-- creates the webapps directory for .war expansion -->
+      <dependency-check-interval>2s</dependency-check-interval>
+      <web-app-deploy expand-preserve-fileset="WEB-INF/work/**" multiversion-routing="${webapp_multiversion_routing}" path="webapps" path-suffix="${elastic_webapp?resin.id:''}" startup-mode="lazy"/>
+    </host-default>
+
+    <!-- auto virtual host deployment in hosts/foo.example.com/webapps -->
+    <host-deploy path="hosts">
+      <host-default>
+        <resin:import optional="true" path="host.xml"/>
+      </host-default>
+    </host-deploy>
+
+    <!-- the default host, matching any host name -->
+    <host id="" root-directory=".">
+      <!--
+         - webapps can be overridden/extended in the resin.xml
+        -->
+      
+
+    </host>
+      
+    <resin:if test="${resin_doc}">
+      <host id="${resin_doc_host}" root-directory="${resin_doc_host}">
+        <web-app id="/resin-doc" root-directory="${resin.root}/doc/resin-doc"/>
+      </host>
+    </resin:if>
+  </cluster>
+
+  <cluster id="web">
+    <!-- define the servers in the cluster -->
+    <server-multi address-list="${web_servers}" id-prefix="web-" port="6810"/>
+
+    <host id="" root-directory="web">
+      
+    </host>
+  </cluster>
+
+</resin>

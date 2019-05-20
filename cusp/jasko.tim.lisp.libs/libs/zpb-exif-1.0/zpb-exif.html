@@ -1,0 +1,582 @@
+<html>
+<head>
+<title>ZPB-EXIF - access to digital image Exif data for Common Lisp</title>
+<style type='text/css'>
+th { text-align: left }
+a, a:visited { text-decoration: none }
+a:hover { text-decoration: underline }
+pre { background: #DDD; padding: 0.25em }
+</style>
+
+</head>
+
+<body>
+
+<h2>ZPB-EXIF - access to digital image Exif data for Common Lisp</h2>
+
+<blockquote>
+<h3>Abstract</h3>
+
+<p><i>Exif</i> is a standard for embedding information in an image
+file created by a digital camera. ZPB-EXIF is a library that makes
+Exif data accessible to Common Lisp programs. For more info about
+Exif, see <a href='http://www.exif.org/'>Exif.org</a>.
+
+
+<p style='color: red'>Download shortcut: <a href='http://www.xach.com/lisp/zpb-exif.tgz'>http://www.xach.com/lisp/zpb-exif.tgz</a>
+</blockquote>
+
+<h3>Contents</h3>
+
+<ol>
+<li> <a href='#sect-overview'>Overview</a>
+<li> <a href='#sect-example'>Example</a>
+<li> <a href='#sect-terms'>Terms</a>
+<li> <a href='#sect-the-zpb-exif-dictionary'>The ZPB-EXIF Dictionary</a>
+
+ <ol>
+  <li> <a href='#make-exif'><tt>make-exif</tt></a>
+  <li> <a href='#exif-value'><tt>exif-value</tt></a>
+  <li> <a href='#parsed-exif-value'><tt>parsed-exif-value</tt></a>
+  <li> <a href='#exif-alist'><tt>exif-alist</tt></a>
+  <li> <a href='#ifd-alist'><tt>ifd-alist</tt></a>
+  <li> <a href='#ifd-entry'><tt>ifd-entry</tt></a>
+  <li> <a href='#entry-value'><tt>entry-value</tt></a>
+  <li> <a href='#parsed-entry-value'><tt>parsed-entry-value</tt></a>
+  <li> <a href='#image-ifd'><tt>image-ifd</tt></a>
+  <li> <a href='#exif-ifd'><tt>exif-ifd</tt></a>
+  <li> <a href='#gps-ifd'><tt>gps-ifd</tt></a>
+  <li> <a href='#interoperability-ifd'><tt>interoperability-ifd</tt></a>
+  <li> <a href='#thumbnail-ifd'><tt>thumbnail-ifd</tt></a>
+  <li> <a href='#exif-data'><tt>exif-data</tt></a>
+  <li> <a href='#thumbnail-image'><tt>thumbnail-image</tt></a>
+  <li> <a href='#invalid-stream'><tt>invalid-stream</tt></a>
+  <li> <a href='#invalid-jpeg-stream'><tt>invalid-jpeg-stream</tt></a>
+  <li> <a href='#invalid-exif-stream'><tt>invalid-exif-stream</tt></a>
+ </ol>
+ 
+
+
+<li> <a href='#sect-parsed-values'>Parsed Values</a>
+ <ol>
+  <li> <a href='#sect-parsed-image-ifd'>Image IFD</a>
+  <li> <a href='#sect-parsed-exif-ifd'>Exif IFD</a>
+ </ol>
+</ol>
+
+<a name='sect-overview'><h3>Overview</h3></a>
+
+<p>Exif data is structured like so:
+
+<ul>
+
+<li> data about an image is separated into multiple sections called
+<i>image file directories</i> or <i>IFDs</i>
+
+<li> each IFD contains one or more key/value pairs called <i>IFD
+entries</i>; the key is also called the <i>tag</i>
+
+<li> there are two mandatory IFDs for an Exif image: the <i>image
+IFD</i> and the <i>Exif IFD</i>
+
+<li> there are a number of optional IFDs: the <i>GPS IFD</i>, the
+<i>interoperability IFD</i>, the <i>thumbnail IFD</i>
+
+ <ul>
+ <li> the thumbnail IFD may also have separate GPS and interoperability
+ IFDs, but these are not supported by ZPB-EXIF
+ </ul>
+
+</ul>
+
+<p>ZPB-EXIF provides access to key/value lookup through an object
+created from an Exif file or stream. It provides quick access to
+image, Exif, and GPS IFD values, and indirect access to other IFDs and
+their key/value entries.
+
+<a name='sect-example'><h3>Example</h3></a>
+
+<pre>
+&gt; <b>(defparameter *exif* (<a href='#make-exif'>make-exif</a> #p"gg_gps.jpg"))</b>
+<i>=> *EXIF*</i>
+
+&gt; <b>(<a href='#exif-value'>exif-value</a> "FNumber" *exif*)</b>
+<i>=> 9/2</i>
+
+&gt; <b>(<a href='#parsed-exif-value'>parsed-exif-value</a> "MeteringMode" *exif*)</b>
+<i>=> :PATTERN</i>
+
+&gt; <b>(exif-value :DateTimeOriginal *exif*)</b>
+<i>=> "2003:11:23 18:07:37"</i>
+
+&gt; <b>(exif-value #x0112 *exif*)</b>   <i>; #x0112 => orientation tag in the image IFD</i>
+<i>=> 6</i>
+
+&gt; <b>(parsed-exif-value #x0112 *exif*)</b>
+<i>=> :ROTATED-270</i>
+
+&gt; <b>(exif-value :ISOSpeedRating *exif*)</b>   <i>; Field not present in this particular image</i>
+<i>=> NIL</i>
+
+&gt; <b>(list (exif-value "GPSLatitude" *exif*)
+        (exif-value "GPSLatitudeRef" *exif*)
+        (exif-value "GPSLongitude" *exif*)
+        (exif-value "GPSLongitudeRef" *exif*))</b>
+<i>=> (#(39 54 56) "N" #(116 23 27) "E")</i>
+
+
+
+</pre>
+
+<a name='sect-terms'><h3>Terms</h3></a>
+
+<dl>
+
+<dt>tag</dt>
+
+<dd>an integer that refers to a unique field in a specific IFD. For example, the integer #x0001 represents the <tt>InteroperabilityIndex</tt> field in the interoperability IFD and the <tt>GPSVersionID</tt> field in the GPS IFD</dd>
+
+<dt>tag designator</dt>
+
+<dd>an object representing a tag and that is one of: a string
+(denoting a tag named by the string for a given IFD), a symbol
+(denoting a tag named by the string that is its name), or a tag
+(denoting itself)</dd>
+
+</dl>
+
+<a name='sect-the-zpb-exif-dictionary'><h3>The ZPB-EXIF Dictionary</h3></a>
+
+<p><a name='make-exif'>[Function]</a><br>
+<b>make-exif</b> <i>exif-stream-designator</i> => <i>exif</i>
+
+<blockquote>Returns an exif object. <i>exif-stream-designator</i> may
+be a stream (designating itself), a pathname (designating the stream
+created by opening the file), or a string (treated the same as a
+pathname). If
+<i>exif-stream-designator</i> does not refer to a JPEG, signals an <a
+href='#invalid-jpeg-stream'><tt>invalid-jpeg-stream</tt></a> error. If
+<i>exif-stream-designator</i> refers to a JPEG, but the JPEG does not
+contain any Exif data, signals an <a
+href='#invalid-exif-stream'><tt>invalid-exif-stream</tt></a> error.
+
+</blockquote>
+
+
+<p><a name='exif-value'>[Function]</a><br>
+<b>exif-value</b> <i>tag-designator exif</i> => <i>value</i>
+
+<blockquote>
+ Returns the value of the field identified by
+ <i>tag-designator</i> from the image IFD, Exif IFD, or GPS IFD.
+</blockquote>
+
+
+<p><a name='parsed-exif-value'>[Function]</a><br>
+<b>parsed-exif-value</b> <i>tag-designator exif</i> =>
+<i>parsed-value</i>
+
+<blockquote>
+ Returns an the value of the field identified by <i>tag-designator</i>
+ from the image IFD, Exif IFD, or GPS IFD in <a
+ href="#sect-parsed-values">parsed form</a>.
+</blockquote>
+
+
+<p><a name='exif-alist'>[Function]</a><br>
+<b>exif-alist</b> <i>exif <tt>&amp;key</tt> parsedp</i> => <i>alist</i>
+
+<blockquote>
+ Returns an association list that has tag names for keys and IFD entry
+ values for values for all entries in the image, Exif, and GPS IFDs in
+ <i>exif</i>. If <i>parsedp</i> is true, the IFD entry values are
+ in <a href='#sect-parsed-values'>parsed form</a>.
+</blockquote>
+
+
+<p><a name='ifd-alist'>[Function]</a><br>
+<b>ifd-alist</b> <i>exif <tt>&amp;key</tt> parsedp</i> => <i>alist</i>
+
+<blockquote>
+ Returns an association list that has tag names for keys and IFD entry
+ values for values for the entries <i>ifd</i>. If <i>parsedp</i> is
+ true, the IFD entry values are in <a
+ href='#sect-parsed-values'>parsed form</a>.
+</blockquote>
+
+
+<p><a name='ifd-entry'>[Function]</a><br>
+<b>ifd-entry</b> <i>tag-designator ifd</i> => <i>ifd-entry</i>
+
+<blockquote>
+ Returns the IFD entry identified by <i>tag-designator</i> in
+ <i>ifd</i>, or NIL if no IFD entry could be found.
+</blockquote>
+
+
+<p><a name='entry-value'>[Function]</a><br>
+<b>entry-value</b> <i>ifd-entry</i> => <i>value</i>
+
+<blockquote>
+ Returns the value of <i>ifd-entry</i>.
+</blockquote>
+
+
+<p><a name='parsed-entry-value'>[Function]</a><br>
+<b>parsed-entry-value</b> <i>ifd-entry</i> => <i>value</i>
+
+<blockquote>
+ Returns the value of <i>ifd-entry</i> in <a
+ href='#sect-parsed-values'>parsed form</a>.  
+</blockquote>
+
+
+<p><a name='image-ifd'>[Function]</a><br>
+<b>image-ifd</b> <i>exif</i> => <i>ifd</i>
+
+<blockquote>Returns the image IFD for <i>exif</i>. The following tags
+may be available in the image IFD:
+
+<p><table>
+<tr><th>Tag</th><th>Name</th><th>Data Type</th></tr>
+<tr><td colspan=3 style='background: #DDD'>Tags Relating to Image Data Structure</td></tr>
+<tr><td>#x0100</td><td>ImageWidth</td><td>short or long</td></tr>
+<tr><td>#x0101</td><td>ImageHeight</td><td>short or long</td></tr>
+<tr><td>#x0102</td><td>BitsPerSample</td><td>short</td></tr>
+<tr><td>#x0103</td><td>Compression</td><td>short</td></tr>
+<tr><td>#x0106</td><td>PhotometricInterpretation</td><td>short</td></tr>
+<tr><td>#x0112</td><td>Orientation</td><td>short</td></tr>
+<tr><td>#x0115</td><td>SamplesPerPixel</td><td>short</td></tr>
+<tr><td>#x011C</td><td>PlanarConfiguration</td><td>short</td></tr>
+<tr><td>#x0212</td><td>YCbCrSubSampling</td><td>short</td></tr>
+<tr><td>#x0213</td><td>YCbCrPositioning</td><td>short</td></tr>
+<tr><td>#x011A</td><td>XResolution</td><td>rational</td></tr>
+<tr><td>#x011B</td><td>YResolution</td><td>rational</td></tr>
+<tr><td>#x0128</td><td>ResolutionUnit</td><td>short</td></tr>
+
+<tr><td colspan=3 style='background: #DDD'>Tags Relating to Recording Offsets</td></tr>
+<tr><td>#x0111</td><td>StripOffsets</td><td>short or long</td></tr>
+<tr><td>#x0116</td><td>RowsPerStrip</td><td>short or long</td></tr>
+<tr><td>#x0117</td><td>StripByteCounts</td><td>short or long</td></tr>
+<tr><td>#x0201</td><td>JPEGInterchangeFormat</td><td>long</td></tr>
+<tr><td>#x0202</td><td>JPEGInterchangeFormatLength</td><td>long</td></tr>
+
+<tr><td colspan=3 style='background: #DDD'>Tags Relating to Image Data Characteristics</td></tr>
+<tr><td>#x012D</td><td>TransferFunction</td><td>short</td></tr>
+<tr><td>#x013E</td><td>WhitePoint</td><td>rational</td></tr>
+<tr><td>#x013F</td><td>PrimaryChromaticities</td><td>rational</td></tr>
+<tr><td>#x0211</td><td>YCbCrCoefficients</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x0214</td><td>ReferenceBlackWhite</td><td>rational</td></tr>
+
+<tr><td colspan=3 style='background: #DDD'>Other Tags</td></tr>
+<tr><td>#x0132</td><td>DateTime</td><td>ascii; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x010E</td><td>ImageDescription</td><td>ascii</td></tr>
+<tr><td>#x010F</td><td>Make</td><td>ascii</td></tr>
+<tr><td>#x0110</td><td>Model</td><td>ascii</td></tr>
+<tr><td>#x0131</td><td>Software</td><td>ascii</td></tr>
+<tr><td>#x013B</td><td>Artist</td><td>ascii</td></tr>
+<tr><td>#x8298</td><td>Copyright</td><td>ascii</td></tr>
+</table>
+
+
+</blockquote>
+
+
+<p><a name='exif-ifd'>[Function]</a><br>
+<b>exif-ifd</b> <i>exif</i> => <i>ifd</i>
+
+<blockquote>Returns the Exif IFD for <i>exif</i>. The following tags
+may be available in the exif IFD:
+
+<table>
+<tr><th>Tag</th><th>Name</th><th>Data Type</th></tr>
+
+<tr><td colspan=3 style='background: #DDD'>Tags Relating to Version</td></tr>
+<tr><td>#x9000</td><td>ExifVersion</td><td>undefined; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA000</td><td>FlashpixVersion</td><td>undefined</td></tr>
+
+<tr><td colspan=3 style='background: #DDD'>Tags Relating to Image Data Characteristics</td></tr>
+<tr><td>#xA001</td><td>ColorSpace</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA001</td><td>Gamma</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x9101</td><td>ComponentsConfiguration</td><td>undefined</td></tr>
+<tr><td>#x9102</td><td>CompressedBitsPerPixel</td><td>rational</td></tr>
+<tr><td>#xA002</td><td>PixelXDimension</td><td>short or long</td></tr>
+<tr><td>#xA003</td><td>PixelYDimension</td><td>short or long</td></tr>
+
+<tr><td colspan=3 style='background: #DDD'>Tags Relating to User Information</td></tr>
+<tr><td>#x927C</td><td>MakerNote</td><td>undefined</td></tr>
+<tr><td>#x9286</td><td>UserComment</td><td>undefined; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA004</td><td>RelatedSoundFile</td><td>ascii</td></tr>
+
+<tr><td colspan=3 style='background: #DDD'>Tags Relating to Date and Time</td></tr>
+<tr><td>#x9003</td><td>DateTimeOriginal</td><td>ascii; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x9004</td><td>DateTimeDigitized</td><td>ascii; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x9290</td><td>SubSecTime</td><td>ascii</td></tr>
+<tr><td>#x9291</td><td>SubSecTimeOriginal</td><td>ascii</td></tr>
+<tr><td>#x9292</td><td>SubSecTimeDigitized</td><td>ascii</td></tr>
+
+<tr><td colspan=3 style='background: #DDD'>Tags Relating to Picture Taking Conditions</td></tr>
+<tr><td>#x829A</td><td>ExposureTime</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x829D</td><td>FNumber</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x8822</td><td>ExposureProgram</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x8824</td><td>SpectralSensitivity</td><td>ascii</td></tr>
+<tr><td>#x8827</td><td>ISOSpeedRatings</td><td>short</td></tr>
+<tr><td>#x8828</td><td>OECF</td><td>undefined</td></tr>
+<tr><td>#x9201</td><td>ShutterSpeedValue</td><td>srational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x9202</td><td>ApertureValue</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x9203</td><td>BrightnessValue</td><td>srational</td></tr>
+<tr><td>#x9204</td><td>ExposureBiasValue</td><td>srational</td></tr>
+<tr><td>#x9205</td><td>MaxApertureValue</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x9206</td><td>SubjectDistance</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x9207</td><td>MeteringMode</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x9208</td><td>LightSource</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x9209</td><td>Flash</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x920A</td><td>FocalLength</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#x9214</td><td>SubjectArea</td><td>short</td></tr>
+<tr><td>#xA20B</td><td>FlashEngergy</td><td>rational</td></tr>
+<tr><td>#xA20C</td><td>SpatialFrquencyResponse</td><td>undefined</td></tr>
+<tr><td>#xA20E</td><td>FocalPlaneXResolution</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA20F</td><td>FocalPlaneYResolution</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA210</td><td>FocalPlaneResolutionUnit</td><td>short</td></tr>
+<tr><td>#xA214</td><td>SubjectLocation</td><td>short</td></tr>
+<tr><td>#xA215</td><td>ExposureIndex</td><td>rational</td></tr>
+<tr><td>#xA217</td><td>SensingMethod</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA300</td><td>FileSource</td><td>undefined</td></tr>
+<tr><td>#xA301</td><td>SceneType</td><td>undefined</td></tr>
+<tr><td>#xA302</td><td>CFAPattern</td><td>undefined</td></tr>
+<tr><td>#xA401</td><td>CustomRendered</td><td>short</td></tr>
+<tr><td>#xA402</td><td>ExposureMode</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA403</td><td>WhiteBalance</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA404</td><td>DigitalZoomRatio</td><td>rational</td></tr>
+<tr><td>#xA405</td><td>FocalLengthIn35mmFilm</td><td>short</td></tr>
+<tr><td>#xA406</td><td>SceneCaptureType</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA407</td><td>GainControl</td><td>rational; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA408</td><td>Contrast</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA409</td><td>Saturation</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA40A</td><td>Sharpness</td><td>short; <a href='#sect-parsed-values'>parsed value available</a></td></tr>
+<tr><td>#xA40B</td><td>DeviceSettingDescription</td><td>undefined</td></tr>
+<tr><td>#xA40C</td><td>SubjectDistanceRange</td><td>short</td></tr>
+<tr><td>#xA420</td><td>ImageUniqueID</td><td>ascii</td></tr>
+</table>
+
+
+</blockquote>
+
+
+<p><a name='gps-ifd'>[Function]</a><br>
+<b>gps-ifd</b> <i>exif</i> => <i>ifd</i>
+
+<blockquote>Returns the GPS IFD for <i>exif</i>.
+
+<p>The following tags are available in the GPS IFD:
+
+<table>
+<tr><th>Tag</th><th>Name</th><th>Data Type</th></tr>
+<tr><td>#x0000</td><td>GPSVersionID</td><td>byte</td></tr>
+<tr><td>#x0001</td><td>GPSLatitudeRef</td><td>ascii</td></tr>
+<tr><td>#x0002</td><td>GPSLatitude</td><td>rational</td></tr>
+<tr><td>#x0003</td><td>GPSLongitudeRef</td><td>ascii</td></tr>
+<tr><td>#x0004</td><td>GPSLongitude</td><td>ascii</td></tr>
+<tr><td>#x0005</td><td>GPSAltitudeRef</td><td>byte</td></tr>
+<tr><td>#x0006</td><td>GPSAltitude</td><td>rational</td></tr>
+<tr><td>#x0007</td><td>GPSTimeStamp</td><td>rational</td></tr>
+<tr><td>#x0008</td><td>GPSSatellites</td><td>ascii</td></tr>
+<tr><td>#x0009</td><td>GPSStatus</td><td>ascii</td></tr>
+<tr><td>#x000A</td><td>GPSMeasureMode</td><td>ascii</td></tr>
+<tr><td>#x000B</td><td>GPSDOP</td><td>rational</td></tr>
+<tr><td>#x000C</td><td>GPSSpeedRef</td><td>ascii</td></tr>
+<tr><td>#x000D</td><td>GPSSpeed</td><td>rational</td></tr>
+<tr><td>#x000E</td><td>GPSTrackRef</td><td>ascii</td></tr>
+<tr><td>#x000F</td><td>GPSTrack</td><td>rational</td></tr>
+<tr><td>#x0010</td><td>GPSImgDirectionRef</td><td>ascii</td></tr>
+<tr><td>#x0011</td><td>GPSImgDirection</td><td>rational</td></tr>
+<tr><td>#x0012</td><td>GPSMapDatum</td><td>ascii</td></tr>
+<tr><td>#x0013</td><td>GPSDestLatitudeRef</td><td>ascii</td></tr>
+<tr><td>#x0014</td><td>GPSDestLatitude</td><td>rational</td></tr>
+<tr><td>#x0015</td><td>GPSDestLongitudeRef</td><td>ascii</td></tr>
+<tr><td>#x0016</td><td>GPSDestLongitude</td><td>rational</td></tr>
+<tr><td>#x0017</td><td>GPSDestBearingRef</td><td>ascii</td></tr>
+<tr><td>#x0018</td><td>GPSDestBearing</td><td>rational</td></tr>
+<tr><td>#x0019</td><td>GPSDestDistanceRef</td><td>ascii</td></tr>
+<tr><td>#x001A</td><td>GPSDestDistance</td><td>rational</td></tr>
+</table>
+
+</blockquote>
+
+
+<p><a name='interoperability-ifd'>[Function]</a><br>
+<b>interoperability-ifd</b> <i>exif</i> => <i>ifd</i>
+
+<blockquote>Returns the interoperability IFD for
+<i>exif</i>.</blockquote>
+
+<p><a name='thumbnail-ifd'>[Function]</a><br>
+<b>thumbnail-ifd</b> <i>exif</i> => <i>ifd</i>
+
+<blockquote>
+ Returns the thumbnail IFD for <i>exif</i>. The tags available are the
+ same as for the <a href='#image-ifd'>image IFD</a>.
+</blockquote>
+
+
+<p><a name='exif-data'>[Function]</a><br>
+<b>exif-data</b> <i>exif</i> => <i>value</i>
+
+<blockquote>
+ Returns a vector of <tt>(unsigned-byte 8)</tt> data representing all
+ the data in the Exif section of the stream from which <i>exif</i> was
+ created.
+</blockquote>
+
+<p><a name='thumbnail-image'>[Function]</a><br>
+<b>thumbnail-image</b> <i>exif</i> => <i>value</i>
+
+<blockquote>
+ Returns a vector of <tt>(unsigned-byte 8)</tt> data representing the
+ embedded Exif thumbnail of <i>exif</i>, or NIL if no Exif thumbnail
+ is present.
+</blockquote>
+
+
+<p><a name='invalid-stream'>[Condition]</a><br>
+<b>invalid-stream</b>
+
+<blockquote>
+ This error condition is a supertype of Exif stream conditions.
+</blockquote>
+
+
+<p><a name='invalid-jpeg-stream'>[Condition]</a><br>
+<b>invalid-jpeg-stream</b>
+
+<blockquote>
+ This condition is signalled when a stream being processed is not a
+ JPEG stream. It is a subtype of <a
+ href='#invalid-stream'>invalid-stream</a>.
+</blockquote>
+
+
+<p><a name='invalid-exif-stream'>[Condition]</a><br>
+<b>invalid-exif-stream</b>
+
+<blockquote>
+ This condition is signalled when a stream being processed is not an
+ Exif stream. It is a subtype of <a
+ href='#invalid-stream'>invalid-stream</a>.
+</blockquote>
+
+
+<a name='sect-parsed-values'><h3>Parsed Values</h3></a>
+
+<p>When using <a
+href='#parsed-exif-value'><tt>parsed-exif-value</tt></a>, the
+following IFD/tag combinations are converted from the "raw" Exif value
+into a more processing-friendly format. All others return the same
+value that would be returned by <a
+href='#exif-value'><tt>exif-value</tt></a>
+
+<a name='sect-parsed-image-ifd'><h4>Image IFD</h4></a>
+
+<ul>
+
+<li> <b>YCbCrSubsampling</b>: returns one of <tt>:CENTERED</tt>,
+     <tt>:CO-SITED</tt>, or <tt>:RESERVED</tt>
+
+<li> <b>DateTime</b>: returns a universal time
+
+</ul>
+
+
+<a name='sect-parsed-exif-ifd'><h4>Exif IFD</h4></a>
+
+<ul>
+
+<li> <b>ExifVersion</b>: returns a string representing the version,
+e.g. "2.1", "2.2", "2.21"
+
+<li> <b>ColorSpace</b>: returns one of <tt>:SRGB</tt>,
+     <tt>:UNCALIBRATED</tt>, or <tt>:RESERVED</tt>
+
+<li> <b>Gamma</b>: returns a float
+
+<li> <b>UserComment</b>: if the UserComment is in ASCII or Undefined
+format, returns a string representing the comment
+
+<li> <b>DateTimeOriginal</b>: returns a universal time
+
+<li> <b>DateTimeDigitized</b>: returns a universal time
+
+<li> <b>ExposureTime</b>: returns a float
+
+<li> <b>FNumber</b>: returns a float
+
+<li> <b>ExposureProgram</b>: returns one of <tt>:NOT-DEFINED</tt>,
+<tt>:MANUAL</tt>, <tt>:NORMAL-PROGRAM</tt>,
+<tt>:APERTURE-PRIORITY</tt>, <tt>:SHUTTER-PRIORITY</tt>,
+<tt>:CREATIVE-PROGRAM</tt>, <tt>:ACTION-PROGRAM</tt>,
+<tt>:PORTRAIT-MODE</tt>, <tt>:LANDSCAPE-MODE</tt>, or
+<tt>:RESERVED</tt>
+
+<li> <b>ShutterSpeedValue</b>: returns a float
+
+<li> <b>ApertureValue</b>: returns a float
+
+<li> <b>MaxApertureValue</b>: returns a float
+
+<li> <b>SubjectDistance</b>: returns a float
+
+<li> <b>MeteringMode</b>: returns one of <tt>:UNKNOWN</tt>,
+<tt>:AVERAGE</tt>, <tt>:CENTER-WEIGHTED-AVERAGE</tt>, <tt>:SPOT</tt>,
+<tt>:MULTISPOT</tt>, <tt>:PATTERN</tt>, <tt>:PARTIAL</tt>,
+<tt>:OTHER</tt>, or <tt>:RESERVED</tt>
+
+<li> <b>LightSource</b>: returns one of <tt>:UNKNOWN</tt>,
+<tt>:DAYLIGHT</tt>, <tt>:FLOURESCENT</tt>, <tt>:TUNGSTEN</tt>,
+<tt>:FLASH</tt>, <tt>:FINE-WEATHER</tt>, <tt>:CLOUDY-WEATHER</tt>,
+<tt>:SHADE</tt>, <tt>:DAYLIGHT-FLOURESCENT</tt>,
+<tt>:DAY-WHITE-FLOURESCENT</tt>, <tt>:COOL-WHITE-FLOURESCENT</tt>,
+<tt>:WHITE-FLOURESCENT</tt>, <tt>:STANDARD-LIGHT-A</tt>,
+<tt>:STANDARD-LIGHT-B</tt>, <tt>:STANDARD-LIGHT-C</tt>, <tt>:D55</tt>,
+<tt>:D65</tt>, <tt>:D75</tt>, <tt>:D50</tt>,
+<tt>:ISO-STUDIO-TUNGSTEN</tt>, <tt>:OTHER-LIGHT-SOURCE</tt>, or
+<tt>:RESERVED</tt>.
+
+<li> <b>Flash</b>: returns T if the flash fired
+
+<li> <b>FocalLength</b>: returns a float
+
+<li> <b>FocalPlaneXResolution</b>: returns a float
+
+<li> <b>FocalPlaneYResolution</b>: returns a float
+
+<li> <b>SensingMethod</b>: returns one of <tt>:NOT-DEFINED</tt>,
+<tt>:ONE-CHIP-COLOR-AREA-SENSOR</tt>,
+<tt>:TWO-CHIP-COLOR-AREA-SENSOR</tt>,
+<tt>:THREE-CHIP-COLOR-AREA-SENSOR</tt>,
+<tt>:COLOR-SEQUENTIAL-AREA-SENSOR</tt>, <tt>:TRILINEAR-SENSOR</tt>,
+<tt>:COLOR-SEQUENTIAL-LINEAR-SENSOR</tt>, or <tt>:RESERVED</tt>
+
+<li> <b>ExposureMode</b>: returns one of <tt>:AUTO-EXPOSURE</tt>,
+<tt>:MANUAL-EXPOSURE</tt>, <tt>:AUTO-BRACKET</tt>, or
+<tt>:RESERVED</tt>
+
+<li> <b>WhiteBalance</b>: returns one of <tt>:AUTO</tt>,
+<tt>:MANUAL</tt>, or <tt>:RESERVED</tt>
+
+<li> <b>SceneCaptureType</b>: returns one of <tt>:STANDARD</tt>,
+<tt>:LANDSCAPE</tt>, <tt>:PORTRAIT</tt>, <tt>:NIGHT-SCENE</tt>, or
+<tt>:RESERVED</tt>
+
+<li> <b>Contrast</b>: returns one of <tt>:NORMAL</tt>, <tt>:SOFT</tt>,
+<tt>:HARD</tt>, or <tt>:RESERVED</tt>
+
+<li> <b>Saturation</b>: returns one of <tt>:NORMAL</tt>,
+<tt>:LOW-SATURATION</tt>, <tt>:HIGH-SATURATION</tt>, or <tt>:RESERVED</tt>
+
+<li> <b>Sharpness</b>: returns one of <tt>:NORMAL</tt>, <tt>:SOFT</tt>,
+<tt>:HARD</tt>, or <tt>:RESERVED</tt>
+
+</ul>
+
+<p><hr>
+$Header: /home/cvs/zpb-exif/zpb-exif.html,v 1.3 2005/12/15 21:05:16 xach Exp $

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Oracle</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="appendix.html" title="Appendix A. Database Back-ends" /><link rel="prev" href="sqlite3.html" title="SQLite version 3" /><link rel="next" href="glossary.html" title="Glossary" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Oracle</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sqlite3.html">Prev</a> </td><th width="60%" align="center">Appendix A. Database Back-ends</th><td width="20%" align="right"> <a accesskey="n" href="glossary.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="oracle"></a>Oracle</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id422148"></a>Libraries</h3></div></div></div><p>The <span class="application">Oracle</span> back-end requires the <span class="application">Oracle</span> OCI client
+      library. (<code class="filename">libclntsh.so</code>).  The location of
+      this library is specified relative to the
+      <span class="symbol">ORACLE_HOME</span> value in the operating system
+      environment.
+      </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id422178"></a>Library Versions</h3></div></div></div><p>
+	<span class="application"><span class="emphasis"><em>CLSQL</em></span></span> has tested sucessfully using the client library from
+	Oracle 9i and Oracle 10g server installations as well as
+	Oracle's 10g Instant Client library. For Oracle 8 and earlier
+	versions, there is vestigial support by pushing the symbol
+	<span class="symbol">:oci7</span> onto <span class="symbol">cl:*features*</span>
+	prior to loading the <code class="filename">clsql-oracle</code> <span class="application">ASDF</span>
+	system.
+	</p><pre class="screen">
+	  (push :oci7 cl:*features*)
+	  (asdf:operate 'asdf:load-op 'clsql-oracle)
+	</pre><p>
+      </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id422219"></a>Initialization</h3></div></div></div><p>
+	Use 
+	</p><pre class="screen">
+(asdf:operate 'asdf:load-op 'clsql-oracle)
+	</pre><p>
+	to load the <span class="application">Oracle</span> back-end.  The database type for the Oracle
+	back-end is <span class="symbol">:oracle</span>.
+      </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id422243"></a>Connection Specification</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id422248"></a>Syntax of connection-spec</h4></div></div></div><pre class="synopsis">(<em class="replaceable"><code>global-name</code></em> <em class="replaceable"><code>user</code></em> <em class="replaceable"><code>password</code></em>)</pre></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id422270"></a>Description of connection-spec</h4></div></div></div><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>global-name</code></em></span></dt><dd><p>String representing the global name of the Oracle database.
+		  This is looked up through the tnsnames.ora file.</p></dd><dt><span class="term"><em class="parameter"><code>user</code></em></span></dt><dd><p>String representing the user name to use for
+		  authentication.</p></dd><dt><span class="term"><em class="parameter"><code>password</code></em></span></dt><dd><p>String representing the password to
+		  use for authentication..</p></dd></dl></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id422330"></a>Notes</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id422334"></a>Symbolic SQL Syntax</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            The <code class="function">userenv</code> operator is <span class="application">Oracle</span> specific. 
+          </p></li><li style="list-style-type: circle"><p>
+            <span class="application">Oracle</span> does not support the <code class="function">except</code>
+            operator. Use <code class="function">minus</code> instead.
+          </p></li><li style="list-style-type: circle"><p>
+            <span class="application">Oracle</span> does not support the <code class="function">all</code>,
+            <code class="function">some</code>, <code class="function">any</code>
+            subquery operations.
+          </p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id422411"></a>Transactions</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            By default, <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> starts in transaction AUTOCOMMIT mode
+            (see <a class="link" href="set-autocommit.html" title="SET-AUTOCOMMIT"><code class="function">set-autocommit</code></a>).
+            To begin a transaction in autocommit mode, <a class="link" href="start-transaction.html" title="START-TRANSACTION"><code class="function">start-transaction</code></a>
+            has to be called explicitly.
+          </p></li></ul></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sqlite3.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="appendix.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="glossary.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="application">SQLite version 3</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Glossary</td></tr></table></div></body></html>

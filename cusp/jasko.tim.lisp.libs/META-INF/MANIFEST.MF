@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Lisp Libraries
+Bundle-SymbolicName: jasko.tim.lisp.libs
+Bundle-Version: 2.0.519

@@ -1,0 +1,1083 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<!-- Object Oriented Data Manipulation Language --> 
+<reference id="ref-oodml"> 
+  <title>Object Oriented Data Manipulation Language (OODML)</title> 
+    <partintro>
+    <para>
+      Object Oriented Data Manipulation Language (OODML) provides a
+      Common Lisp Object System (CLOS) interface to SQL
+      databases. View classes are defined with the <link
+      linkend="ref-ooddl">OODDL</link> interface and objects are read
+      and written with the OODML.
+    </para>
+    <para>
+      The main function for reading data with the OODML is the <link
+      linkend="select"><function>select</function></link>
+      function. The <function>select</function> is also used in the
+      FDML. However, when <function>select</function> is given a view
+      class name, it returns a list of instances of view classes.
+    </para>
+    <para>
+      View class instances can be updated to reflect any changes in
+      the database with the functions <link
+      linkend="update-slot-from-record"><function>update-slot-from-record</function></link>
+      and <link
+      linkend="update-instance-from-records"><function>update-instance-from-records</function></link>.
+    </para>
+    <para>To update the database to reflect changes made to instances of view classes, use the functions <link
+      linkend="update-records-from-instance"><function>update-records-from-instance</function></link>,
+      <link
+      linkend="update-record-from-slot"><function>update-record-from-slot</function></link>, and
+      <link
+      linkend="update-record-from-slots"><function>update-record-from-slots</function></link>.
+    </para>
+    <para>
+      The function <link
+      linkend="delete-instance-records"><function>delete-instance-records</function></link>
+      deletes the records corresponding to an instance of a view
+      class.
+    </para>
+  </partintro>
+
+  <refentry id="db-auto-sync">
+    <refnamediv>
+      <refname>*DB-AUTO-SYNC*</refname>
+      <refpurpose>Enables SQL storage during Lisp object creation.</refpurpose>
+      <refclass>Variable</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Value Type</title>
+      <para>
+	Boolean
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Initial Value</title>
+      <para>&nil;</para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title> 
+      <para>
+	When this variable is &t; an instance is stored in the SQL
+	database when the instance is created by
+	<function>make-instance</function>. Furthermore, the
+	appropriate database records are updated whenever the slots of
+	a <glossterm linkend="gloss-view-class">View Class</glossterm>
+	instance are modified.
+      </para> 
+      <para> 
+        When this variable is &nil;, which is the default value,
+        &clsql; behaves like &commonsql;: instances of view classes
+        are stored or updated in the SQL database only when <link
+        linkend="update-records-from-instance"><function>update-record-from-instance</function></link>,
+        <link
+        linkend="update-record-from-slot"><function>update-record-from-slot</function></link>
+        or <link
+        linkend="update-record-from-slots"><function>update-record-from-slots</function></link>
+        are called.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+	(let ((instance (make-instance 'foo)))
+	  (update-records-from-instance instance))
+
+	;; is equivalent to
+
+	(let ((*db-auto-sync* t))
+	  (make-instance 'foo))
+          
+        ;; and 
+
+        (progn 
+          (setf (slot-value instance 'bar) "baz")
+          (update-record-from-slot instance 'bar))
+
+        ;; is equivalent to 
+
+        (let ((*db-auto-sync* t))
+          (setf (slot-value instance 'bar) "baz"))
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Affected By</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="update-records-from-instance"><function>update-records-from-instance</function></link></member>
+        <member><link linkend="update-record-from-slot"><function>update-record-from-slot</function></link></member>
+        <member><link linkend="update-record-from-slots"><function>update-record-from-slots</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>This is a CLSQL extension to the CommonSQL API.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="default-caching">
+    <refnamediv>
+      <refname>*DEFAULT-CACHING*</refname>
+      <refpurpose>Controls the default caching behavior.</refpurpose>
+      <refclass>Variable</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Value Type</title>
+      <para>
+	Boolean
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Initial Value</title>
+      <para>&t;</para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title> 
+      <para>
+	This variable stores the default value of the
+	<varname>CACHING</varname> keyword for the <link
+	linkend="select"><function>select</function></link>.
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+	(let ((*default-caching* nil)))
+	  (select 'foo))
+
+	;; is equivalent to
+
+	(select 'foo :caching nil)
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Affected By</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="select"><function>select</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title> <para>This is a CLSQL extension to the
+      &commonsql; API. &commonsql; has caching on at all times.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="default-update-objects-max-len">
+    <refnamediv>
+      <refname>*DEFAULT-UPDATE-OBJECTS-MAX-LEN*</refname>
+      <refpurpose>The default maximum number of objects each query to perform a join</refpurpose>
+      <refclass>Variable</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Value Type</title>
+      <para>
+	(or null integer)
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Initial Value</title>
+      <para>&nil;</para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+	This special variable provides the default value for the
+	<parameter>max-len</parameter> argument of the function <link
+	linkend="update-objects-joins"><function>update-object-joins</function></link>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+	(setq *default-update-objects-max-len* 100)
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Affected By</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+	<member><link linkend="update-objects-joins"><function>update-object-joins</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>None.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="instance-refreshed">
+    <refnamediv>
+      <refname>INSTANCE-REFRESHED</refname>
+      <refpurpose>User hook to call on object refresh.</refpurpose>
+      <refclass>Generic function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>instance-refreshed</function> <replaceable>object</replaceable> => <returnvalue><!-- no result --></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>object</parameter></term>
+          <listitem>
+            <para>
+	      The <glossterm linkend="gloss-view-class">View Class</glossterm> object which is being refreshed.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Provides a hook which is called within an object oriented
+      call to <function>select</function> with a non-nil value of
+      <parameter>refresh</parameter> when the <glossterm
+      linkend="gloss-view-class">View Class</glossterm> instance
+      <parameter>object</parameter> has been updated from the
+      database. A method specialised on
+      <type>standard-db-object</type> is provided which has no
+      effects. Methods specialised on particular View Classes can be
+      used to specify any operations that need to be made on View
+      Classes instances which have been updated in calls to
+      <function>select</function>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(slot-value employee1 'email)
+=> "lenin@soviet.org"
+(defmethod instance-refreshed ((e employee))
+   (format t "~&amp;Details for ~A ~A have been updated from the database."
+           (slot-value e 'first-name)
+           (slot-value e 'last-name)))
+=> #&lt;Standard-Method INSTANCE-REFRESHED (EMPLOYEE) {48174D9D}>
+(select 'employee :where [= [slot-value 'employee 'emplid] 1] :flatp t)
+=> (#&lt;EMPLOYEE {48149995}>)
+(slot-value (car *) 'email)
+=> "lenin@soviet.org"
+(update-records [employee] :av-pairs '(([email] "v.lenin@soviet.org")) 
+                :where [= [emplid] 1])
+=> 
+(select 'employee :where [= [slot-value 'employee 'emplid] 1] :flatp t)
+=> (#&lt;EMPLOYEE {48149995}>)
+(slot-value (car *) 'email)
+=> "lenin@soviet.org"
+(select 'employee :where [= [slot-value 'employee 'emplid] 1] :flatp t :refresh t)
+Details for Vladimir Lenin have been updated from the database.
+=> (#&lt;EMPLOYEE {48149995}>)
+(slot-value (car *) 'email)
+=> "v.lenin@soviet.org"
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        The user hook function may cause side effects.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+	None.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <para>
+        <simplelist>
+          <member><link linkend="select"><function>select</function></link></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry> 
+
+  <refentry id="delete-instance-records">
+    <refnamediv>
+      <refname>DELETE-INSTANCE-RECORDS</refname>
+      <refpurpose>Delete SQL records represented by a <glossterm linkend="gloss-view-class">View Class</glossterm>
+      object.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>delete-instance-records</function> <replaceable>object</replaceable> => <returnvalue><!-- no result --></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+	<varlistentry>
+	  <term><parameter>object</parameter></term>
+	  <listitem>
+	    <para>
+	      An instance of a <glossterm linkend="gloss-view-class">View
+	      Class</glossterm>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Deletes the records represented by
+      <parameter>object</parameter> in the appropriate table of the
+      database associated with <parameter>object</parameter>. If
+      <parameter>object</parameter> is not yet associated with a
+      database, an error is signalled.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(def-view-class tab () 
+  ((a :initarg :a :type integer :db-kind :key) 
+   (b :initarg :b :type string)))
+=> #&lt;Standard-Db-Class TAB {49B01845}>
+(create-view-from-class 'tab)
+=> 
+(defvar obj (let ((*db-auto-sync* t))
+              (make-instance 'tab :a 5 :b "the string")))
+=> OBJ
+(start-sql-recording :type :both)
+=> 
+(delete-instance-records obj) 
+;; 2004-07-17 11:07:19 foo/bar/baz => DELETE FROM tab WHERE tab.a = 5
+;; 2004-07-17 11:07:19 foo/bar/baz &lt;= T
+=> 
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+	Deletes data from the SQL database.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+	Permissions granted by the SQL database to the user in the
+	database connection.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+	An exception may be signaled if the database connection user
+	does not have sufficient privileges to modify the database. An
+	error of type <type>sql-database-error</type> is signalled if
+	<replaceable>object</replaceable> is not associated with an
+	active database.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="update-records"><function>update-records</function></link></member>
+        <member><link linkend="delete-records"><function>delete-records</function></link></member>
+        <member><link linkend="update-records-from-instance"><function>update-records-from-instance</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+	Instances are referenced in the database by values stored in
+	the key slots. If
+	<function>delete-records-from-instance</function> is called
+	with an instance of a class that does not contain any keys,
+	then all records in that table will be deleted.
+      </para>
+    </refsect1>
+  </refentry> 
+
+  <refentry id="update-records-from-instance">
+    <refnamediv>
+      <refname>UPDATE-RECORDS-FROM-INSTANCE</refname>
+      <refpurpose>Update database from view class object.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>update-records-from-instance</function> <replaceable>object</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue><!-- no result --></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+	<varlistentry>
+	  <term><parameter>object</parameter></term>
+	  <listitem>
+	    <para>
+	      An instance of a <glossterm linkend="gloss-view-class">View
+	      Class</glossterm>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>database</parameter></term>
+	  <listitem>
+	    <para>
+              <glossterm linkend="gloss-database-object">database
+              object</glossterm>. This will default to the value of
+              <symbol>*default-database*</symbol>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Using an instance of a <glossterm
+      linkend="gloss-view-class">View Class</glossterm>,
+      <parameter>object</parameter>, update the table that stores its
+      instance data. <parameter>database</parameter> specifies the
+      database in which the update is made only if
+      <parameter>object</parameter> is not associated with a
+      database. In this case, a record is created in the appropriate
+      table of <parameter>database</parameter> using values from the
+      slot values of <parameter>object</parameter>, and
+      <parameter>object</parameter> becomes associated with
+      <parameter>database</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(select [email] :from [employee] :where [= [emplid] 1] :field-names nil :flatp t)
+=> ("lenin@soviet.org")
+(defvar *e1* (car (select 'employee :where [= [slot-value 'employee 'emplid] 1] :flatp t)))
+=> *E1* 
+(slot-value *e1* 'email)
+=> "lenin@soviet.org"
+(setf (slot-value *e1* 'email) "v.lenin@soviet.org")
+=> "v.lenin@soviet.org"
+(update-records-from-instance *e1*)
+=> 
+(select [email] :from [employee] :where [= [emplid] 1] :field-names nil :flatp t)
+=> ("v.lenin@soviet.org")
+     </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+	Modifies the database.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+	Nothing.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+	Database errors.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="update-record-from-slot"><function>update-record-from-slot</function></link></member>
+        <member><link linkend="update-record-from-slots"><function>update-record-from-slots</function></link></member>
+        <member><link linkend="update-records"><function>update-records</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry> 
+
+  <refentry id="update-record-from-slot">
+    <refnamediv>
+      <refname>UPDATE-RECORD-FROM-SLOT</refname>
+      <refpurpose>Updates database from slot value.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>update-record-from-slot</function> <replaceable>object</replaceable> <replaceable>slot</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue><!-- no result --></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+	<varlistentry>
+	  <term><parameter>object</parameter></term>
+	  <listitem>
+	    <para>
+	      An instance of a <glossterm linkend="gloss-view-class">View Class</glossterm>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>slot</parameter></term>
+	  <listitem>
+	    <para>
+	      The name of a slot in <parameter>object</parameter>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>database</parameter></term>
+	  <listitem>
+	    <para>
+              A <glossterm linkend="gloss-database-object">database
+              object</glossterm>. This will default to the value of
+              <symbol>*default-database*</symbol>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Updates the value stored in the column represented by the
+      slot, specified by the CLOS slot name
+      <parameter>slot</parameter>, of <glossterm linkend="gloss-view-class">View Class</glossterm> instance
+      <parameter>object</parameter>. <parameter>database</parameter>
+      specifies the database in which the update is made only if
+      <parameter>object</parameter> is not associated with a
+      database. In this case, a record is created in
+      <parameter>database</parameter> and the attribute represented by
+      <parameter>slot</parameter> is initialised from the value of the
+      supplied slots with other attributes having default
+      values. Furthermore, <parameter>object</parameter> becomes
+      associated with <parameter>database</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(select [email] :from [employee] :where [= [emplid] 1] :field-names nil :flatp t)
+=> ("lenin@soviet.org")
+(defvar *e1* (car (select 'employee :where [= [slot-value 'employee 'emplid] 1] :flatp t)))
+=> *E1* 
+(slot-value *e1* 'email)
+=> "lenin@soviet.org"
+(setf (slot-value *e1* 'email) "v.lenin@soviet.org")
+=> "v.lenin@soviet.org"
+(update-record-from-slot *e1* 'email)
+=> 
+(select [email] :from [employee] :where [= [emplid] 1] :field-names nil :flatp t)
+=> ("v.lenin@soviet.org")
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+	Modifies database.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected By</title>
+      <para>
+	Nothing.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+	Database errors.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="update-record-from-slots"><function>update-record-from-slots</function></link></member>
+        <member><link linkend="update-records-from-instance"><function>update-records-from-instance</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry> 
+
+  <refentry id="update-record-from-slots">
+    <refnamediv>
+      <refname>UPDATE-RECORD-FROM-SLOTS</refname>
+      <refpurpose>Update database from slots of view class object.</refpurpose>
+      <refclass>function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>syntax</title>
+      <synopsis>
+      <function>update-record-from-slots</function> <replaceable>object</replaceable> <replaceable>slots</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue><!-- no result --></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+	<varlistentry>
+	  <term><parameter>object</parameter></term>
+	  <listitem>
+	    <para>
+	      An instance of a <glossterm linkend="gloss-view-class">View Class</glossterm>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>slots</parameter></term>
+	  <listitem>
+	    <para>
+	      A list of slot names in <parameter>object</parameter>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>database</parameter></term>
+	  <listitem>
+	    <para>
+              A <glossterm linkend="gloss-database-object">database
+              object</glossterm>. This will default to the value of
+              <symbol>*default-database*</symbol>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Updates the values stored in the columns represented by
+      the slots, specified by the clos slot names
+      <parameter>slots</parameter>, of <glossterm linkend="gloss-view-class">View Class</glossterm> instance
+      <parameter>object</parameter>. <parameter>database</parameter>
+      specifies the database in which the update is made only if
+      <parameter>object</parameter> is not associated with a
+      database. In this case, a record is created in the appropriate
+      table of <parameter>database</parameter> and the attributes
+      represented by <parameter>slots</parameter> are initialised from
+      the values of the supplied slots with other attributes having
+      default values. Furthermore, <parameter>object</parameter>
+      becomes associated with <parameter>database</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(select [last-name] [email] :from [employee] :where [= [emplid] 1] :field-names nil)
+=> (("Lenin" "lenin@soviet.org"))
+(defvar *e1* (car (select 'employee :where [= [slot-value 'employee 'emplid] 1] :flatp t)))
+=> *E1* 
+(slot-value *e1* 'last-name)
+=> "Lenin"
+(slot-value *e1* 'email)
+=> "lenin@soviet.org"
+(setf (slot-value *e1* 'last-name) "Ivanovich")
+=> "Ivanovich"
+(setf (slot-value *e1* 'email) "v.ivanovich@soviet.org")
+=> "v.ivanovich@soviet.org"
+(update-record-from-slots *e1* '(email last-name))
+=> 
+(select [last-name] [email] :from [employee] :where [= [emplid] 1] :field-names nil)
+=> (("Ivanovich" "v.ivanovich@soviet.org"))
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+	Modifies the SQL database.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+	Nothing.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+	Database errors.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <para>
+        <simplelist>
+	  <member><link linkend="update-record-from-slot"><function>update-record-from-slot</function></link></member>
+	  <member><link linkend="update-records-from-instance"><function>update-records-from-instance</function></link></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry> 
+
+  <refentry id="update-instance-from-records">
+    <refnamediv>
+      <refname>UPDATE-INSTANCE-FROM-RECORDS</refname>
+      <refpurpose>Update slot values from database.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>update-instance-from-records</function> <replaceable>object</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue>object</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+	<varlistentry>
+	  <term><parameter>object</parameter></term>
+	  <listitem>
+	    <para>
+	      An instance of a <glossterm linkend="gloss-view-class">View Class</glossterm>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>database</parameter></term>
+	  <listitem>
+	    <para>
+              A <glossterm linkend="gloss-database-object">database
+              object</glossterm>. This will default to the value of
+              <symbol>*default-database*</symbol>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Updates the slot values of the <glossterm
+      linkend="gloss-view-class">View Class</glossterm> instance
+      <parameter>object</parameter> using the attribute values of the
+      appropriate table of <parameter>database</parameter> which
+      defaults to the database associated with
+      <parameter>object</parameter> or, if
+      <parameter>object</parameter> is not associated with a database,
+      <varname>*default-database*</varname>.  Join slots are updated
+      but instances of the class on which the join is made are not
+      updated.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(defvar *e1* (car (select 'employee :where [= [slot-value 'employee 'emplid] 1] :flatp t)))
+=> *E1* 
+(slot-value *e1* 'email)
+=> "lenin@soviet.org"
+(update-records [employee] 
+                :av-pairs '(([email] "v.lenin@soviet.org"))
+                :where [= [emplid] 1])
+=> 
+(update-instance-from-records *e1*)
+=> #&lt;EMPLOYEE {4806B53D}>
+(slot-value *e1* 'email)
+=> "v.lenin@soviet.org"
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Slot values of <parameter>object</parameter> may be modified.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <simplelist>
+	  <member>Data in SQL database.</member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        If <parameter>database</parameter> is not able to be read.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="update-slot-from-record"><function>update-slot-from-record</function></link></member>
+        <member><link linkend="update-objects-joins"><function>update-objects-joins</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry> 
+
+  <refentry id="update-slot-from-record">
+    <refnamediv>
+      <refname>UPDATE-SLOT-FROM-RECORD</refname>
+      <refpurpose>Update objects slot from database.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>update-slot-from-record</function> <replaceable>object</replaceable> <replaceable>slot</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue>object</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+	<varlistentry>
+	  <term><parameter>object</parameter></term>
+	  <listitem>
+	    <para>
+	      An instance of a <glossterm linkend="gloss-view-class">View Class</glossterm>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>slot</parameter></term>
+	  <listitem>
+	    <para>
+	      The name of a slot in <parameter>object</parameter>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>database</parameter></term>
+	  <listitem>
+	    <para>
+              A <glossterm linkend="gloss-database-object">database
+              object</glossterm>. This will default to the value of
+              <symbol>*default-database*</symbol>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Updates the slot value, specified by the CLOS slot name
+      <parameter>slot</parameter>, of the <glossterm
+      linkend="gloss-view-class">View Class</glossterm> instance
+      <parameter>object</parameter> using the attribute values of the
+      appropriate table of <parameter>database</parameter> which
+      defaults to the database associated with
+      <parameter>object</parameter> or, if
+      <parameter>object</parameter> is not associated with a database,
+      <varname>*default-database*</varname>.  Join slots are updated
+      but instances of the class on which the join is made are not
+      updated.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(defvar *e1* (car (select 'employee :where [= [slot-value 'employee 'emplid] 1] :flatp t)))
+=> *E1* 
+(slot-value *e1* 'email)
+=> "lenin@soviet.org"
+(update-records [employee] 
+                :av-pairs '(([email] "v.lenin@soviet.org"))
+                :where [= [emplid] 1])
+=> 
+(update-slot-from-record *e1* 'email)
+=> #&lt;EMPLOYEE {4806B53D}>
+(slot-value *e1* 'email)
+=> "v.lenin@soviet.org"
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+	Modifies the slot value of the object.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <simplelist>
+	  <member>Data in SQL database.</member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+	Database errors.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="update-instance-from-records"><function>update-instance-from-records</function></link></member>
+        <member><link linkend="update-objects-joins"><function>update-objects-joins</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry> 
+
+  <refentry id="update-objects-joins">
+    <refnamediv>
+      <refname>UPDATE-OBJECTS-JOINS</refname>
+      <refpurpose>Updates joined slots of objects.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>update-objects-joins</function> <replaceable>objects</replaceable> &amp;key <replaceable>slots</replaceable> <replaceable>force-p</replaceable> <replaceable>class-name</replaceable> <replaceable>max-len</replaceable> => <returnvalue><!-- no result --></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+	<varlistentry>
+	  <term><parameter>objects</parameter></term>
+	  <listitem>
+	    <para>
+	      A list of instances of a <glossterm
+	      linkend="gloss-view-class">View Class</glossterm>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>slots</parameter></term>
+	  <listitem>
+	    <para>
+              A list of slot names in <parameter>object</parameter> or &t;. 
+            </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>force-p</parameter></term>
+	  <listitem>
+	    <para>
+              A Boolean, defaulting to &t;. 
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>class-name</parameter></term>
+	  <listitem>
+	    <para>
+	      A list of instances of a <glossterm
+	      linkend="gloss-view-class">View Class</glossterm>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>max-len</parameter></term>
+	  <listitem>
+	    <para>
+              A non-negative integer or &nil; defaulting to
+              <symbol>*default-update-objects-max-len*</symbol>.
+	    </para>
+	  </listitem>
+	</varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Updates from the records of the appropriate database
+      tables the join slots specified by <parameter>slots</parameter>
+      in the supplied list of <glossterm linkend="gloss-view-class">View
+      Class</glossterm> instances
+      <parameter>objects</parameter>. <parameter>slots</parameter>
+      when &t; means that all join slots with
+      <symbol>:retrieval</symbol> <symbol>:immediate</symbol> are
+      updated. <parameter>class-name</parameter> is used to specify
+      the <glossterm linkend="gloss-view-class">View Class</glossterm> of
+      all instance in <parameter>objects</parameter>, when &nil; then
+      the class of the first instance in
+      <parameter>objects</parameter> is
+      used. <parameter>force-p</parameter> when &t; means that all
+      join slots are updated whereas a value of &nil; means that only
+      unbound join slots are updated. <parameter>max-len</parameter>
+      when non-nil specifies that
+      <function>update-object-joins</function> may issue multiple
+      database queries with a maximum of
+      <parameter>max-len</parameter> instances updated in each query.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(defvar *addresses* (select 'deferred-employee-address :order-by [ea_join aaddressid] :flatp t))
+=> *ADDRESSES*
+(slot-boundp (car *addresses*) 'address)
+=> NIL
+(update-objects-joins *addresses*)
+=> 
+(slot-boundp (car *addresses*) 'address)
+=> T
+(slot-value (car *addresses*) 'address)
+=> #&lt;ADDRESS {480B0F1D}>     
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        The slot values of <parameter>objects</parameter> are modified. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <simplelist>
+	  <member><link
+	  linkend="default-update-objects-max-len"><varname>*default-update-objects-max-len*</varname></link></member>
+	</simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+	Database errors.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="default-update-objects-max-len"><varname>*default-update-objects-max-len*</varname></link></member>
+        <member><link linkend="update-instance-from-records"><function>update-instance-from-records</function></link></member>
+        <member><link linkend="update-slot-from-record"><function>update-slot-from-record</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+</reference> 

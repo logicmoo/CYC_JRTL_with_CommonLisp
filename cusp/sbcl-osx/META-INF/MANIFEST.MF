@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Sbcl_osx Plug-in
+Bundle-SymbolicName: sbcl_osx
+Bundle-Version: 1.0.22

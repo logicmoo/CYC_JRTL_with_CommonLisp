@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>EXECUTE-COMMAND</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fdml.html" title="Functional Data Manipulation Language (FDML)" /><link rel="prev" href="delete-records.html" title="DELETE-RECORDS" /><link rel="next" href="query.html" title="QUERY" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">EXECUTE-COMMAND</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="delete-records.html">Prev</a> </td><th width="60%" align="center">Functional Data Manipulation Language (FDML)</th><td width="20%" align="right"> <a accesskey="n" href="query.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="execute-command"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>EXECUTE-COMMAND — Execute an SQL command which returns no values.<p><b>Generic Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405285"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">execute-command</code> <em class="replaceable"><code>sql-expression</code></em> &amp;key <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue"></span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405313"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>sql-expression</code></em></span></dt><dd><p>An <a class="glossterm" href="glossary.html#gloss-sql-expression"><em class="glossterm">sql
+            expression</em></a> that represents an SQL
+            statement which will return no values.</p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to the value
+            of <span class="symbol">*default-database*</span>.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405376"></a><h2>Description</h2><p>Executes the SQL command
+      <em class="parameter"><code>sql-expression</code></em>, which may be a symbolic
+      SQL expression or a string representing any SQL statement apart
+      from a query, on the supplied <em class="parameter"><code>database</code></em>
+      which defaults to <span class="symbol">*default-database*</span>.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405404"></a><h2>Examples</h2><pre class="screen">
+        (execute-command "create table eventlog (time char(30),event char(70))")
+        =&gt; 
+
+        (execute-command "create table eventlog (time char(30),event char(70))")
+        &gt;&gt; 
+        &gt;&gt; While accessing database #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {480B2B6D}&gt;
+        &gt;&gt;   with expression "create table eventlog (time char(30),event char(70))":
+        &gt;&gt;   Error NIL: ERROR:  amcreate: eventlog relation already exists
+        &gt;&gt;   has occurred.
+        &gt;&gt; 
+        &gt;&gt; Restarts:
+        &gt;&gt;   0: [ABORT] Return to Top-Level.
+        &gt;&gt; 
+        &gt;&gt; Debug  (type H for help)
+        &gt;&gt; 
+        &gt;&gt; (CLSQL-POSTGRESQL::|(PCL::FAST-METHOD DATABASE-EXECUTE-COMMAND (T POSTGRESQL-DATABASE))|
+        &gt;&gt;  #&lt;unused-arg&gt;
+        &gt;&gt;  #&lt;unused-arg&gt;
+        &gt;&gt;  #&lt;unavailable-arg&gt;
+        &gt;&gt;  #&lt;unavailable-arg&gt;)
+        &gt;&gt; Source: (ERROR 'SQL-DATABASE-ERROR :DATABASE DATABASE :EXPRESSION ...)
+        &gt;&gt; 0] 0
+
+        (execute-command "drop table eventlog")
+        =&gt; 
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405425"></a><h2>Side Effects</h2><p>Whatever effects the execution of the SQL statement has
+      on the underlying database, if any.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405437"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405448"></a><h2>Exceptional Situations</h2><p>If the execution of the SQL statement leads to any errors,
+      an error of type <span class="errortype">sql-database-error</span> is
+      signalled.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405464"></a><h2>See Also</h2><p>
+        </p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="query.html" title="QUERY"><code class="function">query</code></a></td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405491"></a><h2>Notes</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="delete-records.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fdml.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="query.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">DELETE-RECORDS </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> QUERY</td></tr></table></div></body></html>

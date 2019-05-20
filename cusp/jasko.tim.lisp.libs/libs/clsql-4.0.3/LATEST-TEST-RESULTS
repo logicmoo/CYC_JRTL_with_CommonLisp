@@ -1,0 +1,50 @@
+Version 3.0.0 run on August 3, 2004 on x86, x86_64, and PowerPC platforms
+
+POSTGRESQL: All 233 tests passed (x86, Allegro CL Enterprise Edition).
+POSTGRESQL-SOCKET/POSTGRESQL: All 233 tests passed (x86, Allegro CL Enterprise Edition).
+MYSQL: All 213 tests passed (x86, Allegro CL Enterprise Edition).
+SQLITE: All 224 tests passed (x86, Allegro CL Enterprise Edition).
+ODBC/POSTGRESQL: All 232 tests passed (x86, Allegro CL Enterprise Edition).
+ODBC/MYSQL: All 213 tests passed (x86, Allegro CL Enterprise Edition).
+ORACLE: All 227 tests passed (x86, Allegro CL Enterprise Edition).
+AODBC/UNKNOWN: 23 of 231 tests failed (x86, Allegro CL Enterprise Edition).
+POSTGRESQL: All 233 tests passed (X86, CMU Common Lisp).
+POSTGRESQL-SOCKET/POSTGRESQL: All 233 tests passed (X86, CMU Common Lisp).
+MYSQL: All 213 tests passed (X86, CMU Common Lisp).
+SQLITE: All 224 tests passed (X86, CMU Common Lisp).
+ODBC/POSTGRESQL: All 232 tests passed (X86, CMU Common Lisp).
+ODBC/MYSQL: All 213 tests passed (X86, CMU Common Lisp).
+ORACLE: All 227 tests passed (X86, CMU Common Lisp).
+POSTGRESQL: All 233 tests passed (NIL, LispWorks).
+POSTGRESQL-SOCKET/POSTGRESQL: All 233 tests passed (NIL, LispWorks).
+MYSQL: All 213 tests passed (NIL, LispWorks).
+SQLITE: All 224 tests passed (NIL, LispWorks).
+ODBC/POSTGRESQL: All 232 tests passed (NIL, LispWorks).
+ODBC/MYSQL: All 213 tests passed (NIL, LispWorks).
+ORACLE: All 227 tests passed (NIL, LispWorks).
+POSTGRESQL: All 233 tests passed (X86, SBCL).
+POSTGRESQL-SOCKET/POSTGRESQL: All 233 tests passed (X86, SBCL).
+MYSQL: All 213 tests passed (X86, SBCL).
+SQLITE: All 224 tests passed (X86, SBCL).
+ODBC/POSTGRESQL: All 232 tests passed (X86, SBCL).
+ODBC/MYSQL: All 213 tests passed (X86, SBCL).
+ORACLE: All 227 tests passed (X86, SBCL).
+
+POSTGRESQL: All 233 tests passed (64-bit AMD64, Allegro CL Enterprise Edition).
+POSTGRESQL-SOCKET/POSTGRESQL: All 233 tests passed (64-bit AMD64, Allegro CL Enterprise Edition).
+MYSQL: All 223 tests passed (64-bit AMD64, Allegro CL Enterprise Edition).
+SQLITE: All 224 tests passed (64-bit AMD64, Allegro CL Enterprise Edition).
+ORACLE: All 227 tests passed (64-bit AMD64, Allegro CL Enterprise Edition).
+
+POSTGRESQL: All 233 tests passed (PowerPC, SBCL).
+POSTGRESQL-SOCKET/POSTGRESQL: All 233 tests passed (PowerPC, SBCL).
+MYSQL: All 217 tests passed (PowerPC, SBCL).
+SQLITE: All 224 tests passed (PowerPC, SBCL).
+ODBC/POSTGRESQL: All 232 tests passed (PowerPC, SBCL).
+ODBC/MYSQL: All 217 tests passed (PowerPC, SBCL).
+POSTGRESQL: All 233 tests passed (ppc, OpenMCL).
+POSTGRESQL-SOCKET/POSTGRESQL: All 233 tests passed (ppc, OpenMCL).
+MYSQL: All 217 tests passed (ppc, OpenMCL).
+SQLITE: All 224 tests passed (ppc, OpenMCL).
+ODBC/POSTGRESQL: All 232 tests passed (ppc, OpenMCL).
+ODBC/MYSQL: All 217 tests passed (ppc, OpenMCL).

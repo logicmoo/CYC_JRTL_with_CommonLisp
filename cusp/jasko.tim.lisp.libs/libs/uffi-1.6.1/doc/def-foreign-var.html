@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>def-foreign-var</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="objects.html" title="Objects" /><link rel="prev" href="with-cast-pointer.html" title="with-cast-pointer" /><link rel="next" href="strings.html" title="Strings" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">def-foreign-var</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="with-cast-pointer.html">Prev</a> </td><th width="60%" align="center">Objects</th><td width="20%" align="right"> <a accesskey="n" href="strings.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="def-foreign-var"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>def-foreign-var — 
+Defines a symbol macro to access a variable in foreign code
+	<p><b>Macro</b></p></p></div><div class="refsynopsisdiv"><h2>Syntax</h2><pre class="synopsis">
+	  <code class="function">def-foreign-var</code> <em class="replaceable"><code>name type module</code></em>
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2620050"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>     
+A string or list specificying the symbol macro's name. If it is a
+     string, that names the foreign variable. A Lisp name is created
+     by translating #\_ to #\- and by converting to upper-case in
+     case-insensitive Lisp implementations. If it is a list, the first
+     item is a string specifying the foreign variable name and the
+     second it is a symbol stating the Lisp name.
+	      </p></dd><dt><span class="term"><em class="parameter"><code>type</code></em></span></dt><dd><p>A foreign type of the foreign variable.
+	      </p></dd><dt><span class="term"><span class="returnvalue">module</span></span></dt><dd><p>
+     A string specifying the module (or library) the foreign variable
+     resides in. (Required by Lispworks)
+	      </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2620116"></a><h2>Description</h2><p>
+Defines a symbol macro which can be used to access (get and set) the
+value of a variable in foreign code.
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2620127"></a><h2>Examples</h2><div class="refsect2" lang="en" xml:lang="en"><a id="id2620132"></a><h3>C code</h3><pre class="screen">
+  int baz = 3;
+
+  typedef struct {
+    int x;
+    double y;
+  } foo_struct;
+
+  foo_struct the_struct = { 42, 3.2 };
+
+  int foo () {
+    return baz;
+  }
+</pre></div><div class="refsect2" lang="en" xml:lang="en"><a id="id2620147"></a><h3>Lisp code</h3><pre class="screen">
+  (uffi:def-struct foo-struct
+    (x :int)
+    (y :double))
+
+  (uffi:def-function ("foo" foo)
+      ()
+    :returning :int
+    :module "foo")
+
+  (uffi:def-foreign-var ("baz" *baz*) :int "foo")
+  (uffi:def-foreign-var ("the_struct" *the-struct*) foo-struct "foo")
+
+
+*baz*
+  =&gt; 3
+
+(incf *baz*)
+  =&gt; 4
+
+(foo)
+  =&gt; 4
+</pre></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2620165"></a><h2>Side Effects</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2620174"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2620184"></a><h2>Exceptional Situations</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="with-cast-pointer.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="objects.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="strings.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">with-cast-pointer </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Strings</td></tr></table></div></body></html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>deref-pointer</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="objects.html" title="Objects" /><link rel="prev" href="pointer-address.html" title="pointer-address" /><link rel="next" href="ensure-char-character.html" title="ensure-char-character" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">deref-pointer</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="pointer-address.html">Prev</a> </td><th width="60%" align="center">Objects</th><td width="20%" align="right"> <a accesskey="n" href="ensure-char-character.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="deref-pointer"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>deref-pointer — Deferences a pointer.
+	<p><b>Macro</b></p></p></div><div class="refsynopsisdiv"><h2>Syntax</h2><pre class="synopsis">
+	  <code class="function">deref-pointer</code> <em class="replaceable"><code>ptr type</code></em> =&gt; <span class="returnvalue">value</span>
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2577595"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>ptr</code></em></span></dt><dd><p>A pointer to a foreign object.
+	      </p></dd><dt><span class="term"><em class="parameter"><code>type</code></em></span></dt><dd><p>A foreign type of the object being pointed to.
+	      </p></dd><dt><span class="term"><span class="returnvalue">value</span></span></dt><dd><p>The value of the object where the pointer points.
+	      </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619091"></a><h2>Description</h2><p>
+	  Returns the object to which a pointer points.
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619102"></a><h2>Examples</h2><p>
+</p><pre class="screen">
+(let ((intp (allocate-foreign-object :int)))
+  (setf (deref-pointer intp :int) 10)
+  (prog1
+    (deref-pointer intp :int)
+    (free-foreign-object intp)))
+=&gt; 10
+</pre><p>
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619120"></a><h2>Notes</h2><p>
+  The TYPE argument is ignored for CL implementations other than
+  AllegroCL. If you want to cast a pointer to another type use
+  WITH-CAST-POINTER together with DEREF-POINTER/DEREF-ARRAY.
+        </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619133"></a><h2>Side Effects</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619142"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619152"></a><h2>Exceptional Situations</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="pointer-address.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="objects.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ensure-char-character.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">pointer-address </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> ensure-char-character</td></tr></table></div></body></html>

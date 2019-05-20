@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>INITIALIZE-DATABASE-TYPE</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-connect.html" title="Connection and Initialisation" /><link rel="prev" href="find-database.html" title="FIND-DATABASE" /><link rel="next" href="reconnect.html" title="RECONNECT" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">INITIALIZE-DATABASE-TYPE</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="find-database.html">Prev</a> </td><th width="60%" align="center">Connection and Initialisation</th><td width="20%" align="right"> <a accesskey="n" href="reconnect.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="initialize-database-type"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>INITIALIZE-DATABASE-TYPE — Initializes a database type<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389765"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">initialize-database-type &amp;key database-type</code> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389784"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>database-type</code></em></span></dt><dd><p>The database type to initialize, i.e. a keyword
+            symbol denoting a known database back-end.  Defaults to
+            the value of
+            <span class="symbol">*default-database-type*</span>.</p></dd><dt><span class="term"><span class="returnvalue">result</span></span></dt><dd><p>Either <code class="constant">NIL</code> if the initialization
+            attempt fails, or <span class="symbol">t</span> otherwise.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389834"></a><h2>Description</h2><p>If the back-end specified by
+	<em class="parameter"><code>database-type</code></em> has not already been
+	  initialized, as seen from
+	  <span class="symbol">*initialized-database-types*</span>, an attempt is 
+	  made to initialize the database.  If this attempt succeeds,
+	  or the back-end has already been initialized, the function
+	  returns t, and places the keyword denoting the database type 
+	  onto the list stored in
+	  <span class="symbol">*initialized-database-types*</span>, if not
+	  already present.</p><p>If initialization fails, the function returns
+	  <code class="constant">NIL</code>, and/or signals an error of type
+	  <span class="errortype">clsql-error</span>.  The kind of action
+	  taken depends on the back-end and the cause of the
+	  problem.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389868"></a><h2>Examples</h2><pre class="screen">
+*initialized-database-types*
+=&gt; NIL
+(setf *default-database-type* :mysql)
+=&gt; :MYSQL
+(initialize-database-type)
+&gt;&gt; Compiling LAMBDA (#:G897 #:G898 #:G901 #:G902): 
+&gt;&gt; Compiling Top-Level Form: 
+&gt;&gt; 
+=&gt; T
+*initialized-database-types*
+=&gt; (:MYSQL)
+(initialize-database-type)
+=&gt; T
+*initialized-database-types*
+=&gt; (:MYSQL)
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389882"></a><h2>Side Effects</h2><p>The database back-end corresponding to the database type
+	  specified is initialized, unless it has already been
+	  initialized.  This can involve any number of other side
+	  effects, as determined by the back-end implementation (like
+	  e.g. loading of foreign code, calling of foreign code,
+	  networking operations, etc.).  If initialization is
+	  attempted and succeeds, the
+	  <em class="parameter"><code>database-type</code></em> is pushed onto the list 
+	  stored in
+	  <span class="symbol">*initialized-database-types*</span>.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389903"></a><h2>Affected by</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><span class="symbol">*default-database-type*</span></td></tr><tr><td><span class="symbol">*initialized-database-types*</span></td></tr></table><p>
+        </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389927"></a><h2>Exceptional Situations</h2><p>If an error is encountered during the initialization
+	  attempt, the back-end may signal errors of kind
+	  <span class="errortype">clsql-error</span>.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389941"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="initialized-database-types.html" title="*INITIALIZED-DATABASE-TYPES*"><code class="function">*initialized-database-types*</code></a></td></tr><tr><td><a class="link" href="default-database-type.html" title="*DEFAULT-DATABASE-TYPE*"><code class="function">*default-database-type*</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389971"></a><h2>Notes</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="find-database.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-connect.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="reconnect.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">FIND-DATABASE </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> RECONNECT</td></tr></table></div></body></html>

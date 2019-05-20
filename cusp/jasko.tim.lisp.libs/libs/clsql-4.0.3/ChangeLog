@@ -1,0 +1,2340 @@
+11 Dec 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 4.0.3
+	* sql/metaclasses.lisp: Unify base-table processing by extracting 
+	the correct code from initialize-instance :around into the helper
+	function set-view-table-slot. Call that function also in
+	reinitialize-instance :around replacing erroneous code discovered
+	by Josh Feinstein.
+	
+17 Nov 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* BUGS: Add note about benefit of using configure file to create
+	Makefiles (suggestion from Joe Corneli)
+	
+22 Oct 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 4.0.2
+	* db-postgresql/postgresql-sql.lisp: Patch from Gabriele Favalessa based on
+	Andrew Golding suggestion for more informative :error-id slot.
+	
+17 Sep 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 4.0.1
+	* db-mysql/mysql-sql.lisp: Convert query to uffi cstring (thanks to
+	Albert Krewinkel).
+	* doc/Makefile, doc/html.xsl: Change output encoding from ISO-8859-1 to UTF-8
+	
+14 Sep 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 4.0.0: Major version increase to warn of potential
+	backwards incompatibility.
+	* NEWS: Document potentional backward incompatible changes
+	* db-mysql/mysql-sql.lisp: Changes session SQL mode to ANSI immediately
+	after connecting. This may break compatibility with some applications
+	who are using non-ANSI features with MySQL. This change is required to
+	properly support view-classes using a string as their :base-table
+	attribute. This allows users to specify the case of table names. 
+	This is feature is even	more essential for MySQL itself since MySQL
+	uses case-sensitive table names. Use connection-based database-create
+	and database-destroy rather than trying to invoke command-line mysql 
+	utility. Remove automatic upcasing of strings from list-indices. 
+	* db-postgresql/postgresql-sql.lisp: Use connection-based 
+	database-create	and database-destroy rather than trying to invoke
+	command-line utilities.
+	* db-postgresql-socket/postgresql-socket-sql.lisp: Use
+	database-execute-command rather than execute-command for
+	database-{create,destroy}. Connect to postgres database
+	rather than template1 for those database creation/deletion.
+	* sql/metaclasses.lisp: Store the string value of :base-table if a 
+	string is provided. Perform sql-escape at time of view-table name
+	creation.
+	* tests/test-init.lisp: Use "ej_join" as a string, rather than a 
+	symbol, since "ej_join"	is specified as :base-table. Clear the
+	expression output-cache in case the code for generating sql output
+	has changed.
+	* test/test-oodml.lisp: whitespace fix
+	* sql/ooddl.lisp: Use quoted string for primary key constraint if
+	table name is specified as a string.
+	* sql/oodml.lisp: Don't convert a string view-table name to database's 
+	default case.
+	* sql/expressions.lisp: Properly handle table and attribute identifiers
+	when they are a string. Do not change case of symbols to match database
+	default case.
+	* sql/operations.lisp: Change multiword symbols to upper case.
+	* sql/fddl.lisp: Quote base-table if a string to preserve case
+	for drop-table and create-table.
+	* tests/test-syntax.lisp: Add tests of low-level string attribute
+	identifiers.
+	
+20 Jul 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.8.6
+	* db-oracle/oracle-loader.lisp: Rework use of ORACLE_HOME directory
+	(problem noted on clsql-devel by icardo Boccato Alves)
+	* sql/pool.lisp: Remove incorrect keyword
+	* sql/database.lisp: Rework WITH-DATABASE to not make the database the
+	default database (reported by Saurabh Nanda and Chaitanya Gupta)
+	* doc/ref-connect.lisp: Update the documentation to WITH-DATABASE to
+	emphasis that make-default has a default value of nil.
+	* sql/transaction.lisp: Adjust commit/rollback messages for Microsoft
+	SQL Server. (patch from Nathan Bird)
+	* sql/metaclasses.lisp: Use finalize-inheritance hack on SBCL because
+	of trouble with def-view-class compilations (patch from Nathan Bird)
+	
+15 Jul 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.8.5
+	* db-mysql/mysql-loader.lisp: Revert previous change since libmysql is
+	not dynamically loaded on Windows
+	
+22 Jun 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.8.4
+	* db-mysql/mysql-loader.lisp: Do not bother loading libmysqlclient since
+	that library is dymically linked to clsql-mysql library. Thus, the mysql
+	library will be automatically loaded. This has only been tested on Linux,
+	thus far.
+
+29 May 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* tests/test-fddl.lisp: Add :order-by for :fddl/big/1 as
+	reported by Ricardo Boccato Alves
+
+02 May 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/database.lisp: Add ability of WITH-DATABASE to return
+	multiple values (patch from Liam Healy)
+	
+25 Apr 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.8.3
+	* doc/connect.xml: variable description fix by Liam Healy
+	* db-sqlite3/sqlite3-api.lisp, uffi/clsql-uffi-loader.lisp:
+	Apply patches from Marcus Pierce to reduce load-time warnings
+	* sql/package.lisp: Export iso-timestring as requested by Kevin Blaisdell
+
+23 Mar 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.8.2
+	* sql/db-postgresql-socket-api.lisp: Change read-socket-sequence to
+	disable wide characters for crypt salt sequence on SBCL, based
+	on patch from Lars Nostdal.
+
+26 Jan 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.8.1
+	* sql/pool.lisp: Test pooled connection when popped from
+	the pool to ensure the connection still works. Currently, implemented
+	only for MySQL.
+
+17 Jan 2007  Kevin Rosenberg <kevin@rosenberg.net>
+	* db-mysql/Makefile: Add potential mysql directories
+
+31 Dec 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/metaclasses.lisp: Remove usused saved-initargs
+	* clsql.asd: Also check ~/.clsql-init.lisp at load-time (usually used to
+	push search libraries)
+	
+30 Dec 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.8.0: BACKWARD INCOMPATABLE CHANGE!
+	* db-postgresql/postgresql-{api,loader,sql,package}.lisp:
+	Apply patch from Edi Weitz to avoid conflict with new Lispworks 5
+	POSTGRESQL package name. CLSQL's new package will be PGSQL, however
+	on non-Lispworks platforms, the nickname POSTGRESQL will still be
+	available. Applications directly using low-level POSTGRESQL package
+	are recommended to use the new PGSQL name.
+	* db-oracle/oracle-{api,sql}.lisp, sql/{expressions,loop-extension}.lisp,
+	Apply patch from Edi Weitz to reduce compiler warnings.
+	
+28 Dec 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.7.9
+	* sql/expressions.lisp: Commit patch from Edi Weitz to
+	use *default-database* for SQL-OUTPUT if no database is
+	explicitly passed to function.
+	* uffi/clsql-uffi-loader.lisp: Change load order to first try
+	plain name/type before attempting user-specified paths (patch
+	from Edi Weitz)
+	* uffi/ptrbits.c: New file to return number of bits in an pointer
+	* uffi/Makefile: use intbits to name .so file based on bit size.
+	Build both 32-bit and 64-bit libraries on 64-bit platform.
+	
+30 Nov 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.7.8
+	* db-sqlite3/sqlite3-sql.lisp: Commit patch from Edi Weitz fixing
+	error display
+
+16 Oct 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.7.7
+	* db-postgresql/postgresql-sql.lisp: Remove 
+	uffi:convert-foreign-to-native wrapper since using cstring for
+	PQresultErrorField
+
+16 Oct 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.7.6
+	* db-postgresql/postgresql-api.lisp: Fix UFFI return type for
+	PQresultErrorField foreign function.
+
+16 Oct 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.7.5
+	* doc/intro.xml: Update supported platforms.
+	* db-postgresql/postgresql-{package,api,sql}.lisp: Apply
+	changes from Andew Golding to use a more-specific error code
+	from PostgreSQL than the generic fatal error code of the result set.
+
+03 Oct 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/syntax.lisp: Commit patch from Marcus Pearce to improve
+	readtable modifications
+
+02 Oct 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/syntax.lisp: Check that original reader syntax functions
+	stored before trying to restore them.
+	
+20 Sep 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/syntax.lisp: Apply patch from Marcus Pearce to correctly
+	display sql reader syntax.
+
+06 Sep 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* uffi/clsql-uffi-loader.lisp, db-mysql/mysql-loader.lisp: Change from using *features*
+	to decide on 64-bit platform and check size of most-positive-fixnum instead.
+	Needed to support clisp amd64.
+
+03 Sep 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.7.1
+	* sql/metaclasses.lisp: Rework slot type's to be more AMOP
+	compatibile. Add warning for a metaclass condition that should
+	not occur.
+	* sql/time.lisp: Fixed symbol case inconsistency causing problem
+	in AllegroCL's modern lisp. First sign of bug noted by
+	Joel Reymond on clsql-devel.
+	* clsql.asd: Make time.lisp depend on utils.lisp
+
+31 Aug 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* db-mysql/mysql-loader.lisp: Apply patch from Marcus Pearce to push 
+	*library-file-dir* to CLSQL's library path.
+
+30 Aug 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.7.0: New platforms supported: SBCL/Win32, CLISP/Win32, CLISP/Cygwin,
+	CLISP/Linux x86, CLISP/Linux amd64, OpenMCL amd64. CLISP support requires the
+	latest development versions of CLISP, cffi, and cffi-uffi-compat packages.
+	* Makefile.common: Add OS detection
+	* uffi/make.sh, db-mysql/make.sh: Remove files
+	* uffi/Makefile, db-mysql/Makefile: Add support for cygwin compilation.
+	Refactor to remove need to make.sh shell scripts. 
+	* clsql.asd: Add support for loop extensions for clisp. Support clisp via cffi.
+	* sql/loop-extension.lisp: Define loop-record-iteration-path in CLSQL-SYS 
+	package rather than CL-USER. Add support for ansi-loop on clisp. 
+	* sql/ansi-loop.lisp: New file to support iteration on clisp. 
+	* db-mysql/mysql-api.lisp: Remove old mysql C API functions that no
+	longer exist in the mysql client library.
+	* doc/ref-fdml.lisp: Correct default field-type.
+	* sql/expressions.lisp: Use database-output-as-type if value exists for boolean output.
+	Fixed bug with noted with MySQL 5.0.24 and boolean values.
+	
+28 Aug 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.6.7
+	* sql/oodml.lisp: Remove high debugging level declaration
+
+14 Aug 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.6.6
+	* sql/generic-postgresql.lisp: Fix assumption that postgres user id
+	is always 1. Fixes problem noted with PostgreSQL 8.1.
+
+12 Aug 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.6.5
+	* sql/generic-postgresql.lisp: Add slot for has-table-pg_roles to
+	lazily cache if pg_roles tables exist. Selectively use SQL from
+	Joel's previous patch if pg_roles table exists. Should now work
+	with both postgresql 7.4 and 8.x.
+	
+12 Aug 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.6.4
+	* clsql.asd: Add support for c:\etc\clsql-init.lisp as possible
+	local initialization file
+	* db-mysql/mysql-loader.lisp: Remove former method of using pathnames
+	as name candidates.
+	* db-odbc/odbc-api.lisp: Work-around Allegro/Windows FFI bug
+	that generates incorrect integer return type
+	* sql/generic-postgresql.lisp: Revert patch from Joel Reymont since
+	it fails on versions of postgresql that lack the pg_role table
+	
+07 Jul 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.6.3
+	* sql/transactions.lisp: Important typo fix from Alexey Antipov
+	for database-start-transaction
+	
+04 Jul 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.6.2
+	* db-postgresql/postgresql-sql.lisp: Apply patch from Vladimir Sekissov
+	to close connection when failing to connect to database.
+	* sql/generic-postgresql.lisp: Apply patch from Joel Reymont
+	to avoid dropping system views.
+	* sql/oodml.lisp: Apply patch from Joel Reymont to avoid listify
+	a nil value [patch sponsored by Flektor]
+	* clsql-uffi.asd, uffi/make.sh: Patch from Richard Kreuter
+	for netbsd compilation
+	
+15 May 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* doc/ref-ooddl.xml: Add documentation for :db-reader and :db-writer
+	slots for def-view-class macro [as reported missing by Thomas Fischbacher].
+	
+09 May 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* db-postgresql-socket/postgresql-socket-api.lisp:
+	Apply patch from Marko Kocic adding the socket creation
+	function needed for CLISP.
+
+08 May 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version: 3.6.0 (requires UFFI v1.5.11 or greater)
+	* db-oracle/metaclasses.lisp: Patch from James Bielman for
+	checking slot constraints.
+	* db-oracle/oracle-{api,sql}.lisp: Avoid dead pointers on loading
+	saved openmcl images (based on patch from James Bielman)
+
+06 May 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* doc/ref-fdml.xml: Documentation patch from Marcus Pearce for limit keyword
+	
+03 May 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.5.7
+	* sql/time.lisp: Apply patch from Aleksandar Bakic to extended
+	duration parsing and unparsing to include year and month.
+	* clsql-uffi.asd, uffi/clsql-uffi-loader.lisp: Apply patch from Nathan Bird
+	improving library search on Windows platform.
+	* doc/ref-fdml.xml, /doc/TODO, tests/test-fdml.lisp, tests/test-init.lisp:
+	Apply patch from Marcus Pearce documenting and testing :limit and :offset for SELECT
+
+20 Mar 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.5.6
+	* clsql-postgresql-socket.asd, 
+	* db-postgresql-socket/postgresql-socket-package.lisp: 
+	Use the cl-md5 package on all platforms. Based on report 
+	from Alan Caulkins.
+	
+09 Mar 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.5.5
+	* uffi/make.sh, db-mysql/make.sh: Add GNU uname
+	
+28 Feb 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.5.4
+	* sql/metaclasses.lisp: Apply patch from Friedrich Dominicus to
+	fix accessor for new versions of SBCL
+	* db-oracle/oracle-sql.lisp: Apply patch from James Bielman
+	to improving parsing of time.
+	* db-db2/db2-constants.lisp: Change NULL_HANDLE has suggested
+	by Harold Lee.
+	* db-oracle/oracle-dbi.lisp: Add support for SQL BIT type
+	as noted by Russ Tyndall.
+	
+16 Jan 2006  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.5.3
+	* sql/time.lisp: Commit patch from Aleksandar Bakic
+	to properly handle destructive flag
+	* db-postgresql-socket/postgresql-socket-api.lisp: Apply patch
+	from Steven Harris for socket files with SBCL.
+	* sql/pool.lisp: Apply patch from Vladimir Sekissov so that
+	new connections added to the pool do not become the *default-database*
+	* sql/connect.lisp: Optionally set *default-database* for pooled
+	connection when make-default is generalized true.
+	
+23 Dec 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.5.1
+	* sql/expressions.lisp: Ensure table names are properly escaped
+	before comparing -- fixes bug reported by Asbjørn Bjørnstad
+	on CLSQL-Devel.
+
+02 Dec 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/generic-postgresql.lisp: improved decoding of table attribute
+	  parameters [from Vladimir Sekissov]
+	* sql/metaclasses.lisp: check that metaclass is standard-db-class or
+	  it's subclass to prevent adding standard-db-object to supers if
+	  somebody in the path has it already when metaclass inherited from
+	  standard-db-class. [from Vladimir Sekissov]
+	
+26 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.5.0
+	* tests/test-init.lisp, tests/test-fddl.lisp, tests/test-fdml.lisp, 
+	* db-odbc/odbc-api.lisp, db-odbc/odbc-ff-interface.lisp,
+	* db-odbc/odbc-package.lisp, db-odbc/odbc-constants.lisp
+	* db-odbc/odbc-dbi.lisp, db-odbc/odbc-sql.lisp
+	* sql/fddl.lisp, sql/generic-odbc.lisp, sql/db-interface.lisp
+	* sql/transaction.lisp, sql/package.lisp, sql/time.lisp
+	Commit patch from Dominic Robinson providing support for 
+	Microsoft SQL Server
+	* doc/csql.lisp: Fix typo in slot name
+	
+24 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.4.7
+	* sql/time.lisp: Commit patch from Aleksandar Bakic for
+	correct handling of decode-time usec value  
+	* clsql-mysql.asd: Commit patch from Harald Hanche-Olsen to
+	correct the name of the shared library file.
+	
+16 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* version 3.4.6
+	* sql/metaclasses.lisp: Avoid calling change-class on
+	effective-slot-definitions on sbcl to conform to sbcl 0.9.6.38
+	changes.
+	
+15 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.4.5
+	* sql/expressions.lisp: Patch from James Biel to add subselects
+
+14 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.4.4 [ Requires UFFI 1.5.7+] 
+	* db-oracle/oracle-{api,sql}.lisp: Patch from James Biel
+	to fix lifetime of foreign strings for Oracle calls
+
+13 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.4.3
+	* db-oracle/oracle-{api,sql}.lisp: Patch from James Biel
+	to improve performance
+	
+12 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.4.2
+	* clsql-uffi.asd: Patch from James Biel improving loading
+	* db-oracle/oracle-{api,sql}.lisp: Patch from James Biel
+	to support 64-bit lisps
+	
+12 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.4.1
+	* sql/expressions.lisp: Escape numbers to SQL strings
+	at expression level.
+	
+11 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.4: Add MySQL 5 support
+	* db-mysql/mysql-client-info.lisp: Recognize MySQL 5
+	* db-mysql/mysql-sql.lisp: Add support for views in MySQL 5
+	* doc/mysql-macosx-notes.txt: New document from Martin Brooks
+	
+7 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* src/time.lisp: Apply patch from Aleksandar Bakic for ROLL
+	function.
+	* BUGS: Added report for update-object-joins by Aleksandar Bakic
+	
+4 Nov 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.3.4 [UFFI >= 1.5.5 needed]
+	* db-odbc/odbc-api.lisp: Apply patch from Yaroslav Kavenchuk
+	to add missing #\' character.
+	* clsql.asd: Add support for CLSQLINIT environmental variable,
+	based on patch from Yaroslav Kavenchcuk. New version of UFFI
+	required.
+	
+30 Oct 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.3.3
+	* sql/oodml.lisp: Apply patch from Drew Crampsie to fix
+	update-objects-joins when using the :target-slot attribute
+	
+26 Oct 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.3.2
+	* sql/expressions.lisp: Avoid parenthesis on multiple group-by fields
+	as noted by Harald Hanche-Olsen.
+	* tests/test-syntax.lisp: Add test for multiple field group-by
+	
+25 Oct 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.3.1
+	* sql/time.lisp: Commit patch from Alan Shields to
+	display escape string on wall-time display only when *print-escape*
+	is true.
+	
+11 Oct 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/metaclasses.lisp: Commit patch from Will to
+	properly set db-reader slot in effective-slot-definition
+	* sql/expressions.lisp: Commit patch from Alan Shields
+	adding make-load-form for sql-relational-exp
+	* sql/generic-postgresql.lisp: Commit patch from Aleksandar Bakic
+	adding support for new NUMBER type
+	
+17 Sep 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.3.0
+	* sql/time.lisp: Apply patch from Alan Shields adding DATE type.
+	* doc/ref-ooddl.xml: Documentation of new type
+	* notes/add-type-hints.txt: New file from Alan Shields
+	* sql/fddl.lisp: Add owner keyword to drop-table as suggested
+	by Francis Leboutte
+	* db-postgresql-socket/postgresql-socket-sql.lisp: Fix database-probe
+	as noted by Francis Leboutte. Similar fix applied to db-mysql and
+	db-postgresql.
+	* sql/expressions.lisp: Allow string table names for output as
+	contributed by Francis Leboutte.
+	* examples/clsql-tutorial.lisp: Support :postgresql-socket as noted 
+	by Francis Leboutte
+	
+08 Sep 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.2.4
+	* doc/into.xml: Change download from ftp to http protocol
+
+08 Sep 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.2.3
+	* db-oracle/oracle-sql.lisp: Correction for v3.2.2 changes by
+	Edi Weitz
+
+08 Sep 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.2.2
+	* db-oracle/oracle-sql.lisp: Add check for zero increment as
+	suggested by Edi Weitz. Add missing database-sequence-last function
+	as noted and tested by Edi Weitz. Ensure that UFFI buffer is freed
+	in handle-oci-error. Add unwind-protect to sql-stmt-exec. Free UFFI
+	stmthp object when query cursor is freed with OCI.
+
+22 Aug 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* uffi/clsql-uffi-loader.lisp: Commit patch from astor@pvv.ntnu.no to
+	display search path when error occurs loading foreign library.
+	
+05 Jul 2005  Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.2.1
+	* doc/appendix.xml: Incorporate Edi Weitz's notes into documentation
+	with changes to support case-sensitive lisp implementations. Add
+	paragraph on using /etc/clsql-init.lisp site initialization file.
+	* clsql.asd: Load file /etc/clsql-init.lisp, if it
+	exists, after package is loaded to set site-specific configuration
+	
+2005-06-24  Edi Weitz  <edi@agharta.de>
+	* sql/db-interface.lisp: Added new special variable
+	*FOREIGN-LIBRARY-SEARCH-PATHS* and function PUSH-LIBRARY-PATH to
+	manipulate it.
+	* sql/package.lisp: Export these.
+	* uffi/clsql-uffi-loader.lisp: Used new variable; changed order of
+	libs.
+	* db-mysql/mysql-loader.lisp: Changed order of libs.
+
+09 Jun 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.2.0: REQUIRES UFFI VERSION 1.4.38 OR HIGHER
+	* clsql-mysql.asd: Renamed clsql/mysql interface library from
+	mysql to clsql_mysql
+	* clsql-uffi.asd: Renamed clsql/uffi interface library from
+	mysql to clsql_uffi
+	* uffi/clsql_uffi.c: Renamed from uffi.c
+	* db-mysql/clsql_mysql.c: Renamed from mysql.c
+	* db-mysql/Makefile, db-mysql/Makefile.msvc, db-mysql/mysql-loader.lisp: Rename shared library
+	* uffi/Makefile, uffi/Makefile.msvc, uffi/uffi-loader.lisp: Rename shared library
+	* db-*/*-loader.lisp: Commit big patch from Edi Weitz to remove
+	absolute pathnames when searching for foreign libraries.
+	foreign library loading.
+	
+07 Jun 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.16
+	* db-mysql/mysql-api.lisp: Commit patch from Espen Wiborn
+	to support UTF-8 on sbcl unicode.
+	
+18 May 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.15
+	* sql/time.lisp: Fix bug in roll that caused failure in test suite
+
+17 May 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.14
+	* sql/oodml.lisp: Properly handle when db-writer is NIL
+
+11 May 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/expressions.lisp: Avoid using simple-string declaration when
+	a non-simple string may be encountered.	[issue noted by 
+	will@cesmail.net] Add a simple-string declaration for a local
+	string generated.
+	
+06 May 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/oodml.lisp: Change db-writer and db-reader processing to accept
+	a symbol as well as function to serve as a function designator
+	[issue noted by will@cesmail.net]
+
+05 May 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.13
+	* sql/time.lisp: Fix error in submitted patch which caused error
+	in timestrings with 19 or less characters.
+	
+27 Apr 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.12
+	* db-postgresql-socket/postgresql-api.lisp: Commit patch from Tim Howe
+	to fix read-socket-sequence on non-sb-unicode sbcl.
+	
+26 Apr 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.12
+	* sql/time.lisp: Commit patch from Daniel Lowe which adds support
+	for fractional seconds which is required by PostgreSQL
+	* db-postgresql/postgresql-loader.lisp: Add library path for Windows
+	
+25 Apr 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/csql.lisp: Update URL for "SQL for Web Dummies" [Sean Champ]
+	
+24 Apr 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.11
+	* sql/syntax: Commit patch from Alan Shields to supress reader
+	macros when *read-supress* is T.
+	
+13 Apr 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.10
+	* db-postgresql-socket/postgresql-socket-api.lisp: Commit patch
+	from Janis Dzerins to support unicode on SBCL
+	* sql/syntax: Commit patch from Alan Shields to improve reporting
+	of invalid syntax statements.
+	
+06 Apr 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.9
+	* db-mysql/mysql-sql.lisp: Add port to connection specification
+	based on patch from Dave Watson
+	* doc/appendix.xml: Document MySQL port parameter to connection spec
+
+03 Apr 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.8
+	* sql/time.lisp: Patch from Keith James for parsing ISO-8601 timestamps
+	
+18 Mar 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/oodml.lisp: Add missing database argument [Patch from
+	Alan Caulkins]
+	
+03 Mar 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/oodml.lisp: Improve database priority in 
+	update-records-from-instance [Patch from Walter C. Pelissero]
+	
+17 Feb 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.7
+	* sql/package.lisp: Export database-reconnect from clsql-sys
+
+08 Feb 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/oodml.lisp: Use explicit database in fault-join-target-slot
+	[Patch from Walter Pelissero]
+	
+29 Jan 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* db-postgresql/postgresql-loader.lisp: Add additional
+	directories to Fink on darwin [patch from Cyrus Harmon].
+	
+29 Jan 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.6
+	* sql/oodml.lisp: Clear view instance cache when delete-instance-records
+	is invoked [suggested by Alan Shutko].
+	* uffi/clsql-uffi-loader.lisp: Improvements for loading with SBCL X86-64
+	* sql/metaclasses.lisp: Don't change case of a :base-table string supplied
+	to def-view-class [fix suggested by Fred Gilham].
+	
+25 Jan 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* tests/*.lisp: Change Vladamir to Vladimir per Cyrus Harmon's
+	suggestion.
+	* sql/utils.lisp: Fix unnecessary consing noted by Fred Gilham.
+	* doc/*.xml: Fix spelling of Vladimir
+	
+24 Jan 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* doc/bookinfo.xml, doc/csql.xml, doc/intro.xml: Update links
+	now that LispWorks is an independant company [noted by
+	Martin Thornquist]
+	
+22 Jan 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* db-sqlite/sqlite-sql.lisp, db-sqlite3/sqlite3-sql.lisp:
+	Better support for 64 bit environments
+
+05 Jan 2005 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.5
+	* sql/metaclass.lisp: Make t the default value of :set
+	[noted by Cyrus Harmon]
+
+28 Dec 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.4
+	* uffi/clsql-uffi.lisp: Add support for unsigned integers
+	* db-mysql/mysql-sql.lisp: Add support for detecting/marking
+	unsigned integers. Apply patch from Yannick Gingras to
+	implement database-sequence-last.
+	
+26 Dec 2004 Kevin Rosenberg <kevin@rosenberg.net>
+        * doc/ref-fdml.lisp: Fix variable tag name to varname
+	[noted by Eduardo Munoz]
+        * db-mysql/mysql-loader.lisp: Handle library paths for 64-bit systems
+ 	
+06 Dec 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.2
+	* sql/ooddl.lisp: Accept patch from Klaus Harbo for
+	update-object-joins.
+	* sql/metaclass.lisp: Remove unnecssary (and runtime error
+	causing) change-class invocation when running on CLISP.
+	* db-mysql/mysql-api.lisp: Commit patch from Paul Werkowski
+	to fix structure name.
+	* sql/database.lisp: More specific error message with trying
+	to use a database value of NIL.
+	* sql/expressions.lisp: Accept a string for the table name
+	in (sql-output sql-delete database) [suggested by Ed Symanzik].
+	
+11 Nov 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.1
+	* sql/generic-postgresql.lisp: Commit patch from Chris Capel to
+	ignore columns which have been dropped.
+	* clsql-postgresql-socket.asd, db-postgresql-socket/postgresql-socket-package.lisp:
+	Use sb-md5 package on SBCL, recommended by Chris Capel
+	
+09 Nov 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.1.0 released: New SQLite3 backend by Aurelio Bignoli
+	* doc/appendix.xml: Document SQLITE3 backend, patch by Aurelio Bignoli
+	* sql/operations.lisp: Add lower and upper SQL functions [Daniel Lowe].
+	
+08 Nov 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/expressions.lisp: Fix slot name [thanks to Daniel Lowe]
+
+31 Oct 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* clsql-sqlite3, db-sqlite3/*: NEW BACKEND
+	contributed by Aurelio Bignoli
+
+23 Oct 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/oodml.lisp: Commit patch from Walter Pelis
+	to use an object's database for a select on its slot.
+	
+20 Oct 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* uffi/uffi.c, uffi/clsql-uffi.lisp: Commit patch from
+	Aurelio Bignoli to fix negative 64-bit integers
+	
+07 Oct 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* db-mysql/mysql.c: Fix parameters in bind_param call
+
+07 Oct 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* uffi/clsql-uffi.lisp: Add support for :blob result-type
+	* db-mysql/mysql-sql.lisp: Add support for :blob
+	result-type
+	
+04 Oct 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* db-mysql/mysql-sql.lisp, db-db2/db2-sql.lisp: Add
+	missing quotes for types in code that is still in development
+	(thanks to Joerg Hoehle)
+	
+03 Oct 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.0.8 released
+	* db-sqlite/sqlite-*.lisp: Apply patch from
+	Aurelio Bignoli with improvements
+	
+01 Oct 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* multiple: Apply patch from Joerg Hoehle with multiple
+	improvements.
+	
+01 Oct 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.0.7 released
+	* sql/oodml.lisp, sql/package.lisp, db-mysql/mysql-objects.lisp:
+	Add support for mediumint.
+	* sql/metaclass.lisp: Rework CLISP MOP handling
+	* sql/ooddl.lisp: Work-around to have CLISP finalize standard-db-class
+	
+28 Sep 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/metaclass.lisp: Support CLISP's attribute name
+	for the type field in direct class slots
+	
+27 Sep 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.0.6 released
+	* BUGS: New file. Document suspected SIGPIPE
+	interaction between SBCL and libpq used in
+	postgresql backend.
+	* doc/ref-fdml.lisp: Document the :caching and :refresh
+	keywords of the SELECT function.
+	* doc/ref-ooddml.lisp: Document the new *default-caching*
+	variable.
+	* sql/package.lisp: Export *default-caching*
+	* sql/oodml.lisp: Use *default-caching* to 
+	control default caching behavior.
+	
+21 Sep 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.0.5 release
+	* doc/appendix.xml: Add note about loading Oracle8 version
+	* db-oracle/oracle-loader.lisp: Support Oracle8 based on
+	data from David Young.
+
+10 Sep 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* doc/Makefile, doc/catalog-darwin.xml: Apply
+	patch from Cyrus Harmon for building docs on Mac OS X
+	* sql/package.lisp: Add new (pre-release) clisp MOP package 	
+	
+09 Sep 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.0.4 Release
+	* multiple: Remove superfluous quotes in UFFI def-type
+	and def-foreign-type forms.
+	
+07 Sep 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.0.3 Release
+	* db-postgresql-socket/postgresql-socket-api.lisp: Commit patch
+	from Tagore Smith to call force-output after sending authentication
+	* db-odbc/odbc-api.lisp: Move ODBC v3 conversons
+	* db-odbc/odbc-sql.lisp: Load mysql or postgresql package when connecting
+	to a database of that type so that functions that indicate capabilities of
+	database are available.
+	
+02 Sep 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* db-odbc/odbc-api.lisp: More conversions to ODBC v3
+	
+02 Sep 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.0.2 Release
+	* TODO: Add note about ODBC on Windows
+	* db-odbc/odbc-loader.lisp: Add /winnt/system32/ to
+	search directories
+	* db-odbc/odbc-ff-interface.lisp: Change the return type 
+	of SQLSetEnvAttr to :short
+	
+02 Sep 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* examples/clsql-tutorial.lisp: added missing initarg for the COMPANYID
+	slot of the employee View Class definition [reported by Franz Deuzer]. 
+
+01 Sep 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.0.1 Release
+	* tests/test-init.lisp: Add second join class to employee-address
+	to test a class with two join slots.
+	* sql/oodml.lisp: Fix find-all function for a class with multiple
+	join slots
+	* TODO: Remove need to test/fix multiple join classes
+	
+27 Aug 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* db-mysql/Makefile, db-mysql/mysql-loader.lisp: accept patch
+	from Jon Buffington for file locations on Darwin.
+	
+17 Aug 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/db-interface.lisp: Improve messages when functions
+	are passed a database object, but the method is not specialized
+	for that database type.
+	* sql/metaclasses.lisp: Fix inline declaration (reported by
+ 	Cyrus Harmon)
+	
+14 Aug 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* TODO: Add bug report about SQL generation with a table
+	containing two join slots.
+	* sql/oodml.lisp: Add optional size to VARCHAR type
+	
+3 Aug 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 3.0.0 Release
+	* sql/expressions.lisp: Change declaration that
+	caused error on openmcl
+	* db-aodbc/aodbc-sql.lisp: Fix storage location
+	of odbc connection. Specialize database-query since
+	dbi's :types keyword is different than generic-odbc's
+	:result-types keyword
+	* sql/db-interface.lisp: Add warnings for methods
+	not specialized by a db backends
+	* tests/test-fddl.lisp: Fix case of symbols to support
+	case-sensitive Allegro 
+	* db-oracle/oracle-sql.lisp: Rework errbuf in handle-oci-error
+	* tests/test-init.lisp: Note that odbc driver for postgresql
+	doesn't properly handle table ownership
+	* LATEST-TEST-RESULTS: update with version 3.0.0
+	
+1 Aug 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* sql/expressions.lisp: conditionalise escaping of backslash in 
+	generated SQL strings on backend. 
+	* tests/test-fdml.lisp: test for escaping of backslash. 
+	* sql/oodml.lisp: minor tidying in FIND-ALL. 
+
+26 Jul 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* NEWS: Initial 3.0 announcement draft
+	* README: Expand acknowledgements of incorporated projects
+	* CONTRIBUTORS: Further document Marcus Pearce contributions
+	
+23 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* sql/oodml.lisp: add DATABASE-OUTPUT-SQL-AS-TYPE method specialisation
+	to print floats with the exponent markers removed. 
+	* tests/test-oodml.lisp: add tests for updating records with floats. 
+
+22 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* db-oracle/oracle-sql.lisp: enable :OWNER :ALL in DATABASE-LIST-* for 
+	CommonSQL compatibility. 
+	* tests/test-init.lisp: skip test :FDDL/TABLE/6 on Oracle since 
+	this column constraint syntax is not supported. 
+	* tests/test-fddl.lisp: change column indexed in test :FDDL/INDEXES/2
+	from EMPLID to LAST_NAME since Oracle complains that EMPLID is already 
+	indexed. 
+
+17 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* doc/ref-fdml.xml: document CACHE-TABLE-QUERIES. 
+	* tests/test-fdml.xml: add test for CACHE-TABLE-QUERIES. 
+	* doc/ref-ooddl.xml: minor changes to syntax and examples entries 
+	for uniformity. 
+	* doc/ref-oodml.xml: add examples for OODML. 
+	* sql/oodml.lisp: ensure SELECT passes on its REFRESH argument 
+	to FIND-ALL. 
+	* sql/metaclasses.lisp: update docstrings. 
+	* tests/test-init.lisp: change :db-constraints for emplid to 
+	(:not-null :unique) as a temporary test for multiple column constraints 
+	in DEF-VIEW-CLASS. 
+	* tests/test-oodml.lisp: add tests for *DB-AUTO-SYNC* and 
+	return type of (SETF SLOT-VALUE-USING-CLASS). 
+	* TODO, doc/TODO: remove items done. 
+	* README: fix typo. 
+	
+16 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* sql/oodml.lisp: on Lispworks, use weak valued hash tables for 
+	object caching. 
+	* sql/expressions.lisp: Fix SQL generation for the symbol NIL. 
+
+16 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* sql/expressions.lisp: reactivate caching of generated SQL strings. 
+	Move methods for DATABASE-OUTPUT-SQL, OUTPUT-SQL and SQL-HASH-KEY 
+	here from sql/fdml.lisp. Rationalise behaviour of SQL-OUTPUT, 
+	OUTPUT-SQL and DATABASE-OUTPUT-SQL. 
+	* sql/fdml.lisp: remove disabled method ADD-STORAGE-CLASS. Move 
+	methods for DATABASE-OUTPUT-SQL, OUTPUT-SQL and SQL-HASH-KEY to 
+	sql/expressions.lisp. 
+	* sql/ooddl.lisp: replace call to DATABASE-OUTPUT-SQL in 
+	DATABASE-PKEY-CONSTRAINT with call to SQL-OUTPUT. 
+	* sql/generics.lisp: add docstrings. 
+
+15 Jul 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.16
+	* db-oracle/oracle-sql.lisp: Remove OpenMCL specific
+	code in favor of fixing UFFI with James Bielman's patch
+	
+14 Jul 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.15
+	* db-oracle/oracle-sql.lisp: Apply patch for OpenMCL/OSX
+	from James Bielman
+	
+14 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* README, INSTALL: update URLs. Minor updates to descriptions. 
+	* tests/README: remove stuff about editing contexts. 
+
+12 Jul 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* db-oracle/oracle-objects.lisp: Change *default-varchar-length* to 
+	*default-string-length*
+	
+12 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* tests/test-syntax.lisp, tests/test-fdml.lisp: add tests for escaping 
+	of single quotes. 
+	* tests/test-fddl.lisp: add tests for column and table constraints 
+	in CREATE-TABLE. Add test for OWNER keyword parameter to 
+	LIST-TABLES (assuming same underlying machinery in other FDDL 
+	functions). 
+	* tests/test-init.lisp: restrict above test to postgresql and oracle. 
+	
+12 Jul 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* db-sqlite/sqlite-sql.lisp: Fix condition as reported by Aurelio 
+	Bignoli.
+
+11 Jul 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/oodml.lisp, sql/package.lisp, doc/ref-ooddl.lisp, db-mysql/mysql-objects.lisp: Add tinyint type
+	
+10 Jul 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.14
+	* doc/*.xml: documentation additionals and fixes so
+	that docbook passes xmllint.
+	
+9 Jul 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.13
+	* sql/fdml.lisp: Apply patch from Kim Minh Kaplan 
+	to change escaping of single quotes. Mild optimizations
+	for escaped string output.
+	* doc/ref-ooddl.lisp: documentation additions
+	* doc/ref-oodml.lisp: Add purpose to functions
+	* TODO: Add need to test single quote escaping
+	
+7 Jul 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* doc/ref-ooddl.xml, doc-ref-oodml.xml: documentation additions
+	* sql/ooddl.lisp: Added SMALLINT type
+	* sql/generic-postgresql.lisp: Added INT2 as SMALLINT type
+	* db-mysql/mysql-objects.lisp: Added SMALLINT type
+	* sql/package.lisp: Export SMALLINT
+	* sql/expressions.lisp: Add MYSQL's UNSIGNED and ZEROFILL as
+	db-constraints
+	
+6 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* sql/expressions.lisp: add AUTO-INCREMENT and UNIQUE to the 
+	recognised column constraints for CREATE-TABLE and the :DB-CONSTRAINTS 
+	View Class slot option. 
+	* sql/ooddl.lisp: fix bug preventing the :DB-CONSTRAINTS View Class 
+	slot option accepting a list of constraints [reported by Travis Cross]. 
+	* doc/ref-fddl.xml: add some examples of specifying column and 
+	table constraints to the documentation for CREATE-TABLE. 
+	* TODO: add note about adding tests for table/column constraints. Add 
+	optimisation note about using cached attribute types in insert/update
+	operations. 
+	
+3 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* doc/appendix.xml: add notes about idiosyncrasies/unsupported 
+	features and so on the documentation for each backend. 
+	* doc/TODO: remove items done. 
+	* doc/ref-transaction.xml: add note in introduction about 
+	autocommit mode as a difference from CommonSQL. 
+	* doc/ref-syntax.xml: add notes about SQL syntax state functions 
+	being macros in CLSQL. Add note about SQL operators which are 
+	CLSQL extensions. 
+
+2 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* Version 2.11.12 released
+	* doc/ref-recording.xml: document SQL I/O recording. 
+	* doc/ref-prepared.xml: new file for documenting prepared statements. 
+	* doc/clsql.xml: comment out include for large object and CLSQL-SYS 
+	documentation. 
+	* doc/ref-conditions.xml: complete documentation of condition system. 
+	* doc/global-index.xml: add symbols from condition system and remove
+	those from LOB and prepared statement APIs. 
+	* doc/ref-fdml.xml: complete documentation of FDML.
+	* doc/glossary.xml: add View Class. 
+	* doc/TODO: remove items done. 
+	* sql/conditions.lisp: make SQL-CONDITION a parent of SQL-ERROR. 
+	* sql/package.lisp: remove FOR-EACH-ROW from exports list. Export 
+	additional slot accessors for condition classes. 
+
+1 Jul 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* doc/ref-ooddl.lisp: Add documentation
+	* doc/ooddl.lisp: Move *DEFAULT-VARCHAR-LENGTH* from oodml.lisp
+	and rename to *DEFAULT-STRING-LENGTH*. Add docstring.
+	* doc/oodml.lisp: Rename references to new name of
+	*DEFAULT-STRING-LENGTH*
+
+1 Jul 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* doc/ref-transaction.xml: document transaction handling. 
+	* sql/transaction.lisp: ensure that COMMIT, ROLLBACK and 
+	START-TRANSACTION return NIL as per the CommonSQL spec. Modify 
+	ADD-TRANSACTION-{ROLLBACK|COMMIT}-HOOK such that a database is 
+	passed as a keyword argument defaulting to *DEFAULT-DATABASE*.
+	Added docstrings. 
+
+30 Jun 2004 Marcus Pearce <m.t.pearce@city.ac.uk>
+	* doc/ref-fdml.xml: document the FDML. 
+	* doc/ref-fddl.xml: move documentation for TRUNCATE-DATABASE here. 
+	* sql/ooddl.lisp: moved *default-varchar-length* to here from 
+	oodml.lisp and renamed to *default-string-length*
+	
+23 Jun 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/oodml.lisp: Add keyword :transactions to def-view-from-class
+	to allow specifying transactionless table creation
+	* doc/ref-oodml.lisp: Add new keyword to signature of 
+	DEF-VIEW-FROM-CLASS	
+	
+18 Jun 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* Version 2.11.11
+	* sql/expressions.lisp: when removing duplicate table identifiers 
+	in the FROM clause of a query, check both table name and alias 
+	are equivalent. 
+	* sql/fdml.lisp: remove DESCRIBE-TABLE. 
+	* sql/db-interface.lisp: remove generics DESCRIBE-TABLE and 
+	DATABASE-DESCRIBE-TABLE. 
+	* sql/package.lisp: remove DESCRIBE-TABLE, DATABASE-DESCRIBE-TABLE 
+	and LIST-TABLE-INDEXES. 
+	* sql/generic-postgresql.lisp: add reader conditional #+nil for 
+	DATABASE-DESCRIBE-TABLE and comment about its uses for 
+	re-implementing LIST-ATTRIBUTE-TYPES with a single SQL query 
+	returning type info for all attributes. 
+	Fix DATABASE-SEQUENCE-LAST. 
+	* sql/fddl.lisp: remove LIST-TABLE-INDEXES and redefine 
+	LIST-INDEXES with additional keyword parameter :ON. 
+	* tests/test-fddl.lisp: replace LIST-TABLE-INDEXES in :fddl/index/3 
+	with LIST-INDEXES (with :ON parameter). 
+	* doc/global-index.xml: remove DESCRIBE-TABLE and LIST-TABLE-INDEXES. 
+	* doc/ref-connect.xml: minor tidying. 
+	* doc/ref-fddl.xml: document the FDDL. 
+	* doc/TODO: removed items done. Moved note about transaction handling 
+	from TODO to here. 
+	* TODO: move note about transaction handling to doc/TODO. Added 
+	optimization note about LIST-ATTRIBUTE-TYPES and LIST-INDEXES. 
+	
+13 Jun 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* Version 2.11.10
+	* sql/syntax.lisp: updated docstrings. 
+	* sql/package.lisp: exported DATABASE-NAME-FROM-SPEC from CLSQL 
+	package.
+	* sql/database.lisp: add docstrings for CREATE-DATABASE, 
+	DESTROY-DATABASE, TRUNCATE-DATABASE and LIST-DATABASES. Replace 
+	CLSQL-GENERIC-ERROR signalled in RECONNECT with SQL-CONNECTION-ERROR. 
+	* doc/ref-syntax.xml, doc/global-index.xml: minor tidying. 
+	* doc/ref-connect.xml: document connection/initialisation. 
+	* doc/ref-fdml.xml: move TRUNCATE-DATABASE reference entry here. 
+	* doc/TODO: remove items done. 
+	* Makefile: add db-oracle to to SUBDIRS. 
+
+13 Jun 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/oodml.lisp: Add new serialization functions:
+	WRITE-INSTANCE-TO-STREAM and READ-INSTANCE-FROM-STREAM
+	* sql/expressions.lisp: Avoid duplicate FROM names when selecting
+	from a table that has more than one primary index.
+	* sql/conditions.lisp: Fix printing of closed-database error
+	
+13 Jun 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.9
+	* sql/conditions.lisp: Set initial slot value for message in SQL-WARNING
+	* sql/transactions.lisp: Correctly set slots of SQL-WARNING
+
+12 Jun 2004 Marcus Pearce <m.t.pearce@city.ac.uk>
+	* sql/package.lisp: export DATABASE-TYPE from CLSQL and subclasses 
+	of SQL-EXPRESSION from CLSQL-SYS. 
+	* sql/syntax.lisp: make error signalled in SQL-OPERATION an 
+	SQL-USER-ERROR. Make SQL-OPERATOR return just one value. 
+	* doc/Makefile: added Mandrake linux. 
+	* doc/catalog-redhat.xml, doc/catalog-mandrake.xml: new files. 
+	* doc/appendix.xml: fixed little typo (adsf). 
+	* doc/glossary.xml: removed closed-database and note about 
+	sql-expression, added some entries. 
+	* doc/ref-syntax.xml: documented the symbolic SQL syntax. 
+
+10 Jun 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.8
+	* db-mysql/mysql-loader.lisp: Remove load of unnecessary zlib library
+	* multiple: Add generalized-boolean type as requested by
+	Edi Weitz
+	* TODO: Added need for test of generalized-boolean
+	
+9 Jun 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.7 released
+	* uffi/clsql-uffi-loader.lisp: Apply patch from Edi Weitz
+	for loading with clc-register-user-package. Remove personal
+	directory from path lisp.
+	* db-mysql/mysql-loader.lisp: Similar changes
+	
+8 Jun 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.6 released
+	* sql/oodml.lisp: Commit patch from Edi Weitz
+	to fix symbol writing/reading
+	* TODO: Add need for symbol slot test
+	
+7 Jun 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* sql/package.lisp: remove duplicate export of 
+	*CACHE-TABLE-QUERIES-DEFAULT*. 
+	* doc/ref-*.xml, doc/global-index.xml: new files documenting 
+	the CommonSQL compatible api. 
+	* tests/test-fdml.lisp: modified the test :fdml/transaction/3 to 
+	reflect changes in return values of WITH-TRANSACTION. 
+
+04 Jun 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* tests/README: Fix filename [reported by Bill Clementson]
+	* sql/transactions.lisp: Apply return value patch from
+	Edi Weitz for WITH-TRANSACTION
+	* tests/README: Remove ptester package requirement (as noted
+	by Bill Clementson)
+	
+03 Jun 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.5 released
+	* examples/clsql-tutorial.lisp: Remove obsolete :nulls-ok attribute,
+	Select connection-spec based on connection type. Bugs reported by
+	Bill Clementson.
+	* uffi/uffi.dll, uffi/uffi.lib: Recompile with Visual Studio 2003
+	* db-mysql/mysql-loader.lisp: Update check for zlibwapi library
+	name on Windows, add \bin\ directory to search path
+	
+31 May 2004 Marcus Pearce <m.t.pearce@city.ac.uk> 
+	* db-odbc/odbc-sql.lisp: DB-TYPE replaced with DATABASE-TYPE in 
+	DATABASE-CONNECT. 
+	* sql/operations.lisp: substr now generates SUBSTR for use on 
+	Oracle; added a new operator SUBSTRING for use elsewhere. minus 
+	now generates MINUS for use on Oracle. Nvl signals an error if 
+	not called with exactly 2 arguments. Add concat function for use 
+	instead of the || operator on MySQL and Oracle. 
+	* sql/syntax.lisp: changed internal symbol for the || operator to 
+	CONCAT-OP. 
+	* sql/expressions.lisp: removed redundant and unused functions 
+	GENERATE-SQL (cf. SQL-OUTPUT) and DATABASE-CONSTRAINT-DESCRIPTION
+	(cf. MAKE-CONSTRAINTS-DESCRIPTION). 
+	* sql/generics.lisp: removed generic function for 
+	DATABASE-CONSTRAINT-DESCRIPTION (see above). 
+	* tests/test-syntax.lisp: modified/added tests according to changes
+	in sql/operations.lisp. 
+	* tests/test-fdml.lisp: changed SUBSTR to SUBSTRING in test 
+	:fdml/select/21.  
+	* sql/package.lisp: added the operators SQL-SUBSTRING, SQL-CONCAT-OP 
+	and SQL-USERENV to the shared exports list. Removed 
+	ROLLBACK-TRANSACTION, COMMIT-TRANSACTION, DATABASE-START-TRANSACTION, 
+	DATABASE-ABORT-TRANSACTION, DATABASE-COMMIT-TRANSACTION, 
+	TRANSACTION-LEVEL, TRANSACTION,  RECORD-SQL-COMMAND and 
+	RECORD-SQL-RESULT from shared exports list. 
+	
+30 May 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* db-postgresql/postgresl-sql.lisp: Avoid computing
+	result-types lisp when nil result-types. Return only
+	one value when field-types nil.
+	* db-mysql/mysql-sql.lisp: Simple queries now
+	working with prepared statements.
+	
+30 May 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.4: MySQL 4.1 now passes all tests
+	* sql/package.lisp: Add API for prepared statments.
+	* sql/fdml.lisp: Change implicit flatp processing
+	for string map-query for greater CommonSQL conformance.
+	Add high-high API for prepared statements.
+	* tests/test-basic.lisp: Add test for map-query and
+	single argument.
+	* sql/transactions.lisp: Change name/semantics of
+	autocommit to set-autocommit.
+	* sql/generic-postgresql.lisp: Add support for
+	prepared statements. 
+	* tests/test-internal.lisp: New file
+	* sql/odbc-api.lisp: Update to using ODBC V3 protocol
+	* clsql-mysql.asd, clsql-uffi.asd: Remove check and Common Lisp
+	Controller invocation.
+	* db-mysql/mysql-api.lisp: Add support for MySQL 4.1 field structure
+	* sql/expressions.lisp: Avoid emitting double parenthesis when a
+	function contains a subselect. 
+	
+27 May 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.3
+	* sql/ooddl.lisp: Commit patch from Edi Weitz fixing return
+	type (setf slot-value-using-class)
+	* TODO: add not that need a test case for the above fix
+	* db-sqlite: Remove clisp support since clisp can not run CLSQL
+	with its MOP usage
+	* db-oracle/oracle-sql.lisp: By default, use OCIEnvCreate as 
+	introduced in Oracle8. Leave older code selectable by a reader macro
+	for Oracle7 and prior. Avoid use of OCIServerAttach since CLSQL
+	uses OCILogon and does not the more complex session management.
+	
+26 May 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/oodml.lisp: Commit universal-time typo patch from Edi Weitz
+	* test/test-init.lisp: Add universal-time slot to person.
+	* test/test-fddl.lisp: Add tests of universal-time slot
+	* test/test-ooddl.lisp: Test universal-time slot in an object
+	* TODO: Remove need for universal-time test	
+	* debian/rules, debian/control: Add cl-sql-oracle binary package
+	* doc/appendix.xml: Add Oracle backend information
+	* db-oracle/oracle-objects.lisp: Add database-get-type-specifier for
+	universal-time. Convert BIGINT CLSQL type to CHAR SQL type
+	* db-mysql/mysql-sql.lisp: Fix condition name to sql-connection-error
+	* doc/ref-clsql.xml: Renamed from ref_clsql.xml. Change the documentation
+	for map-query to reflect changed in arguments to be CommonSQL compatible.
+	Updated old clsql conditions to new CommonSQL compatible conditions.
+	
+25 May 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* sql/oodml.lisp: (string n) now produces a CHAR field. Add new VARCHAR
+	type. Added *default-varchar-length* rather than previous hard-coded
+	varchar length. Remove 'simple-string and 'simple-base-string since they
+	are subtypes of 'string.
+	* db-oracle/oracle-sql.lisp: Use *default-varchar-length* rather than
+	local hard-coded value.
+	* sql/metaclasses.lisp: Convert specified type VARCHAR and (VARCHAR n) to Lisp
+	type string. Convert specified-type (CHAR n) to string. Convert specified-type
+	CHAR to lisp type character.
+	* sql/generic-postgresql.lisp: (string n) => (CHAR n)
+	* sql/operations.lisp: Add userenv
+	* doc/TODO: Add AUTOCOMMIT. Remove need for large table and bigint
+	slot tests
+	* sql/oracle-sql.lisp: Add 64-bit bigint direct conversion
+	* uffi/clsql-uffi.lisp: Handle signed 64-bit integers
+	* test/test-init.lisp: Add large table with bigint slot
+	
+25 May 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.1 released: Much simpler Oracle client library loading.
+	Now uses ORACLE_HOME environmental variable as well as tests default
+	path for Oracle Instant Client. 
+	
+25 May 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.11.0 released: Full Oracle support. All tests pass
+        * db-oracle/oracle-sql.lisp: Add declaration so that SBCL runs efficiently.
+	* tests/test-init.lisp: capitalize odbc backend name in banner
+	* CONTRIBUTORS: Add note about Marcus' excellent work
+	* sql/oodml.lisp: Removed old stub function 	
+	* clsql.asd: Use module names in current package rather than keyword package
+	* db-oracle/oracle-sql.lisp: Don't trim trailing spaces. Prevent interrupts
+	in setting sequence position. Make autocommits more efficient.
+	* tests/test-init.lisp: Skip 2 tests on Oracle which have unsupported syntax 
+	* sql/oodml.lisp: Get rid of undocumented raw-string type. CommonSQL
+	strings are raw (non-trimmed trailing whitespace). Add database-get-type-specifier
+	and read-sql-value for NUMBER and CHAR.
+	* sql/base-classes.lisp: Add autocommit slot
+	* sql/transaction.lisp: Added autocommit processing, mild cleaning.
+	* doc/intro.xml: Add Oracle
+	
+24 May 2004: Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* db-postgresql-socket/postgresql-socket-sql.lisp: replace 
+	CLSQL-SIMPLE-WARNING with SQL-WARNING. 
+	* db-sqlite/sqlite-sql.lisp: replace CLSQL-SIMPLE-WARNING with 
+	SQL-WARNING. 
+	* db-aodbc/aodbc-sql.lisp: replace CLSQL-ERROR with SQL-ERROR. 
+	* clsql.asd: reworked module structure in package definition and 
+	file names to better reflect component functionality. 
+	* sql/package.lisp: added SQL-FATAL-ERROR and SQL-TIMEOUT-ERROR to 
+	exports list. Removed duplicate and obsolete exports. Exported 
+	remaining SQL operations: SQL-SOME, SQL-<>, SQL-BETWEEN, SQL-DISTINCT, 
+	SQL-NVL and SQL-FUNCTION. Organised exports by functionality/file and 
+	according to whether they are specified by CommonSQL or CLSQL 
+	extensions. 
+	* sql/transaction.lisp: replace CLSQL-SIMPLE-WARNING with 
+	SQL-WARNING. 
+	* sql/generics.lisp: moved generics for QUERY and EXECUTE-COMMAND 
+	here from basic-sql.lisp. 
+	* sql/expressions.lisp: NEW FILE: renamed from classes.lisp (deleted). 
+	* sql/fddl.lisp: NEW FILE: renamed from table.lisp (deleted). 
+	* sql/fdml.lisp: NEW FILE: merger of basic-sql.lisp and sql.lisp
+	(both deleted). 
+	* sql/ooddl.lisp: NEW FILE: ooddl from objects.lisp (deleted). 
+	* sql/oodml.lisp: NEW FILE: oodml from objects.lisp (deleted). 
+	
+23 May 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.10.22 released
+	* sql/kmr-mop.lisp, sql/objects.lisp: Since SBCL is the only implementation that
+	has reversed class slots, change the default for ordered-class-slots so that slots
+	are now in the same order an in the def-view-class.
+	* sql/sql.lisp: Honor case of string table identifier to INSERT-RECORDS
+	* test/test-fddl.lisp: Add two tests for mixed case names
+	* db-oracle/oracle-sql.lisp: Add missing database qualifier. Return NUMBER (double)
+	for computed fields, this will require some adjustment to the test suite which
+	in many cases expects integers.
+	* test/test-fdml.lisp: Accomodate that Oracle returns doubles for computed columns
+	
+22 May 2004 Kevin Rosenberg <kevin@rosenberg.net>
+	* Version 2.10.21 released
+	* sql/sequences.lisp: Move generic sequence functions here from db-sqlite,
+	db-odbc, and db-aodbc.
+	* sql/*.lisp: Add db-type parameter to generic functions READ-SQL-VALUE,
+	DATABASE-GET-TYPE-SPECIFIER, and OUTPUT-SQL-VALUE-AS-TYPE. Update methods to use these.
+	* sql/generic-postgresql.lisp, sql/generic-odbc.lisp: New files
+	* db-odbc/odbc-sql.lisp, db-aodbc/aodbc-sql.lisp: Move common code to 
+	sql/generic-odbc.lisp
+	* db-postgresql/postgresql-sql.lisp, db-postgresql-socket/postgresql-socket-sql.lisp: 
+	Move common code to  sql/generic-postgresql.lisp
+	* sql/classes.lisp: honor case of string tables when outputting queries 
+	* sql/objects.lisp: Add database type to default database-get-type-specifier method
+	* sql/sql.lisp:  Add database type to default database-abort-transaction method
+	* db-mysql/mysql-objects.lisp: New file
+	* sql/objects.lisp: Move MySQL specific code to mysql-objects.lisp
+	* sql/utils.lisp: Add GETENV function which will be used to get ORACLE_HOME
+	from environment
+	* test/test-fdml.lisp: String table names are now case sensitive, so convert to
+	default db case for FDML/SELECT/25
+
+22 May 2004 Kevin Rosenberg
+	* Version 2.10.20 released: Oracle backend now fails 6 out of 200 tests
+	* TODO: Added 2 variances from CommonSQL. Add tests for owner phrases
+	and string identifiers with non-default case
+	* sql/table.lisp: Don't convert string table name to a symbol.
+	* sql/classes.lisp: Honor case of string identifiers
+	* sql/sql.lisp: Ensure recyclebin is purged for Oracle in 
+	TRUNCATE-DATABASE
+	* db-oracle/oracle-sql.lisp: Add sequence functions, fix use of
+	of owner phrases. Obtain server and client versions.
+	* db-oracle/oracle-objects.lisp: Fix type specifiers
+	* tests/test-fddl.lisp: Allow :varchar2 and :number as data types
+	* tests/test-init.lisp: Properly get username from Oracle connection-spec
+	
+22 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* sql/generics.lisp: reworked docstrings. Remove generics for 
+	ADD-TO-RELATION and REMOVE-FROM-RELATION. 
+	* sql/objects.lisp: reworked docstrings. Changed UPDATE-OBJECT-JOINS 
+	to UPDATE-OBJECTS-JOINS for CommonSQL compatibility. 
+	* sql/package.lisp: Changed UPDATE-OBJECT-JOINS to UPDATE-OBJECTS-JOINS 
+	for CommonSQL compatibility. Remove ADD-TO-RELATION and 
+	REMOVE-FROM-RELATION. 
+	* tests/test-oodml.lisp: Changed UPDATE-OBJECT-JOINS to 
+	UPDATE-OBJECTS-JOINS for CommonSQL compatibility. 
+	* doc/TODO: added notes about extra slot options to DEF-VIEW-CLASS. 
+	* sql/conditions.lisp: add documentation for conditions. Add 
+	SQL-TIMEOUT-ERROR and SQL-FATAL-ERROR for CommonSQL compatibility. 
+
+21 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* sql/basic-sql.lisp: reworked docstrings. 
+	* sql/transactions.lisp: reworked docstrings. 
+	* sql/sql.lisp: reworked docstrings. 
+	* sql/initialize.lisp: reworked docstrings. INITIALIZE-DATABASE-TYPE 
+	sets *DEFAULT-DATABASE-TYPE* for CommonSQL compatibility. 
+	* sql/database.lisp: reworked docstrings. 
+	* doc/TODO: added notes about START-TRANSACTION and IN-TRANSACTION-P 
+	and FDML extensions and database extensions. 
+
+20 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* db-oracle/oracle-sql: Use clsql-specific error conditions. Use owner keyword.
+	* db-oracle/make9.sh: add makefile for building with Oracle 9 client
+	libraries
+	* sql/table.lisp: Add logic for dealing with Oracle 10g vs. previous
+	Oracle versions with the PURGE option required for drop table. This needs
+	to be converted to a generic function and moved to db-oracle/oracle-sql.lisp
+
+20 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* sql/classes.lisp: remove unused PARAMS slot in SQL-IDENT-ATTRIBUTE. 
+	* sql/syntax.lisp: remove unused PARAMS keyword arg to SQL-EXPRESSION. 
+	* sql/table.lisp: reworked docstrings. 
+	* sql/objects.lisp: moved *default-update-objects-max-len* here from 
+	table.lisp. 
+	* doc/TODO: notes about :if-does-not-exist arg to DROP-TABLE, 
+	DROP-VIEW and DROP-INDEX and the use of the :transactions and 
+	:constraints keyword args to CREATE-TABLE. 
+	* sql/classes.lisp: the DESCRIPTION argument to CREATE-TABLE is now 
+	CommonSQL compatible with respect to column constraints. 
+
+20 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* sql/oracle-sql.lisp: Now compiles and runs on SBCL.
+	Requires UFFI 1.5.0 or higher
+	
+20 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.19
+	* sql/conditions.lisp: Fix cerror
+	
+19 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.18 released: New condition hierarchy to be compatible
+	with CommonSQL -- not backward compatible with previous CLSQL.
+	* sql/db-interface.lisp: Add more default methods
+	* sql/objects.lisp: Add explicit table name to order-by parameters
+	in find-all when only one table to avoid selecting a duplicate row.
+	Fix error in FIND-ALL when using :order-by such as (([foo] :asc))
+	as previous logic was adding two fields (foo asc) to SELECT query.
+	Make :result-types :auto be the default for object selections.
+	Properly handle caching key when using multiple order-by with asc/desc
+	directions.
+	* db-oracle/*.lisp: Much improvements, now passes 90% of test suite
+	
+19 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* sql/recording.lisp: reworked docstrings. 
+	* sql/syntax.lisp: reworked docstrings. 
+	* doc/TODO: added notes about extensions to SQL-RECORDING-P and the 
+	SQL syntax state functions being macros. 
+
+19 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+        * sql/package.lisp: Export initialize-database-type and
+	*initialize-database-types* from CLSQL package.
+	* sql/conditions.lisp: Add new CommonSQL compatible conditions,
+	remove old CLSQL conditions.
+	* sql/loop-extensions.lisp: Make errors of type sql-user-error
+	* */*.lisp: Convert to from old to new conditions
+	
+18 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+        * sql/table.lisp: Add PURGE to drop command for oracle 10g backend.
+	To handle this difference, will need to add a new database-drop-table
+	generic function.
+	* db-oracle/oracle-sql.lisp: Move server-version and
+	major-version-number to database object to allow multiple connections
+	to Oracle servers of different versions.
+	
+18 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* TODO: moved notes about backends to doc/TODO. 
+	* doc/TODO: added notes about backends and select extensions. 
+	* sql/base-classes.lisp: remove obsolete schema slot in database 
+	class. 
+	
+16 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* db-oracle/oracle-api: Add OCIServerVersion
+	* db-oracle/oracle-sql: Query and store server version on connect
+	* sql/db-interface.lisp: Add new db-type-has-bigint? generic
+	function to handle OCI's lack of bigint support
+	* test/test-basic.lisp: Separate bigint testing
+	* test/test-utils.lisp: Add oracle to specs and list of backends
+	* doc/TODO: New file
+	* test/test-fdml.lisp: Added FDML/SELECT/34 to test
+	run-time instantiation of variables in reader macros.
+	* TODO: Remove item already complete. Add note about
+	condition variances
+	
+16 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* sql/syntax.lisp: added condition to the reader macro to treat [*] 
+	as a column identifier (rather than an operation) for CommonSQL 
+	compatibility. 
+	* tests/test-fdml.lisp: add tests for ORDER-BY and SET-OPERATION 
+	keword args to SELECT, [*] as column identifier, new MAP-QUERY 
+	behaviour and the ANY and ALL operators in subqueries. 
+	* tests/test-init.lisp: add set-operation and subquery tests to 
+	appropriate skip lists. 
+	* sql/objects.lisp: remove redundant and non CommonSQL compatible 
+	ORDER-BY-DESCENDING keyword argument for SELECT. 
+	* sql/classes.lisp: remove redundant and non CommonSQL compatible 
+	ORDER-BY-DESCENDING keyword argument for SELECT. 
+	* tests/test-oodml.lisp: add test for ORDER-BY keyword to SELECT 
+	with object queries. 
+
+15 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* sql/db-interface.lisp: Add new db-type-has-union? 
+	since Mysql 3.23 does not support unions.
+	* sql/test-init.lisp: Don't try union tests on database
+	backends which do not support it.
+	* db-oracle/*.lisp: initial port to UFFI
+	* sql/objects.lisp: implement UPDATE-OBJECT-JOINS,
+	implement REFRESH for SELECT.
+	* tests/test-oodml.lisp: Add tests for deferred retrieval,
+	caching, refresh, and update-object-joins
+	* tests/test-init.lisp: Add deferred-employee-address class
+ 	
+15 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* sql/operations.lisp: make MINUS operator a synonym for EXCEPT. Add 
+	COALESCE operator and make NVL a synonym for this. Make ANY, SOME, 
+	ALL and EXISTS generate function expressions so they output the 
+	correct SQL. 
+	* sql/classes.lisp: SELECT now generates appropriate SQL when 
+	passed the SET-OPERATION and ALL keyword arguments. 
+	* sql/classes.lisp: the ORDER-BY keyword argument to SELECT now 
+	accepts ordering constraints as pairs of the form (column direction) 
+	where direction may be :ASC or :DESC. 
+	* tests/test-syntax.lisp: added tests for MINUS and COALESCE/NVL. 
+	Correct tests for ANY, SOME, ALL and EXISTS. 
+	* tests/test-fdml.lisp: added test for COALESCE. 
+	* sql/sql.lisp: MAP-QUERY now applies FUNCTION to QUERY-EXPRESSION 
+	using funcall unless QUERY-EXPRESSION returns one column and its 
+	FLATP slot is not nil in which case apply is used. 
+	* tests/test-basic.lisp: modified calls to MAP-QUERY to reflect the 
+	changes. 
+	* TODO: remove items done. 
+	* db-postgresql/postgresql-sql.lisp: no need to reverse results in 
+	DATABASE-LIST-ATTRIBUTES. 
+	* db-postgresql-socket/postgresql-socket-sql.lisp: no need to reverse
+	results in DATABASE-LIST-ATTRIBUTES. 	
+	
+15 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+        * sql/classes.lisp: SELECT now accepts table identifiers as strings 
+        for CommonSQL compliance. Add support for qualified sql identifiers 
+        with aliased table names. 
+        * tests/test-fdml.lisp: added tests for table identifiers as strings 
+        in SELECT and for aliased definitions. 
+        * tests/test-syntax.lisp: added tests for alias definitions. 
+	
+15 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* sql/sql.lisp: PRINT-QUERY now calls QUERY with result-types and 
+	field-names set to nil. 
+	* sql/sql.lisp: PRINT-QUERY now computes column sizes correctly 
+	with null attribute values. 
+	* sql/operations.lisp: modify SQL concatenation operator to accept 
+	unescaped || symbol.  
+	* sql/syntax.lisp: modify sql reader macro function to accept 
+	unescaped sql concatenation operator. 
+	* tests/test-fdml.lisp: unescape sql concatenation operator. 
+	* tests/test-syntax.lisp: unescape sql concatenation operator. 
+	* TODO: remove items done. Add notes about SQLITE/MYSQL backends. 
+	Note to add test for universal-time. Note about difference from 
+	CommonSQL in transaction handling. 
+
+13 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* tests/test-init.lisp: Add deferred-employee-address
+	class
+	* tests/test-oodml.lisp: Add deferred retrieval testgs
+	
+12 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.17
+	* LATEST-TEST-RESULTS: Run on all platforms, add AMD64
+	* sql/sql.lisp: Add FOR-EACH-ROW macro from clsql-classic/sql.lisp
+	* db-sqlite/sqlite-uffi-api.lisp: Fix row-pointer type
+	* *: Fix minor style warnings
+	* clsql-classic: Remove system and subdirectory
+	* clsql-base: Remove system and subdirectory and
+	fold into clsql system
+	* doc/intro.xml: Remove reference to old clsql-base. Add x86_64
+	as supported platform.
+	
+12 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.16: CLSQL now fully supports AllegroCL AMD64
+	* db-odbc/odbc-api.lisp: work around return-type bug [spr28889] in
+	Allegro 7.0beta AMD64
+	* db-odbc/*.lisp: Add a layer of indirection to foreign-type
+	of ODBC longs since this type can vary on 64-bit platforms depending
+	upon the compilation options of unixODBC.
+	* db-mysql/mysql-api.lisp: Fix int vs. long slots in foreign
+	structures found by testing with AllegroCL 7.0b AMD64.
+	* db-*/*-loader.lisp: Load 64-bit libraries on 64-bit platorms
+	* sql/objects.lisp: Simple implementation of UPDATE-OBJECT-JOINS.
+	Initial caching support for SELECT
+	* tests/test-oodml.lisp: Avoid using cache when testing select.
+	* sql/kmr-mop.lisp: Explicitly check slot order and
+	store as a cl:*feature*
+	* sql/recording.lisp: Remove additional types to
+	increase CommonSQL conformance.
+	* tests/test-init.lisp: Change a :column attribute
+	to test symbols as value
+	* sql/relations.lisp: Remove functions since they don't support
+	many to many relationships.
+	* examples/clsql-tutorial.lisp, doc/csql.lisp: Remove use
+	of add-to-relations function and replace with explicit field settings.
+	* base/classes.lisp: Remove obsolute query-stream. Add record-caches slot.
+	
+9 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.15
+	* LATEST-TEST-RESULTS: results with current version
+	* sql/kmr-mop.lisp: Make CMUCL reader macros specific for cmu18
+	since cmu19 has opposite order of class slots.
+	* sql/objects.lisp: Fix (setf slot-value-using-class) for Lispworks
+	* tests/test-fdml.lisp: Renumber SELECT tests to avoid overwriting
+	a previous test
+	* tests/test-init.lisp: Check test-database-underlying-type for
+	ODBC/MySQL tests
+	
+8 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* sql/operations.lisp: complete remaining operations for the sql 
+	syntax: SUBSTR, SOME, ORDER-BY, GROUP-BY, NULL, DISTINCT, EXCEPT, 
+	UNION, INTERSECT, BETWEEN. 
+	* sql/classes.lisp: add new classes: SQL-BETWEEN-EXPRESSION, 
+	SQL-QUERY-MODIFIER-EXPRESSION and SQL-SET-EXPRESSION. 
+	* tests/test-syntax.lisp: add tests for new operations. 
+	* tests/test-fdml.lisp: add tests for queries based on new operations. 
+	* tests/test-init.lisp: add select/20 to tests skipped for sqlite and 
+	select/20, query/5, query/7 and query/8 to tests skipped by mysql. 
+	* TODO: removed entries done. 
+
+8 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* tests/benchmarks.lisp: Add immediate vs. deferred
+	join test.
+	
+8 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.13: Now works on openmcl 0.14.2 
+	* sql/objects.lisp: Add :retrieval :immediate for
+	object selections
+	* tests/test-init.lisp: Add non-index fields for testing 
+	join class employee-addresss
+	* test/test-oodml.lisp: Add tests for retrieval immediate
+	* sql/metaclasses.lisp: Handle differences in direct-slot-definition 
+	values which are now listifed by openmcl 14.2.
+	* sql/objects.lisp: more framework for supporing immediate retrieval 
+
+7 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* docs/intro.xml: Upload location of a README file
+	* sql/metaclass.lisp: Work-around openmcl's CHANGE-CLASS
+	changing the type-specifier. Use a lisp type of (OR NULL FOO)
+	for a specified-type of FOO unless :db-constraints :not-null.
+	No need to specialize finalize-inheritance for openmcl.
+	* tests/test-*.lisp: Rename fields so that joins occur on
+	fields with different names. This ensures that join code is
+	selecting the proper name.
+	* test/test-init.lisp: Add :base-table for employee-address
+	view class for testing.
+	* sql/objects.lisp: Use view-table rather than name of table
+	in a number of places to fix errors noted with using :base-table.
+
+6 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+        * sql/objects.lisp: replace *update-records-on-make-instance* with 
+        *db-auto-sync* which also controls both automatic creation of 
+        new records on creation of new instance and updating of record 
+        fields on setting of instance slots (as suggested by Edi Weitz). 
+        * tests/test-init.lisp: replace *update-records-on-make-instance* 
+        with *db-auto-sync*. 
+        * sql/package.lisp: replace *update-records-on-make-instance* 
+        with *db-auto-sync*. 
+        * TODO: replace *update-records-on-make-instance* with *db-auto-sync*. 
+        * sql/objects.lisp: remove redundant rebindings of *db-initializing* 
+        and *default-database* in FIND-ALL. 
+	* sql/package.lisp: import time functions from CLSQL-BASE. 
+	* tests/test-time.lisp: replace CLSQl-BASE package qualifier with CLSQL. 
+	* tests/test-fdml.lisp: replace CLSQl-BASE package qualifier with CLSQL. 
+	* tests/test-init.lisp: replace CLSQl-BASE package qualifier with CLSQL. 
+	* tests/test-ooddl.lisp: replace CLSQl-BASE package qualifier with 
+	CLSQL. 
+
+4 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* sql/classes.lisp: Add SQL-OBJECT-QUERY type. Have [select 'class]
+	now return a sql-object-query type rather than directly performing a query.
+	This improves CommonSQL conformance.
+	* sql/sql.lisp:	Add new QUERY method for SQL-OBJECT-QUERY. Move
+	from basic/basic-sql.lisp the DO-QUERY and MAP-QUERY since they now
+	depend on sql-object-query-type.
+	* sql/loop-extensions.lisp: Move from base package
+	* classic/package.lisp: remove references to map-query and do-query
+
+4 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* TODO: New section on optimizations, especially optimizing JOINs.
+	* sql/objects.lisp: Have :target-slot return of list of lists rather
+	than a list of cons pairs to be conformant with CommonSQL.
+	Make :target-slot much more efficient by using a SQL inner join
+	statement and just requiring one SQL query. Add :retrieval :deferrred
+	to target-slot joins. Add placeholder for update-objects-join.
+	* sql/classes.lisp: Add :inner-join and :on slots to sql-query class
+	and process them for query output-sql. 
+
+4 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.11
+	* base/basic-sql.lisp: Avoid multiple evaluation
+	of query-expression in DO-QUERY
+	* sql/objects.lisp: Make SELECT a normal function.
+	SELECT now accepts type-modified database identifiers, such as
+        [foo :string] which means that the values in column foo are returned 
+        as Lisp strings. Add new *update-records-on-make-instance* special
+	variable controlling automatic creation of new instances. Add missing
+	RESULT-TYPES keyword to FIND-ALL. Add :target-slot support.
+	* sql/packages.lisp: Export *update-records-on-make-instance* 
+	* test/test-oodml.lisp: Add tests for :target-slot and many-to-many
+	selections.
+	* test/test-fdml.lisp: Add tests for type-modified
+	database identifiers.
+	* test/test-init.lisp: Stop using add-relation since implementing
+	many-to-many joins. Use *update-records-on-make-instance* 
+	to automatically store records on instance creation. Add many-to-many
+	employee-address view-class.
+	
+4 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.10
+	* base/loop.lisp: Add object iteration. Use :result-type
+	:auto for result-set. Remove 
+	duplicate (and non-correct) code for non-list variables by
+	simply making an atom variable into a list. 
+	* sql/package.lisp: Remove unnecessary clsql-sys package
+	and replace it with clsql.
+	* sql/metaclasses.lisp: Properly store specified-type from
+	direct-slot-definition and then store translated type in
+	effective-slot-definition
+	* sql/classes.lisp: Don't output type in sql-output
+	for SQL-IDENT-ATTRIBUTE. This is in preparation for supporting
+	[foo :integer] as fields in SELECT.
+	* sql/query.lisp: Set default for :result-types to :auto in
+	FDML QUERY.
+	* sql/objects.lisp: Use specified-type when invocating 
+	database-get-type-specifier. def-view-class macro now returns
+	the class instance.
+	* base/basic-sql.lisp: Make :AUTO the default value for
+	:RESULT-TYPES for MAP-QUERY and DO-QUERY.
+	* sql/objects.lisp: Add bigint type
+	* test/tests-basic.lisp: Add tests for :result-types for
+	MAP-QUERY and DO-QUERY
+	* test/test-fdml.lisp: Add test for result-types in LOOP
+	and also using single symbol rather than a list for variables.
+	Add test that default :result-types is auto for FDML QUERY.
+	* test/test-syntax.lisp: Don't expect TYPE in the SQL-OUTPUT
+	of SQL-IDENT-ATTRIBUTE.
+	* test/test-oodml.lisp: Enable OO loop iteration test,
+	modify it so it doesn't depend on boolean where.
+	
+4 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* Version 2.10.9
+	* sql/objects.lisp: added derived type specifier for universal time. 
+	* sql/package.lisp: added #:universal-time to clsql-sys exports. 
+	* tests/test-oodml.lisp: added test for translation of boolean slots 
+	in SELECT with object queries. 
+	
+3 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* db-odbc/odbc-api.lisp: Fix changing nil to "NIL" 
+	for odbc/postgresql backend.
+	* db-odbc/odbc-sql.lisp: Fix ATTRIBUTE-TYPE so that
+	it can handle NIL values from the ODBC driver
+	* tests/benchmarks.lisp: New file with initial
+	benchmark suite
+	* sql/relations.lisp: fix to add subclassing support,
+	minor optimizations [Edi Weitz]
+	
+3 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.8	
+	* base/conditions.lisp: Add *backend-warning-behavior*
+	special variable.
+	* db-postgresql-socket/postgresql-socket-sql.lisp:
+	Honor value of *backend-warning-behavior*
+	* tests/test-fdml.lisp: Remove test of raw boolean value
+	since different backends handle this differently. Add
+	test for :column attribute.
+	* tests/test-oodml.lisp: Add tests for boolean slot value
+	and for :void-value attribute
+	* tests/test-init.lisp: Use *backend-warning-behavior*
+	to suppress warnings from postgresql about implicitly
+	creating primary key in tables. Add new address table.
+	
+3 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.7
+	* db-odbc/odbc-dbi.lisp: Convert TINYINT to integers when
+	result-types is :auto
+	* sql/objects.lisp: Properly handled writing/reading Boolean
+	values from SQL database when retrieving objects.
+	* test/test-fdml.lisp: Add another test for boolean results
+	* test/utils.lisp: Fix incorrect declaration
+	
+2 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* Version 2.10.6
+	* sql/generics.lisp: add generic function for SELECT. 
+	* sql/objects.lisp: make SELECT a method specialisation. 
+	* sql/classes.lisp: MAKE-QUERY now calls SELECT if the selections 
+	referred to are View Classes. 
+	* base/basic-sql.lisp: in DO-QUERY and MAP-QUERY, if the 
+	query-expression arg evaluates to a list, then we have an object 
+	query. 
+	* tests/test-oodml.lisp: add tests for DO-QUERY and MAP-QUERY with 
+	object queries. 
+	* TODO: remove items done and add a todo for SELECT. 
+	* sql/objects.lisp: SELECT takes a :field-names arg to pass on to 
+	QUERY. 
+	* sql/sql.lisp: add :field-names arg to QUERY. 
+	* tests/test-fdml.lisp: minor rework to use :field-names arg to 
+	SELECT. 
+
+2 May 2004 Marcus Pearce (m.t.pearce@city.ac.uk)
+	* sql/objects.lisp: fix bug in FIND-ALL when SELECT called with 2 
+	or more View Classes. 
+	* sql/objects.lisp: make the :flatp argument to SELECT work with 
+	object queries. 
+	* sql/objects.lisp: make SELECT accept a :result-types argument 
+	(defaults to :auto) which is passed on to QUERY.  
+	* sql/objects.lisp: SELECT returns field-names as a second value. 
+	* tests/test-ooddl.lisp: add flatp arg to SELECT calls as appropriate. 
+	* tests/test-fdml.lisp: add flatp/result-types arguments to calls 
+	to SELECT and take only first value as appropriate.
+	* tests/test-fdml.lisp: add two new tests for query result coercion 
+	and the field-names returned as a second value from SELECT. 
+	* tests/test-oodml.lisp: add flatp arg to SELECT calls as appropriate. 
+	
+1 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.6-pre1
+	* sql/metaclasses.lisp: Add void-value slot
+	* doc/csql.xml: Update def-view-class documentation
+	* test/test-init.lisp: Change old :db-type to :db-kind.
+	Remove old :nulls-ok attributes.
+	* sql/objects.lisp: Add new universal-time and bigint
+	types. Optimize reading of integers using parse-integer
+	rather than read-from-string.
+	* */*.lisp: Merge clsql-base-sys and clsql-base packages
+	into clsql-base package
+	* classic/sql.lisp: Move large object support into base, leaving
+	classic without any functionality that is provided in the clsql
+	system.
+	* classic/package.lisp: Rename clsql-classic-sys package to
+	its former nickname of clsql-classic
+	
+1 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.5: SQLite backend now passes all result-types tests
+	* clsql-sqlite.asd: Depend on clsql-uffi system
+	* db-sqlite/sqlite-sql.lisp: Use clsql-uffi:convert-raw-field
+	for efficiency and code reuse. 
+	* db-sqlite/sqlite-api-uffi.lisp: Change (* :char) to (* :unsigned-char)
+	for better cross-implementation compatibility.
+
+1 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.4
+	* sql/tables.lisp: Fix typo in CACHE-TABLE-QUERIES
+	[Marcus Pearce]
+	* db-postgresql/postgresql-sql.lisp: Fix foreign-string vs. cstring
+	bug on SBCL in result-field-names function as reported by Marcus Pearce
+	* db-sqlite/sqlite-sql.lisp: Fix  in database-store-next-row
+	manifest in SBCL testing
+	
+1 May 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.3
+	* sql/database.lisp: Conform more to CommonSQL output
+	for STATUS command [Marcus Pearce]
+	* sql/sqlite-sql.lisp: Rework to use result-types
+	* sql/sqlite-api-clisp.lisp: Add compatibility layer
+	with sqlite-api-uffi.lisp so that sqlite-sql.lisp can
+	be cleaned up of most clisp reader conditionals
+	* sql/test-init.lisp: Now run field type tests on sqlite
+	backend
+	
+30 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.2
+	* base/basic-sql.lisp: Set default value of :result-types 
+	to :auto for more CommonSQL conformance. 
+	* test/test-fdml.lisp: Add tests for numeric value of fields
+	
+
+30 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.10.1: New API function: CACHE-TABLE-QUERIES.
+	* base/basic-sql.lisp, db-*/*-sql.lisp: More CommonSQL conformance.
+	Return field names as second value for QUERY. This can be overridden
+	for efficiency with the new keyword :FIELD-NAMES set to NIL
+	in the QUERY invocation.
+	* test/test-fdml.lisp: Add tests for new field-name feature
+	* sql/metaclass.lisp: Remove old Lispworks cruft
+	and replace it with invocation of new code in kmr-mop.lisp
+	which actually works with Lispworks 4.2
+	* doc/ref_clsql.xml: Document new :FIELD-NAMES keyword to
+	QUERY function
+	* base/db-interface.lisp: Document the multiple values
+	returned by DATABASE-ATTRIBUTE-TYPE so matches the
+	undocumented CommonSQL behavior. 
+	* sql/table.lisp: Add *CACHE-TABLE-QUERIES-DEFAULT* and
+	*DEFAULT-UPDATE-OBJECTS-MAX-LEN* variables and export them.
+	LIST-ATTRIBUTE-TYPES now conforms to CommonSQL spec.
+	Implement CACHE-TABLE-QUERIES.
+	* db-odbc/odbc-sql.lisp: Fix attribute-type function
+	* test/test-fddl.lisp: Add tests for attribute type	
+	* db-mysql/mysql-sql.lisp: Mild optimization in accessing
+	field structures.
+	* base/classes.lisp: Add attribute-cache slot to database clas
+	* base/initialize.lisp: initialize-database-type now automatically
+	loads database-type backend as needed.
+	* base/test-init.lisp: Utilize new initialize-database-type functionality.
+	* TODO: remove items done
+	
+30 Apr 2004 Marcus Pearce (m.t.pearce@city.ac.uk) 
+	* Version 2.9.6
+	* sql/objects.lisp: remove create/drop-sequence-from-class. 
+	* sql/objects.lisp: add INSTANCE-REFRESHED generic function. 
+	* sql/objects.lisp: improved CommonSQL compatibility for
+	UPDATE-RECORD-FROM-SLOT, UPDATE-RECORD-FROM-SLOTS,
+	UPDATE-RECORDS-FROM-INSTANCE and DELETE-INSTANCE-RECORDS. 
+	* sql/generics.lisp: move generics from objects.lisp to here. 
+	
+29 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.9.6-pre1
+	* db-mysql/mysql-client-info.lisp: Add client version 4.1
+	detection
+	* sql/sql.lisp: Make *default-database* the default for
+	TRUNCATE-DATABASE
+	
+28 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.9.5
+	* db-mysql/mysql-sql.lisp: Fix bug in transaction capability
+	detection
+	* sql/objects.lisp: Commit patch from Slawek Zak to allow specifying 
+	:metaclass in DEF-VIEW-CLASS invocation. This allows defining classes 
+	on a metaclass specialized from standard-db-class.
+
+	
+24 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.9.4: Multiple changes to support Allegro's "modern"
+	lisp which uses a lowercase reader and has case-sensitive symbols
+	* sql/classes.lisp: Fix make-load-form bug for sql-ident-table
+	exposed by case-sensitive mlisp. 
+
+22 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.9.3: All tests now pass on all platforms!
+	* LATEST-TEST-RESULTS: New file with summary of test results
+	* sql/generics.lisp: New file for generic function definitions.
+	* test/test-init.lisp: Display names of skipped tests.
+	Use unwind-protect to ensure disconnect
+	* sql/objects.lisp: Change database-type to database-underlying-type
+	so that actual database engine is properly identified
+	* db-odbc/odbc-api.lisp: Have default *time-conversion-function*
+	return an ISO timestring for compatibility with other drivers.
+	Workaround bug in MyODBC for LIST-TABLE-INDEXES
+	* test/test-fdml.lisp: Accomodate that odbc-postgresql driver
+	returns floating-point values for floor and truncate operations 
+	* db-aodbc/aodbc-sql.lisp: Implement DATABASE-LIST-VIEWS
+	* tests/test-basic.lisp: Port to regression tester
+	* test/test-init.lisp: Output to *report-stream*
+	* docs/appendix.xml: Document ODBC and SQLite backends.
+	* sql/classes.lisp: Make output-sql require a database parameter.
+	This allows SQL generation to have the proper case to support
+	the differences in case handling between CommonSQL API,
+	Postgresql, MySQL, Oracle.
+	
+21 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.9.2: Improvments in database capability introspection
+	and querying. Support transactions in MySQL where available.
+	All tests now pass on MySQL and SQLite in addition to postgresql
+	and postgresql-socket. ODBC fails only with OODDL/TIME/1 and OODDL/TIME/2.
+	* db-odbc/odbc-sql.lisp: Add DATABASE-LIST-VIEWS. Better support
+	DATABASE-LIST-SEQUENCES.
+	* clsql-uffi.asd, clsql-mysql.asd: Improve shared library loading
+	* Database_capabilies: add HAS-VIEWS, HAS-CREATE/DESTROY-DB,
+	HAS-BOOLEAN-WHERE, TRANSACTION-CAPABLE
+	* tests/*.lisp: Check database capabilities and remove tests which
+	the database backend does not support
+	* sql/table.lisp: Add :TRANSACTIONS keyword to create table which
+	controls whether InnoDB tables will be created when supported on
+	the underlying MySQL server.
+	
+20 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.9.0: New API function: LIST-TABLE-INDEXES,
+	supported by all database backends (except AODBC since
+	AODBC doesn't support index querying)
+	* db-obdc/odbc-sql.lisp: Support DATABASE-LIST-INDEXES
+	* db-odbc/odbc-api.lisp: Add %TABLE-STATISTICS function
+	to support index queries
+	* db-aodbc/aodbc-sql.lisp: Filter driver manager
+	"information_schema" tables from LIST-TABLES
+	* tests/test-basic.lisp: Remove table after testing
+	* tests/test-fddl.lisp: Test LIST-TABLE-INDEXES
+	* base/db-interface.lisp: Add DATABASE-UNDERLYING-TYPE
+	which gets the underlying type of database -- required
+	when dealing with ODBC databases and want to query
+	database capabilities. Added DB-USE-COLUMN-ON-DROP-TABLES?
+	as first database-backend specific feature. Is T on
+	:mysql, NIL on other backends. Change DROP-TABLE to
+	query this.
+	
+19 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.8.2: Build changes for FreeBSD [Slawek Zak]
+
+19 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.8.1
+	* db-odbc/odbc-sql.lisp: Add DATABASE-LIST function 
+	* db-odbc/odbc-dbi.lisp: Add LIST-ALL-DATA-SOURCES function 
+
+19 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.8.0: New API function: LIST-DATABASES
+	* base/utils.lisp: Fix command-output on CMUCL/SBCL
+	* db-*/*-sql.lisp: Add new database-list function
+	* base/database.lisp: Add new LIST-DATABASES command
+	
+18 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.7.9
+	* db-sqlite/sqlite-sql.lisp: Fix sequence functions.
+	* db-sqlite/sqlite-api-uffi.lisp: Print error string
+	correctly.
+	
+18 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.7.7
+	* doc/csql.xml, examples/clsql-tutorial.lisp: Patch for db-kind
+	from Eduardo Munoz.
+	
+17 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.7.6
+	* base/objects.lisp, base/classes.lisp: Patch
+	for db-kind from Eduardo Munoz
+	
+16 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.7.5
+	* base/basic-sql.lisp: Fix FLATP in QUERY
+
+16 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.7.3: Implement RECONNECT
+
+15 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.7.2: Fix ODBC on Lispworks Windows
+
+15 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.7.1: Fix for new ODBC backend.
+	clsql-odbc now works on SBCL, CMUCL, OpenMCL
+	in addition to AllegroCL and Lispworks.
+
+15 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.7.0: New backend: ODBC. Tests as
+	well as AODBC backend on Allegro,Lispworks.
+	SBCL and CMUCL don't work quite yet.  Requires UFFI v1.4.11+
+	* db-odbc/*.lisp: Add ODBC3 function SQLSetEnvAttr
+	to explicitly set ODBC2 support. Add BIGINT support.
+	Add result-types support. Added SQLTables.
+	Fix array type in fetch-all-rows. Make width
+	changable by database or query.
+	* base/utils.lisp: Add process functions
+	* base/package.lisp: Export utils to CLSQL-BASE-SYS
+	* db-aodbc: Implement sequence functions,
+	database-list-tables, database-list-attributes
+	* tests/utils.lisp: Add support for ODBC backend,
+	rework READ-SPECS to use +all-db-types+
+	* db-mysql/mysql-sql.lisp: Use WITHOUT-INTERRUPTS
+	for SEQUENCE-NEXT
+	
+13 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.13. Requires UFFI version 1.4.9
+	* db-odbc/*.lisp: Further porting.
+	Pre-alpha code! But, basic query is now working.
+
+13 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.12
+	* base/transactions.lisp: Add quote for macro
+	expansion of WITH-TRANSACTIONS [Time Howe]
+	* db-sqlite/sqlite-sql.lisp: Support memory database
+	in database-probe [Ng Pheng Siong]
+	* db-odbc/*.lisp: Initial port to UFFI of SQL-ODBC.
+	The DBI layer is not finished.
+	
+12 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.11
+	* sql/objects.lisp: add :root-class functionality for
+	list-classes and add duration type support [Marcus Pearce]
+	* db-odbc: Add mid-level [DBI] layer
+
+12 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.10
+	* db-aodbc: Add methods for generic functions, some are
+	not yet implemented.
+	* clsql-odbc.asd, db-odbc/*.lisp: Initial start of ODBC
+	support
+
+12 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.9
+	* base/package.lisp: Add missing symbols [Marcus Pearce]
+
+12 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.8
+	* test/test-fddl.lisp: Cleanup fix [Marcus Pearce]
+	* utils/time.lisp: Multiple fixes [Marcus Pearce]
+	* sql/sql.lisp: Fix for truncate-database [Marcus Pearce]
+	
+12 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.7
+	* sql/*.lisp: Remove schema versioning cruft
+	[Marcus Pearce]
+	* Makefile: Add classic subdirectory
+	
+12 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.6
+	* sql/sql.lisp: Fix TRUNCATE command, bug reported
+	by Marcus Pearce
+	* sql/sql.lisp: Remove EXPLAIN function. Postgresql/Oracle
+	specific and easy for an application to directly support.
+	Idea from Marcus Pearce.
+	* base/basic-sql.lisp: Remove DESCRIBE-TABLE top-level 
+	API as duplicates LIST-ATTRIBUTE-TYPES [Marcus Pearce].
+	Keep low-level interface for future optimization
+	supporting LIST-ATTRIBUTE-TYPES command.
+	* Makefile: Add to db-sqlite and test directories.
+	Include them in top-level Makefile
+	
+12 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.5
+	* sql/relations.lisp: Add missing file
+	* utils/time.lisp: Fixes/extensions [Marcus Pearce]
+	* test/test-time.lips: New file [Marcus Pearce]
+	
+10 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.4
+	* test/test-init.lisp: Properly handle object
+	creation. Close database after use.
+	* sql/sql.lisp: Make DESCRIBE-TABLE a generic
+	function so can have methods specialized on
+	table being a string or an sql-table object.
+	* base/pool.lisp: Really fix CMUCL locking
+	
+10 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.3
+	* test/test-init.lisp: Signal correctly
+	if any errors occurred in any test suite
+	* base/loop-extensions.lisp: Fix error
+	introduced for Lispworks
+	* base/pool.lisp: Fix locking for CMUCL
+	* base/objects.lisp: Remove schema-version cruft
+	
+10 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.2: New CLSQL API functions:
+	DESCRIBE-TABLE AND TRUNCATE-DATABASE
+	Currently, this are only supported on :postgresql
+	and :postgresql-socket
+	* base/database.lisp: automatically load ASDF system
+	in CONNECT if not already loaded
+	* base/tests.lisp: disconnect database after testing 
+	* base/*.lisp: Remove CLOSED-DATABASE type in favor
+	of storing open/closed status in slot of database
+	* base/pool.lisp: Support locks for CMUCL, OpenMCL, SBCL
+	* db-postgresql/postgresql-sql.lisp: add DATABASE-RECONNECT,
+	DATABASE-DESCRIBE-TABLE
+	* db-sqlite/sqlite-sql.lisp: Add missing slots in database
+	* base/conditions: Remove duplicate condition
+	* db-*/*-sql.lisp: Fill new database slot DATABASE-TYPE
+	* base/recording.lisp: Add new :QUERY type for recording
+	
+10 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.6.1: documentation fixes, merged
+	classic-tests into tests
+
+10 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+        * Version 2.6.0 released: New API functions
+	CREATE-DATABASE, DESTORY-DATABASE, PROBE-DATABASE
+	* doc/ref_clsql.xml: Document new functions
+	* base/database.lisp: New API functions
+	* base/conditions.lisp: Added CLSQL-ACCESS-ERROR
+	* base/utils.lisp: Fix use of position-char.
+	Add COMMAND-OUTPUT used by backends for running
+	external programs. Fix parsing of SQL*NET-compatible
+	connection-specs.
+	* base/loop-extension.lisp: Simplify package use
+	for Lispworks and Allegro
+	* db-*/*-sql.lisp: Added DATABASE-CREATE,
+	DATABASE-DESTORY, PROBE-DATABASE methods
+	* tests/test-init.lisp, clasic-tests/tests.lisp:
+	Use destroy-database and create-database to ensure 
+	testing with empty database
+	* tests/test-connection.lisp: Add tests for
+	parsing of string connection-specs
+	* examples/run-tests.sh: New file for running
+	test suite on all installed CL implementations
+	* examples/clsql-tutorial.lisp: moved from
+	doc directory
+	* examples/dot.clsql-tests.config: New file
+	giving an example test configuration
+	* test/README: Add notes about rtest/ptester
+	downloads and link to sample test configuration file.
+	
+10 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.5.1 released:
+	* tests/*.lisp: Rework so tests are run
+	on multiple backends automatically based
+	on the contents of ~/.clsql-tests.config.
+	Reuse helper functions from classic-tests.
+	* base/database.lisp: Support connection-spec
+	as string for CONNECT
+	* classic-tests/tests.lisp: Automatically
+	load database backends as needed. 
+	
+09 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+        * Version 2.5.0 released:
+	All tests for CLSQL and CLSQL-CLASSIC pass
+	on all platforms.
+	* base/loop-extension.lisp: Add Lispworks
+	loop-extension. Improve type specifying on
+	other platforms.
+	
+09 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.4.2 released:
+	loop extension now supported on Allegro, all
+	CLSQL-TESTS pass on Allegro.
+	* sql/metaclasses.lisp: Some optimization
+	of compute-slots, be selective when
+	ordered-class-slots needs to be called
+	instead of class-slots
+	* TODO: add URL with documentation on
+	extending Lispworks LOOP form
+	
+09 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.4.1 released: CLSQL-TESt suite passes
+	all tests for postgresql and CMUCL, SBCL, OpenMCL.
+	Allegro and Lispworks pass all tests except for
+	FDML/LOOP/1 since the loop extension have not yet
+	been ported to those implementions.
+	* sql/metaclasses.lisp: Added new slot to standard-db-class
+	to hold user-specified type. OpenMCL adjustments to compensate
+	for its type-predicate function. Since AllegroCL, Lispworks,
+	and OpenMCL have different slot orders, added compute-slots
+	and ordered-class-slots functions so their slot order matches
+	SBCL/CMUCL.
+
+08 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.4.0 released: All tests for clsql-classic now finish
+	correctly on Allegro, Lispworks, CMUCL, SBCL, OpenMCL for
+	mysql, postgresql, postgresql-sockets, and sqlite backends.
+	* db-mysql/mysql-sql.lisp: Fix array dereferencing
+	* classic-tests/tests.lisp: Fix package name of
+	number-to-sql-string. 
+	* clsql.asd/clsql-tests.asd: Add support for asdf:test-op
+	* db-sqlite/sqlite-api-{uffi,sql}.lisp: Multiple UFFI fixes,
+	now passes tests on all support UFFI platforms.
+	* db-postgresql-socket/postgresql-socket-api.list: Ported to 
+	SBCL and OpenMCL
+	* multiple: Finish renaming of :types keyword to :result-types for
+	greater CommonSQL compatibility, including documentation
+	* sql/basic-cmds.lisp: Remove obsolete file
+	
+08 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Version 2.3.3 released
+	* Fixes for sequences on mysql and sqlite [Marcus Pearce]
+	* Fixes for uffi sqlite backend [Aurelio Bignoli / Kevin Rosenberg]
+	* Fix for schema table [Marcus Pearce]
+	* Add loop extension support for SBCL and OpenMCL [Marcus Pearce]
+	* Fixes to test suite [Marcus Pearce]
+
+06 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+        * db-*/*-sql.lisp: Ensure that expr in
+	database-query-result-set is a string
+	* Documentation integration
+	
+06 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* With for Marcus Pearce's excellent work, I've merged
+	his clsql-usql port into clsql. The original clsql
+	interface is available in the clsql-classic package.
+
+02 Apr 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Integrate patch from Marcus Pearce <ek735@soi.city.ac.uk>
+	adding further support for providing backend for UncommonSQL
+
+10 Mar 2004 Kevin Rosenberg (kevin@rosenberg.net)
+	* Integrate patch from Aurelio Bignoli for SQLite backend
+
+11 Nov 2003 Kevin Rosenberg (kevin@rosenberg.net)
+	* Converted documentation to XML format
+	* Made package installable with asdf-install
+
+23 Jul 2003 Kevin Rosenberg (kevin@rosenberg.net)
+	* Add for-each-row macro
+
+12 Dec 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* uffi/clsql-uffi.lisp: return NIL for numeric fields that are NULL
+	
+16 Oct 2002 Kevin Rosenberg (kevin@rosenberg.net)
+        * Add support for SBCL, OpenMCL, and SCL
+	* Add *load-truename* to search path for clsql's
+	compiled libraries.
+
+01 Sep 2002 Kevin Rosenberg (kevin@rosenberg.net)
+        * Rework use of file types in .asd files
+
+17 Aug 2002 Kevin Rosenberg (kevin@rosenberg.net)
+        * Add .asd definition files for ASDF users
+
+31 Jul 2002 Kevin Rosenberg (kevin@rosenberg.net)
+        * Restructure directories for Common Lisp Controller v3 compatibility
+
+25 Jul 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* Also change case of logical host in loader files
+	* Rework handling of logical pathnames
+	
+05 Jul 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* Change case of logical host
+	
+14 May 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* clsql-base.system: Added base package that can be used without
+	high-level SQL commands. Used for adding support for UncommonSQL.
+	* *.system: Reworked logical pathnames to be more consistent with
+	Common Lisp Controller.
+	* debian/*: Completed initial Debian support
+	
+10 May 2002 Marc Battyani (marc.battyani@fractalconcept.com)
+	* sql/classes.cl:
+	* sql/transactions.cl:
+	Added transaction support. Functions/macros added:
+	with-transaction, commit-transaction, rollback-transaction,
+	add-transaction-commit-hook, add-transaction-rollback-hook
+
+04 May 2002 Marc Battyani (marc.battyani@fractalconcept.com)
+	* sql/sql.cl:
+	* sql/pool.cl:
+	* sql/functional.cl:
+	Added pool support in connect/disconnect and with-database.
+	Removed with-db-from-pool as with-database can now works with the connections pool
+
+01 May 2002 Marc Battyani (marc.battyani@fractalconcept.com)
+	* sql/sql.cl:
+	* sql/pool.cl:
+	* sql/classes.cl:
+	* sql/package.cl:
+	Completed connection pool.
+	Added with-db-from-pool macro.
+	
+27 Apr 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* Multiple files:
+	Added initial support for connection pool
+	* sql/transactions.cl
+	Took transaction code from UncommonSQL and integrated
+	into CLSQL code. See file for disclaimer about why this
+	was added.
+
+23 Apr 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* interfaces/postgresql/postgresql-sql.cl:
+	Fix keyword typo in database-read-large-object
+	* interfaces/mysql/mysql-loader.cl
+	Fix loading on Win32
+	* test-suite/tester-clsql.cl
+	Fix type coercion of double-float
+	* doc/*
+	Added debian docbook catalog, made it the default
+	
+19 Apr 2002 Marc Battyani (marc.battyani@fractalconcept.com)
+	* interface/postgresql/postgresql-api.cl:
+	* interface/postgresql/postgresql-sql.cl:
+	* sql/sql.cl:
+	* sql/db-interface.cl:
+	Added large objects support for postgresql.
+
+07 Apr 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* src/postgresql-socket/postgresql-socket-api.cl:
+	Fixed find-foreign-function call, eliminated crypt warning
+	* Makefiles:
+	Multiple improvements
+	* sql/usql.cl:
+	Moved functionality from low-level interfaces to this file
+	via generic functions
+	* test-suite/tester.cl:
+	Added test with acl-compat-tester, moved others to old-tests
+	directory.
+	
+06 Apr 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* src/usql.cl:
+	Reinstated commented out sections
+	* interfaces/postgresql/postgresql-loader.cl:
+	* interfaces/mysql/mysql-loader.cl:
+	Updated find-forieign-library support.
+	* interfaces/postgresql-socket/postgresql-socket-package.cl:
+	Fixed require form for Lispworks (Thanks Marc Battyani!)
+	* interfaces/postgresql-socket/postgresql-socket-api.cl:
+	Fixed eval of def-function for crypt library.
+		
+31 Mar 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* Added interface to support USQL high-level rouines
+	
+29 Mar 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* Separated db-interface and conditions from sql/sql.cl
+	* Improved foreign library loading testing
+	* interfaces/postgresql/postgresql-api.cl
+	Added PQisBusy function
+	* interfaces/clsql-uffi/clsql-uffi.cl
+	Fixed sign error for 64-bit processing
+	
+27 Mar 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* interfaces/postgresql-socket/postgresql-socket-api.cl:
+	Fixes to read-double-from-socket. Added 64-bit integer support.
+	* test-suite/xptest-clsql.cl
+	Added testint for 64-bit integers
+	* Additons to installation docs
+	
+26 Mar 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* interfaces/postgresql-socket/postgresql-socket-api.cl:
+	Implemented direct socket reading for field type :double
+	* Added usage information for :types to documentation
+	* interfaces/mysql/mysql-sql.cl: Fixed type specifiers in atoi,
+	atol, atof calls
+	* interfaces/clsql-uffi: Created new directory. Split common
+	interface routines that use UFFI into this package. Required
+	especially to support direct reading of 64-bit integers into
+	bignums and bypassing temporary strings.
+	* test-clsql.cl: Updated to test postgresql-socket's
+	read-double-from-socket function.
+	* test-suite/xptest-clsql.cl
+	Started work on test suite
+
+25 Mar 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* interfaces/mysql/mysql-api.cl: Added mysql-fetch-fields,
+	mysql-fetch-field-direct Got :auto types working
+	* interfaces/postgresql/postgresql-api.cl
+	* interfaces/postgresql-socket/postgresql-socket-api.cl
+	Added pgsql-field-types enum. Got :auto types working.
+	* multiple-files
+	Renamed :field-types to :types.
+	
+24 Mar 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* Added field-types parameter to query, database-query,
+	database-query-result-set, map-query. Haven't added code
+	to utilize field types, yet.
+	* Changed postgresql-socket result set from cons to a structure
+	* Updated test-clsql.cl to use automated testing with a config
+	file
+	* Changed return types of field accessors from cstring to
+	(* :unsigned-char).  This prepares for being able to use specified
+	type conversions when taking field data into lisp.
+	* Added field-type processing for most interfaces. Not done yet.
+	
+23 Mar 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* doc/ref.sgml: Updated MAP-QUERY example to use
+	*read-default-float-format* (John Foderaro)
+	* Extensive work to foreign library loaders and .system files to
+	check for successful loading of foreign libraries.
+	* Modified test-clsql.cl to allow more modularity and
+	automated testing in future release.
+        * mysql/mysql-sql.lisp: Added field types
+	
+01 Jan 2002 Kevin Rosenberg (kevin@rosenberg.net)
+	* mysql/mysql-sql.lisp:
+	- Added support for Allegro CL and Lispworks using UFFI layer
+	- Changed database-connect to use mysql-real-connect. This way,
+	  can avoid using double (unwind-protect)
+	- Changed database-connect to have MySQL library allocate space
+	  for MYSQL structure. This will make the code more robust in
+	  the event that MySQL library changes the size of the mysql-mysql
+	  structure.

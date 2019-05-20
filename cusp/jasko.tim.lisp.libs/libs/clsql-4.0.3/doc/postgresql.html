@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>PostgreSQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="appendix.html" title="Appendix A. Database Back-ends" /><link rel="prev" href="appendix.html" title="Appendix A. Database Back-ends" /><link rel="next" href="postgresql-socket.html" title="PostgreSQL Socket" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">PostgreSQL</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="appendix.html">Prev</a> </td><th width="60%" align="center">Appendix A. Database Back-ends</th><td width="20%" align="right"> <a accesskey="n" href="postgresql-socket.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="postgresql"></a>PostgreSQL</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id368827"></a>Libraries</h3></div></div></div><p>The PostgreSQL back-end requires the PostgreSQL C 
+      client library (<code class="filename">libpq.so</code>).  The
+      location of this library is specified via 
+	  <span class="symbol">*postgresql-so-load-path*</span>, which defaults
+	  to <code class="filename">/usr/lib/libpq.so</code>.  Additional flags 
+	  to <span class="application">ld</span> needed for linking are
+	  specified via <span class="symbol">*postgresql-so-libraries*</span>,
+	  which defaults to <span class="symbol">("-lcrypt" "-lc")</span>.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id368866"></a>Initialization</h3></div></div></div><p>Use 
+	  </p><pre class="screen">
+(asdf:operate 'asdf:load-op 'clsql-postgresql)
+	</pre><p>
+	  to load the PostgreSQL back-end.  The database type for the
+	  PostgreSQL back-end is <span class="symbol">:postgresql</span>.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id392726"></a>Connection Specification</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id392732"></a>Syntax of connection-spec</h4></div></div></div><pre class="synopsis">
+	    (<em class="replaceable"><code>host</code></em> <em class="replaceable"><code>db</code></em> <em class="replaceable"><code>user</code></em> <em class="replaceable"><code>password</code></em> &amp;optional <em class="replaceable"><code>port</code></em> <em class="replaceable"><code>options</code></em> <em class="replaceable"><code>tty</code></em>)
+	  </pre></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id392771"></a>Description of connection-spec</h4></div></div></div><p>
+	    For every parameter in the connection-spec,
+	    <span class="symbol">nil</span> indicates that the PostgreSQL default
+	    environment variables (see PostgreSQL documentation) will
+	    be used, or if those are unset, the compiled-in defaults
+	    of the C client library are used.
+	  </p><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>host</code></em></span></dt><dd><p>String representing the hostname or IP address
+		  the PostgreSQL server resides on.  Use the empty
+		  string to indicate a connection to localhost via
+		  Unix-Domain sockets instead of TCP/IP.</p></dd><dt><span class="term"><em class="parameter"><code>db</code></em></span></dt><dd><p>String representing the name of the database on
+		  the server to connect to.</p></dd><dt><span class="term"><em class="parameter"><code>user</code></em></span></dt><dd><p>String representing the user name to use for
+		  authentication.</p></dd><dt><span class="term"><em class="parameter"><code>password</code></em></span></dt><dd><p>String representing the unencrypted password to
+		  use for authentication.</p></dd><dt><span class="term"><em class="parameter"><code>port</code></em></span></dt><dd><p>String representing the port to use for
+		  communication with the PostgreSQL server.</p></dd><dt><span class="term"><em class="parameter"><code>options</code></em></span></dt><dd><p>String representing further runtime options for
+		  the PostgreSQL server.</p></dd><dt><span class="term"><em class="parameter"><code>tty</code></em></span></dt><dd><p>String representing the tty or file to use for
+		  debugging messages from the PostgreSQL server.</p></dd></dl></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id412060"></a>Notes</h3></div></div></div><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="appendix.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="appendix.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="postgresql-socket.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Appendix A. Database Back-ends </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> PostgreSQL Socket</td></tr></table></div></body></html>

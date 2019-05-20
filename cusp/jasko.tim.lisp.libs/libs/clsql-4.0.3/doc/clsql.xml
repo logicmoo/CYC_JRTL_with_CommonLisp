@@ -1,0 +1,30 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+<!ENTITY % xinclude SYSTEM "xinclude.mod">
+%myents;
+%xinclude;
+]>
+
+<book lang="en">
+  <xi:include href="bookinfo.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="preface.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="intro.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="csql.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="ref-connect.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="ref-syntax.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="ref-fddl.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="ref-fdml.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="ref-transaction.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="ref-ooddl.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="ref-oodml.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="ref-recording.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="ref-conditions.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <!-- <xi:include href="ref-lob.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /> --> 
+  <!-- <xi:include href="ref-prepared.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /> --> 
+  <!-- <xi:include href="ref-clsql-sys.xml" xmlns:xi="http://www.w3.org/2001/XInclude" /> --> 
+  <xi:include href="global-index.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="appendix.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="glossary.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+</book>

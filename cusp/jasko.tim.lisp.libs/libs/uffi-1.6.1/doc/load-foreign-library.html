@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>load-foreign-library</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="func_libr.html" title="Functions &amp; Libraries" /><link rel="prev" href="def-function.html" title="def-function" /><link rel="next" href="find-foreign-library.html" title="find-foreign-library" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">load-foreign-library</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="def-function.html">Prev</a> </td><th width="60%" align="center">Functions &amp; Libraries</th><td width="20%" align="right"> <a accesskey="n" href="find-foreign-library.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="load-foreign-library"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>load-foreign-library — Loads a foreign library. 
+	<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2578753"></a><h2>Syntax</h2><pre class="synopsis">
+	  <code class="function">load-foreign-library</code> <em class="replaceable"><code>filename &amp;key module supporting-libraries force-load</code></em> =&gt; <span class="returnvalue">success</span>
+</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2578780"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>filename</code></em></span></dt><dd><p>A string or pathname specifying the library location
+in the filesystem. At least one implementation (<span class="application">Lispworks</span>) can not
+accept a logical pathname.  If this parameter denotes a pathname without a
+directory component then most of the supported Lisp implementations will be
+able to find the library themselves if it is located in one of the standard
+locations as defined by the underlying operating system.
+	      </p></dd><dt><span class="term"><em class="parameter"><code>module</code></em></span></dt><dd><p>A string designating the name of the module to apply
+to functions in this library. (Required for Lispworks)
+	      </p></dd><dt><span class="term"><em class="parameter"><code>supporting-libraries</code></em></span></dt><dd><p>A list of strings naming the libraries required to
+link the foreign library. (Required by CMUCL)
+	      </p></dd><dt><span class="term"><em class="parameter"><code>force-load</code></em></span></dt><dd><p>Forces the loading of the library if it has been previously loaded. 
+	      </p></dd><dt><span class="term"><span class="returnvalue">success</span></span></dt><dd><p>A boolean flag, <code class="constant">T</code> if the library was able to be
+loaded successfully or if the library has been previously loaded,
+	      </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2572978"></a><h2>Description</h2><p>Loads a foreign library. Applies a module name to functions
+within the library. Ensures that a library is only loaded once during
+a session. A library can be reloaded by using the <span class="symbol">:force-load</span> key.
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2572996"></a><h2>Examples</h2><pre class="screen">
+  (load-foreign-library #p"/usr/lib/libmysqlclient.so" 
+                        :module "mysql" 
+                        :supporting-libraries '("c"))
+    =&gt; T
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2573012"></a><h2>Side Effects</h2><p>Loads the foreign code into the Lisp system.
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2573023"></a><h2>Affected by</h2><p>Ability to load the file.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2573034"></a><h2>Exceptional Situations</h2><p>An error will be signaled if the library is unable to be loaded.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="def-function.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="func_libr.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="find-foreign-library.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">def-function </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> find-foreign-library</td></tr></table></div></body></html>

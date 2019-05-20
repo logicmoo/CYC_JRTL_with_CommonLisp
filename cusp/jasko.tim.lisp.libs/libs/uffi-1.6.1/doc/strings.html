@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Strings</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="index.html" title="UFFI Reference Guide" /><link rel="prev" href="def-foreign-var.html" title="def-foreign-var" /><link rel="next" href="convert-from-cstring.html" title="convert-from-cstring" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Strings</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="def-foreign-var.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="convert-from-cstring.html">Next</a></td></tr></table><hr /></div><div class="reference" lang="en" xml:lang="en"><div class="titlepage"><div><div><h1 class="title"><a id="strings"></a>Strings</h1></div></div><hr /></div><div class="partintro" lang="en" xml:lang="en"><div><div><div><h1 class="title"><a id="id2607796"></a>Overview</h1></div></div></div><p>
+      <span class="application"><span class="emphasis"><em>UFFI</em></span></span> has functions to two types of <code class="varname">C</code>-compatible
+      strings: <span class="emphasis"><em>cstring</em></span> and <span class="emphasis"><em>foreign</em></span>
+      strings.  cstrings are used <span class="emphasis"><em>only</em></span> as parameters to
+      and from functions. In some implementations a cstring is not a foreign
+      type but rather the Lisp string itself. On other platforms a cstring
+      is a newly allocated foreign vector for storing characters. The
+      following is an example of using cstrings to both send and return a
+      value.
+    </p><pre class="screen">
+(uffi:def-function ("getenv" c-getenv) 
+   ((name :cstring))
+   :returning :cstring)
+
+(defun my-getenv (key)
+  "Returns an environment variable, or NIL if it does not exist"
+  (check-type key string)
+  (uffi:with-cstring (key-native key)
+    (uffi:convert-from-cstring (c-getenv key-native))))
+    </pre><p>
+      In contrast, foreign strings are always a foreign vector of
+      characters which have memory allocated. Thus, if you need to
+      allocate memory to hold the return value of a string, you must
+      use a foreign string and not a cstring.  The following is an
+      example of using a foreign string for a return value.
+    </p><pre class="screen">
+(uffi:def-function ("gethostname" c-gethostname)
+    ((name (* :unsigned-char))
+     (len :int))
+  :returning :int)
+
+(defun gethostname ()
+  "Returns the hostname"
+  (let* ((name (uffi:allocate-foreign-string 256))
+         (result-code (c-gethostname name 256))
+         (hostname (when (zerop result-code)
+                     (uffi:convert-from-foreign-string name))))
+    ;; UFFI does not yet provide a universal way to free
+    ;; memory allocated by C's malloc. At this point, a program
+    ;; needs to call C's free function to free such memory.
+    (unless (zerop result-code)
+      (error "gethostname() failed."))))
+    </pre><p>
+      Foreign functions that return pointers to freshly allocated
+      strings should in general not return cstrings, but foreign
+      strings. (There is no portable way to release such cstrings from
+      Lisp.) The following is an example of handling such a function.
+    </p><pre class="screen">
+(uffi:def-function ("readline" c-readline)
+    ((prompt :cstring))
+  :returning (* :char))
+
+(defun readline (prompt)
+  "Reads a string from console with line-editing."
+  (with-cstring (c-prompt prompt)
+      (let* ((c-str (c-readline c-prompt))
+             (str (convert-from-foreign-string c-str)))
+        (uffi:free-foreign-object c-str)
+        str)))
+    </pre><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="refentrytitle"><a href="convert-from-cstring.html">convert-from-cstring</a></span><span class="refpurpose"> — Converts a cstring to a Lisp string.</span></dt><dt><span class="refentrytitle"><a href="convert-to-cstring.html">convert-to-cstring</a></span><span class="refpurpose"> — Converts a Lisp string to a cstring.</span></dt><dt><span class="refentrytitle"><a href="free-cstring.html">free-cstring</a></span><span class="refpurpose"> — Free memory used by cstring.
+      </span></dt><dt><span class="refentrytitle"><a href="with-cstring.html">with-cstring</a></span><span class="refpurpose"> — Binds a newly created cstring.</span></dt><dt><span class="refentrytitle"><a href="convert-from-foreign-string.html">convert-from-foreign-string</a></span><span class="refpurpose"> — Converts a foreign string into a Lisp string.</span></dt><dt><span class="refentrytitle"><a href="convert-to-foreign-string.html">convert-to-foreign-string</a></span><span class="refpurpose"> — Converts a Lisp string to a foreign string.
+      </span></dt><dt><span class="refentrytitle"><a href="allocate-foreign-string.html">allocate-foreign-string</a></span><span class="refpurpose"> — Allocates space for a foreign string.
+      </span></dt></dl></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="def-foreign-var.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="convert-from-cstring.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">def-foreign-var </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> convert-from-cstring</td></tr></table></div></body></html>

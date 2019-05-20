@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>LOOP</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fdml.html" title="Functional Data Manipulation Language (FDML)" /><link rel="prev" href="do-query.html" title="DO-QUERY" /><link rel="next" href="map-query.html" title="MAP-QUERY" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">LOOP</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="do-query.html">Prev</a> </td><th width="60%" align="center">Functional Data Manipulation Language (FDML)</th><td width="20%" align="right"> <a accesskey="n" href="map-query.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="loop-tuples"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>LOOP — Extension to Common Lisp
+      <code class="computeroutput">Loop</code> to iterate over all the
+      tuples of a query via a loop clause.<p><b>Loop Clause</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407930"></a><h2>Syntax</h2><pre class="synopsis">{as | for} <em class="replaceable"><code>var</code></em> [<em class="replaceable"><code>type-spec</code></em>] being {each | the} {record | records | tuple | tuples} {in | of} <em class="replaceable"><code>query</code></em> [from <em class="replaceable"><code>database</code></em>]</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407955"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>var</code></em></span></dt><dd><p>A <code class="literal">d-var-spec</code>, as defined in the
+            grammar for <code class="function">loop</code>-clauses in the ANSI
+            Standard for Common Lisp.  This allows for the usual
+            loop-style destructuring.</p></dd><dt><span class="term"><em class="parameter"><code>type-spec</code></em></span></dt><dd><p>An optional <code class="literal">type-spec</code> either
+            simple or destructured, as defined in the grammar for
+            <code class="function">loop</code>-clauses in the ANSI Standard for
+            Common Lisp.</p></dd><dt><span class="term"><em class="parameter"><code>query</code></em></span></dt><dd><p>An <a class="glossterm" href="glossary.html#gloss-sql-expression"><em class="glossterm">sql
+            expression</em></a> that represents an SQL
+            query which is expected to return a (possibly empty)
+            result set, where each tuple has as many attributes as
+            <em class="parameter"><code>function</code></em> takes arguments.</p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>An optional
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to the value
+            of <span class="symbol">*default-database*</span>.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408072"></a><h2>Description</h2><p>This clause is an iteration driver for
+      <code class="function">loop</code>, that binds the given variable
+      (possibly destructured) to the consecutive tuples (which are
+      represented as lists of attribute values) in the result set
+      returned by executing the SQL <em class="parameter"><code>query</code></em>
+      expression on the <em class="parameter"><code>database</code></em>
+      specified.</p><p>
+        <em class="parameter"><code>query</code></em> may be an object query (i.e., the
+        selection arguments refer to View Classes), in which case the
+        supplied variable is bound to the tuples of View Class
+        instances returned by the object oriented query.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408110"></a><h2>Examples</h2><pre class="screen">
+(defvar *my-db* (connect '("dent" "newesim" "dent" "dent"))
+"My database"
+=&gt; *MY-DB*
+(loop with time-graph = (make-hash-table :test #'equal)
+   with event-graph = (make-hash-table :test #'equal)
+   for (time event) being the tuples of "select time,event from log"
+   from *my-db*
+   do
+     (incf (gethash time time-graph 0))
+     (incf (gethash event event-graph 0))
+   finally
+     (flet ((show-graph (k v) (format t "~40A =&gt; ~5D~%" k v)))
+       (format t "~&amp;Time-Graph:~%===========~%")
+       (maphash #'show-graph time-graph)
+       (format t "~&amp;~%Event-Graph:~%============~%")
+       (maphash #'show-graph event-graph))
+     (return (values time-graph event-graph)))
+&gt;&gt; Time-Graph:
+&gt;&gt; ===========
+&gt;&gt; D                                        =&gt; 53000
+&gt;&gt; X                                        =&gt;     3
+&gt;&gt; test-me                                  =&gt;  3000
+&gt;&gt; 
+&gt;&gt; Event-Graph:
+&gt;&gt; ============
+&gt;&gt; CLOS Benchmark entry.                    =&gt;  9000
+&gt;&gt; Demo Text...                             =&gt;     3
+&gt;&gt; doit-text                                =&gt;  3000
+&gt;&gt; C    Benchmark entry.                    =&gt; 12000
+&gt;&gt; CLOS Benchmark entry                     =&gt; 32000
+=&gt; #&lt;EQUAL hash table, 3 entries {48350A1D}&gt;
+=&gt; #&lt;EQUAL hash table, 5 entries {48350FCD}&gt;
+
+(loop for (forename surname)
+      being each tuple in
+        [select [first-name] [last-name] :from [employee] 
+                :order-by [last-name]]
+      collect (concatenate 'string forename " " surname))
+=&gt; ("Yuri Andropov" "Leonid Brezhnev" "Konstantin Chernenko" "Mikhail Gorbachev"
+    "Nikita Kruschev" "Vladimir Lenin" "Vladimir Putin" "Josef Stalin"
+    "Leon Trotsky" "Boris Yeltsin")
+
+(loop for (e) being the records in 
+     [select 'employee :where [&lt; [emplid] 4] :order-by [emplid]]
+  collect (slot-value e 'last-name))
+=&gt; ("Lenin" "Stalin" "Trotsky")
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408137"></a><h2>Side Effects</h2><p>Whatever effects the execution of the SQL query has
+      on the underlying database, if any.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408147"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408157"></a><h2>Exceptional Situations</h2><p>If the execution of  the SQL query leads to any
+      errors, an error of type
+      <span class="errortype">sql-database-error</span> is signalled.</p><p>Otherwise, any of the exceptional situations of
+      <code class="function">loop</code> applies.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408179"></a><h2>See Also</h2><p>
+        </p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="query.html" title="QUERY"><code class="function">query</code></a></td></tr><tr><td><a class="link" href="map-query.html" title="MAP-QUERY"><code class="function">map-query</code></a></td></tr><tr><td><a class="link" href="do-query.html" title="DO-QUERY"><code class="function">do-query</code></a></td></tr><tr><td><a class="link" href="print-query.html" title="PRINT-QUERY"><code class="function">print-query</code></a></td></tr><tr><td><a class="link" href="select.html" title="SELECT"><code class="function">select</code></a></td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408240"></a><h2>Notes</h2><p>The <em class="parameter"><code>database</code></em> loop keyword is a
+      <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extension.</p><p> 
+        The extended <code class="function">loop</code> syntax is common across
+        the functional and object-oriented data manipulation
+        languages.
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="do-query.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fdml.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="map-query.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">DO-QUERY </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> MAP-QUERY</td></tr></table></div></body></html>

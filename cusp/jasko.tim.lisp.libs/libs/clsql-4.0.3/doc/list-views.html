@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>LIST-VIEWS</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fddl.html" title="Functional Data Definition Language (FDDL)" /><link rel="prev" href="drop-view.html" title="DROP-VIEW" /><link rel="next" href="view-exists-p.html" title="VIEW-EXISTS-P" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">LIST-VIEWS</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="drop-view.html">Prev</a> </td><th width="60%" align="center">Functional Data Definition Language (FDDL)</th><td width="20%" align="right"> <a accesskey="n" href="view-exists-p.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="list-views"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>LIST-VIEWS — Returns a list of database views.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399312"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">list-views</code> &amp;key <em class="replaceable"><code>owner</code></em> <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399337"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>owner</code></em></span></dt><dd><p>
+              A string, <code class="constant">NIL</code> or <span class="symbol">:all</span>. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>
+              A database object which defaults to
+              <span class="symbol">*default-database*</span>.
+            </p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>
+              A list of strings.
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399405"></a><h2>Description</h2><p>Returns a list of strings representing view names in
+      <em class="parameter"><code>database</code></em> which defaults to
+      <span class="symbol">*default-database*</span>. <em class="parameter"><code>owner</code></em>
+      is <code class="constant">NIL</code> by default which means that only views owned by users
+      are listed. If <em class="parameter"><code>owner</code></em> is a string denoting
+      a user name, only views owned by <em class="parameter"><code>owner</code></em>
+      are listed. If <em class="parameter"><code>owner</code></em> is
+      <span class="symbol">:all</span> then all views are listed.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399452"></a><h2>Examples</h2><pre class="screen">
+(list-views :owner "fred")
+=&gt; ("lenins_group")
+
+(list-views :owner :all)
+=&gt; ("pg_user" "pg_rules" "pg_views" "pg_tables" "pg_indexes" "pg_stats"
+    "pg_stat_all_tables" "pg_stat_sys_tables" "pg_stat_user_tables"
+    "pg_statio_all_tables" "pg_statio_sys_tables" "pg_statio_user_tables"
+    "pg_stat_all_indexes" "pg_stat_sys_indexes" "pg_stat_user_indexes"
+    "pg_statio_all_indexes" "pg_statio_sys_indexes" "pg_statio_user_indexes"
+    "pg_statio_all_sequences" "pg_statio_sys_sequences" 
+    "pg_statio_user_sequences" "pg_stat_activity" "pg_stat_database" 
+    "pg_locks" "pg_settings" "lenins_group")        
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399469"></a><h2>Side Effects</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399479"></a><h2>Affected by</h2><p>
+        <span class="symbol">*default-database*</span>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399491"></a><h2>Exceptional Situations</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399501"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="create-view.html" title="CREATE-VIEW"><code class="function">create-view</code></a></td></tr><tr><td><a class="link" href="drop-view.html" title="DROP-VIEW"><code class="function">drop-view</code></a></td></tr><tr><td><a class="link" href="view-exists-p.html" title="VIEW-EXISTS-P"><code class="function">view-exists-p</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399541"></a><h2>Notes</h2><p>
+        <code class="function">list-views</code> is a <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extension. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="drop-view.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fddl.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="view-exists-p.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">DROP-VIEW </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> VIEW-EXISTS-P</td></tr></table></div></body></html>

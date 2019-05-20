@@ -1,0 +1,6 @@
+static const char compiler_data_text[] = 
+"si::dodefpackage \"CL-USER\" #1=\"CL-FAD\" (\"FAD\") (#2=\"CL\") (\"COPY-FILE\" \"COPY-STRE"
+ "AM\" \"DELETE-DIRECTORY-AND-FILES\" \"DIRECTORY-EXISTS-P\" \"DIRECTORY-PATHNAME-P\" \"FI"
+ "LE-EXISTS-P\" \"LIST-DIRECTORY\" \"PATHNAME-AS-DIRECTORY\" \"PATHNAME-AS-FILE\" \"WALK-D"
+ "IRECTORY\") \"CL-FAD-TEST\" (#2# #1#) (\"TEST\")) ";
+#define compiler_data_text_size 285

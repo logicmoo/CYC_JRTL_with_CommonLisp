@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>def-enum</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="aggregates.html" title="Aggregate Types" /><link rel="prev" href="aggregates.html" title="Aggregate Types" /><link rel="next" href="def-struct.html" title="def-struct" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">def-enum</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="aggregates.html">Prev</a> </td><th width="60%" align="center">Aggregate Types</th><td width="20%" align="right"> <a accesskey="n" href="def-struct.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="def-enum"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>def-enum — Defines a <code class="computeroutput">C</code> enumeration.
+	<p><b>Macro</b></p></p></div><div class="refsynopsisdiv"><h2>Syntax</h2><pre class="synopsis">
+	  <code class="function">def-enum</code> <em class="replaceable"><code>name fields &amp;key separator-string</code></em>
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2574000"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>A symbol that names the enumeration.
+	      </p></dd><dt><span class="term"><em class="parameter"><code>fields</code></em></span></dt><dd><p>A list of field defintions. Each definition can be
+a symbol or a list of two elements. Symbols get assigned a value of the
+current counter which starts at <code class="computeroutput">0</code> and
+increments by <code class="computeroutput">1</code> for each subsequent symbol. It the field definition is a list, the first position is the symbol and the second
+position is the value to assign the the symbol. The current counter gets set
+to <code class="computeroutput">1+</code> this value.
+	      </p></dd><dt><span class="term"><em class="parameter"><code>separator-string</code></em></span></dt><dd><p>A string that governs the creation of constants. The
+default is <code class="computeroutput">"#"</code>.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2600835"></a><h2>Description</h2><p>
+	  Declares a <code class="computeroutput">C</code> enumeration. It generates constants with integer values for the elements of the enumeration. The symbols for the these constant
+values are created by the <code class="function">concatenation</code> of the
+enumeration name, separator-string, and field symbol. Also creates
+a foreign type with the name <em class="parameter"><code>name</code></em> of type
+<code class="constant">:int</code>.
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2600872"></a><h2>Examples</h2><pre class="screen">
+(def-enum abc (:a :b :c)) 
+;; Creates constants abc#a (1), abc#b (2), abc#c (3) and defines
+;; the foreign type "abc" to be :int
+
+(def-enum efoo (:e1 (:e2 10) :e3) :separator-string "-")
+;; Creates constants efoo-e1 (1), efoo-e2 (10), efoo-e3 (11) and defines
+;; the foreign type efoo to be :int
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2600890"></a><h2>Side Effects</h2><p>Creates a :int foreign type, defines constants.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2614811"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2614822"></a><h2>Exceptional Situations</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="aggregates.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="aggregates.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="def-struct.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Aggregate Types </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> def-struct</td></tr></table></div></body></html>

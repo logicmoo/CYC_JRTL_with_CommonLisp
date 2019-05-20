@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>DEF-VIEW-CLASS</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-ooddl.html" title="Object Oriented Data Definition Language (OODDL)" /><link rel="prev" href="create-view-from-class.html" title="CREATE-VIEW-FROM-CLASS" /><link rel="next" href="drop-view-from-class.html" title="DROP-VIEW-FROM-CLASS" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">DEF-VIEW-CLASS</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="create-view-from-class.html">Prev</a> </td><th width="60%" align="center">Object Oriented Data Definition Language (OODDL)</th><td width="20%" align="right"> <a accesskey="n" href="drop-view-from-class.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="def-view-class"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>DEF-VIEW-CLASS — Defines CLOS classes with mapping to SQL database.<p><b>Macro</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id409217"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">def-view-class</code> <em class="replaceable"><code>name</code></em> <em class="replaceable"><code>superclasses</code></em> <em class="replaceable"><code>slots</code></em> &amp;rest <em class="replaceable"><code>class-options</code></em> =&gt; <span class="returnvalue">class</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id409248"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>
+	      The class name.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>superclasses</code></em></span></dt><dd><p>
+	      The superclasses for the defined class.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>slots</code></em></span></dt><dd><p>
+	      The class slot definitions.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>class options</code></em></span></dt><dd><p>
+	      The class options.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>class</code></em></span></dt><dd><p>
+	      The defined class.
+	    </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id409349"></a><h2>Slot Options</h2><div class="itemizedlist"><ul type="disc"><li><p>
+	    <em class="parameter"><code>:db-kind</code></em> - specifies the kind of
+	    database mapping which is performed for this slot and
+	    defaults to <em class="parameter"><code>:base</code></em> which indicates
+	    that the slot maps to an ordinary column of the database
+	    table. A <em class="parameter"><code>:db-kind</code></em> value of
+	    <em class="parameter"><code>:key</code></em> indicates that this slot is a
+	    special kind of <em class="parameter"><code>:base</code></em> slot which
+	    maps onto a column which is one of the unique keys for the
+	    database table, the value <em class="parameter"><code>:join</code></em>
+	    indicates this slot represents a join onto another
+	    <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View Class</em></a>
+	    which contains View Class objects, and the value
+	    <em class="parameter"><code>:virtual</code></em> indicates a standard CLOS
+	    slot which does not map onto columns of the database
+	    table.
+	  </p></li><li><p>
+	    <em class="parameter"><code>:db-info</code></em> - if a slot is specified
+	    with <em class="parameter"><code>:db-kind</code></em>
+	    <em class="parameter"><code>:join</code></em>, the slot option
+	    <em class="parameter"><code>:db-info</code></em> contains a property list
+	    which specifies the nature of the join. The valid members
+	    of the list are:
+	  </p><div class="itemizedlist"><ul type="circle"><li><p>
+		<em class="parameter"><code>:join-class</code></em>
+		<span class="emphasis"><em>class-name</em></span> - the name of the
+		class to join on.
+	      </p></li><li><p>
+		<em class="parameter"><code>:home-key</code></em>
+		<span class="emphasis"><em>slot-name</em></span> - the name of the slot
+		of this class for joining
+	      </p></li><li><p>
+		<em class="parameter"><code>:foreign-key</code></em>
+		<span class="emphasis"><em>slot-name</em></span> - the name of the slot
+		of the <em class="parameter"><code>:join-class</code></em> for joining
+	      </p></li><li><p>
+		<em class="parameter"><code>:target-slot</code></em>
+		<span class="emphasis"><em>target-slot</em></span> - this is an optional
+		parameter. If specified, then the join slot of the
+		defining class will contain instances of this target
+		slot rather than of the join class. This can be useful
+		when the <em class="parameter"><code>:join-class</code></em> is an
+		intermediate class in a
+		<span class="emphasis"><em>many-to-many</em></span> relationship and the
+		application is actually interested in the
+		<em class="parameter"><code>:target-slot</code></em>.
+	      </p></li><li><p>
+		<em class="parameter"><code>:retrieval</code></em>
+		<span class="emphasis"><em>time</em></span> - The default value is
+		<em class="parameter"><code>:deferred</code></em>, which defers filling
+		this slot until the value is accessed. The other valid
+		value is <em class="parameter"><code>:immediate</code></em> which
+		performs the SQL query when the instance of the class
+		is created. In this case, the
+		<em class="parameter"><code>:set</code></em> is automatically set to
+		<code class="constant">NIL</code>
+	      </p></li><li><p>
+		<em class="parameter"><code>:set</code></em> <span class="emphasis"><em>set</em></span> -
+		This controls what is stored in the join slot.  The
+		default value is <code class="constant">T</code>. When <span class="emphasis"><em>set</em></span> is
+		<code class="constant">T</code> and <span class="emphasis"><em>target-slot</em></span> is undefined,
+		the join slot will contain a list of instances of the
+		join class. Whereas, if
+		<span class="emphasis"><em>target-slot</em></span> is defined, then the
+		join slot will contain a list of pairs of
+		<span class="emphasis"><em>(target-value join-instance)</em></span>.
+		When <span class="emphasis"><em>set</em></span> is <code class="constant">NIL</code>, the join slot
+		will contain a single instances.
+	      </p></li></ul></div></li><li><p>
+	    <em class="parameter"><code>:type</code></em> - for slots of
+	    <em class="parameter"><code>:db-kind</code></em> <em class="parameter"><code>:base</code></em> or
+	    <em class="parameter"><code>:key</code></em>, the <em class="parameter"><code>:type</code></em> slot
+	    option has a special interpretation such that Lisp
+	    types, such as string, integer and float are
+	    automatically converted into appropriate SQL types for
+	    the column onto which the slot maps. This behaviour may
+	    be overridden using the <em class="parameter"><code>:db-type</code></em> slot
+	    option. The valid values are:
+	    </p><table class="simplelist" border="0" summary="Simple list"><tr><td>
+		<em class="parameter"><code>string</code></em> - a variable length
+		character field up to <a class="link" href="default-string-length.html" title="*DEFAULT-STRING-LENGTH*">*default-string-length*</a>
+		characters.
+	      </td></tr><tr><td>
+		<em class="parameter"><code>(string n)</code></em> - a fixed length
+		character field <em class="parameter"><code>n</code></em> characters
+		long.
+	      </td></tr><tr><td>
+		<em class="parameter"><code>varchar</code></em> - a variable length
+		character field up to <a class="link" href="default-string-length.html" title="*DEFAULT-STRING-LENGTH*">*default-string-length*</a>
+		characters.
+	      </td></tr><tr><td>
+		<em class="parameter"><code>(varchar n)</code></em> - a variable length
+		character field up to <em class="parameter"><code>n</code></em>
+		characters in length.
+	      </td></tr><tr><td>
+		<em class="parameter"><code>char</code></em> - a single character field
+	      </td></tr><tr><td><em class="parameter"><code>integer</code></em> - signed integer
+	      at least 32-bits wide</td></tr><tr><td><em class="parameter"><code>(integer n)</code></em></td></tr><tr><td><em class="parameter"><code>float</code></em></td></tr><tr><td><em class="parameter"><code>(float n)</code></em></td></tr><tr><td><em class="parameter"><code>long-float</code></em></td></tr><tr><td><em class="parameter"><code>number</code></em></td></tr><tr><td><em class="parameter"><code>(number n)</code></em></td></tr><tr><td><em class="parameter"><code>(number n p)</code></em></td></tr><tr><td>
+		<em class="parameter"><code>tinyint</code></em> - An integer column 8-bits
+		wide. [not supported by all database backends]
+	      </td></tr><tr><td>
+		<em class="parameter"><code>smallint</code></em> - An integer column 16-bits
+		wide. [not supported by all database backends]
+	      </td></tr><tr><td>
+		<em class="parameter"><code>bigint</code></em> - An integer column 
+		64-bits wide. [not supported by all database backends]
+	      </td></tr><tr><td>
+		<em class="parameter"><code>universal-time</code></em> - an integer
+		field sufficiently wide to store a
+		universal-time. On most databases, a slot of this
+		type assigned a SQL type of
+		<em class="parameter"><code>BIGINT</code></em>
+	      </td></tr><tr><td>
+		<em class="parameter"><code>wall-time</code></em> - a slot which stores
+		a date and time in a SQL timestamp column. <span class="application"><span class="emphasis"><em>CLSQL</em></span></span>
+		provides a number of time manipulation functions to
+		support objects of type <span class="type">wall-time</span>.
+	      </td></tr><tr><td>
+		<em class="parameter"><code>date</code></em> - a slot which stores the
+		date (without any time of day resolution) in a
+                column. <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> provides a number of time
+		manipulation functions that operate on date values.
+	      </td></tr><tr><td>
+		<em class="parameter"><code>duration</code></em> - stores a
+		<span class="type">duration</span> structure.  <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> provides
+		routines for <span class="type">wall-time</span> and
+		<span class="type">duration</span> processing.
+	      </td></tr><tr><td><em class="parameter"><code>boolean</code></em> - stores a <code class="constant">T</code> or
+	      <code class="constant">NIL</code> value.</td></tr><tr><td>
+		<em class="parameter"><code>generalized-boolean</code></em> - similar
+		to a <em class="parameter"><code>boolean</code></em> in that either a
+		<code class="constant">T</code> or <code class="constant">NIL</code> value is stored in the SQL
+		database. However, any Lisp object can be stored in
+		the Lisp object. A Lisp value of <code class="constant">NIL</code> is stored as
+		<code class="constant">FALSE</code> in the database, any
+		other Lisp value is stored as
+		<code class="constant">TRUE</code>.
+	      </td></tr><tr><td>
+		<em class="parameter"><code>keyword</code></em> - stores a keyword
+	      </td></tr><tr><td><em class="parameter"><code>symbol</code></em> - stores a symbol</td></tr><tr><td>
+		<em class="parameter"><code>list</code></em> - stores a list by writing
+		it to a string. The items in the list must be able to
+		be readable written.
+	      </td></tr><tr><td><em class="parameter"><code>vector</code></em> - stores a vector
+	      similarly to <em class="parameter"><code>list</code></em></td></tr><tr><td><em class="parameter"><code>array</code></em> - stores a array
+	      similarly to <em class="parameter"><code>list</code></em></td></tr></table><p>
+	  </p></li><li><p>
+	    <em class="parameter"><code>:column</code></em> - specifies the name of
+	    the SQL column which the slot maps onto, if
+	    <em class="parameter"><code>:db-kind</code></em> is not
+	    <em class="parameter"><code>:virtual</code></em>, and defaults to the
+	    slot name. If the slot name is used for the SQL column
+	    name, any hypens in the slot name are converted
+	    to underscore characters.
+	  </p></li><li><p>
+	    <em class="parameter"><code>:void-value</code></em> - specifies the value
+	    to store in the Lisp instance if the SQL value is NULL and
+	    defaults to NIL.
+	  </p></li><li><p>
+	    <em class="parameter"><code>:db-constraints</code></em> - is a keyword
+	    symbol representing an SQL column constraint expression or
+	    a list of such symbols. The following column constraints
+	    are supported: <span class="symbol">:not-null</span>,
+	    <span class="symbol">:primary-key</span>, <span class="symbol">:unique</span>,
+	    <span class="symbol">:unsigned</span> (<span class="application">MySQL</span> specific),
+	    <span class="symbol">:zerofill</span> (<span class="application">MySQL</span> specific) and
+	    <span class="symbol">:auto-increment</span> (<span class="application">MySQL</span> specific).
+	  </p></li><li><p>
+	    <em class="parameter"><code>:db-type</code></em> - a string to specify the SQL
+	    column type. If specified, this string overrides the SQL
+	    column type as computed from the <em class="parameter"><code>:type</code></em>
+	    slot value.
+	  </p></li><li><p>
+	    <em class="parameter"><code>:db-reader</code></em> - If a string, then when
+	    reading values from the database, the string will be used
+	    for a format string, with the only value being the value
+	    from the database.  The resulting string will be used as
+	    the slot value.  If a function then it will take one
+	    argument, the value from the database, and return the
+	    value that should be put into the slot. If a symbol, then
+	    the symbol-function of the symbol will be used.
+          </p></li><li><p>
+	    <em class="parameter"><code>:db-writer</code></em> - If a string, then when
+	    reading values from the slot for the database, the string
+	    will be used for a format string, with the only value
+	    being the value of the slot.  The resulting string will be
+	    used as the column value in the database.  If a function
+	    then it will take one argument, the value of the slot, and
+	    return the value that should be put into the database. If
+	    a symbol, then the symbol-function of the symbol will be
+	    used.
+          </p></li></ul></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410191"></a><h2>Class Options</h2><p>
+	</p><div class="itemizedlist"><ul type="disc"><li><p>
+	      <em class="parameter"><code>:base-table</code></em> - specifies the name
+	      of the SQL database table. The default value is the
+	      class name. Like slot names, hypens in the class name
+	      are converted to underscore characters.
+	    </p></li></ul></div><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410220"></a><h2>Description</h2><p>
+	Creates a <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View
+	Class</em></a> called <em class="parameter"><code>name</code></em> whose
+	slots <em class="parameter"><code>slots</code></em> can map onto the attributes
+	of a table in a database. If
+	<em class="parameter"><code>superclasses</code></em> is <code class="constant">NIL</code> then the
+	superclass of <em class="parameter"><code>class</code></em> will be
+	<em class="parameter"><code>standard-db-object</code></em>, otherwise
+	<em class="parameter"><code>superclasses</code></em> is a list of superclasses
+	for <em class="parameter"><code>class</code></em> which must include
+	<em class="parameter"><code>standard-db-object</code></em> or a descendent of
+	this class.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410263"></a><h2>Examples</h2><p>
+	The following examples are from the <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> test suite.
+      </p><pre class="screen">
+(def-view-class person (thing)
+  ((height :db-kind :base :accessor height :type float
+           :initarg :height)
+   (married :db-kind :base :accessor married :type boolean
+            :initarg :married)
+   (birthday :type clsql:wall-time :initarg :birthday)
+   (bd-utime :type clsql:universal-time :initarg :bd-utime)
+   (hobby :db-kind :virtual :initarg :hobby :initform nil)))
+  
+(def-view-class employee (person)
+  ((emplid
+    :db-kind :key
+    :db-constraints :not-null
+    :type integer
+    :initarg :emplid)
+   (groupid
+    :db-kind :key
+    :db-constraints :not-null
+    :type integer
+    :initarg :groupid)
+   (first-name
+    :accessor first-name
+    :type (varchar 30)
+    :initarg :first-name)
+   (last-name
+    :accessor last-name
+    :type (varchar 30)
+    :initarg :last-name)
+   (email
+    :accessor employee-email
+    :type (varchar 100)
+    :initarg :email)
+   (ecompanyid
+    :type integer
+    :initarg :companyid)
+   (company
+    :accessor employee-company
+    :db-kind :join
+    :db-info (:join-class company
+			  :home-key ecompanyid
+			  :foreign-key companyid
+			  :set nil))
+   (managerid
+    :type integer
+    :initarg :managerid)
+   (manager
+    :accessor employee-manager
+    :db-kind :join
+    :db-info (:join-class employee
+			  :home-key managerid
+			  :foreign-key emplid
+			  :set nil))
+   (addresses
+    :accessor employee-addresses
+    :db-kind :join
+    :db-info (:join-class employee-address
+			  :home-key emplid
+			  :foreign-key aemplid
+			  :target-slot address
+			  :set t)))
+  (:base-table employee))
+
+(def-view-class company ()
+  ((companyid
+    :db-kind :key
+    :db-constraints :not-null
+    :type integer
+    :initarg :companyid)
+   (groupid
+    :db-kind :key
+    :db-constraints :not-null
+    :type integer
+    :initarg :groupid)
+   (name
+    :type (varchar 100)
+    :initarg :name)
+   (presidentid
+    :type integer
+    :initarg :presidentid)
+   (president
+    :reader president
+    :db-kind :join
+    :db-info (:join-class employee
+			  :home-key presidentid
+			  :foreign-key emplid
+			  :set nil))
+   (employees
+    :reader company-employees
+    :db-kind :join
+    :db-info (:join-class employee
+			  :home-key (companyid groupid)
+			  :foreign-key (ecompanyid groupid)
+			  :set t))))
+
+(def-view-class address ()
+  ((addressid
+    :db-kind :key
+    :db-constraints :not-null
+    :type integer
+    :initarg :addressid)
+   (street-number
+    :type integer
+    :initarg :street-number)
+   (street-name
+    :type (varchar 30)
+    :void-value ""
+    :initarg :street-name)
+   (city
+    :column "city_field"
+    :void-value "no city"
+    :type (varchar 30)
+    :initarg :city)
+   (postal-code
+    :column zip
+    :type integer
+    :void-value 0
+    :initarg :postal-code))
+  (:base-table addr))
+
+;; many employees can reside at many addressess
+(def-view-class employee-address ()
+  ((aemplid :type integer :initarg :emplid)
+   (aaddressid :type integer :initarg :addressid)
+   (verified :type boolean :initarg :verified)
+   (address :db-kind :join
+	    :db-info (:join-class address
+				  :home-key aaddressid
+				  :foreign-key addressid
+				  :retrieval :immediate)))
+  (:base-table "ea_join"))
+
+(def-view-class deferred-employee-address ()
+  ((aemplid :type integer :initarg :emplid)
+   (aaddressid :type integer :initarg :addressid)
+   (verified :type boolean :initarg :verified)
+   (address :db-kind :join
+	    :db-info (:join-class address
+				  :home-key aaddressid
+				  :foreign-key addressid
+				  :retrieval :deferred
+				  :set nil)))
+  (:base-table "ea_join"))
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410314"></a><h2>Side Effects</h2><p>Creates a new CLOS class.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410323"></a><h2>Affected by</h2><p>
+	Nothing.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410333"></a><h2>Exceptional Situations</h2><p>
+	None.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410343"></a><h2>See Also</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="create-view-from-class.html" title="CREATE-VIEW-FROM-CLASS"><code class="function">create-view-from-class</code></a></td></tr><tr><td><a class="link" href="standard-db-object.html" title="STANDARD-DB-OBJECT"><em class="parameter"><code>standard-db-object</code></em></a></td></tr><tr><td><a class="link" href="drop-view-from-class.html" title="DROP-VIEW-FROM-CLASS"><code class="function">drop-view-from-class</code></a></td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410385"></a><h2>Notes</h2><p>
+	The actual SQL type for a column depends up the database type
+	in which the SQL table is stored. As an example, the view
+	class type <em class="parameter"><code>(varchar 100)</code></em> specifies a
+	SQL column type <em class="parameter"><code>VARCHAR(100)</code></em> in <span class="application">MySQL</span>
+	and a column type <em class="parameter"><code>VARCHAR2(100)</code></em> in
+	<span class="application">Oracle</span>
+      </p><p>
+	The actual lisp type for a slot may be different than the
+	value specified by the <em class="parameter"><code>:type</code></em> attribute.
+	For example, a slot declared with "<em class="parameter"><code>:type (string
+	30)</code></em>" actually sets the slots Lisp type as
+	<em class="parameter"><code>(or null string)</code></em>. This is to allow a
+	<code class="constant">NIL</code> value or a string shorter than 30 characters to be
+	stored in the slot.
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="create-view-from-class.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-ooddl.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="drop-view-from-class.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">CREATE-VIEW-FROM-CLASS </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DROP-VIEW-FROM-CLASS</td></tr></table></div></body></html>

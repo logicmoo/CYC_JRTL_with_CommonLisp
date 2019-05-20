@@ -1,0 +1,68 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<bookinfo>
+  <title>&clsql; Users' Guide</title>
+  <authorgroup>
+  <author>
+    <firstname>Kevin</firstname>
+    <othername>M.</othername>
+    <surname>Rosenberg</surname>
+    <affiliation><jobtitle>Maintainer of &clsql;</jobtitle></affiliation>
+  </author>
+  <author>
+    <firstname>Marcus</firstname>
+    <othername>T.</othername>
+    <surname>Pearce</surname>
+    <affiliation><jobtitle>Contributor to &clsql;</jobtitle></affiliation>
+  </author>
+  <author>
+    <firstname>Pierre</firstname>
+    <othername>R.</othername>
+    <surname>Mai</surname>
+    <affiliation><jobtitle>Author of Original MaiSQL Code</jobtitle></affiliation>
+  </author>
+  <author>
+    <othername>onShore Development, Inc.</othername>
+    <affiliation><jobtitle>Author of UncommonSQL Package</jobtitle></affiliation>
+  </author>
+  </authorgroup>
+  <printhistory>
+    <simpara>$Date$</simpara>
+    <simpara>$Id$</simpara>
+  </printhistory>
+  <legalnotice>
+    <itemizedlist>
+      <listitem>
+	<para>&clsql; is Copyright &copy; 2002-2004 by Kevin M. Rosenberg,
+	Copyright &copy; 1999-2001 by Pierre R. Mai, and Copyright
+	&copy; 1999-2003 onShore Development, Inc.</para>
+       </listitem>
+       <listitem>
+	 <para><application>Allegro CL</application>&reg; is a registered
+	   trademark of Franz Inc.</para>
+	</listitem>
+	<listitem>
+          <para><application>Common SQL</application>,
+          <application>LispWorks</application> are trademarks or
+	  registered trademarks of LispWorks Ltd.</para>
+	</listitem>
+	<listitem>
+	<para><application>Oracle</application>&reg; is a registered
+	trademark of Oracle Inc.</para>
+	</listitem>
+	<listitem>
+	  <para><application>Microsoft Windows</application>&reg; is a
+	  registered trademark of Microsoft Inc.</para>
+	</listitem>
+	<listitem>
+	  <para>Other brand or product names are the registered
+	  trademarks or trademarks of their respective holders.</para>
+	</listitem>
+    </itemizedlist>
+  </legalnotice>
+</bookinfo>

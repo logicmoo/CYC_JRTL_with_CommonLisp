@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>ODBC</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="appendix.html" title="Appendix A. Database Back-ends" /><link rel="prev" href="mysql.html" title="MySQL" /><link rel="next" href="aodbc.html" title="AODBC" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="application">ODBC</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="mysql.html">Prev</a> </td><th width="60%" align="center">Appendix A. Database Back-ends</th><td width="20%" align="right"> <a accesskey="n" href="aodbc.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="odbc"></a><span class="application">ODBC</span></h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421203"></a>Libraries</h3></div></div></div><p>
+	  The <span class="application">ODBC</span> back-end requires access to an <span class="application">ODBC</span> driver
+	  manager as well as <span class="application">ODBC</span> drivers for the underlying
+	  database server. <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> has been tested with
+	  <span class="application">unixODBC</span> ODBC Driver Manager as
+	  well as Microsoft's ODBC manager.  These driver managers
+	  have been tested with the <a class="ulink" href="http://odbc.postgresql.org" target="_top">
+	  <em class="citetitle">psqlODBC</em></a> driver for
+	  <span class="application">PostgreSQL</span> and the <a class="ulink" href="http://www.mysql.com/products/connector/odbc/" target="_top">
+	  <em class="citetitle">MyODBC</em></a> driver for <span class="application">MySQL</span>.
+	</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421275"></a>Initialization</h3></div></div></div><p>
+	  Use 
+	  </p><pre class="screen">
+(asdf:operate 'asdf:load-op 'clsql-odbc)
+	  </pre><p>
+	  to load the <span class="application">ODBC</span> back-end.  The database type for the <span class="application">ODBC</span>
+	  back-end is <span class="symbol">:odbc</span>.
+	</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421308"></a>Connection Specification</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421314"></a>Syntax of connection-spec</h4></div></div></div><pre class="synopsis">(<em class="replaceable"><code>dsn</code></em> <em class="replaceable"><code>user</code></em> <em class="replaceable"><code>password</code></em>)</pre></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421339"></a>Description of connection-spec</h4></div></div></div><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>dsn</code></em></span></dt><dd><p>String representing the ODBC data source name.</p></dd><dt><span class="term"><em class="parameter"><code>user</code></em></span></dt><dd><p>String representing the user name to use for
+		  authentication.</p></dd><dt><span class="term"><em class="parameter"><code>password</code></em></span></dt><dd><p>String representing the unencrypted password to
+		  use for authentication.</p></dd></dl></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421407"></a>Notes</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421412"></a>FDDL</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            The <span class="symbol">:owner</span> keyword argument to the FDDL functions 
+            for listing and testing for database objects is ignored. 
+          </p></li></ul></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="mysql.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="appendix.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="aodbc.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">MySQL </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="application">AODBC</span></td></tr></table></div></body></html>

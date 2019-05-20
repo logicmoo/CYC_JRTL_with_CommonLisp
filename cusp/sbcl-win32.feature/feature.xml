@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="sbcl_win32"
+      label="SBCL-Win32"
+      version="1.0.22"
+      os="win32"
+      arch="x86">
+   <install-handler library="sbcl.installer.jar" handler="sbcl.installer.sbclInstallHandler"/>
+
+   <description>
+      Steel Bank Common Lisp for Win32.
+   </description>
+
+   <copyright>
+      SBCL
+   </copyright>
+
+   <license>
+      Steel Bank Common Lisp (SBCL) is free software, and comes with
+absolutely no warranty. SBCL is derived from CMU CL, which was
+released into the public domain, subject only to the BSD-style
+&quot;free, but credit must be given and copyright notices must be
+retained&quot; licenses in the LOOP macro (from MIT and Symbolics)
+and in the PCL implementation of CLOS (from Xerox). After CMU
+CL was was released into the public domain, it was maintained
+by volunteers, who continued the tradition of releasing their
+work into the public domain. All changes to SBCL since the fork
+from CMU CL have been released into the public domain in jurisdictions
+where this is possible, or under the FreeBSD licence where not.
+Thus, there are no known obstacles to copying, using, and modifying
+SBCL freely, as long as copyright notices of MIT, Symbolics,
+Xerox and Gerd Moellmann are retained.
+   </license>
+
+   <url>
+      <update label="Cusp Update" url="http://www.bitfauna.com/projects/cusp/update/"/>
+   </url>
+
+   <plugin
+         id="sbcl_win32"
+         download-size="0"
+         install-size="37000"
+         version="0.0.0"/>
+
+</feature>

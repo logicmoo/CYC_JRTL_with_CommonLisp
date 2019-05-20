@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>UFFI Reference Guide</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="next" href="preface.html" title="Preface" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="application"><span class="emphasis"><em>UFFI</em></span></span> Reference Guide</th></tr><tr><td width="20%" align="left"> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="preface.html">Next</a></td></tr></table><hr /></div><div class="book" lang="en" xml:lang="en"><div class="titlepage"><div><div><h1 class="title"><a id="id2522664"></a><span class="application"><span class="emphasis"><em>UFFI</em></span></span> Reference Guide</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Kevin</span> <span class="othername">M.</span> <span class="surname">Rosenberg</span></h3><div class="affiliation"><span class="orgname">Heart Hospital of New Mexico<br /></span><div class="address"><p><br />
+	<code class="email">&lt;<a class="email" href="mailto:kevin@rosenberg.net">kevin@rosenberg.net</a>&gt;</code><br />
+	<span class="street">504 Elm Street N.E.</span><br />
+	<span class="city">Albuquerque</span><br />
+	<span class="state">New Mexico</span><br />
+	<span class="postcode">87102</span><br />
+      </p></div></div></div></div><div><p class="copyright">Copyright © 2002-2003 Kevin M. Rosenberg</p></div><div><div class="legalnotice"><a id="id2520958"></a><div class="itemizedlist"><ul type="disc"><li><p>The <span class="application"><span class="emphasis"><em>UFFI</em></span></span> package was designed and
+	  written by Kevin M. Rosenberg.
+	</p></li><li><p>
+	  Permission is granted to copy, distribute and/or modify this document
+	  under the terms of the GNU Free Documentation License, Version 1.1
+	  or any later version published by the Free Software Foundation;
+	  with no Invariant Sections, with the no
+	  Front-Cover Texts, and with no Back-Cover Texts.
+	  A copy of the license is included in the <span class="application"><span class="emphasis"><em>UFFI</em></span></span> distribution.
+	</p></li><li><p>
+	  <span class="application">Allegro CL</span>® is a registered
+	  trademark of Franz Inc.
+	</p></li><li><p>
+	  <span class="application">Lispworks</span>® is a registered
+	  trademark of Xanalys Inc.
+	</p></li><li><p>
+	  <span class="application">Microsoft Windows</span>® is a
+	  registered trademark of Microsoft Inc.
+	</p></li><li><p>
+	  Other brand or product names are the registered trademarks
+	  or trademarks of their respective holders.
+	</p></li></ul></div></div></div></div><hr /></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="preface"><a href="preface.html">Preface</a></span></dt><dt><span class="chapter"><a href="introduction.html">1. Introduction</a></span></dt><dd><dl><dt><span class="sect1"><a href="introduction.html#purpose">Purpose</a></span></dt><dt><span class="sect1"><a href="background.html">Background
+    </a></span></dt><dt><span class="sect1"><a href="supported-impl.html">Supported Implementations</a></span></dt><dt><span class="sect1"><a href="design.html">Design</a></span></dt><dd><dl><dt><span class="sect2"><a href="design.html#id2596453">Overview</a></span></dt><dt><span class="sect2"><a href="design.html#id2597646">Priorities</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="notes.html">2. Programming Notes</a></span></dt><dd><dl><dt><span class="sect1"><a href="notes.html#impl-specific">Implementation Specific Notes</a></span></dt><dd><dl><dt><span class="sect2"><a href="notes.html#id2602147"><span class="application">AllegroCL</span></a></span></dt><dt><span class="sect2"><a href="notes.html#id2611821"><span class="application">Lispworks</span></a></span></dt><dt><span class="sect2"><a href="notes.html#id2593693"><span class="application">CMUCL</span></a></span></dt></dl></dd><dt><span class="sect1"><a href="object-represen.html">Foreign Object Representation and Access</a></span></dt><dt><span class="sect1"><a href="optimizing.html">Optimizing Code Using UFFI</a></span></dt><dd><dl><dt><span class="sect2"><a href="optimizing.html#id2606966">Background</a></span></dt><dt><span class="sect2"><a href="optimizing.html#id2577263">Cross-Implementation Optimization</a></span></dt></dl></dd></dl></dd><dt><span class="reference"><a href="ref_declarations.html">I. Declarations</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="def-type.html">def-type</a></span><span class="refpurpose"> — Defines a Common Lisp type. 
+      </span></dt></dl></dd><dt><span class="reference"><a href="primitives.html">II. Primitive Types</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="def-constant.html">def-constant</a></span><span class="refpurpose"> — Binds a symbol to a constant. 
+      </span></dt><dt><span class="refentrytitle"><a href="def-foreign-type.html">def-foreign-type</a></span><span class="refpurpose"> — Defines a new foreign type. 
+      </span></dt><dt><span class="refentrytitle"><a href="null-char-p.html">null-char-p</a></span><span class="refpurpose"> — Tests a character for <code class="constant">NULL</code> value.
+      </span></dt></dl></dd><dt><span class="reference"><a href="aggregates.html">III. Aggregate Types</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="def-enum.html">def-enum</a></span><span class="refpurpose"> — Defines a <code class="computeroutput">C</code> enumeration.
+	</span></dt><dt><span class="refentrytitle"><a href="def-struct.html">def-struct</a></span><span class="refpurpose"> — Defines a <code class="computeroutput">C</code> structure.
+	</span></dt><dt><span class="refentrytitle"><a href="get-slot-value.html">get-slot-value</a></span><span class="refpurpose"> — Retrieves a value from a slot of a structure.
+	</span></dt><dt><span class="refentrytitle"><a href="get-slot-pointer.html">get-slot-pointer</a></span><span class="refpurpose"> — Retrieves a pointer from a slot of a structure.
+	</span></dt><dt><span class="refentrytitle"><a href="def-array-pointer.html">def-array-pointer</a></span><span class="refpurpose"> — Defines a pointer to a array of type.
+	</span></dt><dt><span class="refentrytitle"><a href="deref-array.html">deref-array</a></span><span class="refpurpose"> — Deference an array.
+	</span></dt><dt><span class="refentrytitle"><a href="def-union.html">def-union</a></span><span class="refpurpose"> — Defines a foreign union type.
+	</span></dt></dl></dd><dt><span class="reference"><a href="objects.html">IV. Objects</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="allocate-foreign-object.html">allocate-foreign-object</a></span><span class="refpurpose"> — Allocates an instance of a foreign object.
+	</span></dt><dt><span class="refentrytitle"><a href="free-foreign-object.html">free-foreign-object</a></span><span class="refpurpose"> — Frees memory that was allocated for a foreign boject.
+	</span></dt><dt><span class="refentrytitle"><a href="with-foreign-object.html">with-foreign-object</a></span><span class="refpurpose"> — Wraps the allocation of a foreign object around a body of code.
+	</span></dt><dt><span class="refentrytitle"><a href="size-of-foreign-type.html">size-of-foreign-type</a></span><span class="refpurpose"> — Returns the number of data bytes used by a foreign object type.
+	</span></dt><dt><span class="refentrytitle"><a href="pointer-address.html">pointer-address</a></span><span class="refpurpose"> — Returns the address of a pointer.
+	</span></dt><dt><span class="refentrytitle"><a href="deref-pointer.html">deref-pointer</a></span><span class="refpurpose"> — Deferences a pointer.
+	</span></dt><dt><span class="refentrytitle"><a href="ensure-char-character.html">ensure-char-character</a></span><span class="refpurpose"> — Ensures that a dereferenced <code class="constant">:char</code> pointer is
+a character.
+	</span></dt><dt><span class="refentrytitle"><a href="ensure-char-integer.html">ensure-char-integer</a></span><span class="refpurpose"> — Ensures that a dereferenced <code class="constant">:char</code> pointer is
+an integer.
+	</span></dt><dt><span class="refentrytitle"><a href="make-null-pointer.html">make-null-pointer</a></span><span class="refpurpose"> — Create a <code class="constant">NULL</code> pointer.
+	</span></dt><dt><span class="refentrytitle"><a href="null-pointer-p.html">null-pointer-p</a></span><span class="refpurpose"> — Tests a pointer for <code class="constant">NULL</code> value.
+	</span></dt><dt><span class="refentrytitle"><a href="null-cstring-pointer.html">+null-cstring-pointer+</a></span><span class="refpurpose"> — A constant <code class="constant">NULL</code> cstring pointer.
+	</span></dt><dt><span class="refentrytitle"><a href="with-cast-pointer.html">with-cast-pointer</a></span><span class="refpurpose"> — Wraps a body of code with a pointer cast to a new type.
+	</span></dt><dt><span class="refentrytitle"><a href="def-foreign-var.html">def-foreign-var</a></span><span class="refpurpose"> — 
+Defines a symbol macro to access a variable in foreign code
+	</span></dt></dl></dd><dt><span class="reference"><a href="strings.html">V. Strings</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="convert-from-cstring.html">convert-from-cstring</a></span><span class="refpurpose"> — Converts a cstring to a Lisp string.</span></dt><dt><span class="refentrytitle"><a href="convert-to-cstring.html">convert-to-cstring</a></span><span class="refpurpose"> — Converts a Lisp string to a cstring.</span></dt><dt><span class="refentrytitle"><a href="free-cstring.html">free-cstring</a></span><span class="refpurpose"> — Free memory used by cstring.
+      </span></dt><dt><span class="refentrytitle"><a href="with-cstring.html">with-cstring</a></span><span class="refpurpose"> — Binds a newly created cstring.</span></dt><dt><span class="refentrytitle"><a href="convert-from-foreign-string.html">convert-from-foreign-string</a></span><span class="refpurpose"> — Converts a foreign string into a Lisp string.</span></dt><dt><span class="refentrytitle"><a href="convert-to-foreign-string.html">convert-to-foreign-string</a></span><span class="refpurpose"> — Converts a Lisp string to a foreign string.
+      </span></dt><dt><span class="refentrytitle"><a href="allocate-foreign-string.html">allocate-foreign-string</a></span><span class="refpurpose"> — Allocates space for a foreign string.
+      </span></dt></dl></dd><dt><span class="reference"><a href="func_libr.html">VI. Functions &amp; Libraries</a></span></dt><dd><dl><dt><span class="refentrytitle"><a href="def-function.html">def-function</a></span><span class="refpurpose"> — Declares a function. 
+	</span></dt><dt><span class="refentrytitle"><a href="load-foreign-library.html">load-foreign-library</a></span><span class="refpurpose"> — Loads a foreign library. 
+	</span></dt><dt><span class="refentrytitle"><a href="find-foreign-library.html">find-foreign-library</a></span><span class="refpurpose"> — Finds a foreign library file.
+	</span></dt></dl></dd><dt><span class="appendix"><a href="installation.html">A. Installation</a></span></dt><dd><dl><dt><span class="sect1"><a href="installation.html#download">Download <span class="application"><span class="emphasis"><em>UFFI</em></span></span></a></span></dt><dt><span class="sect1"><a href="loading.html">Loading</a></span></dt></dl></dd><dt><span class="glossary"><a href="glossary.html">Glossary</a></span></dt></dl></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="preface.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"> </td><td width="20%" align="center"> </td><td width="40%" align="right" valign="top"> Preface</td></tr></table></div></body></html>

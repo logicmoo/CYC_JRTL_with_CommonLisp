@@ -1,0 +1,124 @@
+* RUNNING THE REGRESSION SUITE
+
+This test suite looks for a configuration file named
+".clsql-test.config" located in the users home directory. This file
+contains a single assoc-list that specifies the connection specs for
+each database type to be tested. There is an example file in
+contained in CLSQL's examples directory.
+
+These tests require the downloading of the rt package from
+http://files.b9.com/.
+
+Load clsql.asd or put it somewhere where ASDF can find it
+and call:
+
+(asdf:oos 'asdf:test-op 'clsql)
+
+The test suite will then automatically run on all of the backends that
+you have defined in .clsql-test.config
+
+* REGRESSION TEST SUITE GOALS
+
+The intent of this test suite is to provide sufficient coverage for
+the system to support the following:
+
+** Refactoring and Redesign of particular subsystems
+
+Refactoring and redesign efforts are normally restricted to a single
+subsystem, or perhaps to interdependent subsystems.  In such cases, a
+set of regression tests which excercise the existing interface of the
+rest of CLSQL to the changing subsystems should be in place and passing
+before the coding starts.
+
+** Ensuring portability and Supporting new ports.
+
+The more coverage the test suite provides the easier portability is to
+maintain, particularly if we have instances of the test suite running
+against the head on the supporting lisp environment/OS/hardware/DBMS
+combinations.  Since no individual within the project has the ability
+to run all of those combinations themselves, we are dependent upon some
+informal coordination between the mintainers of the various ports.
+
+** Adding new RDBMS backends
+
+The entire CLSQL DBMS interface needs to be excercised by the test
+suite, such that a new RDBMS backend that passes all the tests can be
+reasonably assured of working with the CLSQL layers above that.  These
+tests should also serve as impromptu documentation for the details of
+that interface and what it expects frothe RDBMS driver layers.
+
+** Bug identification and QA
+
+As new bugs are identified, they should have a regression test written
+which excercises them. This is to ensue that we donot start
+backtracking. These tests by theselves are also very valuable for
+developers, so even if you cannot fix a bug yourself, providing a
+testto excercise it greatly reduces the amount of timea developer must
+spend finding the bug prior to fixing it.
+
+
+* TEST DESIGN ISSUES
+
+** Multiple RDBMS Issues
+
+CLSQL supports several RDBMS backends, and it should be possible to run
+every test against all of them.  However, there are some features
+which we want tests for but which are not implemented on several of
+the backends.  
+
+** Test Hygiene
+
+Tests should be able to be run multiple times against the same
+database.  It is also important that they clean up after themselves
+when they create tables, sequences or other pesistent entities in the
+RDBMS backends, because often there are limits to the number of those
+thatcan exist at one time, and it also makes debuging thru the SQL
+monitors difficult when there aretons of unused tables lying around.
+
+If test need to load large datasets, they should have a mechanism to
+ensure the dataset is loaded just once, and not with every test run.
+
+Lastly, because there are various idiosyncracies with RDBMSs, please
+ensure that you run the entire test suite once when you write your
+tests, to ensure that your test does not leave some state behind which
+causes other tests to fail.
+
+** Test Run Configuration
+
+The file test-init.lisp defines several variables which can be used to
+control the connection dictionary of the database against which tests
+will be run.  
+
+
+* DATABASE CONNECTIONS/LIFECYCLE
+
+** CreateDB
+   *** Without existing DB
+   *** With existing DB and use old
+   *** With existing DB and use new
+   *** Error if existing DB
+
+** Data Definition
+  *** Create Tables/Views/Sequences/Indexes -- Should cover creation of
+      tables with all supported types of fields.
+  *** Delete Tables/Views/Sequences/Indexes
+  *** Inspection of Tables and attributes, including types
+
+** Data Manipulation
+  *** Update
+  *** Insert
+  *** Delete
+  *** Query
+
+** Functional Interface
+  *** Creation/Modification of SQL expressions
+  *** Querying
+
+** Embedded SQL syntax
+  *** Excercise all sql operators
+  
+** Object Interface
+  *** View class definition
+  *** Object creation/manipulation/deletion
+  *** Inter-object Relations
+

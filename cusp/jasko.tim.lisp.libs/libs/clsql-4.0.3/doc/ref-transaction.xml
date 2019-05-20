@@ -1,0 +1,844 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<!-- Transaction handling --> 
+
+<reference id="ref-transaction"> 
+  <title>Transaction Handling</title> 
+    <partintro>
+    <para>
+      This section describes the interface provided by &clsql; for
+      handling database transactions. The interface allows for opening
+      transaction blocks, committing or rolling back changes made and
+      controlling autocommit behaviour.
+    </para>
+    <note>
+      <para>
+      In contrast to &commonsql;, &clsql;, by default, starts in
+      transaction AUTOCOMMIT mode (see <link
+      linkend="set-autocommit"><function>set-autocommit</function></link>).
+      To begin a transaction in autocommit mode, <link
+      linkend="start-transaction"><function>start-transaction</function></link>
+      has to be called explicitly.
+      </para>
+    </note> 
+  </partintro>
+
+  <refentry id="start-transaction">
+    <refmeta>
+      <refentrytitle>START-TRANSACTION</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>START-TRANSACTION</refname>
+      <refpurpose>Open a transaction block.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>start-transaction</function> &amp;key <replaceable>database</replaceable> => <returnvalue>&nil;</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Starts a transaction block on
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol> and which continues until
+      <function>rollback</function> or <function>commit</function> are
+      called.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(in-transaction-p)
+=> NIL
+(select [*] :from [foo] :field-names nil)
+=> NIL
+(start-transaction)
+=> NIL 
+(in-transaction-p)
+=> T
+(insert-records :into [foo] :av-pairs '(([bar] 1) ([baz] "one")))
+=> 
+(select [*] :from [foo] :field-names nil)
+=> ((1 "one"))
+(rollback)
+=> NIL 
+(in-transaction-p)
+=> NIL
+(select [*] :from [foo] :field-names nil)
+=> NIL
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Autocommit mode is disabled and if
+        <parameter>database</parameter> is currently within the scope
+        of a transaction, all commit and rollback hooks are removed
+        and the transaction level associated with
+        <parameter>database</parameter> is modified.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        Signals an error of type <symbol>sql-database-error</symbol>
+        if <parameter>database</parameter> is not a database object.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="commit"><function>commit</function></link></member>
+        <member><link linkend="rollback"><function>rollback</function></link></member>
+        <member><link linkend="in-transaction-p"><function>in-transaction-p</function></link></member>
+        <member><link linkend="set-autocommit"><function>set-autocommit</function></link></member>
+        <member><link linkend="with-transaction"><function>with-transaction</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>start-transaction</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="commit">
+    <refmeta>
+      <refentrytitle>COMMIT</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>COMMIT</refname>
+      <refpurpose>Commit modifications made in the current transaction.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>commit</function> &amp;key <replaceable>database</replaceable> => <returnvalue>&nil;</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>      
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>If <parameter>database</parameter>, which defaults to
+      <symbol>*default-database*</symbol>, is currently within the
+      scope of a transaction, commits changes made since the
+      transaction began.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(in-transaction-p)
+=> NIL
+(select [*] :from [foo] :field-names nil)
+=> NIL
+(start-transaction)
+=> NIL 
+(in-transaction-p)
+=> T
+(insert-records :into [foo] :av-pairs '(([bar] 1) ([baz] "one")))
+=> 
+(select [*] :from [foo] :field-names nil)
+=> ((1 "one"))
+(commit)
+=> NIL 
+(in-transaction-p)
+=> NIL
+(select [*] :from [foo] :field-names nil)
+=> ((1 "one"))
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Changes made within the scope of the current transaction are
+        committed in the underlying database and the transaction level
+        of <parameter>database</parameter> is reset.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        The transaction level of <parameter>database</parameter> which
+        indicates whether a transaction has been initiated by a call to 
+        <function>start-transaction</function> since the last call to 
+        <function>rollback</function> or <function>commit</function>. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        Signals an error of type <symbol>sql-database-error</symbol>
+        if <parameter>database</parameter> is not a database object. A
+        warning of type <symbol>sql-warning</symbol> is signalled if there 
+        is no transaction in progress. 
+        </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="start-transaction"><function>start-transaction</function></link></member>
+        <member><link linkend="rollback"><function>rollback</function></link></member>
+        <member><link linkend="in-transaction-p"><function>in-transaction-p</function></link></member>
+        <member><link linkend="add-transaction-commit-hook"><function>add-transaction-commit-hook</function></link></member>
+        <member><link linkend="set-autocommit"><function>set-autocommit</function></link></member>
+        <member><link linkend="with-transaction"><function>with-transaction</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="rollback">
+    <refmeta>
+      <refentrytitle>ROLLBACK</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>ROLLBACK</refname>
+      <refpurpose>Roll back modifications made in the current transaction.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>rollback</function> &amp;key <replaceable>database</replaceable> => <returnvalue>&nil;</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>      
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>If <parameter>database</parameter>, which defaults to
+      <symbol>*default-database*</symbol>, is currently within the
+      scope of a transaction, rolls back changes made since the
+      transaction began.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(in-transaction-p)
+=> NIL
+(select [*] :from [foo] :field-names nil)
+=> NIL
+(start-transaction)
+=> NIL 
+(in-transaction-p)
+=> T
+(insert-records :into [foo] :av-pairs '(([bar] 1) ([baz] "one")))
+=> 
+(select [*] :from [foo] :field-names nil)
+=> ((1 "one"))
+(rollback)
+=> NIL 
+(in-transaction-p)
+=> NIL
+(select [*] :from [foo] :field-names nil)
+=> NIL
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+       Changes made within the scope of the current transaction are
+       reverted in the underlying database and the transaction level
+       of <parameter>database</parameter> is reset.  </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        The transaction level of <parameter>database</parameter> which
+        indicates whether a transaction has been initiated by a call to 
+        <function>start-transaction</function> since the last call to 
+        <function>rollback</function> or <function>commit</function>. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        Signals an error of type <symbol>sql-database-error</symbol>
+        if <parameter>database</parameter> is not a database object. A
+        warning of type <symbol>sql-warning</symbol> is signalled if
+        there is no transaction in progress.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="start-transaction"><function>start-transaction</function></link></member>
+        <member><link linkend="commit"><function>commit</function></link></member>
+        <member><link linkend="in-transaction-p"><function>in-transaction-p</function></link></member>
+        <member><link linkend="add-transaction-rollback-hook"><function>add-transaction-rollback-hook</function></link></member>
+        <member><link linkend="set-autocommit"><function>set-autocommit</function></link></member>
+        <member><link linkend="with-transaction"><function>with-transaction</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="in-transaction-p">
+    <refmeta>
+      <refentrytitle>IN-TRANSACTION-P</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>IN-TRANSACTION-P</refname>
+      <refpurpose>A predicate for testing whether a transaction is currently in progress.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>in-transaction-p</function> &amp;key <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>      
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>A Boolean.</para> 
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>A predicate to test whether
+      <parameter>database</parameter>, which defaults to
+      <symbol>*default-database*</symbol>, is currently within the
+      scope of a transaction.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(in-transaction-p)
+=> NIL
+(start-transaction)
+=> NIL 
+(in-transaction-p)
+=> T
+(commit)
+=> NIL
+(in-transaction-p)
+=> NIL
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para> 
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="start-transaction"><function>start-transaction</function></link></member>
+        <member><link linkend="commit"><function>commit</function></link></member>
+        <member><link linkend="rollback"><function>rollback</function></link></member>
+        <member><link linkend="set-autocommit"><function>set-autocommit</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>in-transaction-p</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="add-transaction-commit-hook">
+    <refmeta>
+      <refentrytitle>ADD-TRANSACTION-COMMIT-HOOK</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>ADD-TRANSACTION-COMMIT-HOOK</refname>
+      <refpurpose>Specify hooks to be run when committing changes.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>add-transaction-commit-hook</function> <replaceable>commit-hook</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>commit-hook</parameter></term>
+          <listitem>
+            <para>A designator for a function with no required arguments.</para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>      
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>The list of currently defined commit hooks for
+            <parameter>database</parameter>.
+            </para> 
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        Adds <parameter>commit-hook</parameter>, which should a
+        designator for a function with no required arguments, to the
+        list of hooks run when <function>commit</function> is called
+        on <parameter>database</parameter> which defaults to
+        <symbol>*default-database*</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(start-transaction)
+=> NIL 
+(add-transaction-commit-hook #'(lambda () (print "Successfully committed.")))
+=> (#&lt;Interpreted Function (LAMBDA # #) {48E2E689}>)
+(commit)
+"Successfully committed." 
+=> NIL
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        <parameter>commit-hook</parameter> is added to the list of
+        commit hooks for <parameter>database</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        If <parameter>commit-hook</parameter> has one or more required
+        arguments, an error will be signalled when
+        <function>commit</function> is called.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="commit"><function>commit</function></link></member>
+        <member><link linkend="rollback"><function>rollback</function></link></member>
+        <member><link linkend="add-transaction-rollback-hook"><function>add-transaction-rollback-hook</function></link></member>
+        <member><link linkend="with-transaction"><function>with-transaction</function></link></member>
+      </simplelist>
+    </refsect1>    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>add-transaction-commit-hook</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="add-transaction-rollback-hook">
+    <refmeta>
+      <refentrytitle>ADD-TRANSACTION-ROLLBACK-HOOK</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>ADD-TRANSACTION-ROLLBACK-HOOK</refname>
+      <refpurpose>Specify hooks to be run when rolling back changes.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>add-transaction-rollback-hook</function> <replaceable>rollback-hook</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>rollback-hook</parameter></term>
+          <listitem>
+            <para>A designator for a function with no required arguments.</para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>      
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>The list of currently defined rollback hooks for
+            <parameter>database</parameter>.
+            </para> 
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        Adds <parameter>rollback-hook</parameter>, which should a
+        designator for a function with no required arguments, to the
+        list of hooks run when <function>rollback</function> is called
+        on <parameter>database</parameter> which defaults to
+        <symbol>*default-database*</symbol>.  </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(start-transaction)
+=> NIL 
+(add-transaction-rollback-hook #'(lambda () (print "Successfully rolled back.")))
+=> (#&lt;Interpreted Function (LAMBDA # #) {48E37C31}>)
+(rollback)
+"Successfully rolled back." 
+=> NIL      
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        <parameter>rollback-hook</parameter> is added to the list of
+        rollback hooks for <parameter>database</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        If <parameter>rollback-hook</parameter> has one or more
+        required arguments, an error will be signalled when
+        <function>rollback</function> is called.
+      </para>
+    </refsect1>
+<refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="commit"><function>commit</function></link></member>
+        <member><link linkend="rollback"><function>rollback</function></link></member>
+        <member><link linkend="add-transaction-commit-hook"><function>add-transaction-commit-hook</function></link></member>
+      </simplelist>
+    </refsect1>    
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>add-transaction-rollback-hook</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="set-autocommit">
+    <refmeta>
+      <refentrytitle>SET-AUTOCOMMIT</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SET-AUTOCOMMIT</refname>
+      <refpurpose>Turn on or off autocommit for a database.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>set-autocommit</function> <replaceable>value</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>value</parameter></term>
+          <listitem>
+            <para>A Boolean specifying the desired autocommit
+            behaviour for <parameter>database</parameter>.
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>      
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>The previous autocommit value for
+            <parameter>database</parameter>.
+            </para> 
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Turns autocommit off for <parameter>database</parameter>
+      if <parameter>value</parameter> is &nil;, and otherwise turns it
+      on. Returns the old value of autocommit flag.
+      </para>
+      <para> 
+        For RDBMS (such as Oracle) which don't automatically commit
+        changes, turning autocommit on has the effect of explicitly
+        committing changes made whenever SQL statements are executed. 
+      </para>
+      <para> 
+        Autocommit is turned on by default. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+        <!-- examples -->
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        <parameter>database</parameter> is associated with the specified 
+        autocommit mode. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="start-transaction"><function>start-transaction</function></link></member>
+        <member><link linkend="commit"><function>commit</function></link></member>
+        <member><link linkend="add-transaction-commit-hook"><function>add-transaction-commit-hook</function></link></member>
+        <member><link linkend="with-transaction"><function>with-transaction</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>set-autocommit</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="with-transaction">
+    <refmeta>
+      <refentrytitle>WITH-TRANSACTION</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>WITH-TRANSACTION</refname>
+      <refpurpose>Execute a body of code within a transaction.</refpurpose>
+      <refclass>Macro</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>with-transaction</function> &amp;key <replaceable>database</replaceable> &amp;rest <replaceable>body</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term><parameter>body</parameter></term>
+          <listitem>
+            <para>
+              A body of Lisp code. 
+            </para>
+          </listitem>
+        </varlistentry>      
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>The result of executing <parameter>body</parameter>.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Starts a transaction in the database specified by
+      <parameter>database</parameter>, which is
+      <symbol>*default-database*</symbol> by default, and executes
+      <parameter>body</parameter> within that transaction. If
+      <parameter>body</parameter> aborts or throws,
+      <parameter>database</parameter> is rolled back and otherwise the
+      transaction is committed.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(in-transaction-p)
+=> NIL
+(select [email] :from [employee] :where [= [emplid] 1] :flatp t :field-names nil)
+=> ("lenin@soviet.org")
+(with-transaction () 
+   (update-records [employee] 
+                   :av-pairs '((email "lenin-nospam@soviet.org"))
+                   :where [= [emplid] 1]))
+=> NIL
+(select [email] :from [employee] :where [= [emplid] 1] :flatp t :field-names nil)
+=> ("lenin-nospam@soviet.org")
+(in-transaction-p)
+=> NIL
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Changes specified in <parameter>body</parameter> may be made
+        to the underlying database if <parameter>body</parameter>
+        completes successfully.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        Signals an error of type <symbol>sql-database-error</symbol>
+        if <parameter>database</parameter> is not a database object.
+        </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="start-transaction"><function>start-transaction</function></link></member>
+        <member><link linkend="commit"><function>commit</function></link></member>
+        <member><link linkend="rollback"><function>rollback</function></link></member>
+        <member><link linkend="add-transaction-commit-hook"><function>add-transaction-commit-hook</function></link></member>
+        <member><link linkend="add-transaction-rollback-hook"><function>add-transaction-rollback-hook</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+  
+
+</reference> 

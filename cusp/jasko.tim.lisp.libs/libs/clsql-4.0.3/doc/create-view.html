@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CREATE-VIEW</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fddl.html" title="Functional Data Definition Language (FDDL)" /><link rel="prev" href="table-exists-p.html" title="TABLE-EXISTS-P" /><link rel="next" href="drop-view.html" title="DROP-VIEW" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CREATE-VIEW</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="table-exists-p.html">Prev</a> </td><th width="60%" align="center">Functional Data Definition Language (FDDL)</th><td width="20%" align="right"> <a accesskey="n" href="drop-view.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="create-view"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>CREATE-VIEW — Create a database view.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398665"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">create-view</code> <em class="replaceable"><code>name</code></em> &amp;key <em class="replaceable"><code>as</code></em> <em class="replaceable"><code>column-list</code></em> <em class="replaceable"><code>with-check-option</code></em> <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue"></span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398704"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>
+              The name of the view as a string, symbol or SQL expression. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>
+              A database object which defaults to
+              <span class="symbol">*default-database*</span>.
+            </p></dd><dt><span class="term"><em class="parameter"><code>as</code></em></span></dt><dd><p>
+              A symbolic SQL query expression. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>column-list</code></em></span></dt><dd><p>
+              A list. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>with-check-option</code></em></span></dt><dd><p>
+              A Boolean. 
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398812"></a><h2>Description</h2><p>Creates a view called <em class="parameter"><code>name</code></em> in
+      <em class="parameter"><code>database</code></em> which defaults to
+      <span class="symbol">*default-database*</span>. The view is created using
+      the query <em class="parameter"><code>as</code></em> and the columns of the view
+      may be specified using the <em class="parameter"><code>column-list</code></em>
+      parameter. The <em class="parameter"><code>with-check-option</code></em> is <code class="constant">NIL</code>
+      by default but if it has a non-<code class="constant">NIL</code> value, then all
+      insert/update commands on the view are checked to ensure that
+      the new data satisfy the query <em class="parameter"><code>as</code></em>.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398872"></a><h2>Examples</h2><pre class="screen">
+(create-view [lenins-group]
+	     :as [select [first-name] [last-name] [email]
+	                 :from [employee]
+			 :where [= [managerid] 1]])
+=&gt; 
+
+(select [*] :from [lenins-group])
+=&gt; (("Josef" "Stalin" "stalin@soviet.org") 
+    ("Leon" "Trotsky" "trotsky@soviet.org")
+    ("Nikita" "Kruschev" "kruschev@soviet.org")
+    ("Leonid" "Brezhnev" "brezhnev@soviet.org")
+    ("Yuri" "Andropov" "andropov@soviet.org")
+    ("Konstantin" "Chernenko" "chernenko@soviet.org")
+    ("Mikhail" "Gorbachev" "gorbachev@soviet.org")
+    ("Boris" "Yeltsin" "yeltsin@soviet.org")
+    ("Vladimir" "Putin" "putin@soviet.org")), 
+   ("first_name" "last_name" "email")
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398891"></a><h2>Side Effects</h2><p>
+        A view is created in <em class="parameter"><code>database</code></em>. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398908"></a><h2>Affected by</h2><p>
+        <span class="symbol">*default-database*</span>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398923"></a><h2>Exceptional Situations</h2><p>
+        An error is signalled if <em class="parameter"><code>name</code></em> is not a
+        string, symbol or SQL expression. An error of type
+        <span class="symbol">sql-database-data-error</span> is signalled if a
+        relation called <em class="parameter"><code>name</code></em> already exists.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398951"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="drop-view.html" title="DROP-VIEW"><code class="function">drop-view</code></a></td></tr><tr><td><a class="link" href="list-views.html" title="LIST-VIEWS"><code class="function">list-views</code></a></td></tr><tr><td><a class="link" href="view-exists-p.html" title="VIEW-EXISTS-P"><code class="function">view-exists-p</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id343559"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="table-exists-p.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fddl.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="drop-view.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">TABLE-EXISTS-P </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DROP-VIEW</td></tr></table></div></body></html>

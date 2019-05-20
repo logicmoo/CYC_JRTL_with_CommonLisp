@@ -1,0 +1,813 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<!-- Condition System --> 
+
+<reference id="ref-conditions"> 
+  <title>CLSQL Condition System</title> 
+  <partintro>
+    <para>
+      &clsql; provides and uses a condition system in which all errors
+      and warnings are of type <link
+      linkend="sql-condition"><errortype>sql-condition</errortype></link>. This
+      section describes the various subclasses of <link
+      linkend="sql-condition"><errortype>sql-condition</errortype></link>
+      defined by &clsql;. Details are also provided for how they are
+      used in &clsql; and intended to be signalled in user
+      code. Finally, slot accessors for some of the condition types
+      are described.
+    </para>
+  </partintro>
+
+  <refentry id="backend-warning-behavior">
+    <refmeta>
+      <refentrytitle>*BACKEND-WARNING-BEHAVIOR*</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>*BACKEND-WARNING-BEHAVIOR*</refname>
+      <refpurpose>Controls behaviour on warnings from underlying RDBMS.</refpurpose>
+      <refclass>Variable</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Value Type</title>
+      <para>
+        Meaningful values are <symbol>:warn</symbol>,
+        <symbol>:error</symbol>, <symbol>:ignore</symbol> and &nil;.
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Initial Value</title>
+      <para><symbol>:warn</symbol></para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+	Action to perform on warning messages
+	from backend. Default is to <symbol>:warn</symbol>. May also be
+	set to <symbol>:error</symbol> to signal an error or
+	<symbol>:ignore</symbol> or &nil; to silently ignore the
+	warning.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+        <!-- examples --> 
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Affected By</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para><symbol>*backend-warning-behaviour*</symbol> is a &clsql;
+      extension.</para>
+    </refsect1>
+  </refentry>
+  
+  <refentry id="sql-condition">
+    <refmeta>
+      <refentrytitle>SQL-CONDITION</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-CONDITION</refname>
+      <refpurpose>the super-type of all
+      &clsql;-specific
+      conditions</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title> 
+      <para> 
+        This is the super-type of all &clsql;-specific conditions
+        defined by &clsql;, or any of it's database-specific
+        interfaces.  There are no defined initialization arguments nor
+        any accessors.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para><errortype>sql-condition</errortype> is a &clsql;
+      extension.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-error">
+    <refmeta>
+      <refentrytitle>SQL-ERROR</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-ERROR</refname>
+      <refpurpose>the super-type of all
+      &clsql;-specific
+      errors</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><link linkend="sql-error"><errortype>sql-error</errortype></link></member>
+          <member><errortype>simple-error</errortype></member>
+          <member><errortype>simple-condition</errortype></member>
+          <member><errortype>error</errortype></member>
+          <member><errortype>serious-condition</errortype></member>
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        This is the super-type of all &clsql;-specific conditions that
+        represent errors, as defined by &clsql;, or any of it's
+        database-specific interfaces.  There are no defined
+        initialization arguments nor any accessors.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para><errortype>sql-error</errortype> is a &clsql; extension.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-warning">
+    <refmeta>
+      <refentrytitle>SQL-WARNING</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-WARNING</refname>
+      <refpurpose>the super-type of all
+      &clsql;-specific
+      warnings</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><link linkend="sql-warning"><errortype>sql-warning</errortype></link></member>
+          <member><errortype>warning</errortype></member>
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        This is the super-type of all &clsql;-specific conditions that
+        represent warnings, as defined by &clsql;, or any of it's
+        database-specific interfaces.  There are no defined
+        initialization arguments nor any accessors.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para><errortype>sql-warning</errortype> is a &clsql; extension.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-database-warning">
+    <refmeta>
+      <refentrytitle>SQL-DATABASE-WARNING</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-DATABASE-WARNING</refname>
+      <refpurpose>Used to warn while accessing a 
+      &clsql; database.</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><link linkend="sql-database-warning"><errortype>sql-database-warning</errortype></link></member>
+          <member><link linkend="sql-warning"><errortype>sql-warning</errortype></link></member>
+          <member><errortype>warning</errortype></member>
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        This condition represents warnings signalled while accessing
+        a database.
+      </para>
+      <para> 
+        The following initialization arguments and accessors exist:
+      </para>
+      <segmentedlist>
+        <segtitle>Initarg</segtitle>
+        <segtitle>Accessor</segtitle>
+        <segtitle>Description</segtitle>
+        <seglistitem>
+          <seg><symbol>:database</symbol></seg>
+          <seg><function>sql-warning-database</function></seg>
+          <seg>The database object that was involved in the
+          incident.</seg>
+        </seglistitem>
+      </segmentedlist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para><errortype>sql-database-warning</errortype> is a &clsql;
+      extension.</para>
+    </refsect1>
+  </refentry>
+
+  <!-- Specific Conditions -->
+
+  <refentry id="sql-user-error">
+    <refmeta>
+      <refentrytitle>SQL-USER-ERROR</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-USER-ERROR</refname>
+      <refpurpose>condition representing errors because of invalid
+      parameters from the library user.</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><errortype>sql-user-error</errortype></member>
+          <member><link linkend="sql-error"><errortype>sql-error</errortype></link></member>
+          <member><errortype>simple-error</errortype></member>
+          <member><errortype>simple-condition</errortype></member>
+          <member><errortype>error</errortype></member>
+          <member><errortype>serious-condition</errortype></member>
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        This condition represents errors that occur because the user
+        supplies invalid data to &clsql;.  This includes errors such
+        as an invalid format connection specification or an error in
+        the syntax for the <function>LOOP</function> macro extensions.
+      </para>
+      <para> 
+        The following initialization arguments and accessors exist:
+      </para>
+      <segmentedlist>
+        <segtitle>Initarg</segtitle>
+        <segtitle>Accessor</segtitle>
+        <segtitle>Description</segtitle>
+        <seglistitem>
+          <seg><symbol>:message</symbol></seg>
+          <seg><function>sql-user-error-message</function></seg>
+          <seg>The error message.</seg>
+        </seglistitem>
+      </segmentedlist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>The slot accessor
+      <function>sql-user-error-message</function> is a &clsql;
+      extension.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-database-error">
+    <refmeta>
+      <refentrytitle>SQL-DATABASE-ERROR</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-DATABASE-ERROR</refname>
+      <refpurpose>condition representing errors during query or
+      command execution</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><link linkend="sql-database-error"><errortype>sql-database-error</errortype></link></member>
+          <member><link linkend="sql-error"><errortype>sql-error</errortype></link></member>
+          <member><errortype>simple-error</errortype></member>
+          <member><errortype>simple-condition</errortype></member>
+          <member><errortype>error</errortype></member>
+          <member><errortype>serious-condition</errortype></member>
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        This condition represents errors that occur while executing
+        SQL statements, either as part of query operations or command
+        execution, either explicitly or implicitly, as caused e.g. by
+        <function>with-transaction</function>.
+      </para>
+      <para>
+        The following initialization arguments and accessors exist:
+      </para>
+      <segmentedlist>
+        <segtitle>Initarg</segtitle>
+        <segtitle>Accessor</segtitle>
+        <segtitle>Description</segtitle>
+        <seglistitem>
+          <seg><symbol>:database</symbol></seg>
+          <seg><function>sql-error-database</function></seg>
+          <seg>The database object that was involved in the
+          incident.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:error-id</symbol></seg>
+          <seg><function>sql-error-error-id</function></seg>
+          <seg>The numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:secondary-error-id</symbol></seg>
+          <seg><function>sql-error-secondary-error-id</function></seg>
+          <seg>The secondary numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:message</symbol></seg>
+          <seg><function>sql-error-database-message</function></seg>
+          <seg>A string describing the problem that occurred,
+          possibly one returned by the database back-end.</seg>
+        </seglistitem>
+      </segmentedlist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The slot accessor
+        <function>sql-error-database</function> is a &clsql;
+        extension.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-connection-error">
+    <refmeta>
+      <refentrytitle>SQL-CONNECTION-ERROR</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-CONNECTION-ERROR</refname>
+      <refpurpose>condition representing errors during
+      connection</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><link linkend="sql-connection-error"><errortype>sql-connection-error</errortype></link></member>
+          <member><link linkend="sql-database-error"><errortype>sql-database-error</errortype></link></member>
+          <member><link linkend="sql-error"><errortype>sql-error</errortype></link></member>
+          <member><errortype>simple-error</errortype></member>
+          <member><errortype>simple-condition</errortype></member>
+          <member><errortype>error</errortype></member>
+          <member><errortype>serious-condition</errortype></member>
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        This condition represents errors that occur while trying to
+        connect to a database.
+      </para>
+      <para> 
+        The following initialization arguments and accessors exist:
+      </para>
+      <segmentedlist>
+        <segtitle>Initarg</segtitle>
+        <segtitle>Accessor</segtitle>
+        <segtitle>Description</segtitle>
+        <seglistitem>
+          <seg><symbol>:database-type</symbol></seg>
+          <seg><function>sql-error-database-type</function></seg>
+          <seg>Database type for the connection attempt</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:connection-spec</symbol></seg>
+          <seg><function>sql-error-connection-spec</function></seg>
+          <seg>The connection specification used in the
+          connection attempt.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:database</symbol></seg>
+          <seg><function>sql-error-database</function></seg>
+          <seg>The database object that was involved in the
+          incident.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:error-id</symbol></seg>
+          <seg><function>sql-error-error-id</function></seg>
+          <seg>The numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:secondary-error-id</symbol></seg>
+          <seg><function>sql-error-secondary-error-id</function></seg>
+          <seg>The secondary numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:message</symbol></seg>
+          <seg><function>sql-database-error-error</function></seg>
+          <seg>A string describing the problem that occurred,
+          possibly one returned by the database back-end.</seg>
+        </seglistitem>
+      </segmentedlist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The slot accessors
+        <function>sql-error-database</function>,
+        <function>sql-error-database-type</function> and
+        <function>sql-error-connection-spec</function> are
+        &clsql; extensions.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-database-data-error">
+    <refmeta>
+      <refentrytitle>SQL-DATABASE-DATA-ERROR</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-DATABASE-DATA-ERROR</refname>
+      <refpurpose>Used to signal an error with the SQL data passed
+      to a database.</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><errortype>sql-database-data-error</errortype></member>
+          <member><link linkend="sql-database-error"><errortype>sql-database-error</errortype></link></member>
+          <member><link linkend="sql-error"><errortype>sql-error</errortype></link></member>
+          <member><errortype>simple-error</errortype></member>
+          <member><errortype>simple-condition</errortype></member>
+          <member><errortype>error</errortype></member>
+          <member><errortype>serious-condition</errortype></member>
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>This condition represents errors that occur while
+      executing SQL statements, specifically as a result of
+      malformed SQL expressions. 
+      </para>
+      <para> 
+        The following initialization arguments and accessors exist:
+      </para>
+      <segmentedlist>
+        <segtitle>Initarg</segtitle>
+        <segtitle>Accessor</segtitle>
+        <segtitle>Description</segtitle>
+        <seglistitem>
+          <seg><symbol>:expression</symbol></seg>
+          <seg><function>sql-error-expression</function></seg>
+          <seg>The SQL expression whose execution caused the error.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:database</symbol></seg>
+          <seg><function>sql-error-database</function></seg>
+          <seg>The database object that was involved in the
+          incident.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:error-id</symbol></seg>
+          <seg><function>sql-error-error-id</function></seg>
+          <seg>The numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:secondary-error-id</symbol></seg>
+          <seg><function>sql-error-secondary-error-id</function></seg>
+          <seg>The secondary numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:message</symbol></seg>
+          <seg><function>sql-error-database-message</function></seg>
+          <seg>A string describing the problem that occurred,
+          possibly one returned by the database back-end.</seg>
+        </seglistitem>
+      </segmentedlist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The slot accessors
+        <function>sql-error-database</function> and 
+        <function>sql-error-expression</function> are
+        &clsql; extensions.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-temporary-error">
+    <refmeta>
+      <refentrytitle>SQL-TEMPORARY-ERROR</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-TEMPORARY-ERROR</refname>
+      <refpurpose>Used to signal a temporary error in the database
+      backend.</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><errortype>sql-temporary-error</errortype></member>
+          <member><link linkend="sql-database-error"><errortype>sql-database-error</errortype></link></member>
+          <member><link linkend="sql-error"><errortype>sql-error</errortype></link></member>
+          <member><errortype>simple-error</errortype></member>
+          <member><errortype>simple-condition</errortype></member>
+          <member><errortype>error</errortype></member>
+          <member><errortype>serious-condition</errortype></member>
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        This condition represents errors occurring when the database
+        cannot currently process a valid interaction because, for
+        example, it is still executing another command possibly issued
+        by another user.
+      </para>
+      <para> 
+        The following initialization arguments and accessors exist:
+      </para>
+      <segmentedlist>
+        <segtitle>Initarg</segtitle>
+        <segtitle>Accessor</segtitle>
+        <segtitle>Description</segtitle>
+        <seglistitem>
+          <seg><symbol>:database</symbol></seg>
+          <seg><function>sql-error-database</function></seg>
+          <seg>The database object that was involved in the
+          incident.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:error-id</symbol></seg>
+          <seg><function>sql-error-error-id</function></seg>
+          <seg>The numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:secondary-error-id</symbol></seg>
+          <seg><function>sql-error-secondary-error-id</function></seg>
+          <seg>The secondary numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:message</symbol></seg>
+          <seg><function>sql-error-database-message</function></seg>
+          <seg>A string describing the problem that occurred,
+          possibly one returned by the database back-end.</seg>
+        </seglistitem>
+      </segmentedlist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The slot accessor
+        <function>sql-error-database</function> is a &clsql;
+        extension.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-timeout-error">
+    <refmeta>
+      <refentrytitle>SQL-TIMEOUT-ERROR</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-TIMEOUT-ERROR</refname>
+      <refpurpose>condition representing errors when a connection
+      times out.</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><link linkend="sql-connection-error"><errortype>sql-connection-error</errortype></link></member>
+          <member><link linkend="sql-database-error"><errortype>sql-database-error</errortype></link></member>
+          <member><link linkend="sql-error"><errortype>sql-error</errortype></link></member>
+          <member><errortype>simple-error</errortype></member>
+          <member><errortype>simple-condition</errortype></member>
+          <member><errortype>error</errortype></member>
+          <member><errortype>serious-condition</errortype></member>
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>This condition represents errors that occur when the
+      database times out while processing some operation. The
+      following initialization arguments and accessors exist:</para>
+      <segmentedlist>
+        <segtitle>Initarg</segtitle>
+        <segtitle>Accessor</segtitle>
+        <segtitle>Description</segtitle>
+        <seglistitem>
+          <seg><symbol>:database-type</symbol></seg>
+          <seg><function>sql-error-database-type</function></seg>
+          <seg>Database type for the connection attempt</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:connection-spec</symbol></seg>
+          <seg><function>sql-error-connection-spec</function></seg>
+          <seg>The connection specification used in the
+          connection attempt.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:database</symbol></seg>
+          <seg><function>sql-error-database</function></seg>
+          <seg>The database object that was involved in the
+          incident.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:error-id</symbol></seg>
+          <seg><function>sql-error-error-id</function></seg>
+          <seg>The numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:secondary-error-id</symbol></seg>
+          <seg><function>sql-error-secondary-error-id</function></seg>
+          <seg>The secondary numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:message</symbol></seg>
+          <seg><function>sql-error-database-message</function></seg>
+          <seg>A string describing the problem that occurred,
+          possibly one returned by the database back-end.</seg>
+        </seglistitem>
+      </segmentedlist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The slot accessors
+        <function>sql-error-database</function>,
+        <function>sql-error-database-type</function> and
+        <function>sql-error-connection-spec</function> are
+        &clsql; extensions.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-fatal-error">
+    <refmeta>
+      <refentrytitle>SQL-FATAL-ERROR</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-FATAL-ERROR</refname>
+      <refpurpose>condition representing a fatal error in a database
+      connection</refpurpose>
+      <refclass>Condition Type</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Class Precedence List</title>
+      <para>
+        <simplelist type="inline">
+          <member><link linkend="sql-connection-error"><errortype>sql-connection-error</errortype></link></member>
+          <member><link linkend="sql-database-error"><errortype>sql-database-error</errortype></link></member>
+          <member><link linkend="sql-error"><errortype>sql-error</errortype></link></member>
+          <member><errortype>simple-error</errortype></member>
+          <member><errortype>simple-condition</errortype></member>
+          <member><errortype>error</errortype></member>
+          <member><errortype>serious-condition</errortype></member>
+          <member><link linkend="sql-condition"><errortype>sql-condition</errortype></link></member>
+          <member><errortype>condition</errortype></member>
+          <member><errortype>t</errortype></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>This condition represents errors occurring when the
+      database connection is no longer usable. 
+      </para>
+      <para> 
+        The following initialization arguments and accessors exist:
+      </para>
+      <segmentedlist>
+        <segtitle>Initarg</segtitle>
+        <segtitle>Accessor</segtitle>
+        <segtitle>Description</segtitle>
+        <seglistitem>
+          <seg><symbol>:database-type</symbol></seg>
+          <seg><function>sql-error-database-type</function></seg>
+          <seg>Database type for the connection attempt</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:connection-spec</symbol></seg>
+          <seg><function>sql-error-connection-spec</function></seg>
+          <seg>The connection specification used in the
+          connection attempt.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:database</symbol></seg>
+          <seg><function>sql-error-database</function></seg>
+          <seg>The database object that was involved in the
+          incident.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:error-id</symbol></seg>
+          <seg><function>sql-error-error-id</function></seg>
+          <seg>The numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:secondary-error-id</symbol></seg>
+          <seg><function>sql-error-secondary-error-id</function></seg>
+          <seg>The secondary numeric or symbolic error specification
+          returned by the database back-end.  The values and
+          semantics of this are interface specific.</seg>
+        </seglistitem>
+        <seglistitem>
+          <seg><symbol>:message</symbol></seg>
+          <seg><function>sql-error-database-message</function></seg>
+          <seg>A string describing the problem that occurred,
+          possibly one returned by the database back-end.</seg>
+        </seglistitem>
+      </segmentedlist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The slot accessors
+        <function>sql-error-database</function>,
+        <function>sql-error-database-type</function> and
+        <function>sql-error-connection-spec</function> are
+        &clsql; extensions.
+      </para>
+    </refsect1>
+  </refentry>
+  
+</reference> 

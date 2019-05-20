@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>DISCONNECT</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-connect.html" title="Connection and Initialisation" /><link rel="prev" href="database-type.html" title="DATABASE-TYPE" /><link rel="next" href="disconnect-pooled.html" title="DISCONNECT-POOLED" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">DISCONNECT</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="database-type.html">Prev</a> </td><th width="60%" align="center">Connection and Initialisation</th><td width="20%" align="right"> <a accesskey="n" href="disconnect-pooled.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="disconnect"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>DISCONNECT — close a database connection<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388849"></a><h2>Syntax</h2><pre class="synopsis"><code class="function">disconnect</code> &amp;key <em class="replaceable"><code>database</code></em> <em class="replaceable"><code>error</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388873"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>error</code></em></span></dt><dd><p>A boolean flag indicating whether to signal an error 
+              if <em class="parameter"><code>database</code></em> is non-<code class="constant">NIL</code> but cannot 
+              be found. 
+              </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>The database to disconnect, which defaults to the
+		database indicated by
+		<span class="symbol">*default-database*</span>.</p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>A Boolean indicating whether a connection was
+	      successfully disconnected.
+              </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388944"></a><h2>Description</h2><p>This function takes a <span class="type">database</span> object as
+	returned by <code class="function">connect</code>, and closes the
+	connection. If no matching database is found and
+	<em class="parameter"><code>error</code></em> and
+	<em class="parameter"><code>database</code></em> are both non-<code class="constant">NIL</code> an error is
+	signaled, otherwise <code class="constant">NIL</code> is returned. If the database is from a
+	pool it will be released to this pool.
+        </p><p>The status of the object passed is changed to closed
+        after the disconnection succeeds, thereby preventing further
+        use of the object as an argument to <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> functions, with
+        the exception of <code class="function">database-name</code> and
+        <code class="function">database-type</code>. If the user does pass a
+        closed database to any other <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> function, an error of
+        type <span class="errortype">sql-fatal-error</span> is
+        signalled.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389012"></a><h2>Examples</h2><pre class="screen">
+(disconnect :database (find-database "dent/newesim/dent"))
+=&gt; T
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389024"></a><h2>Side Effects</h2><p>The database connection is closed, and the database
+	  object is removed from the list of connected databases as
+	  returned by <code class="function">connected-databases</code>.</p><p>The state of the database object is changed to
+	<span class="type">closed</span>.</p><p>If the database object passed is the same under
+	<code class="function">eq</code> as the value of
+	<span class="symbol">*default-database*</span>, then
+	<span class="symbol">*default-database*</span> is set to the first
+	remaining database from
+	<code class="function">connected-databases</code> or to <code class="constant">NIL</code> if no
+	further active database exists.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389070"></a><h2>Affected by</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><span class="symbol">*default-database*</span></td></tr></table><p>
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389089"></a><h2>Exceptional Situations</h2><p>If during the disconnection attempt an error is detected
+	(e.g. because of network trouble or any other cause), an error
+	of type <span class="errortype">sql-error</span> might be
+	signalled.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389103"></a><h2>See Also</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="connect.html" title="CONNECT"><code class="function">connect</code></a></td></tr><tr><td><a class="link" href="disconnect-pooled.html" title="DISCONNECT-POOLED"><code class="function">disconnect-pooled</code></a></td></tr></table><p>
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389136"></a><h2>Notes</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="database-type.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-connect.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="disconnect-pooled.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">DATABASE-TYPE </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DISCONNECT-POOLED</td></tr></table></div></body></html>

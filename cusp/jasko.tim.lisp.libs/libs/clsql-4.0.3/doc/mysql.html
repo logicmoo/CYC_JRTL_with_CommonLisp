@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>MySQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="appendix.html" title="Appendix A. Database Back-ends" /><link rel="prev" href="postgresql-socket.html" title="PostgreSQL Socket" /><link rel="next" href="odbc.html" title="ODBC" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">MySQL</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="postgresql-socket.html">Prev</a> </td><th width="60%" align="center">Appendix A. Database Back-ends</th><td width="20%" align="right"> <a accesskey="n" href="odbc.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="mysql"></a>MySQL</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id420729"></a>Libraries</h3></div></div></div><p>The <span class="application">MySQL</span> back-end requires the <span class="application">MySQL</span> C 
+	client library (<code class="filename">libmysqlclient.so</code>).
+	The location of this library is specified 
+	via <span class="symbol">*mysql-so-load-path*</span>, which defaults
+	to <code class="filename">/usr/lib/libmysqlclient.so</code>.
+	Additional flags to <span class="application">ld</span> needed for
+	linking are specified via <span class="symbol">*mysql-so-libraries*</span>,
+	which defaults to <span class="symbol">("-lc")</span>.
+      </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id420774"></a>Initialization</h3></div></div></div><p>
+	Use 
+	</p><pre class="screen">
+(asdf:operate 'asdf:load-op 'clsql-mysql)
+	</pre><p>
+	to load the <span class="application">MySQL</span> back-end.  The database type for the MySQL
+	back-end is <span class="symbol">:mysql</span>.
+      </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id420798"></a>Connection Specification</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id420805"></a>Syntax of connection-spec</h4></div></div></div><pre class="synopsis">(<em class="replaceable"><code>host</code></em> <em class="replaceable"><code>db</code></em> <em class="replaceable"><code>user</code></em> <em class="replaceable"><code>password</code></em> &amp;optional <em class="replaceable"><code>port</code></em>)</pre></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id420837"></a>Description of connection-spec</h4></div></div></div><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>host</code></em></span></dt><dd><p>String representing the hostname or IP address
+		  the <span class="application">MySQL</span> server resides on, or <span class="symbol">nil</span>
+		  to indicate the localhost.</p></dd><dt><span class="term"><em class="parameter"><code>db</code></em></span></dt><dd><p>String representing the name of the database on
+		  the server to connect to.</p></dd><dt><span class="term"><em class="parameter"><code>user</code></em></span></dt><dd><p>String representing the user name to use for
+		  authentication, or <span class="symbol">nil</span> to use the
+		  current Unix user ID.</p></dd><dt><span class="term"><em class="parameter"><code>password</code></em></span></dt><dd><p>String representing the unencrypted password to
+		  use for authentication, or <span class="symbol">nil</span> if
+		  the authentication record has an empty password
+		  field.</p></dd><dt><span class="term"><em class="parameter"><code>port</code></em></span></dt><dd><p>String representing the port to use for
+		  communication with the MySQL server.</p></dd></dl></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id420959"></a>Notes</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id420964"></a>FDDL</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            <a class="link" href="drop-index.html" title="DROP-INDEX"><code class="function">drop-index</code></a>
+            requires a table to be specified with the
+            <span class="symbol">:on</span> keyword parameter.
+          </p></li><li style="list-style-type: circle"><p>
+            <a class="glossterm" href="glossary.html#gloss-view"><em class="glossterm">views</em></a> are not
+            supported by <span class="application">MySQL</span>. 
+          </p></li><li style="list-style-type: circle"><p>
+            The <span class="symbol">:transactions</span> keyword argument to
+            <a class="link" href="create-table.html" title="CREATE-TABLE"><code class="function">create-table</code></a>
+            controls whether or not the created table is an InnoDB
+            table which supports transactions.
+          </p></li><li style="list-style-type: circle"><p>
+            The <span class="symbol">:owner</span> keyword argument to the FDDL functions 
+            for listing and testing for database objects is ignored. 
+          </p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421050"></a>FDML</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            Prior to version 4.1, <span class="application">MySQL</span> does not support nested
+            subqueries in calls to <a class="link" href="select.html" title="SELECT"><code class="function">select</code></a>.
+          </p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421085"></a>Symbolic SQL Syntax</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            <span class="application">MySQL</span> does not support the <code class="function">||</code>
+            concatenation operator. Use <code class="function">concat</code>
+            instead.
+          </p></li><li style="list-style-type: circle"><p>
+            <span class="application">MySQL</span> does not support the <code class="function">substr</code>
+            operator. Use <code class="function">substring</code> instead.
+          </p></li><li style="list-style-type: circle"><p>
+            <span class="application">MySQL</span> does not support the
+            <code class="function">intersect</code> and
+            <code class="function">except</code> set operations.
+          </p></li><li style="list-style-type: circle"><p>
+            <span class="application">MySQL</span> (version 4.0 and later) does not support string
+            table aliases unless the server is started with
+            ANSI_QUOTES enabled.
+          </p></li></ul></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="postgresql-socket.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="appendix.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="odbc.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">PostgreSQL Socket </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="application">ODBC</span></td></tr></table></div></body></html>

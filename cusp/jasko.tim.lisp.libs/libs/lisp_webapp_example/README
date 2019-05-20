@@ -1,0 +1,64 @@
+#################################################
+# README
+#################################################
+
+http://berlinbrowndev.blogspot.com/2008/07/enterprise-common-lisp-setting-up.html
+ 
+ This application is a simple webapp to test the
+ Hunchentoot web server.
+ 
+ --------------------------------------
+ To Install Hunchentoot (on Ubuntu 8.04 Heron with SBCL):
+ --------------------------------------
+ $sudo apt-get install libssl-dev
+
+ $sudo sbcl
+
+    * (require :asdf-install)
+
+
+    * (asdf-install:install :hunchentoot)
+
+ --------------------------------------
+ Install the Common Lisp Database Libraries:
+ --------------------------------------
+
+ On Ubuntu, run the following command:
+
+   Version: 5.0.45-1ubuntu3.3
+    sudo apt-get install libmysqlclient15-dev
+
+    sudo apt-cache show libmysqlclient15-dev
+
+    * (asdf-install:install :uffi)
+
+    * (asdf-install:install :clsql)
+
+    When prompted, select accept
+      1: [ACCEPT] Continue, treating #<ASDF:LOAD-OP NIL {B099651}> on
+              #<ASDF:CL-SOURCE-FILE "postgresql-loader" {AD86F69}> as having
+              been successful.
+
+ --------------------------------------
+ Compile the web application (botlist trinity on hunchentoot)
+ --------------------------------------
+    * (require :asdf)
+    * (asdf:operate 'asdf:compile-op 'ghost-trinity)
+    * (asdf:operate 'asdf:load-op 'ghost-trinity)
+    * (hunchentoot:start-server :port 4242)
+
+ --------------------------------------
+ To Run the Hunchentoot tests:
+ --------------------------------------
+
+ View the hunchentoot test example
+    * (asdf:oos 'asdf:load-op :hunchentoot-test)
+
+    * (hunchentoot:start-server :port 4242)
+
+ With your browser, navigate to the URL below
+ http://localhost:4242/trinity/
+ 
+ To test the POST functionality:
+ 
+ http://localhost:4242/trinity/edit/

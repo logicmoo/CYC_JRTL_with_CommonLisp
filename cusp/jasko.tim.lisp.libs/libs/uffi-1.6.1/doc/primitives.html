@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Primitive Types</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="index.html" title="UFFI Reference Guide" /><link rel="prev" href="def-type.html" title="def-type" /><link rel="next" href="def-constant.html" title="def-constant" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Primitive Types</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="def-type.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="def-constant.html">Next</a></td></tr></table><hr /></div><div class="reference" lang="en" xml:lang="en"><div class="titlepage"><div><div><h1 class="title"><a id="primitives"></a>Primitive Types</h1></div></div><hr /></div><div class="partintro" lang="en" xml:lang="en"><div><div><div><h1 class="title"><a id="id2576145"></a>Overview</h1></div></div></div><p>
+      Primitive types have a single value, these include
+      characters, numbers, and pointers. They are all symbols in
+      the keyword package.
+    </p><div class="itemizedlist"><ul type="disc"><li><p><code class="constant">:char</code> - Signed 8-bits. A
+	  dereferenced :char pointer returns an character.
+	</p></li><li><p><code class="constant">:unsigned-char</code> - Unsigned 8-bits. A dereferenced :unsigned-char
+	  pointer returns an character.
+	</p></li><li><p><code class="constant">:byte</code> - Signed 8-bits. A
+	  dereferenced :byte pointer returns an integer.
+	</p></li><li><p><code class="constant">:unsigned-byte</code> - Unsigned 8-bits. A
+	  dereferenced :unsigned-byte pointer returns an integer.
+	</p></li><li><p><code class="constant">:short</code> - Signed 16-bits.
+	</p></li><li><p><code class="constant">:unsigned-short</code> - Unsigned 16-bits.
+	</p></li><li><p><code class="constant">:int</code> - Signed 32-bits.</p></li><li><p><code class="constant">:unsigned-int</code> - Unsigned 32-bits.</p></li><li><p><code class="constant">:long</code> - Signed 32 or 64 bits, depending upon the platform.</p></li><li><p><code class="constant">:unsigned-long</code> - Unsigned 32 or 64 bits, depending upon the platform.</p></li><li><p><code class="constant">:float</code> - 32-bit floating point.</p></li><li><p><code class="constant">:double</code> - 64-bit floating point.</p></li><li><p><code class="constant">:cstring</code> - 
+	  A <code class="constant">NULL</code> terminated string used for passing and returning characters strings with a <code class="computeroutput">C</code> function.
+	</p></li><li><p><code class="constant">:void</code> - 
+	  The absence of a value. Used to indicate that a function does not return a value.
+	</p></li><li><p><code class="constant">:pointer-void</code> - Points to a generic object.</p></li><li><p><code class="constant">*</code> - Used to declare a pointer to an object</p></li></ul></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="refentrytitle"><a href="def-constant.html">def-constant</a></span><span class="refpurpose"> — Binds a symbol to a constant. 
+      </span></dt><dt><span class="refentrytitle"><a href="def-foreign-type.html">def-foreign-type</a></span><span class="refpurpose"> — Defines a new foreign type. 
+      </span></dt><dt><span class="refentrytitle"><a href="null-char-p.html">null-char-p</a></span><span class="refpurpose"> — Tests a character for <code class="constant">NULL</code> value.
+      </span></dt></dl></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="def-type.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="def-constant.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">def-type </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> def-constant</td></tr></table></div></body></html>

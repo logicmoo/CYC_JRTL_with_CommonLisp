@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Optimizing Code Using UFFI</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="notes.html" title="Chapter 2. Programming Notes" /><link rel="prev" href="object-represen.html" title="Foreign Object Representation and Access" /><link rel="next" href="ref_declarations.html" title="Declarations" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Optimizing Code Using UFFI</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="object-represen.html">Prev</a> </td><th width="60%" align="center">Chapter 2. Programming Notes</th><td width="20%" align="right"> <a accesskey="n" href="ref_declarations.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="optimizing"></a>Optimizing Code Using UFFI</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2606966"></a>Background</h3></div></div></div><p> 
+	Two implementions have different techniques to optimize
+	(open-code) foreign objects. <span class="application">AllegroCL</span> can open-code foreign
+	object
+	access if pointers are integers and the type of object is
+    specified in the access function.  Thus, <span class="application"><span class="emphasis"><em>UFFI</em></span></span> represents objects
+    in <span class="application">AllegroCL</span> as integers which don't have type information.
+    </p><p> 
+      <span class="application">CMUCL</span> works best when keeping objects as typed
+    objects. However, it's compiler can open-code object access when
+    the object type is specified in <code class="function">declare</code>
+    commands and in <code class="varname">:type</code> specifiers in
+    <code class="function">defstruct</code> and <code class="function">defclass</code>.
+    </p><p> <span class="application">Lispworks</span>, in converse to <span class="application">AllegroCL</span> and <span class="application">CMUCL</span> does not do
+    any open coding of object access. <span class="application">Lispworks</span>, by default, maintains
+    objects with run-time typing.  </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id2577263"></a>Cross-Implementation Optimization</h3></div></div></div><p>
+	To fully optimize across platforms, both explicit type
+	information must be passed to dereferencing of pointers and
+	arrays. Though this optimization only helps with <span class="application">AllegroCL</span>, <span class="application"><span class="emphasis"><em>UFFI</em></span></span>
+	is designed to require this type information be passed the
+	dereference functions. Second, declarations of type should be
+	made in functions, structures, and classes where foreign
+	objects will be help. This will optimize access for <span class="application">Lispworks</span>
+      </p><p>
+	Here is an example that should both methods being used for
+	maximum cross-implementation optimization:
+	</p><pre class="screen">
+(uffi:def-type the-struct-type-def the-struct-type)
+(let ((a-foreign-struct (allocate-foreign-object 'the-struct-type)))
+  (declare 'the-struct-type-def a-foreign-struct)
+  (get-slot-value a-foreign-struct 'the-struct-type 'field-name))
+	</pre><p>
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="object-represen.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="notes.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ref_declarations.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Foreign Object Representation and Access </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Declarations</td></tr></table></div></body></html>

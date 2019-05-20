@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>DO-QUERY</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fdml.html" title="Functional Data Manipulation Language (FDML)" /><link rel="prev" href="select.html" title="SELECT" /><link rel="next" href="loop-tuples.html" title="LOOP" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">DO-QUERY</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="select.html">Prev</a> </td><th width="60%" align="center">Functional Data Manipulation Language (FDML)</th><td width="20%" align="right"> <a accesskey="n" href="loop-tuples.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="do-query"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>DO-QUERY — Iterate over all the tuples of a query.<p><b>Macro</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407427"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">do-query</code> ((&amp;rest <em class="replaceable"><code>args</code></em>) <em class="replaceable"><code>query-expression</code></em> &amp;key <em class="replaceable"><code>database</code></em> <em class="replaceable"><code>result-types</code></em> &amp;body <em class="replaceable"><code>body</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407462"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>args</code></em></span></dt><dd><p>A list of variable names.</p></dd><dt><span class="term"><em class="parameter"><code>query-expression</code></em></span></dt><dd><p>An <a class="glossterm" href="glossary.html#gloss-sql-expression"><em class="glossterm">sql
+            expression</em></a> that represents an SQL
+            query which is expected to return a (possibly empty)
+            result set, where each tuple has as many attributes as
+            <em class="parameter"><code>function</code></em> takes arguments.</p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to
+            <span class="symbol">*default-database*</span>.</p></dd><dt><span class="term"><em class="parameter"><code>result-types</code></em></span></dt><dd><p>
+              A <a class="glossterm" href="glossary.html#gloss-field-types"><em class="glossterm">field type
+              specifier</em></a>.  The default is <code class="constant">NIL</code>. See <a class="link" href="query.html" title="QUERY"><code class="function">query</code></a> for
+              the semantics of this argument.
+            </p></dd><dt><span class="term"><em class="parameter"><code>body</code></em></span></dt><dd><p>A body of Lisp code, like in a
+            <code class="function">destructuring-bind</code> form.</p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>The result of executing <em class="parameter"><code>body</code></em>.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407615"></a><h2>Description</h2><p>
+        Repeatedly executes <em class="parameter"><code>body</code></em> within a
+        binding of <em class="parameter"><code>args</code></em> on the fields of each
+        row selected by the SQL query
+        <em class="parameter"><code>query-expression</code></em>, which may be a string
+        or a symbolic SQL expression, in
+        <em class="parameter"><code>database</code></em> which defaults to
+        <span class="symbol">*default-database*</span>.
+      </p><p>
+        The body of code is executed in a block named
+        <span class="symbol">nil</span> which may be returned from prematurely
+        via <code class="function">return</code> or
+        <code class="function">return-from</code>.  In this case the result of
+        evaluating the <code class="function">do-query</code> form will be the
+        one supplied to <code class="function">return</code> or
+        <code class="function">return-from</code>.  Otherwise the result will
+        be <span class="symbol">nil</span>.
+      </p><p>
+        The body of code appears also is if wrapped in a
+        <code class="function">destructuring-bind</code> form, thus allowing
+        declarations at the start of the body, especially those
+        pertaining to the bindings of the variables named in
+        <em class="parameter"><code>args</code></em>.
+      </p><p> 
+        <em class="parameter"><code>result-types</code></em> is a list of symbols which
+        specifies the lisp type for each field returned by
+        <em class="parameter"><code>query-expression</code></em>. If
+        <em class="parameter"><code>result-types</code></em> is <code class="constant">NIL</code> all results are
+        returned as strings whereas the default value of
+        <span class="symbol">:auto</span> means that the lisp types are
+        automatically computed for each field.
+      </p><p>
+        <em class="parameter"><code>query-expression</code></em> may be an object query
+        (i.e., the selection arguments refer to View Classes), in
+        which case <em class="parameter"><code>args</code></em> are bound to the tuples
+        of View Class instances returned by the object oriented query. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407746"></a><h2>Examples</h2><pre class="screen">
+(do-query ((salary name) "select salary,name from simple")
+  (format t "~30A gets $~2,5$~%" name (read-from-string salary)))
+&gt;&gt; Mai, Pierre                    gets $10000.00
+&gt;&gt; Hacker, Random J.              gets $08000.50
+=&gt; NIL
+
+(do-query ((salary name) "select salary,name from simple")
+  (return (cons salary name)))
+=&gt; ("10000.00" . "Mai, Pierre")
+
+(let ((result '()))
+  (do-query ((name) [select [last-name] :from [employee]
+                            :order-by [last-name]])
+    (push name result))
+  result)
+=&gt; ("Yeltsin" "Trotsky" "Stalin" "Putin" "Lenin" "Kruschev" "Gorbachev"
+    "Chernenko" "Brezhnev" "Andropov")
+
+(let ((result '()))
+  (do-query ((e) [select 'employee :order-by [last-name]])
+    (push (slot-value e 'last-name) result))
+  result)
+=&gt; ("Yeltsin" "Trotsky" "Stalin" "Putin" "Lenin" "Kruschev" "Gorbachev"
+    "Chernenko" "Brezhnev" "Andropov")
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407765"></a><h2>Side Effects</h2><p>Whatever effects the execution of the SQL query has
+      on the underlying database, if any.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407775"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407785"></a><h2>Exceptional Situations</h2><p>If the execution of  the SQL query leads to any
+      errors, an error of type
+      <span class="errortype">sql-database-error</span> is signalled.</p><p>If the number of variable names in
+      <em class="parameter"><code>args</code></em> and the number of attributes in
+      the tuples in the result set don't match up, an error is
+      signalled.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407808"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="query.html" title="QUERY"><code class="function">query</code></a></td></tr><tr><td><a class="link" href="map-query.html" title="MAP-QUERY"><code class="function">map-query</code></a></td></tr><tr><td><a class="link" href="print-query.html" title="PRINT-QUERY"><code class="function">print-query</code></a></td></tr><tr><td><a class="link" href="loop-tuples.html" title="LOOP"><code class="function">loop</code></a></td></tr><tr><td><a class="link" href="select.html" title="SELECT"><code class="function">select</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id407866"></a><h2>Notes</h2><p>The <em class="parameter"><code>result-types</code></em> keyword argument
+      is a <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extension.</p><p> 
+        <em class="parameter"><code>do-query</code></em> is common across the functional
+        and object-oriented data manipulation languages.
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="select.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fdml.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="loop-tuples.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">SELECT </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> LOOP</td></tr></table></div></body></html>

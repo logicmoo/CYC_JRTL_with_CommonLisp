@@ -1,0 +1,19 @@
+1. SBCL/Postgresql Interaction
+
+Gabor Melis reported an interaction with SBCL and the postgresql
+database backend using a multithreaded program and Portable
+AllegroServe. It appears that libpg installs its own SIGPIPE
+handler. When a multithreaded program servicing socket requests has
+SIGPIPE conditions thrown, the running SBCL instance is killed.  The
+web page http://linux.com.hk/docs/postgresql/libpq-threading.html has
+more information about libpq's SIGPIPE handler.
+
+2. Object joining
+
+Aleksandar Bakic reported the documentation says that :home-key and
+:foreign-key properties of the :db-info property may contain lists of
+symbols. However, update-objects-joins fails in such cases.
+
+2. configure file
+Automatically generate makefiles based on the configuration of an
+end-users system

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>DATABASE-NAME-FROM-SPEC</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-connect.html" title="Connection and Initialisation" /><link rel="prev" href="database-name.html" title="DATABASE-NAME" /><link rel="next" href="database-type.html" title="DATABASE-TYPE" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">DATABASE-NAME-FROM-SPEC</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="database-name.html">Prev</a> </td><th width="60%" align="center">Connection and Initialisation</th><td width="20%" align="right"> <a accesskey="n" href="database-type.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="database-name-from-spec"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>DATABASE-NAME-FROM-SPEC — Return the database name string corresponding to
+	  the given connection specification.<p><b>Generic Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388370"></a><h2>Syntax</h2><pre class="synopsis">
+	  <code class="function">database-name-from-spec</code> <em class="replaceable"><code>connection-spec</code></em> <em class="replaceable"><code>database-type</code></em> =&gt; <span class="returnvalue">name</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388396"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>connection-spec</code></em></span></dt><dd><p>A connection specification, whose structure and
+		interpretation are dependent on the
+		<em class="parameter"><code>database-type</code></em>.</p></dd><dt><span class="term"><em class="parameter"><code>database-type</code></em></span></dt><dd><p>A database type specifier, i.e. a keyword.</p></dd><dt><span class="term"><span class="returnvalue">name</span></span></dt><dd><p>A string denoting a database name.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388457"></a><h2>Description</h2><p>This generic function takes a connection specification
+	  and a database type and returns the database name of the
+	  database object that would be created had
+	  <code class="function">connect</code> been called with the given
+	  connection specification and database types.</p><p>This function is useful in determining a database name
+	  from the connection specification, since the way the
+	  connection specification is converted into a database name
+	  is dependent on the database type.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388479"></a><h2>Examples</h2><pre class="screen">
+(database-name-from-spec '("dent" "newesim" "dent" "dent") :mysql)
+=&gt; "dent/newesim/dent"
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48391DCD}&gt;
+(database-name *default-database*)
+=&gt; "dent/newesim/dent"
+
+(database-name-from-spec '(nil "template1" "dent" nil) :postgresql)
+=&gt; "/template1/dent"
+(connect '(nil "template1" "dent" nil) :database-type :postgresql)
+=&gt; #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}&gt;
+(database-name *default-database*)
+=&gt; "/template1/dent"
+
+(database-name-from-spec '("www.pmsf.de" "template1" "dent" nil) :postgresql)
+=&gt; "www.pmsf.de/template1/dent"
+
+(find-database "dent/newesim/dent")
+=&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {484E91C5}&gt;
+(find-database "/template1/dent")
+=&gt; #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}&gt;
+(find-database "www.pmsf.de/template1/dent" nil)
+=&gt; NIL
+(find-database **)
+=&gt; #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}&gt;
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388499"></a><h2>Side Effects</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388508"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388518"></a><h2>Exceptional Situations</h2><p>If the value of <em class="parameter"><code>connection-spec</code></em>
+	  is not a valid connection specification for the given
+	  database type, an error of type
+	  <span class="errortype">clsql-invalid-spec-error</span> might be
+	  signalled.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388537"></a><h2>See Also</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="connect.html" title="CONNECT"><code class="function">connect</code></a></td></tr></table><p>
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388561"></a><h2>Notes</h2><p><code class="function">database-name-from-spec</code> is a
+	<span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extension.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="database-name.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-connect.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="database-type.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">DATABASE-NAME </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DATABASE-TYPE</td></tr></table></div></body></html>

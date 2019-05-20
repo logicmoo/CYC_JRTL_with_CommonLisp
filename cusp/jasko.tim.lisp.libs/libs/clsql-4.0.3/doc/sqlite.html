@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>SQLite version 2</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="appendix.html" title="Appendix A. Database Back-ends" /><link rel="prev" href="aodbc.html" title="AODBC" /><link rel="next" href="sqlite3.html" title="SQLite version 3" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="application">SQLite version 2</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="aodbc.html">Prev</a> </td><th width="60%" align="center">Appendix A. Database Back-ends</th><td width="20%" align="right"> <a accesskey="n" href="sqlite3.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sqlite"></a><span class="application">SQLite version 2</span></h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421603"></a>Libraries</h3></div></div></div><p>The <span class="application">SQLite version 2</span> back-end requires
+	the <span class="application">SQLite version 2</span> shared library file. Its default file name is
+	<code class="filename">/usr/lib/libsqlite.so</code>.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421629"></a>Initialization</h3></div></div></div><p>
+	  Use 
+	  </p><pre class="screen">
+(asdf:operate 'asdf:load-op 'clsql-sqlite)
+	  </pre><p>
+	  to load the <span class="application">SQLite version 2</span> back-end.  The database type for the <span class="application">SQLite version 2</span>
+	  back-end is <span class="symbol">:sqlite</span>.
+	</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421657"></a>Connection Specification</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421662"></a>Syntax of connection-spec</h4></div></div></div><pre class="synopsis">(<em class="replaceable"><code>filename</code></em>)</pre></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421677"></a>Description of connection-spec</h4></div></div></div><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>filename</code></em></span></dt><dd><p>String representing the filename of the <span class="application">SQLite version 2</span>
+		database file.</p></dd></dl></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421709"></a>Notes</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421713"></a>Connection</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            Passing <em class="parameter"><code>filename</code></em> a value of
+            <code class="filename">:memory:</code> will create a database in
+            physical memory instead of using a file on disk.
+          </p></li><li style="list-style-type: circle"><p>
+            Some operations will be many times faster if database
+            integrity checking is disabled by setting the SYNCHRONOUS
+            flag to OFF (see the SQLITE manual for details).
+          </p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421750"></a>FDDL</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            The <span class="symbol">:owner</span> keyword argument to the FDDL functions 
+            for listing and testing for database objects is ignored. 
+          </p></li><li style="list-style-type: circle"><p>
+            The <span class="symbol">:column-list</span> keyword argument to
+            <a class="link" href="create-view.html" title="CREATE-VIEW"><code class="function">create-view</code></a>
+            is not supported by <span class="application">SQLite version 2</span>. 
+          </p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421794"></a>Symbolic SQL Syntax</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            <span class="application">SQLite version 2</span> does not support the <code class="function">all</code>,
+            <code class="function">some</code>, <code class="function">any</code> and
+            <code class="function">exists</code> subquery operations. 
+          </p></li></ul></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="aodbc.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="appendix.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sqlite3.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="application">AODBC</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> <span class="application">SQLite version 3</span></td></tr></table></div></body></html>

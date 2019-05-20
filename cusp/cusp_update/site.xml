@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/jasko.tim.lisp_0.9.218.jar" id="jasko.tim.lisp" version="0.9.218">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/jasko.tim.lisp_0.9.245.jar" id="jasko.tim.lisp" version="0.9.245">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/jasko.tim.lisp_0.9.360.jar" id="jasko.tim.lisp" version="0.9.360">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/jasko.tim.lisp.libs_1.1.0.jar" id="jasko.tim.lisp.libs" version="1.1.0">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/sbcl_win32_1.0.20.jar" id="sbcl_win32" version="1.0.20" os="win32" arch="x86">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/sbcl_linux_1.0.20.jar" id="sbcl_linux" version="1.0.20" os="linux" arch="x86">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/jasko.tim.lisp_0.9.375.jar" id="jasko.tim.lisp" version="0.9.375">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/jasko.tim.lisp_2.0.519.jar" id="jasko.tim.lisp" version="2.0.519">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/jasko.tim.lisp.libs_1.1.1.jar" id="jasko.tim.lisp.libs" version="1.1.1">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/sbcl_linux_1.0.22.18.jar" id="sbcl_linux" version="1.0.22.18" os="linux" arch="x86">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/sbcl_osx_1.0.22.jar" id="sbcl_osx" version="1.0.22" os="macosx" arch="x86">
+      <category name="cusp"/>
+   </feature>
+   <feature url="features/sbcl_win32_1.0.22.jar" id="sbcl_win32" version="1.0.22" os="win32" arch="x86">
+      <category name="cusp"/>
+   </feature>
+   <category-def name="cusp" label="Cusp">
+      <description>
+         Cusp plugins with lisp libraries.
+      </description>
+   </category-def>
+</site>

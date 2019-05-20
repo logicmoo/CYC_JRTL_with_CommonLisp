@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>DELETE-INSTANCE-RECORDS</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-oodml.html" title="Object Oriented Data Manipulation Language (OODML)" /><link rel="prev" href="instance-refreshed.html" title="INSTANCE-REFRESHED" /><link rel="next" href="update-records-from-instance.html" title="UPDATE-RECORDS-FROM-INSTANCE" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">DELETE-INSTANCE-RECORDS</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="instance-refreshed.html">Prev</a> </td><th width="60%" align="center">Object Oriented Data Manipulation Language (OODML)</th><td width="20%" align="right"> <a accesskey="n" href="update-records-from-instance.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="delete-instance-records"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>DELETE-INSTANCE-RECORDS — Delete SQL records represented by a <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View Class</em></a>
+      object.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id412391"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">delete-instance-records</code> <em class="replaceable"><code>object</code></em> =&gt; <span class="returnvalue"></span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id412417"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>object</code></em></span></dt><dd><p>
+	      An instance of a <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View
+	      Class</em></a>.
+	    </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id412452"></a><h2>Description</h2><p>Deletes the records represented by
+      <em class="parameter"><code>object</code></em> in the appropriate table of the
+      database associated with <em class="parameter"><code>object</code></em>. If
+      <em class="parameter"><code>object</code></em> is not yet associated with a
+      database, an error is signalled.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id412482"></a><h2>Examples</h2><pre class="screen">
+(def-view-class tab () 
+  ((a :initarg :a :type integer :db-kind :key) 
+   (b :initarg :b :type string)))
+=&gt; #&lt;Standard-Db-Class TAB {49B01845}&gt;
+(create-view-from-class 'tab)
+=&gt; 
+(defvar obj (let ((*db-auto-sync* t))
+              (make-instance 'tab :a 5 :b "the string")))
+=&gt; OBJ
+(start-sql-recording :type :both)
+=&gt; 
+(delete-instance-records obj) 
+;; 2004-07-17 11:07:19 foo/bar/baz =&gt; DELETE FROM tab WHERE tab.a = 5
+;; 2004-07-17 11:07:19 foo/bar/baz &lt;= T
+=&gt; 
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id412500"></a><h2>Side Effects</h2><p>
+	Deletes data from the SQL database.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id377468"></a><h2>Affected by</h2><p>
+	Permissions granted by the SQL database to the user in the
+	database connection.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id365221"></a><h2>Exceptional Situations</h2><p>
+	An exception may be signaled if the database connection user
+	does not have sufficient privileges to modify the database. An
+	error of type <span class="type">sql-database-error</span> is signalled if
+	<em class="replaceable"><code>object</code></em> is not associated with an
+	active database.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id412514"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="update-records.html" title="UPDATE-RECORDS"><code class="function">update-records</code></a></td></tr><tr><td><a class="link" href="delete-records.html" title="DELETE-RECORDS"><code class="function">delete-records</code></a></td></tr><tr><td><a class="link" href="update-records-from-instance.html" title="UPDATE-RECORDS-FROM-INSTANCE"><code class="function">update-records-from-instance</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id412553"></a><h2>Notes</h2><p>
+	Instances are referenced in the database by values stored in
+	the key slots. If
+	<code class="function">delete-records-from-instance</code> is called
+	with an instance of a class that does not contain any keys,
+	then all records in that table will be deleted.
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="instance-refreshed.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-oodml.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="update-records-from-instance.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">INSTANCE-REFRESHED </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> UPDATE-RECORDS-FROM-INSTANCE</td></tr></table></div></body></html>

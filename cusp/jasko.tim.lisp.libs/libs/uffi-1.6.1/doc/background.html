@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Background</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="introduction.html" title="Chapter 1. Introduction" /><link rel="prev" href="introduction.html" title="Chapter 1. Introduction" /><link rel="next" href="supported-impl.html" title="Supported Implementations" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Background
+    </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="introduction.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Introduction</th><td width="20%" align="right"> <a accesskey="n" href="supported-impl.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="background"></a>Background
+    </h2></div></div></div><p>
+      Every Common Lisp implementation has a method for interfacing to
+      C-language compatible libraries. These methods are often termed
+      a <span class="emphasis"><em>Foreign Function Library Interface</em></span>
+      (<acronym class="acronym">FFI</acronym>). Unfortunately, these methods vary widely amongst
+      implementations, thus preventing the writing of a portable FFI
+      to a particular C-library.
+    </p><p>
+      <span class="application"><span class="emphasis"><em>UFFI</em></span></span> gathers a common subset of functionality between Common
+      Lisp implementations. <span class="application"><span class="emphasis"><em>UFFI</em></span></span> wraps this common subset of
+      functionality with it's own syntax and provides macro
+      translation of uffi functions into the specific syntax of
+      supported Common Lisp implementations.
+    </p><p>
+      Developers who use <span class="application"><span class="emphasis"><em>UFFI</em></span></span> to interface with C libraries will
+      automatically have their code function in each of uffi's supported
+      implementations.
+    </p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="introduction.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="introduction.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="supported-impl.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 1. Introduction </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Supported Implementations</td></tr></table></div></body></html>

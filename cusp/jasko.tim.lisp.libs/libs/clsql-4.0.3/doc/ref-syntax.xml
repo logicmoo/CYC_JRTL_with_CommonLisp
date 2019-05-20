@@ -1,0 +1,961 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<!-- Symbolic SQL Syntax --> 
+<reference id="ref-syntax"> 
+  <title>The Symbolic SQL Syntax</title> 
+  <partintro>
+    <para> 
+      &clsql; provides a symbolic syntax allowing the construction of
+      SQL expressions as lists delimited by square brackets. The
+      syntax is turned off by default. This section describes
+      utilities for enabling and disabling the square bracket reader
+      syntax and for constructing symbolic SQL expressions.
+    </para>
+  </partintro>  
+
+  <refentry id="enable-sql-reader-syntax">
+    <refmeta>
+      <refentrytitle>ENABLE-SQL-READER-SYNTAX</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>ENABLE-SQL-READER-SYNTAX</refname>
+      <refpurpose>Globally enable square bracket reader syntax.</refpurpose>
+      <refclass>Macro</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>enable-sql-reader-syntax</function> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <para>None.</para> 
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Turns on the SQL reader syntax setting the syntax state
+      such that if the syntax is subsequently disabled, <link
+      linkend="restore-sql-reader-syntax-state">
+      <function>restore-sql-reader-syntax-state</function></link> will
+      enable it again.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <para>None.</para> 
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Sets the internal syntax state to enabled.
+      </para> 
+      <para> 
+        Modifies the default readtable.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="disable-sql-reader-syntax"><function>disable-sql-reader-syntax</function></link></member>
+        <member><link linkend="locally-enable-sql-reader-syntax"><function>locally-enable-sql-reader-syntax</function></link></member>
+        <member><link linkend="locally-disable-sql-reader-syntax"><function>locally-disable-sql-reader-syntax</function></link></member>
+        <member><link linkend="restore-sql-reader-syntax-state"><function>restore-sql-reader-syntax-state</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The symbolic SQL syntax is disabled by default. 
+      </para>
+      <para> 
+        &clsql; differs from &commonsql; in that
+        <function>enable-sql-reader-syntax</function> is defined as a
+        macro rather than a function.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="disable-sql-reader-syntax">
+    <refmeta>
+      <refentrytitle>DISABLE-SQL-READER-SYNTAX</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>DISABLE-SQL-READER-SYNTAX</refname>
+      <refpurpose>Globally disable square bracket reader syntax.</refpurpose>
+      <refclass>Macro</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>disable-sql-reader-syntax</function> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <para>None.</para> 
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Turns off the SQL reader syntax setting the syntax state
+      such that if the syntax is subsequently enabled,
+      <link linkend="restore-sql-reader-syntax-state">
+        <function>restore-sql-reader-syntax-state</function></link> will
+        disable it again.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <para>None.</para> 
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Sets the internal syntax state to disabled.
+      </para> 
+      <para> 
+        Modifies the default readtable.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="enable-sql-reader-syntax"><function>enable-sql-reader-syntax</function></link></member>
+        <member><link linkend="locally-enable-sql-reader-syntax"><function>locally-enable-sql-reader-syntax</function></link></member>
+        <member><link linkend="locally-disable-sql-reader-syntax"><function>locally-disable-sql-reader-syntax</function></link></member>
+        <member><link linkend="restore-sql-reader-syntax-state"><function>restore-sql-reader-syntax-state</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The symbolic SQL syntax is disabled by default. 
+      </para>
+      <para> 
+        &clsql; differs from &commonsql; in that
+        <function>disable-sql-reader-syntax</function> is defined as a
+        macro rather than a function.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="locally-enable-sql-reader-syntax">
+    <refmeta>
+      <refentrytitle>LOCALLY-ENABLE-SQL-READER-SYNTAX</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>LOCALLY-ENABLE-SQL-READER-SYNTAX</refname>
+      <refpurpose>Globally enable square bracket reader syntax.</refpurpose>
+      <refclass>Macro</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>locally-enable-sql-reader-syntax</function> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <para>None.</para> 
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Turns on the SQL reader syntax without changing the syntax
+      state such that <link linkend="restore-sql-reader-syntax-state">
+      <function>restore-sql-reader-syntax-state</function></link> will
+      re-establish the current syntax state.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title> 
+      <para>Intended to be used in a file for code which uses the 
+      square bracket syntax without changing the global state.
+      </para> 
+      <screen>
+        #.(locally-enable-sql-reader-syntax) 
+        
+        ... CODE USING SYMBOLIC SQL SYNTAX ... 
+        
+        #.(restore-sql-reader-syntax-state) 
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Modifies the default readtable.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="enable-sql-reader-syntax"><function>enable-sql-reader-syntax</function></link></member>
+        <member><link linkend="disable-sql-reader-syntax"><function>disable-sql-reader-syntax</function></link></member>
+        <member><link linkend="locally-disable-sql-reader-syntax"><function>locally-disable-sql-reader-syntax</function></link></member>
+        <member><link linkend="restore-sql-reader-syntax-state"><function>restore-sql-reader-syntax-state</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The symbolic SQL syntax is disabled by default. 
+      </para>
+      <para> 
+        &clsql; differs from &commonsql; in that
+        <function>locally-enable-sql-reader-syntax</function> is
+        defined as a macro rather than a function.
+      </para>
+    </refsect1>
+  </refentry>
+
+
+  <refentry id="locally-disable-sql-reader-syntax">
+    <refmeta>
+      <refentrytitle>LOCALLY-DISABLE-SQL-READER-SYNTAX</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>LOCALLY-DISABLE-SQL-READER-SYNTAX</refname>
+      <refpurpose>Locally disable square bracket reader syntax.</refpurpose>
+      <refclass>Macro</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>locally-disable-sql-reader-syntax</function> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <para>None.</para> 
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Turns off the SQL reader syntax without changing the
+      syntax state such that <link
+      linkend="restore-sql-reader-syntax-state">
+      <function>restore-sql-reader-syntax-state</function></link> will
+      re-establish the current syntax state.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <para>Intended to be used in a file for code in which the square
+      bracket syntax should be disabled without changing the global
+      state.
+      </para> 
+      <screen>
+        #.(locally-disable-sql-reader-syntax) 
+        
+        ... CODE NOT USING SYMBOLIC SQL SYNTAX ... 
+        
+        #.(restore-sql-reader-syntax-state) 
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Modifies the default readtable.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="enable-sql-reader-syntax"><function>enable-sql-reader-syntax</function></link></member>
+        <member><link linkend="disable-sql-reader-syntax"><function>disable-sql-reader-syntax</function></link></member>
+        <member><link linkend="locally-enable-sql-reader-syntax"><function>locally-enable-sql-reader-syntax</function></link></member>
+        <member><link linkend="restore-sql-reader-syntax-state"><function>restore-sql-reader-syntax-state</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The symbolic SQL syntax is disabled by default. 
+      </para>
+      <para> 
+        &clsql; differs from &commonsql; in that
+        <function>locally-disable-sql-reader-syntax</function> is
+        defined as a macro rather than a function.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="restore-sql-reader-syntax-state">
+    <refmeta>
+      <refentrytitle>RESTORE-SQL-READER-SYNTAX-STATE</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>RESTORE-SQL-READER-SYNTAX-STATE</refname>
+      <refpurpose>
+        Restore square bracket reader syntax to its previous state.
+      </refpurpose>
+      <refclass>Macro</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>restore-sql-reader-syntax-state</function> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <para>None.</para> 
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Enables the SQL reader syntax if <link
+      linkend="enable-sql-reader-syntax">
+      <function>enable-sql-reader-syntax</function></link> has been
+      called more recently than <link
+      linkend="disable-sql-reader-syntax">
+      <function>disable-sql-reader-syntax</function></link> and
+      otherwise disables the SQL reader syntax. By default, the SQL
+      reader syntax is disabled.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <para> 
+        See <link
+        linkend="locally-enable-sql-reader-syntax">
+        <function>locally-enable-sql-reader-syntax</function></link> and 
+        <link
+         linkend="locally-disable-sql-reader-syntax">
+          <function>locally-disable-sql-reader-syntax</function></link>.
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Reverts the internal syntax state. 
+      </para> 
+      <para> 
+        Modifies the default readtable.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>The current internal syntax state.</para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="enable-sql-reader-syntax"><function>enable-sql-reader-syntax</function></link></member>
+        <member><link linkend="disable-sql-reader-syntax"><function>disable-sql-reader-syntax</function></link></member>
+        <member><link linkend="locally-enable-sql-reader-syntax"><function>locally-enable-sql-reader-syntax</function></link></member>
+        <member><link linkend="locally-disable-sql-reader-syntax"><function>locally-disable-sql-reader-syntax</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The symbolic SQL syntax is disabled by default. 
+      </para>
+      <para> 
+        &clsql; differs from &commonsql; in that
+        <function>restore-sql-reader-syntax-state</function> is
+        defined as a macro rather than a function.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql">
+    <refmeta>
+      <refentrytitle>SQL</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL</refname>
+      <refpurpose>Construct an SQL string from supplied expressions.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>sql &amp;rest</function> <replaceable>args</replaceable> => <returnvalue>sql-expression</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>args</parameter></term>
+          <listitem>
+            <para>A set of expressions.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><returnvalue>sql-expression</returnvalue></term>
+          <listitem>
+            <para>A string representing an SQL expression.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns an SQL string generated from the expressions
+      <parameter>args</parameter>. The expressions are translated into
+      SQL strings and then concatenated with a single space delimiting
+      each expression.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(sql nil)
+=> "NULL"
+
+(sql 'foo)
+=> "FOO"
+
+(sql "bar")
+ => "'bar'"
+ 
+(sql 10)
+=> "10"
+
+(sql '(nil foo "bar" 10))
+=> "(NULL,FOO,'bar',10)"
+
+(sql #(nil foo "bar" 10))
+=> "NULL,FOO,'bar',10"
+        
+(sql [select [foo] [bar] :from [baz]] 'having [= [foo id] [bar id]] 
+     'and [foo val] '&lt; 5)
+=> "SELECT FOO,BAR FROM BAZ HAVING (FOO.ID = BAR.ID) AND FOO.VAL &lt; 5"
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>An error of type <link
+      linkend="sql-user-error"><function>sql-user-error</function></link>
+      is signalled if any element in <parameter>args</parameter> is
+      not of the supported types (a symbol, string, number or symbolic
+      SQL expression) or a list or vector containing only these
+      supported types. 
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="sql-expression"><function>sql-expression</function></link></member>
+        <member><link linkend="sql-operation"><function>sql-operation</function></link></member>
+        <member><link linkend="sql-operator"><function>sql-operator</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>None.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-expression">
+    <refmeta>
+      <refentrytitle>SQL-EXPRESSION</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-EXPRESSION</refname>
+      <refpurpose>Constructs an SQL expression from supplied keyword arguments.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>sql-expression &amp;key</function> <parameter>string</parameter> <parameter>table</parameter> <parameter>alias</parameter> <parameter>attribute</parameter> <parameter>type</parameter> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>string</parameter></term>
+          <listitem>
+            <para>A string.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>table</parameter></term>
+          <listitem>
+            <para>A symbol representing a database table identifier.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>alias</parameter></term>
+          <listitem>
+            <para>A table alias.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>attribute</parameter></term>
+          <listitem>
+            <para>A symbol representing an attribute identifier.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>type</parameter></term>
+          <listitem>
+            <para>A type specifier.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><returnvalue>result</returnvalue></term>
+          <listitem>
+            <para>A object of type <type>sql-expression</type>.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns an SQL expression constructed from the supplied
+      arguments which may be combined as follows:</para>
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            <parameter>attribute</parameter> and
+            <parameter>type</parameter>; 
+          </para>
+        </listitem>
+        <listitem>
+          <para> 
+            <parameter>attribute</parameter>; 
+          </para>
+        </listitem>
+        <listitem>
+          <para> 
+            <parameter>alias</parameter> or <parameter>table</parameter> and
+            <parameter>attribute</parameter> and
+            <parameter>type</parameter>; 
+          </para>
+        </listitem>
+        <listitem>
+          <para> 
+            <parameter>alias</parameter> or
+            <parameter>table</parameter> and
+            <parameter>attribute</parameter>; 
+          </para>
+        </listitem>
+        <listitem>
+          <para> 
+            <parameter>table</parameter>,
+            <parameter>attribute</parameter> and
+            <parameter>type</parameter>; 
+          </para>
+        </listitem>
+        <listitem>
+          <para> 
+            <parameter>table</parameter> and
+            <parameter>attribute</parameter>; 
+          </para>
+        </listitem>
+        <listitem>
+          <para> 
+            <parameter>table</parameter>
+            and <parameter>alias</parameter>; 
+          </para>
+        </listitem>
+        <listitem>
+          <para> 
+            <parameter>table</parameter>; 
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <parameter>string</parameter>.
+          </para>
+        </listitem> 
+      </itemizedlist>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(sql-expression :table 'foo :attribute 'bar)
+=> #&lt;CLSQL-SYS:SQL-IDENT-ATTRIBUTE FOO.BAR>
+
+(sql-expression :attribute 'baz)
+=> #&lt;CLSQL-SYS:SQL-IDENT-ATTRIBUTE BAZ>
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>An error of type <link
+      linkend="sql-user-error"><function>sql-user-error</function></link>
+      is signalled if an unsupported combination of keyword arguments is 
+      specified. 
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="sql"><function>sql</function></link></member>
+        <member><link linkend="sql-operation"><function>sql-operation</function></link></member>
+        <member><link linkend="sql-operator"><function>sql-operator</function></link></member>
+        </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>None.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-operation">
+    <refmeta>
+      <refentrytitle>SQL-OPERATION</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-OPERATION</refname>
+      <refpurpose>Constructs an SQL expression from a supplied operator and arguments.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>sql-operation</function> <parameter>operator</parameter> <function>&amp;rest</function> <parameter>args</parameter> => <returnvalue>result</returnvalue></synopsis>
+      <synopsis>
+      <function>sql-operation</function> 'function <parameter>func</parameter> <function>&amp;rest</function> <parameter>args</parameter> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>operator</parameter></term>
+          <listitem>
+            <para>A symbol denoting an SQL operator.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>func</parameter></term>
+          <listitem>
+            <para>A string denoting an SQL function.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>args</parameter></term>
+          <listitem>
+            <para>A set of arguments for the specified SQL operator or function.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><returnvalue>result</returnvalue></term>
+          <listitem>
+            <para>A object of type <function>sql-expression</function>.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns an SQL expression constructed from the supplied
+      SQL operator or function <parameter>operator</parameter> and
+      its arguments <parameter>args</parameter>. If
+      <parameter>operator</parameter> is passed the symbol 'function
+      then the first value in <parameter>args</parameter> is taken to
+      be a valid SQL function and the remaining values in
+      <parameter>args</parameter> its arguments.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(sql-operation 'select 
+          (sql-expression :table 'foo :attribute 'bar)
+          (sql-operation 'sum  (sql-expression :table 'foo :attribute 'baz))
+          :from 
+          (sql-expression :table 'foo) 
+          :where 
+          (sql-operation '> (sql-expression :attribute 'bar) 12)
+          :order-by (sql-operation 'sum (sql-expression :attribute 'baz)))
+=> #&lt;SQL-QUERY SELECT FOO.BAR,SUM(FOO.BAZ) FROM FOO WHERE (BAR > 12) ORDER BY SUM(BAZ)>
+
+(sql-operation 'function "strpos" "CLSQL" "SQL")
+=> #&lt;CLSQL-SYS:SQL-FUNCTION-EXP STRPOS('CLSQL','SQL')>
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>An error of type <link
+      linkend="sql-user-error"><function>sql-user-error</function></link>
+      is signalled if <parameter>operator</parameter> is not a symbol
+      representing a supported SQL operator.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="sql"><function>sql</function></link></member>
+        <member><link linkend="sql-expression"><function>sql-expression</function></link></member>
+        <member><link linkend="sql-operator"><function>sql-operator</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>None.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-operator">
+    <refmeta>
+      <refentrytitle>SQL-OPERATOR</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-OPERATOR</refname>
+      <refpurpose>Returns the symbol for the supplied SQL operator.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>sql-operator</function> <parameter>operator</parameter> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>operator</parameter></term>
+          <listitem>
+            <para>A symbol denoting an SQL operator.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><returnvalue>result</returnvalue></term>
+          <listitem>
+            <para>The Lisp symbol used by &clsql; to represent the 
+            specified operator.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns the Lisp symbol corresponding to the SQL operator
+      represented by the symbol <parameter>operator</parameter>. If 
+      <parameter>operator</parameter> does not represent a supported 
+      SQL operator or is not a symbol, nil is returned. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(sql-operator 'like)
+=> SQL-LIKE
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>None.</para> 
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="sql"><function>sql</function></link></member>
+        <member><link linkend="sql-expression"><function>sql-expression</function></link></member>
+        <member><link linkend="sql-operation"><function>sql-operation</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        &clsql;'s symbolic SQL syntax currently has support for the
+        following &commonsql; compatible SQL operators:
+      </para> 
+      <simplelist> 
+        <!-- CommonSQL Compatible --> 
+        <member><function>any</function></member> 
+        <member><function>some</function></member> 
+        <member><function>all</function></member> 
+        <member><function>not</function></member> 
+        <member><function>union</function></member> 
+        <member><function>intersect</function></member> 
+        <member><function>minus</function></member>
+        <member><function>except 
+        </function></member> 
+        <member><function>order-by 
+        </function></member> 
+        <member><function>null
+        </function></member> 
+        <member><function>*
+        </function></member> 
+        <member><function>+
+        </function></member> 
+        <member><function>/
+        </function></member> 
+        <member><function>-
+        </function></member> 
+        <member><function>like
+        </function></member> 
+        <member><function>and
+        </function></member> 
+        <member><function>or
+        </function></member> 
+        <member><function>in
+        </function></member> 
+        <member><function>substr 
+        </function></member> 
+        <member><function>|| 
+        </function></member> 
+        <member><function>=
+        </function></member> 
+        <member><function>&lt;
+        </function></member> 
+        <member><function>>
+        </function></member> 
+        <member><function>>=
+        </function></member> 
+        <member><function>&lt;=
+        </function></member> 
+        <member><function>&lt;>
+        </function></member> 
+        <member><function>count
+        </function></member> 
+        <member><function>max
+        </function></member> 
+        <member><function>min
+        </function></member> 
+        <member><function>avg
+        </function></member> 
+        <member><function>sum
+        </function></member> 
+        <member><function>function 
+        </function></member> 
+        <member><function>between 
+        </function></member> 
+        <member><function>distinct 
+        </function></member> 
+        <member><function>nvl 
+        </function></member> 
+        <member><function>slot-value
+        </function></member> 
+        <member><function>userenv 
+        </function></member> 
+      </simplelist> 
+      <para>
+        as well as the pseudo-operator <function>function</function>. 
+      </para>
+      <para> The following operators are provided as &clsql; extensions to 
+      the &commonsql; API. 
+      <simplelist> 
+        <!-- CLSQL Extensions --> 
+        <member><function>concat
+        </function></member> 
+        <member><function>substring 
+        </function></member> 
+        <member><function>limit 
+        </function></member> 
+        <member><function>group-by
+        </function></member> 
+        <member><function>having
+        </function></member> 
+        <member><function>not-null
+        </function></member> 
+        <member><function>exists
+        </function></member> 
+        <member><function>uplike
+        </function></member> 
+        <member><function>is
+        </function></member> 
+        <member><function>==
+        </function></member> 
+        <member><function>the 
+        </function></member> 
+        <member><function>coalesce 
+        </function></member> 
+        <member><function>view-class
+        </function></member> 
+      </simplelist>
+      </para>
+      <para> 
+        Note that some of these operators are not supported by all of
+        the RDBMS supported by &clsql; (see the <link
+        linkend="appendix">Appendix</link> for details).
+      </para>
+    </refsect1>
+  </refentry>
+
+</reference> 

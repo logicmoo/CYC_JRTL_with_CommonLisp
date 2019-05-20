@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>SQLite version 3</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="appendix.html" title="Appendix A. Database Back-ends" /><link rel="prev" href="sqlite.html" title="SQLite version 2" /><link rel="next" href="oracle.html" title="Oracle" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center"><span class="application">SQLite version 3</span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sqlite.html">Prev</a> </td><th width="60%" align="center">Appendix A. Database Back-ends</th><td width="20%" align="right"> <a accesskey="n" href="oracle.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="sqlite3"></a><span class="application">SQLite version 3</span></h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421850"></a>Libraries</h3></div></div></div><p>The <span class="application">SQLite version 3</span> back-end requires
+	the <span class="application">SQLite version 3</span> shared library file. Its default file name is
+	<code class="filename">/usr/lib/libsqlite3.so</code>.</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421875"></a>Initialization</h3></div></div></div><p>
+	  Use 
+	  </p><pre class="screen">
+(asdf:operate 'asdf:load-op 'clsql-sqlite3)
+	  </pre><p>
+	  to load the <span class="application">SQLite version 3</span> back-end.  The database type for the <span class="application">SQLite version 3</span>
+	  back-end is <span class="symbol">:sqlite3</span>.
+	</p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id421903"></a>Connection Specification</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421908"></a>Syntax of connection-spec</h4></div></div></div><pre class="synopsis">(<em class="replaceable"><code>filename</code></em> &amp;optional <em class="replaceable"><code>init-function</code></em>)</pre></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id421926"></a>Description of connection-spec</h4></div></div></div><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>filename</code></em></span></dt><dd><p>String representing the filename of the <span class="application">SQLite version 3</span>
+		database file.</p></dd><dt><span class="term"><em class="parameter"><code>init-function</code></em></span></dt><dd><p>
+		 A function designator.
+		 <em class="replaceable"><code>init-function</code></em> takes a
+		 single argument of type
+		 <span class="type">sqlite3:sqlite3-db</span>, a foreign pointer to
+		 the C descriptor of the newly opened database.
+		 <em class="replaceable"><code>init-function</code></em> is called by
+		 the back-end immediately after <span class="application">SQLite version 3</span>
+		 <code class="function">sqlite3_open</code> library function,
+		 and can be used to perform optional database
+		 initializations by calling foreign functions in the
+		 <span class="application">SQLite version 3</span> library.
+		</p><p>
+		 An example of an initialization function which
+		 defines a new collating sequence for text columns is
+		 provided in
+		 <code class="filename">./examples/sqlite3/init-func/</code>.
+		</p></dd></dl></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id422011"></a>Notes</h3></div></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id422015"></a>Connection</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            Passing <em class="parameter"><code>filename</code></em> a value of
+            <code class="filename">:memory:</code> will create a database in
+            physical memory instead of using a file on disk.
+          </p></li><li style="list-style-type: circle"><p>
+            Some operations will be many times faster if database
+            integrity checking is disabled by setting the SYNCHRONOUS
+            flag to OFF (see the SQLITE manual for details).
+          </p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id422052"></a>FDDL</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            The <span class="symbol">:owner</span> keyword argument to the FDDL functions 
+            for listing and testing for database objects is ignored. 
+          </p></li><li style="list-style-type: circle"><p>
+            The <span class="symbol">:column-list</span> keyword argument to
+            <a class="link" href="create-view.html" title="CREATE-VIEW"><code class="function">create-view</code></a>
+            is not supported by <span class="application">SQLite version 3</span>. 
+          </p></li></ul></div></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id422096"></a>Symbolic SQL Syntax</h4></div></div></div><div class="itemizedlist"><ul type="opencircle"><li style="list-style-type: circle"><p>
+            <span class="application">SQLite version 3</span> does not support the <code class="function">all</code>,
+            <code class="function">some</code>, <code class="function">any</code> and
+            <code class="function">exists</code> subquery operations. 
+          </p></li></ul></div></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sqlite.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="appendix.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="oracle.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top"><span class="application">SQLite version 2</span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Oracle</td></tr></table></div></body></html>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Chapter 2. CommonSQL Tutorial</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="index.html" title="CLSQL Users' Guide" /><link rel="prev" href="installation.html" title="Installation" /><link rel="next" href="ch02s02.html" title="Data Modeling with CLSQL" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 2. <span class="application">CommonSQL</span> Tutorial</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="installation.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="ch02s02.html">Next</a></td></tr></table><hr /></div><div class="chapter" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="csql"></a>Chapter 2. <span class="application">CommonSQL</span> Tutorial</h2></div><div><h3 class="subtitle"><i>Based on the <span class="application">UncommonSQL</span> Tutorial</i></h3></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="csql.html#csql-intro">Introduction</a></span></dt><dt><span class="sect1"><a href="ch02s02.html">Data Modeling with <span class="application"><span class="emphasis"><em>CLSQL</em></span></span></a></span></dt><dt><span class="sect1"><a href="csql-rel.html">Class Relations</a></span></dt><dt><span class="sect1"><a href="csql-creat.html">Object Creation</a></span></dt><dt><span class="sect1"><a href="csql-find.html">Finding Objects</a></span></dt><dt><span class="sect1"><a href="csql-del.html">Deleting Objects</a></span></dt><dt><span class="sect1"><a href="csql-concl.html">Conclusion</a></span></dt></dl></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="csql-intro"></a>Introduction</h2></div></div></div><p>
+      The goal of this tutorial is to guide a new developer thru the
+      process of creating a set of <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> classes providing a
+      Object-Oriented interface to persistent data stored in an <span class="application">SQL</span>
+      database.  We will assume that the reader is familiar with how
+      <span class="application">SQL</span> works, how relations (tables) should be structured, and
+      has created at least one <span class="application">SQL</span> application previously.  We will
+      also assume a minor level of experience with Common Lisp.
+    </p><p>
+      <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> provides two different interfaces to <span class="application">SQL</span> databases, a
+      Functional interface, and an Object-Oriented interface.  The
+      Functional interface consists of a special syntax for embedded
+      <span class="application">SQL</span> expressions in Lisp, and provides lisp functions for <span class="application">SQL</span>
+      operations like <span class="symbol">SELECT</span> and
+      <span class="symbol">UPDATE</span>.  The object-oriented interface provides
+      a way for mapping Common Lisp Objects System (CLOS) objects into
+      databases and includes functions for inserting new objects,
+      querying objects, and removing objects.  Most applications will
+      use a combination of the two.
+    </p><p>
+      <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> is based on the CommonSQL package from LispWorks Ltd, so the
+      documentation that LispWorks makes available online is useful for
+      <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> as well.  It is suggested that developers new to <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> read
+      their documentation as well, as any differences between CommonSQL
+      and <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> are minor. LispWorks makes the following documents
+      available:
+    </p><div class="itemizedlist"><ul type="disc"><li><p>
+	  <a class="ulink" href="http://www.lispworks.com/documentation/lw44/LWUG/html/lwuser-204.htm" target="_top">
+	    <em class="citetitle"><span class="application">Lispworks</span> User Guide - The <span class="application">CommonSQL</span>
+	    Package
+	    </em>
+	  </a>
+	</p></li><li><p>
+	  <a class="ulink" href="http://www.lispworks.com/documentation/lw44/LWRM/html/lwref-424.htm" target="_top">
+	    <em class="citetitle"><span class="application">Lispworks</span> Reference Manual - The SQL
+	    Package</em>
+	  </a>
+	</p></li><li><p>
+	<a class="ulink" href="http://www.lispworks.com/documentation/sql-tutorial/index.html" target="_top">
+	  <em class="citetitle"><span class="application">CommonSQL</span> Tutorial by Nick Levine</em>
+	</a>
+	</p></li></ul></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="installation.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="ch02s02.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Installation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Data Modeling with <span class="application"><span class="emphasis"><em>CLSQL</em></span></span></td></tr></table></div></body></html>

@@ -1,0 +1,131 @@
+<project name="Cusp" default="release.all" basedir="..">
+	<property environment="env"/>
+	<property file="build/site.properties"/>
+	<property file="src/cusp.properties"/>
+	<property file="build/build.properties"/>
+	
+	<target name="setup" description="Sets up build environment.">
+		<condition property="mac" value="mac os x">
+			<os family="mac"/>
+		</condition>
+		<condition property="windows" value="windows">
+			<os family="windows"/>
+		</condition>
+		<condition property="os.family" value="unix">
+			<os family="unix"/>
+		</condition>
+		<condition property="os.family" value="windows">
+			<os family="windows"/>
+		</condition>
+
+		<fail unless="eclipse.home" message="Cannot build -- eclipse.home path not set in site.properties.  See build.properties for info."/>
+		
+		<!-- This is my best guess for how to build up a useful eclipse base library classpath; it will definitely grab
+				more than we need, including 3rd-party plugin jars, but it works for me (Eclipse 3.2 on OS X and Windows). 
+				     - Chas Emerick
+		-->
+		<fileset id="eclipse.libs" dir="${eclipse.home}/plugins/" includes="*.jar"/>
+		<pathconvert targetos="${os.family}" property="classpath" refid="eclipse.libs"/>
+		
+		<!-- prepends the ant classpath to any and all classpaths -->
+		<property name="build.sysclasspath" value="first"/>
+	</target>
+	
+	<target name="clean" depends="setup" description="Deletes all temporary build artifacts.">
+		<delete includeEmptyDirs="true" failonerror="false">
+			<fileset dir="${classes}"/>
+			<fileset dir="${dist}"/>
+			<fileset dir="${release}"/>
+		</delete>
+	</target>
+
+	<target name="compile" depends="setup" description="Compiles all Cusp code to the classes directory.">
+		<mkdir dir="${classes}"/>
+		<javac srcdir="${src}" classpath="${classpath}" destdir="${classes}" debug="yes" optimize="yes" target="1.5" source="1.5"/>
+		<copy tofile="${classes}/cusp.properties" file="${src}/cusp.properties"/>
+	</target>
+
+	<target name="dist" depends="compile" description="Builds Cusp jar.">
+		<delete dir="${dist}"/>
+		<mkdir dir="${dist}"/>
+		
+		<jar destfile="${dist.jar}" update="false">
+			<fileset dir="${classes}"/>
+			<fileset dir="${icons}"/>
+		</jar>
+		
+		<copy todir="${dist}">
+			<fileset file="${plugin.xml}"/>
+			<fileset dir="." includes="${icons}/ ${slime}/ ${templates}/"/>
+		</copy>
+	</target>
+	
+	<target name="install" depends="dist" description="Builds and installs the Cusp plugin into the local eclipse installation.  This does not link in sbcl, but it doesn't overwrite any existing sbcl installation either.">
+		<mkdir dir="${local_tgt}"/>
+		
+		<copy todir="${local_tgt}" overwrite="yes">
+			<fileset dir="${dist}"/>
+		</copy>
+	</target>
+
+	<target name="release.base" depends="dist">
+		<delete dir="${release}" includeEmptyDirs="true"/>
+		<mkdir dir="${release}"/>
+	</target>
+	
+	<target name="release.common" depends="release.base">
+		<mkdir dir="${release.dir}"/>
+		<copy todir="${release.dir}">
+			<fileset dir="${dist}"/>
+		</copy>
+		<mkdir dir="${release.dir}/sbcl"/>
+		<copy todir="${release.dir}/sbcl">
+			<fileset dir="${sbcl.lib}"/>
+			<fileset file="${sbcl.exe}"/>
+		</copy>
+		
+		<zip destfile="${release.dir}.zip" basedir="." includes="${release.dir}" update="no"/>
+	</target>
+		
+	<target name="release.osx.ppc" depends="release.base" description="Builds release for OS X PPC.">
+		<fail unless="sbcl.lib.osx.ppc" message="Cannot build for OS X PPC -- sbcl.lib.osx.ppc path not set in site.properties.  See build.properties for info."/>
+		<fail unless="sbcl.exe.osx.ppc" message="Cannot build for OS X PPC -- sbcl.exe.osx.ppc path not set in site.properties.  See build.properties for info."/>
+		<antcall target="release.common">
+			<param name="release.dir" value="${release}/Cusp-${cusp.version}-osx-ppc"/>
+			<param name="sbcl.lib" value="${sbcl.lib.osx.ppc}"/>
+			<param name="sbcl.exe" value="${sbcl.exe.osx.ppc}"/>
+		</antcall>
+	</target>
+	
+	<target name="release.osx.intel" depends="release.base" description="Builds release for OS X Intel.">
+		<fail unless="sbcl.lib.osx.intel" message="Cannot build for OS X Intel -- sbcl.lib.osx.intel path not set in site.properties.  See build.properties for info."/>
+		<fail unless="sbcl.exe.osx.intel" message="Cannot build for OS X Intel -- sbcl.exe.osx.intel path not set in site.properties.  See build.properties for info."/>
+		<antcall target="release.common">
+			<param name="release.dir" value="${release}/Cusp-${cusp.version}-osx-intel"/>
+			<param name="sbcl.lib" value="${sbcl.lib.osx.intel}"/>
+			<param name="sbcl.exe" value="${sbcl.exe.osx.intel}"/>
+		</antcall>
+	</target>
+		
+	<target name="release.linux" depends="release.base" description="Builds release for Linux.">
+		<fail unless="sbcl.lib.linux" message="Cannot build for Linux -- sbcl.lib.linux path not set in site.properties.  See build.properties for info."/>
+		<fail unless="sbcl.exe.linux" message="Cannot build for Linux -- sbcl.exe.linux path not set in site.properties.  See build.properties for info."/>
+		<antcall target="release.common">
+			<param name="release.dir" value="${release}/Cusp-${cusp.version}-linux"/>
+			<param name="sbcl.lib" value="${sbcl.lib.linux}"/>
+			<param name="sbcl.exe" value="${sbcl.exe.linux}"/>
+		</antcall>
+	</target>
+		
+	<target name="release.windows" depends="release.base" description="Builds release for Windows.">
+		<fail unless="sbcl.lib.windows" message="Cannot build for Windows -- sbcl.lib.windows path not set in site.properties.  See build.properties for info."/>
+		<fail unless="sbcl.exe.windows" message="Cannot build for Windows -- sbcl.exe.windows path not set in site.properties.  See build.properties for info."/>
+		<antcall target="release.common">
+			<param name="release.dir" value="${release}/Cusp-${cusp.version}-windows"/>
+			<param name="sbcl.lib" value="${sbcl.lib.windows}"/>
+			<param name="sbcl.exe" value="${sbcl.exe.windows}"/>
+		</antcall>
+	</target>
+		
+	<target name="release.all" depends="release.osx.ppc,release.osx.intel,release.linux,release.windows" description="Builds releases for OS X PPC, OS X Intel, Windows, and Linux."/>
+</project>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>TABLE-EXISTS-P</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fddl.html" title="Functional Data Definition Language (FDDL)" /><link rel="prev" href="list-tables.html" title="LIST-TABLES" /><link rel="next" href="create-view.html" title="CREATE-VIEW" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">TABLE-EXISTS-P</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="list-tables.html">Prev</a> </td><th width="60%" align="center">Functional Data Definition Language (FDDL)</th><td width="20%" align="right"> <a accesskey="n" href="create-view.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="table-exists-p"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>TABLE-EXISTS-P — Tests for the existence of a database table.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398340"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">table-exists-p</code> <em class="replaceable"><code>name</code></em> &amp;key <em class="replaceable"><code>owner</code></em> <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398374"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>
+              The name of the table as a string, symbol or SQL expression. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>owner</code></em></span></dt><dd><p>
+              A string, <code class="constant">NIL</code> or <span class="symbol">:all</span>. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>
+              A database object which defaults to
+              <span class="symbol">*default-database*</span>.
+            </p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>
+              A Boolean. 
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398470"></a><h2>Description</h2><p>Tests for the existence of an SQL table called
+      <em class="parameter"><code>name</code></em> in <em class="parameter"><code>database</code></em>
+      which defaults to <span class="symbol">*default-database*</span>.
+      <em class="parameter"><code>owner</code></em> is <code class="constant">NIL</code> by default which means
+      that only tables owned by users are examined. If
+      <em class="parameter"><code>owner</code></em> is a string denoting a user name,
+      only tables owned by <em class="parameter"><code>owner</code></em> are
+      examined. If <em class="parameter"><code>owner</code></em> is
+      <span class="symbol">:all</span> then all tables are examined.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398530"></a><h2>Examples</h2><pre class="screen">
+(table-exists-p [foo])
+=&gt; T
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398543"></a><h2>Side Effects</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398555"></a><h2>Affected by</h2><p>
+        <span class="symbol">*default-database*</span>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398570"></a><h2>Exceptional Situations</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398581"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="create-table.html" title="CREATE-TABLE"><code class="function">create-table</code></a></td></tr><tr><td><a class="link" href="drop-table.html" title="DROP-TABLE"><code class="function">drop-table</code></a></td></tr><tr><td><a class="link" href="list-tables.html" title="LIST-TABLES"><code class="function">list-tables</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id398625"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="list-tables.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fddl.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="create-view.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">LIST-TABLES </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> CREATE-VIEW</td></tr></table></div></body></html>

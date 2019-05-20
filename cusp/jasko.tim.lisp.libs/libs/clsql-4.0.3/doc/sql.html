@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>SQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-syntax.html" title="The Symbolic SQL Syntax" /><link rel="prev" href="restore-sql-reader-syntax-state.html" title="RESTORE-SQL-READER-SYNTAX-STATE" /><link rel="next" href="sql-expression.html" title="SQL-EXPRESSION" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">SQL</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="restore-sql-reader-syntax-state.html">Prev</a> </td><th width="60%" align="center">The Symbolic SQL Syntax</th><td width="20%" align="right"> <a accesskey="n" href="sql-expression.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="sql"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>SQL — Construct an SQL string from supplied expressions.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id384041"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">sql &amp;rest</code> <em class="replaceable"><code>args</code></em> =&gt; <span class="returnvalue">sql-expression</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id384067"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>args</code></em></span></dt><dd><p>A set of expressions.</p></dd><dt><span class="term"><span class="returnvalue">sql-expression</span></span></dt><dd><p>A string representing an SQL expression.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id384112"></a><h2>Description</h2><p>Returns an SQL string generated from the expressions
+      <em class="parameter"><code>args</code></em>. The expressions are translated into
+      SQL strings and then concatenated with a single space delimiting
+      each expression.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id384131"></a><h2>Examples</h2><pre class="screen">
+(sql nil)
+=&gt; "NULL"
+
+(sql 'foo)
+=&gt; "FOO"
+
+(sql "bar")
+ =&gt; "'bar'"
+ 
+(sql 10)
+=&gt; "10"
+
+(sql '(nil foo "bar" 10))
+=&gt; "(NULL,FOO,'bar',10)"
+
+(sql #(nil foo "bar" 10))
+=&gt; "NULL,FOO,'bar',10"
+        
+(sql [select [foo] [bar] :from [baz]] 'having [= [foo id] [bar id]] 
+     'and [foo val] '&lt; 5)
+=&gt; "SELECT FOO,BAR FROM BAZ HAVING (FOO.ID = BAR.ID) AND FOO.VAL &lt; 5"
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id384147"></a><h2>Side Effects</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id384158"></a><h2>Affected by</h2><p>
+        None.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id384169"></a><h2>Exceptional Situations</h2><p>An error of type <a class="link" href="sql-user-error.html" title="SQL-USER-ERROR"><code class="function">sql-user-error</code></a>
+      is signalled if any element in <em class="parameter"><code>args</code></em> is
+      not of the supported types (a symbol, string, number or symbolic
+      SQL expression) or a list or vector containing only these
+      supported types. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id384197"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="sql-expression.html" title="SQL-EXPRESSION"><code class="function">sql-expression</code></a></td></tr><tr><td><a class="link" href="sql-operation.html" title="SQL-OPERATION"><code class="function">sql-operation</code></a></td></tr><tr><td><a class="link" href="sql-operator.html" title="SQL-OPERATOR"><code class="function">sql-operator</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id384242"></a><h2>Notes</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="restore-sql-reader-syntax-state.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-syntax.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sql-expression.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">RESTORE-SQL-READER-SYNTAX-STATE </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> SQL-EXPRESSION</td></tr></table></div></body></html>

@@ -1,0 +1,32 @@
+How to Add a Type to CL-SQL (Alan Shields - Alan-Shields@omrf.ouhsc.edu)
+
+I made this small guide to eliminate some of the work I went through.
+I hope it is useful and/or correct.
+
+To add a type to CL-SQL, the following methods need to be
+declared.
+
+
+"sql/expressions.lisp"
+(defmethod database-output-sql (self database))
+
+SELF is specialized for the lisp type, such as (self integer).
+
+"sql/oodml.lisp"
+(defmethod database-get-type-specifier (type args database db-type))
+
+TYPE is a symbol for the clsql type, such as (type (eql 'integer)).
+Note that DB-TYPE is the database type, not DATABASE.
+
+"sql/oodml.lisp"
+(defmethod read-sql-value (val type database db-type))
+
+TYPE is a symbol for the clsql type, as above.
+Same warnings as above.
+
+
+If your type is stored in different ways in different sql servers, you'll need
+to specialize these methods.
+
+These specializations usually go in either db-<database>/<database>-objects.lisp or
+sql/generic-<database>.lisp.

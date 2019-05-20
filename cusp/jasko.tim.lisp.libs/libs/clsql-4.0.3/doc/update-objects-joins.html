@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>UPDATE-OBJECTS-JOINS</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-oodml.html" title="Object Oriented Data Manipulation Language (OODML)" /><link rel="prev" href="update-slot-from-record.html" title="UPDATE-SLOT-FROM-RECORD" /><link rel="next" href="ref-recording.html" title="SQL I/O Recording" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">UPDATE-OBJECTS-JOINS</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="update-slot-from-record.html">Prev</a> </td><th width="60%" align="center">Object Oriented Data Manipulation Language (OODML)</th><td width="20%" align="right"> <a accesskey="n" href="ref-recording.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="update-objects-joins"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>UPDATE-OBJECTS-JOINS — Updates joined slots of objects.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413877"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">update-objects-joins</code> <em class="replaceable"><code>objects</code></em> &amp;key <em class="replaceable"><code>slots</code></em> <em class="replaceable"><code>force-p</code></em> <em class="replaceable"><code>class-name</code></em> <em class="replaceable"><code>max-len</code></em> =&gt; <span class="returnvalue"></span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id413912"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>objects</code></em></span></dt><dd><p>
+	      A list of instances of a <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View Class</em></a>.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>slots</code></em></span></dt><dd><p>
+              A list of slot names in <em class="parameter"><code>object</code></em> or <code class="constant">T</code>. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>force-p</code></em></span></dt><dd><p>
+              A Boolean, defaulting to <code class="constant">T</code>. 
+	    </p></dd><dt><span class="term"><em class="parameter"><code>class-name</code></em></span></dt><dd><p>
+	      A list of instances of a <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View Class</em></a>.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>max-len</code></em></span></dt><dd><p>
+              A non-negative integer or <code class="constant">NIL</code> defaulting to
+              <span class="symbol">*default-update-objects-max-len*</span>.
+	    </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id414029"></a><h2>Description</h2><p>Updates from the records of the appropriate database
+      tables the join slots specified by <em class="parameter"><code>slots</code></em>
+      in the supplied list of <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View
+      Class</em></a> instances
+      <em class="parameter"><code>objects</code></em>. <em class="parameter"><code>slots</code></em>
+      when <code class="constant">T</code> means that all join slots with
+      <span class="symbol">:retrieval</span> <span class="symbol">:immediate</span> are
+      updated. <em class="parameter"><code>class-name</code></em> is used to specify
+      the <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View Class</em></a> of
+      all instance in <em class="parameter"><code>objects</code></em>, when <code class="constant">NIL</code> then
+      the class of the first instance in
+      <em class="parameter"><code>objects</code></em> is
+      used. <em class="parameter"><code>force-p</code></em> when <code class="constant">T</code> means that all
+      join slots are updated whereas a value of <code class="constant">NIL</code> means that only
+      unbound join slots are updated. <em class="parameter"><code>max-len</code></em>
+      when non-nil specifies that
+      <code class="function">update-object-joins</code> may issue multiple
+      database queries with a maximum of
+      <em class="parameter"><code>max-len</code></em> instances updated in each query.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id414123"></a><h2>Examples</h2><pre class="screen">
+(defvar *addresses* (select 'deferred-employee-address :order-by [ea_join aaddressid] :flatp t))
+=&gt; *ADDRESSES*
+(slot-boundp (car *addresses*) 'address)
+=&gt; NIL
+(update-objects-joins *addresses*)
+=&gt; 
+(slot-boundp (car *addresses*) 'address)
+=&gt; T
+(slot-value (car *addresses*) 'address)
+=&gt; #&lt;ADDRESS {480B0F1D}&gt;     
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id414137"></a><h2>Side Effects</h2><p>
+        The slot values of <em class="parameter"><code>objects</code></em> are modified. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id414152"></a><h2>Affected by</h2><p>
+        </p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="default-update-objects-max-len.html" title="*DEFAULT-UPDATE-OBJECTS-MAX-LEN*"><code class="varname">*default-update-objects-max-len*</code></a></td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id414174"></a><h2>Exceptional Situations</h2><p>
+	Database errors.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id414184"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="default-update-objects-max-len.html" title="*DEFAULT-UPDATE-OBJECTS-MAX-LEN*"><code class="varname">*default-update-objects-max-len*</code></a></td></tr><tr><td><a class="link" href="update-instance-from-records.html" title="UPDATE-INSTANCE-FROM-RECORDS"><code class="function">update-instance-from-records</code></a></td></tr><tr><td><a class="link" href="update-slot-from-record.html" title="UPDATE-SLOT-FROM-RECORD"><code class="function">update-slot-from-record</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id414221"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="update-slot-from-record.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-oodml.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ref-recording.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">UPDATE-SLOT-FROM-RECORD </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> SQL I/O Recording</td></tr></table></div></body></html>

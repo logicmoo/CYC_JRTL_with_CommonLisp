@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Installation</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="introduction.html" title="Chapter 1. Introduction" /><link rel="prev" href="prerequisites.html" title="Prerequisites" /><link rel="next" href="csql.html" title="Chapter 2. CommonSQL Tutorial" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Installation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="prerequisites.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Introduction</th><td width="20%" align="right"> <a accesskey="n" href="csql.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="installation"></a>Installation</h2></div></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id352249"></a>Ensure <span class="application">ASDF</span> is loaded</h3></div></div></div><p>
+	Simply load the file <code class="filename">asdf.lisp</code>.
+	</p><pre class="screen">
+(load "asdf.lisp")
+	</pre><p>
+      </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id352278"></a>Build <span class="application">C</span> helper libraries</h3></div></div></div><p><span class="application"><span class="emphasis"><em>CLSQL</em></span></span> uses functions that require 64-bit integer
+	parameters and return values. The <span class="emphasis"><em>FFI</em></span> in most <span class="application"><span class="emphasis"><em>CLSQL</em></span></span>
+	implementations do not support 64-bit integers. Thus, C helper
+	libraries are required to break these 64-bit integers into two compatible
+	32-bit integers. The helper libraries reside in the directories
+	<code class="filename">uffi</code> and <code class="filename">db-mysql</code>.
+      </p><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id379339"></a><span class="application">Microsoft Windows</span></h4></div></div></div><p>
+	  Files named <code class="filename">Makefile.msvc</code> are supplied
+	  for building the libraries under Microsoft Windows.  Since
+	  <span class="application">Microsoft Windows</span> does not come with that compiler, compiled
+	  <span class="type">DLL</span> and <span class="type">LIB</span> library files are
+	  supplied with <span class="application"><span class="emphasis"><em>CLSQL</em></span></span>.
+	</p></div><div class="sect3" lang="en" xml:lang="en"><div class="titlepage"><div><div><h4 class="title"><a id="id379380"></a><span class="application">UNIX</span></h4></div></div></div><p>
+	  Files named <code class="filename">Makefile</code> are supplied for
+	  building the libraries under <span class="application">UNIX</span>. Loading the
+	  <code class="filename">.asd</code> files automatically invokes
+	  <span class="application">make</span> when necessary. So, manual
+	  building of the helper libraries is not necessary on most
+	  <span class="application">UNIX</span> systems. However, the location of the <span class="application">MySQL</span> library
+	  files and include files may need to adjusted in
+	  <code class="filename">db-mysql/Makefile</code> on non-Debian
+	  systems.
+	</p></div></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id379439"></a>Add <span class="application"><span class="emphasis"><em>UFFI</em></span></span> path</h3></div></div></div><p>
+	Unzip or untar the <span class="application"><span class="emphasis"><em>UFFI</em></span></span> distribution which creates a directory
+	for the <span class="application"><span class="emphasis"><em>UFFI</em></span></span> files. Add that directory to <span class="application">ASDF</span>'s <code class="varname">asdf:*central-registry*</code>.
+	You can do that by pushing the pathname of the directory onto this variable.
+	The following example code assumes the <span class="application"><span class="emphasis"><em>UFFI</em></span></span> files reside in the
+	<code class="filename">/usr/share/lisp/uffi/</code> 
+	directory.
+	</p><pre class="screen">
+(push #P"/usr/share/lisp/uffi/" asdf:*central-registry*)
+	</pre><p>
+      </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id379502"></a>Add <span class="application">MD5</span> path</h3></div></div></div><p>
+       If you plan to use the clsql-postgresql-socket interface, you
+       must load the md5 module.  Unzip or untar the cl-md5
+       distribution, which creates a directory for the cl-md5 files.
+       Add that directory to <span class="application">ASDF</span>'s
+       <code class="varname">asdf:*central-registry*</code>.  You can do that by
+       pushing the pathname of the directory onto this variable.  The
+       following example code assumes the cl-md5 files reside in the
+       <code class="filename">/usr/share/lisp/cl-md5/</code> directory.
+       </p><pre class="screen">
+(push #P"/usr/share/lisp/cl-md5/" asdf:*central-registry*)
+       </pre><p>
+     </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id379544"></a>Add <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> path and load module</h3></div></div></div><p>
+       Unzip or untar the <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> distribution which creates a
+       directory for the <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> files. Add that directory to <span class="application">ASDF</span>'s
+       <code class="varname">asdf:*central-registry*</code>.  You can do that by
+       pushing the pathname of the directory onto this variable.  The
+       following example code assumes the <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> files reside in the
+       <code class="filename">/usr/share/lisp/clsql/</code> directory. You need
+       to load the <span class="symbol">clsql</span> system.
+
+	</p><pre class="screen">
+(push #P"/usr/share/lisp/clsql/" asdf:*central-registry*)
+(asdf:operate 'asdf:load-op 'clsql)                   ; main CLSQL package
+	</pre><p>
+      </p></div><div class="sect2" lang="en" xml:lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="id379611"></a>Run test suite (optional)</h3></div></div></div><p>
+	The test suite can be executed using the <span class="application">ASDF</span>
+	<span class="symbol">test-op</span> operator. If <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> has not been
+	loaded with <span class="symbol">asdf:load-op</span>, the
+	<span class="symbol">asdf:test-op</span> operator will automatically load
+	<span class="application"><span class="emphasis"><em>CLSQL</em></span></span>. A configuration file named
+	<code class="filename">.clsql-test.config</code> must be created in
+	your home directory. There are instructures on the format of
+	that file in the <code class="filename">tests/README</code>. After
+	creating <code class="filename">.clsql-test.config</code>, you can run
+	the test suite with <span class="application">ASDF</span>:
+	</p><pre class="screen">
+	  (asdf:operate 'asdf:test-op 'clsql)
+        </pre><p>
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="prerequisites.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="introduction.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="csql.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Prerequisites </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 2. <span class="application">CommonSQL</span> Tutorial</td></tr></table></div></body></html>

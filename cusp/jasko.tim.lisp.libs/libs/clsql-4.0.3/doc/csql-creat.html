@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Object Creation</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="csql.html" title="Chapter 2. CommonSQL Tutorial" /><link rel="prev" href="csql-rel.html" title="Class Relations" /><link rel="next" href="csql-find.html" title="Finding Objects" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Object Creation</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="csql-rel.html">Prev</a> </td><th width="60%" align="center">Chapter 2. <span class="application">CommonSQL</span> Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="csql-find.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="csql-creat"></a>Object Creation</h2></div></div></div><p>
+Now that we have our model laid out, we should create some object.
+Let us assume that we have a database connect set up already.  We
+first need to create our tables in the database:
+</p><p>
+Note: the file <code class="filename">examples/clsql-tutorial.lisp</code> contains
+view class definitions which you can load into your list at this point
+in order to play along at home.
+</p><pre class="programlisting">
+(clsql:create-view-from-class 'employee)
+(clsql:create-view-from-class 'company)
+</pre><p>
+Then we will create our objects.  We create them just like you would
+any other CLOS object:
+</p><pre class="programlisting">
+(defvar company1 (make-instance 'company
+			      :companyid 1
+			      :presidentid 1
+			      :name "Widgets Inc."))
+			      
+(defvar employee1 (make-instance 'employee
+			       :emplid 1
+			       :first-name "Vladimir"
+			       :last-name "Lenin"
+			       :email "lenin@soviet.org"
+			       :companyid 1))
+
+(defvar employee2 (make-instance 'employee
+			       :emplid 2
+			       :first-name "Josef"
+			       :last-name "Stalin"
+			       :email "stalin@soviet.org"
+			       :companyid 1
+			       :managerid 1))
+</pre><p>
+In order to insert an objects into the database we use the
+<code class="function">UPDATE-RECORDS-FROM-INSTANCE</code> function as follows:
+</p><pre class="programlisting">
+(clsql:update-records-from-instance employee1)
+(clsql:update-records-from-instance employee2)
+(clsql:update-records-from-instance company1)
+</pre><p>
+  After you make any changes to an object, you have to specifically
+  tell <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> to update the <span class="application">SQL</span> database.  The
+  <code class="function">UPDATE-RECORDS-FROM-INSTANCE</code> method will write
+  all of the changes you have made to the object into the database.
+</p><p>
+  Since <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> objects are just normal CLOS objects, we can manipulate
+  their slots just like any other object.  For instance, let's say
+  that Lenin changes his email because he was getting too much spam
+  from the German Socialists.
+</p><pre class="programlisting">
+;; Print Lenin's current email address, change it and save it to the
+;; database.  Get a new object representing Lenin from the database
+;; and print the email
+
+;; This lets us use the functional <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> interface with [] syntax
+(clsql:locally-enable-sql-reader-syntax)
+
+(format t "The email address of ~A ~A is ~A"
+	(first-name employee1)
+	(last-name employee1)
+	(employee-email employee1))
+
+(setf (employee-email employee1) "lenin-nospam@soviets.org")
+
+;; Update the database
+(clsql:update-records-from-instance employee1)
+
+(let ((new-lenin (car (clsql:select 'employee
+	                :where [= [slot-value 'employee 'emplid] 1]))))
+      (format t "His new email is ~A"
+	  (employee-email new-lenin)))
+</pre><p>
+  Everything except for the last <code class="function">LET</code> expression
+  is already familiar to us by now.  To understand the call to
+  <code class="function">CLSQL:SELECT</code> we need to discuss the
+  Functional <span class="application">SQL</span> interface and it's integration with the Object
+  Oriented interface of <span class="application"><span class="emphasis"><em>CLSQL</em></span></span>.
+</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="csql-rel.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="csql.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="csql-find.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Class Relations </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Finding Objects</td></tr></table></div></body></html>

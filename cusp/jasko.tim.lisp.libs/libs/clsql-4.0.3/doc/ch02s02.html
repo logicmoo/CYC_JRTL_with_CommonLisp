@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Data Modeling with CLSQL</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="csql.html" title="Chapter 2. CommonSQL Tutorial" /><link rel="prev" href="csql.html" title="Chapter 2. CommonSQL Tutorial" /><link rel="next" href="csql-rel.html" title="Class Relations" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Data Modeling with <span class="application"><span class="emphasis"><em>CLSQL</em></span></span></th></tr><tr><td width="20%" align="left"><a accesskey="p" href="csql.html">Prev</a> </td><th width="60%" align="center">Chapter 2. <span class="application">CommonSQL</span> Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="csql-rel.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id379754"></a>Data Modeling with <span class="application"><span class="emphasis"><em>CLSQL</em></span></span></h2></div></div></div><p>
+      Before we can create, query and manipulate <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> objects, we
+      need to define our data model as noted by Philip Greenspun
+      <sup>[<a id="id379776" href="#ftn.id379776" class="footnote">1</a>]</sup>
+    </p><p>
+      When data modeling, you are telling the relational database
+      management system (RDBMS) the following:
+    </p><div class="itemizedlist"><ul type="disc"><li><p>What elements of the data you will store.</p></li><li><p>How large each element can be.</p></li><li><p>What kind of information each element can contain.</p></li><li><p>What elements may be left blank.</p></li><li><p>Which elements are constrained to a fixed range.</p></li><li><p>Whether and how various tables are to be linked.</p></li></ul></div><p>
+      With <span class="application">SQL</span> database one would do this by defining a set of
+      relations, or tables, followed by a set of queries for joining
+      the tables together in order to construct complex records.
+      However, with <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> we do this by defining a set of CLOS
+      classes, specifying how they will be turned into tables, and how
+      they can be joined to one another via relations between their
+      attributes.  The <span class="application">SQL</span> tables, as well as the queries for
+      joining them together are created for us automatically, saving
+      us from dealing with some of the tedium of <span class="application">SQL</span>.
+    </p><p>
+      Let us start with a simple example of two <span class="application">SQL</span> tables, and the
+      relations between them.
+    </p><pre class="programlisting">
+CREATE TABLE EMPLOYEE ( emplid     NOT NULL number(38),
+                        first_name NOT NULL varchar2(30),
+                        last_name  NOT NULL varchar2(30),
+                        email               varchar2(100),
+                        companyid  NOT NULL number(38),
+                        managerid           number(38))
+
+CREATE TABLE COMPANY ( companyid   NOT NULL number(38),
+                       name        NOT NULL varchar2(100),
+                       presidentid NOT NULL number(38))
+</pre><p>
+This is of course the canonical <span class="application">SQL</span> tutorial example, "The Org Chart".
+</p><p>
+In <span class="application"><span class="emphasis"><em>CLSQL</em></span></span>, we would have two "view classes" (a fancy word for a class
+mapped into a database).  They would be defined as follows:
+</p><pre class="programlisting">
+(clsql:def-view-class employee ()
+  ((emplid
+    :db-kind :key
+    :db-constraints :not-null
+    :type integer
+    :initarg :emplid)
+   (first-name
+    :accessor first-name
+    :type (string 30)
+    :initarg :first-name)
+   (last-name
+    :accessor last-name
+    :type (string 30)
+    :initarg :last-name)
+   (email
+    :accessor employee-email
+    :type (string 100)
+    :nulls-ok t
+    :initarg :email)
+   (companyid
+    :type integer
+    :initarg :companyid)
+   (managerid
+    :type integer
+    :nulls-ok t
+    :initarg :managerid))
+  (:base-table employee))
+
+(clsql:def-view-class company ()
+  ((companyid
+    :db-kind :key
+    :db-constraints :not-null
+    :type integer
+    :initarg :companyid)
+   (name
+    :type (string 100)
+    :initarg :name)
+   (presidentid
+    :type integer
+    :initarg :presidentid))
+  (:base-table company))
+</pre><p>
+  The <code class="function">DEF-VIEW-CLASS</code> macro is just like the
+  normal CLOS <code class="function">DEFCLASS</code> macro, except that it
+  handles several slot options that <code class="function">DEFCLASS</code>
+  doesn't.  These slot options have to do with the mapping of the slot
+  into the database.  We only use a few of the slot options in the
+  above example, but there are several others.
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+  <span class="symbol">:column</span> - The name of the <span class="application">SQL</span> column this slot is stored in.
+    Defaults to the slot name.  If the slot name is not a valid <span class="application">SQL</span>
+    identifier, it is escaped, so foo-bar becomes foo_bar.
+  </p></li><li><p> 
+      <span class="symbol">:db-kind</span> - The kind of database mapping which
+      is performed for this slot.  <span class="symbol">:base</span> indicates
+      the slot maps to an ordinary column of the database view.
+      <span class="symbol">:key</span> indicates that this slot corresponds to
+      part of the unique keys for this view, <span class="symbol">:join</span>
+      indicates a join slot representing a relation to another view
+      and :virtual indicates that this slot is an ordinary CLOS slot.
+      Defaults to <span class="symbol">:base</span>. </p></li><li><p>
+      <span class="symbol">:db-reader</span> - If a string, then when reading
+      values from the database, the string will be used for a format
+      string, with the only value being the value from the database.
+      The resulting string will be used as the slot value.  If a
+      function then it will take one argument, the value from the
+      database, and return the value that should be put into the slot.
+      </p></li><li><p>
+      <span class="symbol">:db-writer</span> - If a string, then when reading
+      values from the slot for the database, the string will be used
+      for a format string, with the only value being the value of the
+      slot.  The resulting string will be used as the column value in
+      the database.  If a function then it will take one argument, the
+      value of the slot, and return the value that should be put into
+      the database.</p></li><li><p>
+      <span class="symbol">:db-type</span> - A string which will be used as the
+      type specifier for this slots column definition in the database.
+      </p></li><li><p>
+      <span class="symbol">:void-value</span> - The Lisp value to return if the
+      field is <code class="constant">NULL</code>. The default is <code class="constant">NIL</code>.</p></li><li><p>
+      <span class="symbol">:db-info</span> - A join specification.
+      </p></li></ul></div><p>
+  In our example each table as a primary key attribute, which is
+  required to be unique.  We indicate that a slot is part of the
+  primary key (<span class="application"><span class="emphasis"><em>CLSQL</em></span></span> supports multi-field primary keys) by specifying
+  the <span class="symbol">:db-kind</span> key slot option.
+</p><p>
+  The <span class="application">SQL</span> type of a slot when it is mapped into the database is
+  determined by the <span class="symbol">:type</span> slot option.  The argument
+  for the <span class="symbol">:type</span> option is a Common Lisp datatype.
+  The <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> framework will determine the appropriate mapping
+  depending on the database system the table is being created in.  If
+  we really wanted to determine what <span class="application">SQL</span> type was used for a slot,
+  we could specify a <span class="symbol">:db-type</span> option like
+  "NUMBER(38)" and we would be guaranteed that the slot would be
+  stored in the database as a NUMBER(38).  This is not recomended
+  because it could makes your view class unportable across database
+  systems.
+</p><p>
+  <code class="function">DEF-VIEW-CLASS</code> also supports some class
+  options, like <span class="symbol">:base-table</span>.  The
+  <span class="symbol">:base-table</span> option specifies what the table name
+  for the view class will be when it is mapped into the database.
+</p><div class="footnotes"><br /><hr width="100" align="left" /><div class="footnote"><p><sup>[<a id="ftn.id379776" href="#id379776" class="para">1</a>] </sup>
+	<a class="ulink" href="http://philip.greenspun.com/sql/data-modeling.html" target="_top">
+	  <em class="citetitle">Philip Greenspun's "SQL For Web Nerds" - Data
+	  Modeling</em>
+	</a>
+	</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="csql.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="csql.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="csql-rel.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 2. <span class="application">CommonSQL</span> Tutorial </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Class Relations</td></tr></table></div></body></html>

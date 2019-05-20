@@ -1,0 +1,137 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<reference id="indexes">
+  <title>Index</title>
+  
+  <refentry id="clsql-index">
+    <refnamediv>
+      <refname>Alphabetical Index for package CLSQL</refname>  
+      <refpurpose>Clickable index of all symbols</refpurpose>
+    </refnamediv>
+    
+    <refsect1>
+      <title>
+      </title>
+      <simplelist columns="2">
+    
+    <!-- VARIABLES --> 
+
+    <member><link linkend="backend-warning-behavior">*BACKEND-WARNING-BEHAVIOR*</link></member>
+    <member><link linkend="cache-table-queries-default">*CACHE-TABLE-QUERIES-DEFAULT*</link></member>
+    <member><link linkend="connect-if-exists">*CONNECT-IF-EXISTS*</link></member>
+    <member><link linkend="db-auto-sync">*DB-AUTO-SYNC*</link></member>
+    <member><link linkend="default-database">*DEFAULT-DATABASE*</link></member>
+    <member><link linkend="default-database-type">*DEFAULT-DATABASE-TYPE*</link></member>
+    <member><link linkend="default-update-objects-max-len">*DEFAULT-UPDATE-OBJECTS-MAX-LEN*</link></member>
+    <member><link linkend="default-string-length">*DEFAULT-STRING-LENGTH*</link></member>
+    <member><link linkend="initialized-database-types">*INITIALIZED-DATABASE-TYPES*</link></member>
+
+    <!-- OTHER SYMBOLS IN ALPHABETICAL ORDER --> 
+
+    <member><link linkend="add-sql-stream">ADD-SQL-STREAM</link></member>
+    <member><link linkend="add-transaction-commit-hook">ADD-TRANSACTION-COMMIT-HOOK</link></member>
+    <member><link linkend="add-transaction-rollback-hook">ADD-TRANSACTION-ROLLBACK-HOOK</link></member>
+    <member><link linkend="attribute-type">ATTRIBUTE-TYPE</link></member>
+    <member><link linkend="cache-table-queries">CACHE-TABLE-QUERIES</link></member>
+    <member><link linkend="commit">COMMIT</link></member>
+    <member><link linkend="connect">CONNECT</link></member>
+    <member><link linkend="connected-databases">CONNECTED-DATABASES</link></member>
+    <member><link linkend="create-database">CREATE-DATABASE</link></member>
+    <member><link linkend="create-index">CREATE-INDEX</link></member>
+    <member><link linkend="create-sequence">CREATE-SEQUENCE</link></member>
+    <member><link linkend="create-table">CREATE-TABLE</link></member>
+    <member><link linkend="create-view">CREATE-VIEW</link></member>
+    <member><link linkend="create-view-from-class">CREATE-VIEW-FROM-CLASS</link></member>
+    <member><link linkend="database">DATABASE</link></member>
+    <member><link linkend="database-name">DATABASE-NAME</link></member>
+    <member><link linkend="database-name-from-spec">DATABASE-NAME-FROM-SPEC</link></member>
+    <member><link linkend="database-type">DATABASE-TYPE</link></member>
+    <member><link linkend="def-view-class">DEF-VIEW-CLASS</link></member>
+    <member><link linkend="delete-instance-records">DELETE-INSTANCE-RECORDS</link></member>
+    <member><link linkend="delete-records">DELETE-RECORDS</link></member>
+    <member><link linkend="delete-sql-stream">DELETE-SQL-STREAM</link></member>
+    <member><link linkend="destroy-database">DESTROY-DATABASE</link></member>
+    <member><link linkend="disable-sql-reader-syntax">DISABLE-SQL-READER-SYNTAX</link></member>
+    <member><link linkend="disconnect">DISCONNECT</link></member>
+    <member><link linkend="disconnect-pooled">DISCONNECT-POOLED</link></member>
+    <member><link linkend="do-query">DO-QUERY</link></member>
+    <member><link linkend="drop-index">DROP-INDEX</link></member>
+    <member><link linkend="drop-sequence">DROP-SEQUENCE</link></member>
+    <member><link linkend="drop-table">DROP-TABLE</link></member>
+    <member><link linkend="drop-view">DROP-VIEW</link></member>
+    <member><link linkend="drop-view-from-class">DROP-VIEW-FROM-CLASS</link></member>
+    <member><link linkend="enable-sql-reader-syntax">ENABLE-SQL-READER-SYNTAX</link></member>
+    <member><link linkend="execute-command">EXECUTE-COMMAND</link></member>
+    <member><link linkend="find-database">FIND-DATABASE</link></member>
+    <member><link linkend="in-transaction-p">IN-TRANSACTION-P</link></member>
+    <member><link linkend="index-exists-p">INDEX-EXISTS-P</link></member>
+    <member><link linkend="initialize-database-type">INITIALIZE-DATABASE-TYPE</link></member>
+    <member><link linkend="insert-records">INSERT-RECORDS</link></member>
+    <member><link linkend="instance-refreshed">INSTANCE-REFRESHED</link></member>
+    <member><link linkend="list-attribute-types">LIST-ATTRIBUTE-TYPES</link></member>
+    <member><link linkend="list-attributes">LIST-ATTRIBUTES</link></member>
+    <member><link linkend="list-classes">LIST-CLASSES</link></member>
+    <member><link linkend="list-databases">LIST-DATABASES</link></member>
+    <member><link linkend="list-indexes">LIST-INDEXES</link></member>
+    <member><link linkend="list-sequences">LIST-SEQUENCES</link></member>
+    <member><link linkend="list-sql-streams">LIST-SQL-STREAMS</link></member>
+    <member><link linkend="list-tables">LIST-TABLES</link></member>
+    <member><link linkend="list-views">LIST-VIEWS</link></member>
+    <member><link linkend="locally-disable-sql-reader-syntax">LOCALLY-DISABLE-SQL-READER-SYNTAX</link></member>
+    <member><link linkend="locally-enable-sql-reader-syntax">LOCALLY-ENABLE-SQL-READER-SYNTAX</link></member>
+    <member><link linkend="loop-tuples">LOOP-FOR-AS-TUPLES</link></member>
+    <member><link linkend="map-query">MAP-QUERY</link></member>
+    <member><link linkend="probe-database">PROBE-DATABASE</link></member>
+    <member><link linkend="query">QUERY</link></member>
+    <member><link linkend="reconnect">RECONNECT</link></member>
+    <member><link linkend="restore-sql-reader-syntax-state">RESTORE-SQL-READER-SYNTAX-STATE</link></member>
+    <member><link linkend="rollback">ROLLBACK</link></member>
+    <member><link linkend="select">SELECT</link></member>
+    <member><link linkend="sequence-exists-p">SEQUENCE-EXISTS-P</link></member>
+    <member><link linkend="sequence-last">SEQUENCE-LAST</link></member>
+    <member><link linkend="sequence-next">SEQUENCE-NEXT</link></member>
+    <member><link linkend="set-autocommit">SET-AUTOCOMMIT</link></member>
+    <member><link linkend="set-sequence-position">SET-SEQUENCE-POSITION</link></member>
+    <member><link linkend="sql">SQL</link></member>
+    <member><link linkend="sql-condition">SQL-CONDITION</link></member>
+    <member><link linkend="sql-connection-error">SQL-CONNECTION-ERROR</link></member>
+    <member><link linkend="sql-database-data-error">SQL-DATABASE-DATA-ERROR</link></member>
+    <member><link linkend="sql-database-error">SQL-DATABASE-ERROR</link></member>
+    <member><link linkend="sql-database-warning">SQL-DATABASE-WARNING</link></member>
+    <member><link linkend="sql-error">SQL-ERROR</link></member>
+    <member><link linkend="sql-expression">SQL-EXPRESSION</link></member>
+    <member><link linkend="sql-fatal-error">SQL-FATAL-ERROR</link></member>
+    <member><link linkend="sql-operation">SQL-OPERATION</link></member>
+    <member><link linkend="sql-operator">SQL-OPERATOR</link></member>
+    <member><link linkend="sql-recording-p">SQL-RECORDING-P</link></member>
+    <member><link linkend="sql-stream">SQL-STREAM</link></member>
+    <member><link linkend="sql-temporary-error">SQL-TEMPORARY-ERROR</link></member>
+    <member><link linkend="sql-timeout-error">SQL-TIMEOUT-ERROR</link></member>
+    <member><link linkend="sql-user-error">SQL-USER-ERROR</link></member>
+    <member><link linkend="sql-warning">SQL-WARNING</link></member>
+    <member><link linkend="start-sql-recording">START-SQL-RECORDING</link></member>
+    <member><link linkend="start-transaction">START-TRANSACTION</link></member>
+    <member><link linkend="status">STATUS</link></member>
+    <member><link linkend="stop-sql-recording">STOP-SQL-RECORDING</link></member>
+    <member><link linkend="table-exists-p">TABLE-EXISTS-P</link></member>
+    <member><link linkend="truncate-database">TRUNCATE-DATABASE</link></member>
+    <member><link linkend="update-instance-from-records">UPDATE-INSTANCE-FROM-RECORDS</link></member>
+    <member><link linkend="update-objects-joins">UPDATE-OBJECTS-JOINS</link></member>
+    <member><link linkend="update-record-from-slot">UPDATE-RECORD-FROM-SLOT</link></member>
+    <member><link linkend="update-record-from-slots">UPDATE-RECORD-FROM-SLOTS</link></member>
+    <member><link linkend="update-records">UPDATE-RECORDS</link></member>
+    <member><link linkend="update-records-from-instance">UPDATE-RECORDS-FROM-INSTANCE</link></member>
+    <member><link linkend="update-slot-from-record">UPDATE-SLOT-FROM-RECORD</link></member>
+    <member><link linkend="view-exists-p">VIEW-EXISTS-P</link></member>
+    <member><link linkend="with-database">WITH-DATABASE</link></member>
+    <member><link linkend="with-default-database">WITH-DEFAULT-DATABASE</link></member>
+    <member><link linkend="with-transaction">WITH-TRANSACTION</link></member>
+  </simplelist>
+</refsect1>
+</refentry>
+</reference> 

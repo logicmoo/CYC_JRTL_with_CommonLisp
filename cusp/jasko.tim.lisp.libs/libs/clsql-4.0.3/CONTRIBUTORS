@@ -1,0 +1,25 @@
+CLSQL Contributors
+------------------
+Kevin Rosenberg (main author CLSQL)
+Marcus Pearce <m.t.pearce@city.ac.uk> (initial port UncommonSQL, co-developer of CLSQL version 3.0)
+Pierre Mai (original author MaiSQL from which CLSQL was based)
+Aurelio Bignoli (SQLite backend)
+Marc Battyani (Large object support for postgresql, initial connection pool code)
+
+
+USQL Contributors
+-----------------
+This is a list of those individuals who have contributed in some way
+or other to Uncommonsql. The sources of the attributions are CVS
+annotation, patch submission, and original authorship, write us if
+we've missed anybody.
+
+Jesse Bouwman
+Craig Brozefsky
+Sean Champ
+Matthew Danish
+Adam Di Carlo
+Lyn Headley
+John Krug
+Pierre Mai (original author)
+Christopher J. Vogt

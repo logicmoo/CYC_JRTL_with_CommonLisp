@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>PRINT-QUERY</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fdml.html" title="Functional Data Manipulation Language (FDML)" /><link rel="prev" href="query.html" title="QUERY" /><link rel="next" href="select.html" title="SELECT" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">PRINT-QUERY</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="query.html">Prev</a> </td><th width="60%" align="center">Functional Data Manipulation Language (FDML)</th><td width="20%" align="right"> <a accesskey="n" href="select.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="print-query"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>PRINT-QUERY — Prints a tabular report of query results.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id406052"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">print-query</code> <em class="replaceable"><code>query-expression</code></em> &amp;key <em class="replaceable"><code>titles</code></em> <em class="replaceable"><code>formats</code></em> <em class="replaceable"><code>sizes</code></em> <em class="replaceable"><code>stream</code></em> <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue"></span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id406089"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>query-expression</code></em></span></dt><dd><p>An <a class="glossterm" href="glossary.html#gloss-sql-expression"><em class="glossterm">sql
+            expression</em></a> that represents an SQL
+            query which is expected to return a (possibly empty)
+            result set.</p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to the value
+            of <span class="symbol">*default-database*</span>.</p></dd><dt><span class="term"><em class="parameter"><code>titles</code></em></span></dt><dd><p>
+              A list of strings or <code class="constant">NIL</code> which is the default value. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>formats</code></em></span></dt><dd><p>
+              A list of strings, <code class="constant">NIL</code> or <code class="constant">T</code> which is the default value.
+            </p></dd><dt><span class="term"><em class="parameter"><code>sizes</code></em></span></dt><dd><p>
+              A list of numbers, <code class="constant">NIL</code> or <code class="constant">T</code> which is the default value. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>stream</code></em></span></dt><dd><p>
+              An output stream or <code class="constant">T</code> which is the default value. 
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id406228"></a><h2>Description</h2><p>Prints a tabular report of the results returned by the SQL
+      query <em class="parameter"><code>query-expression</code></em>, which may be a
+      symbolic SQL expression or a string, in
+      <em class="parameter"><code>database</code></em> which defaults to
+      <span class="symbol">*default-database*</span>. The report is printed onto
+      <em class="parameter"><code>stream</code></em> which has a default value of <code class="constant">T</code>
+      which means that <span class="symbol">*standard-output*</span> is used. The
+      <em class="parameter"><code>title</code></em> argument, which defaults to <code class="constant">NIL</code>,
+      allows the specification of a list of strings to use as column
+      titles in the tabular output. <em class="parameter"><code>sizes</code></em>
+      accepts a list of column sizes, one for each column selected by
+      <em class="parameter"><code>query-expression</code></em>, to use in formatting
+      the tabular report. The default value of <code class="constant">T</code> means that minimum
+      sizes are computed. <em class="parameter"><code>formats</code></em> is a list of
+      format strings to be used for printing each column selected by
+      <em class="parameter"><code>query-expression</code></em>. The default value of
+      <em class="parameter"><code>formats</code></em> is <code class="constant">T</code> meaning that
+      <span class="symbol">~A</span> is used to format all columns or
+      <span class="symbol">~VA</span> if column sizes are used.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id406314"></a><h2>Examples</h2><pre class="screen">
+(print-query [select [emplid] [first-name] [last-name] [email] 
+                     :from [employee] 
+                     :where [&lt; [emplid] 5]] 
+              :titles '("ID" "FORENAME" "SURNAME" "EMAIL"))
+ID FORENAME SURNAME  EMAIL               
+1  Vladimir Lenin    lenin@soviet.org    
+2  Josef    Stalin   stalin@soviet.org   
+3  Leon     Trotsky  trotsky@soviet.org  
+4  Nikita   Kruschev kruschev@soviet.org 
+=&gt; 
+
+(print-query "select emplid,first_name,last_name,email from employee where emplid &gt;= 5" 
+             :titles '("ID" "FORENAME" "SURNAME" "EMAIL"))
+ID FORENAME   SURNAME   EMAIL                
+5  Leonid     Brezhnev  brezhnev@soviet.org  
+6  Yuri       Andropov  andropov@soviet.org  
+7  Konstantin Chernenko chernenko@soviet.org 
+8  Mikhail    Gorbachev gorbachev@soviet.org 
+9  Boris      Yeltsin   yeltsin@soviet.org   
+10 Vladimir   Putin     putin@soviet.org     
+=&gt; 
+</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id406334"></a><h2>Side Effects</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id406343"></a><h2>Affected by</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id406353"></a><h2>Exceptional Situations</h2><p>
+        If the execution of the SQL query leads to any errors, an
+        error of type <span class="errortype">sql-database-error</span> is
+        signalled.  
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id406366"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="query.html" title="QUERY"><code class="function">query</code></a></td></tr><tr><td><a class="link" href="do-query.html" title="DO-QUERY"><code class="function">do-query</code></a></td></tr><tr><td><a class="link" href="map-query.html" title="MAP-QUERY"><code class="function">map-query</code></a></td></tr><tr><td><a class="link" href="loop-tuples.html" title="LOOP"><code class="function">loop</code></a></td></tr><tr><td><a class="link" href="select.html" title="SELECT"><code class="function">select</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id406425"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="query.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fdml.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="select.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">QUERY </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> SELECT</td></tr></table></div></body></html>

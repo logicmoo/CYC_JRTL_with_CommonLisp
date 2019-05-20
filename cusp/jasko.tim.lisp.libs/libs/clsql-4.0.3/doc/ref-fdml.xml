@@ -1,0 +1,2116 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<!-- Functional Data Manipulation Language --> 
+<reference id="ref-fdml"> 
+  <title>Functional Data Manipulation Language (FDML)</title> 
+  <partintro>
+    <para>
+      The functional data manipulation interface provided by &clsql;
+      includes functions for inserting, updating and deleting records
+      in existing database tables and executing SQL queries and
+      statements with the results of queries returned as Lisp types.
+      SQL statements expressed as strings may be executed with the
+      <link linkend="query"><function>query</function></link> and
+      <link
+      linkend="execute-command"><function>execute-command</function></link>
+      functions. The <link
+      linkend="select"><function>select</function></link> function, on
+      the other hand, allows for the construction of queries in Lisp
+      using the symbolic SQL syntax. Finally, iterative manipulation
+      of query results is supported by <link
+      linkend="do-query"><function>do-query</function></link>, <link
+      linkend="map-query"><function>map-query</function></link> and an
+      extended clause for the <link
+      linkend="loop-tuples"><function>loop</function></link> macro.
+    </para>
+  </partintro>
+
+  <!-- Caching table queries --> 
+
+  <refentry id="cache-table-queries-default">
+    <refmeta>
+      <refentrytitle>*CACHE-TABLE-QUERIES-DEFAULT*</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>*CACHE-TABLE-QUERIES-DEFAULT*</refname>
+      <refpurpose>Specifies the default behaviour for caching of
+      attribute types.</refpurpose>
+      <refclass>Variable</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Value Type</title>
+      <para>
+        A valid argument to the <parameter>action</parameter>
+        parameter of <function>cache-table-queries</function>,
+        i.e. one of
+        <simplelist type="inline">
+        <member>&t;</member>
+        <member>&nil;</member>
+        <member><symbol>:flush</symbol></member>
+        </simplelist>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Initial Value</title>
+      <para><symbol>nil</symbol></para>
+    </refsect1>
+    <refsect1>
+      <title>Description</title> 
+      <para> 
+        Specifies the default behaivour for caching of attribute
+        types. Meaningful values are &t;, &nil; and
+        <symbol>:flush</symbol> as described for the
+        <parameter>action</parameter> argument to
+        <function>cache-table-queries</function>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Affected By</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="cache-table-queries"><function>cache-table-queries</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>None.</para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="cache-table-queries">
+    <refmeta>
+      <refentrytitle>CACHE-TABLE-QUERIES</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>CACHE-TABLE-QUERIES</refname>
+      <refpurpose>Control the caching of table attribute types.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>cache-table-queries</function> <replaceable>table</replaceable> &amp;key <replaceable>action</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>table</parameter></term>
+          <listitem>
+            <para>
+              A string representing a database table, &t; or
+              <symbol>:default</symbol>.
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>action</parameter></term>
+          <listitem>
+            <para>
+              &t;, &nil; or <symbol>:flush</symbol>. 
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+      </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Controls the caching of attribute type information on the
+      table specified by <parameter>table</parameter> in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>action</parameter>
+      specifies the caching behaviour to adopt. If its value is &t;
+      then attribute type information is cached whereas if its value
+      is &nil; then attribute type information is not cached. If
+      <parameter>action</parameter> is <symbol>:flush</symbol> then
+      all existing type information in the cache for
+      <parameter>table</parameter> is removed, but caching is still
+      enabled. <parameter>table</parameter> may be a string
+      representing a table for which the caching action is to be taken
+      while the caching action is applied to all tables if
+      <parameter>table</parameter> is &t;. Alternatively, when
+      <parameter>table</parameter> is <symbol>:default</symbol>, the
+      default caching action specified by
+      <symbol>*cache-table-queries-default*</symbol> is applied to all
+      tables for which a caching action has not been explicitly set.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(setf *cache-table-queries-default* t)
+=> T
+(create-table [foo]
+              '(([id] integer)
+                ([height] float)
+                ([name] (string 24))
+                ([comments] varchar)))
+=> 
+(cache-table-queries "foo")
+=> 
+(list-attribute-types "foo")
+=> (("id" :INT4 4 NIL 1) ("height" :FLOAT8 8 NIL 1) ("name" :BPCHAR 24 NIL 1)
+    ("comments" :VARCHAR 255 NIL 1))
+(drop-table "foo")
+=> 
+(create-table [foo]
+              '(([id] integer)
+                ([height] float)
+                ([name] (string 36))
+                ([comments] (string 100))))
+=> 
+(cache-table-queries "foo" :action :flush)
+=> 
+(list-attribute-types "foo")
+=> (("id" :INT4 4 NIL 1) ("height" :FLOAT8 8 NIL 1) ("name" :BPCHAR 36 NIL 1)
+    ("comments" :BPCHAR 100 NIL 1))
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+       <para>
+        The internal attribute cache for
+        <parameter>database</parameter> is modified.
+       </para>
+     </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <simplelist>
+        <member><link linkend="cache-table-queries-default"><symbol>*cache-table-queries-default*</symbol></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="cache-table-queries-default"><symbol>*cache-table-queries-default*</symbol></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="insert-records">
+    <refmeta>
+      <refentrytitle>INSERT-RECORDS</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>INSERT-RECORDS</refname>
+      <refpurpose>Insert tuples of data into a database table.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>insert-records</function> &amp;key <replaceable>into</replaceable> <replaceable>attributes</replaceable> <replaceable>values</replaceable> <replaceable>av-pairs</replaceable> <replaceable>query</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>into</parameter></term>
+          <listitem>
+            <para>
+              A string, symbol or symbolic SQL expression representing
+              the name of a table existing in
+              <parameter>database</parameter>.
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>attributes</parameter></term>
+          <listitem>
+            <para>
+              A list of attribute identifiers or &nil;. 
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>values</parameter></term>
+          <listitem>
+            <para>
+              A list of attribute values or &nil;.               
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>av-pairs</parameter></term>
+          <listitem>
+            <para>
+              A list of attribute identifier/value pairs or &nil;. 
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>query</parameter></term>
+          <listitem>
+            <para>
+              A query expression or &nil;. 
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+      </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        Inserts records into the table specified by
+        <parameter>into</parameter> in <parameter>database</parameter>
+        which defaults to <symbol>*default-database*</symbol>. 
+      </para>
+      <para>
+        There are five ways of specifying the values inserted into
+        each row. In the first <parameter>values</parameter> contains
+        a list of values to insert and
+        <parameter>attributes</parameter>,
+        <parameter>av-pairs</parameter> and
+        <parameter>query</parameter> are &nil;. This can be used when
+        values are supplied for all attributes in
+        <parameter>into</parameter>. In the second,
+        <parameter>attributes</parameter> is a list of column names,
+        <parameter>values</parameter> is a corresponding list of
+        values and <parameter>av-pairs</parameter> and
+        <parameter>query</parameter> are &nil;. In the third,
+        <parameter>attributes</parameter>,
+        <parameter>values</parameter> and <parameter>query</parameter>
+        are &nil; and <parameter>av-pairs</parameter> is an alist of
+        (attribute value) pairs. In the fourth,
+        <parameter>values</parameter>, <parameter>av-pairs</parameter>
+        and <parameter>attributes</parameter> are &nil; and
+        <parameter>query</parameter> is a symbolic SQL query
+        expression in which the selected columns also exist in
+        <parameter>into</parameter>. In the fifth method,
+        <parameter>values</parameter> and
+        <parameter>av-pairs</parameter> are nil and
+        <parameter>attributes</parameter> is a list of column names
+        and <parameter>query</parameter> is a symbolic SQL query
+        expression which returns values for the specified columns.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(select [first-name] [last-name] [email] 
+        :from [employee]
+        :where [= [emplid] 11] 
+        :field-names nil)
+=> NIL
+(insert-records :into [employee] 
+                :attributes '(emplid groupid first_name last_name email 
+                              ecompanyid managerid)
+                :values '(11 1 "Yuri" "Gagarin" "gagarin@soviet.org" 
+                          1 1))
+=> 
+(select [first-name] [last-name] [email] 
+        :from [employee]
+        :where [= [emplid] 11] 
+        :field-names nil)
+=> (("Yuri" "Gagarin" "gagarin@soviet.org"))
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Modifications are made to the underlying database. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error of type <symbol>sql-database-data-error</symbol> is
+        signalled if <parameter>table</parameter> is not an existing
+        table in <parameter>database</parameter> or if the specified
+        attributes are not found. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="update-records"><function>update-records</function></link></member>
+        <member><link linkend="delete-records"><function>delete-records</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="update-records">
+    <refmeta>
+      <refentrytitle>UPDATE-RECORDS</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>UPDATE-RECORDS</refname>
+      <refpurpose>Updates the values of existing records.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>update-records</function> <replaceable>table</replaceable> &amp;key  <replaceable>attributes</replaceable> <replaceable>values</replaceable> <replaceable>av-pairs</replaceable> <replaceable>where</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>table</parameter></term>
+          <listitem>
+            <para>
+              A string, symbol or symbolic SQL expression representing
+              the name of a table existing in
+              <parameter>database</parameter>.
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>attributes</parameter></term>
+          <listitem>
+            <para>
+              A list of attribute identifiers or &nil;. 
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>values</parameter></term>
+          <listitem>
+            <para>
+              A list of attribute values or &nil;.               
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>av-pairs</parameter></term>
+          <listitem>
+            <para>
+              A list of attribute identifier/value pairs or &nil;. 
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>where</parameter></term>
+          <listitem>
+            <para>
+              A symbolic SQL expression. 
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+      </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        Updates the attribute values of existing records satsifying
+        the SQL expression <parameter>where</parameter> in the table
+        specified by <parameter>table</parameter> in
+        <parameter>database</parameter> which defaults to
+        <symbol>*default-database*</symbol>.
+      </para>
+      <para> 
+        There are three ways of specifying the values to update for
+        each row. In the first, <parameter>values</parameter> contains
+        a list of values to use in the update and
+        <parameter>attributes</parameter> and
+        <parameter>av-pairs</parameter> are &nil;. This can be used
+        when values are supplied for all attributes in
+        <parameter>table</parameter>. In the second,
+        <parameter>attributes</parameter> is a list of column names,
+        <parameter>values</parameter> is a corresponding list of
+        values and <parameter>av-pairs</parameter> is &nil;. In the
+        third, <parameter>attributes</parameter> and
+        <parameter>values</parameter> are &nil; and
+        <parameter>av-pairs</parameter> is an alist of (attribute
+        value) pairs.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(select [first-name] [last-name] [email] 
+        :from [employee]
+        :where [= [emplid] 1] 
+        :field-names nil)
+=> (("Vladimir" "Lenin" "lenin@soviet.org"))
+(update-records [employee] 
+                :av-pairs'((first_name "Yuri")
+                           (last_name "Gagarin")
+                           (email "gagarin@soviet.org"))
+                :where [= [emplid] 1])
+=> 
+(select [first-name] [last-name] [email] 
+        :from [employee]
+        :where [= [emplid] 1] 
+        :field-names nil)
+=> (("Yuri" "Gagarin" "gagarin@soviet.org"))
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Modifications are made to the underlying database. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error of type <symbol>sql-database-data-error</symbol> is
+        signalled if <parameter>table</parameter> is not an existing
+        table in <parameter>database</parameter>, if the specified
+        attributes are not found or if the SQL statement resulting
+        from the symbolic expression <parameter>where</parameter> does
+        not return a Boolean value.
+      </para>
+      <para>If the execution of the SQL query leads to any errors, an
+      error of type <errortype>sql-database-error</errortype> is
+      signalled.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <para>
+        <simplelist>
+          <member><link linkend="insert-records"><function>insert-records</function></link></member>
+          <member><link linkend="delete-records"><function>delete-records</function></link></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="delete-records">
+    <refmeta>
+      <refentrytitle>DELETE-RECORDS</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>DELETE-RECORDS</refname>
+      <refpurpose>Delete records from a database table.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>delete-records</function> &amp;key <replaceable>from</replaceable> <replaceable>where</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>from</parameter></term>
+          <listitem>
+            <para>
+              A string, symbol or symbolic SQL expression representing
+              the name of a table existing in
+              <parameter>database</parameter>.
+            </para> 
+          </listitem>
+        </varlistentry>
+                <varlistentry>
+          <term><parameter>where</parameter></term>
+          <listitem>
+            <para>
+              A symbolic SQL expression. 
+            </para> 
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Deletes records satisfying the SQL expression
+      <parameter>where</parameter> from the table specified by
+      <parameter>from</parameter> in <parameter>database</parameter>
+      specifies a database which defaults to
+      <symbol>*default-database*</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(select [first-name] [last-name] [email] 
+        :from [employee]
+        :where [= [emplid] 11] 
+        :field-names nil)
+=> (("Yuri" "Gagarin" "gagarin@soviet.org"))
+(delete-records :from [employee] :where [= [emplid] 11])
+=> 
+(select [first-name] [last-name] [email] 
+        :from [employee]
+        :where [= [emplid] 11] 
+        :field-names nil)
+=> NIL
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Modifications are made to the underlying database. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error of type <symbol>sql-database-data-error</symbol> is
+        signalled if <parameter>from</parameter> is not an existing
+        table in <parameter>database</parameter> or if the SQL
+        statement resulting from the symbolic expression
+        <parameter>where</parameter> does not return a Boolean value. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <para>
+        <simplelist>
+          <member><link linkend="insert-records"><function>insert-records</function></link></member>
+          <member><link linkend="update-records"><function>update-records</function></link></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+
+  <!-- executing SQL commands and queries --> 
+
+  <refentry id="execute-command">
+    <refmeta>
+      <refentrytitle>EXECUTE-COMMAND</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>EXECUTE-COMMAND</refname>
+      <refpurpose>Execute an SQL command which returns no values.</refpurpose>
+      <refclass>Generic Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>execute-command</function> <replaceable>sql-expression</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>sql-expression</parameter></term>
+          <listitem>
+            <para>An <glossterm linkend="gloss-sql-expression">sql
+            expression</glossterm> that represents an SQL
+            statement which will return no values.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+      </varlistentry></variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Executes the SQL command
+      <parameter>sql-expression</parameter>, which may be a symbolic
+      SQL expression or a string representing any SQL statement apart
+      from a query, on the supplied <parameter>database</parameter>
+      which defaults to <symbol>*default-database*</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+        (execute-command "create table eventlog (time char(30),event char(70))")
+        => 
+
+        (execute-command "create table eventlog (time char(30),event char(70))")
+        >> 
+        >> While accessing database #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {480B2B6D}>
+        >>   with expression "create table eventlog (time char(30),event char(70))":
+        >>   Error NIL: ERROR:  amcreate: eventlog relation already exists
+        >>   has occurred.
+        >> 
+        >> Restarts:
+        >>   0: [ABORT] Return to Top-Level.
+        >> 
+        >> Debug  (type H for help)
+        >> 
+        >> (CLSQL-POSTGRESQL::|(PCL::FAST-METHOD DATABASE-EXECUTE-COMMAND (T POSTGRESQL-DATABASE))|
+        >>  #&lt;unused-arg>
+        >>  #&lt;unused-arg>
+        >>  #&lt;unavailable-arg>
+        >>  #&lt;unavailable-arg>)
+        >> Source: (ERROR 'SQL-DATABASE-ERROR :DATABASE DATABASE :EXPRESSION ...)
+        >> 0] 0
+
+        (execute-command "drop table eventlog")
+        => 
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>Whatever effects the execution of the SQL statement has
+      on the underlying database, if any.</para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>If the execution of the SQL statement leads to any errors,
+      an error of type <errortype>sql-database-error</errortype> is
+      signalled.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <para>
+        <simplelist>
+          <member><link linkend="query"><function>query</function></link></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>None.</para>
+    </refsect1>
+  </refentry>
+
+
+  <refentry id="query">
+    <refmeta>
+      <refentrytitle>QUERY</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>QUERY</refname>
+      <refpurpose>Execute an SQL query and return the tuples as a 
+      list.</refpurpose>
+      <refclass>Generic Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>query</function> <replaceable>query-expression</replaceable> &amp;key <replaceable>database</replaceable> <replaceable>result-types</replaceable> <replaceable>flatp</replaceable> <replaceable>field-names</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>query-expression</parameter></term>
+          <listitem>
+            <para>An <glossterm linkend="gloss-sql-expression">sql
+            expression</glossterm> that represents an SQL
+            query which is expected to return a (possibly empty)
+            result set.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>flatp</parameter></term>
+          <listitem>
+            <para>A Boolean whose default value is &nil;.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>result-types</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-field-types">field type
+            specifier</glossterm>. The default is <symbol>:auto</symbol>;.
+            </para>
+            <para>
+              The purpose of this argument is cause &clsql; to
+              import SQL numeric fields into numeric Lisp objects
+              rather than strings. This reduces the cost of
+              allocating a temporary string and the &clsql; users'
+              inconvenience of converting number strings into number
+              objects.
+            </para>
+            <para>
+              A value of <symbol>:auto</symbol> causes &clsql;
+              to automatically convert SQL fields into a
+              numeric format where applicable. The default value of
+              &nil; causes all fields to be returned as strings
+              regardless of the SQL type. Otherwise a list is expected
+              which has a element for each field that specifies the
+              conversion. Valid type identifiers are: 
+              <simplelist type="vert">
+                <member><symbol>:int</symbol> Field is imported as a
+                signed integer, from 8-bits to 64-bits depending
+                upon the field type.
+                </member>
+                <member><symbol>:double</symbol> Field is imported as a
+                double-float number.
+                </member>
+                <member><symbol>t</symbol> Field is imported as a
+                string.
+                </member>
+              </simplelist>
+              If the list is shorter than the number of fields, the a
+              value of <symbol>t</symbol> is assumed for the field.
+              If the list is longer than the number of fields, the
+              extra elements are ignored.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>field-names</parameter></term>
+          <listitem> 
+          <para>
+            A boolean with a default value of &t;. When &t;, this
+            function returns a second value of a list of field
+            names. When &nil;, this function only returns one value -
+            the list of rows.
+          </para>
+          </listitem>
+        </varlistentry>        
+        <varlistentry>
+          <term><returnvalue>result</returnvalue></term>
+          <listitem>
+            <para>A list representing the result set obtained.  For
+            each tuple in the result set, there is an element in
+            this list, which is itself a list of all the attribute 
+            values in the tuple.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        Executes the SQL query expression
+        <parameter>query-expression</parameter>, which may be an SQL
+        expression or a string, on the supplied
+        <parameter>database</parameter> which defaults to
+        <symbol>*default-database*</symbol>. <parameter>result-types</parameter>
+        is a list of symbols which specifies the lisp type for each
+        field returned by <parameter>query-expression</parameter>.
+      </para>
+      <para> 
+        If <parameter>result-types</parameter> is &nil; all results
+        are returned as strings whereas the default value of
+        <symbol>:auto</symbol> means that the lisp types are
+        automatically computed for each field.
+      </para> 
+      <para> 
+        <parameter>field-names</parameter> is &t; by default which
+        means that the second value returned is a list of strings
+        representing the columns selected by
+        <parameter>query-expression</parameter>. If
+        <parameter>field-names</parameter> is &nil;, the list of column
+        names is not returned as a second value.
+      </para>
+      <para> 
+        <parameter>flatp</parameter> has a default value of &nil;
+        which means that the results are returned as a list of
+        lists.If FLATP is &t; and only one result is returned for each
+        record selected by <parameter>query-expression</parameter>,
+        the results are returned as elements of a list.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(query "select emplid,first_name,last_name,height from employee where emplid = 1")
+=> ((1 "Vladimir" "Lenin" 1.5564661d0)), 
+   ("emplid" "first_name" "last_name" "height")
+
+(query "select emplid,first_name,last_name,height from employee where emplid = 1" 
+       :field-names nil)
+=> ((1 "Vladimir" "Lenin" 1.5564661d0))
+
+(query "select emplid,first_name,last_name,height from employee where emplid = 1" 
+       :field-names nil
+       :result-types nil)
+=> (("1" "Vladimir" "Lenin" "1.5564661"))
+
+(query "select emplid,first_name,last_name,height from employee where emplid = 1" 
+       :field-names nil
+       :result-types '(:int t t :double))
+=> ((1 "Vladimir" "Lenin" 1.5564661))
+
+(query "select last_name from employee where emplid > 5" :flatp t)
+=> ("Andropov" "Chernenko" "Gorbachev" "Yeltsin" "Putin"), 
+   ("last_name")
+
+(query "select last_name from employee where emplid > 10" 
+       :flatp t 
+       :field-names nil)
+=> NIL
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>Whatever effects the execution of the SQL query has
+      on the underlying database, if any.</para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>If the execution of the SQL query leads to any errors, an
+      error of type <errortype>sql-database-error</errortype> is
+      signalled.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="execute-command"><function>execute-command</function></link></member>
+        <member><link linkend="print-query"><function>print-query</function></link></member>
+        <member><link linkend="do-query"><function>do-query</function></link></member>
+        <member><link linkend="map-query"><function>map-query</function></link></member>
+        <member><link linkend="loop-tuples"><function>loop</function></link></member>
+        <member><link linkend="select"><function>select</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>The <parameter>field-names</parameter> and
+      <parameter>result-types</parameter> keyword arguments are a
+      &clsql; extension.</para>
+    </refsect1>
+  </refentry>
+  
+  <refentry id="print-query">
+    <refmeta>
+      <refentrytitle>PRINT-QUERY</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>PRINT-QUERY</refname>
+      <refpurpose>Prints a tabular report of query results.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>print-query</function> <replaceable>query-expression</replaceable> &amp;key <replaceable>titles</replaceable> <replaceable>formats</replaceable> <replaceable>sizes</replaceable> <replaceable>stream</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>query-expression</parameter></term>
+          <listitem>
+            <para>An <glossterm linkend="gloss-sql-expression">sql
+            expression</glossterm> that represents an SQL
+            query which is expected to return a (possibly empty)
+            result set.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>titles</parameter></term>
+          <listitem>
+            <para>
+              A list of strings or &nil; which is the default value. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>formats</parameter></term>
+          <listitem>
+            <para>
+              A list of strings, &nil; or &t; which is the default value.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>sizes</parameter></term>
+          <listitem>
+            <para>
+              A list of numbers, &nil; or &t; which is the default value. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>stream</parameter></term>
+          <listitem>
+            <para>
+              An output stream or &t; which is the default value. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Prints a tabular report of the results returned by the SQL
+      query <parameter>query-expression</parameter>, which may be a
+      symbolic SQL expression or a string, in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. The report is printed onto
+      <parameter>stream</parameter> which has a default value of &t;
+      which means that <symbol>*standard-output*</symbol> is used. The
+      <parameter>title</parameter> argument, which defaults to &nil;,
+      allows the specification of a list of strings to use as column
+      titles in the tabular output. <parameter>sizes</parameter>
+      accepts a list of column sizes, one for each column selected by
+      <parameter>query-expression</parameter>, to use in formatting
+      the tabular report. The default value of &t; means that minimum
+      sizes are computed. <parameter>formats</parameter> is a list of
+      format strings to be used for printing each column selected by
+      <parameter>query-expression</parameter>. The default value of
+      <parameter>formats</parameter> is &t; meaning that
+      <symbol>~A</symbol> is used to format all columns or
+      <symbol>~VA</symbol> if column sizes are used.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(print-query [select [emplid] [first-name] [last-name] [email] 
+                     :from [employee] 
+                     :where [&lt; [emplid] 5]] 
+              :titles '("ID" "FORENAME" "SURNAME" "EMAIL"))
+ID FORENAME SURNAME  EMAIL               
+1  Vladimir Lenin    lenin@soviet.org    
+2  Josef    Stalin   stalin@soviet.org   
+3  Leon     Trotsky  trotsky@soviet.org  
+4  Nikita   Kruschev kruschev@soviet.org 
+=> 
+
+(print-query "select emplid,first_name,last_name,email from employee where emplid >= 5" 
+             :titles '("ID" "FORENAME" "SURNAME" "EMAIL"))
+ID FORENAME   SURNAME   EMAIL                
+5  Leonid     Brezhnev  brezhnev@soviet.org  
+6  Yuri       Andropov  andropov@soviet.org  
+7  Konstantin Chernenko chernenko@soviet.org 
+8  Mikhail    Gorbachev gorbachev@soviet.org 
+9  Boris      Yeltsin   yeltsin@soviet.org   
+10 Vladimir   Putin     putin@soviet.org     
+=> 
+</screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        If the execution of the SQL query leads to any errors, an
+        error of type <errortype>sql-database-error</errortype> is
+        signalled.  
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="query"><function>query</function></link></member>
+        <member><link linkend="do-query"><function>do-query</function></link></member>
+        <member><link linkend="map-query"><function>map-query</function></link></member>
+        <member><link linkend="loop-tuples"><function>loop</function></link></member>
+        <member><link linkend="select"><function>select</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="select">
+    <refmeta>
+      <refentrytitle>SELECT</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SELECT</refname>
+      <refpurpose>Executes a query given the supplied constraints.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>select</function> &amp;rest <replaceable>identifiers</replaceable> &amp;key <replaceable>all</replaceable> <replaceable>distinct</replaceable> <replaceable>from</replaceable> <replaceable>group-by</replaceable> <replaceable>having</replaceable> <replaceable>limit</replaceable> <replaceable>offset</replaceable> <replaceable>order-by</replaceable> <replaceable>set-operation</replaceable> <replaceable>where</replaceable> <replaceable>result-types</replaceable> <replaceable>field-names</replaceable> <replaceable>flatp</replaceable> <replaceable>refresh</replaceable> <replaceable>caching</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>identifiers</parameter></term>
+          <listitem>
+            <para>
+              A set of <glossterm linkend="gloss-sql-expression">sql
+              expressions</glossterm> each of which indicates a column
+              to query.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>all</parameter></term>
+          <listitem>
+            <para>
+              A Boolean. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>distinct</parameter></term>
+          <listitem>
+            <para>
+              A Boolean. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>from</parameter></term>
+          <listitem>
+            <para>
+              One or more SQL expression representing tables.  
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>group-by</parameter></term>
+          <listitem>
+            <para>
+              An SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>having</parameter></term>
+          <listitem>
+            <para>
+              An SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>limit</parameter></term>
+          <listitem>
+            <para>
+              A non-negative integer. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>offset</parameter></term>
+          <listitem>
+            <para>
+              A non-negative integer. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>order-by</parameter></term>
+          <listitem>
+            <para>
+              An SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>set-operation</parameter></term>
+          <listitem>
+            <para>
+              An SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>where</parameter></term>
+          <listitem>
+            <para>
+              An SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>flatp</parameter></term>
+          <listitem>
+            <para>A Boolean whose default value is &nil;.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>result-types</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-field-types">field type
+            specifier</glossterm>. The default is <symbol>:auto</symbol>.
+            </para>
+            <para>
+              The purpose of this argument is cause &clsql; to
+              import SQL numeric fields into numeric Lisp objects
+              rather than strings. This reduces the cost of
+              allocating a temporary string and the &clsql; users'
+              inconvenience of converting number strings into number
+              objects.
+            </para>
+            <para>
+              A value of <symbol>:auto</symbol> causes &clsql;
+              to automatically convert SQL fields into a
+              numeric format where applicable. The default value of
+              &nil; causes all fields to be returned as strings
+              regardless of the SQL type. Otherwise a list is expected
+              which has a element for each field that specifies the
+              conversion. Valid type identifiers are: 
+              <simplelist type="vert">
+                <member><symbol>:int</symbol> Field is imported as a
+                signed integer, from 8-bits to 64-bits depending
+                upon the field type.
+                </member>
+                <member><symbol>:double</symbol> Field is imported as a
+                double-float number.
+                </member>
+                <member><symbol>t</symbol> Field is imported as a
+                string.
+                </member>
+              </simplelist>
+              If the list is shorter than the number of fields, the a
+              value of <symbol>t</symbol> is assumed for the field.
+              If the list is longer than the number of fields, the
+              extra elements are ignored.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>field-names</parameter></term>
+          <listitem> 
+          <para>
+            A boolean with a default value of &t;. When &t;, this
+            function returns a second value of a list of field
+            names. When &nil;, this function only returns one value -
+            the list of rows.
+          </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>refresh</parameter></term>
+          <listitem> 
+          <para>
+            This value is only considered when CLOS objects are being
+            selected. A boolean with a default value of &nil;. When
+            the value of the <varname>caching</varname> keyword is
+            &t;, a second equivalent <function>select</function> call
+            will return the same view class instance objects. When
+            <varname>refresh</varname> is &t;, then slots of the
+            existing instances are updated as necessary. In such
+            cases, you may wish to override the hook
+            <function>instance-refresh</function>.
+          </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>caching</parameter></term>
+          <listitem> 
+          <para>
+            This value is only considered when CLOS objects are being
+            selected.  A boolean with a default value of
+            <varname>*default-caching*</varname>. &clsql; caches
+            objects in accordance with the &commonsql; interface: a
+            second equivalent <function>select</function> call will
+            return the same view class instance objects.
+          </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A list representing the result set obtained.  For each
+              tuple in the result set, there is an element in this
+              list, which is itself a list of all the attribute values
+              in the tuple.
+            </para>
+          </listitem>
+        </varlistentry>        
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        Executes a query on <parameter>database</parameter>, which has
+        a default value of <symbol>*default-database*</symbol>,
+        specified by the SQL expressions supplied using the remaining
+        arguments in <parameter>args</parameter>. The
+        <function>select</function> function can be used to generate
+        queries in both functional and object oriented contexts.
+      </para>
+      <para> 
+        In the functional case, the required arguments specify the
+        columns selected by the query and may be symbolic SQL
+        expressions or strings representing attribute
+        identifiers. Type modified identifiers indicate that the
+        values selected from the specified column are converted to the
+        specified lisp type. The keyword arguments
+        <parameter>all</parameter>, <parameter>distinct</parameter>,
+        <parameter>from</parameter>, <parameter>group-by</parameter>,
+        <parameter>having</parameter>, <parameter>limit</parameter>, 
+        <parameter>offset</parameter>, <parameter>order-by</parameter>,
+        <parameter>set-operation</parameter> and
+        <parameter>where</parameter> are used to specify, using the
+        symbolic SQL syntax, the corresponding components of the SQL
+        query generated by the call to
+        <function>select</function>. 
+      </para>
+      <para> 
+        <parameter>result-types</parameter> is a list of symbols which
+        specifies the lisp type for each field returned by the
+        query. If <parameter>result-types</parameter> is &nil; all
+        results are returned as strings whereas the default value of
+        <symbol>:auto</symbol> means that the lisp types are
+        automatically computed for each
+        field. <parameter>field-names</parameter> is &t; by default
+        which means that the second value returned is a list of
+        strings representing the columns selected by the query. If
+        <parameter>field-names</parameter> is &nil;, the list of
+        column names is not returned as a second value.
+      </para>
+      <para>
+        In the object oriented case, the required arguments to
+        <function>select</function> are symbols denoting View Classes
+        which specify the database tables to query. In this case,
+        <function>select</function> returns a list of View Class
+        instances whose slots are set from the attribute values of the
+        records in the specified table. <symbol>Slot-value</symbol> is
+        a legal operator which can be employed as part of the symbolic
+        SQL syntax used in the <parameter>where</parameter> keyword
+        argument to <function>select</function>.
+        <parameter>refresh</parameter> is &nil; by default which means
+        that the View Class instances returned are retrieved from a
+        cache if an equivalent call to <function>select</function> has
+        previously been issued. If <parameter>refresh</parameter> is
+        true, the View Class instances returned are updated as
+        necessary from the database and the generic function
+        <function>instance-refreshed</function> is called to perform
+        any necessary operations on the updated instances.
+      </para>
+      <para> 
+        In both object oriented and functional contexts,
+        <parameter>flatp</parameter> has a default value of &nil;
+        which means that the results are returned as a list of
+        lists. If <parameter>flatp</parameter> is t and only one
+        result is returned for each record selected in the query, the
+        results are returned as elements of a list.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(select [first-name] :from [employee] :flatp t :distinct t
+                     :field-names nil 
+                     :result-types nil 
+                     :order-by [first-name])
+=> ("Boris" "Josef" "Konstantin" "Leon" "Leonid" "Mikhail" "Nikita" "Vladimir"
+    "Yuri")
+
+(select [first-name] [count [*]] :from [employee]
+	                         :result-types nil 
+			         :group-by [first-name]
+			         :order-by [first-name]
+			         :field-names nil)
+=> (("Boris" "1") ("Josef" "1") ("Konstantin" "1") ("Leon" "1") ("Leonid" "1")
+    ("Mikhail" "1") ("Nikita" "1") ("Vladimir" "2") ("Yuri" "1"))
+
+(select [last-name] :from [employee] 
+                    :where [like [email] "%org"]
+		    :order-by [last-name]
+		    :field-names nil 
+		    :result-types nil 
+		    :flatp t)
+=> ("Andropov" "Brezhnev" "Chernenko" "Gorbachev" "Kruschev" "Lenin" "Putin"
+    "Stalin" "Trotsky" "Yeltsin")
+
+(select [max [emplid]] :from [employee] 
+                       :flatp t 
+	               :field-names nil 
+                       :result-types :auto)
+=> (10)
+
+(select [avg [height]] :from [employee] :flatp t :field-names nil)
+=> (1.58999584d0)
+
+(select [emplid] [last-name] :from [employee] :where [= [emplid] 1]) 
+=> ((1 "Lenin")), 
+   ("emplid" "last_name")
+
+(select [emplid :string] :from [employee] 
+                         :where [= 1 [emplid]] 
+                         :field-names nil 
+                         :flatp t)
+=> ("1")
+
+(select [emplid] :from [employee] :order-by [emplid] 
+                 :where [not [between [* [emplid] 10] [* 5 10] [* 10 10]]]
+                 :field-names nil 
+                 :flatp t)
+=> (1 2 3 4)
+
+(select [emplid] :from [employee] 
+        :where [in [emplid] '(1 2 3 4)]
+        :flatp t 
+        :order-by [emplid] 
+        :field-names nil)
+=> (1 2 3 4)
+
+(select [emplid] :from [employee] 
+        :order-by [emplid]
+        :limit 5 
+        :offset 3
+        :field-names nil
+        :flatp t)
+=> (4 5 6 7 8)
+
+(select [first-name] [last-name] :from [employee] 
+        :field-names nil 
+        :order-by '(([first-name] :asc) ([last-name] :desc)))
+=> (("Boris" "Yeltsin") ("Josef" "Stalin") ("Konstantin" "Chernenko")
+    ("Leon" "Trotsky") ("Leonid" "Brezhnev") ("Mikhail" "Gorbachev")
+    ("Nikita" "Kruschev") ("Vladimir" "Putin") ("Vladimir" "Lenin")
+    ("Yuri" "Andropov"))
+
+(select [last-name] :from [employee]                   
+                 :set-operation [union [select [first-name] :from [employee]
+                                               :order-by [last-name]]]
+                 :flatp t
+                 :result-types nil 
+                 :field-names nil)
+=> ("Andropov" "Boris" "Brezhnev" "Chernenko" "Gorbachev" "Josef" "Konstantin"
+    "Kruschev" "Lenin" "Leon" "Leonid" "Mikhail" "Nikita" "Putin" "Stalin"
+    "Trotsky" "Vladimir" "Yeltsin" "Yuri")
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+        <para>Whatever effects the execution of the SQL query has on
+        the underlying database, if any.</para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        If the execution of the SQL query leads to any errors, an
+        error of type <errortype>sql-database-error</errortype> is
+        signalled.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="query"><function>query</function></link></member>
+        <member><link linkend="print-query"><function>print-query</function></link></member>
+        <member><link linkend="do-query"><function>do-query</function></link></member>
+        <member><link linkend="map-query"><function>map-query</function></link></member>
+        <member><link linkend="loop-tuples"><function>loop</function></link></member>
+        <member><link linkend="instance-refreshed"><function>instance-refreshed</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para> 
+        The <function>select</function> function is actually
+        implemented in &clsql; with a single
+        <symbol>&amp;rest</symbol> parameter (which is subsequently
+        destructured) rather than the keyword parameters presented
+        here for the purposes of exposition. This means that incorrect
+        or missing keywords or values may not trigger errors in the
+        way that they would if <function>select</function> had been
+        defined using keyword arguments.
+      </para>
+      <para>
+        The <parameter>field-names</parameter> and
+        <parameter>result-types</parameter> keyword arguments are a
+        &clsql; extension.
+      </para>
+      <para> 
+        <parameter>select</parameter> is common across the functional
+        and object-oriented data manipulation languages.
+      </para>
+    </refsect1>
+  </refentry>
+
+
+  <!-- iteration and mapping --> 
+
+  <refentry id="do-query">
+    <refmeta>
+      <refentrytitle>DO-QUERY</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>DO-QUERY</refname>
+      <refpurpose>Iterate over all the tuples of a query.</refpurpose>
+      <refclass>Macro</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>do-query</function> ((&amp;rest <replaceable>args</replaceable>) <replaceable>query-expression</replaceable> &amp;key <replaceable>database</replaceable> <replaceable>result-types</replaceable> &amp;body <replaceable>body</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>args</parameter></term>
+          <listitem>
+            <para>A list of variable names.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>query-expression</parameter></term>
+          <listitem>
+            <para>An <glossterm linkend="gloss-sql-expression">sql
+            expression</glossterm> that represents an SQL
+            query which is expected to return a (possibly empty)
+            result set, where each tuple has as many attributes as
+            <parameter>function</parameter> takes arguments.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to
+            <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>result-types</parameter></term>
+          <listitem>
+            <para>
+              A <glossterm linkend="gloss-field-types">field type
+              specifier</glossterm>.  The default is &nil;. See <link
+              linkend="query"><function>query</function></link> for
+              the semantics of this argument.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>body</parameter></term>
+          <listitem>
+            <para>A body of Lisp code, like in a
+            <function>destructuring-bind</function> form.</para>
+          </listitem>
+        </varlistentry>      
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>The result of executing <parameter>body</parameter>.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        Repeatedly executes <parameter>body</parameter> within a
+        binding of <parameter>args</parameter> on the fields of each
+        row selected by the SQL query
+        <parameter>query-expression</parameter>, which may be a string
+        or a symbolic SQL expression, in
+        <parameter>database</parameter> which defaults to
+        <symbol>*default-database*</symbol>.
+      </para>
+      <para>
+        The body of code is executed in a block named
+        <symbol>nil</symbol> which may be returned from prematurely
+        via <function>return</function> or
+        <function>return-from</function>.  In this case the result of
+        evaluating the <function>do-query</function> form will be the
+        one supplied to <function>return</function> or
+        <function>return-from</function>.  Otherwise the result will
+        be <symbol>nil</symbol>.
+      </para>
+      <para>
+        The body of code appears also is if wrapped in a
+        <function>destructuring-bind</function> form, thus allowing
+        declarations at the start of the body, especially those
+        pertaining to the bindings of the variables named in
+        <parameter>args</parameter>.
+      </para>
+      <para> 
+        <parameter>result-types</parameter> is a list of symbols which
+        specifies the lisp type for each field returned by
+        <parameter>query-expression</parameter>. If
+        <parameter>result-types</parameter> is &nil; all results are
+        returned as strings whereas the default value of
+        <symbol>:auto</symbol> means that the lisp types are
+        automatically computed for each field.
+      </para>
+      <para>
+        <parameter>query-expression</parameter> may be an object query
+        (i.e., the selection arguments refer to View Classes), in
+        which case <parameter>args</parameter> are bound to the tuples
+        of View Class instances returned by the object oriented query. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(do-query ((salary name) "select salary,name from simple")
+  (format t "~30A gets $~2,5$~%" name (read-from-string salary)))
+>> Mai, Pierre                    gets $10000.00
+>> Hacker, Random J.              gets $08000.50
+=> NIL
+
+(do-query ((salary name) "select salary,name from simple")
+  (return (cons salary name)))
+=> ("10000.00" . "Mai, Pierre")
+
+(let ((result '()))
+  (do-query ((name) [select [last-name] :from [employee]
+                            :order-by [last-name]])
+    (push name result))
+  result)
+=> ("Yeltsin" "Trotsky" "Stalin" "Putin" "Lenin" "Kruschev" "Gorbachev"
+    "Chernenko" "Brezhnev" "Andropov")
+
+(let ((result '()))
+  (do-query ((e) [select 'employee :order-by [last-name]])
+    (push (slot-value e 'last-name) result))
+  result)
+=> ("Yeltsin" "Trotsky" "Stalin" "Putin" "Lenin" "Kruschev" "Gorbachev"
+    "Chernenko" "Brezhnev" "Andropov")
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>Whatever effects the execution of the SQL query has
+      on the underlying database, if any.</para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>If the execution of  the SQL query leads to any
+      errors, an error of type
+      <errortype>sql-database-error</errortype> is signalled.</para>
+      <para>If the number of variable names in
+      <parameter>args</parameter> and the number of attributes in
+      the tuples in the result set don't match up, an error is
+      signalled.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="query"><function>query</function></link></member>
+        <member><link linkend="map-query"><function>map-query</function></link></member>
+        <member><link linkend="print-query"><function>print-query</function></link></member>
+        <member><link linkend="loop-tuples"><function>loop</function></link></member>
+        <member><link linkend="select"><function>select</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>The <parameter>result-types</parameter> keyword argument
+      is a &clsql; extension.</para>
+      <para> 
+        <parameter>do-query</parameter> is common across the functional
+        and object-oriented data manipulation languages.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="loop-tuples">
+    <refmeta>
+      <refentrytitle>LOOP</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>LOOP</refname>
+      <refpurpose>Extension to Common Lisp
+      <computeroutput>Loop</computeroutput> to iterate over all the
+      tuples of a query via a loop clause.</refpurpose>
+      <refclass>Loop Clause</refclass>
+    </refnamediv>
+    <!-- refsect1>
+      <title>Compatibility</title>
+      <caution><para><function>loop-for-as-tuples</function> only works with &cmucl;.</para></caution>
+    </refsect1 -->
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>{as | for} <replaceable>var</replaceable> [<replaceable>type-spec</replaceable>] being {each | the} {record | records | tuple | tuples} {in | of} <replaceable>query</replaceable> [from <replaceable>database</replaceable>]</synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>var</parameter></term>
+          <listitem>
+            <para>A <literal>d-var-spec</literal>, as defined in the
+            grammar for <function>loop</function>-clauses in the ANSI
+            Standard for Common Lisp.  This allows for the usual
+            loop-style destructuring.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>type-spec</parameter></term>
+          <listitem>
+            <para>An optional <literal>type-spec</literal> either
+            simple or destructured, as defined in the grammar for
+            <function>loop</function>-clauses in the ANSI Standard for
+            Common Lisp.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>query</parameter></term>
+          <listitem>
+            <para>An <glossterm linkend="gloss-sql-expression">sql
+            expression</glossterm> that represents an SQL
+            query which is expected to return a (possibly empty)
+            result set, where each tuple has as many attributes as
+            <parameter>function</parameter> takes arguments.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>An optional
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>This clause is an iteration driver for
+      <function>loop</function>, that binds the given variable
+      (possibly destructured) to the consecutive tuples (which are
+      represented as lists of attribute values) in the result set
+      returned by executing the SQL <parameter>query</parameter>
+      expression on the <parameter>database</parameter>
+      specified.</para>
+      <para>
+        <parameter>query</parameter> may be an object query (i.e., the
+        selection arguments refer to View Classes), in which case the
+        supplied variable is bound to the tuples of View Class
+        instances returned by the object oriented query.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(defvar *my-db* (connect '("dent" "newesim" "dent" "dent"))
+"My database"
+=> *MY-DB*
+(loop with time-graph = (make-hash-table :test #'equal)
+   with event-graph = (make-hash-table :test #'equal)
+   for (time event) being the tuples of "select time,event from log"
+   from *my-db*
+   do
+     (incf (gethash time time-graph 0))
+     (incf (gethash event event-graph 0))
+   finally
+     (flet ((show-graph (k v) (format t "~40A => ~5D~%" k v)))
+       (format t "~&amp;Time-Graph:~%===========~%")
+       (maphash #'show-graph time-graph)
+       (format t "~&amp;~%Event-Graph:~%============~%")
+       (maphash #'show-graph event-graph))
+     (return (values time-graph event-graph)))
+>> Time-Graph:
+>> ===========
+>> D                                        => 53000
+>> X                                        =>     3
+>> test-me                                  =>  3000
+>> 
+>> Event-Graph:
+>> ============
+>> CLOS Benchmark entry.                    =>  9000
+>> Demo Text...                             =>     3
+>> doit-text                                =>  3000
+>> C    Benchmark entry.                    => 12000
+>> CLOS Benchmark entry                     => 32000
+=> #&lt;EQUAL hash table, 3 entries {48350A1D}>
+=> #&lt;EQUAL hash table, 5 entries {48350FCD}>
+
+(loop for (forename surname)
+      being each tuple in
+        [select [first-name] [last-name] :from [employee] 
+                :order-by [last-name]]
+      collect (concatenate 'string forename " " surname))
+=> ("Yuri Andropov" "Leonid Brezhnev" "Konstantin Chernenko" "Mikhail Gorbachev"
+    "Nikita Kruschev" "Vladimir Lenin" "Vladimir Putin" "Josef Stalin"
+    "Leon Trotsky" "Boris Yeltsin")
+
+(loop for (e) being the records in 
+     [select 'employee :where [&lt; [emplid] 4] :order-by [emplid]]
+  collect (slot-value e 'last-name))
+=> ("Lenin" "Stalin" "Trotsky")
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>Whatever effects the execution of the SQL query has
+      on the underlying database, if any.</para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>If the execution of  the SQL query leads to any
+      errors, an error of type
+      <errortype>sql-database-error</errortype> is signalled.</para>
+      <para>Otherwise, any of the exceptional situations of
+      <function>loop</function> applies.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <para>
+        <simplelist>
+          <member><link linkend="query"><function>query</function></link></member>
+          <member><link linkend="map-query"><function>map-query</function></link></member>
+          <member><link linkend="do-query"><function>do-query</function></link></member>
+        <member><link linkend="print-query"><function>print-query</function></link></member>
+        <member><link linkend="select"><function>select</function></link></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>The <parameter>database</parameter> loop keyword is a
+      &clsql; extension.</para>
+      <para> 
+        The extended <function>loop</function> syntax is common across
+        the functional and object-oriented data manipulation
+        languages.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="map-query">
+    <refmeta>
+      <refentrytitle>MAP-QUERY</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>MAP-QUERY</refname>
+      <refpurpose>Map a function over all the tuples from a
+      query</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis><function>map-query</function> <replaceable>output-type-spec</replaceable> <replaceable>function</replaceable> <replaceable>query-expression</replaceable> &amp;key <replaceable>database</replaceable> <replaceable>result-types</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>output-type-spec</parameter></term>
+          <listitem>
+            <para>A sequence type specifier or <symbol>nil</symbol>.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>function</parameter></term>
+          <listitem>
+            <para>A function designator.
+            <parameter>function</parameter> takes a single argument which
+            is the atom value for a query single with a single column
+            or is a list of values for a multi-column query.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>query-expression</parameter></term>
+          <listitem>
+            <para>An <glossterm linkend="gloss-sql-expression">sql
+            expression</glossterm> that represents an SQL
+            query which is expected to return a (possibly empty)
+            result set.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>result-types</parameter></term>
+          <listitem>
+            <para>
+              A <glossterm linkend="gloss-field-types">field type
+              specifier</glossterm>.  The default is &nil;. See <link
+              linkend="query"><function>query</function></link> for
+              the semantics of this argument.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><returnvalue>result</returnvalue></term>
+          <listitem>
+            <para>If <parameter>output-type-spec</parameter> is a
+            type specifier other than <symbol>nil</symbol>, then a 
+            sequence of the type it denotes.  Otherwise
+            <symbol>nil</symbol> is returned.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        Applies <parameter>function</parameter> to the successive
+        tuples in the result set returned by executing the SQL
+        <parameter>query-expression</parameter>.  If the
+        <parameter>output-type-spec</parameter> is
+        <symbol>nil</symbol>, then the result of each application of
+        <parameter>function</parameter> is discarded, and
+        <function>map-query</function> returns <symbol>nil</symbol>.
+        Otherwise the result of each successive application of
+        <parameter>function</parameter> is collected in a sequence of
+        type <parameter>output-type-spec</parameter>, where the jths
+        element is the result of applying
+        <parameter>function</parameter> to the attributes of the jths
+        tuple in the result set.  The collected sequence is the result
+        of the call to <function>map-query</function>.
+      </para>
+      <para>
+        If the <parameter>output-type-spec</parameter> is a subtype of
+        <type>list</type>, the result will be a <type>list</type>.
+      </para>
+      <para>
+        If the <parameter>result-type</parameter> is a subtype of
+        <type>vector</type>, then if the implementation can determine
+        the element type specified for the
+        <parameter>result-type</parameter>, the element type of the
+        resulting array is the result of
+        <emphasis>upgrading</emphasis> that element type; or, if the
+        implementation can determine that the element type is
+        unspecified (or <symbol>*</symbol>), the element type of the
+        resulting array is <type>t</type>; otherwise, an error is
+        signaled.
+      </para>
+      <para>
+        If <parameter>result-types</parameter> is &nil; all results
+        are returned as strings whereas the default value of
+        <symbol>:auto</symbol> means that the lisp types are
+        automatically computed for each field.</para>
+      <para>
+        <parameter>query-expression</parameter> may be an object query
+        (i.e., the selection arguments refer to View Classes), in
+        which case the supplied function is applied to the tuples of
+        View Class instances returned by the object oriented query.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(map-query 'list #'(lambda (tuple) 
+                     (multiple-value-bind (salary name) tuple
+                        (declare (ignorable name))
+                        (read-from-string salary)))
+            "select salary,name from simple where salary > 8000")
+=> (10000.0 8000.5)
+
+(map-query '(vector double-float)
+           #'(lambda (tuple)
+               (multiple-value-bind (salary name) tuple
+                  (declare (ignorable name))
+                  (let ((*read-default-float-format* 'double-float))
+                    (coerce (read-from-string salary) 'double-float))
+           "select salary,name from simple where salary > 8000")))
+=> #(10000.0d0 8000.5d0)
+(type-of *)
+=> (SIMPLE-ARRAY DOUBLE-FLOAT (2))
+
+(let (list)
+  (values (map-query nil #'(lambda (tuple) 
+                             (multiple-value-bind (salary name) tuple
+                               (push (cons name (read-from-string salary)) list))
+                         "select salary,name from simple where salary > 8000"))
+          list))
+=> NIL
+=> (("Hacker, Random J." . 8000.5) ("Mai, Pierre" . 10000.0))
+
+(map-query 'vector #'identity
+           [select [last-name] :from [employee] :flatp t
+                   :order-by [last-name]])
+=> #("Andropov" "Brezhnev" "Chernenko" "Gorbachev" "Kruschev" "Lenin" "Putin"
+     "Stalin" "Trotsky" "Yeltsin")
+
+(map-query 'list #'identity
+           [select [first-name] [last-name] :from [employee] 
+                   :order-by [last-name]])
+=> (("Yuri" "Andropov") ("Leonid" "Brezhnev") ("Konstantin" "Chernenko")
+    ("Mikhail" "Gorbachev") ("Nikita" "Kruschev") ("Vladimir" "Lenin")
+    ("Vladimir" "Putin") ("Josef" "Stalin") ("Leon" "Trotsky") 
+    ("Boris" "Yeltsin"))
+
+(map-query 'list #'last-name [select 'employee :order-by [emplid]])
+=> ("Lenin" "Stalin" "Trotsky" "Kruschev" "Brezhnev" "Andropov" "Chernenko"
+    "Gorbachev" "Yeltsin" "Putin")
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>Whatever effects the execution of the SQL query has
+      on the underlying database, if any.</para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>None.</para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>If the execution of  the SQL query leads to any
+      errors, an error of type
+      <errortype>sql-database-error</errortype> is signalled.</para>
+      <para>An error of type <errortype>type-error</errortype> must
+      be signaled if the <parameter>output-type-spec</parameter> is
+      not a recognizable subtype of <type>list</type>, not a
+      recognizable subtype of <type>vector</type>, and not
+      <symbol>nil</symbol>.</para>
+      <para>An error of type <errortype>type-error</errortype>
+      should be signaled if
+      <parameter>output-type-spec</parameter> specifies the number
+      of elements and the size of the result set is different from
+      that number.</para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="query"><function>query</function></link></member>
+        <member><link linkend="do-query"><function>do-query</function></link></member>
+        <member><link linkend="print-query"><function>print-query</function></link></member>
+        <member><link linkend="loop-tuples"><function>loop</function></link></member>
+        <member><link linkend="select"><function>select</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>The <parameter>result-types</parameter> keyword argument
+      is a &clsql; extension.</para>
+      <para> 
+        <parameter>map-query</parameter> is common across the
+        functional and object-oriented data manipulation languages.
+      </para>
+    </refsect1>
+  </refentry>
+
+</reference> 
+

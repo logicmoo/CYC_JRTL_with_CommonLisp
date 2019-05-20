@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>MAP-QUERY</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fdml.html" title="Functional Data Manipulation Language (FDML)" /><link rel="prev" href="loop-tuples.html" title="LOOP" /><link rel="next" href="ref-transaction.html" title="Transaction Handling" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">MAP-QUERY</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="loop-tuples.html">Prev</a> </td><th width="60%" align="center">Functional Data Manipulation Language (FDML)</th><td width="20%" align="right"> <a accesskey="n" href="ref-transaction.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="map-query"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>MAP-QUERY — Map a function over all the tuples from a
+      query<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408295"></a><h2>Syntax</h2><pre class="synopsis"><code class="function">map-query</code> <em class="replaceable"><code>output-type-spec</code></em> <em class="replaceable"><code>function</code></em> <em class="replaceable"><code>query-expression</code></em> &amp;key <em class="replaceable"><code>database</code></em> <em class="replaceable"><code>result-types</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408329"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>output-type-spec</code></em></span></dt><dd><p>A sequence type specifier or <span class="symbol">nil</span>.</p></dd><dt><span class="term"><em class="parameter"><code>function</code></em></span></dt><dd><p>A function designator.
+            <em class="parameter"><code>function</code></em> takes a single argument which
+            is the atom value for a query single with a single column
+            or is a list of values for a multi-column query.</p></dd><dt><span class="term"><em class="parameter"><code>query-expression</code></em></span></dt><dd><p>An <a class="glossterm" href="glossary.html#gloss-sql-expression"><em class="glossterm">sql
+            expression</em></a> that represents an SQL
+            query which is expected to return a (possibly empty)
+            result set.</p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to the value
+            of <span class="symbol">*default-database*</span>.</p></dd><dt><span class="term"><em class="parameter"><code>result-types</code></em></span></dt><dd><p>
+              A <a class="glossterm" href="glossary.html#gloss-field-types"><em class="glossterm">field type
+              specifier</em></a>.  The default is <code class="constant">NIL</code>. See <a class="link" href="query.html" title="QUERY"><code class="function">query</code></a> for
+              the semantics of this argument.
+            </p></dd><dt><span class="term"><span class="returnvalue">result</span></span></dt><dd><p>If <em class="parameter"><code>output-type-spec</code></em> is a
+            type specifier other than <span class="symbol">nil</span>, then a 
+            sequence of the type it denotes.  Otherwise
+            <span class="symbol">nil</span> is returned.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408503"></a><h2>Description</h2><p>
+        Applies <em class="parameter"><code>function</code></em> to the successive
+        tuples in the result set returned by executing the SQL
+        <em class="parameter"><code>query-expression</code></em>.  If the
+        <em class="parameter"><code>output-type-spec</code></em> is
+        <span class="symbol">nil</span>, then the result of each application of
+        <em class="parameter"><code>function</code></em> is discarded, and
+        <code class="function">map-query</code> returns <span class="symbol">nil</span>.
+        Otherwise the result of each successive application of
+        <em class="parameter"><code>function</code></em> is collected in a sequence of
+        type <em class="parameter"><code>output-type-spec</code></em>, where the jths
+        element is the result of applying
+        <em class="parameter"><code>function</code></em> to the attributes of the jths
+        tuple in the result set.  The collected sequence is the result
+        of the call to <code class="function">map-query</code>.
+      </p><p>
+        If the <em class="parameter"><code>output-type-spec</code></em> is a subtype of
+        <span class="type">list</span>, the result will be a <span class="type">list</span>.
+      </p><p>
+        If the <em class="parameter"><code>result-type</code></em> is a subtype of
+        <span class="type">vector</span>, then if the implementation can determine
+        the element type specified for the
+        <em class="parameter"><code>result-type</code></em>, the element type of the
+        resulting array is the result of
+        <span class="emphasis"><em>upgrading</em></span> that element type; or, if the
+        implementation can determine that the element type is
+        unspecified (or <span class="symbol">*</span>), the element type of the
+        resulting array is <span class="type">t</span>; otherwise, an error is
+        signaled.
+      </p><p>
+        If <em class="parameter"><code>result-types</code></em> is <code class="constant">NIL</code> all results
+        are returned as strings whereas the default value of
+        <span class="symbol">:auto</span> means that the lisp types are
+        automatically computed for each field.</p><p>
+        <em class="parameter"><code>query-expression</code></em> may be an object query
+        (i.e., the selection arguments refer to View Classes), in
+        which case the supplied function is applied to the tuples of
+        View Class instances returned by the object oriented query.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408659"></a><h2>Examples</h2><pre class="screen">
+(map-query 'list #'(lambda (tuple) 
+                     (multiple-value-bind (salary name) tuple
+                        (declare (ignorable name))
+                        (read-from-string salary)))
+            "select salary,name from simple where salary &gt; 8000")
+=&gt; (10000.0 8000.5)
+
+(map-query '(vector double-float)
+           #'(lambda (tuple)
+               (multiple-value-bind (salary name) tuple
+                  (declare (ignorable name))
+                  (let ((*read-default-float-format* 'double-float))
+                    (coerce (read-from-string salary) 'double-float))
+           "select salary,name from simple where salary &gt; 8000")))
+=&gt; #(10000.0d0 8000.5d0)
+(type-of *)
+=&gt; (SIMPLE-ARRAY DOUBLE-FLOAT (2))
+
+(let (list)
+  (values (map-query nil #'(lambda (tuple) 
+                             (multiple-value-bind (salary name) tuple
+                               (push (cons name (read-from-string salary)) list))
+                         "select salary,name from simple where salary &gt; 8000"))
+          list))
+=&gt; NIL
+=&gt; (("Hacker, Random J." . 8000.5) ("Mai, Pierre" . 10000.0))
+
+(map-query 'vector #'identity
+           [select [last-name] :from [employee] :flatp t
+                   :order-by [last-name]])
+=&gt; #("Andropov" "Brezhnev" "Chernenko" "Gorbachev" "Kruschev" "Lenin" "Putin"
+     "Stalin" "Trotsky" "Yeltsin")
+
+(map-query 'list #'identity
+           [select [first-name] [last-name] :from [employee] 
+                   :order-by [last-name]])
+=&gt; (("Yuri" "Andropov") ("Leonid" "Brezhnev") ("Konstantin" "Chernenko")
+    ("Mikhail" "Gorbachev") ("Nikita" "Kruschev") ("Vladimir" "Lenin")
+    ("Vladimir" "Putin") ("Josef" "Stalin") ("Leon" "Trotsky") 
+    ("Boris" "Yeltsin"))
+
+(map-query 'list #'last-name [select 'employee :order-by [emplid]])
+=&gt; ("Lenin" "Stalin" "Trotsky" "Kruschev" "Brezhnev" "Andropov" "Chernenko"
+    "Gorbachev" "Yeltsin" "Putin")
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408689"></a><h2>Side Effects</h2><p>Whatever effects the execution of the SQL query has
+      on the underlying database, if any.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408700"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408712"></a><h2>Exceptional Situations</h2><p>If the execution of  the SQL query leads to any
+      errors, an error of type
+      <span class="errortype">sql-database-error</span> is signalled.</p><p>An error of type <span class="errortype">type-error</span> must
+      be signaled if the <em class="parameter"><code>output-type-spec</code></em> is
+      not a recognizable subtype of <span class="type">list</span>, not a
+      recognizable subtype of <span class="type">vector</span>, and not
+      <span class="symbol">nil</span>.</p><p>An error of type <span class="errortype">type-error</span>
+      should be signaled if
+      <em class="parameter"><code>output-type-spec</code></em> specifies the number
+      of elements and the size of the result set is different from
+      that number.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408767"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="query.html" title="QUERY"><code class="function">query</code></a></td></tr><tr><td><a class="link" href="do-query.html" title="DO-QUERY"><code class="function">do-query</code></a></td></tr><tr><td><a class="link" href="print-query.html" title="PRINT-QUERY"><code class="function">print-query</code></a></td></tr><tr><td><a class="link" href="loop-tuples.html" title="LOOP"><code class="function">loop</code></a></td></tr><tr><td><a class="link" href="select.html" title="SELECT"><code class="function">select</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id408832"></a><h2>Notes</h2><p>The <em class="parameter"><code>result-types</code></em> keyword argument
+      is a <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extension.</p><p> 
+        <em class="parameter"><code>map-query</code></em> is common across the
+        functional and object-oriented data manipulation languages.
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="loop-tuples.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fdml.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ref-transaction.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">LOOP </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Transaction Handling</td></tr></table></div></body></html>

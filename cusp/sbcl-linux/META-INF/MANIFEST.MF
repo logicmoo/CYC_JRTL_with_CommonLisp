@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Sbcl_linux Plug-in
+Bundle-SymbolicName: sbcl_linux
+Bundle-Version: 1.0.22.18

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>DATABASE-NAME</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-connect.html" title="Connection and Initialisation" /><link rel="prev" href="connected-databases.html" title="CONNECTED-DATABASES" /><link rel="next" href="database-name-from-spec.html" title="DATABASE-NAME-FROM-SPEC" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">DATABASE-NAME</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="connected-databases.html">Prev</a> </td><th width="60%" align="center">Connection and Initialisation</th><td width="20%" align="right"> <a accesskey="n" href="database-name-from-spec.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="database-name"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>DATABASE-NAME — Get the name of a database object<p><b>Generic Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388080"></a><h2>Syntax</h2><pre class="synopsis"><code class="function">database-name</code> <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue">name</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388101"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A database object, either of type
+		<span class="type">database</span> or of type
+		<span class="type">closed-database</span>.</p></dd><dt><span class="term"><span class="returnvalue">name</span></span></dt><dd><p>A string describing the identity of the database
+		to which this database object is connected to.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388148"></a><h2>Description</h2><p>This function returns the database name of the given
+	  database.  The database name is a string which somehow
+	  describes the identity of the database to which this
+	  database object is or has been connected.  The database name 
+	  of a database object is determined at
+	  <code class="function">connect</code> time, when a call to
+	  <code class="function">database-name-from-spec</code> derives the
+	  database name from the connection specification passed to
+	  <code class="function">connect</code> in the
+	  <em class="parameter"><code>connection-spec</code></em> parameter.</p><p>The database name is used via
+	  <code class="function">find-database</code> in
+	  <code class="function">connect</code> to determine whether database
+	  connections to the specified database exist already.</p><p>Usually the database name string will include
+	  indications of the  host, database name, user, or port that
+	  where used during the connection attempt.  The only
+	  important thing is that this string shall  try to identify
+	  the database at the other end of the connection.  Connection
+	  specifications parts like passwords and credentials shall
+	  not be used as part of the database name.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388202"></a><h2>Examples</h2><pre class="screen">
+(database-name-from-spec '("dent" "newesim" "dent" "dent") :mysql)
+=&gt; "dent/newesim/dent"
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48391DCD}&gt;
+(database-name *default-database*)
+=&gt; "dent/newesim/dent"
+
+(database-name-from-spec '(nil "template1" "dent" nil) :postgresql)
+=&gt; "/template1/dent"
+(connect '(nil "template1" "dent" nil) :database-type :postgresql)
+=&gt; #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}&gt;
+(database-name *default-database*)
+=&gt; "/template1/dent"
+
+(database-name-from-spec '("www.pmsf.de" "template1" "dent" nil) :postgresql)
+=&gt; "www.pmsf.de/template1/dent"
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388219"></a><h2>Side Effects</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388229"></a><h2>Affected By</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="database-name-from-spec.html" title="DATABASE-NAME-FROM-SPEC"><code class="function">database-name-from-spec</code></a></td></tr></table><p>
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388253"></a><h2>Exceptional Situations</h2><p>Will signal an error if the object passed as the
+	  <em class="parameter"><code>database</code></em> parameter is neither of type
+	  <span class="type">database</span> nor of type
+	  <span class="type">closed-database</span>.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388274"></a><h2>See Also</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="connect.html" title="CONNECT"><code class="function">connect</code></a></td></tr><tr><td><a class="link" href="find-database.html" title="FIND-DATABASE"><code class="function">find-database</code></a></td></tr><tr><td><a class="link" href="connected-databases.html" title="CONNECTED-DATABASES"><code class="function">connected-databases</code></a></td></tr><tr><td><a class="link" href="disconnect.html" title="DISCONNECT"><code class="function">disconnect</code></a></td></tr><tr><td><a class="link" href="status.html" title="STATUS"><code class="function">status</code></a></td></tr></table><p>
+        </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id388336"></a><h2>Notes</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="connected-databases.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-connect.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="database-name-from-spec.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">CONNECTED-DATABASES </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DATABASE-NAME-FROM-SPEC</td></tr></table></div></body></html>

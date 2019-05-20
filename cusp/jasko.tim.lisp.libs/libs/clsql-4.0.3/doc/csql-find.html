@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Finding Objects</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="csql.html" title="Chapter 2. CommonSQL Tutorial" /><link rel="prev" href="csql-creat.html" title="Object Creation" /><link rel="next" href="csql-del.html" title="Deleting Objects" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Finding Objects</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="csql-creat.html">Prev</a> </td><th width="60%" align="center">Chapter 2. <span class="application">CommonSQL</span> Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="csql-del.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="csql-find"></a>Finding Objects</h2></div></div></div><p>
+  Now that we have our objects in the database, how do we get them out
+  when we need to work with them?  <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> provides a functional
+  interface to <span class="application">SQL</span>, which consists of a special Lisp reader macro
+  and some functions.  The special syntax allows us to embed <span class="application">SQL</span> in
+  lisp expressions, and lisp expressions in <span class="application">SQL</span>, with ease.
+</p><p>
+  Once we have turned on the syntax with the expression:
+</p><pre class="programlisting">
+(clsql:locally-enable-sql-reader-syntax)
+</pre><p>
+  We can start entering fragments of <span class="application">SQL</span> into our lisp reader.  We
+  will get back objects which represent the lisp expressions.  These
+  objects will later be compiled into <span class="application">SQL</span> expressions that are
+  optimized for the database backed we are connected to.  This means
+  that we have a database independent <span class="application">SQL</span> syntax.  Here are some
+  examples:
+</p><pre class="programlisting">
+;; an attribute or table name
+[foo] =&gt; #&lt;CLSQL-SYS::SQL-IDENT-ATTRIBUTE FOO&gt;
+
+;; a attribute identifier with table qualifier
+[foo bar] =&gt; #&lt;CLSQL-SYS::SQL-IDENT-ATTRIBUTE FOO.BAR&gt;
+
+;; a attribute identifier with table qualifier
+[= "Lenin" [first_name]] =&gt;
+   #&lt;CLSQL-SYS::SQL-RELATIONAL-EXP ('Lenin' = FIRST_NAME)&gt;
+
+[&lt; [emplid] 3] =&gt;
+   #&lt;CLSQL-SYS::SQL-RELATIONAL-EXP (EMPLID &lt; 3)&gt;
+
+[and [&lt; [emplid] 2] [= [first_name] "Lenin"]] =&gt;
+   #&lt;CLSQL-SYS::SQL-RELATIONAL-EXP ((EMPLID &lt; 2) AND
+                                     (FIRST_NAME = 'Lenin'))&gt;
+
+
+;; If we want to reference a slot in an object we can us the
+;;  SLOT-VALUE sql extension
+[= [slot-value 'employee 'emplid] 1] =&gt;
+   #&lt;CLSQL-SYS::SQL-RELATIONAL-EXP (EMPLOYEE.EMPLID = 1)&gt;
+
+[= [slot-value 'employee 'emplid]
+   [slot-value 'company 'presidentid]] =&gt;
+   #&lt;CLSQL-SYS::SQL-RELATIONAL-EXP (EMPLOYEE.EMPLID = COMPANY.PRESIDENTID)&gt;
+</pre><p>
+  The <code class="function">SLOT-VALUE</code> operator is important because it
+  let's us query objects in a way that is robust to any changes in the
+  object-&gt;table mapping, like column name changes, or table name
+  changes.  So when you are querying objects, be sure to use the
+  <code class="function">SLOT-VALUE</code> <span class="application">SQL</span> extension.
+</p><p>
+  Since we can now formulate <span class="application">SQL</span> relational expression which can be
+  used as qualifiers, like we put after the <span class="symbol">WHERE</span>
+  keyword in <span class="application">SQL</span> statements, we can start querying our objects.
+  <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> provides a function <span class="symbol">SELECT</span> which can return
+  use complete objects from the database which conform to a qualifier,
+  can be sorted, and various other <span class="application">SQL</span> operations.
+</p><p>
+  The first argument to <span class="symbol">SELECT</span> is a class name.  it
+  also has a set of keyword arguments which are covered in the
+  documentation.  For now we will concern ourselves only with the
+  :where keyword.  Select returns a list of objects, or nil if it
+  can't find any.  It's important to remember that it always returns a
+  list, so even if you are expecting only one result, you should
+  remember to extract it from the list you get from
+  <span class="symbol">SELECT</span>.
+</p><pre class="programlisting">
+;; all employees
+(clsql:select 'employee)
+;; all companies
+(clsql:select 'company)
+
+;; employees named Lenin
+(clsql:select 'employee :where [= [slot-value 'employee 'last-name]
+				"Lenin"])
+
+(clsql:select 'company :where [= [slot-value 'company 'name]
+			       "Widgets Inc."])
+
+;; Employees of Widget's Inc.
+(clsql:select 'employee
+	    :where [and [= [slot-value 'employee 'companyid]
+			   [slot-value 'company 'companyid]]
+			[= [slot-value 'company 'name]
+			   "Widgets Inc."]])
+
+;; Same thing, except that we are using the employee
+;; relation in the company view class to do the join for us,
+;; saving us the work of writing out the <span class="application">SQL</span>!
+(company-employees company1)
+
+;; President of Widgets Inc.
+(president company1)
+
+;; Manager of Josef Stalin
+(employee-manager employee2)
+</pre></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="csql-creat.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="csql.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="csql-del.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Object Creation </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Deleting Objects</td></tr></table></div></body></html>

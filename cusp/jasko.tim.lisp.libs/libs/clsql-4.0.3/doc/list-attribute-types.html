@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>LIST-ATTRIBUTE-TYPES</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fddl.html" title="Functional Data Definition Language (FDDL)" /><link rel="prev" href="attribute-type.html" title="ATTRIBUTE-TYPE" /><link rel="next" href="list-attributes.html" title="LIST-ATTRIBUTES" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">LIST-ATTRIBUTE-TYPES</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="attribute-type.html">Prev</a> </td><th width="60%" align="center">Functional Data Definition Language (FDDL)</th><td width="20%" align="right"> <a accesskey="n" href="list-attributes.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="list-attribute-types"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>LIST-ATTRIBUTE-TYPES — Returns information about the attribute types of a table.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id401550"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">list-attribute-types</code> <em class="replaceable"><code>table</code></em> &amp;key <em class="replaceable"><code>owner</code></em> <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id401583"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>table</code></em></span></dt><dd><p>
+              The name of a table as a string, symbol or SQL expression. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>owner</code></em></span></dt><dd><p>
+              A string, <code class="constant">NIL</code> or <span class="symbol">:all</span>. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>
+              A database object which defaults to
+              <span class="symbol">*default-database*</span>.
+            </p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>
+              A list. 
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id401679"></a><h2>Description</h2><p>Returns a list containing information about the SQL types
+      of each of the attributes in the table specified by
+      <em class="parameter"><code>table</code></em> in <em class="parameter"><code>database</code></em>
+      which has a default value of
+      <span class="symbol">*default-database*</span>. <em class="parameter"><code>owner</code></em>
+      is <code class="constant">NIL</code> by default which means that only attributes owned by
+      users are listed. If <em class="parameter"><code>owner</code></em> is a string
+      denoting a user name, only attributes owned by
+      <em class="parameter"><code>owner</code></em> are listed. If
+      <em class="parameter"><code>owner</code></em> is <span class="symbol">:all</span> then all
+      attributes are listed. The elements of the returned list are
+      lists where the first element is the name of the attribute, the
+      second element is its SQL type, the third is the type precision,
+      the fourth is the scale of the attribute and the fifth is 1 if
+      the attribute accepts null values and otherwise 0.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id401743"></a><h2>Examples</h2><pre class="screen">
+(list-attribute-types [employee])
+=&gt; (("emplid" :INT4 4 NIL 0) ("groupid" :INT4 4 NIL 0)
+    ("first_name" :VARCHAR 30 NIL 1) ("last_name" :VARCHAR 30 NIL 1)
+    ("email" :VARCHAR 100 NIL 1) ("ecompanyid" :INT4 4 NIL 1)
+    ("managerid" :INT4 4 NIL 1) ("height" :FLOAT8 8 NIL 1)
+    ("married" :BOOL 1 NIL 1) ("birthday" :TIMESTAMP 8 NIL 1)
+    ("bd_utime" :INT8 8 NIL 1))        
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id401759"></a><h2>Side Effects</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id401770"></a><h2>Affected by</h2><p>
+        <span class="symbol">*default-database*</span>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id401785"></a><h2>Exceptional Situations</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id401797"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="attribute-type.html" title="ATTRIBUTE-TYPE"><code class="function">attribute-type</code></a></td></tr><tr><td><a class="link" href="list-attribute-types.html" title="LIST-ATTRIBUTE-TYPES"><code class="function">list-attribute-types</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id401831"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="attribute-type.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fddl.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="list-attributes.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">ATTRIBUTE-TYPE </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> LIST-ATTRIBUTES</td></tr></table></div></body></html>

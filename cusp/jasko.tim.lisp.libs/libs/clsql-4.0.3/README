@@ -1,0 +1,22 @@
+CLSQL is a Common Lisp to SQL engine interface by Kevin M.
+Rosenberg. It includes both functional and object oriented subsystems
+for data definition and manipulation as well as an integrated symbolic
+SQL syntax.
+
+CLSQL supports a number of RDBMS and uses the UFFI (http://uffi.b9.com) 
+library for compatibility with Allegro CL, Lispworks, CMUCL, SBCL and
+OpenMCL.
+
+CLSQL has incorporated code from the following projects. At this point
+in 2004, development of has stopped on these incorporated projects.
+  - Pierre Mai's MaiSQL
+  - onShore Development's UncommonSQL
+  - Paul Meurer's SQL/ODBC 
+  - Cadabra's Oracle interface
+
+CLSQL's home is http://clsql.b9.com.
+
+Documentation is available as a PDF file in doc/clsql.pdf and as HTML
+files in doc/html.tar.gz.
+
+

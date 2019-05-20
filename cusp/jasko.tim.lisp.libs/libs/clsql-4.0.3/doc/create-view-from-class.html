@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CREATE-VIEW-FROM-CLASS</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-ooddl.html" title="Object Oriented Data Definition Language (OODDL)" /><link rel="prev" href="default-string-length.html" title="*DEFAULT-STRING-LENGTH*" /><link rel="next" href="def-view-class.html" title="DEF-VIEW-CLASS" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CREATE-VIEW-FROM-CLASS</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="default-string-length.html">Prev</a> </td><th width="60%" align="center">Object Oriented Data Definition Language (OODDL)</th><td width="20%" align="right"> <a accesskey="n" href="def-view-class.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="create-view-from-class"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>CREATE-VIEW-FROM-CLASS — Create a SQL table from a <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View Class</em></a>.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395524"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">create-view-from-class</code> <em class="replaceable"><code>view-class-name</code></em> &amp;key <em class="replaceable"><code>database</code></em> <em class="replaceable"><code>transactions</code></em> =&gt; <span class="returnvalue"></span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395050"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>view-class-name</code></em></span></dt><dd><p>
+	      The name of a <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View
+	      Class</em></a> that has been defined with <a class="link" href="def-view-class.html" title="DEF-VIEW-CLASS"><code class="function">def-view-class</code></a>.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>
+	      The <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database</em></a> in
+	      which to create the SQL table. This will default to the
+	      value of <span class="symbol">*default-database*</span>.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>transactions</code></em></span></dt><dd><p>
+	      When <code class="constant">NIL</code> specifies that a table type which does not
+	      support transactions should be used.
+	    </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395145"></a><h2>Description</h2><p>
+	Creates a table as defined by the <a class="glossterm" href="glossary.html#gloss-view-class"><em class="glossterm">View Class</em></a>
+	<em class="parameter"><code>view-class-name</code></em> in
+	<em class="parameter"><code>database</code></em>.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395174"></a><h2>Examples</h2><pre class="screen">
+(def-view-class foo () ((a :type (string 80))))
+=&gt; #&lt;Standard-Db-Class FOO {4807F7CD}&gt;
+(create-view-from-class 'foo)
+=&gt; 
+(list-tables)
+=&gt; ("FOO")
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395189"></a><h2>Side Effects</h2><p>
+	Causes a table to be created in the SQL database.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395200"></a><h2>Affected by</h2><p>
+	Most SQL database systems will signal an error if a table
+	creation is attempted when a table with the same name already
+	exists. The SQL user, as specified in the database connection,
+	must have sufficient permission for table creation.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395213"></a><h2>Exceptional Situations</h2><p>
+	A condition will be signaled if the table can not be created
+	in the SQL database.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395225"></a><h2>See Also</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="def-view-class.html" title="DEF-VIEW-CLASS"><code class="function">def-view-class</code></a></td></tr><tr><td><a class="link" href="drop-view-from-class.html" title="DROP-VIEW-FROM-CLASS"><code class="function">drop-view-from-class</code></a></td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id395263"></a><h2>Notes</h2><p>
+	Currently, only <span class="application">MySQL</span> supports transactionless
+	tables. <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> provides the ability to create such tables for
+	applications which would benefit from faster table access and
+	do not require transaction support.
+      </p><p>
+	The case of the table name is determined by the type of the
+	database. <span class="application">MySQL</span>, for example, creates databases in upper-case
+	while <span class="application">PostgreSQL</span> uses lowercase.
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="default-string-length.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-ooddl.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="def-view-class.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">*DEFAULT-STRING-LENGTH* </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DEF-VIEW-CLASS</td></tr></table></div></body></html>

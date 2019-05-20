@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>SQL-STREAM</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-recording.html" title="SQL I/O Recording" /><link rel="prev" href="sql-recording-p.html" title="SQL-RECORDING-P" /><link rel="next" href="add-sql-stream.html" title="ADD-SQL-STREAM" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">SQL-STREAM</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sql-recording-p.html">Prev</a> </td><th width="60%" align="center">SQL I/O Recording</th><td width="20%" align="right"> <a accesskey="n" href="add-sql-stream.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="sql-stream"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>SQL-STREAM — Returns the broadcast stream used for recording SQL commands or results.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id415073"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">sql-stream</code> &amp;key <em class="replaceable"><code>type</code></em> <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id415098"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>type</code></em></span></dt><dd><p>
+              One of the following keyword symbols:
+              <span class="symbol">:commands</span> or <span class="symbol">:results</span>,
+              defaulting to <span class="symbol">:commands</span>.
+            </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to
+            <span class="symbol">*default-database*</span>.</p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>
+              A broadcast stream or <code class="constant">NIL</code>. 
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id415176"></a><h2>Description</h2><p>Returns the broadcast stream used for recording SQL
+      commands sent to or results returned from
+      <em class="parameter"><code>database</code></em> which defaults to
+      <span class="symbol">*default-database*</span>. <em class="parameter"><code>type</code></em>
+      must be one of <span class="symbol">:commands</span> or
+      <span class="symbol">:results</span>, defaulting to
+      <span class="symbol">:commands</span>, and determines whether the stream
+      returned is that used for recording SQL commands or results.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id415211"></a><h2>Examples</h2><pre class="screen">
+(start-sql-recording :type :commands)
+=&gt; 
+(sql-stream :type :commands)
+=&gt; #&lt;Broadcast Stream&gt;
+(sql-stream :type :results)
+=&gt; NIL
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id415224"></a><h2>Side Effects</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id415234"></a><h2>Affected by</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id415244"></a><h2>Exceptional Situations</h2><p>
+        An error is signalled if <em class="parameter"><code>type</code></em> is not
+        one of <span class="symbol">:commands</span> or
+        <span class="symbol">:results</span>.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id415265"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="start-sql-recording.html" title="START-SQL-RECORDING"><code class="function">start-sql-recording</code></a></td></tr><tr><td><a class="link" href="add-sql-stream.html" title="ADD-SQL-STREAM"><code class="function">add-sql-stream</code></a></td></tr><tr><td><a class="link" href="delete-sql-stream.html" title="DELETE-SQL-STREAM"><code class="function">delete-sql-stream</code></a></td></tr><tr><td><a class="link" href="list-sql-streams.html" title="LIST-SQL-STREAMS"><code class="function">list-sql-streams</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id415314"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sql-recording-p.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-recording.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="add-sql-stream.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">SQL-RECORDING-P </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> ADD-SQL-STREAM</td></tr></table></div></body></html>

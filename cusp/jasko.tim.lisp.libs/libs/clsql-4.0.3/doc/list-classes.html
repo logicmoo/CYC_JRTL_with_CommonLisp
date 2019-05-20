@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>LIST-CLASSES</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-ooddl.html" title="Object Oriented Data Definition Language (OODDL)" /><link rel="prev" href="drop-view-from-class.html" title="DROP-VIEW-FROM-CLASS" /><link rel="next" href="ref-oodml.html" title="Object Oriented Data Manipulation Language (OODML)" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">LIST-CLASSES</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="drop-view-from-class.html">Prev</a> </td><th width="60%" align="center">Object Oriented Data Definition Language (OODDL)</th><td width="20%" align="right"> <a accesskey="n" href="ref-oodml.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="list-classes"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>LIST-CLASSES — List classes for tables in SQL database.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410679"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">list-classes</code> &amp;key <em class="replaceable"><code>test</code></em> <em class="replaceable"><code>root-class</code></em> <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue">classes</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410708"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>test</code></em></span></dt><dd><p>
+	      a function used to filter the search. By default, <em class="parameter"><code>identity</code></em> is used which
+	      will return all classes.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>root-class</code></em></span></dt><dd><p>
+	      specifies the root class to the search. By default,
+	      <em class="parameter"><code>standard-db-object</code></em> is used which
+	      is the root for all view classes.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>
+	      The <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database</em></a> to
+	      search for view classes. This will default to the value
+	      of <span class="symbol">*default-database*</span>.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>classes</code></em></span></dt><dd><p>
+	      List of view classes.
+	    </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410802"></a><h2>Description</h2><p>Returns a list of all the View Classes which have been
+      defined in the Lisp session and are connected to
+      <em class="parameter"><code>database</code></em> and which descended from the
+      class <em class="parameter"><code>root-class</code></em> and which satisfy the
+      function <em class="parameter"><code>test</code></em>.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410828"></a><h2>Examples</h2><pre class="screen">
+(list-classes)
+=&gt; (#&lt;clsql-sys::standard-db-class big&gt; #&lt;clsql-sys::standard-db-class employee-address&gt;
+    #&lt;clsql-sys::standard-db-class address&gt; #&lt;clsql-sys::standard-db-class company&gt; 
+    #&lt;clsql-sys::standard-db-class employee&gt;)
+
+(list-classes :test #'(lambda (c) (&gt; (length (symbol-name (class-name c))) 3)))
+=&gt; (#&lt;clsql-sys::standard-db-class employee-address&gt; #&lt;clsql-sys::standard-db-class address&gt;
+    #&lt;clsql-sys::standard-db-class company&gt; #&lt;clsql-sys::standard-db-class employee&gt;)
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410844"></a><h2>Side Effects</h2><p>
+	None.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410854"></a><h2>Affected by</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td>Which view classes have been defined in the Lisp
+	  session.</td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410873"></a><h2>Exceptional Situations</h2><p>
+	None.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410882"></a><h2>See Also</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="def-view-class.html" title="DEF-VIEW-CLASS"><code class="function">def-view-class</code></a></td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id410906"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="drop-view-from-class.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-ooddl.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ref-oodml.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">DROP-VIEW-FROM-CLASS </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Object Oriented Data Manipulation Language (OODML)</td></tr></table></div></body></html>

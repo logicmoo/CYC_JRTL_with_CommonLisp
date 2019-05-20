@@ -1,0 +1,21 @@
+;;; SQL/ODBC module for MCL, CMUCL, LispWorks, ACL and CormanLisp
+;;; Version 0.9
+;;; Copyright (C) Paul Meurer 1999-2001 All rights reserved.
+;;; paul.meurer@hit.uib.no
+;;;
+;;; Use and copying of this software and preparation of derivative works
+;;; based upon this software are permitted, so long as the following
+;;; conditions are met:
+;;;      o This copyright notice is included intact.
+;;;      o No fees or compensation are charged for use, copies, or
+;;; 	   access to this software. You may charge a nominal
+;;; 	   distribution fee for the physical act of transferring a
+;;; 	   copy, but you may not charge for the program itself. 
+;;;      o You are allowed to use this software as part of a commercial
+;;;        software package, provided that its functionality significantly 
+;;;        exceeds the functionality of this software, and that the use of 
+;;;        this software is explicitly mentioned in your documentation.
+;;;
+;;; This software is made available AS IS, and no warranty is made about 
+;;; the software or its performance. 
+

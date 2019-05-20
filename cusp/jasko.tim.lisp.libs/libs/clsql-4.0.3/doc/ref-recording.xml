@@ -1,0 +1,825 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<!-- SQL I/0 Recording --> 
+
+<reference id="ref-recording"> 
+  <title>SQL I/O Recording</title> 
+    <partintro>
+    <para>
+      &clsql; provides a facility for recording SQL commands sent to
+      and/or results returned from the underlying RDBMS to user
+      sprecified streams. This is useful for monitoring &clsql;
+      activity and for debugging applications.
+    </para>
+    <para> 
+      This section documents the functions provided for enabling and
+      disabling SQL recording as well as for manipulating the streams
+      on to which SQL commands and results are recorded.
+    </para>
+  </partintro>
+
+  <refentry id="start-sql-recording">
+    <refmeta>
+      <refentrytitle>START-SQL-RECORDING</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>START-SQL-RECORDING</refname>
+      <refpurpose>Start recording SQL commands or results.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>start-sql-recording</function> &amp;key <replaceable>type</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>type</parameter></term>
+          <listitem>
+            <para>
+              One of the following keyword symbols:
+              <symbol>:commands</symbol>, <symbol>:results</symbol> or
+              <symbol>:both</symbol>, defaulting to
+              <symbol>:commands</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>              <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to
+            <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Starts recording of SQL commands sent to and/or results
+      returned from <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. The SQL is output on one or
+      more broadcast streams, initially just
+      <symbol>*standard-output*</symbol>, and the functions
+      <function>add-sql-stream</function> and
+      <function>delete-sql-stream</function> may be used to add or
+      delete command or result recording streams. The default value of
+      <parameter>type</parameter> is <symbol>:commands</symbol> which
+      means that SQL commands sent to <parameter>database</parameter>
+      are recorded. If <parameter>type</parameter> is
+      <symbol>:results</symbol> then SQL results returned from
+      <parameter>database</parameter> are recorded. Both commands and
+      results may be recorded by passing <parameter>type</parameter>
+      value of <symbol>:both</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(start-sql-recording :type :both)
+=> 
+(select [last-name] :from [employee] 
+                    :where [= [emplid] 1] 
+                    :field-names nil
+                    :flatp t)
+;; 2004-07-02 16:42:12 dent/test/dent => SELECT last_name FROM employee WHERE (emplid = 1)
+;; 2004-07-02 16:42:12 dent/test/dent &lt;= (Lenin)
+=> ("Lenin")
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        The command and result recording broadcast streams associated
+        with <parameter>database</parameter> are reinitialised with
+        only <symbol>*standard-output*</symbol> as their component
+        streams.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="stop-sql-recording"><function>stop-sql-recording</function></link></member>
+        <member><link linkend="sql-recording-p"><function>sql-recording-p</function></link></member>
+        <member><link linkend="sql-stream"><function>sql-stream</function></link></member>
+        <member><link linkend="add-sql-stream"><function>add-sql-stream</function></link></member>
+        <member><link linkend="delete-sql-stream"><function>delete-sql-stream</function></link></member>
+        <member><link linkend="list-sql-streams"><function>list-sql-streams</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="stop-sql-recording">
+    <refmeta>
+      <refentrytitle>STOP-SQL-RECORDING</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>STOP-SQL-RECORDING</refname>
+      <refpurpose>Stop recording SQL commands or results.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>stop-sql-recording</function> &amp;key <replaceable>type</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>type</parameter></term>
+          <listitem>
+            <para>
+              One of the following keyword symbols:
+              <symbol>:commands</symbol>, <symbol>:results</symbol> or
+              <symbol>:both</symbol>, defaulting to
+              <symbol>:commands</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>              <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to
+            <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry> 
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Stops recording of SQL commands sent to and/or results
+      returned from <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. The default value of
+      <parameter>type</parameter> is <symbol>:commands</symbol> which
+      means that SQL commands sent to <parameter>database</parameter>
+      will no longer be recorded. If <parameter>type</parameter> is
+      <symbol>:results</symbol> then SQL results returned from
+      <parameter>database</parameter> will no longer be
+      recorded. Recording may be stopped for both commands and results
+      by passing <parameter>type</parameter> value of
+      <symbol>:both</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(start-sql-recording :type :both)
+=> 
+(select [last-name] :from [employee] 
+                       :where [= [emplid] 1] 
+                       :field-names nil
+                       :flatp t)
+;; 2004-07-02 16:42:12 dent/test/dent => SELECT last_name FROM employee WHERE (emplid = 1)
+;; 2004-07-02 16:42:12 dent/test/dent &lt;= (Lenin)
+=> ("Lenin")
+(stop-sql-recording :type :results)
+=> 
+(select [last-name] :from [employee] 
+                       :where [= [emplid] 1] 
+                       :field-names nil
+                       :flatp t)
+;; 2004-07-02 16:44:11 dent/test/dent => SELECT last_name FROM employee WHERE (emplid = 1)
+=> ("Lenin")
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        The command and result recording broadcast streams associated
+        with <parameter>database</parameter> are reinitialised to
+        &nil;.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="start-sql-recording"><function>start-sql-recording</function></link></member>
+        <member><link linkend="sql-recording-p"><function>sql-recording-p</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-recording-p">
+    <refmeta>
+      <refentrytitle>SQL-RECORDING-P</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-RECORDING-P</refname>
+      <refpurpose>Tests whether SQL commands or results are being recorded.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>sql-recording-p</function> &amp;key <replaceable>type</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>type</parameter></term>
+          <listitem>
+            <para>
+              One of the following keyword symbols:
+              <symbol>:commands</symbol>, <symbol>:results</symbol>,
+              <symbol>:both</symbol> or <symbol>:either</symbol>
+              defaulting to <symbol>:commands</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>              
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to
+            <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry> 
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A Boolean. 
+            </para>
+          </listitem>
+        </varlistentry>              
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Predicate to test whether the SQL recording specified by
+      <parameter>type</parameter> is currently enabled for
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>.
+      <parameter>type</parameter> may be one of
+      <symbol>:commands</symbol>, <symbol>:results</symbol>,
+      <symbol>:both</symbol> or <symbol>:either</symbol>, defaulting
+      to <symbol>:commands</symbol>, otherwise &nil; is returned.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(start-sql-recording :type :commands)
+=> 
+(sql-recording-p :type :commands)
+=> T
+(sql-recording-p :type :both)
+=> NIL
+(sql-recording-p :type :either)
+=> T
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <simplelist>
+        <member><link linkend="start-sql-recording"><function>start-sql-recording</function></link></member>
+        <member><link linkend="stop-sql-recording"><function>stop-sql-recording</function></link></member>      
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="start-sql-recording"><function>start-sql-recording</function></link></member>
+        <member><link linkend="stop-sql-recording"><function>stop-sql-recording</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The <symbol>:both</symbol> and <symbol>:either</symbol> values
+        for the <parameter>type</parameter> keyword argument are
+        &clsql; extensions.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sql-stream">
+    <refmeta>
+      <refentrytitle>SQL-STREAM</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SQL-STREAM</refname>
+      <refpurpose>Returns the broadcast stream used for recording SQL commands or results.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>sql-stream</function> &amp;key <replaceable>type</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>type</parameter></term>
+          <listitem>
+            <para>
+              One of the following keyword symbols:
+              <symbol>:commands</symbol> or <symbol>:results</symbol>,
+              defaulting to <symbol>:commands</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>              <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to
+            <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry> 
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A broadcast stream or &nil;. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns the broadcast stream used for recording SQL
+      commands sent to or results returned from
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>type</parameter>
+      must be one of <symbol>:commands</symbol> or
+      <symbol>:results</symbol>, defaulting to
+      <symbol>:commands</symbol>, and determines whether the stream
+      returned is that used for recording SQL commands or results.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(start-sql-recording :type :commands)
+=> 
+(sql-stream :type :commands)
+=> #&lt;Broadcast Stream>
+(sql-stream :type :results)
+=> NIL
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error is signalled if <parameter>type</parameter> is not
+        one of <symbol>:commands</symbol> or
+        <symbol>:results</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="start-sql-recording"><function>start-sql-recording</function></link></member>
+        <member><link linkend="add-sql-stream"><function>add-sql-stream</function></link></member>
+        <member><link linkend="delete-sql-stream"><function>delete-sql-stream</function></link></member>
+        <member><link linkend="list-sql-streams"><function>list-sql-streams</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="add-sql-stream">
+    <refmeta>
+      <refentrytitle>ADD-SQL-STREAM</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>ADD-SQL-STREAM</refname>
+      <refpurpose>Add a component to the broadcast streams used for recording SQL commands or results.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>add-sql-stream</function> <replaceable>stream</replaceable> &amp;key <replaceable>type</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>stream</parameter></term>
+          <listitem>
+            <para>
+              A stream or &t;. 
+            </para>
+          </listitem>
+        </varlistentry>              
+        <varlistentry>
+          <term><parameter>type</parameter></term>
+          <listitem>
+            <para>
+              One of the following keyword symbols:
+              <symbol>:commands</symbol>, <symbol>:results</symbol> or
+              <symbol>:both</symbol>, defaulting to
+              <symbol>:commands</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>              
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to
+            <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry> 
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              The added stream. 
+            </para>
+          </listitem>
+        </varlistentry>              
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Adds the supplied stream <parameter>stream</parameter> (or
+      &t; for <symbol>*standard-output*</symbol>) as a component of
+      the recording broadcast stream for the SQL recording type
+      specified by <parameter>type</parameter> on
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>type</parameter>
+      must be one of <symbol>:commands</symbol>,
+      <symbol>:results</symbol>, or <symbol>:both</symbol>, defaulting
+      to <symbol>:commands</symbol>, depending on whether the stream
+      is to be added for recording SQL commands, results or both.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(start-sql-recording :type :commands)
+=> 
+(with-output-to-string (s) 
+  (add-sql-stream s :type :commands)
+  (print-query [select [emplid] [first-name] [last-name] [email] :from [employee]] 
+               :stream s))
+
+;; 2004-07-02 17:38:45 dent/test/dent => SELECT emplid,first_name,last_name,email FROM employee
+=> 
+";; 2004-07-02 17:38:45 dent/test/dent => SELECT emplid,first_name,last_name,email FROM employee
+1  Vladimir   Lenin     lenin@soviet.org     
+2  Josef      Stalin    stalin@soviet.org    
+3  Leon       Trotsky   trotsky@soviet.org   
+4  Nikita     Kruschev  kruschev@soviet.org  
+5  Leonid     Brezhnev  brezhnev@soviet.org  
+6  Yuri       Andropov  andropov@soviet.org  
+7  Konstantin Chernenko chernenko@soviet.org 
+8  Mikhail    Gorbachev gorbachev@soviet.org 
+9  Boris      Yeltsin   yeltsin@soviet.org   
+10 Vladimir   Putin     putin@soviet.org     "
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        The specified broadcast stream(s) associated with
+        <parameter>database</parameter> are modified.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="start-sql-recording"><function>start-sql-recording</function></link></member>
+        <member><link linkend="sql-stream"><function>sql-stream</function></link></member>
+        <member><link linkend="delete-sql-stream"><function>delete-sql-stream</function></link></member>
+        <member><link linkend="list-sql-streams"><function>list-sql-streams</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="delete-sql-stream">
+    <refmeta>
+      <refentrytitle>DELETE-SQL-STREAM</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>DELETE-SQL-STREAM</refname>
+      <refpurpose>Remove a component from the broadcast streams used for recording SQL commands or results.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>delete-sql-stream</function> <replaceable>stream</replaceable> &amp;KEY <replaceable>type</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>stream</parameter></term>
+          <listitem>
+            <para>
+              A stream or &t;. 
+            </para>
+          </listitem>
+        </varlistentry>              
+	<varlistentry>
+	  <term><parameter>stream</parameter></term>
+	  <listitem>
+	    <para>
+	      A stream or &t;. 
+	    </para>
+	  </listitem>
+	</varlistentry> 
+	<varlistentry>
+	  <term><parameter>type</parameter></term>
+        <listitem>
+          <para>
+            One of the following keyword symbols:
+            <symbol>:commands</symbol>, <symbol>:results</symbol> or
+            <symbol>:both</symbol>, defaulting to
+            <symbol>:commands</symbol>.
+          </para>
+        </listitem>
+        </varlistentry>  
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to
+            <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry> 
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              The added stream. 
+            </para>
+          </listitem>
+        </varlistentry>              
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Removes the supplied stream <parameter>stream</parameter>
+      from the recording broadcast stream for the SQL recording type
+      specified by <parameter>type</parameter> on
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>type</parameter>
+      must be one of <symbol>:commands</symbol>,
+      <symbol>:results</symbol>, or <symbol>:both</symbol>, defaulting
+      to <symbol>:commands</symbol>, depending on whether the stream
+      is to be added for recording SQL commands, results or both.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(list-sql-streams :type :both)
+=> (#&lt;Stream for descriptor 7> #&lt;Stream for descriptor 7>)
+(delete-sql-stream *standard-output* :type :results)
+=> #&lt;Stream for descriptor 7>
+(list-sql-streams :type :both)
+=> (#&lt;Stream for descriptor 7>)
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        The specified broadcast stream(s) associated with
+        <parameter>database</parameter> are modified.     
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="start-sql-recording"><function>start-sql-recording</function></link></member>
+        <member><link linkend="stop-sql-recording"><function>stop-sql-recording</function></link></member>
+        <member><link linkend="sql-recording-p"><function>sql-recording-p</function></link></member>
+        <member><link linkend="sql-stream"><function>sql-stream</function></link></member>
+        <member><link linkend="add-sql-stream"><function>add-sql-stream</function></link></member>
+        <member><link linkend="delete-sql-stream"><function>delete-sql-stream</function></link></member>
+        <member><link linkend="list-sql-streams"><function>list-sql-streams</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="list-sql-streams">
+    <refmeta>
+      <refentrytitle>LIST-SQL-STREAMS</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>LIST-SQL-STREAMS</refname>
+      <refpurpose>List the components of the broadcast streams used for recording SQL commands or results.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>list-sql-streams</function> &amp;key <replaceable>type</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>type</parameter></term>
+          <listitem>
+            <para>
+              One of the following keyword symbols:
+              <symbol>:commands</symbol>, <symbol>:results</symbol> or
+              <symbol>:both</symbol>, defaulting to
+              <symbol>:commands</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>              
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to
+            <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry> 
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A list. 
+            </para>
+          </listitem>
+        </varlistentry>              
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns the list of component streams for the broadcast
+      stream recording SQL commands sent to and/or results returned
+      from <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>type</parameter>
+      must be one of <symbol>:commands</symbol>,
+      <symbol>:results</symbol>, or <symbol>:both</symbol>, defaulting
+      to <symbol>:commands</symbol>, and determines whether the listed
+      streams contain those recording SQL commands, results or both.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(list-sql-streams :type :both)
+=> NIL
+(start-sql-recording :type :both)
+=> 
+(list-sql-streams :type :both)
+=> (#&lt;Stream for descriptor 7> #&lt;Stream for descriptor 7>)
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+      <simplelist>
+        <member><link linkend="add-sql-stream"><function>add-sql-stream</function></link></member>
+        <member><link linkend="delete-sql-stream"><function>delete-sql-stream</function></link></member>      
+      </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error is signalled if <parameter>type</parameter> is passed
+        a value other than <symbol>:commands</symbol>,
+        <symbol>:results</symbol> or <symbol>:both</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="sql-stream"><function>sql-stream</function></link></member>
+        <member><link linkend="add-sql-stream"><function>add-sql-stream</function></link></member>
+        <member><link linkend="delete-sql-stream"><function>delete-sql-stream</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+</reference> 

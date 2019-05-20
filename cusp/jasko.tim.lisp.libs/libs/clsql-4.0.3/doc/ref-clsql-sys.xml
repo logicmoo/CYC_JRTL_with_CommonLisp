@@ -1,0 +1,103 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<reference id="clsql-sys">
+  <title><symbol>CLSQL-SYS</symbol></title>
+  <partintro>
+      <para>This part gives a reference to the symbols exported from
+      the package <symbol>CLSQL-SYS</symbol>, which are not exported
+      from <symbol>CLSQL</symbol> package..  These symbols are part of
+      the interface for database back-ends, but not part of the normal
+      user-interface of &clsql;.</para>
+    </partintro>
+    <refentry id="database-initialize-database-type">
+      <refnamediv>
+	<refname>DATABASE-INITIALIZE-DATABASE-TYPE</refname>
+	<refpurpose>Back-end part of <link
+	linkend="initialize-database-type"><function>initialize-database-type</function></link>.</refpurpose>
+	<refclass>Generic Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>database-initialize-database-type</function> <replaceable>database-type</replaceable> => <returnvalue>result</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>database-type</parameter></term>
+	    <listitem>
+	      <para>A keyword indicating the database type to
+		initialize.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><returnvalue>result</returnvalue></term>
+	    <listitem>
+	      <para>Either <symbol>t</symbol> if the initialization
+		succeeds or <symbol>nil</symbol> if it fails.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This generic function implements the main part of the
+	  database type initialization performed by
+	  <function>initialize-database-type</function>.  After
+	  <function>initialize-database-type</function> has checked
+	  that the given database type has not been initialized
+	  before, as indicated by
+	  <symbol>*initialized-database-types*</symbol>, it will call
+	  this function with the database type as it's sole
+	  parameter.  Database back-ends are required to define a
+	  method on this generic function which is specialized via an
+	  eql-specializer to the keyword representing their database
+	  type.</para>
+	<para>Database back-ends shall indicate successful
+	  initialization by returning <symbol>t</symbol> from their
+	  method, and <symbol>nil</symbol> otherwise.  Methods for
+	  this generic function are allowed to signal errors of type
+	  <errortype>clsql-error</errortype> or subtypes thereof.
+	  They may also signal other types of conditions, if
+	  appropriate, but have to document this.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<para></para>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>All necessary side effects to initialize the database
+	  instance.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected By</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>Conditions of type <errortype>clsql-error</errortype>
+	  or other conditions may be signalled, depending on the
+	  database back-end.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link
+	  linkend="initialize-database-type"><function>initialize-database-type</function></link></member>
+	  <member><link linkend="initialized-database-types"><symbol>*initialized-database-types*</symbol></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+  </reference>

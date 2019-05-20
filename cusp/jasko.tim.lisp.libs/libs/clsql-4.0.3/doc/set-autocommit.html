@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>SET-AUTOCOMMIT</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-transaction.html" title="Transaction Handling" /><link rel="prev" href="add-transaction-rollback-hook.html" title="ADD-TRANSACTION-ROLLBACK-HOOK" /><link rel="next" href="with-transaction.html" title="WITH-TRANSACTION" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">SET-AUTOCOMMIT</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="add-transaction-rollback-hook.html">Prev</a> </td><th width="60%" align="center">Transaction Handling</th><td width="20%" align="right"> <a accesskey="n" href="with-transaction.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="set-autocommit"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>SET-AUTOCOMMIT — Turn on or off autocommit for a database.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393726"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">set-autocommit</code> <em class="replaceable"><code>value</code></em> &amp;key <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393756"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>value</code></em></span></dt><dd><p>A Boolean specifying the desired autocommit
+            behaviour for <em class="parameter"><code>database</code></em>.
+            </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to the value
+            of <span class="symbol">*default-database*</span>.</p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>The previous autocommit value for
+            <em class="parameter"><code>database</code></em>.
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393843"></a><h2>Description</h2><p>Turns autocommit off for <em class="parameter"><code>database</code></em>
+      if <em class="parameter"><code>value</code></em> is <code class="constant">NIL</code>, and otherwise turns it
+      on. Returns the old value of autocommit flag.
+      </p><p> 
+        For RDBMS (such as Oracle) which don't automatically commit
+        changes, turning autocommit on has the effect of explicitly
+        committing changes made whenever SQL statements are executed. 
+      </p><p> 
+        Autocommit is turned on by default. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393879"></a><h2>Examples</h2><pre class="screen">
+        
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393895"></a><h2>Side Effects</h2><p>
+        <em class="parameter"><code>database</code></em> is associated with the specified 
+        autocommit mode. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393913"></a><h2>Affected by</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393924"></a><h2>Exceptional Situations</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393935"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="start-transaction.html" title="START-TRANSACTION"><code class="function">start-transaction</code></a></td></tr><tr><td><a class="link" href="commit.html" title="COMMIT"><code class="function">commit</code></a></td></tr><tr><td><a class="link" href="add-transaction-commit-hook.html" title="ADD-TRANSACTION-COMMIT-HOOK"><code class="function">add-transaction-commit-hook</code></a></td></tr><tr><td><a class="link" href="with-transaction.html" title="WITH-TRANSACTION"><code class="function">with-transaction</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393990"></a><h2>Notes</h2><p>
+        <code class="function">set-autocommit</code> is a <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extension. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="add-transaction-rollback-hook.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-transaction.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="with-transaction.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">ADD-TRANSACTION-ROLLBACK-HOOK </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> WITH-TRANSACTION</td></tr></table></div></body></html>

@@ -1,0 +1,720 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<chapter id="csql">
+  <title>&commonsql; Tutorial</title>
+  <subtitle>Based on the &usql; Tutorial</subtitle>
+
+  <sect1 id="csql-intro">
+    <title>Introduction</title>
+
+    <para>
+      The goal of this tutorial is to guide a new developer thru the
+      process of creating a set of &clsql; classes providing a
+      Object-Oriented interface to persistent data stored in an &sql;
+      database.  We will assume that the reader is familiar with how
+      &sql; works, how relations (tables) should be structured, and
+      has created at least one &sql; application previously.  We will
+      also assume a minor level of experience with Common Lisp.
+    </para>
+
+    <para>
+      &clsql; provides two different interfaces to &sql; databases, a
+      Functional interface, and an Object-Oriented interface.  The
+      Functional interface consists of a special syntax for embedded
+      &sql; expressions in Lisp, and provides lisp functions for &sql;
+      operations like <symbol>SELECT</symbol> and
+      <symbol>UPDATE</symbol>.  The object-oriented interface provides
+      a way for mapping Common Lisp Objects System (CLOS) objects into
+      databases and includes functions for inserting new objects,
+      querying objects, and removing objects.  Most applications will
+      use a combination of the two.
+    </para>
+
+    <para>
+      &clsql; is based on the CommonSQL package from LispWorks Ltd, so the
+      documentation that LispWorks makes available online is useful for
+      &clsql; as well.  It is suggested that developers new to &clsql; read
+      their documentation as well, as any differences between CommonSQL
+      and &clsql; are minor. LispWorks makes the following documents
+      available:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+	<para>
+	  <ulink url="http://www.lispworks.com/documentation/lw44/LWUG/html/lwuser-204.htm">
+	    <citetitle>&lw; User Guide - The &commonsql;
+	    Package
+	    </citetitle>
+	  </ulink>
+	</para>
+      </listitem>
+
+      <listitem>
+	<para>
+	  <ulink url="http://www.lispworks.com/documentation/lw44/LWRM/html/lwref-424.htm">
+	    <citetitle>&lw; Reference Manual - The SQL
+	    Package</citetitle>
+	  </ulink>
+	</para>
+      </listitem>
+
+      <listitem>
+	<para>
+	<ulink url="http://www.lispworks.com/documentation/sql-tutorial/index.html">
+	  <citetitle>&commonsql; Tutorial by Nick Levine</citetitle>
+	</ulink>
+	</para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
+
+  <sect1>
+    <title>Data Modeling with &clsql;</title>
+
+    <para>
+      Before we can create, query and manipulate &clsql; objects, we
+      need to define our data model as noted by Philip Greenspun
+      <footnote>
+	<para>
+	<ulink
+	 url="http://philip.greenspun.com/sql/data-modeling.html">
+	  <citetitle>Philip Greenspun's "SQL For Web Nerds" - Data
+	  Modeling</citetitle>
+	</ulink>
+	</para>
+      </footnote>
+    </para>
+
+    <para>
+      When data modeling, you are telling the relational database
+      management system (RDBMS) the following:
+    </para>
+
+    <itemizedlist>
+      <listitem>
+	<para>What elements of the data you will store.</para>
+      </listitem> 
+      <listitem>
+	<para>How large each element can be.</para>
+      </listitem>
+      <listitem>
+	<para>What kind of information each element can contain.</para>
+      </listitem>
+      <listitem>
+	<para>What elements may be left blank.</para> 
+      </listitem>
+      <listitem>
+	<para>Which elements are constrained to a fixed range.</para>
+      </listitem>
+      <listitem>
+	<para>Whether and how various tables are to be linked.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>
+      With &sql; database one would do this by defining a set of
+      relations, or tables, followed by a set of queries for joining
+      the tables together in order to construct complex records.
+      However, with &clsql; we do this by defining a set of CLOS
+      classes, specifying how they will be turned into tables, and how
+      they can be joined to one another via relations between their
+      attributes.  The &sql; tables, as well as the queries for
+      joining them together are created for us automatically, saving
+      us from dealing with some of the tedium of &sql;.
+    </para>
+
+    <para>
+      Let us start with a simple example of two &sql; tables, and the
+      relations between them.
+    </para>
+
+<programlisting>
+CREATE TABLE EMPLOYEE ( emplid     NOT NULL number(38),
+                        first_name NOT NULL varchar2(30),
+                        last_name  NOT NULL varchar2(30),
+                        email               varchar2(100),
+                        companyid  NOT NULL number(38),
+                        managerid           number(38))
+
+CREATE TABLE COMPANY ( companyid   NOT NULL number(38),
+                       name        NOT NULL varchar2(100),
+                       presidentid NOT NULL number(38))
+</programlisting>
+
+<para>
+This is of course the canonical &sql; tutorial example, "The Org Chart".
+</para>
+
+<para>
+In &clsql;, we would have two "view classes" (a fancy word for a class
+mapped into a database).  They would be defined as follows:
+</para>
+
+<programlisting>
+(clsql:def-view-class employee ()
+  ((emplid
+    :db-kind :key
+    :db-constraints :not-null
+    :type integer
+    :initarg :emplid)
+   (first-name
+    :accessor first-name
+    :type (string 30)
+    :initarg :first-name)
+   (last-name
+    :accessor last-name
+    :type (string 30)
+    :initarg :last-name)
+   (email
+    :accessor employee-email
+    :type (string 100)
+    :nulls-ok t
+    :initarg :email)
+   (companyid
+    :type integer
+    :initarg :companyid)
+   (managerid
+    :type integer
+    :nulls-ok t
+    :initarg :managerid))
+  (:base-table employee))
+
+(clsql:def-view-class company ()
+  ((companyid
+    :db-kind :key
+    :db-constraints :not-null
+    :type integer
+    :initarg :companyid)
+   (name
+    :type (string 100)
+    :initarg :name)
+   (presidentid
+    :type integer
+    :initarg :presidentid))
+  (:base-table company))
+</programlisting>
+
+<para>
+  The <function>DEF-VIEW-CLASS</function> macro is just like the
+  normal CLOS <function>DEFCLASS</function> macro, except that it
+  handles several slot options that <function>DEFCLASS</function>
+  doesn't.  These slot options have to do with the mapping of the slot
+  into the database.  We only use a few of the slot options in the
+  above example, but there are several others.
+</para>
+
+<itemizedlist>
+
+  <listitem><para>
+  <symbol>:column</symbol> - The name of the &sql; column this slot is stored in.
+    Defaults to the slot name.  If the slot name is not a valid &sql;
+    identifier, it is escaped, so foo-bar becomes foo_bar.
+  </para></listitem>
+
+  <listitem>
+    <para> 
+      <symbol>:db-kind</symbol> - The kind of database mapping which
+      is performed for this slot.  <symbol>:base</symbol> indicates
+      the slot maps to an ordinary column of the database view.
+      <symbol>:key</symbol> indicates that this slot corresponds to
+      part of the unique keys for this view, <symbol>:join</symbol>
+      indicates a join slot representing a relation to another view
+      and :virtual indicates that this slot is an ordinary CLOS slot.
+      Defaults to <symbol>:base</symbol>. </para></listitem>
+
+  <listitem>
+    <para>
+      <symbol>:db-reader</symbol> - If a string, then when reading
+      values from the database, the string will be used for a format
+      string, with the only value being the value from the database.
+      The resulting string will be used as the slot value.  If a
+      function then it will take one argument, the value from the
+      database, and return the value that should be put into the slot.
+      </para></listitem>
+
+  <listitem>
+    <para>
+      <symbol>:db-writer</symbol> - If a string, then when reading
+      values from the slot for the database, the string will be used
+      for a format string, with the only value being the value of the
+      slot.  The resulting string will be used as the column value in
+      the database.  If a function then it will take one argument, the
+      value of the slot, and return the value that should be put into
+      the database.</para></listitem>
+
+  <listitem>
+    <para>
+      <symbol>:db-type</symbol> - A string which will be used as the
+      type specifier for this slots column definition in the database.
+      </para></listitem>
+
+  <listitem>
+    <para>
+      <symbol>:void-value</symbol> - The Lisp value to return if the
+      field is &null;. The default is &nil;.</para></listitem>
+
+  <listitem>
+    <para>
+      <symbol>:db-info</symbol> - A join specification.
+      </para></listitem>
+</itemizedlist>
+
+<para>
+  In our example each table as a primary key attribute, which is
+  required to be unique.  We indicate that a slot is part of the
+  primary key (&clsql; supports multi-field primary keys) by specifying
+  the <symbol>:db-kind</symbol> key slot option.
+</para>
+
+<para>
+  The &sql; type of a slot when it is mapped into the database is
+  determined by the <symbol>:type</symbol> slot option.  The argument
+  for the <symbol>:type</symbol> option is a Common Lisp datatype.
+  The &clsql; framework will determine the appropriate mapping
+  depending on the database system the table is being created in.  If
+  we really wanted to determine what &sql; type was used for a slot,
+  we could specify a <symbol>:db-type</symbol> option like
+  "NUMBER(38)" and we would be guaranteed that the slot would be
+  stored in the database as a NUMBER(38).  This is not recomended
+  because it could makes your view class unportable across database
+  systems.
+</para>
+
+<para>
+  <function>DEF-VIEW-CLASS</function> also supports some class
+  options, like <symbol>:base-table</symbol>.  The
+  <symbol>:base-table</symbol> option specifies what the table name
+  for the view class will be when it is mapped into the database.
+</para>
+  </sect1>
+
+<sect1 id="csql-rel">
+<title>Class Relations</title> 
+
+<para>
+In an &sql; only application, the <symbol>EMPLOYEE</symbol> and
+<symbol>COMPANY</symbol> tables can be queried to determine things
+like, "Who is Vladimir's manager?", "What company does Josef work
+for?", and "What employees work for Widgets Inc.".  This is done by
+joining tables with an &sql; query.
+</para>
+
+<para>
+Who works for Widgets Inc.?
+</para>
+
+<programlisting>
+SELECT first_name, last_name FROM employee, company
+       WHERE employee.companyid = company.companyid
+	     AND company.company_name = "Widgets Inc."
+</programlisting>
+
+<para>
+Who is Vladimir's manager?
+</para>
+
+<programlisting>
+SELECT managerid FROM employee
+       WHERE employee.first_name = "Vladimir"
+	     AND employee.last_name = "Lenin"
+</programlisting>
+
+<para>
+What company does Josef work for?
+</para>
+
+<programlisting>
+SELECT company_name FROM company, employee
+       WHERE employee.first_name = "Josef"
+	     AND employee.last-name = "Stalin"
+	     AND employee.companyid = company.companyid
+</programlisting>
+
+<para>
+With &clsql; however we do not need to write out such queries because
+our view classes can maintain the relations between employees and
+companies, and employees to their managers for us.  We can then access
+these relations like we would any other attribute of an employee or
+company object.  In order to do this we define some join slots for our
+view classes.
+</para>
+
+<para>
+What company does an employee work for?  If we add the following slot
+definition to the employee class we can then ask for it's
+<symbol>COMPANY</symbol> slot and get the appropriate result.
+</para>
+
+<programlisting>
+    ;; In the employee slot list
+    (company
+      :accessor employee-company
+      :db-kind :join
+      :db-info (:join-class company
+	        :home-key companyid
+		:foreign-key companyid
+		:set nil))
+</programlisting>
+
+<para>
+Who are the employees of a given company?  And who is the president of
+it? We add the following slot definition to the company view class and
+we can then ask for it's <symbol>EMPLOYEES</symbol> slot and get the
+right result.
+</para>
+
+<programlisting>
+      ;; In the company slot list
+      (employees
+	:reader company-employees
+	:db-kind :join
+	:db-info (:join-class employee
+		  :home-key companyid
+		  :foreign-key companyid
+		  :set t))
+
+       (president
+        :reader president
+	:db-kind :join
+	:db-info (:join-class employee
+		  :home-key presidentid
+		  :foreign-key emplid
+		  :set nil))
+</programlisting>
+
+<para>
+And lastly, to define the relation between an employee and their
+manager:
+</para>
+
+<programlisting>
+	;; In the employee slot list
+       (manager
+        :accessor employee-manager
+	:db-kind :join
+	:db-info (:join-class employee
+	          :home-key managerid
+		  :foreign-key emplid
+		  :set nil))
+</programlisting>
+
+<para>
+&clsql; join slots can represent one-to-one, one-to-many, and
+many-to-many relations.  Above we only have one-to-one and one-to-many
+relations, later we will explain how to model many-to-many relations.
+First, let's go over the slot definitions and the available options.
+</para>
+
+<para>
+In order for a slot to be a join, we must specify that it's
+<symbol>:db-kind</symbol> <symbol>:join</symbol>, as opposed to
+<symbol>:base</symbol> or <symbol>:key</symbol>.  Once we do that, we
+still need to tell &clsql; how to create the join statements for the
+relation.  This is what the <symbol>:db-info</symbol> option does.  It
+is a list of keywords and values.  The available keywords are:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      <symbol>:join-class</symbol> - The view class to which we want
+      to join.  It can be another view class, or the same view class
+      as our object.</para></listitem>
+
+  <listitem>
+    <para>
+      <symbol>:home-key</symbol> - The slot(s) in the immediate object
+      whose value will be compared to the foreign-key slot(s) in the
+      join-class in order to join the two tables.  It can be a single
+      slot-name, or it can be a list of slot names.</para></listitem>
+      
+  <listitem>
+    <para>
+      <symbol>:foreign-key</symbol> - The slot(s) in the join-class
+      which will be compared to the value(s) of the home-key.
+      </para></listitem>
+
+  <listitem>
+    <para>
+      <symbol>:set</symbol> - A boolean which if false, indicates that
+      this is a one-to-one relation, only one object will be returned.
+      If true, than this is a one-to-many relation, a list of objects
+      will be returned when we ask for this slots value.
+      </para></listitem>
+</itemizedlist>
+
+<para>
+There are other :join-info options available in &clsql;, but we will
+save those till we get to the many-to-many relation examples.
+</para>
+
+</sect1>
+
+<sect1 id="csql-creat">
+<title>Object Creation</title>
+
+<para>
+Now that we have our model laid out, we should create some object.
+Let us assume that we have a database connect set up already.  We
+first need to create our tables in the database:
+</para>
+
+<para>
+Note: the file <filename>examples/clsql-tutorial.lisp</filename> contains
+view class definitions which you can load into your list at this point
+in order to play along at home.
+</para>
+
+<programlisting>
+(clsql:create-view-from-class 'employee)
+(clsql:create-view-from-class 'company)
+</programlisting>
+
+<para>
+Then we will create our objects.  We create them just like you would
+any other CLOS object:
+</para>
+
+<programlisting>
+(defvar company1 (make-instance 'company
+			      :companyid 1
+			      :presidentid 1
+			      :name "Widgets Inc."))
+			      
+(defvar employee1 (make-instance 'employee
+			       :emplid 1
+			       :first-name "Vladimir"
+			       :last-name "Lenin"
+			       :email "lenin@soviet.org"
+			       :companyid 1))
+
+(defvar employee2 (make-instance 'employee
+			       :emplid 2
+			       :first-name "Josef"
+			       :last-name "Stalin"
+			       :email "stalin@soviet.org"
+			       :companyid 1
+			       :managerid 1))
+</programlisting>
+
+<para>
+In order to insert an objects into the database we use the
+<function>UPDATE-RECORDS-FROM-INSTANCE</function> function as follows:
+</para>
+
+<programlisting>
+(clsql:update-records-from-instance employee1)
+(clsql:update-records-from-instance employee2)
+(clsql:update-records-from-instance company1)
+</programlisting>
+
+<para>
+  After you make any changes to an object, you have to specifically
+  tell &clsql; to update the &sql; database.  The
+  <function>UPDATE-RECORDS-FROM-INSTANCE</function> method will write
+  all of the changes you have made to the object into the database.
+</para>
+
+<para>
+  Since &clsql; objects are just normal CLOS objects, we can manipulate
+  their slots just like any other object.  For instance, let's say
+  that Lenin changes his email because he was getting too much spam
+  from the German Socialists.
+</para>
+
+<programlisting>
+;; Print Lenin's current email address, change it and save it to the
+;; database.  Get a new object representing Lenin from the database
+;; and print the email
+
+;; This lets us use the functional &clsql; interface with [] syntax
+(clsql:locally-enable-sql-reader-syntax)
+
+(format t "The email address of ~A ~A is ~A"
+	(first-name employee1)
+	(last-name employee1)
+	(employee-email employee1))
+
+(setf (employee-email employee1) "lenin-nospam@soviets.org")
+
+;; Update the database
+(clsql:update-records-from-instance employee1)
+
+(let ((new-lenin (car (clsql:select 'employee
+	                :where [= [slot-value 'employee 'emplid] 1]))))
+      (format t "His new email is ~A"
+	  (employee-email new-lenin)))
+</programlisting>
+
+<para>
+  Everything except for the last <function>LET</function> expression
+  is already familiar to us by now.  To understand the call to
+  <function>CLSQL:SELECT</function> we need to discuss the
+  Functional &sql; interface and it's integration with the Object
+  Oriented interface of &clsql;.
+</para>
+
+</sect1>
+
+<sect1 id="csql-find">
+<title>Finding Objects</title>
+
+<para>
+  Now that we have our objects in the database, how do we get them out
+  when we need to work with them?  &clsql; provides a functional
+  interface to &sql;, which consists of a special Lisp reader macro
+  and some functions.  The special syntax allows us to embed &sql; in
+  lisp expressions, and lisp expressions in &sql;, with ease.
+</para>
+
+<para>
+  Once we have turned on the syntax with the expression:
+</para>
+
+<programlisting>
+(clsql:locally-enable-sql-reader-syntax)
+</programlisting>
+
+<para>
+  We can start entering fragments of &sql; into our lisp reader.  We
+  will get back objects which represent the lisp expressions.  These
+  objects will later be compiled into &sql; expressions that are
+  optimized for the database backed we are connected to.  This means
+  that we have a database independent &sql; syntax.  Here are some
+  examples:
+</para>
+
+<programlisting>
+;; an attribute or table name
+[foo] => #&lt;CLSQL-SYS::SQL-IDENT-ATTRIBUTE FOO>
+
+;; a attribute identifier with table qualifier
+[foo bar] => #&lt;CLSQL-SYS::SQL-IDENT-ATTRIBUTE FOO.BAR>
+
+;; a attribute identifier with table qualifier
+[= "Lenin" [first_name]] =>
+   #&lt;CLSQL-SYS::SQL-RELATIONAL-EXP ('Lenin' = FIRST_NAME)>
+
+[&lt; [emplid] 3] =>
+   #&lt;CLSQL-SYS::SQL-RELATIONAL-EXP (EMPLID &lt; 3)>
+
+[and [&lt; [emplid] 2] [= [first_name] "Lenin"]] =>
+   #&lt;CLSQL-SYS::SQL-RELATIONAL-EXP ((EMPLID &lt; 2) AND
+                                     (FIRST_NAME = 'Lenin'))>
+
+
+;; If we want to reference a slot in an object we can us the
+;;  SLOT-VALUE sql extension
+[= [slot-value 'employee 'emplid] 1] =>
+   #&lt;CLSQL-SYS::SQL-RELATIONAL-EXP (EMPLOYEE.EMPLID = 1)>
+
+[= [slot-value 'employee 'emplid]
+   [slot-value 'company 'presidentid]] =>
+   #&lt;CLSQL-SYS::SQL-RELATIONAL-EXP (EMPLOYEE.EMPLID = COMPANY.PRESIDENTID)>
+</programlisting>
+
+<para>
+  The <function>SLOT-VALUE</function> operator is important because it
+  let's us query objects in a way that is robust to any changes in the
+  object->table mapping, like column name changes, or table name
+  changes.  So when you are querying objects, be sure to use the
+  <function>SLOT-VALUE</function> &sql; extension.
+</para>
+
+<para>
+  Since we can now formulate &sql; relational expression which can be
+  used as qualifiers, like we put after the <symbol>WHERE</symbol>
+  keyword in &sql; statements, we can start querying our objects.
+  &clsql; provides a function <symbol>SELECT</symbol> which can return
+  use complete objects from the database which conform to a qualifier,
+  can be sorted, and various other &sql; operations.
+</para>
+
+<para>
+  The first argument to <symbol>SELECT</symbol> is a class name.  it
+  also has a set of keyword arguments which are covered in the
+  documentation.  For now we will concern ourselves only with the
+  :where keyword.  Select returns a list of objects, or nil if it
+  can't find any.  It's important to remember that it always returns a
+  list, so even if you are expecting only one result, you should
+  remember to extract it from the list you get from
+  <symbol>SELECT</symbol>.
+</para>
+
+<programlisting>
+;; all employees
+(clsql:select 'employee)
+;; all companies
+(clsql:select 'company)
+
+;; employees named Lenin
+(clsql:select 'employee :where [= [slot-value 'employee 'last-name]
+				"Lenin"])
+
+(clsql:select 'company :where [= [slot-value 'company 'name]
+			       "Widgets Inc."])
+
+;; Employees of Widget's Inc.
+(clsql:select 'employee
+	    :where [and [= [slot-value 'employee 'companyid]
+			   [slot-value 'company 'companyid]]
+			[= [slot-value 'company 'name]
+			   "Widgets Inc."]])
+
+;; Same thing, except that we are using the employee
+;; relation in the company view class to do the join for us,
+;; saving us the work of writing out the &sql;!
+(company-employees company1)
+
+;; President of Widgets Inc.
+(president company1)
+
+;; Manager of Josef Stalin
+(employee-manager employee2)
+</programlisting>
+
+</sect1>
+
+<sect1 id="csql-del">
+<title>Deleting Objects</title>
+
+<para>
+  Now that we know how to create objects in our database, manipulate
+  them and query them (including using our predefined relations to
+  save us the trouble writing alot of &sql;) we should learn how to
+  clean up after ourself.  It's quite simple really. The function
+  <function>DELETE-INSTANCE-RECORDS</function> will remove an object
+  from the database.  However, when we remove an object we are
+  responsible for making sure that the database is left in a correct
+  state.
+</para>
+
+<para>
+  For example, if we remove a company record, we need to either remove
+  all of it's employees or we need to move them to another company.
+  Likewise if we remove an employee, we should make sure to update any
+  other employees who had them as a manager.
+</para>
+
+</sect1>
+
+<sect1 id="csql-concl">
+<title>Conclusion</title>
+
+<para>
+  There are many nooks and crannies to &clsql;, some of which are
+  covered in the Xanalys documents we refered to earlier, some are
+  not.  The best documentation at this time is still the source code
+  for &clsql; itself and the inline documentation for its various
+  functions.
+</para>
+
+</sect1>
+
+</chapter>

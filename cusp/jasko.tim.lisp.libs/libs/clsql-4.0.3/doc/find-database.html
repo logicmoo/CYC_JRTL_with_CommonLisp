@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>FIND-DATABASE</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-connect.html" title="Connection and Initialisation" /><link rel="prev" href="disconnect-pooled.html" title="DISCONNECT-POOLED" /><link rel="next" href="initialize-database-type.html" title="INITIALIZE-DATABASE-TYPE" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">FIND-DATABASE</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="disconnect-pooled.html">Prev</a> </td><th width="60%" align="center">Connection and Initialisation</th><td width="20%" align="right"> <a accesskey="n" href="initialize-database-type.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="find-database"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>FIND-DATABASE — &gt;Locate a database object through it's
+      name.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389345"></a><h2>Syntax</h2><pre class="synopsis"><code class="function">find-database</code> <em class="replaceable"><code>database</code></em> &amp;optional <em class="replaceable"><code>errorp</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389370"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A database object or a string, denoting a database 
+		name.</p></dd><dt><span class="term"><em class="parameter"><code>errorp</code></em></span></dt><dd><p>A generalized boolean.  Defaults to
+		<span class="symbol">t</span>.</p></dd><dt><span class="term"><em class="parameter"><code>db-type</code></em></span></dt><dd><p>
+                A keyword symbol denoting a known database back-end. 
+              </p></dd><dt><span class="term"><span class="returnvalue">result</span></span></dt><dd><p>Either a database object, or, if
+		<em class="parameter"><code>errorp</code></em> is <code class="constant">NIL</code>, 
+		possibly <code class="constant">NIL</code>.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389457"></a><h2>Description</h2><p><code class="function">find-database</code> locates an active
+        database object given the specification in
+        <em class="parameter"><code>database</code></em>.  If
+        <em class="parameter"><code>database</code></em> is an object of type
+        <span class="type">database</span>, <code class="function">find-database</code>
+        returns this.  Otherwise it will search the active databases
+        as indicated by the list returned by
+        <code class="function">connected-databases</code> for a database of
+        type <em class="parameter"><code>db-type</code></em> whose name (as returned by
+        <code class="function">database-name</code> is equal as per
+        <code class="function">string=</code> to the string passed as
+        <em class="parameter"><code>database</code></em>. If it succeeds, it returns
+        the first database found.</p><p> 
+          If <em class="parameter"><code>db-type</code></em> is <code class="constant">NIL</code> all databases
+          matching the string <em class="parameter"><code>database</code></em> are
+          considered. If no matching databases are found and
+          <em class="parameter"><code>errorp</code></em> is <code class="constant">NIL</code> then <code class="constant">NIL</code> is
+          returned. If <em class="parameter"><code>errorp</code></em> is <code class="constant">NIL</code> and one or
+          more matching databases are found, then the most recently
+          connected database is returned as a first value and the
+          number of matching databases is returned as a second
+          value. If no, or more than one, matching databases are found
+          and <em class="parameter"><code>errorp</code></em> is true, an error is
+          signalled.
+        </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389563"></a><h2>Examples</h2><pre class="screen">
+(database-name-from-spec '("dent" "newesim" "dent" "dent") :mysql)
+=&gt; "dent/newesim/dent"
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48391DCD}&gt;
+(database-name *default-database*)
+=&gt; "dent/newesim/dent"
+
+(database-name-from-spec '(nil "template1" "dent" nil) :postgresql)
+=&gt; "/template1/dent"
+(connect '(nil "template1" "dent" nil) :database-type :postgresql)
+=&gt; #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}&gt;
+(database-name *default-database*)
+=&gt; "/template1/dent"
+
+(database-name-from-spec '("www.pmsf.de" "template1" "dent" nil) :postgresql)
+=&gt; "www.pmsf.de/template1/dent"
+
+(find-database "dent/newesim/dent")
+=&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {484E91C5}&gt;
+(find-database "/template1/dent")
+=&gt; #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}&gt;
+(find-database "www.pmsf.de/template1/dent" nil)
+=&gt; NIL
+(find-database **)
+=&gt; #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}&gt;
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389583"></a><h2>Side Effects</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389593"></a><h2>Affected By</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="connected-databases.html" title="CONNECTED-DATABASES"><code class="function">connected-databases</code></a></td></tr></table><p>
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389617"></a><h2>Exceptional Situations</h2><p>Will signal an error of type
+	<span class="errortype">clsql-error</span> if no matching database
+	  can be found, and <em class="parameter"><code>errorp</code></em> is true.
+	  Will signal an error if the value of
+	  <em class="parameter"><code>database</code></em> is neither an object of type
+	  <span class="type">database</span> nor a string.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389643"></a><h2>See Also</h2><p>
+	</p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="database-name.html" title="DATABASE-NAME"><code class="function">database-name</code></a></td></tr><tr><td><a class="link" href="database-name-from-spec.html" title="DATABASE-NAME-FROM-SPEC"><code class="function">database-name-from-spec</code></a></td></tr><tr><td><a class="link" href="disconnect.html" title="DISCONNECT"><code class="function">disconnect</code></a></td></tr><tr><td><a class="link" href="connect.html" title="CONNECT"><code class="function">connect</code></a></td></tr><tr><td><a class="link" href="status.html" title="STATUS"><code class="function">status</code></a></td></tr><tr><td><a class="link" href="connected-databases.html" title="CONNECTED-DATABASES"><code class="function">connected-databases</code></a></td></tr></table><p>
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id389714"></a><h2>Notes</h2><p>The <em class="parameter"><code>db-type</code></em> keyword argument to
+        <code class="function">find-database</code> is a <span class="application"><span class="emphasis"><em>CLSQL</em></span></span>
+        extension. </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="disconnect-pooled.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-connect.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="initialize-database-type.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">DISCONNECT-POOLED </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> INITIALIZE-DATABASE-TYPE</td></tr></table></div></body></html>

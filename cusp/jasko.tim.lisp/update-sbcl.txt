@@ -1,0 +1,16 @@
+mv sbcl/site .
+mv sbcl/site-systems/ .
+
+rm -r sbcl
+
+cp -r /usr/local/lib/sbcl .
+
+cp /usr/local/bin/sbcl sbcl
+
+rm sbcl/sbcl.core.old
+
+rm -r sbcl/site
+rm -r sbcl/site-systems
+
+mv site sbcl
+mv site-systems sbcl

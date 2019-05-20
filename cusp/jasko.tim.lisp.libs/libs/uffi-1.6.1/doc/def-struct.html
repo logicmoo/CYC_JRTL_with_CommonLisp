@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>def-struct</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="aggregates.html" title="Aggregate Types" /><link rel="prev" href="def-enum.html" title="def-enum" /><link rel="next" href="get-slot-value.html" title="get-slot-value" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">def-struct</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="def-enum.html">Prev</a> </td><th width="60%" align="center">Aggregate Types</th><td width="20%" align="right"> <a accesskey="n" href="get-slot-value.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="def-struct"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>def-struct — Defines a <code class="computeroutput">C</code> structure.
+	<p><b>Macro</b></p></p></div><div class="refsynopsisdiv"><h2>Syntax</h2><pre class="synopsis">
+	  <code class="function">def-struct</code> <em class="replaceable"><code>name &amp;rest fields</code></em>
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2614884"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>A symbol that names the structure.
+	      </p></dd><dt><span class="term"><em class="parameter"><code>fields</code></em></span></dt><dd><p>A variable number of field defintions. Each definition is a list consisting of a symbol naming the field followed by its foreign type.
+	      </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2614933"></a><h2>Description</h2><p>
+	  Declares a structure. A special type is available as a slot
+in the field. It is a pointer that points to an instance of the parent
+structure. It's type is <code class="constant">:pointer-self</code>.
+
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2614951"></a><h2>Examples</h2><pre class="screen">
+(def-struct foo (a :unsigned-int) 
+                (b (* :char)) 
+                (c (:array :int 10)) 
+                (next :pointer-self))
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2597040"></a><h2>Side Effects</h2><p>Creates a foreign type.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2597051"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2597063"></a><h2>Exceptional Situations</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="def-enum.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="aggregates.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="get-slot-value.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">def-enum </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> get-slot-value</td></tr></table></div></body></html>

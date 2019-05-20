@@ -1,0 +1,855 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+  
+<appendix id="appendix">
+  <title>Database Back-ends</title>
+
+  <sect1 id="foreignlibs">
+    <title>How CLSQL finds and loads foreign  libraries</title>
+    <para>
+      For some database types CLSQL has to load external foreign
+      libaries.  These are usually searched for in the standard
+      locations the operating system uses but you can tell &clsql; to
+      look into other directories as well by using the function
+      <function>CLSQL:PUSH-LIBRARY-PATH</function> or by directly
+      manipulating the special variable
+      <varname>CLSQL:*FOREIGN-LIBRARY-SEARCH-PATHS*</varname>.  If,
+      say, the shared library libpq.so needed for PostgreSQL support
+      is located in the directory <filename>/opt/foo/</filename> on
+      your machine you'd use
+      <screen>
+	(clsql:push-library-path "/opt/foo/")
+      </screen>
+  before loading the CLSQL-POSTGRESQL module.  (Note the trailing
+  slash above!)
+
+  If you want to combine this with fully automatic loading of
+  libraries via ASDF a technique like the following works:
+
+  <screen>
+    (defmethod asdf:perform :after ((o asdf:load-op) 
+                                    (c (eql (asdf:find-system 'clsql))))
+      (funcall (find-symbol (symbol-name '#:push-library-path)
+                            (find-package 'clsql))
+               #p"/opt/foo/"))
+  </screen>
+    </para>
+
+    <para>
+      Additionally, site-specific initialization can be done using an
+initialization file. If the file <filename>/etc/clsql-init.lisp</filename> 
+exists, this file will be read after the &clsql; ASDF system is loaded.
+This file can contain forms to set site-specific paths as well as change
+&clsql; default values.
+    </para>
+  </sect1>
+  <sect1 id="postgresql">
+    <title>PostgreSQL</title>
+    <sect2>
+      <title>Libraries</title>
+      <para>The PostgreSQL back-end requires the PostgreSQL C 
+      client library (<filename>libpq.so</filename>).  The
+      location of this library is specified via 
+	  <symbol>*postgresql-so-load-path*</symbol>, which defaults
+	  to <filename>/usr/lib/libpq.so</filename>.  Additional flags 
+	  to <application>ld</application> needed for linking are
+	  specified via <symbol>*postgresql-so-libraries*</symbol>,
+	  which defaults to <symbol>("-lcrypt" "-lc")</symbol>.</para>
+      </sect2>
+      <sect2>
+	<title>Initialization</title>
+	<para>Use 
+	  <screen>
+(asdf:operate 'asdf:load-op 'clsql-postgresql)
+	</screen>
+	  to load the PostgreSQL back-end.  The database type for the
+	  PostgreSQL back-end is <symbol>:postgresql</symbol>.</para>
+      </sect2>
+      <sect2>
+	<title>Connection Specification</title>
+	<sect3>
+	  <title>Syntax of connection-spec</title>
+	  <synopsis>
+	    (<replaceable>host</replaceable> <replaceable>db</replaceable> <replaceable>user</replaceable> <replaceable>password</replaceable> &amp;optional <replaceable>port</replaceable> <replaceable>options</replaceable> <replaceable>tty</replaceable>)
+	  </synopsis>
+	</sect3>
+	<sect3>
+	  <title>Description of connection-spec</title>
+	  <para>
+	    For every parameter in the connection-spec,
+	    <symbol>nil</symbol> indicates that the PostgreSQL default
+	    environment variables (see PostgreSQL documentation) will
+	    be used, or if those are unset, the compiled-in defaults
+	    of the C client library are used.
+	  </para>
+	  <variablelist>
+	    <varlistentry>
+	      <term><parameter>host</parameter></term>
+	      <listitem>
+		<para>String representing the hostname or IP address
+		  the PostgreSQL server resides on.  Use the empty
+		  string to indicate a connection to localhost via
+		  Unix-Domain sockets instead of TCP/IP.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>db</parameter></term>
+	      <listitem>
+		<para>String representing the name of the database on
+		  the server to connect to.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>user</parameter></term>
+	      <listitem>
+		<para>String representing the user name to use for
+		  authentication.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>password</parameter></term>
+	      <listitem>
+		<para>String representing the unencrypted password to
+		  use for authentication.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>port</parameter></term>
+	      <listitem>
+		<para>String representing the port to use for
+		  communication with the PostgreSQL server.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>options</parameter></term>
+	      <listitem>
+		<para>String representing further runtime options for
+		  the PostgreSQL server.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>tty</parameter></term>
+	      <listitem>
+		<para>String representing the tty or file to use for
+		  debugging messages from the PostgreSQL server.</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</sect3>
+      </sect2>
+      <sect2><title>Notes</title>
+      <para>None.</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="postgresql-socket">
+      <title>PostgreSQL Socket</title>
+      <sect2>
+	<title>Libraries</title>
+	<para>The PostgreSQL Socket back-end needs
+	  <emphasis>no</emphasis> access to the PostgreSQL C
+	  client library, since it communicates directly with the
+	  PostgreSQL server using the published frontend/backend
+	  protocol, version 2.0.  This eases installation and makes it
+	  possible to dump CMU CL images containing CLSQL and this
+	  backend, contrary to backends which require FFI code.</para>
+      </sect2>
+      <sect2>
+	<title>Initialization</title>
+	<para>
+	  Use 
+	  <screen>
+(asdf:operate 'asdf:load-op 'clsql-postgresql-socket)
+	</screen>
+	  to load the PostgreSQL Socket back-end.  The database type
+	  for the PostgreSQL Socket back-end is
+	  <symbol>:postgresql-socket</symbol>.
+	</para>
+      </sect2>
+      <sect2>
+	<title>Connection Specification</title>
+	<sect3>
+	  <title>Syntax of connection-spec</title>
+	  <synopsis>
+	    (<replaceable>host</replaceable> <replaceable>db</replaceable> <replaceable>user</replaceable> <replaceable>password</replaceable> &amp;optional <replaceable>port</replaceable> <replaceable>options</replaceable> <replaceable>tty</replaceable>)
+	  </synopsis>
+	</sect3>
+	<sect3>
+	  <title>Description of connection-spec</title>
+	  <variablelist>
+	    <varlistentry>
+	      <term><parameter>host</parameter></term>
+	      <listitem>
+		<para>If this is a string, it represents the hostname or
+		  IP address the PostgreSQL server resides on.  In
+		  this case communication with the server proceeds via
+		  a TCP connection to the given host and port.</para>
+		<para>
+		  If this is a pathname, then it is assumed to name the
+		  directory that contains the server's Unix-Domain
+		  sockets.  The full name to the socket is then
+		  constructed from this and the port number passed,
+		  and communication will proceed via a connection to
+		  this unix-domain socket.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>db</parameter></term>
+	      <listitem>
+		<para>String representing the name of the database on
+		  the server to connect to.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>user</parameter></term>
+	      <listitem>
+		<para>String representing the user name to use for
+		  authentication.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>password</parameter></term>
+	      <listitem>
+		<para>String representing the unencrypted password to
+		  use for authentication.  This can be the empty
+		  string if no password is required for
+		  authentication.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>port</parameter></term>
+	      <listitem>
+		<para>Integer representing the port to use for
+		  communication with the PostgreSQL server.  This
+		  defaults to 5432.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>options</parameter></term>
+	      <listitem>
+		<para>String representing further runtime options for
+		  the PostgreSQL server.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>tty</parameter></term>
+	      <listitem>
+		<para>String representing the tty or file to use for
+		  debugging messages from the PostgreSQL server.</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</sect3>
+      </sect2>
+      <sect2><title>Notes</title>
+      <para>None.</para>
+      </sect2>
+    </sect1>
+
+  <sect1 id="mysql">
+    <title>MySQL</title>
+    <sect2>
+      <title>Libraries</title>
+      <para>The &mysql; back-end requires the &mysql; C 
+	client library (<filename>libmysqlclient.so</filename>).
+	The location of this library is specified 
+	via <symbol>*mysql-so-load-path*</symbol>, which defaults
+	to <filename>/usr/lib/libmysqlclient.so</filename>.
+	Additional flags to <application>ld</application> needed for
+	linking are specified via <symbol>*mysql-so-libraries*</symbol>,
+	which defaults to <symbol>("-lc")</symbol>.
+      </para>
+    </sect2>
+    <sect2>
+      <title>Initialization</title>
+      <para>
+	Use 
+	<screen>
+(asdf:operate 'asdf:load-op 'clsql-mysql)
+	</screen>
+	to load the &mysql; back-end.  The database type for the MySQL
+	back-end is <symbol>:mysql</symbol>.
+      </para>
+      </sect2>
+      <sect2>
+	<title>Connection Specification</title>
+	<sect3>
+	  <title>Syntax of connection-spec</title>
+	  <synopsis>(<replaceable>host</replaceable> <replaceable>db</replaceable> <replaceable>user</replaceable> <replaceable>password</replaceable> &amp;optional <replaceable>port</replaceable>)</synopsis>
+	</sect3>
+	<sect3>
+	  <title>Description of connection-spec</title>
+	  <variablelist>
+	    <varlistentry>
+	      <term><parameter>host</parameter></term>
+	      <listitem>
+		<para>String representing the hostname or IP address
+		  the &mysql; server resides on, or <symbol>nil</symbol>
+		  to indicate the localhost.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>db</parameter></term>
+	      <listitem>
+		<para>String representing the name of the database on
+		  the server to connect to.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>user</parameter></term>
+	      <listitem>
+		<para>String representing the user name to use for
+		  authentication, or <symbol>nil</symbol> to use the
+		  current Unix user ID.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>password</parameter></term>
+	      <listitem>
+		<para>String representing the unencrypted password to
+		  use for authentication, or <symbol>nil</symbol> if
+		  the authentication record has an empty password
+		  field.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>port</parameter></term>
+	      <listitem>
+		<para>String representing the port to use for
+		  communication with the MySQL server.</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</sect3>
+      </sect2>
+      <sect2><title>Notes</title>
+      <sect3><title>FDDL</title> 
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            <link
+            linkend="drop-index"><function>drop-index</function></link>
+            requires a table to be specified with the
+            <symbol>:on</symbol> keyword parameter.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <glossterm linkend="gloss-view">views</glossterm> are not
+            supported by &mysql;. 
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The <symbol>:transactions</symbol> keyword argument to
+            <link
+            linkend="create-table"><function>create-table</function></link>
+            controls whether or not the created table is an InnoDB
+            table which supports transactions.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            The <symbol>:owner</symbol> keyword argument to the FDDL functions 
+            for listing and testing for database objects is ignored. 
+          </para>
+        </listitem>        
+      </itemizedlist>
+      </sect3>
+      <sect3><title>FDML</title>
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            Prior to version 4.1, &mysql; does not support nested
+            subqueries in calls to <link
+            linkend="select"><function>select</function></link>.
+          </para>
+        </listitem>
+      </itemizedlist>
+      </sect3>
+      <sect3><title>Symbolic SQL Syntax</title>
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            &mysql; does not support the <function>||</function>
+            concatenation operator. Use <function>concat</function>
+            instead.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            &mysql; does not support the <function>substr</function>
+            operator. Use <function>substring</function> instead.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            &mysql; does not support the
+            <function>intersect</function> and
+            <function>except</function> set operations.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            &mysql; (version 4.0 and later) does not support string
+            table aliases unless the server is started with
+            ANSI_QUOTES enabled.
+          </para>
+        </listitem>
+      </itemizedlist>
+      </sect3>
+      </sect2>
+    </sect1>
+    
+    <sect1 id="odbc">
+      <title>&odbc;</title>
+      <sect2>
+	<title>Libraries</title> 
+	<para>
+	  The &odbc; back-end requires access to an &odbc; driver
+	  manager as well as &odbc; drivers for the underlying
+	  database server. &clsql; has been tested with
+	  <application>unixODBC</application> ODBC Driver Manager as
+	  well as Microsoft's ODBC manager.  These driver managers
+	  have been tested with the <ulink
+	  url="http://odbc.postgresql.org">
+	  <citetitle>psqlODBC</citetitle></ulink> driver for
+	  &postgresql; and the <ulink
+	  url="http://www.mysql.com/products/connector/odbc/">
+	  <citetitle>MyODBC</citetitle></ulink> driver for &mysql;.
+	</para>
+      </sect2>
+      <sect2>
+	<title>Initialization</title>
+	<para>
+	  Use 
+	  <screen>
+(asdf:operate 'asdf:load-op 'clsql-odbc)
+	  </screen>
+	  to load the &odbc; back-end.  The database type for the &odbc;
+	  back-end is <symbol>:odbc</symbol>.
+	</para>
+      </sect2>
+      <sect2>
+	<title>Connection Specification</title>
+	<sect3>
+	  <title>Syntax of connection-spec</title>
+	  <synopsis>(<replaceable>dsn</replaceable> <replaceable>user</replaceable> <replaceable>password</replaceable>)</synopsis>
+	</sect3>
+	<sect3>
+	  <title>Description of connection-spec</title>
+	  <variablelist>
+	    <varlistentry>
+	      <term><parameter>dsn</parameter></term>
+	      <listitem>
+		<para>String representing the ODBC data source name.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>user</parameter></term>
+	      <listitem>
+		<para>String representing the user name to use for
+		  authentication.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>password</parameter></term>
+	      <listitem>
+		<para>String representing the unencrypted password to
+		  use for authentication.</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</sect3>
+      </sect2>
+      <sect2><title>Notes</title>
+      <sect3><title>FDDL</title> 
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            The <symbol>:owner</symbol> keyword argument to the FDDL functions 
+            for listing and testing for database objects is ignored. 
+          </para>
+        </listitem>        
+      </itemizedlist>
+      </sect3>
+      </sect2>
+    </sect1>
+
+    <sect1 id="aodbc">
+      <title>&aodbc;</title>
+      <sect2>
+	<title>Libraries</title> <para>The &aodbc; back-end requires
+	access to the &odbc; interface of &acl; named DBI. This
+	interface is not available in the trial version of
+	&acl;</para>
+      </sect2>
+      <sect2>
+	<title>Initialization</title>
+	<para>
+	  Use 
+	  <screen>
+(require 'aodbc-v2)
+(asdf:operate 'asdf:load-op 'clsql-aodbc)
+	  </screen>
+	  to load the &aodbc; back-end.  The database type for the &aodbc;
+	  back-end is <symbol>:aodbc</symbol>.
+	</para>
+      </sect2>
+      <sect2>
+	<title>Connection Specification</title>
+	<sect3>
+	  <title>Syntax of connection-spec</title>
+	  <synopsis>
+	    (<replaceable>dsn</replaceable> <replaceable>user</replaceable> <replaceable>password</replaceable>)
+	  </synopsis>
+	</sect3>
+	<sect3>
+	  <title>Description of connection-spec</title>
+	  <variablelist>
+	    <varlistentry>
+	      <term><parameter>dsn</parameter></term>
+	      <listitem>
+		<para>String representing the ODBC data source name.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>user</parameter></term>
+	      <listitem>
+		<para>String representing the user name to use for
+		  authentication.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>password</parameter></term>
+	      <listitem>
+		<para>String representing the unencrypted password to
+		  use for authentication.</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</sect3>
+      </sect2>
+      <sect2><title>Notes</title>
+      <para>
+        None. 
+      </para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sqlite">
+      <title>&sqlite;</title>
+      <sect2>
+	<title>Libraries</title> <para>The &sqlite; back-end requires
+	the &sqlite; shared library file. Its default file name is
+	<filename>/usr/lib/libsqlite.so</filename>.</para>
+      </sect2>
+      <sect2>
+	<title>Initialization</title>
+	<para>
+	  Use 
+	  <screen>
+(asdf:operate 'asdf:load-op 'clsql-sqlite)
+	  </screen>
+	  to load the &sqlite; back-end.  The database type for the &sqlite;
+	  back-end is <symbol>:sqlite</symbol>.
+	</para>
+      </sect2>
+      <sect2>
+	<title>Connection Specification</title>
+	<sect3>
+	  <title>Syntax of connection-spec</title>
+	  <synopsis>(<replaceable>filename</replaceable>)</synopsis>
+	</sect3>
+	<sect3>
+	  <title>Description of connection-spec</title>
+	  <variablelist>
+	    <varlistentry>
+	      <term><parameter>filename</parameter></term>
+	      <listitem>
+		<para>String representing the filename of the &sqlite;
+		database file.</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</sect3>
+      </sect2>
+      <sect2><title>Notes</title>
+      <sect3><title>Connection</title> 
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            Passing <parameter>filename</parameter> a value of
+            <filename>:memory:</filename> will create a database in
+            physical memory instead of using a file on disk.
+          </para>
+        </listitem>        
+        <listitem>
+          <para>
+            Some operations will be many times faster if database
+            integrity checking is disabled by setting the SYNCHRONOUS
+            flag to OFF (see the SQLITE manual for details).
+          </para>
+        </listitem>
+      </itemizedlist>
+      </sect3>
+      <sect3><title>FDDL</title> 
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            The <symbol>:owner</symbol> keyword argument to the FDDL functions 
+            for listing and testing for database objects is ignored. 
+          </para>
+        </listitem>        
+        <listitem>
+          <para>
+            The <symbol>:column-list</symbol> keyword argument to
+            <link
+            linkend="create-view"><function>create-view</function></link>
+            is not supported by &sqlite;. 
+          </para>
+        </listitem>
+      </itemizedlist>
+      </sect3>
+      <sect3><title>Symbolic SQL Syntax</title>
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            &sqlite; does not support the <function>all</function>,
+            <function>some</function>, <function>any</function> and
+            <function>exists</function> subquery operations. 
+          </para>
+        </listitem>
+      </itemizedlist>
+      </sect3>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sqlite3">
+      <title>&sqlite3;</title>
+      <sect2>
+	<title>Libraries</title> <para>The &sqlite3; back-end requires
+	the &sqlite3; shared library file. Its default file name is
+	<filename>/usr/lib/libsqlite3.so</filename>.</para>
+      </sect2>
+      <sect2>
+	<title>Initialization</title>
+	<para>
+	  Use 
+	  <screen>
+(asdf:operate 'asdf:load-op 'clsql-sqlite3)
+	  </screen>
+	  to load the &sqlite3; back-end.  The database type for the &sqlite3;
+	  back-end is <symbol>:sqlite3</symbol>.
+	</para>
+      </sect2>
+      <sect2>
+	<title>Connection Specification</title>
+	<sect3>
+	  <title>Syntax of connection-spec</title>
+	  <synopsis>(<replaceable>filename</replaceable> &amp;optional <replaceable>init-function</replaceable>)</synopsis>
+	</sect3>
+	<sect3>
+	  <title>Description of connection-spec</title>
+	  <variablelist>
+	    <varlistentry>
+	      <term><parameter>filename</parameter></term>
+	      <listitem>
+		<para>String representing the filename of the &sqlite3;
+		database file.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>init-function</parameter></term>
+	      <listitem>
+		<para>
+		 A function designator.
+		 <replaceable>init-function</replaceable> takes a
+		 single argument of type
+		 <type>sqlite3:sqlite3-db</type>, a foreign pointer to
+		 the C descriptor of the newly opened database.
+		 <replaceable>init-function</replaceable> is called by
+		 the back-end immediately after &sqlite3;
+		 <function>sqlite3_open</function> library function,
+		 and can be used to perform optional database
+		 initializations by calling foreign functions in the
+		 &sqlite3; library.
+		</para>
+		<para>
+		 An example of an initialization function which
+		 defines a new collating sequence for text columns is
+		 provided in
+		 <filename>./examples/sqlite3/init-func/</filename>.
+		</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</sect3>
+      </sect2>
+      <sect2><title>Notes</title>
+      <sect3><title>Connection</title> 
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            Passing <parameter>filename</parameter> a value of
+            <filename>:memory:</filename> will create a database in
+            physical memory instead of using a file on disk.
+          </para>
+        </listitem>        
+        <listitem>
+          <para>
+            Some operations will be many times faster if database
+            integrity checking is disabled by setting the SYNCHRONOUS
+            flag to OFF (see the SQLITE manual for details).
+          </para>
+        </listitem>
+      </itemizedlist>
+      </sect3>
+      <sect3><title>FDDL</title> 
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            The <symbol>:owner</symbol> keyword argument to the FDDL functions 
+            for listing and testing for database objects is ignored. 
+          </para>
+        </listitem>        
+        <listitem>
+          <para>
+            The <symbol>:column-list</symbol> keyword argument to
+            <link
+            linkend="create-view"><function>create-view</function></link>
+            is not supported by &sqlite3;. 
+          </para>
+        </listitem>
+      </itemizedlist>
+      </sect3>
+      <sect3><title>Symbolic SQL Syntax</title>
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            &sqlite3; does not support the <function>all</function>,
+            <function>some</function>, <function>any</function> and
+            <function>exists</function> subquery operations. 
+          </para>
+        </listitem>
+      </itemizedlist>
+      </sect3>
+      </sect2>
+    </sect1>
+
+  <sect1 id="oracle">
+    <title>Oracle</title>
+    <sect2>
+      <title>Libraries</title>
+      <para>The &oracle; back-end requires the &oracle; OCI client
+      library. (<filename>libclntsh.so</filename>).  The location of
+      this library is specified relative to the
+      <symbol>ORACLE_HOME</symbol> value in the operating system
+      environment.
+      </para>
+    </sect2>
+    <sect2>
+      <title>Library Versions</title>
+      <para>
+	&clsql; has tested sucessfully using the client library from
+	Oracle 9i and Oracle 10g server installations as well as
+	Oracle's 10g Instant Client library. For Oracle 8 and earlier
+	versions, there is vestigial support by pushing the symbol
+	<symbol>:oci7</symbol> onto <symbol>cl:*features*</symbol>
+	prior to loading the <filename>clsql-oracle</filename> &asdf;
+	system.
+	<screen>
+	  (push :oci7 cl:*features*)
+	  (asdf:operate 'asdf:load-op 'clsql-oracle)
+	</screen>
+      </para>
+    </sect2>
+    <sect2>
+      <title>Initialization</title>
+      <para>
+	Use 
+	<screen>
+(asdf:operate 'asdf:load-op 'clsql-oracle)
+	</screen>
+	to load the &oracle; back-end.  The database type for the Oracle
+	back-end is <symbol>:oracle</symbol>.
+      </para>
+      </sect2>
+      <sect2>
+	<title>Connection Specification</title>
+	<sect3>
+	  <title>Syntax of connection-spec</title>
+	  <synopsis>(<replaceable>global-name</replaceable> <replaceable>user</replaceable> <replaceable>password</replaceable>)</synopsis>
+	</sect3>
+	<sect3>
+	  <title>Description of connection-spec</title>
+	  <variablelist>
+	    <varlistentry>
+	      <term><parameter>global-name</parameter></term>
+	      <listitem>
+		<para>String representing the global name of the Oracle database.
+		  This is looked up through the tnsnames.ora file.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>user</parameter></term>
+	      <listitem>
+		<para>String representing the user name to use for
+		  authentication.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><parameter>password</parameter></term>
+	      <listitem>
+		<para>String representing the password to
+		  use for authentication..</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</sect3>
+      </sect2>
+      <sect2><title>Notes</title>
+      <sect3><title>Symbolic SQL Syntax</title>
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            The <function>userenv</function> operator is &oracle; specific. 
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            &oracle; does not support the <function>except</function>
+            operator. Use <function>minus</function> instead.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            &oracle; does not support the <function>all</function>,
+            <function>some</function>, <function>any</function>
+            subquery operations.
+          </para>
+        </listitem>
+      </itemizedlist>
+      </sect3>
+      <sect3><title>Transactions</title>
+      <itemizedlist mark='opencircle'>
+        <listitem>
+          <para>
+            By default, &clsql; starts in transaction AUTOCOMMIT mode
+            (see <link
+            linkend="set-autocommit"><function>set-autocommit</function></link>).
+            To begin a transaction in autocommit mode, <link
+            linkend="start-transaction"><function>start-transaction</function></link>
+            has to be called explicitly.
+          </para>
+        </listitem>
+      </itemizedlist>
+      </sect3>
+      </sect2> 
+    </sect1>
+
+  </appendix>

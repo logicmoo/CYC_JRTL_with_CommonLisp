@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CREATE-INDEX</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fddl.html" title="Functional Data Definition Language (FDDL)" /><link rel="prev" href="view-exists-p.html" title="VIEW-EXISTS-P" /><link rel="next" href="drop-index.html" title="DROP-INDEX" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CREATE-INDEX</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="view-exists-p.html">Prev</a> </td><th width="60%" align="center">Functional Data Definition Language (FDDL)</th><td width="20%" align="right"> <a accesskey="n" href="drop-index.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="create-index"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>CREATE-INDEX — Create a database index.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399879"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">create-index</code> <em class="replaceable"><code>name</code></em> &amp;key <em class="replaceable"><code>on</code></em> <em class="replaceable"><code>unique</code></em> <em class="replaceable"><code>attributes</code></em> <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue"></span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id399913"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>
+              The name of the index as a string, symbol or SQL expression. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>on</code></em></span></dt><dd><p>
+              The name of a table as a string, symbol or SQL expression. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>unique</code></em></span></dt><dd><p>
+              A Boolean. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>attributes</code></em></span></dt><dd><p>
+              A list of attribute names. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>
+              A database object which defaults to
+              <span class="symbol">*default-database*</span>.
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id400008"></a><h2>Description</h2><p>Creates an index called <em class="parameter"><code>name</code></em> on the
+      table specified by <em class="parameter"><code>on</code></em> in
+      <em class="parameter"><code>database</code></em> which default to
+      <span class="symbol">*default-database*</span>. The table attributes to use
+      in constructing the index <em class="parameter"><code>name</code></em> are
+      specified by <em class="parameter"><code>attributes</code></em>. The
+      <em class="parameter"><code>unique</code></em> argument is <code class="constant">NIL</code> by default but
+      if it has a non-<code class="constant">NIL</code> value then the indexed attributes must
+      have unique values.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id400060"></a><h2>Examples</h2><pre class="screen">
+(create-index [bar] :on [employee] 
+              :attributes '([first-name] [last-name] [email]) 
+              :unique t)
+=&gt; 
+
+(index-exists-p [bar])
+=&gt; T
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id400073"></a><h2>Side Effects</h2><p>
+        An index is created in <em class="parameter"><code>database</code></em>. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id400088"></a><h2>Affected by</h2><p>
+        <span class="symbol">*default-database*</span>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id400100"></a><h2>Exceptional Situations</h2><p>
+        An error is signalled if <em class="parameter"><code>name</code></em> is not a
+        string, symbol or SQL expression. An error of type
+        <span class="symbol">sql-database-data-error</span> is signalled if a
+        relation called <em class="parameter"><code>name</code></em> already exists.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id400124"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="drop-index.html" title="DROP-INDEX"><code class="function">drop-index</code></a></td></tr><tr><td><a class="link" href="list-indexes.html" title="LIST-INDEXES"><code class="function">list-indexes</code></a></td></tr><tr><td><a class="link" href="index-exists-p.html" title="INDEX-EXISTS-P"><code class="function">index-exists-p</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id400164"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="view-exists-p.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fddl.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="drop-index.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">VIEW-EXISTS-P </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DROP-INDEX</td></tr></table></div></body></html>

@@ -1,0 +1,30 @@
+UNAME=$(shell uname)
+
+OS_AIX=$(shell expr "$(UNAME)" : '.*AIX.*')
+OS_SUNOS=$(shell expr "$(UNAME)" : '.*SunOS.*')
+OS_DARWIN=$(shell expr "$(UNAME)" : '.*Darwin.*')
+OS_CYGWIN=$(shell expr "$(UNAME)" : '.*CYGWIN.*')
+
+all:
+	
+
+.PHONY: clean
+clean:
+	@rm -rf .bin
+	@rm -f *.ufsl *.fsl *.fas *.x86f *.sparcf *.fasl  *.pfsl *.dfsl
+	@rm -f *.fasla8 *.fasla16 *.faslm8 *.faslm16 *.faslmt
+	@rm -f *~ *.bak *.orig *.err \#*\# .#*
+	@rm -f *.so *.a
+	@rm -rf debian/cl-sql
+ifneq ($(SUBDIRS)$(DOCSUBDIRS),)
+	@set -e; for i in $(SUBDIRS) $(DOCSUBDIRS); do \
+		$(MAKE) -C $$i $@; done
+endif
+
+distclean: clean
+ifneq ($(SUBDIRS)$(DOCSUBDIRS),)
+	@set -e; for i in $(SUBDIRS) $(DOCSUBDIRS); do \
+		$(MAKE) -C $$i $@; done
+endif
+
+.SUFFIXES:            # No default suffixes

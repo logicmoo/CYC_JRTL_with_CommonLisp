@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>QUERY</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fdml.html" title="Functional Data Manipulation Language (FDML)" /><link rel="prev" href="execute-command.html" title="EXECUTE-COMMAND" /><link rel="next" href="print-query.html" title="PRINT-QUERY" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">QUERY</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="execute-command.html">Prev</a> </td><th width="60%" align="center">Functional Data Manipulation Language (FDML)</th><td width="20%" align="right"> <a accesskey="n" href="print-query.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="query"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>QUERY — Execute an SQL query and return the tuples as a 
+      list.<p><b>Generic Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405532"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">query</code> <em class="replaceable"><code>query-expression</code></em> &amp;key <em class="replaceable"><code>database</code></em> <em class="replaceable"><code>result-types</code></em> <em class="replaceable"><code>flatp</code></em> <em class="replaceable"><code>field-names</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405572"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>query-expression</code></em></span></dt><dd><p>An <a class="glossterm" href="glossary.html#gloss-sql-expression"><em class="glossterm">sql
+            expression</em></a> that represents an SQL
+            query which is expected to return a (possibly empty)
+            result set.</p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to the value
+            of <span class="symbol">*default-database*</span>.</p></dd><dt><span class="term"><em class="parameter"><code>flatp</code></em></span></dt><dd><p>A Boolean whose default value is <code class="constant">NIL</code>.</p></dd><dt><span class="term"><em class="parameter"><code>result-types</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-field-types"><em class="glossterm">field type
+            specifier</em></a>. The default is <span class="symbol">:auto</span>;.
+            </p><p>
+              The purpose of this argument is cause <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> to
+              import SQL numeric fields into numeric Lisp objects
+              rather than strings. This reduces the cost of
+              allocating a temporary string and the <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> users'
+              inconvenience of converting number strings into number
+              objects.
+            </p><p>
+              A value of <span class="symbol">:auto</span> causes <span class="application"><span class="emphasis"><em>CLSQL</em></span></span>
+              to automatically convert SQL fields into a
+              numeric format where applicable. The default value of
+              <code class="constant">NIL</code> causes all fields to be returned as strings
+              regardless of the SQL type. Otherwise a list is expected
+              which has a element for each field that specifies the
+              conversion. Valid type identifiers are: 
+              </p><table class="simplelist" border="0" summary="Simple list"><tr><td><span class="symbol">:int</span> Field is imported as a
+                signed integer, from 8-bits to 64-bits depending
+                upon the field type.
+                </td></tr><tr><td><span class="symbol">:double</span> Field is imported as a
+                double-float number.
+                </td></tr><tr><td><span class="symbol">t</span> Field is imported as a
+                string.
+                </td></tr></table><p>
+              If the list is shorter than the number of fields, the a
+              value of <span class="symbol">t</span> is assumed for the field.
+              If the list is longer than the number of fields, the
+              extra elements are ignored.
+            </p></dd><dt><span class="term"><em class="parameter"><code>field-names</code></em></span></dt><dd><p>
+            A boolean with a default value of <code class="constant">T</code>. When <code class="constant">T</code>, this
+            function returns a second value of a list of field
+            names. When <code class="constant">NIL</code>, this function only returns one value -
+            the list of rows.
+          </p></dd><dt><span class="term"><span class="returnvalue">result</span></span></dt><dd><p>A list representing the result set obtained.  For
+            each tuple in the result set, there is an element in
+            this list, which is itself a list of all the attribute 
+            values in the tuple.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405779"></a><h2>Description</h2><p>
+        Executes the SQL query expression
+        <em class="parameter"><code>query-expression</code></em>, which may be an SQL
+        expression or a string, on the supplied
+        <em class="parameter"><code>database</code></em> which defaults to
+        <span class="symbol">*default-database*</span>. <em class="parameter"><code>result-types</code></em>
+        is a list of symbols which specifies the lisp type for each
+        field returned by <em class="parameter"><code>query-expression</code></em>.
+      </p><p> 
+        If <em class="parameter"><code>result-types</code></em> is <code class="constant">NIL</code> all results
+        are returned as strings whereas the default value of
+        <span class="symbol">:auto</span> means that the lisp types are
+        automatically computed for each field.
+      </p><p> 
+        <em class="parameter"><code>field-names</code></em> is <code class="constant">T</code> by default which
+        means that the second value returned is a list of strings
+        representing the columns selected by
+        <em class="parameter"><code>query-expression</code></em>. If
+        <em class="parameter"><code>field-names</code></em> is <code class="constant">NIL</code>, the list of column
+        names is not returned as a second value.
+      </p><p> 
+        <em class="parameter"><code>flatp</code></em> has a default value of <code class="constant">NIL</code>
+        which means that the results are returned as a list of
+        lists.If FLATP is <code class="constant">T</code> and only one result is returned for each
+        record selected by <em class="parameter"><code>query-expression</code></em>,
+        the results are returned as elements of a list.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405880"></a><h2>Examples</h2><pre class="screen">
+(query "select emplid,first_name,last_name,height from employee where emplid = 1")
+=&gt; ((1 "Vladimir" "Lenin" 1.5564661d0)), 
+   ("emplid" "first_name" "last_name" "height")
+
+(query "select emplid,first_name,last_name,height from employee where emplid = 1" 
+       :field-names nil)
+=&gt; ((1 "Vladimir" "Lenin" 1.5564661d0))
+
+(query "select emplid,first_name,last_name,height from employee where emplid = 1" 
+       :field-names nil
+       :result-types nil)
+=&gt; (("1" "Vladimir" "Lenin" "1.5564661"))
+
+(query "select emplid,first_name,last_name,height from employee where emplid = 1" 
+       :field-names nil
+       :result-types '(:int t t :double))
+=&gt; ((1 "Vladimir" "Lenin" 1.5564661))
+
+(query "select last_name from employee where emplid &gt; 5" :flatp t)
+=&gt; ("Andropov" "Chernenko" "Gorbachev" "Yeltsin" "Putin"), 
+   ("last_name")
+
+(query "select last_name from employee where emplid &gt; 10" 
+       :flatp t 
+       :field-names nil)
+=&gt; NIL
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405900"></a><h2>Side Effects</h2><p>Whatever effects the execution of the SQL query has
+      on the underlying database, if any.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405910"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405920"></a><h2>Exceptional Situations</h2><p>If the execution of the SQL query leads to any errors, an
+      error of type <span class="errortype">sql-database-error</span> is
+      signalled.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id405934"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="execute-command.html" title="EXECUTE-COMMAND"><code class="function">execute-command</code></a></td></tr><tr><td><a class="link" href="print-query.html" title="PRINT-QUERY"><code class="function">print-query</code></a></td></tr><tr><td><a class="link" href="do-query.html" title="DO-QUERY"><code class="function">do-query</code></a></td></tr><tr><td><a class="link" href="map-query.html" title="MAP-QUERY"><code class="function">map-query</code></a></td></tr><tr><td><a class="link" href="loop-tuples.html" title="LOOP"><code class="function">loop</code></a></td></tr><tr><td><a class="link" href="select.html" title="SELECT"><code class="function">select</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id406001"></a><h2>Notes</h2><p>The <em class="parameter"><code>field-names</code></em> and
+      <em class="parameter"><code>result-types</code></em> keyword arguments are a
+      <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extension.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="execute-command.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fdml.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="print-query.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">EXECUTE-COMMAND </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> PRINT-QUERY</td></tr></table></div></body></html>

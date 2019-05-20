@@ -1,0 +1,182 @@
+1.0.0, TBD
+
+    * Tons of bugs squashed
+    
+    * Editor (and repl) improvements:
+        - Another level of highlighting of s-expression
+        - Added option to change default color
+        - Now indent line is Ctrl-Tab, while Tab indents whole top level sexp.
+        - New feature: auto edits.
+        - Improved indentation.
+        - Added several actions to LispEditor context menu.
+        - Added a few more words to highlight as important Lisp words
+        - Fine-tuned pair auto edits and expand selection
+      
+    * Repl
+        - Fixed up the repl toolbar to only show buttons relevant to the current state
+        - Now Repl displays CL version, Cusp version and current package in status bar
+        - When a package is loaded, repl prints notification message.
+        - Repl's sash now behaves in a more robust way - keeps both history and repl visible.
+        - Undo (Ctrl+z) now works in Repl
+        - Ctrl+click (find definition) now works in Repl
+        - Autocompletions are off, when in Read mode
+        - "Use Ctrl+Enter" preference has no effect when in Read mode: Hitting Enter always sends results to Lisp.
+      
+    * Improved work with lisp implementations (still doesn't work with clisp):
+        - Added ability to use remote Slime over SSH
+        - Lisp welcome message now is more reliable
+        - Lisp startup and shut down now should be more robust (but still there is room for improvement)
+        - Communication code is greatly improved, which should result in quicker and more reliable connection to lisp (through cusp)
+        - Fixed bug: When CL quits with fatal error (like when heap is exhausted) Cusp does not notice it. Now REPL shows Disconnected message and reconnect button shows that it is disconnected.
+      
+    * Improved library/package management system
+        - More robust library finding code
+        - Added all library dependencies and tested them on SBCL in supported OSs.
+    
+    * Wizards
+        - When a new project is made, the REPL will now automatically switch to that project's package
+        - New Project now does some cleaning to project names to make sure they form a valid package
+        - Added some comments into the default generated files to explain their purpose better
+        - Added options in Create Lisp Project wizard to create tests.lisp file and generate an example function with its test.
+        - New wizard: create executable (sbcl only)
+      
+    * Outline
+        - Fixed many bugs to make outline robust
+        - Cache outline quick-tips request to significantly reduce cusping (communication with lisp)
+      
+    * Improved and new development tools
+        - Fixed a lot of bugs dealing with compilation warnings and errors
+        - Made message for undefined variable produced by SBCL prettier. 
+        - Fixed couple bugs in Compile on save mode.
+        - Profiler now is a little bit more intuitive (little tweak)
+        - Updated Threads View to suppply more information
+        - Improved debugger:
+            - Forcing the debug label not to exceed 50px in height 
+            - Stepping support
+            - View locals and find source are more robust now
+            - Debugger now correctly handles multiple levels (conditions thrown while in the debugger)
+            - Debugger correctly handles multi-threading (when it's invoked by hunchentoot, say)
+            - New feature: Added breakpoints and tracing macros and added easy way to add/remove them in code.
+            - When debugger is invoked with (break) default restart selection is "[CONTINUE] Return from BREAK", rather than "[ABORT] Return to SLIME's top level."
+            - Cleaned up debug clutter by hiding cusp frames in debugger backtraces (optional - can set to off in preferences)
+        - New feature: integrated unit testing (see tutorial).
+      
+    * Quick assist improvements
+        - Fixed several bugs in fuzzy autocompletions
+        - Fixed several bugs in hyperlinks, to improve find definition feature
+        - Made apropos results read-only
+        - Made showing and hiding popups more robust
+      
+    
+    * Improved code analysis
+        - Fixed bugs in FindCallees and FindCallers
+        - Results of FindCallees and FindCallers are now shown in new Xref View rather than in modal dialog box.
+    
+    * Improved Navigator
+        - Renamed 'Load asd' to 'Load Project.' This terminology make more sense to newbs
+        - Load Project action now works on any file in the project, searching out an asd file on its own
+    
+    * Other improvements
+        - When diffing or merging files with team support, lisp files are now color formatted.
+        - Used FilteredList in package dialogs, so searching for library or package is easier now
+        - Removed SecondaryReplViewer
+        - Preferences are improved and many now work without restarting.
+        - Rearranged Lisp menu and changed some keybindings.
+
+
+0.9.0, Sep 8, 2007
+    * Update site for cusp, lisp libraries and sbcl
+    * Support for Unicode (UTF-8)
+    * More keybindings for new and old Lisp Actions
+    * Many features are now customizable through Preferences->Lisp:
+        - Customizable font coloring
+        - Which lisp implementation to use
+        - Controlling contents assist features
+        - REPL customization options
+        - Initialization file (file that evaluated after lisp start)
+    * Improved work with lisp implementations
+        - Works with all major lisp implementations (CLisp, Allegro, LispWorks)
+        - Can connect to lisp remotely
+        - More robust handling of start/quit SBCL on Windows (still not perfect)
+    * Improved and new development tools
+        - New Debugger (almost like in SLIME but using Eclipse widgets), 
+            - Pressing q works same way as in SLIME
+            - automatically jumps to code location when selecting backtraces
+        - New Threads viewer with ability to pause and kill threads
+        - New Profiling functions
+        - New SLIME-like inspector
+        - Improved compilation warnings and errors
+        - New file compilation modes:
+            - Eclipse mode - when a file is saved all its content is recompiled
+            - Compile on save - only changed forms are recompiled when file is saved
+            - Slime mode - nothing is compiled when file is saved
+    * Improved REPL
+        - (in-package) changes package in REPL
+        - A button in REPL to interrupt the currently executing command
+        - Show expression evaluated from file in REPL (customizable)
+        - History is now shown in dialog box, and can be used without mouse
+        - Option to log compiler comments to console
+    * New Library/package management system
+        - Contains set of basic libraries
+        - Allows adding a folder to look up libraries (then just put your library there and it will be available)
+        - Load Package dialog can be used to load libraries - it shows all available libraries, for each library it shows short info and links to documentation
+    * Improved Editor
+        - New Actions:
+            - Evaluate Current Expression
+            - Select Current Expression
+            - Expand Selection
+            - Evaluate File
+            - Jump Forward (to next s-expression)
+            - Jump Back (to previous s-expression)
+            - Commenting (wraps/unwraps selection into #| |#)
+        - More robust coloring
+        - More robust indentation
+        - Highlighting of current s-expression
+        - Folding is updated as document is changed, not when it is saved
+        - Folds on "sections"
+        - Option to auto close (), "", #| |#
+        - Fixed double clicking to select whole identifier rather than word between '-'
+        - Ctrl+Click navigates to definition of a symbol
+    * Improved Outline
+        - Updates as document is changed, not when it is saved
+        - New sort by position
+        - New "sections" as possible outlining elements (A "section" is specified by ';;;;< Section name > description' comment)
+        - Shows quick doc tooltip (if available) when mouse hover over an element of outline
+    * Improved Navigator
+        - Popup menu item to load a file
+        - Lisp project wizard can specify the location of the project
+    * Quick assist improvements
+        - Entire argument list is in bold
+        - Fuzzy auto completions
+        - Quick doc for symbols in auto completion list
+        - Improved ListDialog used in displaying OpenDefinition, Find Calles, FindCallers:
+            - Displays images next to each choice
+            - Has type-ahead find
+    * New Task list (comments with TODO: automatically added to task list)
+    * Lots of bug fixes and small improvements
+
+0.8.0, Feb 14, 2007
+
+    * Fresh SBCL build (1.0.2.21).
+    * Added "Find Callees" and "Find Callers."
+    * Added a "Load Asd" context menu option to .asd files.
+    * Added a "Delete .fasls" context menu option to projects.
+    * Now open source.
+
+0.7.5, Nov 12, 2006
+
+    * As always, includes the latest and greatest SBCL build (0.9.18.45).
+    * Repl should work properly when in read mode (for example, when you execute (read-line)).
+    * Repl will now change color to indicate what mode it's in
+    * Tooltips are specialized for make-instance to tell you precisely what initargs that object has.
+    * More better Lisp indentation: should work properly for labels, flet, and macrolet now.
+
+0.7.0, Nov 5, 2006
+
+    * Includes the latest and greatest SBCL build, naturally.
+    * New lisp projects will now be automatically created with an asd and defpackage file.
+    * Added the ability to change the font size of the REPL.
+    * Various UI improvements to the Outline view.
+    * The button to restart the Lisp instance should work now.
+    * Alt+E should now properly display the result of evaluating the current expression.
+    * Fixed a display bug that sometimes caused certain outputs to not show up.

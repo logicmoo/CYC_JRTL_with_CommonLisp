@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>null-char-p</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="primitives.html" title="Primitive Types" /><link rel="prev" href="def-foreign-type.html" title="def-foreign-type" /><link rel="next" href="aggregates.html" title="Aggregate Types" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">null-char-p</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="def-foreign-type.html">Prev</a> </td><th width="60%" align="center">Primitive Types</th><td width="20%" align="right"> <a accesskey="n" href="aggregates.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="null-char-p"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>null-char-p — Tests a character for <code class="constant">NULL</code> value.
+      <p><b>Macro</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2591362"></a><h2>Syntax</h2><pre class="synopsis">
+	<code class="function">null-char-p</code> <em class="replaceable"><code>char</code></em> =&gt; <span class="returnvalue">is-null</span>
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2591390"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>char</code></em></span></dt><dd><p>A character or integer.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>is-null</code></em></span></dt><dd><p>A boolean flag indicating if char is a <code class="constant">NULL</code> value.
+	    </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2591441"></a><h2>Description</h2><p>
+	A predicate testing if a character or integer is <code class="constant">NULL</code>. This
+	abstracts the difference in implementations where some return a 
+	<code class="computeroutput">character</code>
+	and some return a 
+	<code class="computeroutput">integer</code>
+	whence dereferencing a 
+	<code class="computeroutput">C</code>
+	character pointer.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2591475"></a><h2>Examples</h2><pre class="screen">
+(def-array-pointer ca :unsigned-char)
+(let ((fs (convert-to-foreign-string "ab")))
+      (values (null-char-p (deref-array fs 'ca 0))
+      (null-char-p (deref-array fs 'ca 2))))
+=&gt; <code class="constant">NIL</code>
+   <code class="constant">T</code>
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2614537"></a><h2>Side Effects</h2><p>None.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2614549"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2614560"></a><h2>Exceptional Situations</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="def-foreign-type.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="primitives.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="aggregates.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">def-foreign-type </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Aggregate Types</td></tr></table></div></body></html>

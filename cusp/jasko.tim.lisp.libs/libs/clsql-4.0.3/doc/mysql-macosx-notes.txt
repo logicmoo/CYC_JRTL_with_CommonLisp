@@ -1,0 +1,60 @@
+Instructions:
+
+----------------
+1. Install MySQL from Fink, not from mysql.com
+
+It is sufficient to install the binaries from Fink.
+CLSQL requires the MySQL library libmysqlclient.dylib; this library  
+is not provided with the mysql binary install.
+This library is in /sw/lib/mysql . However, it is actually called  
+libmysqlclient.14.0.0.dylib .
+-----------------
+2. After installing MySQL, do the following at the shell.
+(Assuming that you do not want to have to load CLSQL as root user  
+every time you use it.)
+
+2a. Create a symbolic link from libmysqlclient.14.0.0.dylib to the  
+name libmysqlclient.dylib .
+2b. Change ownership to yourself along the path /sw/lib/mysql/ 
+libmysqlclient.dylib .
+-----------------
+3. Either install CocoaMySQL or download the source of MySQL (e.g.  
+5.0) from mysql.com.
+
+CLSQL requires MySQL's header files. These files are not provided  
+with Fink's binary MySQL install.
+In CocoaMySQL the headers are found at: /Applications/CocoaMySQL.app/ 
+Contents/Frameworks/SMySQL.framework/Versions/A/Headers
+In MySQL 5.0 sources, the headers are found at: ~/Desktop/ 
+mysql-5.0.15/include
+
+3a. Copy the directory full of headers to /sw/include/mysql
+3b. Make yourself the owner of these files.
+
+You may now dispose of CocoaMySQL or the MySQL sources, if you desire.
+-----------------
+4. In the CLSQL sources, modify db-mysql/makefile to read as follows:
+
+...  CFLAGS="-I /sw/include/mysql" LDFLAGS=" -L/sw/lib/mysql/   ...
+
+-----------------
+5. In Lisp, do the following:
+
+Assuming asdf and the CLSQL & UFFI sources are in the same directory;  
+substitute the appropriate path for ~ .
+The code below is right out of the CLSQL docs, but note particularly  
+the commented expression.
+
+(load "~/asdf.lisp")
+
+(progn
+     	(push "~/uffi-1.5.5/" asdf:*central-registry*)
+     	(asdf:operate 'asdf:load-op :uffi)
+     	(push "~/clsql-3.3.4/" asdf:*central-registry*)
+	(asdf:operate 'asdf:load-op :clsql))
+
+(progn
+	(in-package :clsql)
+	(setf *default-database-type* :mysql)
+	(clsql:push-library-path "/sw/lib/mysql/")  ;  !!
+	(asdf:operate 'asdf:load-op 'clsql-mysql))

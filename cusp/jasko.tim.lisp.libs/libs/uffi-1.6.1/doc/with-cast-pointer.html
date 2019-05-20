@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>with-cast-pointer</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="objects.html" title="Objects" /><link rel="prev" href="null-cstring-pointer.html" title="+null-cstring-pointer+" /><link rel="next" href="def-foreign-var.html" title="def-foreign-var" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">with-cast-pointer</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="null-cstring-pointer.html">Prev</a> </td><th width="60%" align="center">Objects</th><td width="20%" align="right"> <a accesskey="n" href="def-foreign-var.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="with-cast-pointer"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>with-cast-pointer — Wraps a body of code with a pointer cast to a new type.
+	<p><b>Macro</b></p></p></div><div class="refsynopsisdiv"><h2>Syntax</h2><pre class="synopsis">
+	  <code class="function">with-cast-pointer</code> (<em class="replaceable"><code>binding-name ptr type) &amp; body body</code></em> =&gt; <span class="returnvalue">value</span>
+	</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619872"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>binding-name</code></em></span></dt><dd><p>A symbol which will be bound to the casted object.
+	      </p></dd><dt><span class="term"><em class="parameter"><code>ptr</code></em></span></dt><dd><p>A pointer to a foreign object.
+	      </p></dd><dt><span class="term"><em class="parameter"><code>type</code></em></span></dt><dd><p>A foreign type of the object being pointed to.
+	      </p></dd><dt><span class="term"><span class="returnvalue">value</span></span></dt><dd><p>The value of the object where the pointer points.
+	      </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619947"></a><h2>Description</h2><p>
+  Executes BODY with POINTER cast to be a pointer to type TYPE.
+  BINDING-NAME is will be bound to this value during the execution of
+  BODY.
+
+  This is a no-op in AllegroCL but will wrap BODY in a LET form if
+  BINDING-NAME is provided.
+
+  This macro is meant to be used in conjunction with DEREF-POINTER or
+  DEREF-ARRAY. In Allegro CL the "cast" will actually take place in
+  DEREF-POINTER or DEREF-ARRAY.
+	</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619963"></a><h2>Examples</h2><pre class="screen">
+(with-foreign-object (size :int)
+   ;; FOO is a foreign function returning a :POINTER-VOID
+   (let ((memory (foo size)))
+      (when (mumble)
+         ;; at this point we know for some reason that MEMORY points
+         ;; to an array of unsigned bytes
+         (with-cast-pointer (memory :unsigned-byte)
+           (dotimes (i (deref-pointer size :int))
+            (do-something-with
+              (deref-array memory '(:array :unsigned-byte) i)))))))
+</pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619982"></a><h2>Side Effects</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2619992"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2620002"></a><h2>Exceptional Situations</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="null-cstring-pointer.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="objects.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="def-foreign-var.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">+null-cstring-pointer+ </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> def-foreign-var</td></tr></table></div></body></html>

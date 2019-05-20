@@ -1,0 +1,42 @@
+# -*- Mode: Makefile -*-
+###########################################################################
+# FILE IDENTIFICATION
+# 
+#  Name:    Makefile.msvc
+#  Purpose: Makefile for the CLSQL UFFI helper package (MSVC)
+#  Author:  Kevin M. Rosenberg
+#  Created: Mar 2002
+#
+#  CVS Id:   $Id: Makefile.msvc,v 1.1 2002/09/18 07:43:40 kevin Exp $
+#
+# This file, part of CLSQL, is Copyright (c) 2002-2004 by Kevin M. Rosenberg
+#
+# CLSQL users are granted the rights to distribute and use this software
+# as governed by the terms of the Lisp Lesser GNU Public License
+# (http://opensource.franz.com/preamble.html), also known as the LLGPL.
+###########################################################################
+
+
+BASE=clsql_mysql
+
+# Set to the directory where you have installed mysql's library
+MYSQL_DIR=c:/mysql
+
+MYSQL_LIB_DIR=$(MYSQL_DIR)/lib/opt
+MYSQL_LIB_FILE=$(MYSQL_LIB_DIR)/Libmysql.lib
+MYSQL_INCLUDE=$(MYSQL_DIR)/include
+
+# Nothing to configure beyond here
+
+SRC=$(BASE).c
+OBJ=$(BASE).obj
+DLL=$(BASE).dll
+
+$(DLL): $(SRC) $(MYSQL_LIB_FILE)
+	cl /MD /LD -D_MT /DWIN32=1 /D__LCC__=1 /I$(MYSQL_INCLUDE) $(SRC) $(MYSQL_LIB_FILE)
+        del $(OBJ) $(BASE).exp
+
+clean:
+        del /q $(DLL)
+
+

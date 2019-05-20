@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>ADD-TRANSACTION-ROLLBACK-HOOK</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-transaction.html" title="Transaction Handling" /><link rel="prev" href="add-transaction-commit-hook.html" title="ADD-TRANSACTION-COMMIT-HOOK" /><link rel="next" href="set-autocommit.html" title="SET-AUTOCOMMIT" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">ADD-TRANSACTION-ROLLBACK-HOOK</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="add-transaction-commit-hook.html">Prev</a> </td><th width="60%" align="center">Transaction Handling</th><td width="20%" align="right"> <a accesskey="n" href="set-autocommit.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="add-transaction-rollback-hook"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>ADD-TRANSACTION-ROLLBACK-HOOK — Specify hooks to be run when rolling back changes.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396709"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">add-transaction-rollback-hook</code> <em class="replaceable"><code>rollback-hook</code></em> &amp;key <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396739"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>rollback-hook</code></em></span></dt><dd><p>A designator for a function with no required arguments.</p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to the value
+            of <span class="symbol">*default-database*</span>.</p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>The list of currently defined rollback hooks for
+            <em class="parameter"><code>database</code></em>.
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396820"></a><h2>Description</h2><p>
+        Adds <em class="parameter"><code>rollback-hook</code></em>, which should a
+        designator for a function with no required arguments, to the
+        list of hooks run when <code class="function">rollback</code> is called
+        on <em class="parameter"><code>database</code></em> which defaults to
+        <span class="symbol">*default-database*</span>.  </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396854"></a><h2>Examples</h2><pre class="screen">
+(start-transaction)
+=&gt; NIL 
+(add-transaction-rollback-hook #'(lambda () (print "Successfully rolled back.")))
+=&gt; (#&lt;Interpreted Function (LAMBDA # #) {48E37C31}&gt;)
+(rollback)
+"Successfully rolled back." 
+=&gt; NIL      
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396870"></a><h2>Side Effects</h2><p>
+        <em class="parameter"><code>rollback-hook</code></em> is added to the list of
+        rollback hooks for <em class="parameter"><code>database</code></em>.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393594"></a><h2>Affected by</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393606"></a><h2>Exceptional Situations</h2><p>
+        If <em class="parameter"><code>rollback-hook</code></em> has one or more
+        required arguments, an error will be signalled when
+        <code class="function">rollback</code> is called.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393629"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="commit.html" title="COMMIT"><code class="function">commit</code></a></td></tr><tr><td><a class="link" href="rollback.html" title="ROLLBACK"><code class="function">rollback</code></a></td></tr><tr><td><a class="link" href="add-transaction-commit-hook.html" title="ADD-TRANSACTION-COMMIT-HOOK"><code class="function">add-transaction-commit-hook</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id393674"></a><h2>Notes</h2><p>
+        <code class="function">add-transaction-rollback-hook</code> is a <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extension. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="add-transaction-commit-hook.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-transaction.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="set-autocommit.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">ADD-TRANSACTION-COMMIT-HOOK </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> SET-AUTOCOMMIT</td></tr></table></div></body></html>

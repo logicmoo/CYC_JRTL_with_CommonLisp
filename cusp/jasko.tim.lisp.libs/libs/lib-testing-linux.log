@@ -1,0 +1,245 @@
+============== Test on Linux (Fedora VMWare) with cusp 0.9.375 and sbcl 1.0.20
+Ganymede
+
+
+----- chunga-0.4.3 - Drakma dependency - check if Drackma works
+- compiled
+- works ?
+checked by Drackma?
+
+----- cl-base64-3.3.2 - skiped testing - I think it is used by other libraries
+- compiled
+
+----- cl-fad-0.6.2 - Works
+- compiled
+- to test: load package.
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/cl-fad-0.6.2/test.lisp")
+(cl-fad-test::test)
+Get All tests passed.
+
+----- cl-interpol-0.2.1 - Works (all tests pass)
+- compiled
+- to test: (asdf:oos 'asdf:test-op 'cl-interpol)
+
+
+----- cl-ppcre-2.0.0 - Works
+- compiled
+- to test: (asdf:oos 'asdf:test-op 'cl-ppcre)
+
+
+----- cl-smtp - Need smtp server to check if it works
+- compiled
+- didn't test
+
+
+
+----- clsql 4.0.3 - Works (at least with sqlite3 and mysql) uses uffi, so checks that too
+- compiled
+- to test: 
+shell>sqlite3 ex1 (then just quit - should create empty database in home)
+get mysql: I installed 5.0.45-6.fc7.i386.rpm / also get development package
+
+copy file .clsql-test.config into home directory
+
+
+(asdf:oos 'asdf:test-op 'clsql)
+didn't work - had to go to \jasko.tim.lisp.libs\libs\clsql-4.0.3\uffi folder and run make
+then find libsqlite3.so and sqlite3.so (not perfect matches on names) and copy them
+into uffi folder.
+
+All tests pass. Some tests are skiped since sqlite3 does not support them.
+
+also need to run make in db-mysql folder
+
+---------- this is from Win32, still some is relevant
+FIXME: cannot make it run with mysql! it just cannotfind clsql_mysql.dll. But people were able to run it so find out what is going on.
+- testing mysql. Download and setup mysql (full setup) (enter password for root)
+Test: c:\>mysql -u root -p. Change root pass to "secret" as in config file, or change config file.
+Also create empty database ex1:
+mysql> set password for 'root'@'localhost' = password('secret');
+mysql> create database ex1;
+
+
+----- cl-unicode 0.1.1 - Works
+- compiled
+- testing: (asdf:oos 'asdf:test-op 'cl-unicode)
+
+
+----- cl-utilities-1.2.4 - Works, but for tests requires FiveAM to test,
+FiveAM requires ARNESI - arnesi does not compile
+- compiled
+- to test: manually - pain. - just couple tests
+load package, change package to cl-utilities
+run tests expressions from tests.lisp
+
+----- cl-who-0.11.1 - Works
+- compiled
+- testing: after loading library run, get to cl-who package and run examples
+(in place of *html-stream* use (*standard-output* nil :prologue t)
+
+----- closure-common-2007-10-21 is dependency of cxml - don't test it directly
+
+----- cxml-2007-10-21
+- compiled
+- testing: after loading: (asdf:operate 'asdf:test-op :cxml) - did not do anything - try examples?
+(with-open-file (s "/home/sk/tmp/example.xml" :direction :output)
+    (write-string "<test a='b'><child/></test>" s))
+
+(defparameter *example* (cxml:parse-file "c:/temp/example.xml" (cxml-dom:make-dom-builder)))
+(dom:document-element *example*)
+* (dom:tag-name (dom:document-element *example*))
+"test"
+* (dom:child-nodes (dom:document-element *example*))
+#(#<DOM-IMPL::ELEMENT child @ #x722b6d8a>)
+
+* (dom:get-attribute (dom:document-element *example*) "a")
+"b"
+
+----- cffi-080216 dependency of cl+ssl - runs, but with my changes some tests gets error (failed to find expect-long-long-sum)
+- compiles
+- testing: (asdf:oos 'asdf:test-op 'cffi)
+could not compile lib - remove from test files:
+ long long and other exotics from libtest.c, defcfun.lisp, callbacks.lisp, 
+
+
+----- cl+ssl-2007-07-07 dependency of drakma 
+compiles and loads ok
+
+----- drakma-0.11.5 works
+- compiled
+- tested by following examples in documentation
+
+----- flexi-streams-1.0.7 works
+- compiled
+- testing:  All tests passed. (asdf:oos 'asdf:test-op 'flexi-streams)
+
+------ cl-store_0.8.3 works (1 out of 127 tests failed)
+- compiled
+- testing (asdf:oos 'asdf:test-op 'cl-store)
+Test FUNCTION.2 failed
+Form: (PROGN
+       (STORE #'CL-STORE::MKSTR *TEST-FILE*)
+       (LET ((FN (RESTORE *TEST-FILE*)))
+         (EVERY
+          (LAMBDA (ARGS)
+            (STRING= (APPLY FN ARGS) (APPLY #'CL-STORE::MKSTR ARGS)))
+          '(("foobar" "baz") ("a" "b" "c") ("1 2" "ab " "f oO")))))
+Expected value: T
+Actual value: #<RESTORE-ERROR {24E479C9}>.
+ GFUNCTION.1 GFUNCTION.2 GFUNCTION.3 NOCIRC.1 STRUCT-CLASS.1
+ SERIALIZATION-UNIT.1
+1 out of 127 total tests failed: FUNCTION.2.
+
+------ html-template-0.9.1 works
+- compiled
+- (load "d:/docums/code/eclipse/jasko.tim.lisp.libs/libs/html-template-0.9.1/test.lisp")
+Please wait a couple of seconds.
+All tests passed...
+
+------ hunchentoot-0.15.7
+- I have not figured out how to run test file.
+I used http://berlinbrowndev.blogspot.com/2008/07/enterprise-common-lisp-setting-up.html
+to test:
+(hunchentoot:start-server :port 4242) then going to http://localhost:4242/ in webbrowser shows
+hunchentoot default page,
+
+------- lisp_webapp_example (requires mysql) - testing hunchentoot
+adjust the following path to path where index.html is located
+(setq html-template:*default-template-pathname* 
+	  #P"c:\\projects\\tools\\home\\projects\\aaageneralprojects\\haskellnotebook\\lisp\\webapp\\")
+see later:	  
+
+to your location
+loaded hunchentoot
+loaded clsql-mysql
+loaded ghost-trinity
+(setq html-template:*default-template-pathname* 
+	  #P"D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/lisp_webapp_example/")
+(hunchentoot:start-server :port 4242)
+point browser to http://localhost:4242
+
+
+----- md5-1.8.5 works (was not able to run tests, but it is used in other libraries and tested there)
+- compiles
+
+----- meta don't know
+- compiles
+- don't know how to test
+
+----- ptester-2.1.2 is used in testing some included libraries (so works)
+
+----- puri-1.5.1 - works
+- compiled
+- (asdf:oos 'asdf:test-op 'puri) 126 tests - all passed
+
+----- rfc2388 - did not test, but it looks like a dependency of something else
+- compiled
+
+----- rt-20040621 - is used in testing some included libraries (so works)
+
+----- salza-0.7.4 - depricated - superceeded by salza2. This library is included because some
+other libs may depend on it
+- compiled
+
+------ salza2-2.0.4 - probably works
+- compiled
+- testing: load library, change package to salza2,  run (compress-data (sb-ext:string-to-octets "Hello, hello, hello, hello world.") 
+                 'zlib-compressor), get output, and not sure what to do with it.
+
+------ split-sequence - works
+- compiled
+- testing: load library, run examples in index.html: (split-sequence:SPLIT-SEQUENCE #\Space "A stitch in time saves nine.")
+
+------ trivial-gray-streams-2006-09-16 - used in many libraries, so works
+- compiled
+
+------ uffi-1.6.1 - used by clsql, so works
+
+------ url-rewrite-0.1.1 - works
+- compiled
+- testing: load package, change package to url-rewrite
+(defvar +session-cookie-name+ "session")
+(defun add-session-var (html session-value)
+    (with-input-from-string (*standard-input* html)
+      (with-output-to-string (*standard-output*)
+        (rewrite-urls (lambda (url)
+                        (add-get-param-to-url url
+                                              +session-cookie-name+
+                                              session-value))))))
+
+(add-session-var "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"> 
+ <HTML>
+   <BODY BGCOLOR=white>
+     This is the <A NAME=foo HREF='first.html?foo=bar'>first link</A>, and this is the <A CLASS=NOBORDER HREF=\"http://www.cliki.net/\" TITLE='bar'>second one</A>.
+     And here's a picture: <img src='/pics/cool_pic.gif' width=100 height=100>
+   </BODY>
+ </HTML>" "foo42")
+
+get:
+"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\"> 
+ <HTML>
+   <BODY BGCOLOR=white>
+     This is the <A NAME=foo HREF='first.html?foo=bar&amp;session=foo42'>first link</A>, and this is the <A CLASS=NOBORDER HREF=\"http://www.cliki.net/\" TITLE='bar'>second one</A>.
+     And here's a picture: <img src='/pics/cool_pic.gif?session=foo42' width=100 height=100>
+   </BODY>
+ </HTML>"
+
+----- zip - works
+- compiles
+- testing: create zip file with several entries, say c:\tmp\tmp.zip
+(zip:with-zipfile (zf #p"c:/tmp/tmp.zip") (zip:zipfile-entries zf))
+get hashtable with entries in zipfile (can check using inspector)
+(zip:unzip #p"c:/tmp/tmp.zip" #p"c:/tmp/t/")
+get contents of zip in c:/tmp/t/
+
+----- zpb-exif-1.0 - did not test here
+-compiles
+
+
+----- usocket-0.3.7- Works (but some tests fail)
+- compiled
+- to test: load package, load rt
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/usocket-0.3.7/test/package.lisp")
+(load "D:/docums/code/eclipse/jasko.tim.lisp.libs/libs/usocket-0.3.7/test/test-usocket.lisp")
+(usocket-test:run-usocket-tests)
+Test didn't finish

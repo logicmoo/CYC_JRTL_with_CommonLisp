@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>*DEFAULT-DATABASE*</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-connect.html" title="Connection and Initialisation" /><link rel="prev" href="connect-if-exists.html" title="*CONNECT-IF-EXISTS*" /><link rel="next" href="default-database-type.html" title="*DEFAULT-DATABASE-TYPE*" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">*DEFAULT-DATABASE*</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="connect-if-exists.html">Prev</a> </td><th width="60%" align="center">Connection and Initialisation</th><td width="20%" align="right"> <a accesskey="n" href="default-database-type.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="default-database"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>*DEFAULT-DATABASE* — The default database object to use.<p><b>Variable</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id376277"></a><h2>Value Type</h2><p>Any object of type <span class="type">database</span>, or <code class="constant">NIL</code> to
+      indicate no default database.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id313849"></a><h2>Initial Value</h2><p><code class="constant">NIL</code></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id313861"></a><h2>Description</h2><p>Any function or macro in <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> that operates on a
+      database uses the value of this variable as the default value
+      for it's <em class="parameter"><code>database</code></em> parameter.</p><p>The value of this parameter is changed by calls to
+      <code class="function">connect</code>, which sets
+      <span class="symbol">*default-database*</span> to the database object
+      it returns.  It is also changed by calls to
+      <code class="function">disconnect</code>, when the database object
+      being disconnected is the same as the value of
+      <span class="symbol">*default-database*</span>.  In this case
+      <code class="function">disconnect</code> sets
+      <span class="symbol">*default-database*</span> to the first database
+      that remains in the list of active databases as returned by
+      <code class="function">connected-databases</code>, or
+      <code class="constant">NIL</code> if no further active databases
+      exist.</p><p>The user may change <span class="symbol">*default-database*</span>
+      at any time to a valid value of his choice.</p><div class="caution" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Caution</h3><p>If the value of <span class="symbol">*default-database*</span> is
+        <code class="constant">NIL</code>, then all calls to <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> functions on
+        databases must provide a suitable
+        <em class="parameter"><code>database</code></em> parameter, or an error will be
+        signalled.</p></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id313963"></a><h2>Examples</h2><pre class="screen">
+        (connected-databases)
+        =&gt; NIL
+        (connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+        =&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48385F55}&gt;
+        (connect '(nil "template1" "dent" nil) :database-type :postgresql)
+        =&gt; #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {483868FD}&gt;
+        (connect '("dent" "newesim" "dent" "dent") :database-type :mysql :if-exists :new)
+        =&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48387265}&gt;
+        *default-database*
+        =&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48387265}&gt;
+        (disconnect)
+        =&gt; T
+        *default-database*
+        =&gt; #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {483868FD}&gt;
+        (disconnect)
+        =&gt; T
+        *default-database*
+        =&gt; #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48385F55}&gt;
+        (disconnect)
+        =&gt; T
+        *default-database*
+        =&gt; NIL
+        (connected-databases)
+        =&gt; NIL
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id313984"></a><h2>Affected By</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="connect.html" title="CONNECT"><code class="function">connect</code></a></td></tr><tr><td><a class="link" href="disconnect.html" title="DISCONNECT"><code class="function">disconnect</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id314018"></a><h2>See Also</h2><p>
+        </p><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="connected-databases.html" title="CONNECTED-DATABASES"><code class="function">connected-databases</code></a></td></tr></table><p>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id314046"></a><h2>Notes</h2><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>This variable is intended to facilitate working with
+        <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> in an interactive
+        fashion at the top-level loop, and because of this,
+        <code class="function">connect</code> and
+        <code class="function">disconnect</code> provide some fairly
+        complex  behaviour to keep
+        <span class="symbol">*default-database*</span> set to  useful values.
+        Programmatic use of <span class="application"><span class="emphasis"><em>CLSQL</em></span></span>
+        should never depend on the value of
+        <span class="symbol">*default-database*</span> and should provide
+        correct database objects via the
+        <em class="parameter"><code>database</code></em> parameter to functions
+        called.</p></div></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="connect-if-exists.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-connect.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="default-database-type.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">*CONNECT-IF-EXISTS* </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> *DEFAULT-DATABASE-TYPE*</td></tr></table></div></body></html>

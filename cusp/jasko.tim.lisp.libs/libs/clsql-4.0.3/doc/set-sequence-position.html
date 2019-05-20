@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>SET-SEQUENCE-POSITION</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fddl.html" title="Functional Data Definition Language (FDDL)" /><link rel="prev" href="sequence-next.html" title="SEQUENCE-NEXT" /><link rel="next" href="truncate-database.html" title="TRUNCATE-DATABASE" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">SET-SEQUENCE-POSITION</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sequence-next.html">Prev</a> </td><th width="60%" align="center">Functional Data Definition Language (FDDL)</th><td width="20%" align="right"> <a accesskey="n" href="truncate-database.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="set-sequence-position"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>SET-SEQUENCE-POSITION — Sets the position of a database sequence.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id404277"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">set-sequence-position</code> <em class="replaceable"><code>name</code></em> <em class="replaceable"><code>position</code></em> &amp;key <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id404310"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>
+              The name of the sequence as a string, symbol or SQL expression. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>position</code></em></span></dt><dd><p>
+              An integer. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>
+              A database object which defaults to
+              <span class="symbol">*default-database*</span>.
+            </p></dd><dt><span class="term"><em class="parameter"><code>result</code></em></span></dt><dd><p>
+              An integer. 
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id404400"></a><h2>Description</h2><p>Explicitly set the position of the sequence called
+      <em class="parameter"><code>name</code></em> in <em class="parameter"><code>database</code></em>,
+      which defaults to <span class="symbol">*default-database*</span>, to
+      <em class="parameter"><code>position</code></em> which is returned.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id404433"></a><h2>Examples</h2><pre class="screen">
+(sequence-last [foo])
+=&gt; 4
+(set-sequence-position [foo] 50)
+=&gt; 50
+(sequence-next [foo])
+=&gt; 51
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id404447"></a><h2>Side Effects</h2><p>
+        Modifies the value of the sequence <em class="parameter"><code>name</code></em>
+        in <em class="parameter"><code>database</code></em>.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id404471"></a><h2>Affected by</h2><p>
+        <span class="symbol">*default-database*</span>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id404486"></a><h2>Exceptional Situations</h2><p>
+        Will signal an error of type
+        <span class="symbol">sql-database-data-error</span> if a sequence called
+        <em class="parameter"><code>name</code></em> does not exist in
+        <em class="parameter"><code>database</code></em>.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id404513"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="create-sequence.html" title="CREATE-SEQUENCE"><code class="function">create-sequence</code></a></td></tr><tr><td><a class="link" href="drop-sequence.html" title="DROP-SEQUENCE"><code class="function">drop-sequence</code></a></td></tr><tr><td><a class="link" href="list-sequences.html" title="LIST-SEQUENCES"><code class="function">list-sequences</code></a></td></tr><tr><td><a class="link" href="sequence-exists-p.html" title="SEQUENCE-EXISTS-P"><code class="function">sequence-exists-p</code></a></td></tr><tr><td><a class="link" href="sequence-last.html" title="SEQUENCE-LAST"><code class="function">sequence-last</code></a></td></tr><tr><td><a class="link" href="sequence-next.html" title="SEQUENCE-NEXT"><code class="function">sequence-next</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id404589"></a><h2>Notes</h2><p>
+        <code class="function">set-sequence-position</code> is a <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extension.  
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sequence-next.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fddl.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="truncate-database.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">SEQUENCE-NEXT </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> TRUNCATE-DATABASE</td></tr></table></div></body></html>

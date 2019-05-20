@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>convert-from-foreign-string</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="UFFI Reference Guide" /><link rel="up" href="strings.html" title="Strings" /><link rel="prev" href="with-cstring.html" title="with-cstring" /><link rel="next" href="convert-to-foreign-string.html" title="convert-to-foreign-string" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">convert-from-foreign-string</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="with-cstring.html">Prev</a> </td><th width="60%" align="center">Strings</th><td width="20%" align="right"> <a accesskey="n" href="convert-to-foreign-string.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="convert-from-foreign-string"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>convert-from-foreign-string — Converts a foreign string into a Lisp string.<p><b>Macro</b></p></p></div><div class="refsynopsisdiv"><h2>Syntax</h2><pre class="synopsis">
+	<code class="function">convert-from-foreign-string</code>
+	<em class="replaceable"><code>foreign-string &amp;key length null-terminated-p</code></em>
+	=&gt;
+	<span class="returnvalue">string</span>
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2523152"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>foreign-string</code></em></span></dt><dd><p>A foreign string.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>length</code></em></span></dt><dd><p>The length of the foreign string to convert. The
+	    default is the length of the string until a <code class="constant">NULL</code>
+	    character is reached.
+	    </p></dd><dt><span class="term"><em class="parameter"><code>null-terminated-p</code></em></span></dt><dd><p>A boolean flag with a default value of <code class="constant">T</code> When true,
+	    the string is converted until the first <code class="constant">NULL</code> character is reached.
+	    </p></dd><dt><span class="term"><span class="returnvalue">string</span></span></dt><dd><p>A Lisp string.
+	    </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2523246"></a><h2>Description</h2><p>
+	Returns a Lisp string from a foreign string. 
+	Can translated ASCII and binary strings.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2523258"></a><h2>Side Effects</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2523270"></a><h2>Affected by</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id2523281"></a><h2>Exceptional Situations</h2><p>None.</p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="with-cstring.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="strings.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="convert-to-foreign-string.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">with-cstring </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> convert-to-foreign-string</td></tr></table></div></body></html>

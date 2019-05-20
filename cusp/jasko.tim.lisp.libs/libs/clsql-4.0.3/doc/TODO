@@ -1,0 +1,30 @@
+DOCUMENTATION TO DO LIST
+
+1. Variances from CommonSQL (Ideally, this will be extremely minimal) 
+
+2. Underdocumented CommonSQL features:
+
+ - Retrieval immediate
+ - SQL operators: ||, SUBSTR, MINUS, INTERSECT, UNION, NVL 
+
+3. CLSQL extensions to CommonSQL
+
+ - SQL operators: group-by, limit, not-null, ==, is, having, the, uplike,
+   view-class, coalesce, except, exists, substring, concat 
+
+ - SELECT: additional keyword arguments accepted include :INNER-JOIN and :ON. 
+
+4. Documenting lower level, non-CommonSQL functions (some of this is already 
+   done). 
+
+ - connection pools
+ - database-query-result-set 
+ 
+5. Notes on any peculiarities of each of the backends (e.g., unsupported 
+   features, notable extensions etc.). 
+
+ - MYSQL 
+ - SQLITE 
+ - ODBC 
+-  ORACLE 
+

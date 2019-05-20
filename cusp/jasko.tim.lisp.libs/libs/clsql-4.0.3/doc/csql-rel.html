@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>Class Relations</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="csql.html" title="Chapter 2. CommonSQL Tutorial" /><link rel="prev" href="ch02s02.html" title="Data Modeling with CLSQL" /><link rel="next" href="csql-creat.html" title="Object Creation" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Class Relations</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a> </td><th width="60%" align="center">Chapter 2. <span class="application">CommonSQL</span> Tutorial</th><td width="20%" align="right"> <a accesskey="n" href="csql-creat.html">Next</a></td></tr></table><hr /></div><div class="sect1" lang="en" xml:lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="csql-rel"></a>Class Relations</h2></div></div></div><p>
+In an <span class="application">SQL</span> only application, the <span class="symbol">EMPLOYEE</span> and
+<span class="symbol">COMPANY</span> tables can be queried to determine things
+like, "Who is Vladimir's manager?", "What company does Josef work
+for?", and "What employees work for Widgets Inc.".  This is done by
+joining tables with an <span class="application">SQL</span> query.
+</p><p>
+Who works for Widgets Inc.?
+</p><pre class="programlisting">
+SELECT first_name, last_name FROM employee, company
+       WHERE employee.companyid = company.companyid
+	     AND company.company_name = "Widgets Inc."
+</pre><p>
+Who is Vladimir's manager?
+</p><pre class="programlisting">
+SELECT managerid FROM employee
+       WHERE employee.first_name = "Vladimir"
+	     AND employee.last_name = "Lenin"
+</pre><p>
+What company does Josef work for?
+</p><pre class="programlisting">
+SELECT company_name FROM company, employee
+       WHERE employee.first_name = "Josef"
+	     AND employee.last-name = "Stalin"
+	     AND employee.companyid = company.companyid
+</pre><p>
+With <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> however we do not need to write out such queries because
+our view classes can maintain the relations between employees and
+companies, and employees to their managers for us.  We can then access
+these relations like we would any other attribute of an employee or
+company object.  In order to do this we define some join slots for our
+view classes.
+</p><p>
+What company does an employee work for?  If we add the following slot
+definition to the employee class we can then ask for it's
+<span class="symbol">COMPANY</span> slot and get the appropriate result.
+</p><pre class="programlisting">
+    ;; In the employee slot list
+    (company
+      :accessor employee-company
+      :db-kind :join
+      :db-info (:join-class company
+	        :home-key companyid
+		:foreign-key companyid
+		:set nil))
+</pre><p>
+Who are the employees of a given company?  And who is the president of
+it? We add the following slot definition to the company view class and
+we can then ask for it's <span class="symbol">EMPLOYEES</span> slot and get the
+right result.
+</p><pre class="programlisting">
+      ;; In the company slot list
+      (employees
+	:reader company-employees
+	:db-kind :join
+	:db-info (:join-class employee
+		  :home-key companyid
+		  :foreign-key companyid
+		  :set t))
+
+       (president
+        :reader president
+	:db-kind :join
+	:db-info (:join-class employee
+		  :home-key presidentid
+		  :foreign-key emplid
+		  :set nil))
+</pre><p>
+And lastly, to define the relation between an employee and their
+manager:
+</p><pre class="programlisting">
+	;; In the employee slot list
+       (manager
+        :accessor employee-manager
+	:db-kind :join
+	:db-info (:join-class employee
+	          :home-key managerid
+		  :foreign-key emplid
+		  :set nil))
+</pre><p>
+<span class="application"><span class="emphasis"><em>CLSQL</em></span></span> join slots can represent one-to-one, one-to-many, and
+many-to-many relations.  Above we only have one-to-one and one-to-many
+relations, later we will explain how to model many-to-many relations.
+First, let's go over the slot definitions and the available options.
+</p><p>
+In order for a slot to be a join, we must specify that it's
+<span class="symbol">:db-kind</span> <span class="symbol">:join</span>, as opposed to
+<span class="symbol">:base</span> or <span class="symbol">:key</span>.  Once we do that, we
+still need to tell <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> how to create the join statements for the
+relation.  This is what the <span class="symbol">:db-info</span> option does.  It
+is a list of keywords and values.  The available keywords are:
+</p><div class="itemizedlist"><ul type="disc"><li><p>
+      <span class="symbol">:join-class</span> - The view class to which we want
+      to join.  It can be another view class, or the same view class
+      as our object.</p></li><li><p>
+      <span class="symbol">:home-key</span> - The slot(s) in the immediate object
+      whose value will be compared to the foreign-key slot(s) in the
+      join-class in order to join the two tables.  It can be a single
+      slot-name, or it can be a list of slot names.</p></li><li><p>
+      <span class="symbol">:foreign-key</span> - The slot(s) in the join-class
+      which will be compared to the value(s) of the home-key.
+      </p></li><li><p>
+      <span class="symbol">:set</span> - A boolean which if false, indicates that
+      this is a one-to-one relation, only one object will be returned.
+      If true, than this is a one-to-many relation, a list of objects
+      will be returned when we ask for this slots value.
+      </p></li></ul></div><p>
+There are other :join-info options available in <span class="application"><span class="emphasis"><em>CLSQL</em></span></span>, but we will
+save those till we get to the many-to-many relation examples.
+</p></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch02s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="csql.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="csql-creat.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Data Modeling with <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Object Creation</td></tr></table></div></body></html>

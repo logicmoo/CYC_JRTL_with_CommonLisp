@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>SQL-OPERATOR</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-syntax.html" title="The Symbolic SQL Syntax" /><link rel="prev" href="sql-operation.html" title="SQL-OPERATION" /><link rel="next" href="ref-fddl.html" title="Functional Data Definition Language (FDDL)" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">SQL-OPERATOR</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="sql-operation.html">Prev</a> </td><th width="60%" align="center">The Symbolic SQL Syntax</th><td width="20%" align="right"> <a accesskey="n" href="ref-fddl.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="sql-operator"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>SQL-OPERATOR — Returns the symbol for the supplied SQL operator.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id385570"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">sql-operator</code> <em class="parameter"><code>operator</code></em> =&gt; <span class="returnvalue">result</span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id385598"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>operator</code></em></span></dt><dd><p>A symbol denoting an SQL operator.</p></dd><dt><span class="term"><span class="returnvalue">result</span></span></dt><dd><p>The Lisp symbol used by <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> to represent the 
+            specified operator.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id385650"></a><h2>Description</h2><p>Returns the Lisp symbol corresponding to the SQL operator
+      represented by the symbol <em class="parameter"><code>operator</code></em>. If 
+      <em class="parameter"><code>operator</code></em> does not represent a supported 
+      SQL operator or is not a symbol, nil is returned. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id385675"></a><h2>Examples</h2><pre class="screen">
+(sql-operator 'like)
+=&gt; SQL-LIKE
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id385688"></a><h2>Side Effects</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id385699"></a><h2>Affected by</h2><p>
+        None.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id385710"></a><h2>Exceptional Situations</h2><p>None.</p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id385721"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="sql.html" title="SQL"><code class="function">sql</code></a></td></tr><tr><td><a class="link" href="sql-expression.html" title="SQL-EXPRESSION"><code class="function">sql-expression</code></a></td></tr><tr><td><a class="link" href="sql-operation.html" title="SQL-OPERATION"><code class="function">sql-operation</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id385766"></a><h2>Notes</h2><p>
+        <span class="application"><span class="emphasis"><em>CLSQL</em></span></span>'s symbolic SQL syntax currently has support for the
+        following <span class="application">CommonSQL</span> compatible SQL operators:
+      </p><table class="simplelist" border="0" summary="Simple list"><tr><td><code class="function">any</code></td></tr><tr><td><code class="function">some</code></td></tr><tr><td><code class="function">all</code></td></tr><tr><td><code class="function">not</code></td></tr><tr><td><code class="function">union</code></td></tr><tr><td><code class="function">intersect</code></td></tr><tr><td><code class="function">minus</code></td></tr><tr><td><code class="function">except 
+        </code></td></tr><tr><td><code class="function">order-by 
+        </code></td></tr><tr><td><code class="function">null
+        </code></td></tr><tr><td><code class="function">*
+        </code></td></tr><tr><td><code class="function">+
+        </code></td></tr><tr><td><code class="function">/
+        </code></td></tr><tr><td><code class="function">-
+        </code></td></tr><tr><td><code class="function">like
+        </code></td></tr><tr><td><code class="function">and
+        </code></td></tr><tr><td><code class="function">or
+        </code></td></tr><tr><td><code class="function">in
+        </code></td></tr><tr><td><code class="function">substr 
+        </code></td></tr><tr><td><code class="function">|| 
+        </code></td></tr><tr><td><code class="function">=
+        </code></td></tr><tr><td><code class="function">&lt;
+        </code></td></tr><tr><td><code class="function">&gt;
+        </code></td></tr><tr><td><code class="function">&gt;=
+        </code></td></tr><tr><td><code class="function">&lt;=
+        </code></td></tr><tr><td><code class="function">&lt;&gt;
+        </code></td></tr><tr><td><code class="function">count
+        </code></td></tr><tr><td><code class="function">max
+        </code></td></tr><tr><td><code class="function">min
+        </code></td></tr><tr><td><code class="function">avg
+        </code></td></tr><tr><td><code class="function">sum
+        </code></td></tr><tr><td><code class="function">function 
+        </code></td></tr><tr><td><code class="function">between 
+        </code></td></tr><tr><td><code class="function">distinct 
+        </code></td></tr><tr><td><code class="function">nvl 
+        </code></td></tr><tr><td><code class="function">slot-value
+        </code></td></tr><tr><td><code class="function">userenv 
+        </code></td></tr></table><p>
+        as well as the pseudo-operator <code class="function">function</code>. 
+      </p><p> The following operators are provided as <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extensions to 
+      the <span class="application">CommonSQL</span> API. 
+      </p><table class="simplelist" border="0" summary="Simple list"><tr><td><code class="function">concat
+        </code></td></tr><tr><td><code class="function">substring 
+        </code></td></tr><tr><td><code class="function">limit 
+        </code></td></tr><tr><td><code class="function">group-by
+        </code></td></tr><tr><td><code class="function">having
+        </code></td></tr><tr><td><code class="function">not-null
+        </code></td></tr><tr><td><code class="function">exists
+        </code></td></tr><tr><td><code class="function">uplike
+        </code></td></tr><tr><td><code class="function">is
+        </code></td></tr><tr><td><code class="function">==
+        </code></td></tr><tr><td><code class="function">the 
+        </code></td></tr><tr><td><code class="function">coalesce 
+        </code></td></tr><tr><td><code class="function">view-class
+        </code></td></tr></table><p>
+      </p><p> 
+        Note that some of these operators are not supported by all of
+        the RDBMS supported by <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> (see the <a class="link" href="appendix.html" title="Appendix A. Database Back-ends">Appendix</a> for details).
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="sql-operation.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-syntax.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="ref-fddl.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">SQL-OPERATION </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Functional Data Definition Language (FDDL)</td></tr></table></div></body></html>

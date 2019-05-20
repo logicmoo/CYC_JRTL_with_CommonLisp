@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>CREATE-TABLE</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-fddl.html" title="Functional Data Definition Language (FDDL)" /><link rel="prev" href="ref-fddl.html" title="Functional Data Definition Language (FDDL)" /><link rel="next" href="drop-table.html" title="DROP-TABLE" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">CREATE-TABLE</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ref-fddl.html">Prev</a> </td><th width="60%" align="center">Functional Data Definition Language (FDDL)</th><td width="20%" align="right"> <a accesskey="n" href="drop-table.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="create-table"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>CREATE-TABLE — Create a database table.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id358837"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">create-table</code> <em class="replaceable"><code>name</code></em> <em class="replaceable"><code>description</code></em> &amp;key <em class="replaceable"><code>database</code></em> <em class="replaceable"><code>constraints</code></em> <em class="replaceable"><code>transactions</code></em> =&gt; <span class="returnvalue"></span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id350534"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>name</code></em></span></dt><dd><p>
+              The name of the table as a string, symbol or SQL expression. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>
+              A database object which defaults to
+              <span class="symbol">*default-database*</span>.
+            </p></dd><dt><span class="term"><em class="parameter"><code>description</code></em></span></dt><dd><p>
+              A list. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>constraints</code></em></span></dt><dd><p>
+              A string, a list of strings or <code class="constant">NIL</code>. 
+            </p></dd><dt><span class="term"><em class="parameter"><code>transactions</code></em></span></dt><dd><p>
+              A Boolean. The default value is <code class="constant">T</code>. 
+            </p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id381441"></a><h2>Description</h2><p>Creates a table called <em class="parameter"><code>name</code></em>, which
+      may be a string, symbol or SQL table identifier, in
+      <em class="parameter"><code>database</code></em> which defaults to
+      <span class="symbol">*default-database*</span>. <em class="parameter"><code>description</code></em>
+      is a list whose elements are lists containing the attribute
+      names, types, and other constraints such as not-null or
+      primary-key for each column in the table.
+      </p><p>
+        <em class="parameter"><code>constraints</code></em> is a string representing an
+        SQL table constraint expression or a list of such strings.
+      </p><p> 
+        With MySQL databases, if <em class="parameter"><code>transactions</code></em>
+        is <code class="constant">T</code> an InnoDB table is created which supports transactions.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id381498"></a><h2>Examples</h2><pre class="screen">
+(create-table [foo]
+              '(([id] integer)
+                ([height] float)
+                ([name] (string 24))
+                ([comments] longchar)))
+=&gt; 
+(table-exists-p [foo]) 
+=&gt; T 
+
+(create-table [foo] '(([bar] integer :not-null :unique :primary-key) 
+                      ([baz] string :not-null :unique)))
+=&gt; 
+(table-exists-p [foo])
+=&gt; T
+
+(create-table [foo] '(([bar] integer :not-null) ([baz] string :not-null))
+              :constraints '("UNIQUE (bar,baz)" "PRIMARY KEY (bar)"))
+=&gt; 
+(table-exists-p [foo])
+=&gt; T
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id381516"></a><h2>Side Effects</h2><p>
+        A table is created in <em class="parameter"><code>database</code></em>. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id381532"></a><h2>Affected by</h2><p>
+        <span class="symbol">*default-database*</span>
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id366774"></a><h2>Exceptional Situations</h2><p>
+        An error is signalled if <em class="parameter"><code>name</code></em> is not a
+        string, symbol or SQL expression. An error of type
+        <span class="symbol">sql-database-data-error</span> is signalled if a
+        relation called <em class="parameter"><code>name</code></em> already exists.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id366801"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="drop-table.html" title="DROP-TABLE"><code class="function">drop-table</code></a></td></tr><tr><td><a class="link" href="list-tables.html" title="LIST-TABLES"><code class="function">list-tables</code></a></td></tr><tr><td><a class="link" href="table-exists-p.html" title="TABLE-EXISTS-P"><code class="function">table-exists-p</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id366846"></a><h2>Notes</h2><p>
+        The <em class="parameter"><code>constraints</code></em> and
+        <em class="parameter"><code>transactions</code></em> keyword arguments to
+        <code class="function">create-table</code> are <span class="application"><span class="emphasis"><em>CLSQL</em></span></span> extensions. The
+        <em class="parameter"><code>transactions</code></em> keyword argument is for
+        compatibility with MySQL databases.
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ref-fddl.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-fddl.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="drop-table.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Functional Data Definition Language (FDDL) </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> DROP-TABLE</td></tr></table></div></body></html>

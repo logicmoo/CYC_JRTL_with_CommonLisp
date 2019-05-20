@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML><HEAD><TITLE>CLiki : SPLIT-SEQUENCE</TITLE>
+<LINK  REL="alternate" TYPE="application/rss+xml" TITLE="Recent Changes" HREF="http://www.cliki.net/recent-changes.rdf"><LINK  REL="stylesheet" HREF="http://www.cliki.net/admin/cliki.css"></HEAD>
+<BODY><FORM ACTION="http://www.cliki.net/admin/search"><DIV ID="banner"><SPAN CLASS="search"><INPUT  NAME="words" SIZE="30"><INPUT  TYPE="submit" VALUE="search"></SPAN>
+<A TITLE="CLiki home page" CLASS="logo" HREF="http://www.cliki.net/">CL<SPAN CLASS="sub">iki</SPAN>
+</A>
+the common lisp wiki<BR ><DIV ID="navbar"><A HREF="http://www.cliki.net/index">Home</A>
+<A HREF="http://www.cliki.net/Recent%20Changes">Recent Changes</A>
+<A HREF="http://www.cliki.net/CLiki">About CLiki</A>
+<A HREF="http://www.cliki.net/Text%20Formatting">Text Formatting</A>
+<A ONCLICK="if(name=window.prompt('New page name ([A-Za-z0-9 ])')) document.location='http://www.cliki.net/edit/'+name ;return false;" HREF="#">Create New Page</A>
+</DIV>
+</DIV>
+</FORM>
+<H1>SPLIT-SEQUENCE</H1>
+<a class="internal" href="SPLIT-SEQUENCE" >SPLIT-SEQUENCE</a> (formerly known as <a class="internal" href="PARTITION" >PARTITION</a>) is a member of the <a class="internal" href="Common%20Lisp%20Utilities" >Common Lisp Utilities</a> family of programs, designed by community consensus.
+<p><p><i>Function</i> <b>SPLIT-SEQUENCE, SPLIT-SEQUENCE-IF, SPLIT-SEQUENCE-IF-NOT</b></p>
+<p><p><b>Syntax:</b></p>
+<p><p><b>split-sequence</b> <i>delimiter  sequence  <tt>&key</tt> count remove-empty-subseqs from-end start end test test-not key</i> => <i>list, index</i></p> 
+<p><p><b>split-sequence-if</b> <i>predicate sequence <tt>&key</tt> count remove-empty-subseqs from-end start end key</i> => <i>list, index</i></p>
+<p><p><b>split-sequence-if-not</b> <i>predicate  sequence <tt>&key</tt> count remove-empty-subseqs from-end start end key</i> => <i>list, index</i></p>
+<p><p><b>Arguments and Values:</b></p>
+<p><p><i>delimiter</i>---an <i>object</i>.</p>
+<p><i>predicate</i>---a <i>designator</i> for a <i>function</i> of one <i>argument</i> that returns a <i>generalized boolean</i>.</p>
+<p><i>sequence</i>---a <i>proper sequence</i>.</p>
+<p><i>count</i>---an <i>integer</i> or <b>nil</b>. The default is <b>nil</b>.</p>
+<p><i>remove-empty-subseqs</i>---a <i>generalized boolean</i>. The default is <i>false</i>.</p>
+<p><i>from-end</i>---a <i>generalized boolean</i>. The default is <i>false</i>.</p>
+<p><i>start, end</i>---<i>bounding index designators</i> of <i>sequence</i>. The defaults for </i>start</i> and <i>end</i> are <tt>0</tt> and <b>nil</b>, respectively.</p>
+<p><i>test</i>---a <i>designator</i> for a <i>function</i> of two <i>arguments</i> that returns a <i>generalized boolean</i>.</p>
+<p><i>test-not</i>---a <i>designator</i> for a <i>function</i> of two <i>arguments</i> that returns a <i>generalized boolean</i>.</p>
+<p><i>key</i>---a <i>designator</i> for a <i>function</i> of one <i>argument</i>, or <b>nil</b>.</p>
+<p><i>list</i>---a <i>proper sequence</i>.</p>
+<p><i>index</i>---an <i>integer</i> greater than or equal to zero, and less than or equal to the <i>length</i> of the <i>sequence</i>.</p>
+<p><p><b>Description:</b></p>
+<p><p>Splits <i>sequence</i> into a list of subsequences delimited by objects <i>satisfying the test</i>.
+<p><i>List</i> is a list  of  sequences  of  the same  kind as <i>sequence</i> that has elements consisting of subsequences of <i>sequence</i> that were delimited in the argument by elements <i>satisfying the test</i>. <i>Index</i> is an index into <i>sequence</i> indicating the  unprocessed region, suitable as an argument to <a class="hyperspec" href = "http://www.lisp.org/HyperSpec/Body/acc_subseq.html"><b>subseq</b></a> to continue processing in the same manner if desired.
+<p>The <i>count</i> argument, if supplied,  limits  the  number  of subsequences  in  the  first  return  value;  if more than <i>count</i> delimited  subsequences  exist  in  <i>sequence</i>,  the <i>count</i> leftmost delimited subsequences will be in order in the first return value, and the second return  value  will be  the  index  into  <i>sequence</i> at  which  processing stopped.
+<p>If <i>from-end</i> is non-null, <i>sequence</i> is concep­tually processed from right to left, accumulating the sub­sequences in reverse order; <i>from-end</i> only makes a differ­ence  in  the  case  of a non-null <i>count</i> argument. In the presence of  <i>from-end</i>,  the  <i>count</i> rightmost  delimited subsequences  will  be  in  the order that they are in <i>sequence</i> in the first return value, and the  sec­ond  is  the  index  indicating the end of the unprocessed region.
+<p>The <i>start</i> and <i>end</i> keyword  arguments  permit  a  certain    subsequence  of the <i>sequence</i> to be processed without the need for a copying stage; their  use  is  conceptually equivalent  to  partitioning  the subsequence delimited by <i>start</i> and <i>end</i>, only without the need for copying.
+<p>If <i>remove-empty-subseqs</i> is null (the default), then empty subsequences will be included in the result.
+<p>In  all  cases, the subsequences in the first return value will be in the order that they appeared  in <i>sequence</i>.
+<p><p><b>Examples:</b></p>
+<p><pre>
+ (split-sequence:SPLIT-SEQUENCE #\Space "A stitch in time saves nine.")
+=>  ("A" "stitch" "in" "time" "saves" "nine.")
+    28
+ (split-sequence:SPLIT-SEQUENCE #\, "foo,bar ,baz, foobar , barbaz,")
+=>  ("foo" "bar " "baz" " foobar " " barbaz" "")
+    30
+</pre>
+<p><hr>
+<p><a class="download" href="http://ftp.linux.org.uk/pub/lisp/experimental/cclan/split-sequence.tar.gz"
+><b>Download ASDF package from http://ftp.linux.org.uk/pub/lisp/experimental/cclan/split-sequence.tar.gz</b></a>
+<hr><p><b>This page is linked from: </b> <a class="internal" href="armish" >armish</a> &nbsp; <a class="internal" href="CL-FTP" >CL-FTP</a> &nbsp; <a class="internal" href="Common%20Lisp%20Utilities" >Common Lisp Utilities</a> &nbsp; <a class="internal" href="IOlib" >IOlib</a> &nbsp; <a class="internal" href="liards" >liards</a> &nbsp; <a class="internal" href="PARTITION" >PARTITION</a> &nbsp; <a class="internal" href="philip-jose" >philip-jose</a> &nbsp; <a class="internal" href="Steeldump" >Steeldump</a> &nbsp; <a class="internal" href="text" >text</a> &nbsp; <DIV ID="footer"><A HREF="edit/SPLIT-SEQUENCE?v=5">Edit page</A>
+ | <A HREF="SPLIT-SEQUENCE?source">View source</A>
+ | Revisions: <A HREF="http://www.cliki.net/SPLIT-SEQUENCE?v=1" TITLE="Fri, 13 Oct 2006 23:07:57 GMT">1</A>
+<A HREF="http://www.cliki.net/SPLIT-SEQUENCE?v=2" TITLE="Fri, 13 Oct 2006 23:07:57 GMT">2</A>
+<A HREF="http://www.cliki.net/SPLIT-SEQUENCE?v=3" TITLE="Fri, 13 Oct 2006 23:07:57 GMT">3</A>
+<A HREF="http://www.cliki.net/SPLIT-SEQUENCE?v=4" TITLE="Tue, 06 Nov 2007 00:42:29 GMT">4</A>
+<B TITLE="Tue, 19 Feb 2008 22:29:09 GMT">5</B>
+</DIV>
+<P>CLiki pages can be edited by anyone at any time.  Imagine a fearsomely comprehensive disclaimer of liability.  Now fear, comprehensively</P>
+</BODY>
+</HTML>

@@ -1,0 +1,47 @@
+Sep 14 2006
+-----------
+Version 4.0.0 release with incompatible backward change: 
+ - using ANSI mode for MySQL backend
+ - reducing case changes in SQL output for symbols which will have an effect
+ for users of mlisp (Allegro "Modern" Lisp) .
+ - Add support for generating quoted strings in SQL output when
+specifying table names as strings rather than symbols. This may have
+an effect on applications that use strings as table names and use
+inconsistent case in the table names. Previously, those varying case
+strings would be mapped to a canonical case unquoted SQL output. But
+to accomodate users which need to specify case in table names, this
+mapping has been removed.
+See ChangeLog entry for details.
+
+Dec 30 2006
+-----------
+Version 3.8.0 released with incompatible backward change. See
+the ChangeLog entry for details.
+
+
+Aug 3 2006
+----------
+CLSQL 3.0 has been released. The 3.0 release of CLSQL is a major
+rewrite compared to version 2.0. New features include:
+
+ - Full CommonSQL backward compatibility with native documentation while
+   retaining and adding many improvements beyond the CommonSQL 
+   standard.
+ - Extensive (233 tests) regression suite
+ - Addition of ODBC and Oracle backends
+
+I wish to acknowledge Marcus Pearce's significant contribution to this
+release. He has performed the initial port of Uncommonsql to CLSQL as
+well as the initial regression suite and most of the new
+documentation. He has contributed to many of the re-design decisions
+and new code for CLSQL.
+
+CLSQL's home is http://clsql.b9.com
+
+Enjoy!
+
+Kevin Rosenberg
+
+
+
+

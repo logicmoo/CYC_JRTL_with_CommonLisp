@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title>STOP-SQL-RECORDING</title><meta name="generator" content="DocBook XSL Stylesheets V1.73.2" /><link rel="start" href="index.html" title="CLSQL Users' Guide" /><link rel="up" href="ref-recording.html" title="SQL I/O Recording" /><link rel="prev" href="start-sql-recording.html" title="START-SQL-RECORDING" /><link rel="next" href="sql-recording-p.html" title="SQL-RECORDING-P" /></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">STOP-SQL-RECORDING</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="start-sql-recording.html">Prev</a> </td><th width="60%" align="center">SQL I/O Recording</th><td width="20%" align="right"> <a accesskey="n" href="sql-recording-p.html">Next</a></td></tr></table><hr /></div><div class="refentry" lang="en" xml:lang="en"><a id="stop-sql-recording"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>STOP-SQL-RECORDING — Stop recording SQL commands or results.<p><b>Function</b></p></p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396221"></a><h2>Syntax</h2><pre class="synopsis">
+      <code class="function">stop-sql-recording</code> &amp;key <em class="replaceable"><code>type</code></em> <em class="replaceable"><code>database</code></em> =&gt; <span class="returnvalue"></span></pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396249"></a><h2>Arguments and Values</h2><div class="variablelist"><dl><dt><span class="term"><em class="parameter"><code>type</code></em></span></dt><dd><p>
+              One of the following keyword symbols:
+              <span class="symbol">:commands</span>, <span class="symbol">:results</span> or
+              <span class="symbol">:both</span>, defaulting to
+              <span class="symbol">:commands</span>.
+            </p></dd><dt><span class="term"><em class="parameter"><code>database</code></em></span></dt><dd><p>A 
+            <a class="glossterm" href="glossary.html#gloss-database-object"><em class="glossterm">database
+            object</em></a>. This will default to
+            <span class="symbol">*default-database*</span>.</p></dd></dl></div></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396321"></a><h2>Description</h2><p>Stops recording of SQL commands sent to and/or results
+      returned from <em class="parameter"><code>database</code></em> which defaults to
+      <span class="symbol">*default-database*</span>. The default value of
+      <em class="parameter"><code>type</code></em> is <span class="symbol">:commands</span> which
+      means that SQL commands sent to <em class="parameter"><code>database</code></em>
+      will no longer be recorded. If <em class="parameter"><code>type</code></em> is
+      <span class="symbol">:results</span> then SQL results returned from
+      <em class="parameter"><code>database</code></em> will no longer be
+      recorded. Recording may be stopped for both commands and results
+      by passing <em class="parameter"><code>type</code></em> value of
+      <span class="symbol">:both</span>.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396382"></a><h2>Examples</h2><pre class="screen">
+(start-sql-recording :type :both)
+=&gt; 
+(select [last-name] :from [employee] 
+                       :where [= [emplid] 1] 
+                       :field-names nil
+                       :flatp t)
+;; 2004-07-02 16:42:12 dent/test/dent =&gt; SELECT last_name FROM employee WHERE (emplid = 1)
+;; 2004-07-02 16:42:12 dent/test/dent &lt;= (Lenin)
+=&gt; ("Lenin")
+(stop-sql-recording :type :results)
+=&gt; 
+(select [last-name] :from [employee] 
+                       :where [= [emplid] 1] 
+                       :field-names nil
+                       :flatp t)
+;; 2004-07-02 16:44:11 dent/test/dent =&gt; SELECT last_name FROM employee WHERE (emplid = 1)
+=&gt; ("Lenin")
+      </pre></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396401"></a><h2>Side Effects</h2><p>
+        The command and result recording broadcast streams associated
+        with <em class="parameter"><code>database</code></em> are reinitialised to
+        <code class="constant">NIL</code>.
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id396422"></a><h2>Affected by</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id414719"></a><h2>Exceptional Situations</h2><p>
+        None. 
+      </p></div><div class="refsect1" lang="en" xml:lang="en"><a id="id414729"></a><h2>See Also</h2><table class="simplelist" border="0" summary="Simple list"><tr><td><a class="link" href="start-sql-recording.html" title="START-SQL-RECORDING"><code class="function">start-sql-recording</code></a></td></tr><tr><td><a class="link" href="sql-recording-p.html" title="SQL-RECORDING-P"><code class="function">sql-recording-p</code></a></td></tr></table></div><div class="refsect1" lang="en" xml:lang="en"><a id="id354669"></a><h2>Notes</h2><p>
+        None. 
+      </p></div></div><div class="navfooter"><hr /><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="start-sql-recording.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ref-recording.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="sql-recording-p.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">START-SQL-RECORDING </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> SQL-RECORDING-P</td></tr></table></div></body></html>

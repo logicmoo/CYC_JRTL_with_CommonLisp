@@ -1,0 +1,355 @@
+<html><head><title>The Allegro CL Test harness</title></head><body><table border="0" width="100%" cellpadding="1" cellspacing="0"><tr><td colspan="2" bgcolor="#00FFFF"><table border="0" cellpadding="5" cellspacing="3"><tr><td align="left" bgcolor="#00FFFF"><a href="contents.htm"><b>ToC</b></a></td><td align="left" bgcolor="#00FFFF"><a href="introduction.htm"><b>DocOverview</b></a></td><td align="left" bgcolor="#00FFFF"><a href="cgide.htm"><b>CGDoc</b></a></td><td align="left" bgcolor="#00FFFF"><a href="release-notes.htm"><b>RelNotes</b></a></td><td align="left" bgcolor="#00FFFF"><a href="index.htm"><b>Index</b></a></td><td align="left" bgcolor="#00FFFF"><a href="permuted-index.htm"><b>PermutedIndex</b></a></td></tr></table></td><td align="right"><b>Allegro CL version 6.1</b><br><small><a href="introduction.htm#updates-s">Unrevised</a></small></td></tr></table><h1>The Allegro CL Test harness</h1><p>This document contains the following sections:</p><a href="#tester-api-1">1.0 The tester module API</a><br>&nbsp;&nbsp;&nbsp;<a href="#tester-vars-2">1.1 Test Harness Variables</a><br>&nbsp;&nbsp;&nbsp;<a href="#tester-macros-2">1.2 Test Harness Macros</a><br>&nbsp;&nbsp;&nbsp;<a href="#tester-examples-2">1.3 Examples</a><br><p>
+ANSI Common Lisp contains no functionality designed specifically for
+testing applications. Because testing is an essential part of
+application development, Franz Inc.  is making public the test harness
+used internally for testing Allegro CL itself. (A test harness is a
+collection of macros and variables associated with testing, along with
+templates for test forms.)
+</p><p>
+The test harness facility was added to Allegro CL in release 6.0. (It
+was available as a patch for release 5.0.1).
+</p><p>
+To use the test harness, you must load the
+<i>tester.fasl</i> module. Do this by evaluating
+</p><pre>
+(require :tester)
+</pre><hr><hr><h2><a name="tester-api-1">1.0 The tester module API</a></h2>
+
+<p>
+All of the following symbols are exported from the
+<code>util.test</code> package.
+</p>
+
+<hr><h2><a name="tester-vars-2">1.1 Test Harness Variables</a></h2>
+
+<p>
+The test harness API includes the following variables, each described
+fully on its own page and briefly here.
+</p>
+
+<ul>
+
+<li>
+<a href="pages/variables/util.test/s_break-on-test-failures_s.htm"><code>*break-on-test-failures*</code></a>:
+If true, <a href="../ansicl/dictentr/break.htm"><b>break</b></a> is called when
+a test fails.
+</li>
+
+<li>
+<a href="pages/variables/util.test/s_error-protect-tests_s.htm"><code>*error-protect-tests*</code></a>: If true, errors
+(other than in a test-error form) will be considered a failure and
+testing continues.
+</li>
+
+<li>
+<a href="pages/variables/util.test/s_test-errors_s.htm"><code>*test-errors*</code></a>: 
+The value is the number of test errors which have occurred.
+</li>
+
+<li>
+<a href="pages/variables/util.test/s_test-successes_s.htm"><code>*test-successes*</code></a>: 
+The value is the number of test successes which have occurred.
+</li>
+
+<li>
+<a href="pages/variables/util.test/s_test-unexpected-failures_s.htm"><code>*test-unexpected-failures*</code></a>: 
+The value is the number of unexpected test failures which have occurred.
+</li>
+
+</ul>
+
+<hr><h2><a name="tester-macros-2">1.2 Test Harness Macros</a></h2>
+
+<p>
+These macros wrap around a form to be tested and supply the expected
+value (for the test macro) or the expected behavior, which is encoded
+in the macro name (e.g. test-error). For example:
+</p>
+
+<pre>
+(test 1 (+ 0 1))   ;; (testing that the result of (+ 0 1) is
+                   ;; the fixnum 1)
+(test-error (+ 1 "2"))  ;; (testing that an error is
+                                  ;; signaled when a string is 
+                                  ;; passed as an argument to +)
+</pre>
+
+<p>
+Many more examples are given below. 
+</p>
+
+<p>
+<a href="pages/operators/util.test/with-tests.htm"><b>with-tests</b></a> wraps around
+a collection of <strong>test</strong> or <strong>test-*</strong>
+forms. 
+</p>
+
+<p>
+Note that many of the macros have <em>fail-info</em> and
+<em>known-failure</em> keyword arguments. 
+</p>
+
+<ul>
+  <li><em>fail-info</em>, if non-nil, should be a string that will be printed if the test
+    fails. Typical strings provide information about what is being tested, such as "This
+    is bug2075".</li>
+  <li><em>known-failure</em>, if non-nil, affects what is printed when the test fails or
+    succeeds. Thus a failure is reported as "Test failed: known failure: ..." and a
+    success as "Expected test failure for [...] did not occur."</li>
+</ul>
+
+<p>
+Each macro is described briefly here and fully on its documentation page.
+</p>
+
+<ul>
+
+<li>
+<p>
+<a href="pages/operators/util.test/test.htm"><b>test</b></a>
+</p>
+<p><b>Arguments: </b><i>
+expected-value test-form
+</i>&key <i></i> (<i>test</i> #'eql)<i> multiple-values fail-info known-failure</i><i>
+</i></p>
+<p>
+Perform a single test and compare <i>expected-value</i>
+with the value actually returned by <i>test-form</i>.
+</p>
+</li>
+
+<li>
+<p>
+<a href="pages/operators/util.test/test-error.htm"><b>test-error</b></a>
+</p>
+<p><b>Arguments: </b><i>
+form
+</i>&key <i>announce catch-breaks fail-info known-failure</i> (<i>condition-type</i> 'simple-error)<i> include-subtypes format-control format-arguments</i><i>
+</i></p>
+<p>
+Perform a single test to see whether
+<i>form</i> signals an error.
+</p>
+</li>
+
+<li>
+<p>
+<a href="pages/operators/util.test/test-no-error.htm"><b>test-no-error</b></a>
+</p>
+<p><b>Arguments: </b><i>
+form
+</i>&key <i>announce catch-breaks fail-info known-failure</i><i>
+</i></p>
+<p>
+Perform a single test to see that
+<i>form</i> does not signal an error.
+</p>
+</li>
+
+<li>
+<p>
+<a href="pages/operators/util.test/test-warning.htm"><b>test-warning</b></a>
+</p>
+<p><b>Arguments: </b><i>
+form
+</i>&key <i>fail-info known-failure</i><i>
+</i></p>
+<p>
+Perform a single test to see that
+<i>form</i> signals a warning.
+</p>
+</li>
+
+<li>
+<p>
+<a href="pages/operators/util.test/test-no-warning.htm"><b>test-no-warning</b></a>
+</p>
+<p><b>Arguments: </b><i>
+form
+</i>&key <i>fail-info known-failure</i><i>
+</i></p>
+<p>
+Perform a single test to see that
+<i>form</i> does not signal a warning.
+</p>
+</li>
+
+<li>
+<p>
+<a href="pages/operators/util.test/with-tests.htm"><b>with-tests</b></a>
+</p>
+<p><b>Arguments: </b><i>
+(</i>&key <i></i> (<i>name</i> "unnamed")<i>)
+</i> &body <i>body</i><i>
+</i></p>
+<p>
+Evaluates
+<i>body</i>, which should be a list of test forms,
+and reports on the results.
+</p>
+</li>
+
+</ul>
+
+<hr><h2><a name="tester-examples-2">1.3 Examples</a></h2>
+
+<p>
+The following are simple examples using the test harness. The test
+forms themselves are trivial, and the purpose is to indicate the
+behavior of the test harness macros. 
+</p>
+
+
+<pre>
+user(1): (require :tester)
+; Fasl loading .../tester.fasl
+t
+user(2): (use-package :util.test)
+t
+user(3): (test 1 1)
+t
+user(4): (test 1 2)
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: 2
+  wanted: 1
+     got: 2
+nil
+user(5): (defun foo (x) x)
+foo
+user(6): (test 1 (foo 1))
+t
+user(7): (test 1 (foo 2))
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: (foo 2)
+  wanted: 1
+     got: 2
+nil
+user(8): (setq *break-on-test-failures* t)
+t
+user(9): (test 1 (foo 2))
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: (foo 2)
+  wanted: 1
+     got: 2
+Break: *break-on-test-failures* is non-nil.
+
+Restart actions (select using :continue):
+ 0: return from break.
+ 1: Return to Top Level (an &quot;abort&quot; restart)
+ 2: Abort #&lt;process Initial Lisp Listener&gt;
+[1c] user(10): :pop
+user(11): (setq *break-on-test-failures* nil)
+nil
+user(12): (test 1 (error &quot;foo&quot;))
+Error: foo
+
+Restart actions (select using :continue):
+ 0: Return to Top Level (an &quot;abort&quot; restart)
+ 1: Abort #&lt;process Initial Lisp Listener&gt;
+[1] user(13): :pop
+user(14): (setq *error-protect-tests* t)
+t
+user(15): (test 1 (error &quot;foo&quot;))
+Condition type: simple-error
+Message: foo
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: (error &quot;foo&quot;)
+Reason: an error (of type `simple-error') was detected.
+nil
+user(16): (setq *error-protect-tests* nil)
+nil
+user(17): *test-errors*
+4
+user(18): *test-successes*
+2
+user(19): (test 1 2 :known-failure t)
+Test failed: known failure: 2
+  wanted: 1
+     got: 2
+nil
+user(20): (test 1 (foo 1) :known-failure t)
+Expected test failure for (foo 1) did not occur.
+nil
+user(21): (test 1 (foo 1) :known-failure t :fail-info &quot;This is bug666.&quot;)
+Expected test failure for (foo 1) did not occur.
+Additional info: This is bug666.
+nil
+user(22): (test-error (error &quot;foo&quot;))
+t
+user(23): (test-no-error (error &quot;foo&quot;))
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: (error &quot;foo&quot;)
+Reason: detected an unexpected error of type `simple-error'.
+nil
+user(24): (test-error (car '(10)))
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: (car '(10))
+Reason: expected but did not detect an error of type `condition'.
+nil
+user(25): (test-no-error (car '(10)))
+t
+user(26): (test-warning (warn &quot;foo&quot;))
+t
+user(27): (test-no-warning (warn &quot;foo&quot;))
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: (warn &quot;foo&quot;)
+  wanted: no warning
+     got: a warning
+nil
+user(28): (test-warning (car '(10)))
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: (car '(10))
+  wanted: a warning
+     got: no warning
+nil
+user(29): (test-no-warning (car '(10)))
+t
+user(30): (test-error (error &quot;foo: ~a&quot; 10))
+t
+user(31): (test-error (error &quot;foo: ~a&quot; 10) :format-control &quot;foo: ~a&quot;)
+t
+user(32): (test-error (error &quot;foo: ~a&quot; 10) :format-control &quot;foo: ~a&quot;
+	    :format-arguments '(10))
+t
+user(33): (test-error (error &quot;foo: ~a&quot; 10) :format-control &quot;foo:  ~a&quot;)
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: (error &quot;foo: ~a&quot; 10)
+Reason: the format-control was incorrect.
+  wanted: &quot;~1@&lt;foo: ~a~:@&gt;&quot;
+     got: &quot;~1@&lt;foo:  ~a~:@&gt;&quot;
+nil
+user(34): (test-error (error &quot;foo: ~a&quot; 10) :format-control &quot;foo: ~a&quot;
+	    :format-arguments '(11))
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: (error &quot;foo: ~a&quot; 10)
+Reason: the format-arguments were incorrect.
+  wanted: (10)
+     got: (11)
+nil
+user(35): (test-error (error &quot;foo: ~a&quot; 10) :condition-type 'condition
+	    :include-subtypes t)
+t
+user(36): (test-error (error &quot;foo: ~a&quot; 10) :condition-type 'simple-break
+	    :include-subtypes t)
+ * * * UNEXPECTED TEST FAILURE * * *
+Test failed: (error &quot;foo: ~a&quot; 10)
+Reason: detected an incorrect condition type.
+  wanted: simple-break
+     got: #&lt;standard-class simple-error&gt;
+nil
+user(37): (test-error (break &quot;foo: ~a&quot; 10) :condition-type 'simple-break
+	    :include-subtypes t)
+Break: foo: 10
+  [condition type: simple-break]
+
+Restart actions (select using :continue):
+ 0: return from break.
+ 1: Return to Top Level (an &quot;abort&quot; restart)
+ 2: Abort #&lt;process Initial Lisp Listener&gt;
+[1c] user(38): :pop
+user(39): (test-error (break &quot;foo: ~a&quot; 10) :catch-breaks t
+		      :condition-type 'simple-break :include-subtypes t)
+t
+</pre>
+
+</body><hr><p><small>Copyright (c) 1998-2001, Franz Inc. Berkeley, CA., USA. All rights reserved.</small><br><small>Documentation for Allegro CL version 6.1 update # 1. This page was not revised.</small><br><small>Created 2001.12.15.</small></p><table border="0" width="100%" cellpadding="1" cellspacing="0"><tr><td colspan="2" bgcolor="#00FFFF"><table border="0" cellpadding="5" cellspacing="3"><tr><td align="left" bgcolor="#00FFFF"><a href="contents.htm"><b>ToC</b></a></td><td align="left" bgcolor="#00FFFF"><a href="introduction.htm"><b>DocOverview</b></a></td><td align="left" bgcolor="#00FFFF"><a href="cgide.htm"><b>CGDoc</b></a></td><td align="left" bgcolor="#00FFFF"><a href="release-notes.htm"><b>RelNotes</b></a></td><td align="left" bgcolor="#00FFFF"><a href="index.htm"><b>Index</b></a></td><td align="left" bgcolor="#00FFFF"><a href="permuted-index.htm"><b>PermutedIndex</b></a></td></tr></table></td><td align="right"><b>Allegro CL version 6.1</b><br><small><a href="introduction.htm#updates-s">Unrevised</a></small></td></tr></table></html>

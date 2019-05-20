@@ -1,0 +1,2416 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<reference id="clsql">
+  <title><symbol>CLSQL</symbol></title>
+  <partintro>
+    <para>This part gives a reference to the symbols exported from the
+    <symbol>CLSQL</symbol> package.  These symbols constitute
+    the normal user-interface of &clsql;. Currently, the symbols of
+    the &commonsql;-API are not documented here.</para>
+    </partintro>
+    <!-- Conditions -->
+    <refentry id="sql-condition">
+      <refnamediv>
+	<refname>SQL-CONDITION</refname>
+	<refpurpose>the super-type of all
+	  &clsql;-specific
+	  conditions</refpurpose>
+	<refclass>Condition Type</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Class Precedence List</title>
+        <para>
+	<simplelist type="inline">
+	  <member><errortype>sql-condition</errortype></member>
+	  <member><errortype>condition</errortype></member>
+	  <member><errortype>t</errortype></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This is the super-type of all
+	  &clsql;-specific conditions
+	  defined by &clsql;, or any of it's
+	  database-specific interfaces.  There are no defined
+	  initialization arguments nor any accessors.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="sql-error">
+      <refnamediv>
+	<refname>SQL-ERROR</refname>
+	<refpurpose>the super-type of all
+	  &clsql;-specific
+	  errors</refpurpose>
+	<refclass>Condition Type</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Class Precedence List</title>
+        <para>
+	<simplelist type="inline">
+	  <member><errortype>sql-error</errortype></member>
+	  <member><errortype>error</errortype></member>
+	  <member><errortype>serious-condition</errortype></member>
+	  <member><errortype>sql-condition</errortype></member>
+	  <member><errortype>condition</errortype></member>
+	  <member><errortype>t</errortype></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This is the super-type of all
+	  &clsql;-specific conditions that
+	  represent errors, as defined by
+	  &clsql;, or any of it's
+	  database-specific interfaces.  There are no defined
+	  initialization arguments nor any accessors.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="sql-warning">
+      <refnamediv>
+	<refname>SQL-WARNING</refname>
+	<refpurpose>the super-type of all
+	  &clsql;-specific
+	  warnings</refpurpose>
+	<refclass>Condition Type</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Class Precedence List</title>
+        <para>
+	<simplelist type="inline">
+	  <member><errortype>sql-warning</errortype></member>
+	  <member><errortype>warning</errortype></member>
+	  <member><errortype>sql-condition</errortype></member>
+	  <member><errortype>condition</errortype></member>
+	  <member><errortype>t</errortype></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This is the super-type of all
+	  &clsql;-specific conditions that
+	  represent warnings, as defined by
+	  &clsql;, or any of it's
+	  database-specific interfaces.  There are no defined
+	  initialization arguments nor any accessors.</para>
+      </refsect1>
+    </refentry>
+    <!-- Specifc Conditions -->
+    <refentry id="sql-user-error">
+      <refnamediv>
+	<refname>CLSQL-USER-ERROR</refname>
+	<refpurpose>condition representing errors because of invalid
+	  parameters from the library user.</refpurpose>
+	<refclass>Condition Type</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Class Precedence List</title>
+        <para>
+	<simplelist type="inline">
+	  <member><errortype>sql-error</errortype></member>
+	  <member><errortype>sql-condition</errortype></member>
+	  <member><errortype>condition</errortype></member>
+	  <member><errortype>t</errortype></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This condition represents errors that occur because the
+	  user supplies invalid data to &clsql;.  This includes errors such as
+	  an invalid format connection specification or an error in the syntax
+	  for the <function>LOOP</function> macro extensions.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="sql-connection-error">
+      <refnamediv>
+	<refname>SQL-CONNECTION-ERROR</refname>
+	<refpurpose>condition representing errors during
+	  connection</refpurpose>
+	<refclass>Condition Type</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Class Precedence List</title>
+        <para>
+	<simplelist type="inline">
+	  <member><errortype>sql-connection-error</errortype></member>
+	  <member><errortype>sql-database-error</errortype></member>
+	  <member><errortype>sql-error</errortype></member>
+	  <member><errortype>sql-condition</errortype></member>
+	  <member><errortype>condition</errortype></member>
+	  <member><errortype>t</errortype></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This condition represents errors that occur while trying 
+	  to connect to a database.  The following initialization
+	  arguments and accessors exist:</para>
+	<segmentedlist>
+	  <segtitle>Initarg</segtitle>
+	  <segtitle>Accessor</segtitle>
+	  <segtitle>Description</segtitle>
+	  <seglistitem>
+	    <seg><symbol>:database-type</symbol></seg>
+	    <seg><function>sql-connection-error-database-type</function></seg>
+	    <seg>Database type for the connection attempt</seg>
+	  </seglistitem>
+	  <seglistitem>
+	    <seg><symbol>:connection-spec</symbol></seg>
+	    <seg><function>sql-connection-error-connection-spec</function></seg>
+	    <seg>The connection specification used in the
+	      connection attempt.</seg>
+	  </seglistitem>
+	  <seglistitem>
+	    <seg><symbol>:errno</symbol></seg>
+	    <seg><function>sql-connection-error-errno</function></seg>
+	    <seg>The numeric or symbolic error specification
+	      returned by the database back-end.  The values and
+	      semantics of this are interface specific.</seg>
+	  </seglistitem>
+	  <seglistitem>
+	    <seg><symbol>:error</symbol></seg>
+	    <seg><function>sql-connection-error-error</function></seg>
+	    <seg>A string describing the problem that occurred,
+	      possibly one returned by the database back-end.</seg>
+	  </seglistitem>
+	</segmentedlist>
+      </refsect1>
+    </refentry>
+    <refentry id="sql-database-error">
+      <refnamediv>
+	<refname>SQL-DATABASE-ERROR</refname>
+	<refpurpose>condition representing errors during query or
+	  command execution</refpurpose>
+	<refclass>Condition Type</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Class Precedence List</title>
+        <para>
+	<simplelist type="inline">
+	  <member><errortype>sql-database-error</errortype></member>
+	  <member><errortype>sql-error</errortype></member>
+	  <member><errortype>error</errortype></member>
+	  <member><errortype>serious-condition</errortype></member>
+	  <member><errortype>sql-condition</errortype></member>
+	  <member><errortype>condition</errortype></member>
+	  <member><errortype>t</errortype></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This condition represents errors that occur while
+	executing SQL statements, either as part of query operations
+	or command execution, either explicitly or implicitly, as
+	  caused e.g. by <function>with-transaction</function>.
+	  The following initialization arguments and accessors exist:</para>
+	<segmentedlist>
+	  <segtitle>Initarg</segtitle>
+	  <segtitle>Accessor</segtitle>
+	  <segtitle>Description</segtitle>
+	  <seglistitem>
+	    <seg><symbol>:database</symbol></seg>
+	    <seg><function>sql-database-error-database</function></seg>
+	    <seg>The database object that was involved in the
+	      incident.</seg>
+	  </seglistitem>
+	  <seglistitem>
+	    <seg><symbol>:expression</symbol></seg>
+	    <seg><function>sql-database-error-expression</function></seg>
+	    <seg>The SQL expression whose execution caused the error.</seg>
+	  </seglistitem>
+	  <seglistitem>
+	    <seg><symbol>:errno</symbol></seg>
+	    <seg><function>sql-database-error-errno</function></seg>
+	    <seg>The numeric or symbolic error specification
+	      returned by the database back-end.  The values and
+	      semantics of this are interface specific.</seg>
+	  </seglistitem>
+	  <seglistitem>
+	    <seg><symbol>:error</symbol></seg>
+	    <seg><function>sql-database-error-error</function></seg>
+	    <seg>A string describing the problem that occurred,
+	      possibly one returned by the database back-end.</seg>
+	  </seglistitem>
+	</segmentedlist>
+      </refsect1>
+    </refentry>
+
+    <!-- Database Types -->
+    <refentry id="default-database-type">
+      <refnamediv>
+	<refname>*DEFAULT-DATABASE-TYPE*</refname>
+	<refpurpose>The default database type to use</refpurpose>
+	<refclass>Variable</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Value Type</title>
+	<para>Any keyword representing a valid database back-end of
+	  &clsql;, or
+	  <symbol>nil</symbol>.</para>
+      </refsect1>
+      <refsect1>
+	<title>Initial Value</title>
+	<para><symbol>nil</symbol></para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>The value of this variable is used in calls to
+	  <function>initialize-database-type</function> and
+	  <function>connect</function> as the default
+	  value of the <parameter>database-type</parameter>
+	  parameter.</para>
+	<caution>
+	  <para>If the value of this variable is <symbol>nil</symbol>,
+	    then all calls to
+	    <function>initialize-database-type</function> or
+	    <function>connect</function> will have to specify the
+	    <parameter>database-type</parameter> to use, or a
+	    general-purpose error will be signalled.</para>
+	</caution>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(setf *default-database-type* :mysql)
+=> :mysql
+(initialize-database-type)
+=> t
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Affected By</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="initialized-database-types">
+      <refnamediv>
+	<refname>*INITIALIZED-DATABASE-TYPES*</refname>
+	<refpurpose>List of all initialized database types</refpurpose>
+	<refclass>Variable</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Value Type</title>
+	<para>A list of all initialized database types, each of which
+	  represented by it's corresponding keyword.</para>
+      </refsect1>
+      <refsect1>
+	<title>Initial Value</title>
+	<para><symbol>nil</symbol></para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This variable is updated whenever
+	  <function>initialize-database-type</function> is called for a
+	  database type which hasn't already been initialized before,
+	  as determined by this variable.  In that case the keyword
+	  representing the database type is pushed onto the list
+	  stored in
+	  <symbol>*INITIALIZED-DATABASE-TYPES*</symbol>.</para>
+	<caution>
+	  <para>Attempts to modify the value of this variable will
+	    result in undefined behaviour.</para>
+	</caution>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(setf *default-database-type* :mysql)
+=> :mysql
+(initialize-database-type)
+=> t
+*initialized-database-types*
+=> (:MYSQL)
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Affected By</title>
+        <para>
+	<simplelist>
+	  <member><function>initialize-database-type</function></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>Direct access to this variable is primarily provided
+	  because of compatibility with Harlequin's <application>Common
+	    SQL</application>.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="initialize-database-type">
+      <refnamediv>
+	<refname>INITIALIZE-DATABASE-TYPE</refname>
+	<refpurpose>Initializes a database type</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>initialize-database-type</function>	&amp;key <replaceable>database-type</replaceable> => <returnvalue>result</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>database-type</parameter></term>
+	    <listitem>
+	      <para>The database type to initialize, i.e. a keyword
+		symbol denoting a known database back-end.  Defaults to
+		the value of
+		<symbol>*default-database-type*</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><returnvalue>result</returnvalue></term>
+	    <listitem>
+	      <para>Either <symbol>nil</symbol> if the initialization
+		attempt fails, or <symbol>t</symbol> otherwise.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>If the back-end specified by
+	<parameter>database-type</parameter> has not already been
+	  initialized, as seen from
+	  <symbol>*initialized-database-types*</symbol>, an attempt is 
+	  made to initialize the database.  If this attempt succeeds,
+	  or the back-end has already been initialized, the function
+	  returns t, and places the keyword denoting the database type 
+	  onto the list stored in
+	  <symbol>*initialized-database-types*</symbol>, if not
+	  already present.</para>
+	<para>If initialization fails, the function returns
+	  <symbol>nil</symbol>, and/or signals an error of type
+	  <errortype>clsql-error</errortype>.  The kind of action
+	  taken depends on the back-end and the cause of the
+	  problem.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+*initialized-database-types*
+=> NIL
+(setf *default-database-type* :mysql)
+=> :MYSQL
+(initialize-database-type)
+>> Compiling LAMBDA (#:G897 #:G898 #:G901 #:G902): 
+>> Compiling Top-Level Form: 
+>> 
+=> T
+*initialized-database-types*
+=> (:MYSQL)
+(initialize-database-type)
+=> T
+*initialized-database-types*
+=> (:MYSQL)
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>The database back-end corresponding to the database type
+	  specified is initialized, unless it has already been
+	  initialized.  This can involve any number of other side
+	  effects, as determined by the back-end implementation (like
+	  e.g. loading of foreign code, calling of foreign code,
+	  networking operations, etc.).  If initialization is
+	  attempted and succeeds, the
+	  <parameter>database-type</parameter> is pushed onto the list 
+	  stored in
+	  <symbol>*initialized-database-types*</symbol>.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected by</title>
+        <para>
+	<simplelist>
+	  <member><symbol>*default-database-type*</symbol></member>
+	  <member><symbol>*initialized-database-types*</symbol></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>If an error is encountered during the initialization
+	  attempt, the back-end may signal errors of kind
+	  <errortype>clsql-error</errortype>.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+    <!-- Databases Connection and Disconnection -->
+    <refentry id="connect-if-exists">
+      <refnamediv>
+	<refname>*CONNECT-IF-EXISTS*</refname>
+	<refpurpose>Default value for the
+	  <parameter>if-exists</parameter> parameter of
+	  <function>connect</function>.</refpurpose>
+	<refclass>Variable</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Value Type</title>
+	<para>A valid argument to the <parameter>if-exists</parameter> 
+	  parameter of <function>connect</function>, i.e. one of
+	  <simplelist type="inline">
+	    <member><symbol>:new</symbol></member>
+	    <member><symbol>:warn-new</symbol></member>
+	    <member><symbol>:error</symbol></member>
+	    <member><symbol>:warn-old</symbol></member>
+	    <member><symbol>:old</symbol></member>
+	  </simplelist>.
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Initial Value</title>
+	<para><symbol>:error</symbol></para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>The value of this variable is used in calls to
+	  <function>connect</function> as the default
+	  value of the <parameter>if-exists</parameter>
+	  parameter.  See <link
+	  linkend="connect"><function>connect</function></link> for
+	  the semantics of the valid values for this variable.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected By</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+        <para>
+	<simplelist>
+	  <member><link
+	  linkend="connect"><function>connect</function></link></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="connected-databases">
+      <refnamediv>
+	<refname>CONNECTED-DATABASES</refname>
+	<refpurpose>Return the list of active database
+	  objects.</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>connected-databases</function> => <returnvalue>databases</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><returnvalue>databases</returnvalue></term>
+	    <listitem>
+	      <para>The list of active database objects.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This function returns the list of active database
+	  objects, i.e. all those database objects created by calls to 
+	  <function>connect</function>, which have not been closed by
+	  calling <function>disconnect</function> on them.</para> 
+	<caution>
+	  <para>The consequences of modifying the list returned by
+	    <function>connected-databases</function> are
+	    undefined.</para>
+	</caution>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(connected-databases)
+=> NIL
+(connect '(nil "template1" "dent" nil) :database-type :postgresql)
+=> #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {4830BC65}>
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {4830C5AD}>
+(connected-databases)
+=> (#&lt;CLSQL-MYSQL:MYSQL-DATABASE {4830C5AD}>
+    #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {4830BC65}>)
+(disconnect)
+=> T
+(connected-databases)
+=> (#&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {4830BC65}>)
+(disconnect)
+=> T
+(connected-databases)
+=> NIL
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected By</title>
+        <para>
+	<simplelist>
+	  <member><function>connect</function></member>
+	  <member><function>disconnect</function></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="default-database">
+      <refnamediv>
+	<refname>*DEFAULT-DATABASE*</refname>
+	<refpurpose>The default database object to use</refpurpose>
+	<refclass>Variable</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Value Type</title>
+	<para>Any object of type <type>database</type>, or nil to
+	  indicate no default database.</para>
+      </refsect1>
+      <refsect1>
+	<title>Initial Value</title>
+	<para><symbol>nil</symbol></para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>Any function or macro in
+	  &clsql; that operates on a
+	  database uses the value of this variable as the default
+	  value for it's <parameter>database</parameter>
+	  parameter.</para>
+	<para>The value of this parameter is changed by calls to
+	  <function>connect</function>, which sets
+	  <symbol>*default-database*</symbol> to the database object
+	  it returns.  It is also changed by calls to
+	  <function>disconnect</function>, when the database object
+	  being disconnected is the same as the value of
+	  <symbol>*default-database*</symbol>.  In this case
+	  <function>disconnect</function> sets
+	  <symbol>*default-database*</symbol> to the first database
+	  that remains in the list of active databases as returned by
+	  <function>connected-databases</function>, or
+	  <symbol>nil</symbol> if no further active databases
+	  exist.</para>
+	<para>The user may change <symbol>*default-database*</symbol>
+	  at any time to a valid value of his choice.</para>
+	<caution>
+	  <para>If the value of <symbol>*default-database*</symbol> is
+	    <symbol>nil</symbol>, then all calls to
+	    &clsql; functions on databases
+	    must provide a suitable <parameter>database</parameter>
+	    parameter, or an error will be signalled.</para>
+	</caution>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(connected-databases)
+=> NIL
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48385F55}>
+(connect '(nil "template1" "dent" nil) :database-type :postgresql)
+=> #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {483868FD}>
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql :if-exists :new)
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48387265}>
+*default-database*
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48387265}>
+(disconnect)
+=> T
+*default-database*
+=> #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {483868FD}>
+(disconnect)
+=> T
+*default-database*
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48385F55}>
+(disconnect)
+=> T
+*default-database*
+=> NIL
+(connected-databases)
+=> NIL
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Affected By</title>
+        <para>
+	<simplelist>
+	  <member><link linkend="connect"><function>connect</function></link></member>
+	  <member><link linkend="disconnect"><function>disconnect</function></link></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+        <para>
+	<simplelist>
+	  <member><link linkend="connected-databases"><function>connected-databases</function></link></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<note>
+	  <para>This variable is intended to facilitate working with
+	    &clsql; in an interactive
+	    fashion at the top-level loop, and because of this,
+	    <function>connect</function> and
+	    <function>disconnect</function> provide some fairly
+	    complex  behaviour to keep
+	    <symbol>*default-database*</symbol> set to  useful values.
+	    Programmatic use of &clsql;
+	    should never depend on the value of
+	    <symbol>*default-database*</symbol> and should provide
+	    correct database objects via the
+	    <parameter>database</parameter> parameter to functions
+	    called.</para>
+	</note>
+      </refsect1>
+    </refentry>
+    <!-- Classes -->
+    <refentry id="database">
+      <refnamediv>
+	<refname>DATABASE</refname>
+	<refpurpose>The super-type of all
+	  &clsql; databases</refpurpose>
+	<refclass>Class</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Class Precedence List</title>
+        <para>
+	<simplelist type="inline">
+	  <member><type>database</type></member>
+	  <member><type>standard-object</type></member>
+	  <member><type>t</type></member>
+	</simplelist>
+        </para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This class is the superclass of all
+	  &clsql; databases. The different
+	  database back-ends derive subclasses of this class to
+	  implement their databases.  No instances of this class are
+	  ever created by &clsql;.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="closed-database">
+      <refnamediv>
+	<refname>CLOSED-DATABASE</refname>
+	<refpurpose>The class representing all closed
+	  &clsql; databases</refpurpose>
+	<refclass>Class</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Class Precedence List</title>
+        <para>
+	<simplelist type="inline">
+	  <member><type>closed-database</type></member>
+	  <member><type>standard-object</type></member>
+	  <member><type>t</type></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>&clsql; <type>database</type>
+	  instances are changed to this class via
+	  <function>change-class</function> after they are closed via
+	  <function>disconnect</function>.  All functions and generic
+	  functions that take database objects as arguments will
+	  signal errors of type
+	  <errortype>clsql-closed-error</errortype> when they are
+	  called on instances of <type>closed-database</type>, with
+	  the exception of <function>database-name</function>, which
+	  will continue to work as for instances of
+	  <type>database</type>.</para>
+      </refsect1>
+    </refentry>
+    <!-- Functions -->
+    <refentry id="database-name">
+      <refnamediv>
+	<refname>DATABASE-NAME</refname>
+	<refpurpose>Get the name of a database object</refpurpose>
+	<refclass>Generic Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>database-name</function> <replaceable>database</replaceable> => <returnvalue>name</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>database</parameter></term>
+	    <listitem>
+	      <para>A database object, either of type
+		<type>database</type> or of type
+		<type>closed-database</type>.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><returnvalue>name</returnvalue></term>
+	    <listitem>
+	      <para>A string describing the identity of the database
+		to which this database object is connected to.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This function returns the database name of the given
+	  database.  The database name is a string which somehow
+	  describes the identity of the database to which this
+	  database object is or has been connected.  The database name 
+	  of a database object is determined at
+	  <function>connect</function> time, when a call to
+	  <function>database-name-from-spec</function> derives the
+	  database name from the connection specification passed to
+	  <function>connect</function> in the
+	  <parameter>connection-spec</parameter> parameter.</para>
+	<para>The database name is used via
+	  <function>find-database</function> in
+	  <function>connect</function> to determine whether database
+	  connections to the specified database exist already.</para>
+	<para>Usually the database name string will include
+	  indications of the  host, database name, user, or port that
+	  where used during the connection attempt.  The only
+	  important thing is that this string shall  try to identify
+	  the database at the other end of the connection.  Connection
+	  specifications parts like passwords and credentials shall
+	  not be used as part of the database name.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(database-name-from-spec '("dent" "newesim" "dent" "dent") :mysql)
+=> "dent/newesim/dent"
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48391DCD}>
+(database-name *default-database*)
+=> "dent/newesim/dent"
+
+(database-name-from-spec '(nil "template1" "dent" nil) :postgresql)
+=> "/template1/dent"
+(connect '(nil "template1" "dent" nil) :database-type :postgresql)
+=> #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}>
+(database-name *default-database*)
+=> "/template1/dent"
+
+(database-name-from-spec '("www.pmsf.de" "template1" "dent" nil) :postgresql)
+=> "www.pmsf.de/template1/dent"
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected By</title>
+	<para>
+	<simplelist>
+	  <member><link linkend="database-name-from-spec"><function>database-name-from-spec</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>Will signal an error if the object passed as the
+	  <parameter>database</parameter> parameter is neither of type
+	  <type>database</type> nor of type
+	  <type>closed-database</type>.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link
+	  linkend="connect"><function>connect</function></link></member>
+	  <member><link
+	  linkend="find-database"><function>find-database</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="find-database">
+      <refnamediv>
+	<refname>FIND-DATABASE</refname>
+	<refpurpose>Locate a database object through it's
+	  name.</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>find-database</function> <replaceable>database</replaceable> &amp;optional <replaceable>errorp</replaceable> => <returnvalue>result</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>database</parameter></term>
+	    <listitem>
+	      <para>A database object or a string, denoting a database 
+		name.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>errorp</parameter></term>
+	    <listitem>
+	      <para>A generalized boolean.  Defaults to
+		<symbol>t</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><returnvalue>result</returnvalue></term>
+	    <listitem>
+	      <para>Either a database object, or, if
+		<parameter>errorp</parameter> is <symbol>nil</symbol>, 
+		possibly <symbol>nil</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para><function>find-database</function> locates an active
+	  database object given the specification in
+	  <parameter>database</parameter>.  If
+	  <parameter>database</parameter> is an object of type
+	  <type>database</type>, <function>find-database</function>
+	  returns this.  Otherwise it will search the active databases 
+	  as indicated by the list returned by
+	  <function>connected-databases</function> for a database
+	  whose name (as returned by
+	  <function>database-name</function> is equal as per
+	  <function>string=</function> to the string passed as
+	  <parameter>database</parameter>.  If it succeeds, it returns 
+	  the first database found.</para>
+	<para>If it fails to find a matching database, it will signal
+	  an error of type <errortype>clsql-error</errortype> if
+	  <parameter>errorp</parameter> is true.  If
+	  <parameter>errorp</parameter> is <symbol>nil</symbol>, it
+	  will return <symbol>nil</symbol> instead.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(database-name-from-spec '("dent" "newesim" "dent" "dent") :mysql)
+=> "dent/newesim/dent"
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48391DCD}>
+(database-name *default-database*)
+=> "dent/newesim/dent"
+
+(database-name-from-spec '(nil "template1" "dent" nil) :postgresql)
+=> "/template1/dent"
+(connect '(nil "template1" "dent" nil) :database-type :postgresql)
+=> #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}>
+(database-name *default-database*)
+=> "/template1/dent"
+
+(database-name-from-spec '("www.pmsf.de" "template1" "dent" nil) :postgresql)
+=> "www.pmsf.de/template1/dent"
+
+(find-database "dent/newesim/dent")
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {484E91C5}>
+(find-database "/template1/dent")
+=> #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}>
+(find-database "www.pmsf.de/template1/dent" nil)
+=> NIL
+(find-database **)
+=> #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}>
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected By</title>
+	<para>
+	<simplelist>
+	  <member><link linkend="connected-databases"><function>connected-databases</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>Will signal an error of type
+	<errortype>clsql-error</errortype> if no matching database
+	  can be found, and <parameter>errorp</parameter> is true.
+	  Will signal an error if the value of
+	  <parameter>database</parameter> is neither an object of type
+	  <type>database</type> nor a string.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link
+	  linkend="database-name"><function>database-name</function></link></member>
+	  <member><link
+	  linkend="database-name-from-spec"><function>database-name-from-spec</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+
+    <refentry id="connect">
+      <refnamediv>
+	<refname>CONNECT</refname>
+	<refpurpose>create a connection to a database</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>connect</function> <replaceable>connection-spec</replaceable> &amp;key <replaceable>if-exists</replaceable> <replaceable>database-type</replaceable> <replaceable>pool</replaceable> => <returnvalue>database</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>connection-spec</parameter></term>
+	    <listitem>
+	      <para>A connection specification</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>if-exists</parameter></term>
+	    <listitem>
+	      <para>This indicates the action to take if a connection
+		to the same database exists already.  See below for the
+		legal values and actions.  It defaults to the value of 
+		<symbol>*connect-if-exists*</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database-type</parameter></term>
+	    <listitem>
+	      <para>A database type specifier, i.e. a keyword.
+		This defaults to the value of
+		<symbol>*default-database-type*</symbol></para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>pool</parameter></term>
+	    <listitem>
+	      <para>A boolean flag. If &t;, acquire connection from a
+               pool of open connections. If the pool is empty, a new
+               connection is created. The default is &nil;.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><returnvalue>database</returnvalue></term>
+	    <listitem>
+	      <para>The database object representing the connection.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This function takes a connection specification and
+	  a database type and creates a connection to the database
+	  specified by those.  The type and structure of the
+	  connection specification depend on the database type.</para> 
+	<para>The parameter <parameter>if-exists</parameter> specifies
+	  what to do if a connection to the database specified exists
+	  already, which is checked by calling
+	  <function>find-database</function> on the database name
+	  returned by <function>database-name-from-spec</function>
+	  when called with the <parameter>connection-spec</parameter>
+	  and <parameter>database-type</parameter> parameters. The
+	  possible values of <parameter>if-exists</parameter> are:
+	  <variablelist>
+	    <varlistentry>
+	      <term><symbol>:new</symbol></term>
+	      <listitem>
+		<para>Go ahead and create a new connection.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><symbol>:warn-new</symbol></term>
+	      <listitem>
+		<para>This is just like <symbol>:new</symbol>, but
+		  also signals a warning of type
+		  <errortype>clsql-exists-warning</errortype>,
+		  indicating the old and newly created
+		  databases.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><symbol>:error</symbol></term>
+	      <listitem>
+		<para>This will cause <function>connect</function> to
+		  signal a correctable error of type
+		  <errortype>clsql-exists-error</errortype>.  The
+		  user may choose to proceed, either by indicating
+		  that a new connection shall be created, via the
+		  restart <symbol>create-new</symbol>, or by
+		  indicating that the existing connection shall be
+		  used, via the restart
+		  <symbol>use-old</symbol>.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><symbol>:old</symbol></term>
+	      <listitem>
+		<para>This will cause <function>connect</function> to
+		  use an old connection if one exists.</para>
+	      </listitem>
+	    </varlistentry>
+	    <varlistentry>
+	      <term><symbol>:warn-old</symbol></term>
+	      <listitem>
+		<para>This is just like <symbol>:old</symbol>, but
+		  also signals a warning of type
+		  <errortype>clsql-exists-warning</errortype>,
+		  indicating the old database used, via the slots
+		  <symbol>old-db</symbol> and
+		  <symbol>new-db</symbol></para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</para>
+	<para>The database name of the returned database object will
+	  be the same under <function>string=</function> as that which
+	  would be returned by a call to
+	  <function>database-name-from-spec</function> with the given 
+	  <parameter>connection-spec</parameter> and
+	  <parameter>database-type</parameter> parameters.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(database-name-from-spec '("dent" "newesim" "dent" "dent") :mysql)
+=> "dent/newesim/dent"
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48036F6D}>
+(database-name *)
+=> "dent/newesim/dent"
+
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+>> In call to CONNECT:
+>>   There is an existing connection #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48036F6D}> to database dent/newesim/dent.
+>> 
+>> Restarts:
+>>   0: [CREATE-NEW] Create a new connection.
+>>   1: [USE-OLD   ] Use the existing connection.
+>>   2: [ABORT     ] Return to Top-Level.
+>> 
+>> Debug  (type H for help)
+>> 
+>> (CONNECT ("dent" "newesim" "dent" "dent") :IF-EXISTS NIL :DATABASE-TYPE ...)
+>> Source: 
+>> ; File: /prj/CLSQL/sql/sql.cl
+>> (RESTART-CASE (ERROR 'CLSQL-EXISTS-ERROR :OLD-DB OLD-DB)
+>>               (CREATE-NEW NIL :REPORT "Create a new connection."
+>>                (SETQ RESULT #))
+>>               (USE-OLD NIL :REPORT "Use the existing connection."
+>>                (SETQ RESULT OLD-DB)))
+>> 0] 0
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {480451F5}>
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>A database connection is established, and the resultant
+	  database object is registered, so as to appear in the list
+	  returned by <function>connected-databases</function>.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected by</title>
+	<para>
+	<simplelist>
+	  <member><symbol>*default-database-type*</symbol></member>
+	  <member><symbol>*connect-if-exists*</symbol></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>If the connection specification is not syntactically or
+	  semantically correct for the given database type, an error
+	  of type <errortype>clsql-invalid-spec-error</errortype> is
+	  signalled.  If during the connection attempt an error is
+	  detected (e.g. because of permission problems, network
+	  trouble  or any other cause), an error of type
+	  <errortype>sql-connection-error</errortype> is
+	  signalled.</para>
+	<para>If a connection to the database specified by
+	  <parameter>connection-spec</parameter> exists already,
+	  conditions are signalled according to the
+	  <parameter>if-exists</parameter> parameter, as described
+	  above.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><function>connected-databases</function></member>
+	  <member><link linkend="disconnect"><function>disconnect</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+
+    <refentry id="disconnect">
+      <refnamediv>
+	<refname>DISCONNECT</refname>
+	<refpurpose>close a database connection</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>disconnect</function> &amp;key <replaceable>database</replaceable> <replaceable>pool</replaceable> => <returnvalue>t</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>pool</parameter></term>
+	    <listitem>
+	      <para>A boolean flag indicating whether to put the database into a 
+pool of opened databases. If &t;, rather than terminating the database connection, the
+connection is left open and the connection is placed into a pool of connections. Subsequent
+calls to <link linkend="connect"><function>connect</function></link> can then reuse this connection.
+The default is &nil;.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database</parameter></term>
+	    <listitem>
+	      <para>The database to disconnect, which defaults to the
+		database indicated by
+		<symbol>*default-database*</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This function takes a <type>database</type> object as
+	  returned by <function>connect</function>, and closes the
+	  connection.  The class of the object passed is changed to
+	  <type>closed-database</type> after the disconnection
+	  succeeds,  thereby preventing further use of the object as
+	  an argument to &clsql; functions,
+	  with the exception of <function>database-name</function>.
+	  If the user does pass a  closed database object to any other
+	  &clsql; function, an error of type
+	  <errortype>clsql-closed-error</errortype> is
+	  signalled.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(disconnect :database (find-database "dent/newesim/dent"))
+=> T
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>The database connection is closed, and the database
+	  object is removed from the list of connected databases as
+	  returned by <function>connected-databases</function>.</para>
+	<para>The class of the database object is changed to
+	  <type>closed-database</type>.</para>
+	<para>If the database object passed is the same under
+	  <function>eq</function> as the value of
+	  <symbol>*default-database*</symbol>, then
+	  <symbol>*default-database*</symbol> is set to the first
+	  remaining database from
+	  <function>connected-databases</function> or to nil if no
+	  further active database exists.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected by</title>
+	<para>
+	<simplelist>
+	  <member><symbol>*default-database*</symbol></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>If during the disconnection attempt an error is
+	  detected (e.g. because of network trouble or any other
+	  cause), an error of type <errortype>clsql-error</errortype> 
+	  might be signalled.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link linkend="connect"><function>connect</function></link></member>
+	  <member><link linkend="connect"><function>closed-database</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+
+    <refentry id="disconnect-pooled">
+      <refnamediv>
+	<refname>DISCONNECT-POOLED</refname>
+	<refpurpose>closes all pooled database connections</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>disconnect-pool</function> => <returnvalue>t</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This function disconnects all database connections
+	  that have been placed into the pool. Connections are placed
+	  in the pool by calling <link
+	  linkend="disconnect"><function>disconnection</function></link>.
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(disconnect-pool)
+=> T
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>Database connections will be closed and entries in the pool are removed.
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected by</title>
+	<para>
+	<simplelist>
+	  <member><function>disconnect</function></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>If during the disconnection attempt an error is
+	  detected (e.g. because of network trouble or any other
+	  cause), an error of type <errortype>clsql-error</errortype> 
+	  might be signalled.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link linkend="connect"><function>connect</function></link></member>
+	  <member><link linkend="connect"><function>closed-database</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+
+    <refentry id="create_db">
+      <refnamediv>
+	<refname>CREATE-DATABASE</refname>
+	<refpurpose>create a database</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>create-database</function> <replaceable>connection-spec</replaceable> &amp;key <replaceable>database-type</replaceable> => <returnvalue>success</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>connection-spec</parameter></term>
+	    <listitem>
+	      <para>A connection specification</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database-type</parameter></term>
+	    <listitem>
+	      <para>A database type specifier, i.e. a keyword.
+		This defaults to the value of
+		<symbol>*default-database-type*</symbol></para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>success</parameter></term>
+	    <listitem>
+	      <para>A boolean flag. If &t;, a new database was
+	      successfully created.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This function creates a database in the database system
+	specified by <parameter>database-type</parameter>.
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(create-database '("localhost" "new" "dent" "dent") :database-type :mysql)
+=> T
+
+(create-database '("localhost" "new" "dent" "badpasswd") :database-type :mysql)
+=>
+Error: While trying to access database localhost/new/dent
+  using database-type MYSQL:
+  Error database-create failed: mysqladmin: connect to server at 'localhost' failed
+error: 'Access denied for user: 'root@localhost' (Using password: YES)'
+  has occurred.
+  [condition type: CLSQL-ACCESS-ERROR]
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>A database will be created on the filesystem of the host.</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>An exception will be thrown if the database system does
+	not allow new databases to be created or if database creation
+	fails.</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>This function may invoke the operating systems
+	functions.  Thus, some database systems may require the
+	administration functions to be available in the current
+	<symbol>PATH</symbol>. At this time, the
+	<symbol>:mysql</symbol> backend requires
+	<filename>mysqladmin</filename> and the
+	<symbol>:postgresql</symbol> backend requires
+	<filename>createdb</filename>.</para>
+      </refsect1>
+    </refentry>
+
+    <refentry id="destroy_db">
+      <refnamediv>
+	<refname>DESTROY-DATABASE</refname>
+	<refpurpose>destroys a database</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>destroy-database</function> <replaceable>connection-spec</replaceable> &amp;key <replaceable>database-type</replaceable> => <returnvalue>success</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>connection-spec</parameter></term>
+	    <listitem>
+	      <para>A connection specification</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database-type</parameter></term>
+	    <listitem>
+	      <para>A database type specifier, i.e. a keyword.
+		This defaults to the value of
+		<symbol>*default-database-type*</symbol></para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>success</parameter></term>
+	    <listitem>
+	      <para>A boolean flag. If &t;, the database was
+	      successfully destroyed.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This function destroy a database in the database system
+	specified by <parameter>database-type</parameter>.
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(destroy-database '("localhost" "new" "dent" "dent") :database-type :postgresql)
+=> T
+
+(destroy-database '("localhost" "new" "dent" "dent") :database-type :postgresql)
+=>
+Error: While trying to access database localhost/test2/root
+  using database-type POSTGRESQL:
+  Error database-destory failed: dropdb: database removal failed: ERROR:  database "test2" does not exist
+  has occurred.
+  [condition type: CLSQL-ACCESS-ERROR]
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>A database will be removed from the filesystem of the host.</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>An exception will be thrown if the database system does not
+	allow databases to be removed, the database does not exist, or
+	if database removal fails.</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>This function may invoke the operating systems
+	functions.  Thus, some database systems may require the
+	administration functions to be available in the current
+	<symbol>PATH</symbol>. At this time, the
+	<symbol>:mysql</symbol> backend requires
+	<filename>mysqladmin</filename> and the
+	<symbol>:postgresql</symbol> backend requires
+	<filename>dropdb</filename>.</para>
+      </refsect1>
+    </refentry>
+
+    <refentry id="probe_db">
+      <refnamediv>
+	<refname>PROBE-DATABASE</refname>
+	<refpurpose>tests for existence of a database</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>probe-database</function> <replaceable>connection-spec</replaceable> &amp;key <replaceable>database-type</replaceable> => <returnvalue>success</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>connection-spec</parameter></term>
+	    <listitem>
+	      <para>A connection specification</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database-type</parameter></term>
+	    <listitem>
+	      <para>A database type specifier, i.e. a keyword.
+		This defaults to the value of
+		<symbol>*default-database-type*</symbol></para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>success</parameter></term>
+	    <listitem>
+	      <para>A boolean flag. If &t;, the database exists
+	      in the database system.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This function tests for the existence of a database in
+	the database system specified by
+	<parameter>database-type</parameter>.
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(probe-database '("localhost" "new" "dent" "dent") :database-type :postgresql)
+=> T
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>None</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>An exception maybe thrown if the database system does
+	not receive administrator-level authentication since function
+	may need to read the administrative database of the database
+	system.</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+
+    <refentry id="database-name-from-spec">
+      <refnamediv>
+	<refname>DATABASE-NAME-FROM-SPEC</refname>
+	<refpurpose>Return the database name string corresponding to
+	  the given connection specification.</refpurpose>
+	<refclass>Generic Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis>
+	  <function>database-name-from-spec</function> <replaceable>connection-spec</replaceable> <replaceable>database-type</replaceable> => <returnvalue>name</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>connection-spec</parameter></term>
+	    <listitem>
+	      <para>A connection specification, whose structure and
+		interpretation are dependent on the
+		<parameter>database-type</parameter>.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database-type</parameter></term>
+	    <listitem>
+	      <para>A database type specifier, i.e. a keyword.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><returnvalue>name</returnvalue></term>
+	    <listitem>
+	      <para>A string denoting a database name.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This generic function takes a connection specification
+	  and a database type and returns the database name of the
+	  database object that would be created had
+	  <function>connect</function> been called with the given
+	  connection specification and database types.</para>
+	<para>This function is useful in determining a database name
+	  from the connection specification, since the way the
+	  connection specification is converted into a database name
+	  is dependent on the database type.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(database-name-from-spec '("dent" "newesim" "dent" "dent") :mysql)
+=> "dent/newesim/dent"
+(connect '("dent" "newesim" "dent" "dent") :database-type :mysql)
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {48391DCD}>
+(database-name *default-database*)
+=> "dent/newesim/dent"
+
+(database-name-from-spec '(nil "template1" "dent" nil) :postgresql)
+=> "/template1/dent"
+(connect '(nil "template1" "dent" nil) :database-type :postgresql)
+=> #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}>
+(database-name *default-database*)
+=> "/template1/dent"
+
+(database-name-from-spec '("www.pmsf.de" "template1" "dent" nil) :postgresql)
+=> "www.pmsf.de/template1/dent"
+
+(find-database "dent/newesim/dent")
+=> #&lt;CLSQL-MYSQL:MYSQL-DATABASE {484E91C5}>
+(find-database "/template1/dent")
+=> #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}>
+(find-database "www.pmsf.de/template1/dent" nil)
+=> NIL
+(find-database **)
+=> #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {48392D2D}>
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected by</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>If the value of <parameter>connection-spec</parameter>
+	  is not a valid connection specification for the given
+	  database type, an error of type
+	  <errortype>clsql-invalid-spec-error</errortype> might be
+	  signalled.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link linkend="connect"><function>connect</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+    <!-- Querying Operations -->
+    <refentry id="execute-command">
+      <refnamediv>
+	<refname>EXECUTE-COMMAND</refname>
+	<refpurpose>Execute an SQL command which returns no
+	  values.</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>execute-command</function> <replaceable>sql-expression</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue>t</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>sql-expression</parameter></term>
+	    <listitem>
+	      <para>An <glossterm linkend="gloss-sql-expression">sql
+		  expression</glossterm> that represents an SQL
+		statement which will return no values.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database</parameter></term>
+	    <listitem>
+	      <para>A 
+		<glossterm linkend="gloss-database-object">database
+		  object</glossterm>. This will default to the value
+		of <symbol>*default-database*</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This will execute the command given by
+	  <parameter>sql-expression</parameter> in the
+	  <parameter>database</parameter> specified.  If the execution 
+	  succeeds it will return <symbol>t</symbol>, otherwise an
+	  error of type <errortype>sql-database-error</errortype> will
+	  be signalled.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(execute-command "create table eventlog (time char(30),event char(70))")
+=> T
+
+(execute-command "create table eventlog (time char(30),event char(70))")
+>> 
+>> While accessing database #&lt;CLSQL-POSTGRESQL:POSTGRESQL-DATABASE {480B2B6D}>
+>>   with expression "create table eventlog (time char(30),event char(70))":
+>>   Error NIL: ERROR:  amcreate: eventlog relation already exists
+>>   has occurred.
+>> 
+>> Restarts:
+>>   0: [ABORT] Return to Top-Level.
+>> 
+>> Debug  (type H for help)
+>> 
+>> (CLSQL-POSTGRESQL::|(PCL::FAST-METHOD DATABASE-EXECUTE-COMMAND (T POSTGRESQL-DATABASE))|
+>>  #&lt;unused-arg>
+>>  #&lt;unused-arg>
+>>  #&lt;unavailable-arg>
+>>  #&lt;unavailable-arg>)
+>> Source: (ERROR 'SQL-DATABASE-ERROR :DATABASE DATABASE :EXPRESSION ...)
+>> 0] 0
+
+(execute-command "drop table eventlog")
+=> T
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>Whatever effects the execution of the SQL statement has
+	  on the underlying database, if any.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected by</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>If the execution of  the SQL statement leads to any
+	  errors, an error of type
+	  <errortype>sql-database-error</errortype> is signalled.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link linkend="query"><function>query</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="query">
+      <refnamediv>
+	<refname>QUERY</refname>
+	<refpurpose>Execute an SQL query and return the tuples as a
+	  list</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>query</function> <replaceable>query-expression</replaceable> &amp;key <replaceable>database</replaceable> <replaceable>result-types</replaceable> <replaceable>field-names</replaceable> => <returnvalue>result</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>query-expression</parameter></term>
+	    <listitem>
+	      <para>An <glossterm linkend="gloss-sql-expression">sql
+		  expression</glossterm> that represents an SQL
+		query which is expected to return a (possibly empty)
+		result set.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database</parameter></term>
+	    <listitem>
+	      <para>A 
+		<glossterm linkend="gloss-database-object">database
+		  object</glossterm>. This will default to the value
+		of <symbol>*default-database*</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>result-types</parameter></term>
+	    <listitem>
+	      <para>A 
+		<glossterm linkend="gloss-field-types">field type
+		  specifier</glossterm>. The default is &nil;.
+		</para>
+		<para>
+		  The purpose of this argument is cause &clsql; to
+		  import SQL numeric fields into numeric Lisp objects
+		  rather than strings. This reduces the cost of
+		  allocating a temporary string and the &clsql; users'
+		  inconvenience of converting number strings into number
+		  objects.
+		</para>
+		<para>
+		  A value of <symbol>:auto</symbol> causes &clsql;
+		  to automatically convert SQL fields into a
+		  numeric format where applicable. The default value of
+		  &nil; causes all fields to be returned as strings
+		  regardless of the SQL type. Otherwise a list is expected
+		  which has a element for each field that specifies the
+		  conversion. If the list is shorter than the number
+		  of fields, the a value of <symbol>t</symbol> is
+		  assumed for the field.  If the list is longer than
+		  the number of fields, the extra elements are
+		  ignored.
+		  <simplelist type="vert">
+		    <member><symbol>:int</symbol> Field is imported as a
+		      signed integer, from 8-bits to 64-bits depending
+                      upon the field type.
+		    </member>
+		    <member><symbol>:double</symbol> Field is imported as a
+		      double-float number.
+		    </member>
+		    <member><symbol>t</symbol> Field is imported as a
+		      string.
+		    </member>
+		  </simplelist>
+		</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>field-names</parameter></term>
+	    <listitem>
+	      <para>
+		A boolean with a default value of &t;. When &t;, this
+		function results a second value of a list of field
+		names. When &nil;, this function only returns one value
+		- the list of rows.
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><returnvalue>result</returnvalue></term>
+	    <listitem>
+	      <para>A list representing the result set obtained.  For
+		each tuple in the result set, there is an element in
+		this list, which is itself a list of all the attribute 
+		values in the tuple.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This will execute the query given by
+	  <parameter>query-expression</parameter> in the
+	  <parameter>database</parameter> specified.  If the execution 
+	  succeeds it will return the result set returned by the
+	  database, otherwise an error of type
+	  <errortype>sql-database-error</errortype> will 
+	  be signalled.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(execute-command "create table simple (name char(50), salary numeric(10,2))")
+=> T
+(execute-command "insert into simple values ('Mai, Pierre',10000)")
+=> T
+(execute-command "insert into simple values ('Hacker, Random J.',8000.50)")
+=> T
+(query "select * from simple")
+=> (("Mai, Pierre" "10000.00") ("Hacker, Random J." "8000.50"))
+(query "select salary from simple")
+=> (("10000.00") ("8000.50"))
+(query "select salary from simple where salary > 10000")
+=> NIL
+(query "select salary,name from simple where salary > 10000")
+=> NIL
+(query "select salary,name from simple where salary > 9000")
+=> (("10000.00" "Mai, Pierre"))
+(query "select salary,name from simple where salary > 8000")
+=> (("10000.00" "Mai, Pierre") ("8000.50" "Hacker, Random J."))
+
+;; MySQL-specific:
+(query "show tables")
+=> (("demo") ("log") ("newlog") ("simple") ("spacetrial"))
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>Whatever effects the execution of the SQL query has
+	  on the underlying database, if any.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected by</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>If the execution of  the SQL query leads to any
+	  errors, an error of type
+	  <errortype>sql-database-error</errortype> is signalled.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link linkend="execute-command"><function>execute-command</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+    <!-- Iteration -->
+    <refentry id="map-query">
+      <refnamediv>
+	<refname>MAP-QUERY</refname>
+	<refpurpose>Map a function over all the tuples from a
+	  query</refpurpose>
+	<refclass>Function</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>map-query</function> <replaceable>output-type-spec</replaceable> <replaceable>function</replaceable> <replaceable>query-expression</replaceable> &amp;key <replaceable>database</replaceable> <replaceable>result-types</replaceable> => <returnvalue>result</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>output-type-spec</parameter></term>
+	    <listitem>
+	      <para>A sequence type specifier or <symbol>nil</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>function</parameter></term>
+	    <listitem>
+	      <para>A function designator.
+		<parameter>function</parameter> takes a single argument which
+		is the atom value for a query single with a single column
+		or is a list of values for a multi-column query.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>query-expression</parameter></term>
+	    <listitem>
+	      <para>An <glossterm linkend="gloss-sql-expression">sql
+		  expression</glossterm> that represents an SQL
+		query which is expected to return a (possibly empty)
+		result set.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database</parameter></term>
+	    <listitem>
+	      <para>A 
+		<glossterm linkend="gloss-database-object">database
+		  object</glossterm>. This will default to the value
+		of <symbol>*default-database*</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>result-types</parameter></term>
+	    <listitem>
+	      <para>
+		A <glossterm linkend="gloss-field-types">field type specifier</glossterm>. 
+		The default is &nil;. See <link
+		linkend="query"><function>query</function></link>
+		for the semantics of this argument.  
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><returnvalue>result</returnvalue></term>
+	    <listitem>
+	      <para>If <parameter>output-type-spec</parameter> is a
+		type specifier other than <symbol>nil</symbol>, then a 
+		sequence of the type it denotes.  Otherwise
+		<symbol>nil</symbol> is returned.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>Applies <parameter>function</parameter> to the
+	  successive tuples in the result set returned
+	  by executing the SQL
+	  <parameter>query-expression</parameter>.  If the
+	  <parameter>output-type-spec</parameter> is
+	  <symbol>nil</symbol>, then the result of each application
+	  of <parameter>function</parameter> is discarded, and
+	  <function>map-query</function> returns
+	  <symbol>nil</symbol>.  Otherwise the result of each
+	  successive application of <parameter>function</parameter> is 
+	  collected in a sequence of type
+	  <parameter>output-type-spec</parameter>, where the jths
+	  element is the result of applying
+	  <parameter>function</parameter> to the attributes of the
+	  jths tuple in the result set.  The collected sequence is the 
+	  result of the call to <function>map-query</function>.
+	</para>
+	<para>If the <parameter>output-type-spec</parameter> is a
+	  subtype of <type>list</type>, the result will be a
+	  <type>list</type>.</para>
+	<para>If the <parameter>result-type</parameter> is a subtype
+	  of <type>vector</type>, then if the implementation can
+	  determine the element type specified for the
+	  <parameter>result-type</parameter>, the element type of the
+	  resulting array is the result of
+	  <emphasis>upgrading</emphasis> that element type; or, if the
+	  implementation can determine that the element type is
+	  unspecified (or <symbol>*</symbol>), the element type of the
+	  resulting array is <type>t</type>; otherwise, an error is
+	  signaled.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(map-query 'list #'(lambda (tuple) 
+                     (multiple-value-bind (salary name) tuple
+  		       (declare (ignorable name))
+		       (read-from-string salary)))
+	   "select salary,name from simple where salary > 8000")
+=> (10000.0 8000.5)
+
+(map-query '(vector double-float)
+	   #'(lambda (tuple)
+               (multiple-value-bind (salary name) tuple
+	         (declare (ignorable name))
+                 (let ((*read-default-float-format* 'double-float))
+ 	           (coerce (read-from-string salary) 'double-float))
+ 	            "select salary,name from simple where salary > 8000")))
+=> #(10000.0d0 8000.5d0)
+(type-of *)
+=> (SIMPLE-ARRAY DOUBLE-FLOAT (2))
+
+(let (list)
+  (values (map-query nil #'(lambda (tuple) 
+                             (multiple-value-bind (salary name) tuple
+	                       (push (cons name (read-from-string salary)) list))
+		     "select salary,name from simple where salary > 8000")
+	  list))
+=> NIL
+=> (("Hacker, Random J." . 8000.5) ("Mai, Pierre" . 10000.0))
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>Whatever effects the execution of the SQL query has
+	  on the underlying database, if any.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected by</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>If the execution of  the SQL query leads to any
+	  errors, an error of type
+	  <errortype>sql-database-error</errortype> is signalled.</para>
+	<para>An error of type <errortype>type-error</errortype> must
+	  be signaled if the <parameter>output-type-spec</parameter> is
+	  not a recognizable subtype of <type>list</type>, not a
+	  recognizable subtype of <type>vector</type>, and not
+	  <symbol>nil</symbol>.</para>
+	<para>An error of type <errortype>type-error</errortype>
+	  should be signaled if
+	  <parameter>output-type-spec</parameter> specifies the number
+	  of elements and the size of the result set is different from
+	  that number.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link linkend="query"><function>query</function></link></member>
+	  <member><link linkend="do-query"><function>do-query</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="do-query">
+      <refnamediv>
+	<refname>DO-QUERY</refname>
+	<refpurpose>Iterate over all the tuples of a
+	query</refpurpose>
+	<refclass>Macro</refclass>
+      </refnamediv>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><function>do-query</function> ((&amp;rest <replaceable>args</replaceable>) <replaceable>query-expression</replaceable> &amp;key <replaceable>database</replaceable> <replaceable>result-types</replaceable>) &amp;body <replaceable>body</replaceable> => <returnvalue>nil</returnvalue></synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>args</parameter></term>
+	    <listitem>
+	      <para>A list of variable names.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>query-expression</parameter></term>
+	    <listitem>
+	      <para>An <glossterm linkend="gloss-sql-expression">sql
+		  expression</glossterm> that represents an SQL
+		query which is expected to return a (possibly empty)
+		result set, where each tuple has as many attributes as
+		<parameter>function</parameter> takes arguments.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database</parameter></term>
+	    <listitem>
+	      <para>A 
+		<glossterm linkend="gloss-database-object">database
+		  object</glossterm>. This will default to
+		<symbol>*default-database*</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>result-types</parameter></term>
+	    <listitem>
+	      <para>
+		A <glossterm linkend="gloss-field-types">field type specifier</glossterm>. 
+		The default is &nil;. See <link
+		linkend="query"><function>query</function></link>
+		for the semantics of this argument.  
+	      </para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>body</parameter></term>
+	    <listitem>
+	      <para>A body of Lisp code, like in a
+		<function>destructuring-bind</function> form.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>Executes the <parameter>body</parameter> of code
+	  repeatedly with the variable names in
+	  <parameter>args</parameter> bound to the attributes of each
+	  tuple in the result set returned by executing the SQL
+	  <parameter>query-expression</parameter> on the
+	  <parameter>database</parameter> specified.</para>
+	<para>The body of code is executed in a block named
+	  <symbol>nil</symbol> which may be returned from prematurely
+	  via <function>return</function> or
+	  <function>return-from</function>.  In this case the result
+	  of evaluating the <function>do-query</function> form will be 
+	  the one supplied to <function>return</function> or
+	  <function>return-from</function>.  Otherwise the result will 
+	  be <symbol>nil</symbol>.</para>
+	<para>The body of code appears also is if wrapped in a
+	  <function>destructuring-bind</function> form, thus allowing
+	  declarations at the start of the body, especially those
+	  pertaining to the bindings of the variables named in
+	  <parameter>args</parameter>.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(do-query ((salary name) "select salary,name from simple")
+  (format t "~30A gets $~2,5$~%" name (read-from-string salary)))
+>> Mai, Pierre                    gets $10000.00
+>> Hacker, Random J.              gets $08000.50
+=> NIL
+
+(do-query ((salary name) "select salary,name from simple")
+  (return (cons salary name)))
+=> ("10000.00" . "Mai, Pierre")
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>Whatever effects the execution of the SQL query has
+	  on the underlying database, if any.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected by</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>If the execution of  the SQL query leads to any
+	  errors, an error of type
+	  <errortype>sql-database-error</errortype> is signalled.</para>
+	<para>If the number of variable names in
+	  <parameter>args</parameter> and the number of attributes in
+	  the tuples in the result set don't match up, an error is
+	  signalled.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link linkend="query"><function>query</function></link></member>
+	  <member><link linkend="map-query"><function>map-query</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+    <refentry id="loop-tuples">
+      <refnamediv>
+	<refname>LOOP-FOR-AS-TUPLES</refname>
+	<refpurpose>Iterate over all the tuples of a
+	query via a loop clause</refpurpose>
+	<refclass>Loop Clause</refclass>
+      </refnamediv>
+      <refsect1>
+        <title>Compatibility</title>
+        <caution><para><function>loop-for-as-tuples</function> only works with &cmucl;.</para></caution>
+      </refsect1>
+      <refsect1>
+	<title>Syntax</title>
+	<synopsis><replaceable>var</replaceable> [<replaceable>type-spec</replaceable>] being {each | the} {record | records | tuple | tuples} {in | of} <replaceable>query</replaceable> [from <replaceable>database</replaceable>]</synopsis>
+      </refsect1>
+      <refsect1>
+	<title>Arguments and Values</title>
+	<variablelist>
+	  <varlistentry>
+	    <term><parameter>var</parameter></term>
+	    <listitem>
+	      <para>A <literal>d-var-spec</literal>, as defined in the 
+		grammar for <function>loop</function>-clauses in the
+		ANSI Standard for Common Lisp.  This allows for the
+		usual loop-style destructuring.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>type-spec</parameter></term>
+	    <listitem>
+	      <para>An optional <literal>type-spec</literal> either
+		simple or destructured, as defined in the grammar for
+		<function>loop</function>-clauses in the ANSI Standard
+		for Common Lisp.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>query</parameter></term>
+	    <listitem>
+	      <para>An <glossterm linkend="gloss-sql-expression">sql
+		  expression</glossterm> that represents an SQL
+		query which is expected to return a (possibly empty)
+		result set, where each tuple has as many attributes as
+		<parameter>function</parameter> takes arguments.</para>
+	    </listitem>
+	  </varlistentry>
+	  <varlistentry>
+	    <term><parameter>database</parameter></term>
+	    <listitem>
+	      <para>An optional
+		<glossterm linkend="gloss-database-object">database
+		  object</glossterm>. This will default to the value
+		of <symbol>*default-database*</symbol>.</para>
+	    </listitem>
+	  </varlistentry>
+	</variablelist>
+      </refsect1>
+      <refsect1>
+	<title>Description</title>
+	<para>This clause is an iteration driver for
+	<function>loop</function>, that binds the given variable
+	  (possibly destructured) to the consecutive tuples (which are 
+	  represented as lists of attribute values) in the result set
+	  returned by executing the SQL <parameter>query</parameter>
+	  expression on the <parameter>database</parameter>
+	  specified.</para>
+      </refsect1>
+      <refsect1>
+	<title>Examples</title>
+	<screen>
+(defvar *my-db* (connect '("dent" "newesim" "dent" "dent"))
+  "My database"
+=> *MY-DB*
+(loop with time-graph = (make-hash-table :test #'equal)
+      with event-graph = (make-hash-table :test #'equal)
+      for (time event) being the tuples of "select time,event from log"
+      from *my-db*
+      do
+      (incf (gethash time time-graph 0))
+      (incf (gethash event event-graph 0))
+      finally
+      (flet ((show-graph (k v) (format t "~40A => ~5D~%" k v)))
+        (format t "~&amp;Time-Graph:~%===========~%")
+        (maphash #'show-graph time-graph)
+        (format t "~&amp;~%Event-Graph:~%============~%")
+        (maphash #'show-graph event-graph))
+      (return (values time-graph event-graph)))
+>> Time-Graph:
+>> ===========
+>> D                                        => 53000
+>> X                                        =>     3
+>> test-me                                  =>  3000
+>> 
+>> Event-Graph:
+>> ============
+>> CLOS Benchmark entry.                    =>  9000
+>> Demo Text...                             =>     3
+>> doit-text                                =>  3000
+>> C    Benchmark entry.                    => 12000
+>> CLOS Benchmark entry                     => 32000
+=> #&lt;EQUAL hash table, 3 entries {48350A1D}>
+=> #&lt;EQUAL hash table, 5 entries {48350FCD}>
+	</screen>
+      </refsect1>
+      <refsect1>
+	<title>Side Effects</title>
+	<para>Whatever effects the execution of the SQL query has
+	  on the underlying database, if any.</para>
+      </refsect1>
+      <refsect1>
+	<title>Affected by</title>
+	<para>None.</para>
+      </refsect1>
+      <refsect1>
+	<title>Exceptional Situations</title>
+	<para>If the execution of  the SQL query leads to any
+	  errors, an error of type
+	  <errortype>sql-database-error</errortype> is signalled.</para>
+	<para>Otherwise, any of the exceptional situations of
+	  <function>loop</function> applies.</para>
+      </refsect1>
+      <refsect1>
+	<title>See Also</title>
+	<para>
+	<simplelist>
+	  <member><link linkend="query"><function>query</function></link></member>
+	  <member><link linkend="map-query"><function>map-query</function></link></member>
+	  <member><link linkend="do-query"><function>do-query</function></link></member>
+	</simplelist>
+	</para>
+      </refsect1>
+      <refsect1>
+	<title>Notes</title>
+	<para>None.</para>
+      </refsect1>
+    </refentry>
+  </reference>

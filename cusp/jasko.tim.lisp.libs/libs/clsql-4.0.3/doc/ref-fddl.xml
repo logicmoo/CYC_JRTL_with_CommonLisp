@@ -1,0 +1,2618 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<!-- Functional Data Definition Language --> 
+<reference id="ref-fddl"> 
+  <title>Functional Data Definition Language (FDDL)</title> 
+  <partintro>
+    <para>
+      &clsql; provides a functional DDL which supports the creation
+      and destruction of a variety of database objects including
+      tables, views, indexes and sequences. Functions which return
+      information about currently defined database objects are also
+      provided. In addition, the FDDL includes functionality for
+      examining table attributes and attribute types. 
+    </para>
+  </partintro>
+
+  <refentry id="create-table">
+    <refmeta>
+      <refentrytitle>CREATE-TABLE</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>CREATE-TABLE</refname>
+      <refpurpose>Create a database table.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>create-table</function> <replaceable>name</replaceable> <replaceable>description</replaceable> &amp;key <replaceable>database</replaceable> <replaceable>constraints</replaceable> <replaceable>transactions</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the table as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>description</parameter></term>
+          <listitem>
+            <para>
+              A list. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>constraints</parameter></term>
+          <listitem>
+            <para>
+              A string, a list of strings or &nil;. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>transactions</parameter></term>
+          <listitem>
+            <para>
+              A Boolean. The default value is &t;. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Creates a table called <parameter>name</parameter>, which
+      may be a string, symbol or SQL table identifier, in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>description</parameter>
+      is a list whose elements are lists containing the attribute
+      names, types, and other constraints such as not-null or
+      primary-key for each column in the table.
+      </para> 
+      <para>
+        <parameter>constraints</parameter> is a string representing an
+        SQL table constraint expression or a list of such strings.
+      </para> 
+      <para> 
+        With MySQL databases, if <parameter>transactions</parameter>
+        is &t; an InnoDB table is created which supports transactions.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(create-table [foo]
+              '(([id] integer)
+                ([height] float)
+                ([name] (string 24))
+                ([comments] longchar)))
+=> 
+(table-exists-p [foo]) 
+=> T 
+
+(create-table [foo] '(([bar] integer :not-null :unique :primary-key) 
+                      ([baz] string :not-null :unique)))
+=> 
+(table-exists-p [foo])
+=> T
+
+(create-table [foo] '(([bar] integer :not-null) ([baz] string :not-null))
+              :constraints '("UNIQUE (bar,baz)" "PRIMARY KEY (bar)"))
+=> 
+(table-exists-p [foo])
+=> T
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        A table is created in <parameter>database</parameter>. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error is signalled if <parameter>name</parameter> is not a
+        string, symbol or SQL expression. An error of type
+        <symbol>sql-database-data-error</symbol> is signalled if a
+        relation called <parameter>name</parameter> already exists.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="drop-table"><function>drop-table</function></link></member>
+        <member><link linkend="list-tables"><function>list-tables</function></link></member>
+        <member><link linkend="table-exists-p"><function>table-exists-p</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The <parameter>constraints</parameter> and
+        <parameter>transactions</parameter> keyword arguments to
+        <function>create-table</function> are &clsql; extensions. The
+        <parameter>transactions</parameter> keyword argument is for
+        compatibility with MySQL databases.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="drop-table">
+    <refmeta>
+      <refentrytitle>DROP-TABLE</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>DROP-TABLE</refname>
+      <refpurpose>Drop a database table.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>drop-table</function> <replaceable>name</replaceable> &amp;key <replaceable>if-does-not-exist</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the table as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>if-does-not-exist</parameter></term>
+          <listitem>
+            <para>
+              A symbol. Meaningful values are <symbol>:ignore</symbol>
+              or <symbol>:error</symbol> (the default).  
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Drops the table called <parameter>name</parameter> from
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. If the table does not exist
+      and <parameter>if-does-not-exist</parameter> is
+      <symbol>:ignore</symbol> then <function>drop-table</function>
+      returns &nil; whereas an error is signalled if
+      <parameter>if-does-not-exist</parameter> is
+      <symbol>:error</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(table-exists-p [foo])
+=> T
+(drop-table [foo] :if-does-not-exist :ignore)
+=> 
+(table-exists-p [foo])
+=> NIL        
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        A table is dropped <parameter>database</parameter>. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error is signalled if <parameter>name</parameter> is not a
+        string, symbol or SQL expression. An error of type
+        <symbol>sql-database-data-error</symbol> is signalled if
+        <parameter>name</parameter> doesn't exist and
+        <parameter>if-does-not-exist</parameter> has a value of
+        <symbol>:error</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-table"><function>create-table</function></link></member>
+        <member><link linkend="list-tables"><function>list-tables</function></link></member>
+        <member><link linkend="table-exists-p"><function>table-exists-p</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The <parameter>if-does-not-exist</parameter> keyword argument
+        to <function>drop-table</function> is a &clsql; extension.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="list-tables">
+    <refmeta>
+      <refentrytitle>LIST-TABLES</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>LIST-TABLES</refname>
+      <refpurpose>Returns a list of database tables.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>list-tables</function> &amp;key <replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A list of strings.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns a list of strings representing table names in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>owner</parameter>
+      is &nil; by default which means that only tables owned by users
+      are listed. If <parameter>owner</parameter> is a string denoting
+      a user name, only tables owned by <parameter>owner</parameter>
+      are listed. If <parameter>owner</parameter> is
+      <symbol>:all</symbol> then all tables are listed.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(list-tables :owner "fred")
+=> ("type_table" "type_bigint" "employee" "company" "addr" "ea_join" "big")
+
+(list-tables :owner :all)
+=> ("pg_description" "pg_group" "pg_proc" "pg_rewrite" "pg_type" "pg_attribute"
+    "pg_class" "pg_inherits" "pg_index" "pg_operator" "pg_opclass" "pg_am"
+    "pg_amop" "pg_amproc" "pg_language" "pg_largeobject" "pg_aggregate"
+    "pg_trigger" "pg_listener" "pg_cast" "pg_namespace" "pg_shadow"
+    "pg_conversion" "pg_depend" "pg_attrdef" "pg_constraint" "pg_database"
+    "type_table" "type_bigint" "employee" "company" "pg_statistic" "addr"
+    "ea_join" "big")
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-table"><function>create-table</function></link></member>
+        <member><link linkend="drop-table"><function>drop-table</function></link></member>
+        <member><link linkend="table-exists-p"><function>table-exists-p</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="table-exists-p">
+    <refmeta>
+      <refentrytitle>TABLE-EXISTS-P</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>TABLE-EXISTS-P</refname>
+      <refpurpose>Tests for the existence of a database table.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>table-exists-p</function> <replaceable>name</replaceable> &amp;key <replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the table as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A Boolean. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Tests for the existence of an SQL table called
+      <parameter>name</parameter> in <parameter>database</parameter>
+      which defaults to <symbol>*default-database*</symbol>.
+      <parameter>owner</parameter> is &nil; by default which means
+      that only tables owned by users are examined. If
+      <parameter>owner</parameter> is a string denoting a user name,
+      only tables owned by <parameter>owner</parameter> are
+      examined. If <parameter>owner</parameter> is
+      <symbol>:all</symbol> then all tables are examined.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(table-exists-p [foo])
+=> T
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-table"><function>create-table</function></link></member>
+        <member><link linkend="drop-table"><function>drop-table</function></link></member>
+        <member><link linkend="list-tables"><function>list-tables</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="create-view">
+    <refmeta>
+      <refentrytitle>CREATE-VIEW</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>CREATE-VIEW</refname>
+      <refpurpose>Create a database view.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>create-view</function> <replaceable>name</replaceable> &amp;key <replaceable>as</replaceable> <replaceable>column-list</replaceable> <replaceable>with-check-option</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the view as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>as</parameter></term>
+          <listitem>
+            <para>
+              A symbolic SQL query expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>column-list</parameter></term>
+          <listitem>
+            <para>
+              A list. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>with-check-option</parameter></term>
+          <listitem>
+            <para>
+              A Boolean. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Creates a view called <parameter>name</parameter> in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. The view is created using
+      the query <parameter>as</parameter> and the columns of the view
+      may be specified using the <parameter>column-list</parameter>
+      parameter. The <parameter>with-check-option</parameter> is &nil;
+      by default but if it has a non-&nil; value, then all
+      insert/update commands on the view are checked to ensure that
+      the new data satisfy the query <parameter>as</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(create-view [lenins-group]
+	     :as [select [first-name] [last-name] [email]
+	                 :from [employee]
+			 :where [= [managerid] 1]])
+=> 
+
+(select [*] :from [lenins-group])
+=> (("Josef" "Stalin" "stalin@soviet.org") 
+    ("Leon" "Trotsky" "trotsky@soviet.org")
+    ("Nikita" "Kruschev" "kruschev@soviet.org")
+    ("Leonid" "Brezhnev" "brezhnev@soviet.org")
+    ("Yuri" "Andropov" "andropov@soviet.org")
+    ("Konstantin" "Chernenko" "chernenko@soviet.org")
+    ("Mikhail" "Gorbachev" "gorbachev@soviet.org")
+    ("Boris" "Yeltsin" "yeltsin@soviet.org")
+    ("Vladimir" "Putin" "putin@soviet.org")), 
+   ("first_name" "last_name" "email")
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        A view is created in <parameter>database</parameter>. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error is signalled if <parameter>name</parameter> is not a
+        string, symbol or SQL expression. An error of type
+        <symbol>sql-database-data-error</symbol> is signalled if a
+        relation called <parameter>name</parameter> already exists.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="drop-view"><function>drop-view</function></link></member>
+        <member><link linkend="list-views"><function>list-views</function></link></member>
+        <member><link linkend="view-exists-p"><function>view-exists-p</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="drop-view">
+    <refmeta>
+      <refentrytitle>DROP-VIEW</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>DROP-VIEW</refname>
+      <refpurpose>Drops a database view.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>drop-view</function> <replaceable>name</replaceable> &amp;key <replaceable>if-does-not-exist</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the view as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>if-does-not-exist</parameter></term>
+          <listitem>
+            <para>
+              A symbol. Meaningful values are <symbol>:ignore</symbol>
+              or <symbol>:error</symbol> (the default). 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Drops the view called <parameter>name</parameter> from
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. If the view does not exist
+      and <parameter>if-does-not-exist</parameter> is
+      <symbol>:ignore</symbol> then <function>drop-view</function>
+      returns &nil; whereas an error is signalled if
+      <parameter>if-does-not-exist</parameter> is
+      <symbol>:error</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(view-exists-p [foo])
+=> T
+(drop-view [foo] :if-does-not-exist :ignore)
+=> 
+(view-exists-p [foo])
+=> NIL        
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        A view is dropped <parameter>database</parameter>. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error is signalled if <parameter>name</parameter> is not a
+        string, symbol or SQL expression. An error of type
+        <symbol>sql-database-data-error</symbol> is signalled if
+        <parameter>name</parameter> doesn't exist and
+        <parameter>if-does-not-exist</parameter> has a value of
+        <symbol>:error</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-view"><function>create-view</function></link></member>
+        <member><link linkend="list-views"><function>list-views</function></link></member>
+        <member><link linkend="view-exists-p"><function>view-exists-p</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The <parameter>if-does-not-exist</parameter> keyword argument
+        to <function>drop-view</function> is a &clsql; extension.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="list-views">
+    <refmeta>
+      <refentrytitle>LIST-VIEWS</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>LIST-VIEWS</refname>
+      <refpurpose>Returns a list of database views.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>list-views</function> &amp;key <replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A list of strings.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns a list of strings representing view names in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>owner</parameter>
+      is &nil; by default which means that only views owned by users
+      are listed. If <parameter>owner</parameter> is a string denoting
+      a user name, only views owned by <parameter>owner</parameter>
+      are listed. If <parameter>owner</parameter> is
+      <symbol>:all</symbol> then all views are listed.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(list-views :owner "fred")
+=> ("lenins_group")
+
+(list-views :owner :all)
+=> ("pg_user" "pg_rules" "pg_views" "pg_tables" "pg_indexes" "pg_stats"
+    "pg_stat_all_tables" "pg_stat_sys_tables" "pg_stat_user_tables"
+    "pg_statio_all_tables" "pg_statio_sys_tables" "pg_statio_user_tables"
+    "pg_stat_all_indexes" "pg_stat_sys_indexes" "pg_stat_user_indexes"
+    "pg_statio_all_indexes" "pg_statio_sys_indexes" "pg_statio_user_indexes"
+    "pg_statio_all_sequences" "pg_statio_sys_sequences" 
+    "pg_statio_user_sequences" "pg_stat_activity" "pg_stat_database" 
+    "pg_locks" "pg_settings" "lenins_group")        
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-view"><function>create-view</function></link></member>
+        <member><link linkend="drop-view"><function>drop-view</function></link></member>
+        <member><link linkend="view-exists-p"><function>view-exists-p</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>list-views</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="view-exists-p">
+    <refmeta>
+      <refentrytitle>VIEW-EXISTS-P</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>VIEW-EXISTS-P</refname>
+      <refpurpose>Tests for the existence of a database view.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>view-exists-p</function> <replaceable>name</replaceable> &amp;key <replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the view as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A Boolean. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Tests for the existence of an SQL view called
+      <parameter>name</parameter> in <parameter>database</parameter>
+      which defaults to <symbol>*default-database*</symbol>.
+      <parameter>owner</parameter> is &nil; by default which means
+      that only views owned by users are examined. If
+      <parameter>owner</parameter> is a string denoting a user name,
+      only views owned by <parameter>owner</parameter> are
+      examined. If <parameter>owner</parameter> is
+      <symbol>:all</symbol> then all views are examined.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(view-exists-p [lenins-group])
+=> T
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-view"><function>create-view</function></link></member>
+        <member><link linkend="drop-view"><function>drop-view</function></link></member>
+        <member><link linkend="list-views"><function>list-views</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>view-exists-p</function> is a &clsql; extension.  
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="create-index">
+    <refmeta>
+      <refentrytitle>CREATE-INDEX</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>CREATE-INDEX</refname>
+      <refpurpose>Create a database index.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>create-index</function> <replaceable>name</replaceable> &amp;key <replaceable>on</replaceable> <replaceable>unique</replaceable> <replaceable>attributes</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the index as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>on</parameter></term>
+          <listitem>
+            <para>
+              The name of a table as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>unique</parameter></term>
+          <listitem>
+            <para>
+              A Boolean. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>attributes</parameter></term>
+          <listitem>
+            <para>
+              A list of attribute names. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Creates an index called <parameter>name</parameter> on the
+      table specified by <parameter>on</parameter> in
+      <parameter>database</parameter> which default to
+      <symbol>*default-database*</symbol>. The table attributes to use
+      in constructing the index <parameter>name</parameter> are
+      specified by <parameter>attributes</parameter>. The
+      <parameter>unique</parameter> argument is &nil; by default but
+      if it has a non-&nil; value then the indexed attributes must
+      have unique values.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(create-index [bar] :on [employee] 
+              :attributes '([first-name] [last-name] [email]) 
+              :unique t)
+=> 
+
+(index-exists-p [bar])
+=> T
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        An index is created in <parameter>database</parameter>. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error is signalled if <parameter>name</parameter> is not a
+        string, symbol or SQL expression. An error of type
+        <symbol>sql-database-data-error</symbol> is signalled if a
+        relation called <parameter>name</parameter> already exists.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="drop-index"><function>drop-index</function></link></member>
+        <member><link linkend="list-indexes"><function>list-indexes</function></link></member>
+        <member><link linkend="index-exists-p"><function>index-exists-p</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="drop-index">
+    <refmeta>
+      <refentrytitle>DROP-INDEX</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>DROP-INDEX</refname>
+      <refpurpose>Drop a database index.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>drop-index</function> <replaceable>name</replaceable> &amp;key <replaceable>if-does-not-exist</replaceable> <replaceable>on</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the index as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>on</parameter></term>
+          <listitem>
+            <para>
+              The name of a table as a string, symbol or SQL
+              expression.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>if-does-not-exist</parameter></term>
+          <listitem>
+            <para>
+              A symbol. Meaningful values are <symbol>:ignore</symbol>
+              or <symbol>:error</symbol> (the default). 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Drops the index called <parameter>name</parameter> in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. If the index does not exist
+      and <parameter>if-does-not-exist</parameter> is
+      <symbol>:ignore</symbol> then <parameter>drop-index</parameter>
+      returns &nil; whereas an error is signalled if
+      <parameter>if-does-not-exist</parameter> is
+      <symbol>:error</symbol>. 
+      </para> 
+      <para> 
+        The argument <parameter>on</parameter> allows the optional
+        specification of a table to drop the index from. This is
+        required for compatability with MySQL.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(index-exists-p [foo])
+=> T
+(drop-index [foo] :if-does-not-exist :ignore)
+=> 
+(index-exists-p [foo])
+=> NIL        
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        An index is dropped in <parameter>database</parameter>. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error is signalled if <parameter>name</parameter> is not a
+        string, symbol or SQL expression. An error of type
+        <symbol>sql-database-data-error</symbol> is signalled if
+        <parameter>name</parameter> doesn't exist and
+        <parameter>if-does-not-exist</parameter> has a value of
+        <symbol>:error</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-index"><function>create-index</function></link></member>
+        <member><link linkend="list-indexes"><function>list-indexes</function></link></member>
+        <member><link linkend="index-exists-p"><function>index-exists-p</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        The <parameter>if-does-not-exist</parameter> and
+        <parameter>on</parameter> keyword arguments to
+        <function>drop-index</function> are &clsql; extensions.  The
+        keyword argument <parameter>on</parameter> is provided for
+        compatibility with MySQL.
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="list-indexes">
+    <refmeta>
+      <refentrytitle>LIST-INDEXES</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>LIST-INDEXES</refname>
+      <refpurpose>Returns a list of database indexes.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>list-indexes</function> &amp;key <replaceable>on</replaceable><replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>on</parameter></term>
+          <listitem>
+            <para>
+              The name of a table as a string, symbol or SQL
+              expression, a list of such names or &nil;.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A list of strings.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns a list of strings representing index names in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>owner</parameter>
+      is &nil; by default which means that only indexes owned by users
+      are listed. If <parameter>owner</parameter> is a string denoting
+      a user name, only indexes owned by <parameter>owner</parameter>
+      are listed. If <parameter>owner</parameter> is
+      <symbol>:all</symbol> then all indexes are listed.
+      </para>
+      <para> 
+         The keyword argument <parameter>on</parameter> limits the
+         results to indexes on the specified tables. Meaningful values
+         for <parameter>on</parameter> are &nil; (the default) which
+         means that all tables are considered, a string, symbol or SQL
+         expression representing a table name in
+         <parameter>database</parameter> or a list of such table
+         identifiers.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(list-indexes)
+=> ("employeepk" "companypk" "addrpk" "bar")        
+
+(list-indexes :on '([addr] [company]))
+=> ("addrpk" "companypk")
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-index"><function>create-index</function></link></member>
+        <member><link linkend="drop-index"><function>drop-index</function></link></member>
+        <member><link linkend="index-exists-p"><function>index-exists-p</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>list-indexes</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="index-exists-p">
+    <refmeta>
+      <refentrytitle>INDEX-EXISTS-P</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>INDEX-EXISTS-</refname>
+      <refpurpose>Tests for the existence of a database index.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>index-exists-p</function> <replaceable>name</replaceable> &amp;key <replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the index as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A Boolean. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Tests for the existence of an SQL index called
+      <parameter>name</parameter> in <parameter>database</parameter>
+      which defaults to
+      <symbol>*default-database*</symbol>. <parameter>owner</parameter>
+      is &nil; by default which means that only indexes owned by users
+      are examined. If <parameter>owner</parameter> is a string
+      denoting a user name, only indexes owned by
+      <parameter>owner</parameter> are examined. If
+      <parameter>owner</parameter> is <symbol>:all</symbol> then all
+      indexes are examined.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(index-exists-p [bar])
+=> T
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-index"><function>create-index</function></link></member>
+        <member><link linkend="drop-index"><function>drop-index</function></link></member>
+        <member><link linkend="list-indexes"><function>list-indexes</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>index-exists-p</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="attribute-type">
+    <refmeta>
+      <refentrytitle>ATTRIBUTE-TYPE</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>ATTRIBUTE-TYPE</refname>
+      <refpurpose>Returns the type of the supplied attribute.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>attribute-type attribute</function> <replaceable>table</replaceable> &amp;key <replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>type</returnvalue>, <returnvalue>precision</returnvalue>, <returnvalue>scale</returnvalue>, <returnvalue>nulls-accepted</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>attribute</parameter></term>
+          <listitem>
+            <para>
+              The name of the index as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>table</parameter></term>
+          <listitem>
+            <para>
+              The name of a table as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>type</parameter></term>
+          <listitem>
+            <para>
+              A keyword symbol denoting a vendor-specific SQL type. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>precision</parameter></term>
+          <listitem>
+            <para>
+              An integer denoting the precision of the attribute type
+              or &nil;.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>scale</parameter></term>
+          <listitem>
+            <para>
+              An integer denoting the scale of the attribute type
+              or &nil;.              
+            </para>
+          </listitem>
+        </varlistentry> 
+        <varlistentry> 
+          <term><parameter>nulls-accepted</parameter></term>
+          <listitem>
+            <para>
+              0 or 1. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns a keyword symbol representing the vendor-specific
+      field type of the supplied attribute
+      <parameter>attribute</parameter> in the table specified by
+      <parameter>table</parameter> in <parameter>database</parameter>
+      which defaults to
+      <symbol>*default-database*</symbol>. <parameter>owner</parameter>
+      is &nil; by default which means that the attribute specified by
+      <parameter>attribute</parameter>, if it exists, must be user
+      owned else &nil; is returned. If <parameter>owner</parameter> is
+      a string denoting a user name, the attribute, if it exists, must
+      be owned by <parameter>owner</parameter> else &nil; is returned,
+      whereas if <parameter>owner</parameter> is <symbol>:all</symbol>
+      then the attribute, if it exists, will be returned regardless of
+      its owner.
+      </para>
+
+      <para>Other information is also returned. The second value is
+      the type precision, the third is the scale and the fourth
+      represents whether or not the attribute accepts null values (a
+      value of 0) or not (a value of 1).
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(attribute-type [emplid] [employee])
+=> :INT4, 4, NIL, 0
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="list-attributes"><function>list-attributes</function></link></member>
+        <member><link linkend="list-attribute-types"><function>list-attribute-types</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="list-attribute-types">
+    <refmeta>
+      <refentrytitle>LIST-ATTRIBUTE-TYPES</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>LIST-ATTRIBUTE-TYPES</refname>
+      <refpurpose>Returns information about the attribute types of a table.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>list-attribute-types</function> <replaceable>table</replaceable> &amp;key <replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>table</parameter></term>
+          <listitem>
+            <para>
+              The name of a table as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A list. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns a list containing information about the SQL types
+      of each of the attributes in the table specified by
+      <parameter>table</parameter> in <parameter>database</parameter>
+      which has a default value of
+      <symbol>*default-database*</symbol>. <parameter>owner</parameter>
+      is &nil; by default which means that only attributes owned by
+      users are listed. If <parameter>owner</parameter> is a string
+      denoting a user name, only attributes owned by
+      <parameter>owner</parameter> are listed. If
+      <parameter>owner</parameter> is <symbol>:all</symbol> then all
+      attributes are listed. The elements of the returned list are
+      lists where the first element is the name of the attribute, the
+      second element is its SQL type, the third is the type precision,
+      the fourth is the scale of the attribute and the fifth is 1 if
+      the attribute accepts null values and otherwise 0.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(list-attribute-types [employee])
+=> (("emplid" :INT4 4 NIL 0) ("groupid" :INT4 4 NIL 0)
+    ("first_name" :VARCHAR 30 NIL 1) ("last_name" :VARCHAR 30 NIL 1)
+    ("email" :VARCHAR 100 NIL 1) ("ecompanyid" :INT4 4 NIL 1)
+    ("managerid" :INT4 4 NIL 1) ("height" :FLOAT8 8 NIL 1)
+    ("married" :BOOL 1 NIL 1) ("birthday" :TIMESTAMP 8 NIL 1)
+    ("bd_utime" :INT8 8 NIL 1))        
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="attribute-type"><function>attribute-type</function></link></member>
+        <member><link linkend="list-attribute-types"><function>list-attribute-types</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="list-attributes">
+    <refmeta>
+      <refentrytitle>LIST-ATTRIBUTES</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>LIST-ATTRIBUTES</refname>
+      <refpurpose>Returns the attributes of a table as a list.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>list-attributes</function> <replaceable>name</replaceable> &amp;key <replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of a table as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A list. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns a list of strings representing the attributes of
+      table <parameter>name</parameter> in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>owner</parameter>
+      is &nil; by default which means that only attributes owned by
+      users are listed. If <parameter>owner</parameter> is a string
+      denoting a user name, only attributes owned by
+      <parameter>owner</parameter> are listed. If
+      <parameter>owner</parameter> is <symbol>:all</symbol> then all
+      attributes are listed.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(list-attributes [employee])
+=> ("emplid" "groupid" "first_name" "last_name" "email" "ecompanyid" "managerid"
+    "height" "married" "birthday" "bd_utime")      
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="attribute-type"><function>attribute-type</function></link></member>
+        <member><link linkend="list-attribute-types"><function>list-attribute-types</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="create-sequence">
+    <refmeta>
+      <refentrytitle>CREATE-SEQUENCE</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>CREATE-SEQUENCE</refname>
+      <refpurpose>Create a database sequence.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>create-sequence</function> <replaceable>name</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the sequence as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Creates a sequence called <parameter>name</parameter> in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(create-sequence [foo])
+=> 
+(sequence-exists-p [foo])
+=> T        
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        A sequence is created in <parameter>database</parameter>. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error is signalled if <parameter>name</parameter> is not a
+        string, symbol or SQL expression. An error of type
+        <symbol>sql-database-data-error</symbol> is signalled if a
+        relation called <parameter>name</parameter> already exists.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="drop-sequence"><function>drop-sequence</function></link></member>
+        <member><link linkend="list-sequences"><function>list-sequences</function></link></member>
+        <member><link linkend="sequence-exists-p"><function>sequence-exists-p</function></link></member>
+        <member><link linkend="sequence-last"><function>sequence-last</function></link></member>
+        <member><link linkend="sequence-next"><function>sequence-next</function></link></member>
+        <member><link linkend="set-sequence-position"><function>set-sequence-position</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>create-sequence</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="drop-sequence">
+    <refmeta>
+      <refentrytitle>DROP-SEQUENCE</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>DROP-SEQUENCE</refname>
+      <refpurpose>Drop a database sequence.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>drop-sequence</function> <replaceable>name</replaceable> &amp;key <replaceable>if-does-not-exist</replaceable> <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the sequence as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>if-does-not-exist</parameter></term>
+          <listitem>
+            <para>
+              A symbol. Meaningful values are <symbol>:ignore</symbol>
+              or <symbol>:error</symbol> (the default). 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Drops the sequence called <parameter>name</parameter> from
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. If the sequence does not
+      exist and <parameter>if-does-not-exist</parameter> is
+      <symbol>:ignore</symbol> then
+      <parameter>drop-sequence</parameter> returns &nil; whereas an
+      error is signalled if <parameter>if-does-not-exist</parameter>
+      is <symbol>:error</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(sequence-exists-p [foo])
+=> T
+(drop-sequence [foo] :if-does-not-exist :ignore)
+=> 
+(sequence-exists-p [foo])
+=> NIL        
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        A sequence is dropped from <parameter>database</parameter>.  
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        An error is signalled if <parameter>name</parameter> is not a
+        string, symbol or SQL expression. An error of type
+        <symbol>sql-database-data-error</symbol> is signalled if
+        <parameter>name</parameter> doesn't exist and
+        <parameter>if-does-not-exist</parameter> has a value of
+        <symbol>:error</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-sequence"><function>create-sequence</function></link></member>
+        <member><link linkend="list-sequences"><function>list-sequences</function></link></member>
+        <member><link linkend="sequence-exists-p"><function>sequence-exists-p</function></link></member>
+        <member><link linkend="sequence-last"><function>sequence-last</function></link></member>
+        <member><link linkend="sequence-next"><function>sequence-next</function></link></member>
+        <member><link linkend="set-sequence-position"><function>set-sequence-position</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>drop-sequence</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="list-sequences">
+    <refmeta>
+      <refentrytitle>LIST-SEQUENCES</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>LIST-SEQUENCES</refname>
+      <refpurpose>Returns a list of database sequences.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>list-sequences</function> &amp;key <replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A list of strings.
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Returns a list of strings representing sequence names in
+      <parameter>database</parameter> which defaults to
+      <symbol>*default-database*</symbol>. <parameter>owner</parameter>
+      is &nil; by default which means that only sequences owned by
+      users are listed. If <parameter>owner</parameter> is a string
+      denoting a user name, only sequences owned by
+      <parameter>owner</parameter> are listed. If
+      <parameter>owner</parameter> is <symbol>:all</symbol> then all
+      sequences are listed.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(list-sequences)
+=> ("foo")  
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-sequence"><function>create-sequence</function></link></member>
+        <member><link linkend="drop-sequence"><function>drop-sequence</function></link></member>
+        <member><link linkend="sequence-exists-p"><function>sequence-exists-p</function></link></member>
+        <member><link linkend="sequence-last"><function>sequence-last</function></link></member>
+        <member><link linkend="sequence-next"><function>sequence-next</function></link></member>
+        <member><link linkend="set-sequence-position"><function>set-sequence-position</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>list-sequences</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sequence-exists-p">
+    <refmeta>
+      <refentrytitle>SEQUENCE-EXISTS-P</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SEQUENCE-EXISTS-P</refname>
+      <refpurpose>Tests for the existence of a database sequence.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>sequence-exists-p</function> <replaceable>name</replaceable> &amp;key <replaceable>owner</replaceable> <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the sequence as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>owner</parameter></term>
+          <listitem>
+            <para>
+              A string, &nil; or <symbol>:all</symbol>. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              A Boolean. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Tests for the existence of an SQL sequence called
+      <parameter>name</parameter> in <parameter>database</parameter>
+      which defaults to
+      <symbol>*default-database*</symbol>. <parameter>owner</parameter>
+      is &nil; by default which means that only sequences owned by
+      users are examined. If <parameter>owner</parameter> is a string
+      denoting a user name, only sequences owned by
+      <parameter>owner</parameter> are examined. If
+      <parameter>owner</parameter> is <symbol>:all</symbol> then all
+      sequences are examined.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(sequence-exists-p [foo])
+=> NIL        
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-sequence"><function>create-sequence</function></link></member>
+        <member><link linkend="drop-sequence"><function>drop-sequence</function></link></member>
+        <member><link linkend="list-sequences"><function>list-sequences</function></link></member>
+        <member><link linkend="sequence-last"><function>sequence-last</function></link></member>
+        <member><link linkend="sequence-next"><function>sequence-next</function></link></member>
+        <member><link linkend="set-sequence-position"><function>set-sequence-position</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>sequence-exists-p</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sequence-last">
+    <refmeta>
+      <refentrytitle>SEQUENCE-LAST</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SEQUENCE-LAST</refname>
+      <refpurpose>Return the last element in a database sequence.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>sequence-last</function> <replaceable>name</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the sequence as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              An integer. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Return the last value allocated in the sequence called
+      <parameter>name</parameter> in <parameter>database</parameter>
+      which defaults to <symbol>*default-database*</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(sequence-last [foo])
+=> 1        
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        The current value stored in database sequence
+        <parameter>name</parameter>.
+      </para>
+      <para> 
+        <symbol>*default-database*</symbol> 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        Will signal an error of type
+        <symbol>sql-database-data-error</symbol> if a sequence called
+        <parameter>name</parameter> does not exist in
+        <parameter>database</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-sequence"><function>create-sequence</function></link></member>
+        <member><link linkend="drop-sequence"><function>drop-sequence</function></link></member>
+        <member><link linkend="list-sequences"><function>list-sequences</function></link></member>
+        <member><link linkend="sequence-exists-p"><function>sequence-exists-p</function></link></member>
+        <member><link linkend="sequence-next"><function>sequence-next</function></link></member>
+        <member><link linkend="set-sequence-position"><function>set-sequence-position</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>sequence-last</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="sequence-next">
+    <refmeta>
+      <refentrytitle>SEQUENCE-NEXT</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SEQUENCE-NEXT</refname>
+      <refpurpose>Increment the value of a database sequence.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>sequence-next</function> <replaceable>name</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the sequence as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              An integer. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Increment and return the value of the sequence called
+      <parameter>name</parameter> in <parameter>database</parameter>
+      which defaults to <symbol>*default-database*</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(sequence-last [foo])
+=> 3
+(sequence-next [foo])
+=> 4
+(sequence-next [foo])
+=> 5
+(sequence-next [foo])
+=> 6
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Modifies the value of the sequence <parameter>name</parameter>
+        in <parameter>database</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        The current value stored in database sequence
+        <parameter>name</parameter>.
+      </para>
+      <para> 
+        <symbol>*default-database*</symbol> 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        Will signal an error of type
+        <symbol>sql-database-data-error</symbol> if a sequence called
+        <parameter>name</parameter> does not exist in
+        <parameter>database</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-sequence"><function>create-sequence</function></link></member>
+        <member><link linkend="drop-sequence"><function>drop-sequence</function></link></member>
+        <member><link linkend="list-sequences"><function>list-sequences</function></link></member>
+        <member><link linkend="sequence-exists-p"><function>sequence-exists-p</function></link></member>
+        <member><link linkend="sequence-last"><function>sequence-last</function></link></member>
+        <member><link linkend="set-sequence-position"><function>set-sequence-position</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>sequence-next</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="set-sequence-position">
+    <refmeta>
+      <refentrytitle>SET-SEQUENCE-POSITION</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>SET-SEQUENCE-POSITION</refname>
+      <refpurpose>Sets the position of a database sequence.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>set-sequence-position</function> <replaceable>name</replaceable> <replaceable>position</replaceable> &amp;key <replaceable>database</replaceable> => <returnvalue>result</returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>name</parameter></term>
+          <listitem>
+            <para>
+              The name of the sequence as a string, symbol or SQL expression. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>position</parameter></term>
+          <listitem>
+            <para>
+              An integer. 
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry> 
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>
+              A database object which defaults to
+              <symbol>*default-database*</symbol>.
+            </para>
+          </listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><parameter>result</parameter></term>
+          <listitem>
+            <para>
+              An integer. 
+            </para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>Explicitly set the position of the sequence called
+      <parameter>name</parameter> in <parameter>database</parameter>,
+      which defaults to <symbol>*default-database*</symbol>, to
+      <parameter>position</parameter> which is returned.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(sequence-last [foo])
+=> 4
+(set-sequence-position [foo] 50)
+=> 50
+(sequence-next [foo])
+=> 51
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Modifies the value of the sequence <parameter>name</parameter>
+        in <parameter>database</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        <symbol>*default-database*</symbol>
+      </para> 
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        Will signal an error of type
+        <symbol>sql-database-data-error</symbol> if a sequence called
+        <parameter>name</parameter> does not exist in
+        <parameter>database</parameter>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <simplelist>
+        <member><link linkend="create-sequence"><function>create-sequence</function></link></member>
+        <member><link linkend="drop-sequence"><function>drop-sequence</function></link></member>
+        <member><link linkend="list-sequences"><function>list-sequences</function></link></member>
+        <member><link linkend="sequence-exists-p"><function>sequence-exists-p</function></link></member>
+        <member><link linkend="sequence-last"><function>sequence-last</function></link></member>
+        <member><link linkend="sequence-next"><function>sequence-next</function></link></member>
+      </simplelist>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>set-sequence-position</function> is a &clsql; extension.  
+      </para>
+    </refsect1>
+  </refentry>
+
+  <refentry id="truncate-database">
+    <refmeta>
+      <refentrytitle>TRUNCATE-DATABASE</refentrytitle>
+    </refmeta>
+    <refnamediv>
+      <refname>TRUNCATE-DATABASE</refname>
+      <refpurpose>Drop all tables, views, indexes and sequences in a database.</refpurpose>
+      <refclass>Function</refclass>
+    </refnamediv>
+    <refsect1>
+      <title>Syntax</title>
+      <synopsis>
+      <function>truncate-database</function> &amp;key <replaceable>database</replaceable> => <returnvalue></returnvalue></synopsis>
+    </refsect1>
+    <refsect1>
+      <title>Arguments and Values</title>
+      <variablelist>
+        <varlistentry>
+          <term><parameter>database</parameter></term>
+          <listitem>
+            <para>A 
+            <glossterm linkend="gloss-database-object">database
+            object</glossterm>. This will default to the value
+            of <symbol>*default-database*</symbol>.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </refsect1>
+    <refsect1>
+      <title>Description</title>
+      <para>
+        Drop all tables, views, indexes and sequences in
+        <parameter>database</parameter> which defaults to
+        <symbol>*default-database*</symbol>.
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Examples</title>
+      <screen>
+(list-tables)
+=> ("type_table" "type_bigint" "employee" "company" "addr" "ea_join" "big")
+(list-indexes)
+=> ("employeepk" "companypk" "addrpk")
+(list-views)
+=> ("lenins_group")
+(list-sequences)
+=> ("foo" "bar")
+(truncate-database)
+=> 
+(list-tables)
+=> NIL
+(list-indexes)
+=> NIL
+(list-views)
+=> NIL
+(list-sequences)
+=> NIL
+      </screen>
+    </refsect1>
+    <refsect1>
+      <title>Side Effects</title>
+      <para>
+        Modifications are made to the underlying database. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Affected by</title>
+      <para>
+        None. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Exceptional Situations</title>
+      <para>
+        Signals an error of type <symbol>sql-database-error</symbol> if 
+        <parameter>database</parameter> is not a database object. 
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>See Also</title>
+      <para>
+        <simplelist>
+          <member><link linkend="drop-table"><function>drop-table</function></link></member>
+          <member><link linkend="drop-view"><function>drop-view</function></link></member>
+          <member><link linkend="drop-index"><function>drop-index</function></link></member>
+          <member><link linkend="drop-sequence"><function>drop-sequence</function></link></member>
+        </simplelist>
+      </para>
+    </refsect1>
+    <refsect1>
+      <title>Notes</title>
+      <para>
+        <function>truncate-database</function> is a &clsql; extension. 
+      </para>
+    </refsect1>
+  </refentry>
+
+</reference> 

@@ -1,0 +1,17 @@
+<?xml version='1.0' ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+<!ENTITY % myents SYSTEM "entities.inc">
+%myents;
+]>
+
+<preface id="preface">
+  <title>Preface</title>
+  <para>
+    This guide provides reference to the features of &clsql;.  The
+    first chapter provides an introduction to &clsql; and installation
+    instructions.  The reference sections document all user accessible
+    symbols with examples of usage.  There is a glossary of commonly
+    used terms with their definitions.
+  </para>
+</preface>
