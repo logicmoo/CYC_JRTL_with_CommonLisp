@@ -16,7 +16,7 @@ prolog_stack:stack_guard(none).
    
 :- current_module(larkc_client) -> true;
   (prolog_load_context(file,PLC),
-   absolute_file_name('./pengines_server/',Dir,[relative_to(PLC),access(write),file_type(directory)]), 
+   absolute_file_name('./pengines_server/',Dir,[relative_to(PLC),access(read),file_type(directory)]), 
    asserta(user:library_directory(Dir))).
 
 :- use_module(library(larkc_pengines_server)).

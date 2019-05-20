@@ -41,14 +41,14 @@
 
 (PRINT *features*)
 ;;(cl:load "./site-lisp/slime/start-swank.lisp")
-(cl:load "site-lisp/cusp/swank-loader.lisp")
+(cl:load "site-lisp/cusp/cusp-loader.lisp")
 
-(swank-loader:init
+(cusp-loader:init
  :delete nil         ; delete any existing SWANK packages
  :reload nil         ; reload SWANK, even if the SWANK package already exists
  :load-contribs nil) ; load all contribs
 
-(swank:create-server :port 4005
+(cusp:create-server :port 4005
                      ;; if non-nil the connection won't be closed
                      ;; after connecting
                      :dont-close t)
