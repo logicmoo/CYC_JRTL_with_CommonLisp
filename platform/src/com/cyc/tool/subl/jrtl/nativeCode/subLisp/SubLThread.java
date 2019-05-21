@@ -12,6 +12,7 @@ import java.util.List;
 import org.armedbear.lisp.Environment;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispThread;
+import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
@@ -38,10 +39,14 @@ final public class SubLThread extends Thread {
                 return Lisp.NIL;
             }
         }
-    }
+    }   
+    
+    public LispThread lispThread;
 
-    LispThread lispThread;
-
+    /**
+     * TODO Describe the purpose of this method.
+     * @return 
+     */
     public LispThread getLispThread() {
 
         if (lispThread == null) {
@@ -231,6 +236,7 @@ final public class SubLThread extends Thread {
     public static int MAX_DYNAMIC_BINDINGS = 16384;
     final public static ComparatorGenericKey genericSortComparator = new ComparatorGenericKey(null, null);
     final public static ComparatorIdentityKey identitySortComparator = new ComparatorIdentityKey(null);
+    
 
     private void init() {
         setContextClassLoader(PatchFileLoader.PATCH_FILE_LOADER);
@@ -629,8 +635,10 @@ final public class SubLThread extends Thread {
     @Override
     public void run() {
         try {
-            // TODO? Main.setSubLisp(true);
+            // TODO? Main.setSubLisp(true);           
             super.run();
+        } catch (Throwable t) {
+          t.printStackTrace( SystemCurrent.originalSystemErr );
         } finally {
             assert previousName != null;
             SubLProcess.currentSubLThread().setSubLProcess(null);

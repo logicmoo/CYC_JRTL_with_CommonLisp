@@ -27,17 +27,16 @@ Export-Package: jasko.tim.lisp,
   jasko.tim.lisp.wizards,
   jasko.tim.lisp.wizards.actions
 Require-Bundle: org.eclipse.core.runtime,
-  org.eclipse.jface.text,
-  org.eclipse.ui,
-  org.eclipse.ui.editors,
-  org.eclipse.ui.views,
-  org.eclipse.ui.ide,
-  org.eclipse.ui.console,
-  org.eclipse.compare,
-  org.eclipse.debug.ui,
-  org.eclipse.core.expressions,
-  org.eclipse.ui.navigator,
-  org.eclipse.core.filesystem
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+ org.eclipse.jface.text,
+ org.eclipse.ui,
+ org.eclipse.ui.editors,
+ org.eclipse.ui.views,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.console,
+ org.eclipse.compare,
+ org.eclipse.debug.ui,
+ org.eclipse.core.filesystem
+Bundle-RequiredExecutionEnvironment: J2SE-1.5,
+ JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: jasko.tim.lisp

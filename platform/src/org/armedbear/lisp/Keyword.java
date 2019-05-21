@@ -164,7 +164,8 @@ public final class Keyword
         CDR6                = internKeyword("CDR6");
 
 
-        		public static SubLSymbol TEXT_KEYWORD = internKeyword("TEXT");
+    
+    public static SubLSymbol TEXT_KEYWORD = internKeyword("TEXT");
                 public static Symbol TEXT_KEYWORD_CHARACTER = Symbol.CHARACTER;
 	            public static SubLSymbol BINARY_KEYWORD = internKeyword("BINARY");
         		public static SubLSymbol ERROR_KEYWORD = internKeyword("ERROR");

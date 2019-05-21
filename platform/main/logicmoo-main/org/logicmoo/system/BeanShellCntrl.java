@@ -542,6 +542,8 @@ public class BeanShellCntrl {
 
 	@LispMethod
 	static public void cyc_imports_cl() {
+    Symbol._PACKAGE_.setProcessScope( true );
+    Symbol._PACKAGE_.traceSymbol( true );
 		if (SubLMain.Never_REDEFINE)
 			return;
 		synchronized (StartupLock) {
@@ -553,7 +555,7 @@ public class BeanShellCntrl {
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_EXT, false);
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL, false);
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL_USER, false);
-			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_SUBLISP, true);
+			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_SUBLISP, true);			
 		}
 	}
 

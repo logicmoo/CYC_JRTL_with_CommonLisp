@@ -105,7 +105,7 @@ public class StreamsLow extends SubLTrampolineFile {
 		SubLInOutTextStream ioStream = SubLStreamFactory.makeInOutTextStream(StreamsLow.originalInputStream,
 				StreamsLow.originalOutputStream);
 		(StreamsLow.originalIOStream = ioStream).setIsInteractive(true);
-		StreamsLow.$terminal_io$ = SubLFiles.defvar(StreamsLow.me, "*TERMINAL-IO*", ioStream);
+		StreamsLow.$terminal_io$ = SubLFiles.defProcessVar(StreamsLow.me, "*TERMINAL-IO*", ioStream);
 		SubLSynonymStream ioSynonymStream = SubLStreamFactory.makeUnclosableSynonymStream(CommonSymbols.TERMINAL_IO);
 		SubLSynonymStream ioSynonymStream2 = SubLStreamFactory.makeUnclosableSynonymStream(CommonSymbols.TERMINAL_IO);
 		SubLSynonymStream ioSynonymStream3 = SubLStreamFactory.makeUnclosableSynonymStream(CommonSymbols.TERMINAL_IO);
@@ -115,9 +115,9 @@ public class StreamsLow extends SubLTrampolineFile {
 		StreamsLow.originalSynInputStream = ioSynonymStream;
 		StreamsLow.originalSynOutputStream = ioSynonymStream2;
 		StreamsLow.originalSynErrorStream = ioSynonymStream3;
-		StreamsLow.$standard_input$ = SubLFiles.defvar(StreamsLow.me, "*STANDARD-INPUT*", ioSynonymStream);
-		StreamsLow.$standard_output$ = SubLFiles.defvar(StreamsLow.me, "*STANDARD-OUTPUT*", ioSynonymStream2);
-		StreamsLow.$error_output$ = SubLFiles.defvar(StreamsLow.me, "*ERROR-OUTPUT*", ioSynonymStream3);
+		$standard_input$ = SubLFiles.defProcessVar( StreamsLow.me, "*STANDARD-INPUT*", ioSynonymStream);
+		$standard_output$ = SubLFiles.defProcessVar( StreamsLow.me, "*STANDARD-OUTPUT*", ioSynonymStream2);
+		StreamsLow.$error_output$ = SubLFiles.defProcessVar(StreamsLow.me, "*ERROR-OUTPUT*", ioSynonymStream3);
 		StreamsLow.originalErrorStream = StreamsLow.$error_output$.getValue().toOutputTextStream();
 		StreamsLow.$debug_io$ = SubLFiles.defvar(StreamsLow.me, "*DEBUG-IO*", ioSynonymStream4);
 		StreamsLow.$null_input$ = SubLFiles.defvar(StreamsLow.me, "*NULL-INPUT*", SubLStreamFactory.NULL_IN_STREAM);
@@ -134,8 +134,8 @@ public class StreamsLow extends SubLTrampolineFile {
 			   o2 = $standard_output$.getDynamicValue(),
 			   o3 = $standard_output$.toLispObject().symbolValue(),
 						 o4 = NIL.toOutputTextStream();
-		$standard_output$.toLispObject().traceSymbol(true);
-
+    $standard_output$.toLispObject().setProcessScope( true );
+    $standard_input$.toLispObject().setProcessScope( true );
 		assert o1==o2;
 		assert o1==o3;
 		assert o1==o4;

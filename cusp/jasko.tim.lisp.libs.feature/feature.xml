@@ -2,7 +2,7 @@
 <feature
       id="jasko.tim.lisp.libs"
       label="Lisp Libraries"
-      version="1.1.1">
+      version="2.0.519">
 
    <description>
       Lisp libraries.
@@ -17,7 +17,7 @@
    </license>
 
    <url>
-      <update label="Cusp Update" url="http://www.bitfauna.com/projects/cusp/update/"/>
+      <update label="LarKC Cusp Update" url="http://logicmoo.org/update-site/"/>
    </url>
 
    <plugin

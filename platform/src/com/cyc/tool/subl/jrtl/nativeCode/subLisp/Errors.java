@@ -242,11 +242,12 @@ public class Errors
   {
     synchronized( Errors.cerrorLock )
     {
-      if( false && !SubLMain.isInitialized() )
+      if( !SubLMain.isInitialized() )
       {
         RuntimeException re = new RuntimeException( formatString.princToString() );
         re.printStackTrace();
-        throw re;
+        if( false )
+          throw re;
       }
       if( SubLNil.NIL != Errors.$continue_cerrorP$.getDynamicValue() )
         return SubLNil.NIL;
@@ -810,7 +811,6 @@ public class Errors
   public static SubLObject handleMissingMethodError(String string)
   {
     // TODO Auto-generated method stub
-    return Errors.unimplementedMethod("Auto-generated method stub:  Errors.handleMissingMethodError " + string);
-
+    return Errors.unimplementedMethod( "Auto-generated method stub:  Errors.handleMissingMethodError " + string );
   }
 }

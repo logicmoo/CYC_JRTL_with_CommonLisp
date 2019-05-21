@@ -10,10 +10,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
-import org.h2.command.ddl.CreateFunctionAlias;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -65,8 +67,17 @@ public class SubLFiles
         return CommonSymbols.UNDECLARED;
       }
     };
-    /* Process Local */
+    /* Global */
     public static final VariableAccessMode GLOBAL_TOP_LEVEL = new VariableAccessMode( "GLOBAL-TOP-LEVEL" )
+    {
+      @Override
+      public SubLSymbol toSymbol()
+      {
+        return Keyword.TOP_LEVEL;
+      }
+    };
+    /* Process Local */
+    public static final VariableAccessMode PROCESS_LOCAL = new VariableAccessMode( "PROCESS-LOCAL" )
     {
       @Override
       public SubLSymbol toSymbol()
@@ -126,7 +137,7 @@ public class SubLFiles
         SubLCompiledFunction func = SubLObjectFactory.makeCompiledFunction( className, methodName, parameterArray, SubLObject.class, functionSymbol, requiredArgCount, optionalArgCount, allowsRest );
         if( prev != null && !func.equalp( prev ) )
         {
-          if( SubLMain.Never_REDEFINE)
+          if( SubLMain.Never_REDEFINE )
           {
             Errors.warn( "NEVER Redefining: " + functionSymbol );
             return;
@@ -228,6 +239,18 @@ public class SubLFiles
       Errors.cerror( "Continue.", "Error while declaring global: " + variableName, e );
     }
     return null;
+  }
+
+  public static LispObject findKeyword(int start, LispObject args[], Symbol kw, Supplier<LispObject> otherwise)
+  {
+    for( int i = start; i < args.length; i++ )
+    {
+      if( args[ i ].equal( kw ) )
+      {
+        return args[ i + 1 ];
+      }
+    }
+    return otherwise.get();
   }
 
   private static SubLSymbol asSymbol(Object variableName, SubLPackage package1)
@@ -418,6 +441,14 @@ public class SubLFiles
     return declareSymbol( variableName, initialValue, VariableAccessMode.DYNAMIC, false );
   }
 
+  public static SubLSymbol defProcessVar(SubLFile file, Object variableName, SubLObject initialValue)
+  {
+    /*
+     * SubL defvar : mutable dynamic global, not re-initialized on re-evaluation
+     */
+    return declareSymbol( variableName, initialValue, VariableAccessMode.DYNAMIC, false ).toLispObject().setProcessScope( true );
+  }
+
   public static SubLSymbol defvar(SubLFile file, Object variableName, SubLObject initialValue, SubLPackage thePackage)
   {
     /*
@@ -439,8 +470,7 @@ public class SubLFiles
     {
       return;
     }
-    notAgain.add(className);
-
+    notAgain.add( className );
     org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
     try
     {
@@ -590,11 +620,12 @@ public class SubLFiles
   {
     symbolInitializationOrder = new LinkedHashSet<SubLSymbol>();
   }
+
   /**
    * @param string
    */
   public static void declareOverridable(String string)
   {
-    shouldOverride.add(string);
+    shouldOverride.add( string );
   }
 }

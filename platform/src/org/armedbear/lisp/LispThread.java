@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
 import java.io.PrintStream;
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
@@ -49,21 +51,27 @@ import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrowImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.util.SafeRunnable;
+import com.cyc.tool.subl.util.SubLFiles;
 
 public abstract class LispThread extends LispObject
 {
+    public LispObject initialBindings = NIL;
+
     static public class LispThreadImpl extends LispThread {
 
-		LispThreadImpl(Function fun, LispObject name) {
-			super(fun, name);
+		LispThreadImpl(Function fun, LispObject name, LispObject initialBindings0, long cstack, long vstack) {
+			super(fun, name,initialBindings0,cstack,vstack, true);
 		}
-		LispThreadImpl(Thread javaThread) {
+		protected LispThreadImpl(Thread javaThread) {
 			super(javaThread);
 		}
-		protected LispThreadImpl() {
-			super(Thread.currentThread());
-		}
+//		protected LispThreadImpl() {
+//			super(Thread.currentThread());
+//		}
 	}
 
 	// use a concurrent hashmap: we may want to add threads
@@ -98,7 +106,7 @@ public abstract class LispThread extends LispObject
     	}
     }
     final String creator;
-    final Thread javaThread;
+    Thread javaThread;
     private boolean destroyed;
     final LispObject name;
     public LispObject[] _values;
@@ -107,55 +115,107 @@ public abstract class LispThread extends LispObject
     private Symbol wrapper =
         PACKAGE_THREADS.intern("THREAD-FUNCTION-WRAPPER");
 
-    protected LispThread(Thread javaThread)
+  protected LispThread( Thread javaThread )
+  {
+    this.javaThread = javaThread;
+    if( javaThread instanceof SubLThread )
     {
-        this.javaThread = javaThread;
-        name = new SimpleString(javaThread.getName());
-        creator = BeanShellCntrl.getStackTraceString(new Throwable());
+      ( (SubLThread) javaThread ).lispThread = this;
     }
+    name = new SimpleString( javaThread.getName() );
+    creator = BeanShellCntrl.getStackTraceString( new Throwable() );
+  }
 
-    protected LispThread(final Function fun, LispObject name)
+    protected LispThread(Function fun, LispObject name, LispObject initialBindings0, long cstack, long vstack, boolean daemon)
     {
 
       creator = BeanShellCntrl.getStackTraceString(new Throwable());
-        Runnable r = new Runnable() {
+      this.name = name;
+      SafeRunnable r = new SafeRunnable() {
             @Override
-			public void run()
+			public void safeRun()
             {
+              Throwable problem = null;
+              registerThread(Thread.currentThread());
                 try {
+                  initInitialBindings();
                     threadValue = funcall(wrapper,
                             new LispObject[] { fun },
                             LispThread.this);
                 }
                 catch (ThreadDestroyed ignored) {
+                  problem = ignored;
                       // Might happen.
                 }
                 catch (ProcessingTerminated e) {
+                  problem = e;
                     Lisp.exit(e.getStatus());
                 }
                 catch (Throwable t) { // any error: process thread interrupts
                     if (isInterrupted()) {
                         processThreadInterrupts();
                     }
+                    problem = t;
                     String msg
                         = MessageFormat.format("Ignoring uncaught exception {0}.",
                                                t.toString());
                     Debug.warn(msg);
                 }
                 finally {
+                  if(problem!=null) problem.printStackTrace(SystemCurrent.originalSystemErr);
                     // make sure the thread is *always* removed from the hash again
                     map.remove(Thread.currentThread());
                 }
             }
         };
-        javaThread = new Thread(r);
-        this.name = name;
-        map.put(javaThread, this);
-        if (name != NIL)
-            javaThread.setName(name.getStringValue());
-        javaThread.setDaemon(true);
-        javaThread.start();
+        
+        // use SubL's MAKE-PROCESS
+        if (true) {
+          SubLObjectFactory.makeProcess( (SubLString) name.STRING(), r );
+        } else {
+          Thread javaThread = new Thread(r); 
+          this.registerThread( javaThread );
+          javaThread.setDaemon(daemon);
+          javaThread.start();
+        }
     }
+
+    /**
+     * TODO Describe the purpose of this method.
+     */
+    protected void registerThread(Thread thr)
+    {
+      javaThread = thr;
+      map.put(javaThread, this);
+      if (name != NIL)
+          javaThread.setName(name.getStringValue());
+//      javaThread.setDaemon(daemon);
+//      javaThread.start();
+    }
+
+    /**
+     * TODO Describe the purpose of this method.
+     */
+  public void initInitialBindings()
+  {
+    LispObject[] pairs = initialBindings.copyToArray();
+    for( int i = 0; i < pairs.length; i++ )
+    {
+      final LispObject lispObject = pairs[ i ];
+      if( lispObject.isCons() )
+      {
+        Cons cons = (Cons) lispObject;
+        LispObject var = cons.car();
+        LispObject val = cons.cdr();
+        var.toSymbol().toLispObject().setDynamicValue( val );
+      }
+      else
+      {
+        Symbol symbol = (Symbol) lispObject;
+        symbol.setDynamicValue( symbol.value );
+      }
+    }
+  }
 
     public StackTraceElement[] getJavaStackTrace() {
         return javaThread.getStackTrace();
@@ -1398,37 +1458,46 @@ public abstract class LispThread extends LispObject
     }
   };
   static Symbol _TRACE_LISP_ = TRACE_LISP.getLambdaName().toSymbol().toLispObject();
+  
+  
+
   static
   {
+    _TRACE_LISP_.setProcessScope( true );
     _TRACE_LISP_.initializeSpecial( NIL );
-    Symbol.PRINT_PPRINT_DISPATCH.setIsTL( false );
+    Symbol.PRINT_PPRINT_DISPATCH.setProcessScope( false );
   }
-
-    @DocString(name="make-thread", args="function &key name")
-    private static final Primitive MAKE_THREAD =
-        new Primitive("make-thread", PACKAGE_THREADS, true, "function &key name")
+  static Symbol INITIAL_BINDING = internKeyword( "INITIAL-BINDING" ), //
+      CSTACK_SIZE = internKeyword( "CSTACK-SIZE" ), //
+      VSTACK_SIZE = internKeyword( "VSTACK-SIZE" );
+  @DocString(name = "make-thread", args = "function &key name :INITIAL-BINDINGS :CSTACK-SIZE :VSTACK-SIZE")
+  private static final Primitive MAKE_THREAD = new Primitive( "make-thread", PACKAGE_THREADS, true, "function &key name :INITIAL-BINDINGS :CSTACK-SIZE :VSTACK-SIZE" )
+  {
+    @Override
+    public LispObject execute(LispObject[] args)
     {
-        @Override
-        public LispObject execute(LispObject[] args)
-        {
-            final int length = args.length;
-            if (length == 0)
-                error(new WrongNumberOfArgumentsException(this, 1, -1));
-            LispObject name = NIL;
-            if (length > 1) {
-                if ((length - 1) % 2 != 0)
-                    program_error("Odd number of keyword arguments.");
-                if (length > 3)
-                    error(new WrongNumberOfArgumentsException(this, -1, 2)); // don't count the keyword itself as an argument
-                if (args[1] == Keyword.NAME)
-                    name = args[2].STRING();
-                else
-                    program_error("Unrecognized keyword argument "
-                                  + args[1].princToString() + ".");
-            }
-            return new LispThreadImpl(checkFunction(args[0]), name);
-        }
-    };
+      final int length = args.length;
+      if( length == 0 )
+        error( new WrongNumberOfArgumentsException( this, 1, -1 ) );
+      if( length > 1 )
+      {
+        if( ( length - 1 ) % 2 != 0 )
+          program_error( "Odd number of keyword arguments." );
+      }
+      long cstack = 0;
+      long vstack = 0;
+      LispObject name = SubLFiles.findKeyword( 1, args, Keyword.NAME, () -> NIL );
+      if( name != NIL )
+      {
+        name = name.STRING();
+      }
+      LispObject initialBindings = SubLFiles.findKeyword( 1, args, INITIAL_BINDING, () -> Symbol._DEFAULT_SPECIAL_BINDINGS_.symbolValue() );
+      // else
+      // program_error("Unrecognized keyword argument "
+      // + args[1].princToString() + ".");
+      return new LispThreadImpl( checkFunction( args[ 0 ] ), name, initialBindings, vstack, cstack );
+    }
+  };
 
     @DocString(name="threadp", args="object",
     doc="Boolean predicate testing if OBJECT is a thread.")
@@ -1461,6 +1530,27 @@ public abstract class LispThread extends LispObject
             return lispThread.javaThread.isAlive() ? T : NIL;
         }
     };
+    
+    @DocString(name="thread-active-p", args="thread",
+    doc="Returns T if THREAD is alive.")
+    private static final Primitive THREAD_ACTIVE_P =
+        new Primitive("thread-alive-p", PACKAGE_THREADS, true, "thread",
+              "Boolean predicate whether THREAD is already terminated.")
+    {
+        @Override
+        public LispObject execute(LispObject arg)
+        {
+            final LispThread lispThread;
+            if (arg instanceof LispThread) {
+                lispThread = (LispThread) arg;
+            }
+            else {
+                return type_error(arg, Symbol.THREAD);
+            }
+            return lispThread.javaThread.isAlive() ? T : NIL;
+        }
+    };
+
 
     @DocString(name="thread-name", args="thread",
     doc="Return the name of THREAD, if it has one.")

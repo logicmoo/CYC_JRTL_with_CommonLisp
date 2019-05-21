@@ -130,7 +130,7 @@ public class Lisp {
         PACKAGE_TPL.usePackage(PACKAGE_EXT);
         PACKAGE_EXT.addNickname("EXT");
         PACKAGE_EXT.usePackage(PACKAGE_CL);
-        PACKAGE_EXT.usePackage(PACKAGE_THREADS);
+        PACKAGE_EXT.usePackage(PACKAGE_THREADS);        
         PACKAGE_JVM.usePackage(PACKAGE_CL);
         PACKAGE_JVM.usePackage(PACKAGE_EXT);
         PACKAGE_JVM.usePackage(PACKAGE_SYS);
@@ -143,6 +143,8 @@ public class Lisp {
         PACKAGE_LISP.usePackage(PACKAGE_CL);
         PACKAGE_LISP.usePackage(PACKAGE_EXT);
         PACKAGE_LISP.usePackage(PACKAGE_SYS);
+        PACKAGE_THREADS.addNickname("MT");
+        PACKAGE_THREADS.addNickname("MP");
         PACKAGE_THREADS.usePackage(PACKAGE_CL);
         PACKAGE_THREADS.usePackage(PACKAGE_EXT);
         PACKAGE_THREADS.usePackage(PACKAGE_SYS);
@@ -2465,6 +2467,10 @@ public class Lisp {
 
     // ### *traced-names*
     public static final Symbol _TRACED_NAMES_ = exportSpecial("*TRACED-NAMES*", PACKAGE_SYS, NIL);
+
+    // ### *default-special-bindings*
+    public static final Symbol _DEFAULT_SPECIAL_BINDINGS_ = exportSpecial( "*DEFAULT-SPECIAL-BINDINGS*", PACKAGE_THREADS, 
+        list(Symbol._RANDOM_STATE_,Symbol.CURRENT_READTABLE) );
 
     // Floating point traps.
     protected static boolean TRAP_OVERFLOW = true;

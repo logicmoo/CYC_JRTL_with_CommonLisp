@@ -17,7 +17,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
 
 /*
-C:\sbcl\bin\sbcl.exe --load "C:/slime/cusp-loader.lisp" --eval "(cusp:create-cusp-server 4005 nil)"
+C:\sbcl\bin\sbcl.exe --load "C:/slime/cusp-loader.lisp" --eval "(cusp:create-cusp-server 3005 nil)"
  */
 
 /**
@@ -67,7 +67,7 @@ public class CuspInterface {
 	private String lispCommand = "";
 
 	/** Port of the Cusp server */
-	private static Integer port = 4004;
+	private static Integer port = 3004;
 
 	private Socket echoSocket = null;
 	private Socket secondary = null;
@@ -260,7 +260,8 @@ public class CuspInterface {
 		indents.put("with-unlocked-packages", 1);
 
 		addIndentationListener(new CuspRunnable() {
-			public void run() {
+			@Override
+      public void run() {
 				LispNode updates = result.get(1);
 				for (LispNode update : updates.params) {
 					String symbol = update.get(0).value;
@@ -356,7 +357,8 @@ public class CuspInterface {
 				if (!code.equals("")) {
 					System.out.printf("asdf path: %s\n", asdfext);
 					sr = new CuspRunnable() {
-						public void run() {
+						@Override
+            public void run() {
 							emacsRexStartup(code, "COMMON-LISP-USER");
 						}
 					};
@@ -375,7 +377,8 @@ public class CuspInterface {
 
 			sendGetConnectionInfoStartup(new CuspRunnable() {
 
-				public void run() {
+				@Override
+        public void run() {
 					LispNode impl = getReturn().getf(":lisp-implementation");
 					setLispVersion(impl.getf(":name").value + " " + impl.getf(":version").value);
 				}
@@ -1722,38 +1725,45 @@ public class CuspInterface {
 			// but... put the special case handler actions in the dispatch hash
 			// table:
 			ListenerDispatch default_dispatch = new ListenerDispatch() {
-				public void func(LispNode node) {
+				@Override
+        public void func(LispNode node) {
 					signalResponse(node);
 				}
 			};
 
 			dispatch.put(":ping", new ListenerDispatch() {
-				public void func(LispNode node) {
+				@Override
+        public void func(LispNode node) {
 					sendPong(node.get(1).value, node.get(2).value);
 				}
 			});
 			dispatch.put(":debug-activate", new ListenerDispatch() {
-				public void func(LispNode node) {
+				@Override
+        public void func(LispNode node) {
 					signalListeners(debugListeners, node);
 				}
 			});
 			dispatch.put(":debug", new ListenerDispatch() {
-				public void func(LispNode node) {
+				@Override
+        public void func(LispNode node) {
 					signalListeners(debugInfoListeners, node);
 				}
 			});
 			dispatch.put(":debug-return", new ListenerDispatch() {
-				public void func(LispNode node) {
+				@Override
+        public void func(LispNode node) {
 					signalListeners(debugReturnListeners, node);
 				}
 			});
 			dispatch.put(":read-string", new ListenerDispatch() {
-				public void func(LispNode node) {
+				@Override
+        public void func(LispNode node) {
 					signalListeners(readListeners, node);
 				}
 			});
 			dispatch.put(":presentation-start", new ListenerDispatch() {
-				public void func(LispNode node) {
+				@Override
+        public void func(LispNode node) {
 					String node1_value = node.get(1).value;
 					for (CuspRunnable r : displayListeners) {
 						((CuspDisplayRunnable) r).startPresentation(node1_value);
@@ -1761,19 +1771,22 @@ public class CuspInterface {
 				}
 			});
 			dispatch.put(":presentation-end", new ListenerDispatch() {
-				public void func(LispNode node) {
+				@Override
+        public void func(LispNode node) {
 					for (CuspRunnable r : displayListeners) {
 						((CuspDisplayRunnable) r).endPresentation();
 					}
 				}
 			});
 			dispatch.put(":write-string", new ListenerDispatch() {
-				public void func(LispNode node) {
+				@Override
+        public void func(LispNode node) {
 					signalListeners(displayListeners, node);
 				}
 			});
 			dispatch.put(":indentation-update", new ListenerDispatch() {
-				public void func(LispNode node) {
+				@Override
+        public void func(LispNode node) {
 					signalListeners(indentationListeners, node);
 				}
 			});
@@ -1800,7 +1813,8 @@ public class CuspInterface {
 
 		String totalBuf = "";
 
-		public void run() {
+		@Override
+    public void run() {
 			// Each message is prefixed by a hex length, so create a permanent
 			// buffer to receive it:
 			char[] lbuf = new char[6];
@@ -1958,7 +1972,8 @@ public class CuspInterface {
 			}
 		}
 
-		public void run() {
+		@Override
+    public void run() {
 			char[] cbuf = new char[MAX_READ];
 
 			while (running) {
@@ -2031,7 +2046,8 @@ public class CuspInterface {
 			return got_start_string;
 		}
 
-		public void filter(String str) {
+		@Override
+    public void filter(String str) {
 			if (str.contains("Cusp started")) {
 				synchronized (this) {
 					got_start_string = true;

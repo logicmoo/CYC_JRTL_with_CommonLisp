@@ -1018,13 +1018,13 @@ public class LispObject
     {
       Thread.dumpStack();
     }
-    if( Lisp.insideToString > 1 )
+    if( Lisp.insideToString > 1 || Lisp.cold)
     {
       return easyToString();
     }
     final Object o = Lisp.printingObject;
     // if (o == this) return "OVERFLOW: " + easyToString();
-    final LispThread thread = LispThread.currentThread();
+    final LispThread thread = LispThread.currentThread();    
     final SpecialBindingsMark mark = thread.markSpecialBindings();
     try
     {

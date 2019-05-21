@@ -1146,8 +1146,10 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
 
     @Override
     public void run() {
+      Throwable problem = null;
+      runThread = currentSubLThread();
         try {
-            (runThread = currentSubLThread()).clearBindings();
+            runThread.clearBindings();
             synchronized (SubLProcess.currentProcesses) {
                 SubLProcess.currentProcesses.add(this);
             }
@@ -1158,7 +1160,10 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
             Threads.possiblyHandleInterrupts(false);
             safeRun();
         } catch (TerminationRequest terminate) {
+          problem = terminate;
+          return;
         } catch (Exception e) {
+          problem = e;
             try {
                 e.printStackTrace();
                 Errors.handleError(e);

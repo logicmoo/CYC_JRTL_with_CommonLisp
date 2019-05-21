@@ -46,7 +46,7 @@ OF THE POSSIBILITY OF SUCH DAMAGE.
    </license>
 
    <url>
-      <update label="Cusp Update" url="http://www.bitfauna.com/projects/cusp/update/"/>
+      <update label="LarKC Cusp Update" url="http://logicmoo.org/update-site/"/>
    </url>
 
    <plugin
