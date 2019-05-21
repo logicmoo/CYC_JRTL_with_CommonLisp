@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.armedbear.lisp.AbstractString;
+import org.armedbear.lisp.Cons;
 import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
@@ -353,7 +354,7 @@ abstract public class SubLPackage extends LispObject implements SubLObject {
         if (Symbol._PACKAGE_ != null) {
             Symbol._PACKAGE_.setValue( thePackage);
         }
-        if (Packages.$package$ != null)
+        if (Packages.$package$ != null && Packages.$package$!=Symbol._PACKAGE_)
             Packages.$package$.setValue(thePackage.toPackage());
     }
 
@@ -512,10 +513,24 @@ abstract public class SubLPackage extends LispObject implements SubLObject {
     // exportedSymbols.add(symbol.toSymbol());
     // }
 
-    public void exportSymbols(SubLObject symbols) {
-        Errors.unimplementedMethod("SubLPackage.exportSymbols");
+    public void exportSymbols(SubLObject arg) {
+      if (arg instanceof Cons) {
+        if(arg.first().isString()) {
+          export(arg.first().getString(),checkSymbol((LispObject) arg.rest()));
+          return;
+        }
+        for (SubLObject list = arg; list != NIL; list = list.rest())
+          exportSymbols(list.first());
+    } else
+      export(checkSymbol((LispObject) arg));
     }
 
+    /**
+     * TODO Describe the purpose of this method.
+     * @param string
+     * @param checkSymbol
+     */
+    protected abstract void export(String string, Symbol checkSymbol);
     // abstract public Set<SubLSymbol> getAllSymbols() ;
     abstract public String getName();
 

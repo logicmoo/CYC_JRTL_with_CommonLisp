@@ -1345,7 +1345,7 @@ public abstract class LispThread extends LispObject
    * @return
    */
   boolean trace_calls() {
-    if(_TRACE_LISP_!=null && _TRACE_LISP_.boundp() ) {
+    if(_TRACE_LISP_!=null && _TRACE_LISP_.boundp_at_all() ) {
       return _TRACE_LISP_.symbolValue( this ).getBooleanValue();
     }
     return false;

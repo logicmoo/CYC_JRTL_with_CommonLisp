@@ -95,15 +95,15 @@ public class Symbol
   @Override
   public void bind(SubLObject newValue, SubLObject[] bindings)
   {
-    final int subLID = this.checkSubLId();
-    bindings[ subLID ] = newValue;
+    setDynamicValue( newValue, bindings );
+    // final int subLID = this.checkSubLId();
+    // bindings[ subLID ] = newValue;
   }
 
   @Override
   public void bind(SubLObject newValue, SubLThread thread)
   {
-    final int subLID = this.checkSubLId();
-    thread.bindingsList[ subLID ] = newValue;
+    bind( newValue, thread.bindingsList );
   }
 
   private int checkSubLId()
@@ -111,7 +111,8 @@ public class Symbol
     this.checkOwned();
     if( this.subLID == INVALID_BINDING_INDEX )
     {
-      this.unboundError();
+      if( this.accessModeVar == VariableAccessMode.DYNAMIC )
+        this.unboundError();
     }
     return this.subLID;
   }
@@ -127,16 +128,16 @@ public class Symbol
   @Override
   public SubLObject currentBinding(SubLObject[] bindings)
   {
-    final int subLID = this.checkSubLId();
-    return bindings[ subLID ];
+    // does not imply was really dymic
+    return getDynamicValue( bindings );
+    // final int subLID = this.checkSubLId();
+    // return bindings[ subLID ];
   }
 
   @Override
   public SubLObject currentBinding(SubLThread thread)
   {
-    final int subLID = this.checkSubLId();// if(clValueMode) return
-                                          // symbolValue();
-    return thread.bindingsList[ subLID ];
+    return currentBinding( thread.bindingsList );
   }
 
   @Override
@@ -235,8 +236,7 @@ public class Symbol
 
   private void notifyChange(SubLObject value)
   {
-    final String symbol2 = String.valueOf( this );
-    String msg = "changing value of " + symbol2 + " to " + value;
+    String msg = "changing value of " + this + " to " + value;
     SystemCurrent.originalSystemErr.println( msg );
     // ( new Exception( msg ) ).printStackTrace( SystemCurrent.originalSystemErr
     // );
@@ -258,7 +258,8 @@ public class Symbol
   @Override
   public SubLObject getDynamicValue()
   {
-    return this.getDynamicValue( SubLProcess.currentSubLThread() );
+    final SubLThread currentSubLThread = SubLProcess.currentSubLThread();
+    return this.getDynamicValue( currentSubLThread );
   }
 
   protected LispObject unboundError()
@@ -274,10 +275,26 @@ public class Symbol
   @Override
   public SubLObject getDynamicValue(SubLObject[] bindings)
   {
-    final int subLID = this.checkSubLId();
-    final SubLObject result = bindings[ subLID ];
-    if( result != SubLSymbol.UNBOUND )
-      return result;
+    final int subLID = this.subLID;
+    if( subLID != INVALID_BINDING_INDEX )
+    {
+      final SubLObject result = bindings[ subLID ];
+      if( result != SubLSymbol.UNBOUND )
+      {
+        return result;
+      }
+      else
+      {
+        if( true )
+        {
+          // Warn Unbound or use default?
+        }
+      }
+    }
+    else
+    {
+      // Warn INVALID_BINDING_INDEX
+    }
     return this.symbolValue();
   }
 
@@ -318,13 +335,6 @@ public class Symbol
 
   protected SubLObject getValueSL(boolean canThrow)
   {
-    if( this.accessModeVar == VariableAccessMode.DYNAMIC )
-    {
-      final int subLID = this.checkSubLId();
-      final SubLObject result = SubLProcess.currentSubLThread().bindingsList[ subLID ];
-      if( result != SubLSymbol.UNBOUND )
-        return result;
-    }
     if( this.accessModeVar == VariableAccessMode.UNDECLARED )
     {
       final SubLEnvironment slenv = SubLEnvironment.currentEnvironment();
@@ -334,6 +344,13 @@ public class Symbol
         if( result != SubLSymbol.UNBOUND )
           return result;
       }
+    }
+    else if( this.accessModeVar == VariableAccessMode.DYNAMIC )
+    {
+      final int subLID = this.checkSubLId();
+      final SubLObject result = SubLProcess.currentSubLThread().bindingsList[ subLID ];
+      if( result != SubLSymbol.UNBOUND )
+        return result;
     }
     // SubLObject result = isConstantSymbol() ? value : value;
     final SubLObject result = this.getTLValue0();
@@ -453,15 +470,15 @@ public class Symbol
   @Override
   public void rebind(SubLObject oldValue, SubLObject[] bindings)
   {
-    final int subLID = this.checkSubLId();
-    bindings[ subLID ] = oldValue;
+    setDynamicValue( oldValue, bindings );
+    // final int subLID = this.checkSubLId();
+    // bindings[ subLID ] = oldValue;
   }
 
   @Override
   public void rebind(SubLObject oldValue, SubLThread thread)
   {
-    final int subLID = this.checkSubLId();
-    thread.bindingsList[ subLID ] = oldValue;
+    rebind( oldValue, thread.bindingsList );
   }
 
   @Override
@@ -511,10 +528,23 @@ public class Symbol
   {
     this.resetCache();
     final int subLID = this.checkSubLId();
-    if( bindings[ subLID ] != SubLSymbol.UNBOUND )
-      bindings[ subLID ] = newValue;
-    else
-      this.setTLValue( newValue );
+    if( subLID != INVALID_BINDING_INDEX )
+    {
+      if( bindings[ subLID ] != SubLSymbol.UNBOUND )
+      {
+        checkChange( newValue );
+        bindings[ subLID ] = newValue;
+        return;
+      }
+      else
+      {
+        if( true )
+        {
+          // Warn ?
+        }
+      }
+    }
+    this.setTLValue( newValue );
   }
 
   @Override
@@ -542,33 +572,36 @@ public class Symbol
     }
   }
 
-  public void setValueSL(SubLObject value)
+  private void setValueSL(SubLObject newvalue)
   {
     if( this.accessModeVar == VariableAccessMode.DYNAMIC )
     {
       final int subLID = this.checkSubLId();
       final SubLObject[] bindings = SubLProcess.currentSubLThread().bindingsList;
       if( bindings[ subLID ] != SubLSymbol.UNBOUND )
-        bindings[ subLID ] = value;
+        bindings[ subLID ] = newvalue;
       else
       {
-        this.setTLValue( value );
+        this.setTLValue( newvalue );
         if( this.isSpecialVariable() )
         {
         }
       }
     }
     else if( this.accessModeVar == VariableAccessMode.LEXICAL )
-      this.setTLValue( value ); // was setGlobalValue()
+    {
+      this.setTLValue( newvalue ); // was setGlobalValue()
+      return;
+    }
     else if( this.accessModeVar == VariableAccessMode.CONSTANT )
     {
       final SubLObject tlValue = this.getTLValue();
       if( tlValue == null )
       {
-        this.setTLValue( value );
+        this.setTLValue( newvalue );
         return;
       }
-      if( !tlValue.equal( value ) )
+      if( !tlValue.equal( newvalue ) )
       {
         if( this.isConstantSymbol() )
         {
@@ -580,16 +613,21 @@ public class Symbol
       {
       }
     }
-    else if( this.accessModeVar == VariableAccessMode.UNDECLARED )
+    else if( this.accessModeVar == VariableAccessMode.PROCESS_LOCAL )
     {
-      final SubLEnvironment env = SubLEnvironment.currentEnvironment();
-      env.setBinding( this, value );
-      if( !this.isSpecialVariable() )
-        this.setTLValue( value );
+      this.setTLValue( newvalue );
     }
     else if( this.accessModeVar == VariableAccessMode.GLOBAL_TOP_LEVEL )
     {
-      this.setTLValue( value );
+      this.setTLValue( newvalue );
+      this.value = newvalue;
+    }
+    else if( this.accessModeVar == VariableAccessMode.UNDECLARED )
+    {
+      final SubLEnvironment env = SubLEnvironment.currentEnvironment();
+      env.setBinding( this, newvalue );
+      if( !this.isSpecialVariable() )
+        this.setTLValue( newvalue );
     }
     else
       Errors.error( "Don't know about access mode: " + this.accessModeVar );
@@ -625,16 +663,7 @@ public class Symbol
   @Override
   public boolean boundp()
   {
-    final SubLObject tlValue = this.getTLValue();
-    if( tlValue != SubLSymbol.UNBOUND || this.isKeyword() )
-      return true;
-    return false;
-  }
-
-  public boolean boundp_at_all()
-  {
-    final SubLObject tlValue = this.symbolValueNoThrow();
-    if( tlValue != SubLSymbol.UNBOUND || this.isKeyword() )
+    if( this.getTLValue() != SubLSymbol.UNBOUND || this.isKeyword() )
       return true;
     return false;
   }
@@ -1426,7 +1455,7 @@ public class Symbol
         return (LispObject) this.getTLValue();
       else
         result = thread.lookupSpecial( symbol );
-    }
+      }
     else
     {
       env = Environment.newEnvironment();
@@ -2279,7 +2308,7 @@ public class Symbol
         value = this.symbolValueNoThrow();
         if( value == null )
         {
-          s += " ====> javaNULL ";
+          // s += " ====> javaNULL ";
         }
         else if( value != this && value != null )
         {

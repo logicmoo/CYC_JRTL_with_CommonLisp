@@ -728,9 +728,12 @@ public class Package
   }
 
   @Override
-  public synchronized void export(final Symbol symbol)
+  public void export(final Symbol symbol) {
+     export( symbol.getName(), symbol );
+  }
+
+  public synchronized void export(final String symbolName, final Symbol symbol)
   {
-    final String symbolName = symbol.getName();
     Symbol sym = null;
     boolean added = false;
     if( symbol.getPackageOrNil() != this )

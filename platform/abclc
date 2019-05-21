@@ -29,9 +29,8 @@ export JAVA_OPTS1="-agentlib:jdwp=transport=dt_socket,server=n,address=10.0.0.12
 export JAVA_OPTS2="-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend=y"
 export _JAVA_SR_SIGNUM=20 
 
-cls
+# cls
 
-echo ""
 echo BASEDIR=$BASEDIR
 echo LCD=$LCD
 echo JARPREFIX=$JARPREFIX

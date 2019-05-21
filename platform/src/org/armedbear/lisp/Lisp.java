@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -2508,6 +2510,19 @@ public class Lisp {
         loadClass("org.armedbear.lisp.ash");
         loadClass("org.armedbear.lisp.Java");
         loadClass("org.armedbear.lisp.PackageFunctions");
+
+        
+        Symbol GETENV = PACKAGE_EXT.findAccessibleSymbol( "GETENV" );
+          PACKAGE_SYS.shadowingImport( GETENV );
+          PACKAGE_SYS.export( GETENV );
+//          String cla = "command-line-argument".toUpperCase();
+//          Symbol CLA = PACKAGE_EXT.findAccessibleSymbol( "*"+cla+"-LIST*" );
+//          if(CLA!=null) {
+//          PACKAGE_SYS.export( cla + "S", CLA );
+//         
+//          }
+//          CLA = PACKAGE_SYS.findAccessibleSymbol( cla + "S" );
+          
 
         cold = false;
     }

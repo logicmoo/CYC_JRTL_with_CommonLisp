@@ -1018,7 +1018,7 @@ public class LispObject
     {
       Thread.dumpStack();
     }
-    if( Lisp.insideToString > 1 || Lisp.cold)
+    if( Lisp.insideToString > 2)
     {
       return easyToString();
     }

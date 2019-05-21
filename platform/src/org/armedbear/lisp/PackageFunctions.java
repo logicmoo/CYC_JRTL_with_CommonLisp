@@ -109,7 +109,7 @@ public final class PackageFunctions
                 return error(new WrongNumberOfArgumentsException(this, 1, 2));
             LispObject symbols = args[0];
             Package pkg =
-                args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
+                args.length ==2 ? coerceToPackage(args[1]) : getCurrentPackage();
             if (symbols.listp()) {
                 while (symbols != NIL) {
                     pkg.importSymbol(checkSymbol(symbols.car()));

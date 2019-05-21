@@ -180,7 +180,10 @@ public LispObject typeOf()
   @Override
 public LispObject classOf()
   {
-    LispObject c = getLispClass();
+    LispObject c = null;
+    if (layout != null) {
+      c =  layout.getLispClass();
+    }
     if (c != null)
       return c;
     return StandardClass.CONDITION;

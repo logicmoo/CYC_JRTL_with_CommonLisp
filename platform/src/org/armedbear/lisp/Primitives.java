@@ -3658,11 +3658,7 @@ public final class Primitives {
         @Override
         public LispObject execute(LispObject arg) {
             final Package pkg = (Package) Symbol._PACKAGE_.symbolValue();
-            if (arg instanceof Cons) {
-                for (LispObject list = arg; list != NIL; list = list.cdr())
-                    pkg.export(checkSymbol(list.car()));
-            } else
-                pkg.export(checkSymbol(arg));
+            pkg.exportSymbols( arg);
             return T;
         }
 
@@ -3670,12 +3666,7 @@ public final class Primitives {
         public LispObject execute(LispObject first, LispObject second)
 
         {
-            if (first instanceof Cons) {
-                Package pkg = coerceToPackage(second);
-                for (LispObject list = first; list != NIL; list = list.cdr())
-                    pkg.export(checkSymbol(list.car()));
-            } else
-                coerceToPackage(second).export(checkSymbol(first));
+                coerceToPackage(second).exportSymbols( first);
             return T;
         }
     };
