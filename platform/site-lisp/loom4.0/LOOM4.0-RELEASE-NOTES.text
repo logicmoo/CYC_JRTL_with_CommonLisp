@@ -1,0 +1,1141 @@
+
+		******   LOOM 4.0  RELEASE  NOTES   ****
+
+				 July 9, 1999
+
+One major change and a number of smaller changes have been made.  The major
+change in Loom 4.0 is the addition of units and dimensions as a fundamental
+data type.
+
+Other changes are an extension of the meta-level predicates, particularly for
+roles and role values.  More support for qualified relations has been added.
+Regular expression and wildcard searching of object names has been added.  The
+input language has been extended with two new operators, :the-list and
+:the-list* in order to make the construction of lists of Loom objects much
+simpler.  Also, Loom now supports both open and closed intervals (previously
+only closed intervals were properly supported).  Documentation for the :roles
+keyword is included.
+
+Context creation has been made faster and there are other improvements "under
+the hood" as far as performance and some extension of Loom's inference
+abilities.
+
+Loom 4.0 will be the last release of the Loom language.  All future development
+will involve the PowerLoom language.
+
+The source files are available through our web site:
+
+	http://www.isi.edu/isd/LOOM/how-to-get.html
+
+or from the ftp server at isi.edu under the account name "loomftp" using the
+standard loomftp password.   The files are available in Unix tar format and
+Macintosh compress binhex format.  The file names are:
+
+	loom4.0.tar		   Unix tar file
+	loom4.0.tar.gz		   GZip Compressed Unix tar file
+	Loom4.0.sea.hqx		   Macintosh binhex file 
+
+As always, remember to transfer the *.tar file in binary mode.
+Installation instructions for all systems can be found in the file
+
+	loom4.0-install.text
+
+CONTENTS:
+
+  o   :THE-LIST and :THE-LIST*
+  o   OPEN AND CLOSED INTERVALS
+  o   QUALIFIED RELATIONS
+  o   :ROLES KEYWORD
+  o   INSTANCE ROLES ADDED
+  o   CHANGES TO THE TBOX   
+  o   CHANGES TO LOOM FUNCTIONS
+  o   REGULAR EXPRESSION AND WILDCARDS
+  o   UNITS AND DIMENSIONS
+  o   CHANGES TO LOOM-FEATURES
+  o   OKBC SUPPORT
+
+-------------------------------------------------------------------------------
+
+                     ===   :THE-LIST and :THE-LIST*   ===
+
+To make it easier to construct lists that include Loom objects, two new
+operators have been introduced.  Previously the only way to have a single
+value which was a list of Loom objects was to use one of the functional calls
+like SET-VALUES or FSET-VALUES.  The new operators create a list of their
+contents after Loom's normal parsing.  These operators parallel the Common Lisp
+LIST and LIST* functions.   Examples:
+
+        (tell (r fred (:the-list 'billy william (:the-list 'jim james))))
+
+        (retrieve ?x (r fred ?x))
+          => ((BILLY |I|WILLIAM (JIM |I|JAMES)))
+
+        (retrieve ?y (= ?y (:the-list (:the-list* 1 2 3) 'g james)))
+          => (((1 2 . 3) G |I|JAMES))
+
+        (retrieve ?x (r ?x (:the-list 'billy william (:the-list 'jim james))))
+          => (|I|FRED)
+
+-------------------------------------------------------------------------------
+
+                     ===   OPEN AND CLOSED INTERVALS   ===
+
+Loom now supports both open and closed intervals.  The previous support for
+intervals supported only closed intervals via the :THROUGH keyword.  Open
+intervals were handled by either producing closed intervals (if possible, for
+example with integer intervals) or by using approximations to the open interval
+based by exploiting the limits of precision of floating point numbers.  The
+reason this is an issue for Loom users is that Loom would tranforms a
+definition that looked like:
+
+        (defconcept foo :is (:and bar (> r 3) (< r 10)))
+
+into an equivalent form with a value restriction:
+
+        (defconcept foo :is (:and bar (:all r (:through 4 9))))  ;; Loom 3.0
+
+With Loom 4.0, four new interval creating operators are introduced and the
+:THROUGH operator has been declared obsolete.  If it is encountered a nagging
+message will appear, but the code will continue to function.  The new operators
+are:
+
+        :INTERVAL++     Closed interval.
+        :INTERVAL+-     Semi-open.  Open at the high end.
+        :INTERVAL-+     Semi-open.  Open at the low end.
+        :INTERVAL--     Open interval.
+
+The naming convention is that there are two symbols at the end of the operator
+name.  A "+" indicates that the value is part of the interval and a "-"
+indicates that the value is not part of the interval.  The precise semantics
+are:
+
+        x is in (:interval++ a b) iff a <= x <= b
+        x is in (:interval+- a b) iff a <= x <  b
+        x is in (:interval-+ a b) iff a <  x <= b
+        x is in (:interval-- a b) iff a <  x <  b
+
+In Loom 4.0, the definitions
+
+        (defconcept foo :is (:and bar (> r 3) (< r 10)))
+        (defconcept baz :is (:and bar (> r 1.7) (<= r 12.6)))
+
+is transformed into
+
+        (defconcept foo :is (:and bar (:all r (:interval-- 3 10))))
+        (defconcept baz :is (:and bar (:all r (:interval-+ 1.7 12.6))))
+
+Note that BAZ subsumes FOO.
+
+-------------------------------------------------------------------------------
+
+                        ===   QUALIFIED RELATIONS   ===
+
+In addition to relations, Loom also offers the ability to place restrictions on
+qualified relations.  A qualified relation is a relation restricted to a
+particular range.  A relation R restricted by qualification Q is the same as
+the relation defined by (:and R (:range Q)).  For convenience, Loom number and
+type restriction operators allow specification of qualified relations.  One
+type of qualified relation is very common and has had a long-standing short
+form: :SOME restrictions:
+
+        (:some R C)     <=>     (:at-least 1 R C)
+
+One can also introduce restrictions with other numbers, such as
+
+        (:at-least 2 child Male)    to define someone with >= 2 boys.
+
+The trickiest one conceptually is the :ALL type restriction.  Partially that is
+because the qualification comes last in the form (since it is the optional part
+of the syntax).
+
+        (:all R C Q)    means that all fillers of R which happen to be of type
+                        Q must be of type C.  Fillers that are not of type Q
+                        may or may not be of type C.
+
+Contrast that with
+
+        (:all R (:and C Q))  means that all fillers of R must be of type Q and
+                             of type C
+
+A concrete example would be:
+
+        (defconcept Unenlightened-Corporation
+           :is (:and Corporation
+                     (:all employee Male Manager))
+           :annotations ((documentation "An unenlightened corporation is one
+      in which all of the employees who are managers are Male.")))
+
+                                     -----
+
+A number of meta-predicates and functions have been added to make it easier to
+use qualified relations and do reasoning about them.  The details are in the
+section on TBOX changes (look for relations with the word "QUALIFIED" in them)
+and also in the changes to Loom functions section (look for the keyword
+argument "qualification").
+
+-------------------------------------------------------------------------------
+
+                        ===   :ROLES KEYWORD   ===
+
+The :roles keyword was introduced in Loom 2.0 to make a frame-like syntax
+possible for those users who preferred that modeling paradigm.  The keyword was
+never completely documented.  Since then there have been some extensions to the
+syntax.  The complete specification of the :roles keyword is as follows:
+
+ (defconcept
+   :roles (<roleName>
+           (<roleName> :min <Int>              ; Minimum cardinality
+                       :max <Int>              ; Maximum cardinality
+                       :type <Concept>         ; Type of Role Range
+                       :value <Thing>          ; One filler of Role.
+                                               ;    appear multiple times.
+                       :default <Thing>        ; One default filler of Role. Can 
+                                               ;    appear multiple times.
+                       :function <Func>        ; Functional definition of Role.
+                       :predicate <Pred>       ; Predicate for checking role as
+                                               ;    Tuple.
+                       :facets 
+                           ((<Role> <Value>) ...)   ; Annotations on the Role
+                       :characteristics
+                           (<Key1> <Key2> ...) ; Role Characteristics currently
+                                               ;    only :virtual is legal
+           )
+          )
+  )
+
+
+Role specifications are not part of the definition of a concept, so they are
+not used in concept classification.  They do introduce constraints that are
+checked when incoherence is being detected.  Also, roles introduced by the
+:ROLES keyword are returned by the GET-ROLES function.  If the <roleName> is
+not defined separately with DEFRELATION, Loom will create a definition.  The
+default definition will be for either a single valued or multiple valued
+relation.  This behavior is controlled by the Loom feature
+:MAKE-ROLES-SINGLE-VALUED, which is SET by default.
+
+If a simple role name appears, then that means that the associated relation is
+considered a role of that concept.  There are no other implications.  In
+particular, there may be zero fillers of the role.
+
+A more detailed explanation of the role keywords
+
+        (R :min i)   implies (:at-least i R)
+        (R :max i)   implies (:at-most i R)
+        (R :type C)  implies (:all R C)
+
+        (R :value i1 :value i2)         implies (:filled-by R i1 i2)
+        (R :default i1 :default i2)    defaults (:filled-by R i1 i2)
+          Note:  Loom defaults are inference defaults and not initial values.
+
+        (R :function f)  means to use function f to compute the values for
+                this role.  f should either be a generic function name or
+                a lambda expression that takes one argument.
+        (R :predicate p)  means to use function p to determine if a tuple
+                belongs to this role.  p should either be a generic function
+                name or a lambda expression that takes two arguments.
+        
+        (R :facets ((documentation "This is a documentation string")
+                    (P p-value)
+                    (q q-value)))
+             Facets are annotations on the role object.  They can be queried
+                like any Loom assertions.  The role object itself can be
+                referenced in a query using the THE-ROLE relation.
+
+        (R :characteristics (:virtual))   :VIRTUAL the only supported
+                        characteristic at this time.  It is only used to
+                        suppress the creation of a real CLOS slot on the CLOS
+                        class associated with this concept if CLOS instances
+                        are being used.
+
+Example:
+
+  (defrelation p :characteristics (:multiple-valued))  ;; Override default
+  (defconcept foo
+    :roles ((p :min 2 :max 3 :value 4 :value 5 :default 10)
+            (q :facets ((documentation "This is role Q on Foo")))))
+  (defconcept bar :roles ((r :type (:and integer (:interval+- 1 5)))))
+
+  (setq foo.p (get-role 'foo 'p))
+     => |ROLE|(P 2 3 THING)
+  (all-values foo.p)
+     => (5 4 10)
+  (strict-values foo.p)
+     => (4 5)
+  (default-values foo.p)
+     => (10)
+  (min-value foo.p)
+     => NIL
+  (min-cardinality foo.p)
+     => 2
+  (max-cardinality foo.p)
+     => 3
+  (cardinality foo.p)
+     => NIL              ; Since 2 /= 3
+
+  (retrieve ?d (documentation (the-role 'foo 'q) ?d))
+     => ("This is role Q on Foo")
+
+  (setq bar.r (get-role 'bar 'r))
+     => |ROLE|(R 0 1 INTEGER)
+  (min-value bar.r)     
+     => 1   1          ; Second value is NIL if the minimum value is a limit
+                       ;    and non-NIL if it is an exact bound.
+  (max-value bar.r)
+     => 5   NIL        ; Second value is NIL if the maximum value is a limit
+                       ;    and non-NIL if it is an exact bound.
+  (all-values bar.r)
+     => NIL
+
+The role objects have the following functions available for use.  There are
+also corresponding relations for use in the query language:
+
+CONCEPT role            the object (concept) the role is defined on
+RELATION role           the relation for this role object
+TYPES role              the type restriction on fillers of this role
+MIN-CARDINALITY role    the minimum cardinality for this role           
+MAX-CARDINALITY role    the maximum cardinality for this role           
+CARDINALITY role        the cardinality of the role (if it exists)
+MIN-VALUE role          the minimum value, and a flag if inclusive
+MAX-VALUE role          the maximum value, and a flag if inclusive
+ALL-VALUES role         all fillers
+STRICT-VALUES role      only strict (required) fillers
+DEFAULT-VALUES role     only default fillers
+
+-------------------------------------------------------------------------------
+
+                       ===   INSTANCE ROLES ADDED   ===
+
+In addition to the roles on concepts, support for role objects have also been
+added for instances.  This is in part to support the OKBC notion of facets on
+"own" slots.  This means that the GET-ROLES function will now work on instances
+as well as concepts.  GET-ROLES on concepts continues to work as it did before,
+namely to retrieve what are known as in OKBC terms as "template" slots.
+
+A new functions GET-INSTANCE-ROLE has been added.  This will return (and create
+if necessary), an instance role on the object.  The function GET-ROLES has been
+extended with a new keyword argument :INSTANCE-ROLE-ON-CONCEPT-P, which allows
+the retrieval of all instance roles on concepts.
+
+If you are not using OKBC, then this change should not be of any concern.
+
+The following function was added in support of instance roles
+
+INSTANCE role           the object (instance) the role is defined on
+                        it is actually a synonym for CONCEPT.
+
+-------------------------------------------------------------------------------
+
+                        ===   CHANGES TO THE TBOX   ===
+
+These changes represent changes from Loom 3.0 to Loom 4.0.  You are advised to
+consult the Loom 3.0 release notes for additional changes from the reference
+manual.  The most extensive change on the concept side is the addition of
+numeric and semi-numeric concepts to support the measures and dimensions.
+There has also been an expansion of relations to provide better access to
+meta-information as well as to support the units and dimensions.  The
+measures-related information is presented in its own section below.
+
+The constants are changed around a bit.  All constant types are disjoint unless
+they are in a subsumption relations.  In particular, this means that
+FLOATING-POINT-NUMBER and INTEGER are disjoint.  The new hierarchy looks like:
+
+   CONSTANT
+      CHARACTER  
+      CONS-OR-NIL
+         LIST
+      QUANTITY
+         MEASURE ... (see section Units and Dimensions)
+         NUMBER
+            FLOATING-POINT-NUMBER
+            RATIONAL-NUMBER
+            INTEGER
+      STRING
+      SYMBOL
+
+The other changes are detailed below.  The notation (RO) means the relation is
+read-only.  "R", "C" and "Q" refer to "Relation", "Concept" and "Qualification"
+respectively.  This is used in some of the abbreviations.
+
+== CONCEPT REMOVED:
+
+Concept   SEQUENCE
+
+== NEW CONCEPTS AND RELATIONS
+
+Concept   FLOATING-POINT-NUMBER         New subtype of number
+Concept   MAX-RESTRICTION               Max cardinality restriction
+Concept   MEASURE                       Measure Object (Units & Dimensions)
+Concept   MEASUREMENT-CONCEPT           Meta Concept for Measures
+Concept   MIN-RESTRICTION               Min cardinality restriction
+Concept   OKBC-INDIVIDUAL               Support for OKBC
+Concept   QUANTITY                      New supertype of number and Measure
+Concept   RATIONAL-NUMBER               New subtype of number
+Concept   RESTRICTION                   Restriction MetaObject
+Concept   VALUE-RESTRICTION             Value restriction
+
+Relation   ALL-VALUES                   Relation on ROLE for all fillers (RO)
+Relation   BACKGROUND-FILE-NAME         Associates filename with context
+Relation   DEFAULT-VALUES               Relation on ROLE for default fillers (RO)
+Relation   DEFAULT-ROLE-VALUES          3-ary: default fillers of R on C (RO)
+Relation   DEFAULT-QUALIFIED-ROLE-VALUES 4-ary: R x C x Q => default fillers
+Relation   DIRECT-DEPENDENTS            Meta relation (no longer obsolete) (RO)
+Relation   DISJOINT                     Relates disjoint concepts. (RO)
+Relation   INCOHERENCE-REASON           Records Incoherence justification (RO)
+Relation   MAX-VALUE                    Relation on ROLE for maximum value (RO)
+Relation   MEASURE-OBJECT               <internal use>
+Relation   MIN-VALUE                    Relation on ROLE for maximum value (RO)
+Relation   OKBC-PRETTY-NAME             OKBC support
+Relation   OKBC-SLOT-COLLECTION-TYPE    OKBC support (RO)
+Relation   OUTPUT-UNIT                  Annotation for GUI support.
+Relation   PROPER-SUBRELATIONS          Subrelations not including SELF
+Relation   PROPER-SUPERRELATIONS        Superrelations not including SELF
+Relation   PROPOSITION-ARGUMENTS        <internal use>
+Relation   PROPOSITION-OPERATOR         <internal use>
+Relation   PROPOSITION-TRUTH-VALUE      <internal use>
+Relation   QUALIFICATION                Qualification of a RESTRICTION (RO)
+Relation   QUALIFIED-ROLE-VALUES        4-ary: C x R x Q => all fillers
+Relation   QUALIFIED-ROLE-TYPES         4-ary: C x R x Q => filler type
+Relation   QUALIFIED-ROLE-CARDINALITY   4-ary: C x R x Q => cardinality
+Relation   QUALIFIED-ROLE-MAX-CARDINALITY  4-ary: C x R x Q => max cardinality
+Relation   QUALIFIED-ROLE-MIN-CARDINALITY  4-ary: C x R x Q => min cardinality
+Relation   QUALIFIED-ROLE-MAX-VALUE     4-ary: C x R x Q => max value of filler
+Relation   QUALIFIED-ROLE-MIN-VALUE     4-ary: C x R x Q => min value of filler
+Relation   ROLE-MAX-VALUE               3-ary: Max value of relation on concept
+Relation   ROLE-MIN-VALUE               3-ary: Min value of relation on concept
+Relation   STRICT-VALUES                Relation on ROLE for strict fillers (RO)
+Relation   STRICT-ROLE-VALUES           3-ary: Strict fillers of relation on concept
+Relation   STRICT-QUALIFIED-ROLE-VALUES 4-ary: C x R x Q => strict fillers
+Relation   THE-INSTANCE-ROLE            Gets an instance role
+Relation   VALUE-TYPE                   3-ary: Value type of relation on concept
+
+
+== OBSOLETE CONCEPTS AND RELATIONS
+
+The following concepts and relations are now considered obsolete.  They
+are no longer present in BUILT-IN-THEORY by default.  If you wish to
+continue using them, you will need to explicitly set the Loom feature
+:load-obsolete-concepts:
+
+   (set-feature :load-obsolete-concepts)
+
+At some point in the future (although maybe not in your lifetime :)
+these concepts and relations will disappear from Loom entirely.
+
+This list has not changed significantly since Loom 3.0, although there are two
+additional equivalences and more information available from roles.
+
+  Type           Old Name                    New Substitute
+--------    ------------------          ------------------------
+Concept     Old-Role                    <none>
+Concept     max-restriction             [Use Roles *]
+Concept     max-restriction-p           max-restriction
+Concept     min-restriction             [Use Roles *]
+Concept     min-restriction-p           min-restriction
+Concept     named-p                     user-defined
+Concept     Restriction                 [Use Roles *]
+Concept     restriction-p               restriction
+Concept     value-restriction           [Use Roles *]
+Concept     value-restriction-p         value-restriction
+Property    primitive-p                 primitive
+Property    single-valued-p             single-valued
+Property    user-defined-p              user-defined
+Relation    concept--attributes         characteristics
+Relation    concept--characteristics    characteristics
+Relation    concept--instances          instances
+Relation    concept--name               loom::name
+Relation    concept--restrictions       [Use Roles *] roles
+Relation    direct-dependents           <none>
+Relation    direct-subconcept           direct-subrelations
+Relation    direct-subconcepts          direct-subrelations
+Relation    direct-superconcept         direct-superrelations
+Relation    direct-superconcepts        direct-superrelations
+Relation    has-role                    roles
+Relation    instance--asserted-concepts <none **>
+Relation    instance--asserted-type     <none **>
+Relation    instance--cached-concepts   <none **>
+Relation    instance--concepts          instance-of
+Relation    instance--forward-chaining-type     <none **>
+Relation    instance--identifier        loom::name
+Relation    instance--max-restriction   role-max-cardinality
+Relation    instance--min-restriction   role-min-cardinality
+Relation    instance--type              instance-of
+Relation    instance--value-restriction role-types
+Relation    instance-of-p               instance-of
+Relation    isa-p                       isa
+Relation    relation--domain            domain
+Relation    relation--name              loom::name
+Relation    relation--range             range
+Relation    relation--restrictions      restrictions
+Relation    restriction--concepts       [Use Roles *] concept
+Relation    restriction--max            [Use Roles *] max-cardinality
+Relation    restriction--min            [Use Roles *] min-cardinality
+Relation    restriction--qualification  qualification
+Relation    restriction--relation       [Use Roles *] relation
+Relation    restriction--value-restriction      [Use Roles *] types
+Relation    role--concept               concept
+Relation    role--instance              <none>       (Old Style Roles)
+Relation    role--relation              <none>       (Old Style Roles)
+Relation    role--value                 <none>       (Old Style Roles)
+Relation    subconcept*                 subrelations
+Relation    subconcept+                 proper-subrelations
+Relation    subconcepts                 subrelations
+Relation    superconcept*               superrelations
+Relation    superconcept+               proper-superrelations
+Relation    superconcepts               superrelations
+
+
+NOTES ABOUT OBSOLETE CONCEPTS and RELATIONS
+
+* [Use Roles] We are recommending not using the restrictions but using
+Role objects instead.  Role objects can be retrieved using the binary
+relation "roles" on a concept to return all roles or the ternary
+relation "the-role" which returns a role object for a Concept, Relation
+pair.  Once a role object is available, information about number and
+value restrictions can be obtained using the following relations:
+    min-cardinality
+    max-cardinality
+    cardinality                 (Only has a value of min = max)
+    types
+    min-value
+    max-value
+    all-values
+    strict-values
+    default-values
+
+** There is no equivalent for these relations.  If you are using them,
+please contact the loom development team and we will work something out.
+
+*** The relation "the-relation" is a ternary (3-place) relation that
+relates a SYMBOL, NUMBER and CONCEPT/RELATION.    The number is the
+arity of the relation.  Concepts are considered unary relations.  Using
+this form instead of the obsolete "name--relation" requires that you
+know the arity of the relation you wish to find, but it is probably a
+good idea to know that anyway.  The most common relations are binary, so
+the arity would be 2.  Examples:
+
+   (retrieve ?c (the-relation 'concept 1 ?x))  ==>  (|C|CONCEPT)
+   (retrieve ?c (the-relation 'domain 2 ?x))   ==>  (|R|DOMAIN)
+   (retrieve ?c (the-relation '< 2 ?x))        ==>  (|R|<)
+   (retrieve ?c (the-relation '+ 3 ?x))        ==>  (|R|+)
+
+
+-------------------------------------------------------------------------------
+
+                     ===   CHANGES TO LOOM FUNCTIONS   ===
+
+== New Functions:
+
+ALL-VALUES role
+  Returns all fillers for "role".  This is the union of the strict and default
+  fillers.
+
+BASE-UNIT measure               <see units & dimensions>
+
+DEFAULT-VALUES role
+  Returns default fillers for "role".  This may not always be the same as the
+  declared defaults, since any default fillers which are also strict fillers
+  will NOT be returned by this function. 
+
+DEFINE-MEASUREMENT-CONCEPT name example &key dont-define-synonym-p
+   <see units & dimensions>
+
+DEFINE-PROPERTY &rest options
+  A functional interface to the DEFPROPERTY macro.  This is just like
+  DEFINE-CONCEPT, except that the :domain keyword is also supported.
+
+DIMENSIONED-NUMBER quant unit                   <see units & dimensions>
+
+FIND-OBJECTS objectOrName &key type local-p no-warning-p ignore-package-p
+                               context match
+  <see regular expression>
+
+GET-EXPLICITLY-DECLARED-ROLES conceptOrName &key direct-p
+  Return a list of explicitly-declared roles (including inherited roles unless
+  `direct-p' is non-NIL) for the concept `conceptOrName'.  A role is explicitly
+  declared if it appears in a :roles clause.
+
+GET-INSTANCE-ROLE instance relation
+  Return an instance role for relation `relation' on `instance'.  This is similar
+  the function `GET-ROLE', but returns a role specifically for this instance.
+  
+GET-ROLE-MAX-VALUE conceptOrInstance relation &key qualification
+  Returns the maximum numeric value that "relation" with optional
+  "qualification" has on "conceptOrInstance".  If no such maximum is 
+  known, then NIL is returned.
+ 
+GET-ROLE-MIN-VALUE conceptOrInstance relation &key qualification
+  Returns the minimum numeric value that "relation" with optional
+  "qualification" has on "conceptOrInstance".  If no such minimum is 
+  known, then NIL is returned.
+
+MAX-VALUE role
+  Returns the maximum numeric value of "role".  If no such maximum is 
+  known, then NIL is returned.  Operates on role objects.
+
+MIN-VALUE role
+  Returns the maximum numeric value of "role".  If no such maximum is 
+  known, then NIL is returned.  Operates on role objects.
+
+PROPERTY-P object
+  Returns non-NIL if "object" is a PROPERTY (a unary relation defined using 
+  DEFPROPERTY).
+
+SKOLEM-INSTANCE-P object
+  Returns non-NIL if "object" is a skolem instance (created with
+  CREATE-SKOLEM-INSTANCE. 
+
+STRICT-VALUES role
+  Returns strict (required) fillers for "role".
+
+UNIT-MAGNITUDE dimensionedNumber                <see units & dimensions>
+UNIT-UNIT dimensionedNumber                     <see units & dimensions>
+UNIT-VALUE-AS dimensionedNumber desiredUnit     <see units & dimensions>
+UNITS measure                                   <see units & dimensions>
+
+VALUE-TYPE role
+  Returns strict (required) fillers for "role".  
+
+== Additional Arguments:
+ 
+CREATION-POLICY  &optional contextOrPolicy policy
+  Changed creation-policy to allow specifying the context.  The first argument
+  is now either a context, context-name or policy keyword.  If the first is a
+  policy keyword, then the current context is used.  The second argument is a
+  policy keyword, but is only used if the first argument is a context.  As
+  before, a call with no arguments returns the policy of the current context.
+  A call with only the context argument returns the policy of the specified
+  context.
+
+FIND-CONCEPT 
+FIND-CONTEXT contextOrName &key error-p match
+FIND-INSTANCE
+FIND-KB
+FIND-RELATION
+  <see regular expressions>
+
+GET-ROLE objectOrName relationOrName &key no-error-p
+  
+GET-ROLES conceptOrInstanceOrName &key instance-role-on-concept-p
+  Added "instance-role-on-concept-p" keyword argument.  If non-NIL, then
+  instead of getting the normal roles for concepts, instance roles are
+  returned.   Also, the first argument can now be something other than a
+  concept, in which case instance roles are returned.
+
+GET-TYPES instanceOrName &key direct-p asserted-p raw-p
+  Added keyword argument ":raw-p".  Normally this function returns only
+  user-defined concepts as types.  If :raw-p is non-NIL, then Loom
+  internal concepts will be returned instead.
+
+GET-VALUE instanceOrName roleOrName &key context kb asserted-p direct-p
+                                         no-error-p no-defaults-p
+  Added keyword ":no-defaults-p", which will return only the values of the role
+  that do not require default reasoning.  
+
+GET-VALUES instanceOrName roleOrName &key context kb asserted-p direct-p
+                                         no-error-p no-defaults-p
+  Added keyword ":no-defaults-p", which will return only the values of the role
+  that do not require default reasoning.
+
+
+GET-SUPERRELATIONS relationOrName &key direct-p raw-p proper-p
+GET-SUBRELATIONS relationOrName &key direct-p raw-p proper-p
+GET-SUPERCONCEPTS conceptOrName &key direct-p raw-p proper-p
+GET-SUBCONCEPTS conceptOrName &key direct-p raw-p proper-p
+  Added the keywords ":raw-p" and ":proper-p".  The :raw-p keyword, if non-NIL,
+  specifies that concepts that are not user-defined will also be returned in
+  the list of supers or subs.  The :proper-p keyword, if non-NIL, means that
+  the relation or concept itself will NOT be returned.  Normally, the subs and
+  supers lists include the concept or relation itself.
+
+GET-ROLE-TYPES object relation &key qualification raw-p
+  Added the keywords ":raw-p" and ":qualification".  The :raw-p keyword, if non-NIL,
+  specifies that concepts that are not user-defined will also be returned.
+  The :qualification keyword is used to allow asking about qualified relations.
+  Examples:
+    (defconcept a :is (:and c (:all r (:and x y))))
+    (defconcept b :is (:and c (> r 3)))
+
+    (get-role-types (fc c) (fr r) :raw-p nil)   ==>  (|C|X  C|Y|)
+    (get-role-types (fc c) (fr r) :raw-p t)     ==>  (|C|X&Y|)
+
+    (get-role-types (fc b) (fr r) :raw-p nil)   ==>  (|C|NUMBER)
+    (get-role-types (fc b) (fr r) :raw-p t) 
+         ==>    (|C|LOOM::NUMBER_0002(:INTERVAL+- '-INFINITY 3))
+  
+    (defconcept k :is (:and c (:all r x y)))
+
+    (get-role-types (fc k) (fr r) :qualification NIL)     ==> (|C|THING)
+    (get-role-types (fc k) (fr r) :qualification (fc y))  ==> (|C|X)
+  
+
+GET-ROLE-MIN-CARDINALITY object relation &key qualification
+GET-ROLE-MAX-CARDINALITY object relation &key qualification
+GET-ROLE-CARDINALITY object relation &key qualification
+GET-ROLE-VALUES object relation &key qualification
+GET-ROLE-STRICT-VALUES object relation &key qualification
+GET-ROLE-DEFAULT-VALUES object relation &key qualification
+  Added the keyword argument ":qualification".  Used to get information about
+  the qualified role rather than the role at large.
+  Example:
+    (defconcept k :is (:and c (:at-least 1 r x) (:at-most 3 r x)))
+
+    (get-role-min-cardinality (fc c) (fr r) :qualification NIL)    => 1
+    (get-role-min-cardinality (fc c) (fr r) :qualification (fc x)) => 1
+    (get-role-min-cardinality (fc c) (fr r) :qualification (fc y)) => 0
+  
+    (get-role-max-cardinality (fc c) (fr r) :qualification NIL)    => NIL
+    (get-role-max-cardinality (fc c) (fr r) :qualification (fc x)) => 3
+    (get-role-max-cardinality (fc c) (fr r) :qualification (fc y)) => NIL
+
+-------------------------------------------------------------------------------
+
+                 ===   REGULAR EXPRESSION AND WILDCARDS   ===
+
+The FIND-... functions have been modified to expand their search capabilities.
+If the extended search capabilities are taken advantage of, then the value
+returned by the FIND-... functions will be lists rather than single objects.
+Care was taken to not change the return value if the arguments are given as in
+previous Loom versions.
+
+The "match" argument to the functions specifies how the matching is to be
+carried out.  The following are legal arguments:
+
+  o :EXACT              match exactly, including case.
+  * :CASE-INSENSITIVE   match exactly, but case does not matter.
+  o :SUBSTRING-EXACT    match a substring, including case.
+  o :SUBSTRING          match a substring, but case does not matter.
+  o :WILDCARD-EXACT     match using wildcard characters ? and *, other letters
+                        must match, including case.
+  o :WILDCARD           match using wildcard characters ? and *, for other
+                        letters, case does not matter.
+  o :REGEX-EXACT        matching using regular expressions, other letters must
+                        match exactly, including case.
+  o :REGEX              matching using regular expressions, for other letters
+                        case does not matter.
+
+The default value for all of the FIND-... functions is :CASE-INSENSITIVE,
+unless a symbol is passed as the argument to FIND-CONCEPT, FIND-INSTANCE or
+FIND-RELATION, in which case :EXACT is the default match value.
+
+Wildcards use "*" to match any number of characters (including 0), and "?" to
+match any single character.  Regular expressions are a bit more complicated.
+The following capabilities are supported:
+
+== REGULAR EXPRESSION MEANINGS
+
+CHARACTER       MEANING
+   ^            Beginning of string
+   $            End of string
+   . (period)   Matches any character
+   *            Zero or more of the preceding element
+   +            One or more of the preceding element
+ [...]          Match any one of the elements in the square brackets.  A range 
+                may be specified using the "-" (hyphen) character.  To include
+                a hyphen itself, it must be the first element inside the square
+                brackets.  If the first character is "^" (caret), then this
+                inverts the sense of the test--in other words the match is for
+                anything except what is specified in the square brackets.
+  (...)         Grouping operator.  Make the regular expression in parentheses
+                act as a single element.  Can also be referenced later.
+  \<n>          Refer to the <n>-th element in parentheses.  The first element
+                is number 1.
+   \            Escape character.  Used to enter any of the special regular
+                expression characters as its literal self, or to introduce the
+                reference to a previous group or a special character group.
+  \t            Tab character
+  \r            Return character
+  \n            Newline character
+  \b            Word boundaries:  Tab, Space, [.,!:]
+  \B            non Word boundaries
+  \d            Digits: [0-9]
+  \D            non Digit
+  \s            Space characters:  Tab Newline Space Return
+  \S            non Space characters
+  \w            Word constituents: [0-9a-zA-Z_]
+  \W            non word constituents
+
+== EXAMPLES
+EXPRESSION      MEANING
+   .*           Match anything. (Not recommended: Finds too many matches.)
+ ^AIRCRAFT      Finds names beginning with "AIRCRAFT".
+ AIRCRAFT$      Finds names ending with "AIRCRAFT".
+ ^AIRCRAFT$     Find an exact match for "AIRCRAFT".
+ ^.$            Match all single character names.
+ ^..$           Match all double character names.
+ T.T            Finds names which have "T" in them twice, separated by any
+                other  character.
+ TH.*TH         Finds names which have "TH" in them twice, with any number of
+                intervening characters. 
+ [0-9]          Finds names which include a digit.
+ [-_]           Finds names which include a hyphen or underscore.
+ ([A-Z])\1      Finds names which have the same character twice in a row.
+ [^AEIOU]       Finds names which have at least one letter that is not a vowel.
+ ^[^AEIOU]*$    Finds names which have no vowels.
+ ^[^-]*$        Finds names which have no hyphens.
+
+
+== FUNCTIONS SUPPORTING REGULAR EXPRESSIONS.
+
+FIND-CONCEPT conceptOrName &key no-warning-p ignore-package-p context match
+  Added :match keyword to support regular expression matching.  The
+  conceptOrName argument should be a string.
+  
+FIND-CONTEXT contextOrName &key error-p match  
+  Added :match keyword to support regular expression matching.  The
+  conceptOrName argument should be a string.
+
+FIND-INSTANCE instanceOrName &key no-warning-p context ignore-package-p match
+  Added :match keyword to support regular expression matching.  The
+  conceptOrName argument should be a string.
+
+FIND-KB knowledgeBaseOrName &key match
+  Added :match keyword to support regular expression matching.  The
+  conceptOrName argument should be a string.
+
+FIND-OBJECTS objectOrName &key type local-p no-warning-p ignore-package-p
+                               context match 
+
+  Find objects returns a list of objects.  This is the general interface to
+  finding Loom objects other than Contexts and KBs.  The objects that are
+  searched over is specified by the :TYPE argument, which is one of :CONCEPTS
+  :RELATIONS :INSTANCES or :ANY.  The default value is :ANY.  The search will
+  take place in the context specified or the current context.  The search will
+  include all super contexts as well, unless :LOCAL-P is non-NIL.  If no
+  matching objects can be found, then a warning will be issued unless
+  :NO-WARNING-P is non-NIL.  If :IGNORE-PACAKGE-P is non-NIL, then the Lisp
+  package of a symbol passed as "objectOrName" is ignored in the matching.  If
+  the name is not a symbol, this has no effect.
+  
+  MATCH is one of :exact :case-insensitive :substring-exact :substring
+                  :wildcard-exact :wildcard :regex-exact :regex
+  
+  Defaults are TYPE = :ANY and MATCH = :CASE-INSENSITIVE
+
+FIND-RELATION relationOrName &key no-warning-p ignore-package-p context match
+  Added :match keyword to support regular expression matching.  The
+  conceptOrName argument should be a string.
+
+-------------------------------------------------------------------------------
+
+                       ===   UNITS AND DIMENSIONS   ===
+
+A units and dimensions package has been added to Loom.  The original code was
+written by Roman Cunis at the University of Hamburg and is available in the
+Carnegie-Mellon University Lisp archives.  It has been integrated into this
+Loom release.  Details on the operation of that package are included in
+separate documentation files:
+
+  measures/unit-definitions.text           Describes the units included with
+                                           the Loom  
+  measures/measures-usage.text             How to use the measures package.
+  measures/measures-implementation.text    How the measures are implmented.
+
+The measures package allows the specification and manipulation of dimensioned
+quantities.  If Loom is compiled to include units and dimensions (the default
+setting), then the TBOX includes concepts for the dimensioned quantities as
+well as relations which allow the use of dimensioned quantities in assertions
+and queries.  The arthimetic operations (+, -, *, /) and comparison operators
+(>, <, <=, >=, =, /=) are also extended to work with dimensioned quantities.
+
+The units and dimensioned are integrated with the Lisp reader so that one may
+adopt a fairly natural means of specifying dimensioned units.  It is simply a
+number immediately followed by a units expression.  CASE IS SIGNIFICANT in the
+units expression.  The units expression consists of unit names with optional
+exponents, and an optional "/" to indicate division of units.  To separate
+units, either the exponent 1 or a period (".") may be used.  For example, "five
+newton meters" could be written "5N.m".  A large number of units are
+predefined.  The base units are taken from the SI, but a large number of
+English units are also included.
+
+TBOX additions with the measures package:
+
+Measures CONCEPTS.  All are read-only.
+  LOOM::MEASURE         Concept to which all dimensioned quantities belong.
+                        Not exported from the LOOM package to avoid name
+                        conflicts with existing user code.
+  MEASUREMENT-CONCEPT   Meta Concept for all subtypes of MESURE
+
+  ACCELERATION-MEASURE          base unit:  m/s2
+  ANGLE-MEASURE                 base unit:  deg
+  AREA-MEASURE                  base unit:  m2
+  DATA-MEASURE                  base unit:  bit
+  DENSITY-MEASURE               base unit:  kg/m3
+  DISTANCE-MEASURE              base unit:  m
+  ELECTRIC-CURRENT-MEASURE      base unit:  A
+  ELECTRIC-POTENTIAL-MEASURE    base unit:  V
+  ELECTRIC-RESISTANCE-MEASURE   base unit:  ohm
+  FORCE-MEASURE                 base unit:  N
+  FREQUENCY-MEASURE             base unit:  Hz
+  ILLUMINANCE-MEASURE           base unit:  lux
+  INDUCTANCE-MEASURE            base unit:  H
+  LUMINOUS-INTENSITY-MEASURE    base unit:  Cd
+  MAGNETIC-FLUX-DENSITY-MEASURE base unit:  T
+  MAGNETIC-FLUX-MEASURE         base unit:  Wb
+  MASS-MEASURE                  base unit:  kg
+  POWER-MEASURE                 base unit:  W
+  PRESSURE-MEASURE              base unit:  Pa
+  REVOLUTION-MEASURE            base unit:  deg/s
+  SCALAR-MEASURE                no base unit
+  SPEED-MEASURE                 base unit:  m/s
+  TEMPERATURE-MEASURE           base unit:  K    (on a temperature scale)
+  TIME-MEASURE                  base unit:  s
+  VOLUME-MEASURE                base unit:  m3
+  WORK-OR-TORQUE-MEASURE        base unit:  J    (indistinguishable from N.m)
+
+Measures RELATIONS.  All are read-only.
+  UNIT-UNIT          (unit-unit Measure UnitString) relates a dimensioned
+                     quantity to its unit.
+  UNIT-MAGNITUDE     (unit-magnitude Measure Number) relates a dimensioned
+                     quantity to its magnitude.  In general the magnitude will
+                     be a rational number.  It is expressed in terms of the
+                     units returned by the UNIT-UNIT relation.
+  UNIT-MAGNITUDE-AS  (unit-value-as Measure UnitString Number) relates a
+                     Measure to its magnitude in the given unit as long as
+                     Measure and UnitString are compatible.
+  DIMENSIONED-NUMBER (dimensioned-number Quantity UnitString Measure) Relates a
+                     a `Quantity' in the units specified in `UnitString' as
+                     long as `Quantity' is either a Number, or it and
+                     `UnitString' are compatible.  This can be used to create
+                     new dimensioned quantities.
+
+  UNITS              (units MeasurementConcept UnitString) is a multiple-valued
+                     relation between a Measurement concept and the defined
+                     units of that measurement.
+  BASE-UNIT          (base-unit MeasurementConcept UnitString) a single-valued 
+                     relation between a Measurement concept and the base unit
+                     for that measurement.
+
+
+Measures Functions.  These largely correspond to the relations noted above.
+
+BASE-UNIT measurementConcept
+  Returns the base unit of the concept.
+
+DEFINE-MEASUREMENT-CONCEPT name example &key dont-define-synonym-p
+  Define a measurement concept named `name' based on an example of
+  a dimensioned quantity `example'.  If there is an existing measurement
+  concept that includes `example', then a synonym for that concept is defined
+  unless `:dont-define-synonym-p' is non-NIL.  The default is to define a
+  synonym. Returns the measurement concept for `example'.
+
+  If `example' is not a dimensioned quantity, then a warning is printed and NIL
+  is returned.  In all other cases, a measurement concept is returned --
+  either the existing one or a new one.
+  Note that if a synonym is defined, it will eventually be merged with the
+  existing measurement concept.
+
+DIMENSIONED-NUMBER quantity unit
+  Returns a dimensioned number constructed from the magnitude and unit.
+  This is handy for programmatically creating dimensioned numbers since it 
+  doesn't require running using the reader.  It can also be used to create
+  dimensioned numbers with different default printing units.  In that case,
+  the quantity and the unit specified must be compatible.
+  Examples:  (dimensioned-number 34 "m/s2")   =>  34m/s2
+             (dimensioned-number 24in "ft")   =>  2ft
+             (dimensioned-number 24in "in")   =>  24in
+
+UNIT-MAGNITUDE dimensionedNumber
+  Returns the magnitude of the dimensioned number.  The magnitude is consistent
+  with the value returned by the UNIT-UNIT function.
+  Example:  (unit-magnitude 24in) => 24
+
+UNIT-UNIT dimensionedNumber
+  Returns the unit of the dimensioned number as a string.  The unit is
+  consistent with the value returned by the UNIT-MAGNITUDE function.
+  Example:  (unit-magnitude 24in) => "in"
+
+UNIT-VALUE-AS dimensionedNumber desiredUnit
+  Returns the value of the dimensioned number in the desired unit.  For
+  fractional cases this will generally be a rational number.
+  Example:  (unit-value-as 10000m "km") => 10
+
+UNITS measure
+  Returns a list of all the units associated with the given measurement
+  concept.
+
+Arithmetic functions.  These parallel the built-in Common Lisp functions, but
+work with the dimensioned numbers.  Like the built-in functions, most of them
+take any number of arguments.
+
+MEASURES:DIM* &rest args
+MEASURES:DIM+ &rest args
+MEASURES:DIM- &rest args
+MEASURES:DIM/ &rest args
+
+MEASURES:DIM-EQL x y
+MEASURES:DIM-EQUAL x y
+MEASURES:DIM-EQUALP x y
+MEASURES:DIM/= &rest args
+MEASURES:DIM< &rest args
+MEASURES:DIM<= &rest args
+MEASURES:DIM= &rest args
+MEASURES:DIM> &rest args
+MEASURES:DIM>= &rest args
+
+MEASURES:DIM-EXPT dim power
+MEASURES:DIM-MAX &rest args
+MEASURES:DIM-MIN &rest args
+MEASURES:DIM-SQRT dim
+MEASURES:DIM-ZEROP dim
+
+MEASURES:DIM-NUMBER value unit            
+  Like DIMENSIONED-NUMBER
+MEASURES:DIM-NUMBER-P object
+MEASURES:DIM-SAME-UNITS-P x y
+  Test to see if the units are compatible for addition & subtraction
+MEASURES:DIM-VALUE dn &optional unit
+  A combination of unit-magnitude and unit-value-as
+MEASURES:PRINT-CONVERTED dim &rest unit-format
+  See the measures documentation.
+
+What follows are some examples of the use of the units and dimensions.
+
+  ------------------------------------------------------------
+  (creation-policy :classified-instance)
+  (defrelation speed :range speed-measure :characteristics :single-valued)
+  (defconcept car)
+  (defconcept sports-car :is (:and car (> speed 100mph)))
+  (defconcept lame-vehicle :is (:and car (< speed 80mph)))
+
+  (tellm (car porsche) (speed porsche 240km/h))
+
+  Recognition changes for state 1 in context TEST-THEORY:
+     entry:  PORSCHE  |C|SPORTS-CAR
+             PORSCHE  |C|CAR
+
+  (tell (car vw-bug) (speed vw-bug 60mph))
+
+  Recognition changes for state 2 in context TEST-THEORY:
+     entry:  VW-BUG   |C|LAME-VEHICLE
+             VW-BUG   |C|CAR
+  ------------------------------------------------------------
+
+  (get-subconcepts 'loom::measure) =>
+   (|C|ACCELERATION-MEASURE |C|ANGLE-MEASURE |C|AREA-MEASURE |C|DATA-MEASURE
+   |C|DENSITY-MEASURE |C|DISTANCE-MEASURE |C|ELECTRIC-CURRENT-MEASURE
+   |C|ELECTRIC-POTENTIAL-MEASURE |C|ELECTRIC-RESISTANCE-MEASURE |C|FORCE-MEASURE
+   |C|FREQUENCY-MEASURE |C|ILLUMINANCE-MEASURE |C|INDUCTANCE-MEASURE
+   |C|LUMINOUS-INTENSITY-MEASURE |C|MAGNETIC-FLUX-DENSITY-MEASURE
+   |C|MAGNETIC-FLUX-MEASURE |C|MASS-MEASURE |C|LOOM::MEASURE |C|POWER-MEASURE
+   |C|PRESSURE-MEASURE |C|REVOLUTION-MEASURE |C|SCALAR-MEASURE |C|SPEED-MEASURE
+   |C|TEMPERATURE-MEASURE |C|TIME-MEASURE |C|VOLUME-MEASURE |C|WORK-OR-TORQUE-MEASURE)
+  ------------------------------------------------------------
+
+  (retrieve ?x (units power-measure ?x))
+    => ("GW" "MW" "kW" "hp" "shp" "W" "N.m/s" "mW")
+  (retrieve ?x (base-unit distance-measure ?x))
+    => ("m")
+  (retrieve ?x (units distance-measure ?x))
+    => ("parsec" "lightyear" "LY" "AU" "NM" "nautmi" "mile" "miles" "mi" "km"
+        "furlong" "fathom" "m" "yd" "ft" "dm" "in" "cm" "pica" "mm" "point"
+        "pt" "um" "nm" "angstrom" "ang")
+
+
+  (retrieve ?x (unit-unit 220km/h ?x))
+    => ("km/h")
+  (retrieve ?x (unit-magnitude 220km/h ?x))
+    => (220)
+  (retrieve ?x (unit-magnitude-as 220km/h "mph" ?x))
+    => (156250/1143)
+  (float (car *))
+    => 136.70166
+  (retrieve ?x (dimensioned-number 20 "ft" ?x))
+    => (20ft)
+  (retrieve ?x (dimensioned-number 10000m "km" ?x))
+    => (10km)
+
+  (retrieve ?x (* 30mph 3h ?x))
+    => (144840.95m)
+  (retrieve ?x (dimensioned-number (* 30mph 3h) "mile" ?x))
+    => (90mile)
+  ------------------------------------------------------------
+  (defconcept stuff)
+  (defrelation mass :characteristics :single-valued)
+  (defrelation volume :characteristics :single-valued)
+
+  (defrelation density :is (:satisfies (?x ?y)
+                              (/ (mass ?x) (volume ?x) ?y))
+          :characteristics :single-valued)
+
+  (tellm (stuff block) (Mass block 20kg))
+
+  (retrieve ?x (mass block ?x))
+    => (20kg)
+
+  (retrieve ?x (density block ?x))
+    => NIL
+
+  (tellm (volume block 1m3))
+  (retrieve ?x (density block ?x))
+    => (20kg/m3)
+  ------------------------------------------------------------
+
+NOTE:
+The units code will aggressively put dimensions into their canonical form.
+This can lead to some surprising results, such as when one wishes to express
+something like fuel consumption in terms of volume of fuel per distance
+traveled.  The expression "50 liters per kilometer" (for some particularly
+inefficient mode of travel) will get transformed into an area measurement,
+since the canonical representation of a liter is in terms of cubic meters, and
+all dimensions are simplified.
+
+   50l/km   =>  4.9999997e-5m2
+
+  ------------------------------------------------------------
+
+Also, as a special hack, a some scalar quantities have also been defined to
+allow the natural representation of percent (%) and a not quite so natural
+representation of promille (%%) for use in arithmetic:
+
+   (ms:dim* 1000 10%)   => 100
+   (ms:dim* 1000 10%%)  => 10
+
+   (ms:dim* 50m 50%)    => 25m
+
+As the above code hints, there are a set of operations for using the measures
+package outside of Loom forms.  The details are described below under a
+subsection of the "Changes to Loom Functions" section.
+
+-------------------------------------------------------------------------------
+
+                   ===   CHANGES TO LOOM-FEATURES   ===
+
+The Loom feature :EXPAND-SYSTEM-DEFINED-PRINT-NAMES has been changed to
+                 :LONG-PRINT-NAMES
+
+The Loom feature :APPROXIMATE-OPEN-INTERVALS no longer has any effect.  It is
+        will continue to be recognized by the code for backward compatibility.
+        Its function has been rendered superfluous by the true open interval
+        upgrade.
+
+A new Loom feature :ALLOW-DUPLICATE-CREATES has been added.  If true, Loom will
+        not signal an error if a call to the CREATE function specifies a name
+        that is already taken.  Instead Loom will try to do something
+        intelligent.  This assists some code that generates Loom forms.  It is
+        NOT SET by default.
+
+A new Loom feature :AUTOMATICALLY-ADVANCE-STATE has been added.  It controls
+        the behavior of updates.  If the feature is set, then each assertion
+        will advance the state of the knowledge base (agent time) and there is
+        no difference between TELLM and TELL (or any other ...M and associated
+        forms).  The wrapper WITHOUT-PRODUCTIONS is not affected by this
+        setting.  It is SET by default.
+
+-------------------------------------------------------------------------------
+
+                           ===   OKBC SUPPORT   ===
+
+Loom now also offers support for the OKBC protocol.  The actual software for
+OKBC is a separate download and is not activated by default.  It also relies on
+Stanford University's generic OBKC server code which can be obtained through
+the OKBC link from this URL:
+
+        http://www.ksl.stanford.edu/sns.html
+
+The concept OKBC-INDIVIDUAL has been added, corresponding to the OKBC
+:INDIVIDUAL class, which consists of all objects in the Loom system except for
+CONCEPT objects.  In addition, the relations OKBC-PRETTY-NAME has been added.
+
+-------------------------------------------------------------------------------
+
+                             END OF RELEASE NOTES

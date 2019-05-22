@@ -1,0 +1,429 @@
+
+		    INSTALLATION NOTES FOR LOOM 4.0
+
+			    July 12, 1999
+
+
+CONTENTS:
+
+    I.  General Information
+   II.  Directory Organization
+  III.  Installing the Sources
+   IV.  REQUIRED SITE CUSTOMIZATION
+    V.  Optional Site Customization
+   VI.  Defsystem Code
+  VII.  Building and Using Loom
+
+==============================================================================
+
+
+                           I.  GENERAL INFORMATION
+
+These notes accompany the full release of Loom 4.0.  Documentation for Loom
+4.0 will be available separately.  Preliminary documentation of the new
+features is contained in the release notes.
+
+We have successfully compiled Loom 4.0 using the following lisp environments:
+
+1.  Franz Allegro Common Lisp (Version 4.2-4.3, 5.0), on Sun SPARC II machines.
+2.  Macintosh Common Lisp (4.2), on a G3 PowerMac, MacOS 8.5.1
+3.  Franz Allegro Common Lisp (Version 5.0), on Windows
+
+Development of the system was done using Allegro and Macintosh Common Lisps,
+so Loom should be fairly stable on those platforms.  Although this version has
+not been tested with Harlequin Lispworks, previous versions were found to run
+under that lisp implementation.  Other users report failure using Loom with
+CMU Common Lisp version 18.
+
+==============================================================================
+
+
+                         II.  DIRECTORY ORGANIZATION
+
+The Loom distribution includes Loom source code contained in several
+directories.
+
+Loom itself has one top-level directory and four sub-directories for source
+code.  There is also a sub-directory for compiled code which mirrors the
+source code sub-directory structure.  The top level directory can have any
+name you wish.  For illustrative purposes it will be called "loom4.0b1" in this
+document.  The four sub-directories must be named as follows:
+
+   loom4.0
+        abox
+        kbclasses
+	measures
+	okbc		(optional)
+        tbox
+        patch
+        BIN            
+	    BIN-xxx    (There are multiple, platform-specific BIN sub-directories)
+                abox
+                kbclasses
+                tbox
+                patch
+
+The installation procedures for Unix and Macintosh systems will automatically
+create the necessary directory and sub-directories.  You will only need to
+create the directory that will hold loom4.0.
+
+You should reserve 4 to 5 megabytes of disk storage for the Loom sources and
+binaries.  The exact amount required will depend on the particular lisp
+implementation that you use.
+
+==============================================================================
+
+
+                         III.  INSTALLING THE SOURCES
+
+The sources are provided in two formats: tar format for Unix systems and
+binhex format for Macintosh systems.
+
+A.  UNIX
+
+The files are stored in tape archive (tar) format.  Remember to retrieve them
+in binary mode via ftp.  If you have difficulty un-archiving the files, use
+ftp to retrieve them again, making sure you are using a binary mode transfer.
+
+  1. Create the top level directory for loom.
+  2. "cd" to this directory.
+  3. Install the loom files with "tar xf loom4.0.tar".
+  4. After this successfully completes, you may delete "loom4.0.tar".
+
+B.  MACINTOSH
+
+The files are compressed into a self-extracting archive and then encoded using
+using the binhex format.  Installing Loom requires the following steps:
+
+  1. Create and name the top level folder for loom.
+  2. Move the the binhexed file "loom4.0.sea.hqx" to the folder in which you
+     want loom installed.
+  3. Decode the binhex format.  You will get a file named "loom4.0.sea".
+  4. Double click on "loom4.0.sea" and it will install the source files.
+  5. You may delete the "loom4.0.sea" and "loom4.0.sea.hqx" files.
+
+C.  IBM-COMPATIBLE PC
+
+We do not have an IBM-specific archive available.  You will need to find a
+method of obtaining the source files.
+
+For use with Windows 3.x and Allegro Common Lisp/PC, you will also need to
+modify the file and directory names.
+
+  1. Create and name the top level folder for loom.
+  2. Acquire and decode either the Unix or the Macintosh file archives.
+  3. Change the names on the files supplied in the loom distribution
+     by truncating to 8 characters and changing the extension ".lisp" to 
+     ".LSP".
+
+Windows95 and Windows-NT along with Allegro Common Lisp/PC version 3.0
+support longer pathnames.  In this case the filenames will not need to
+be truncated, but the extension will still need to be changed from ".lisp"
+to ".LSP"
+
+  1. Create and name the top level folder for loom.
+  2. Acquire and decode either the Unix or the Macintosh file archives.
+  3. Change the filename extension ".lisp" to  ".LSP".
+
+D.  PATCHES
+
+From time to time ISI will release patch files via ftp.  These files will be
+named "loom4-0-patches.lisp".  Each such patch file contains all previous
+patches.  It should replace the "loom4-0-patches.lisp" in the "patch" directory
+that the archives created.  This is needed so the automatic loading and
+compiling code can incorporate the latest patches.
+
+As an alternative, one could load the patch file right after starting up a new
+Loom process or application.  It is important to remember to compile the file
+before loading it.  In order to compile correctly, it must be compiled from an
+existing Loom.  It will not compile correctly in Lisp alone.  The function
+(loom:load-loom-patches :compile-if-needed-p t) will load the patch file,
+compiling it first if necessary.
+
+==============================================================================
+
+
+                       IV.  REQUIRED SITE CUSTOMIZATION
+
+The files "compile-loom.lisp" and "load-loom.lisp" have code to automatically
+set pathname variables to the directory that contains those files.  There is
+NO LONGER any need to edit the files.
+
+If you for some reason wish to change the default behavior you can modify the
+pathname code.
+
+                                 BINARY FILES
+
+Binary (compiled) files are kept in their own parallel directory structure.
+The file "pathnames.lisp" contains the variable *loom-binary-directory*, which
+points to the top level directory for storing binary files.  The default
+setting is to use a subdirectory under "BIN" that is present at the top level of
+the main Loom 4.0 directory.  If you wish, you may change this to point
+anywhere in your file system.  If you change this variable to point to the
+same place as *loom-pathname-default*, then binaries and sources will be
+stored in the same directories.
+
+The default setup uses separate directories for different lisp versions.  For
+example, the default would store Allegro version 4.3 files in "BIN/ACL4.3" and
+Allegro version 5.0 files in "BIN/ACL5.0" directories, unknown Lisp versions
+will be stored under the "MISC" subdirectory.
+
+==============================================================================
+
+
+		       V.  OPTIONAL SITE CUSTOMIZATION
+
+By default, Loom 4.0 will compile with the Units and Dimensions code
+included.  This will also modify the behavior of the reader to be able to read
+in dimensioned quantities in a natural manner.  One consequence of this reader
+modification is that symbol names that match dimensioned quantities must be
+written with vertical bars around them.  The other consequence is that the
+only legal floating point exponent marker is "e" or "E".
+
+Both of these behaviors can be modified.
+
+There is a compile and load time switch that will prevent the measures code
+from loading at all.  The files "compile-loom.lisp" and "load-loom.lisp"
+contain the following code which enables compilation of the units and
+dimensions code:
+
+	(push :use-units *features*)
+
+To disable units and dimensions, this line should be commented out or
+removed.  This must be done before compiling or loading the Loom system.
+
+The installation of the reader can be modified according to the information in
+the separate measures package documentation.  This is controlled by the
+variable MS::*READ-MEASURES*, which is contained in the file
+"measures/measures.lisp":
+
+   (defvar *read-measures* ':integrated)
+
+The other choices are :on-demand and :dispatched.
+
+With :on-demand, there will be a special readtable MS::*DIM-NUMBER-READTABLE*
+which is bound to a readtable that recognizes dimensioned numbers.  This can
+be used to control when this feature is used.
+
+With :dispatched, a dispatch reader macro will be set for the character M, so
+that units can be read by prefixing them with #M.  The character used can be
+modified by editting the file "measures/reader-setup.lisp".
+
+
+==============================================================================
+
+
+			     VI.  DEFSYSTEM CODE
+
+The system organization and compilation is controlled by using defsystem code.
+The source for this utility is included with the Loom distribution.  It is
+based on the publicly available defsystem code written by Mark Kantrowitz.
+
+You may use this facility in programs that you develop as well.  Information
+about how to use the facility is contained in the file "defsystem.text".  This
+code creates and uses a new package named "MAKE".
+
+------------------------------------------------------------------------------
+IMPORTANT COMPATIBILITY NOTE: The new defsystem used by Loom is based on Mark
+Kantrowitz' defsystem, but it contains a number of extensions needed to assure
+correct compilation of Loom.  This version of defsystem should be compatible
+with existing code that uses Mark Kantrowitz' defsystem from the CMU archives.
+------------------------------------------------------------------------------
+
+If you wish, you may compile the source code for defsystem.  This WILL NOT be
+done automatically by the Loom compilation.  As always, compiling the file
+should lead to a speed increase when it is being used.  Since this only
+happens when Loom is compiled or loaded, it will not have an impact on how
+fast Loom itself operates.  Since the defsystem code is designed to run on
+many different platforms, there will be compiler warnings when features are
+referenced which do not exist on a particular platform.  We have noted the
+following compiler warnings.  They do not prevent the correct operation of the
+defsystem facility.
+
+1.  Franz Allegro Common Lisp (Version 4.3)
+
+    ; While compiling (:TOP-LEVEL-FORM "defsystem.lisp" 1):
+    Warning: Symbol *LIBRARY* declared special
+    Warning: Symbol *MODULE-FILES* declared special
+    ; While compiling OPERATE-ON-SYSTEM:
+    Warning: variable *COMPILE-FILE-VERBOSE* is never used
+
+
+2.  Lucid Common Lisp (Version 4.0.1 and 4.1)
+
+    ;;; Warning: File ... does not begin with IN-PACKAGE.  Compiling in ...
+    ;;; While compiling top level forms
+    ;;; Warning: Free variable *MODULE-FILES* assumed to be special
+    ;;; Warning: Free variable *LIBRARY* assumed to be special
+    ;;; While compiling OPERATE-ON-SYSTEM
+    ;;; Warning: *COMPILE-FILE-VERBOSE* is bound locally, and is not special
+    ;;; Warning: *COMPILE-VERBOSE* is bound locally, and is not special
+    ;;; Warning: Variable *COMPILE-FILE-VERBOSE* is bound, but not referenced
+    ;;; Warning: Variable *COMPILE-VERBOSE* is bound, but not referenced
+    ;;; Warning: The following functions are not known to be defined:
+    ;;; COMMON-LISP-USER::CANONICALIZE-MODULE-NAME was referenced by
+    ;;; top level forms
+    ;;; COMMON-LISP-USER::MODULE-FILES was referenced by
+    ;;; top level forms
+
+
+3.  Macintosh Common Lisp (Version 2.0)
+
+    ;Compiler warnings for "...defsystem.lisp" :
+    ;   Unused lexical variable *COMPILE-FILE-VERBOSE*, in OPERATE-ON-SYSTEM.
+
+
+==============================================================================
+
+
+			VII.  BUILDING AND USING LOOM
+
+A. GENERAL
+
+Loom is built by starting lisp in the normal fashion and loading the file
+"compile-loom.lisp" (which is found in the top level Loom directory).  To use
+Loom after it is compiled, load the file "load-loom.lisp" (also in the top
+level Loom directory).
+
+*****************************************************************************
+*                                                                           *
+*  Remember to set any compiler options that you wish to use before you     *
+*  load the file "compile-loom.lisp".                                       *
+*                                                                           *
+*  The performance that you get from Loom can be greatly influenced by the  *
+*  settings that you choose.  Our experiments have shown that certain Loom  *
+*  functions cons when compiled using Lucid's development compiler, but     *
+*  don't cons at all when compiled using the production compiler!           *
+*                                                                           *
+*****************************************************************************
+
+For example, on a Unix system where the "loom4.0" directory was under "/usr",
+the action would look like:
+
+        (load "/usr/loom4.0/compile-loom.lisp")
+or
+        (load "/usr/loom4.0/load-loom.lisp")
+
+
+After compiling, you might want to save an application image (see section C).
+
+
+B. IMPLEMENTATION SPECIFIC
+
+Through careful conditionalization, the compilation and loading of Loom is
+automatically adapted to a specific implementation by the "compile-loom.lisp"
+and the "load-loom.lisp" files.  Although no user action is required, we will
+note some of the warning messages that you will see.  In some cases these are
+caused by idiosyncrasies of a particular implementation.  In other cases they
+are style warnings which were violated for portability reasons.  In the
+warnings, the path to the top level directory is abbreviated "...", and
+wildcard matches are indicated by "<*>".
+
+The presence of these warnings does not indicate a problem with Loom.
+
+1.  Franz Allegro Common Lisp (Version 4.3)
+
+    ; While compiling LOOM-CONSTANT in .../tbox/classdefs.lisp
+    Warning: cond clause (T (PACKAGE-NAME *PACKAGE*)) is unreachable
+
+    ; While compiling FORM-LOOKUP-FN-NAME in .../tbox/contexts.lisp
+    Warning: cond clause (T (PACKAGE-NAME *PACKAGE*)) is unreachable
+
+    ; While compiling FORM-INPUT-PARAMETERS  in .../abox/predicates.lisp:
+    Warning: cond clause (T (PACKAGE-NAME *PACKAGE*)) is unreachable
+    Warning: cond clause (T (PACKAGE-NAME *PACKAGE*)) is unreachable
+
+    ; While compiling COMPUTE-BACKWARD-CHAINING-P in .../abox/seal.lisp:
+    Warning: Variable #:Gxxxxx is never used.
+
+2.  Lucid Common Lisp (Version 4.1)
+
+  These three warnings will occur while loading loom as well:
+
+    ;;; Warning: File ".../compile-loom.lisp" does not begin with IN-PACKAGE.
+    Loading into package "USER"
+    ;;; Warning: File ".../defsystem.lisp" does not begin with IN-PACKAGE.
+    Loading into package "COMMON-LISP-USER"
+    ;;; Warning: File ".../defsys.lisp" does not begin with IN-PACKAGE.
+    Loading into package "COMMON-LISP-USER"
+
+  This warning will appear at the end of compilation:
+    ;;; Warning: The following function is not known to be defined:
+    ;;;          FUNCTION-LAMBDA-EXPRESSION was referenced by
+    ;;;             LOOM::WARN-IF-REDEFINING-METHOD
+
+
+3.  Macintosh Common Lisp (Version 4.2)
+
+  We have found that giving MCL 4.2 a memory partition size of 10MB works
+well.  We don't recommend using less than 5 to 6MB.  You will not be able to
+run using the MCL default size of 3MB.  This effectively means that you will
+need at least 8MB on a System 7 Macintosh.  To run with less memory you will
+have to use System 6.0.8 or something similar.
+
+  Loom should compile under MCL version 4.2 without any warning 
+messages other than those associated with defsystem.
+
+4.  Harlequin LispWorks  (Version 3.2.1)
+
+  Based on user reports, you should expect the following warning messages
+during compilation of Loom:
+
+    ;      - Loading binary file ".../tbox/service.wfasl"
+    ;;;*** Warning in (COMPILER::SUBFUNCTION 1 MAKE:OPERATE-ON-SYSTEM) : 
+    MAKE::*COMPILE-FILE-VERBOSE* bound lexically.
+
+    ;      - Loading binary file ".../abox/workspaces.wfasl" 
+    Warning: Defining method #<CLOS:STANDARD-METHOD NO-APPLICABLE-METHOD
+    (:AROUND) (T) 100A327C> visible from packages COMMON-LISP.
+
+5.  Allegro Common Lisp/PC (Version 2.0)
+
+  To use ACL/PC you should have at least 20MB of swap space allocated.  You
+will need to increase the heap size in the ALLEGRO.INI file from its default
+value of 8MB to 16MB.  Insufficient heap or swap space will result in
+"expression too big to compile" errors.
+
+6.  All Lisps:
+
+    ;      - Compiling source file ".../abox/coda.lisp" 
+
+    Questionable definition for concept or relation CONCEPT.
+    Source definition:
+    (DEFCONCEPT CONCEPT :IS-PRIMITIVE META-THING ...)
+    Lisp translation:
+    (LAMBDA NIL ...)
+
+    Questionable definition for concept or relation SUBRELATIONS.
+    Source definition:
+    (DEFRELATION SUBRELATIONS :IS-PRIMITIVE BINARY-TUPLE)
+    Lisp translation:
+    (LAMBDA (?SELF)...)
+
+
+C. SAVING AN APPLICATION IMAGE.
+
+You may find it convenient to save an application image containing the Loom
+code rather than loading the files via "load-loom.lisp" every time you start
+a new Lisp.  Most Lisp systems allow you to save an application image to the
+disk and then start it up again.  The exact mechanism is implementation
+dependent.  Common ways of saving a lisp image named "loom4.0" are:
+
+
+1.  Allegro Common Lisp
+
+        (dumplisp :name "/bin/loom4.0")
+
+2.  Lucid Common Lisp
+
+        (disksave "/bin/loom4.0" :full-gc t)
+
+3.  Macintosh Common Lisp
+
+        (save-application "Loom4.0")
+
+
+==============================================================================
+                          END OF INSTALLATION NOTES
+
+
