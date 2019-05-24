@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id$
+ * $Id: Condition.java 15001 2017-04-27 07:08:40Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,7 +98,7 @@ public class Condition extends StandardObject
   {
     super(StandardClass.CONDITION);
     Debug.assertTrue(slots.length == 2);
-    setFormatControl(message);
+    setFormatControl(message.replaceAll("~","~~"));
     setFormatArguments(NIL);
   }
 

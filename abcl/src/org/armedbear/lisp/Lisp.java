@@ -48,13 +48,13 @@ import java.util.WeakHashMap;
 
 abstract public class Lisp extends ABCLStatic
 {
-  public static final boolean debug = false;
+  public static boolean debug = true;
 
   public static boolean cold = true;
 
   public static boolean initialized;
 
-  public static boolean NO_STACK_FRAMES = !debug;
+  public static boolean NO_STACK_FRAMES = !debug && false;
 
   final public static boolean LISP_NOT_JAVA = true;
 
@@ -1879,10 +1879,11 @@ abstract public class Lisp extends ABCLStatic
   {
     if (obj instanceof Package)
       return (Package) obj;
-    Package pkg = getCurrentPackage().findPackage(javaString(obj));
+    String name = javaString(obj);
+    Package pkg = getCurrentPackage().findPackage(name);
     if (pkg != null)
       return pkg;
-    error(new PackageError(obj.princToString() + " is not the name of a package."));
+    error(new PackageError(obj.princToString() + " is not the name of a package.", obj));
     // Not reached.
     return null;
   }
@@ -2491,6 +2492,10 @@ abstract public class Lisp extends ABCLStatic
   public static final Symbol _COMPILE_FILE_CLASS_EXTENSION_ =
    exportSpecial("*COMPILE-FILE-CLASS-EXTENSION*", PACKAGE_SYS, new SimpleString("class")); // cls
 
+  // ### *lisp-file-extensions*
+  public static final Symbol _LISP_FILE_EXTENSTION_ = // FIXME Make code calling this loops thru extensions
+   exportSpecial("*LISP-FILE-EXTENSION*", PACKAGE_SYS, new SimpleString("lisp"));  
+
   // ### *compile-file-zip*
   public static final Symbol _COMPILE_FILE_ZIP_ =
     exportSpecial("*COMPILE-FILE-ZIP*", PACKAGE_SYS, T);
@@ -2822,6 +2827,7 @@ abstract public class Lisp extends ABCLStatic
     loadClass("org.armedbear.lisp.ash");
     loadClass("org.armedbear.lisp.Java");
     loadClass("org.armedbear.lisp.PackageFunctions");
+    loadClass("org.armedbear.lisp.setenv");
     cold = false;
   }
 

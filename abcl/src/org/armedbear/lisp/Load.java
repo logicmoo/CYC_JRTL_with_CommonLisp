@@ -78,7 +78,7 @@ public final class Load
         if (name.type == NIL
             && (name.name != NIL || name.name != null)) {
             Pathname lispPathname = new Pathname(name);
-            lispPathname.type = new SimpleString("lisp");
+            lispPathname.type =  Lisp._LISP_FILE_EXTENSTION_.symbolValue();
             lispPathname.invalidateNamestring();
             LispObject lisp = Pathname.truename(lispPathname, false);
             Pathname abclPathname = new Pathname(name);
@@ -296,6 +296,8 @@ public final class Load
         pathname = new Pathname(filename);
         LispObject bootPath = Site.getLispHome();
         Pathname mergedPathname;
+        
+        String LISP_FILE_EXT = Lisp._LISP_FILE_EXTENSTION_.symbolValue().getStringValue();
         if (bootPath instanceof Pathname) {
             mergedPathname = Pathname.mergePathnames(pathname, (Pathname)bootPath);
         } else {
@@ -315,7 +317,7 @@ public final class Load
             if (url == null || url.toString().endsWith("/")) {
                 url = Lisp.class.getResource(path.replace('-', '_') + "." + COMPILE_FILE_TYPE);
                 if (url == null) {
-                    url = Lisp.class.getResource(path + ".lisp");
+                    url = Lisp.class.getResource(path +  "." + LISP_FILE_EXT);
                 }
             }
             if (url == null) {
