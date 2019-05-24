@@ -2,7 +2,7 @@
  * ReaderError.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id$
+ * $Id: ReaderError.java 15120 2018-04-23 17:58:49Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,15 +40,23 @@ public final class ReaderError extends StreamError
     public ReaderError(String message)
     {
         super(StandardClass.READER_ERROR);
-        setFormatControl(message);
+        setFormatControl(message.replaceAll("~","~~"));
         setFormatArguments(NIL);
     }
 
     public ReaderError(String message, Stream stream)
     {
         super(StandardClass.READER_ERROR);
-        setFormatControl(message);
+        setFormatControl(message.replaceAll("~","~~"));
         setFormatArguments(NIL);
+        setStream(stream);
+    }
+
+  public ReaderError(String message, Stream stream, LispObject arg1, LispObject arg2)
+  {
+        super(StandardClass.READER_ERROR);
+        setFormatControl(message);
+        setFormatArguments(list(arg1, arg2));
         setStream(stream);
     }
 

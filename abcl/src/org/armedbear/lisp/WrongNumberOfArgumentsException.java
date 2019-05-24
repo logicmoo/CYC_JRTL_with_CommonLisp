@@ -2,7 +2,7 @@
  * WrongNumberOfArgumentsException.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id$
+ * $Id: WrongNumberOfArgumentsException.java 15001 2017-04-27 07:08:40Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public final class WrongNumberOfArgumentsException extends ProgramError
 	this.expectedMinArgs = expectedMin;
 	this.expectedMaxArgs = expectedMax;
         this.actualArgs = args;
-        setFormatControl(getMessage());
+        setFormatControl(getMessage().replaceAll("~","~~"));
         setFormatArguments(NIL);
     }
 
@@ -80,7 +80,7 @@ public final class WrongNumberOfArgumentsException extends ProgramError
 	    throw new NullPointerException("message can not be null");
 	}
 	this.message = message;
-        setFormatControl(getMessage());
+        setFormatControl(getMessage().replaceAll("~","~~"));
         setFormatArguments(NIL);
     }
 

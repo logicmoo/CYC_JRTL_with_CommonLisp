@@ -10,6 +10,9 @@ platform/lib/cyc.jar
 platform/lib/subl.jar
 platform/src-bak/
 platform/target/
+*/build/classes/
+*/dist/
+*/bin-eclipse/
 #platform/units/
 #platform/webapps/
 #platform/transcripts/

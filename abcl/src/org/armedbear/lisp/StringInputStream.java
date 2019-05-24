@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id$
+ * $Id: StringInputStream.java 14857 2016-09-04 07:01:02Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +35,14 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
+import java.io.IOException;
 import java.io.StringReader;
 
 public final class StringInputStream extends Stream
 {
     private final StringReader stringReader;
     private final int start;
+    private final String subString;
     
     public StringInputStream(String s)
     {
@@ -61,7 +63,8 @@ public final class StringInputStream extends Stream
 
         this.start = start;
         
-        stringReader = new StringReader(s.substring(start, end));
+        subString = s.substring(start, end);
+        stringReader = new StringReader(subString);
         initAsCharacterInputStream(stringReader);
     }
 
@@ -93,7 +96,41 @@ public final class StringInputStream extends Stream
 
     @Override
     public int getOffset() {
-        return start + super.getOffset();
+        return start + offset;
+    }
+
+    @Override
+    protected long _getFilePosition() {
+        return getOffset();
+    }
+
+    @Override
+    protected boolean _setFilePosition(LispObject arg) {
+        try {
+            int offset;
+
+            if (arg == Keyword.START)
+                offset = 0;
+            else if (arg == Keyword.END)
+                offset = subString.length();
+            else {
+                long n = Fixnum.getValue(arg);
+                if (n < 0 || n > subString.length())
+                    error(new StreamError(this, "FILE-POSITION got out of bounds argument."));
+                offset = (int) n; // FIXME arg might be a bignum
+            }
+
+            stringReader.reset();
+            stringReader.skip(offset);
+            initAsCharacterInputStream(stringReader);
+
+            this.offset = offset;
+        }
+        catch (IOException e) {
+            error(new StreamError(this, e));
+        }
+
+        return true;
     }
     
     // ### make-string-input-stream

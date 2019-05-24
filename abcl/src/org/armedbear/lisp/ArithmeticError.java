@@ -2,7 +2,7 @@
  * ArithmeticError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id$
+ * $Id: ArithmeticError.java 15001 2017-04-27 07:08:40Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +72,7 @@ public class ArithmeticError extends LispError
     public ArithmeticError(String message)
     {
         super(StandardClass.ARITHMETIC_ERROR);
-        setFormatControl(message);
+        setFormatControl(message.replaceAll("~","~~"));
         setFormatArguments(NIL);
         setOperation(NIL);
         setOperands(NIL);

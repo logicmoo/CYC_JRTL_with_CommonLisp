@@ -63,7 +63,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
 public class Lisp {
-    public static final boolean debug = true;
+    public static boolean debug = false;
 
     public static boolean cold = true;
 
@@ -74,7 +74,7 @@ public class Lisp {
 
     static final WeakHashMap<LispObject, LispObject> documentationHashTable = new WeakHashMap<LispObject, LispObject>();
 
-    public static boolean LISP_NOT_JAVA = true;
+    final public static boolean LISP_NOT_JAVA = true;
     // Packages.
     public static final Package PACKAGE_CL = Packages.createPackage("COMMON-LISP", 2048); // EH 10-10-2010: Actual number = 1014
     public static final Package PACKAGE_CL_USER = Packages.createPackage("COMMON-LISP-USER", 1024);

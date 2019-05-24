@@ -2,7 +2,7 @@
  * Debug.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id$
+ * $Id: Debug.java 15031 2017-06-01 06:46:15Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,6 +80,9 @@ public final class Debug
     {
         trace(new Exception("BUG!"));
     }
+    public static void dumpSt(String s) {
+      trace(new Exception(s));
+  }
 
     public static final void trace(String s)
     {
@@ -89,7 +92,7 @@ public final class Debug
     @SuppressWarnings("CallToThreadDumpStack")
     public static final void trace(Throwable t)
     {
-        t.printStackTrace();
+        t.printStackTrace(System.err);
     }
 
     public static final void trace(String message, Throwable t)

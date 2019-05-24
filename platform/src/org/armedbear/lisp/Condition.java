@@ -36,6 +36,7 @@ package org.armedbear.lisp;
 import java.util.List;
 
 import org.jpl7.Term;
+import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
@@ -236,7 +237,7 @@ public final String printObjectImpl()
             return Symbol.APPLY.execute(f, NIL, formatControl, getFormatArguments()).getStringValue();
           }
         if(formatControl == UNBOUND_VALUE) {
-          Errors.warn( "formatControl == " + formatControl );
+          SystemCurrent.originalSystemErr.println( "formatControl == " + formatControl );
         }
       }
     final int maxLevel;

@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id$
+ * $Id: StringOutputStream.java 14976 2017-02-03 08:15:25Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,11 +35,12 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
+import java.io.IOException;
 import java.io.StringWriter;
 
 public final class StringOutputStream extends Stream
 {
-    private final StringWriter stringWriter;
+    private final SeekableStringWriter stringWriter;
 
     public StringOutputStream()
     {
@@ -51,7 +52,7 @@ public final class StringOutputStream extends Stream
         super(Symbol.STRING_OUTPUT_STREAM);
         this.elementType = elementType;
         this.eolStyle = EolStyle.RAW;
-        initAsCharacterOutputStream(stringWriter = new StringWriter());
+        initAsCharacterOutputStream(stringWriter = new SeekableStringWriter());
     }
 
     @Override
@@ -85,17 +86,61 @@ public final class StringOutputStream extends Stream
     {
         if (elementType == NIL)
             return 0;
-        return stringWriter.getBuffer().length();
+        if(OLD_WAY)return offset;
+        return stringWriter.getOffset();
+//        
+//        return  getCharPos();
     }
 
-    public LispObject getString()
-    {
+    boolean OLD_WAY = false;
+
+    @Override
+    protected boolean _setFilePosition(LispObject arg) {
         if (elementType == NIL)
+            return false;
+
+        try {
+            int offset;
+
+            if (arg == Keyword.START)
+                offset = 0;
+            else if (arg == Keyword.END)
+                offset = stringWriter.getBuffer().length();
+            else {
+                long n = Fixnum.getValue(arg);
+                offset = (int) n; // FIXME arg might be a bignum
+            }
+
+            stringWriter.seek(offset);
+            //if(true)setCharPos( offset );
+            if(OLD_WAY)this.offset = offset;
+        }
+        catch (IllegalArgumentException e) {
+            error(new StreamError(this, e));
+        }
+
+        return true;
+    }
+
+
+    public LispObject getString() {
+      if (elementType == NIL) {
             return new NilVector(0);
+      }
+
         StringBuffer sb = stringWriter.getBuffer();
         SimpleString s = new SimpleString(sb);
         sb.setLength(0);
         return s;
+    }
+
+    public LispObject getSimpleStringAndClear()
+    {
+        if (elementType == NIL)
+            return new NilVector(0);
+        String contents = stringWriter.toStringAndClear();
+        
+        return new SimpleString(contents);
     }
 
     // ### %make-string-output-stream
@@ -119,8 +164,9 @@ public final class StringOutputStream extends Stream
         @Override
         public LispObject execute(LispObject arg)
         {
-            if (arg instanceof StringOutputStream)
-                return ((StringOutputStream)arg).getString();
+          if (arg instanceof StringOutputStream) {
+            return ((StringOutputStream)arg).getSimpleStringAndClear();
+          }
             return type_error(this, Symbol.STRING_OUTPUT_STREAM);
         }
     };

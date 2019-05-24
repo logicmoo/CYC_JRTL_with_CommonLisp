@@ -228,6 +228,9 @@ public final class Java
         catch (IllegalArgumentException e) {
             error(new LispError("illegal argument"));
         }
+        catch (Error ct) {  //ControlTransfer's
+            throw ct;
+        }
         catch (Throwable t) { // no code -> no ControlTransfer
             error(new LispError(getMessage(t)));
         }

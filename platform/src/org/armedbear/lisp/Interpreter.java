@@ -387,7 +387,8 @@ public final class Interpreter implements Runnable {
                             System.err.println("No argument supplied to --eval");
                             exit(1); // FIXME
                         }
-                    } else if (arg.equals("--load") || arg.equals("--load-system-file")) {
+                    } else if (arg.equals("--load") || 
+arg.equals("--load-system-file")) {
                         if (i + 1 < args.length) {
                             ++i;
                         } else {

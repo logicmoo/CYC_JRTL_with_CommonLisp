@@ -1093,7 +1093,14 @@ abstract public class Lisp extends ABCLStatic
       }
   }
 
-  public static Symbol checkSymbol(LispObject obj)
+  public static final LispInteger checkInteger(LispObject obj) {
+    if (obj instanceof LispInteger)
+      return (LispInteger) obj;
+    return (LispInteger) // Not reached.
+      type_error(obj, Symbol.INTEGER);
+  }
+
+  public static final Symbol checkSymbol(LispObject obj)
   {
           if (obj instanceof Symbol)
                   return (Symbol) obj;

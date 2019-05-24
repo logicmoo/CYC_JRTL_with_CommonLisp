@@ -537,8 +537,9 @@ public final class SimpleString extends AbstractString
     @Override
 	public String toString()  {
 		string = getStringValue();
-		if (Lisp.insideToString == 0) {
-			if(!Lisp.debug) Debug.assertViolation("calling toString in a STR " + string + ".. use getStringValue() instead");
+		if (false && Lisp.insideToString == 0) {
+			if(!Lisp.debug) Debug.assertViolation("calling toString in a STR " + string + //
+			    ".. use getStringValue() instead");
 		}
     	return string;
 
