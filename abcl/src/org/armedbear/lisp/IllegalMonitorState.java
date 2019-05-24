@@ -2,7 +2,7 @@
  * IllegalMonitorState.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id$
+ * $Id: IllegalMonitorState.java 15001 2017-04-27 07:08:40Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,7 +43,7 @@ public final class IllegalMonitorState extends ProgramError
         // This is really just an ordinary PROGRAM-ERROR, broken out into its
         // own Java class as a convenience for the implementation.
         super(StandardClass.PROGRAM_ERROR);
-        setFormatControl(getMessage());
+        setFormatControl(getMessage().replaceAll("~","~~"));
         setFormatArguments(NIL);
     }
 
@@ -55,7 +55,7 @@ public final class IllegalMonitorState extends ProgramError
         if (message != null) {
             this.message = message;
         } 
-        setFormatControl(getMessage());
+        setFormatControl(getMessage().replaceAll("~","~~"));
         setFormatArguments(NIL);
     }
     

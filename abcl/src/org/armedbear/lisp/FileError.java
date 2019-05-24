@@ -2,7 +2,7 @@
  * FileError.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id$
+ * $Id: FileError.java 15001 2017-04-27 07:08:40Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ public final class FileError extends LispError
     public FileError(String message)
     {
         super(StandardClass.FILE_ERROR);
-        setFormatControl(message);
+        setFormatControl(message.replaceAll("~","~~"));
         setFormatArguments(NIL);
         setPathname(NIL);
     }
@@ -76,7 +76,7 @@ public final class FileError extends LispError
 
     {
         super(StandardClass.FILE_ERROR);
-        setFormatControl(message);
+        setFormatControl(message.replaceAll("~","~~"));
         setFormatArguments(NIL);
         setPathname(pathname);
     }
