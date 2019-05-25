@@ -141,10 +141,10 @@
 ;;;		unspecified or NIL, in which case as many digits as possible
 ;;;		are generated, subject to the constraint that there are no
 ;;;		trailing zeroes.
-;;;     SCALE    - If this parameter is specified or non-NIL, then the number
+;;;     SCALE    - If this parameter is specified or non-zero, then the number
 ;;;		printed is (* x (expt 10 scale)). This scaling is exact,
 ;;;		and cannot lose precision.
-;;;     FMIN     - This parameter, if specified or non-NIL, is the minimum
+;;;     FMIN     - This parameter, if specified or non-zero, is the minimum
 ;;;		number of fraction digits which will be produced, regardless
 ;;;		of the value of WIDTH or FDIGITS. This feature is used by
 ;;;		the ~E format directive to prevent complete loss of
@@ -167,25 +167,189 @@
 ;;;     POINT-POS       - The position of the digit preceding the decimal
 ;;;		       point. Zero indicates point before first digit.
 ;;;
-;;; NOTE: FLONUM-TO-STRING goes to a lot of trouble to guarantee
-;;; accuracy. Specifically, the decimal number printed is the closest
-;;; possible approximation to the true value of the binary number to
-;;; be printed from among all decimal representations with the same
-;;; number of digits. In free-format output, i.e. with the number of
-;;; digits unconstrained, it is guaranteed that all the information is
-;;; preserved, so that a properly- rounding reader can reconstruct the
-;;; original binary number, bit-for-bit, from its printed decimal
-;;; representation. Furthermore, only as many digits as necessary to
-;;; satisfy this condition will be printed.
+;;; NOTE:  FLONUM-TO-STRING goes to a lot of trouble to guarantee accuracy.
+;;; Specifically, the decimal number printed is the closest possible 
+;;; approximation to the true value of the binary number to be printed from 
+;;; among all decimal representations  with the same number of digits.  In
+;;; free-format output, i.e. with the number of digits unconstrained, it is 
+;;; guaranteed that all the information is preserved, so that a properly-
+;;; rounding reader can reconstruct the original binary number, bit-for-bit, 
+;;; from its printed decimal representation. Furthermore, only as many digits
+;;; as necessary to satisfy this condition will be printed.
 ;;;
-;;; FLOAT-STRING actually generates the digits for positive numbers.
-;;; The algorithm is essentially that of algorithm Dragon4 in "How to
-;;; Print Floating-Point Numbers Accurately" by Steele and White. The
-;;; current (draft) version of this paper may be found in
-;;; [CMUC]<steele>tradix.press. DO NOT EVEN THINK OF ATTEMPTING TO
-;;; UNDERSTAND THIS CODE WITHOUT READING THE PAPER!
+;;;
+;;; FLOAT-STRING actually generates the digits for positive numbers.  The
+;;; algorithm is essentially that of algorithm Dragon4 in "How to Print 
+;;; Floating-Point Numbers Accurately" by Steele and White.  The current 
+;;; (draft) version of this paper may be found in [CMUC]<steele>tradix.press.
+;;; DO NOT EVEN THINK OF ATTEMPTING TO UNDERSTAND THIS CODE WITHOUT READING 
+;;; THE PAPER!
 
-(defun flonum-to-string (x &optional width fdigits scale fmin)
+(defparameter *digits* "0123456789")
+
+(defun float-to-digits* (digits number position relativep)
+  "Does what float-to-digits, but also detects if result is zero."
+  (multiple-value-bind (exp string)
+      (float-to-digits digits
+                       number
+                       position
+                       relativep)
+    (values exp
+            string
+            (and position
+                 (< exp (- (abs position)))))))
+
+(defun flonum-to-string (x &optional width fdigits (scale 0) (fmin 0))
+  (declare (type float x))
+  (if (zerop x)
+      ;; Zero is a special case which FLOAT-STRING cannot handle.
+      (cond ((null fdigits)
+             (values ".0" 2 t nil 0))
+            ((zerop fdigits)
+             (values "0." 2 nil t 1))
+            (T
+             (let ((s (make-string (1+ fdigits) :initial-element #\0)))
+               (setf (schar s 0) #\.)
+               (values s (length s) t nil 0))))
+      (multiple-value-bind (e string zero?)
+          (cond (fdigits
+                 (float-to-digits* nil x
+                                   (min (- (+ fdigits scale))
+                                        (- fmin))
+                                   nil))
+                ((null width)
+                 (float-to-digits* nil x nil nil))
+                (T  
+                    (when (null scale) (setq scale -1))
+                    (let ((w (multiple-value-list
+                             (float-to-digits* nil x
+                                               (max 0
+                                                    (+ (- width 2)
+                                                       (if (minusp scale)
+                                                           scale 0)))
+                                               t)))
+                         (f (multiple-value-list
+                             (float-to-digits* nil x
+                                               (- (+ fmin scale))
+                                               nil))))
+                     (if (>= (length (cadr w))
+                             (length (cadr f)))
+                         (values-list w)
+                         (values-list f)))))
+        (let* ((exp (+ e scale))
+               (stream (make-string-output-stream))
+               (length (length string)))
+          ;; Integer part
+          (when (plusp exp)
+            (write-string string
+                          stream
+                          :end (min length exp))
+            (dotimes (i (- exp length))
+              (write-char #\0 stream)))
+          ;; Separator and fraction
+          (write-char #\. stream)
+          ;; Fraction part
+          (cond ((and zero? fdigits)
+                 (dotimes (i fdigits)
+                   (write-char #\0 stream)))
+                (fdigits
+                 (let ((characters-used 0))
+                   (dotimes (i (min (- exp) fdigits))
+                     (incf characters-used)
+                     (write-char #\0 stream))
+                   (let* ((start (max 0 (min length exp)))
+                          (end (max start
+                                    (min length
+                                         (+ start (- fdigits characters-used))))))
+                     (write-string string stream
+                                   :start start
+                                   :end   end)
+                     (incf characters-used (- end start))
+                     (dotimes (i (- fdigits characters-used))
+                       (write-char #\0 stream)))))
+                (zero?
+                 (write-char #\0 stream))
+                (T
+                 (dotimes (i (- exp))
+                   (write-char #\0 stream))
+                 (let ((start (max 0 (min length exp))))
+                   (write-string string stream
+                                 :start start))))
+          (let* ((string (get-output-stream-string stream))
+                 (length (length string))
+                 (position (position #\. string)))
+            (values string
+                    length
+                    (= position 0)
+                    (= position (1- length))
+                    position))))))
+
+;;; SCALE-EXPONENT  --  Internal
+;;;
+;;;    Given a non-negative floating point number, SCALE-EXPONENT returns a new
+;;; floating point number Z in the range (0.1, 1.0] and an exponent E such
+;;; that Z * 10^E is (approximately) equal to the original number.  There may
+;;; be some loss of precision due the floating point representation.  The
+;;; scaling is always done with long float arithmetic, which helps printing of
+;;; lesser precisions as well as avoiding generic arithmetic.
+;;;
+(defun scale-exponent (original-x)
+  (declare (optimize (debug 0) (safety 0)))
+  (let* ((x (coerce original-x 'long-float))
+         (delta 0))
+    (declare (long-float x)
+             (fixnum delta))
+    (multiple-value-bind (sig exponent)
+        (decode-float x)
+      (declare (ignore sig)
+               (fixnum exponent)
+               (long-float sig))
+      (when (zerop x)
+        (return-from scale-exponent (values (float 0.0l0 original-x) 1)))
+      ;; When computing our initial scale factor using EXPT, we pull out part of
+      ;; the computation to avoid over/under flow.  When denormalized, we must pull
+      ;; out a large factor, since there is more negative exponent range than
+      ;; positive range.
+      (when (and (minusp exponent)
+                 (< least-negative-normalized-long-float x
+                    least-positive-normalized-long-float))
+        #+long-float
+        (setf x (* x 1.0l18) delta -18)
+        #-long-float
+        (setf x (* x 1.0l16) delta -16))
+      ;; We find the appropriate factor that keeps the output within [0.1,1)
+      ;; Note that we have to compute the exponential _every_ _time_ in the loop
+      ;; because multiplying just by 10.0l0 every time would lead to a greater
+      ;; loss of precission.
+      (let ((ex (- (round (* exponent #.(log 2l0 10))) delta)))
+        (declare (fixnum ex))
+        (if (minusp ex)
+            (loop for y of-type long-float
+                 = (* x (the long-float (expt 10.0l0 (- ex))))
+               while (< y 0.1l0)
+               do (decf ex)
+               finally (return (values y (the fixnum (+ delta ex)))))
+            (loop for y of-type long-float
+                 = (/ x (the long-float (expt 10.0l0 ex)))
+               while (>= y 1.0l0)
+               do (incf ex)
+               finally (return (values y (the fixnum (+ delta ex)))))))
+      #+(or)
+      (loop with ex of-type fixnum
+           = (round (* exponent #.(log 2l0 10)))
+         for y of-type long-float
+           = (if (minusp ex)
+                 (* x (the long-float (expt 10.0l0 (- ex))))
+                 (/ x (the long-float (expt 10.0l0 ex))))
+         do (cond ((<= y 0.1l0)
+                   (decf ex))
+                  ((> y 1.0l0)
+                   (incf ex))
+                  (t
+                   (return (values y (the fixnum (+ delta ex))))))))))
+
+
+(defun flonum-to-string-old (x &optional width fdigits scale fmin)
   (declare (ignore fmin)) ; FIXME
   (cond ((zerop x)
 	 ;; Zero is a special case which FLOAT-STRING cannot handle.
@@ -265,7 +429,7 @@
            (concatenate 'string (subseq s 0 index) "." (subseq s index))))))
 
 
-(defun scale-exponent (original-x)
+(defun scale-exponent-old (original-x)
   (let* ((x (coerce original-x 'long-float)))
     (multiple-value-bind (sig exponent) (decode-float x)
       (declare (ignore sig))
@@ -298,6 +462,173 @@
   "Return true if the double-float X is denormalized."
   (and (zerop (ldb double-float-exponent-byte (double-float-high-bits x)))
        (not (zerop x))))
+
+
+;;;; float-to-digits-old
+;;; This is Dragon4(Formmatter-Feeding Process for Floating-Point Printout).
+;;; Preforming Free-Format Perfect Psoitive Floating-Ponint Printout.
+;;;
+;;; See. Guy L. Steele Jr and Jon L. White, ``Hot to Print Floating-Point
+;;; Numbers Accurately'', p.112-126, Proc. of ACM SIGPLAN '90, June 1992.
+;;;
+;;; b = 2, B = 10
+;;;
+;;; cutoff-mode == :relative => cutoff-place < 0
+;;; f < b^p
+;;; x = f * b^(e-p)
+;;;
+;;; Returns:
+;;;     list-of-digits
+;;;     expt
+;;;
+(defun float-to-digits-old (f e p cutoff-mode cutoff-place)
+  (when (zerop f)
+    (return-from float-to-digits-old (values '(0) 0)) )
+
+  (let* ((round-up-p nil)
+         (R (ash f (max (- e p) 0)))
+         (S (ash 1 (max 0 (- p e))))
+         (M- (ash 1 (max 0 (- e p))))
+         (M+ M-)
+         (k 0) )
+
+    ;; Fixup
+    ;;
+    (when (= f (ash 1 (1- p)))
+      (setq M+ (ash M+ 1))
+      (setq R (ash R 1))
+      (setq S (ash S 1)) )
+
+    (let ((S/B (ceiling S 10)))
+      (loop
+       (unless (< R S/B) (return))
+       (decf k)
+       (setq R (* R 10))
+       (setq M- (* M- 10))
+       (setq M+ (* M+ 10)) ) )
+
+    (loop
+     (loop
+      (unless (>= (+ (* 2 R) M+) (* 2 S)) (return))
+      (setq S (* S 10))
+      (incf k) )
+
+     ;; Performe any necessary adjustment of M- and M+ to take into account
+     ;; the formmating requirements.
+     (ecase cutoff-mode
+       ((:absolute))
+       ((:normal)   (setq cutoff-place k))
+       ((:relative) (incf cutoff-place k))
+       ((:variable) (setq cutoff-place (if (minusp k)
+                                       (- 1 cutoff-place)
+                                       (1+ (- k cutoff-place)) ))) )
+
+     ;; CutoffAdjust
+     (when (or (eq cutoff-mode :relative) (eq cutoff-mode :absolute))
+       (let ((a (- cutoff-place k))
+             (y S) )
+         (if (>= a 0)
+           (dotimes (j a) (setq y (* y 10)))
+           (dotimes (j (- a)) (setq y (ceiling y 10))) )
+         ;; (asset (= y (ceiling (* S (expt 10 a)))))
+         (setq M- (max y M-))
+         (setq M+ (max y M+))
+         (if (= M+ y) (setq round-up-p t)) ))
+
+     (unless (>= (+ (* 2 R) M+) (* 2 S)) (return)) )
+
+    ;; Generating.
+    (let ((result '())
+          (expt (1- k))
+          low-p high-p U )
+      (loop
+       (decf k)
+       (multiple-value-setq (U R) (floor (* R 10) S))
+       (setq M- (* M- 10))
+       (setq M+ (* M+ 10))
+       (setq low-p (< (* 2 R) M-))
+       (setq high-p (if round-up-p
+                     (>= (* 2 R) (- (* 2 S) M+))
+                     (> (* 2 R) (- (* 2 S) M+)) ))
+       (unless (and (not low-p) (not high-p) (/= k cutoff-place))
+         (return) )
+       (push U result) )
+
+      (push (cond
+              ((and low-p (not high-p)) U)
+              ((and high-p (not low-p)) (1+ U))
+              ((<= (* 2 R) S) U)
+              (t (1+ U)) )
+            result )
+      (values (nreverse result) expt) ) ) )
+
+
+;;;; Float To Digits
+;;;
+;;; Returns:
+;;;     list-of-digits
+;;;
+;;; Called by:
+;;;     print-float
+;;;
+;;; Description:
+;;;  Convert floating-point number into list of digits based 10.
+;;;
+;;; Reference:
+;;;  Printing Floating-Point Numbers Quickly and Accurately, Robert G Burger,
+;;;  and R. Kent Dybvig, Proceedings of the SIGPLAN '96 Conference on
+;;;  Programming Language Design and Implementation.
+;;;
+;;; Note:
+;;;  This algorithm is faster than Guy L. Steel's algorithm.
+;;;
+;
+(defun float-to-digits (f e min-e p)
+  (labels (
+    (generate (r s m+ m- low-ok? high-ok?)
+      (multiple-value-bind (d r)
+          (truncate (* r 10) s)
+        (let* ((m+ (* m+ 10))
+               (m- (* m- 10))
+               (tc1 (if low-ok?  (<= r m-) (< r m-)))
+               (tc2 (if high-ok? (>= (+ r m+) s) (> (+ r m+) s))) )
+          (if (not tc1)
+              (if (not tc2)
+                  (cons d (generate r s m+ m- low-ok? high-ok?))
+                (list (+ d 1)) )
+            (if (not tc2)
+                (list d)
+              (if (< (* r 2) s)
+                  (list d)
+                (list (+ d 1)) ))) ) ) )
+
+    (scale (r s m+ m- k low-ok? high-ok?)
+      (cond
+        ((if high-ok?
+             (>= (+ r m+) s)
+           (> (+ r m+) s) )
+          (scale r (* s 10) m+ m- (+ k 1) low-ok? high-ok?) )
+
+        ((if high-ok?
+             (< (* (+ r m+) 10) s)
+           (<= (* (+ r m+) 10) s) )
+          (scale (* r 10) s (* m+ 10) (* m- 10) (- k 1) low-ok? high-ok?) )
+
+        (t
+          (values (generate r s m+ m- low-ok? high-ok?) k) )) )
+    )
+    (let ((round? (zerop (mod f 2))))
+      (if (>= e 0)
+          (if (not (= f (expt 2 (- p 1))))
+              (let ((be (expt 2 e)))
+                (scale (* f be 2) 2 be be 0 round? round?) )
+            (let* ((be (expt 2 e))
+                   (be1 (* be 2)) )
+              (scale (* f be1 2) (* 2 2) be1 be 0 round? round?) ))
+        (if (or (= e min-e) (not (= f (expt 2 (- p 1)))))
+            (scale (* f 2) (* (expt 2 (- e)) 2) 1 1 0 round? round?)
+        (scale (* f 4) (* (expt 2 (- 1 e)) 2) 2 1 0 round? round?) )) ) ) )
+
 
 ;;; From early-format.lisp.
 
