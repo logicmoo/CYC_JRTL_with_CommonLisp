@@ -550,7 +550,7 @@ public final class FloatFunctions
 					if (fmaxlen < len) {
 						if (fmaxlen <= whole_len) {
 							fdigits = INT__1;
-							number = DoubleFloat.makeDoubleFloat(Math.round(number.doubleValue()));
+							number = new DoubleFloat(Math.round(number.doubleValue()));
 						}
 						maxlen = Fixnum.getInstance(whole_len);
 					}
