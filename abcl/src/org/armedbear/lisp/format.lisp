@@ -190,7 +190,7 @@
 (defun float-to-digits* (digits number position relativep)
   "Does what float-to-digits, but also detects if result is zero."
   (multiple-value-bind (exp string)
-      (float-to-digits digits
+      (float-to-digits-java digits
                        number
                        position
                        relativep)
@@ -199,7 +199,7 @@
             (and position
                  (< exp (- (abs position)))))))
 
-(defun flonum-to-string (x &optional width fdigits (scale 0) (fmin 0))
+(defun flonum-to-string-old (x &optional width fdigits (scale 0) (fmin 0))
   (declare (type float x))
   (if (zerop x)
       ;; Zero is a special case which FLOAT-STRING cannot handle.

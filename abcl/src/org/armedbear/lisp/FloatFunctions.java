@@ -36,6 +36,7 @@ package org.armedbear.lisp;
 import static org.armedbear.lisp.Lisp.*;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 
 public final class FloatFunctions
 {
@@ -469,4 +470,168 @@ public final class FloatFunctions
             return new SimpleString(sb.toString());
         }
     };
+
+	static final LispInteger INT__2 = Fixnum.constants[2];
+	static final LispInteger INT__0 = Fixnum.constants[0];
+	static final LispInteger INT__1 = Fixnum.constants[1];
+	static final Symbol SYM22891;
+	static final Symbol SYM22890;
+	static final Symbol SYM22861;
+	static final LispCharacter CHR22824;
+	static final Symbol SYM22820;
+	static final Symbol SYM22809;
+	static final Symbol SYM22808;
+	static final Symbol SYM22805;
+	static final Symbol SYM22804;
+	static final LispInteger INT22797;
+	static final Symbol SYM22790;
+	static final Symbol SYM22785;
+	static final LispCharacter CHR22784;
+	static final Symbol SYM22783;
+	static final Symbol SYM22782;
+	static final LispInteger INT22781;
+	static final AbstractString STR22780;
+	static final LispInteger INT22777;
+	static final LispInteger INT22776;
+	static final AbstractString STR22775;
+
+	private static final Symbol s_FLONUM_TO_STRING = Lisp.internInPackage("FLONUM-TO-STRING", "SYSTEM");
+	static {
+		new F_FLONUM_TO_STRING();
+	}
+
+	public static class F_FLONUM_TO_STRING extends CompiledPrimitive {
+		public F_FLONUM_TO_STRING() {
+			super(s_FLONUM_TO_STRING, Lisp.readObjectFromString("(x &optional width fdigits (scale 0) (fmin 0))"));
+			s_FLONUM_TO_STRING.setSymbolFunction(this);
+		}
+
+		@Override
+		public final LispObject execute(LispObject[] var1) {
+			LispThread thread = LispThread.currentThread();
+			LispObject number = getRequired(var1, 0);
+			LispObject maxlen = getOptional(var1, 1, NIL);
+			LispObject fdigits = getOptional(var1, 2, NIL);
+			LispObject scale = getOptional(var1, 3, INT__0);
+			LispObject slimit = getOptional(var1, 4, INT__0);
+			LispObject var8;
+			if (number.zerop()) {
+				if (fdigits == Lisp.NIL) {
+					return thread.execute(Symbol.VALUES, STR22775, INT22776, Lisp.T, Lisp.NIL, INT22777);
+				} else if (fdigits.zerop()) {
+					return thread.execute(Symbol.VALUES, STR22780, INT22776, Lisp.NIL, Lisp.T, INT22781);
+				} else {
+					var8 = thread.execute(SYM22782, fdigits.incr(), SYM22783, CHR22784);
+					((AbstractString) var8).setCharAt(0, '.');
+					return thread.execute(Symbol.VALUES, var8, thread.execute(SYM22785, var8), Lisp.T, Lisp.NIL,
+							INT22777);
+				}
+			} else {
+				//System.err.println("IN:" + Arrays.toString(var1));
+				thread._values = null;
+				if (scale == NIL)
+					scale = INT__0;
+				if (slimit == NIL)
+					slimit = INT__0;
+
+				String s = Double.toString(number.doubleValue());
+				int e_at = s.toUpperCase().indexOf('E');
+				int left_len = s.indexOf('.');
+				int len = s.length();
+				int whole_len = left_len + 1;
+				int fdig = len - left_len - 1;
+
+				if (maxlen == NIL) {
+					maxlen = Fixnum.getInstance(len);
+				} else {
+					
+					int fmaxlen = maxlen.intValue();
+
+					if (fmaxlen < len) {
+						if (fmaxlen <= whole_len) {
+							fdigits = INT__1;
+							number = DoubleFloat.makeDoubleFloat(Math.round(number.doubleValue()));
+						}
+						maxlen = Fixnum.getInstance(whole_len);
+					}
+				}
+
+				String wPart = s.substring(0, left_len);
+				if (wPart.equals("0")) {
+
+				}
+				if (fdigits == NIL) {
+					fdigits = Fixnum.getInstance(fdig);
+
+					if (fdigits.intValue() > maxlen.intValue()) {
+						fdigits = Fixnum.getInstance(maxlen.intValue() - 1);
+						if (fdigits.intValue() < 0) {
+							fdigits = Fixnum.getInstance(0);
+						}
+					}
+				} else {
+					if (fdigits.intValue() > maxlen.intValue()) {
+						fdigits = Fixnum.getInstance(maxlen.intValue() - 1);
+						if (fdigits.intValue() < 0) {
+							fdigits = Fixnum.getInstance(0);
+						}
+					}
+				}
+
+				LispObject[] varN = new LispObject[] { number, maxlen, fdigits, scale, slimit };
+				//System.err.println("MID:" + Arrays.toString(varN));
+				LispObject res = Lisp.internInPackage("FLONUM-TO-STRING-OLD", "SYSTEM").execute(varN);
+
+				return res;
+			}
+		}
+
+		/**
+		 * @param var1
+		 * @param i
+		 * @param nil
+		 * @return
+		 */
+		private LispObject getOptional(LispObject[] var1, int i, LispObject nil) {
+			if (var1.length > i)
+				return var1[i];
+			return nil;
+		}
+
+		/**
+		 * @param var1
+		 * @param i
+		 * @return
+		 */
+		private LispObject getRequired(LispObject[] var1, int i) {
+			if (var1.length > i)
+				return var1[i];
+			return program_error("not enough args");
+		}
+
+	}
+
+	static {
+		STR22775 = new SimpleString(".0");
+		INT22776 = Fixnum.constants[2];
+		INT22777 = Fixnum.constants[0];
+		STR22780 = new SimpleString("0.");
+		INT22781 = Fixnum.constants[1];
+		SYM22782 = Symbol.MAKE_STRING;
+		SYM22783 = Keyword.INITIAL_ELEMENT;
+		CHR22784 = LispCharacter.makeCharacter('0');
+		SYM22785 = Symbol.LENGTH;
+		SYM22790 = Lisp.internInPackage("FLOAT-TO-DIGITS*", "SYSTEM");
+		INT22797 = Fixnum.makeFixnum(-1);
+		SYM22804 = Symbol.VALUES_LIST;
+		SYM22805 = Symbol.MAKE_STRING_OUTPUT_STREAM;
+		SYM22808 = Symbol.WRITE_STRING;
+		SYM22809 = Keyword.END;
+		SYM22820 = Symbol.WRITE_CHAR;
+		CHR22824 = LispCharacter.makeCharacter('.');
+		SYM22861 = Keyword.START;
+		SYM22890 = Symbol.GET_OUTPUT_STREAM_STRING;
+		SYM22891 = Symbol.POSITION;
+	}
+
 }
