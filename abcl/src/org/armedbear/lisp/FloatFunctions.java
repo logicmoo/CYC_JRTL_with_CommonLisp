@@ -534,56 +534,70 @@ public final class FloatFunctions
 				if (slimit == NIL)
 					slimit = INT__0;
 
-				String s = Double.toString(number.doubleValue());
-				int e_at = s.toUpperCase().indexOf('E');
-				int left_len = s.indexOf('.');
-				int len = s.length();
-				int whole_len = left_len + 1;
-				int fdig = len - left_len - 1;
-
-				if (maxlen == NIL) {
-					maxlen = Fixnum.getInstance(len);
-				} else {
-					
-					int fmaxlen = maxlen.intValue();
-
-					if (fmaxlen < len) {
-						if (fmaxlen <= whole_len) {
-							fdigits = INT__1;
-							number = new DoubleFloat(Math.round(number.doubleValue()));
-						}
-						maxlen = Fixnum.getInstance(whole_len);
-					}
-				}
-
-				String wPart = s.substring(0, left_len);
-				if (wPart.equals("0")) {
-
-				}
-				if (fdigits == NIL) {
-					fdigits = Fixnum.getInstance(fdig);
-
-					if (fdigits.intValue() > maxlen.intValue()) {
-						fdigits = Fixnum.getInstance(maxlen.intValue() - 1);
-						if (fdigits.intValue() < 0) {
-							fdigits = Fixnum.getInstance(0);
-						}
-					}
-				} else {
-					if (fdigits.intValue() > maxlen.intValue()) {
-						fdigits = Fixnum.getInstance(maxlen.intValue() - 1);
-						if (fdigits.intValue() < 0) {
-							fdigits = Fixnum.getInstance(0);
-						}
-					}
-				}
-
-				LispObject[] varN = new LispObject[] { number, maxlen, fdigits, scale, slimit };
-				//System.err.println("MID:" + Arrays.toString(varN));
-				LispObject res = Lisp.internInPackage("FLONUM-TO-STRING-OLD", "SYSTEM").execute(varN);
-
-				return res;
+				return failsFour(number, maxlen, fdigits, scale, slimit);
 			}
+		}
+
+		/**
+		 * @param number
+		 * @param maxlen
+		 * @param fdigits
+		 * @param scale
+		 * @param slimit
+		 * @return
+		 */
+		private LispObject failsFour(LispObject number, LispObject maxlen, LispObject fdigits, LispObject scale,
+				LispObject slimit) {
+			String s = number.printObject();
+			 
+			int e_at = s.toUpperCase().indexOf('E');
+			int left_len = s.indexOf('.');
+			int len = s.length();
+			int whole_len = left_len + 1;
+			int fdig = len - left_len - 1;
+
+			if (maxlen == NIL) {
+				maxlen = Fixnum.getInstance(len);
+			} else {
+				
+				int fmaxlen = maxlen.intValue();
+
+				if (fmaxlen < len) {
+					if (fmaxlen <= whole_len) {
+						fdigits = INT__1;
+						number = new DoubleFloat(Math.round(number.doubleValue()));
+					}
+					maxlen = Fixnum.getInstance(whole_len);
+				}
+			}
+
+			String wPart = s.substring(0, left_len);
+			if (wPart.equals("0")) {
+
+			}
+			if (fdigits == NIL) {
+				fdigits = Fixnum.getInstance(fdig);
+
+				if (fdigits.intValue() > maxlen.intValue()) {
+					fdigits = Fixnum.getInstance(maxlen.intValue() - 1);
+					if (fdigits.intValue() < 0) {
+						fdigits = Fixnum.getInstance(0);
+					}
+				}
+			} else {
+				if (fdigits.intValue() > maxlen.intValue()) {
+					fdigits = Fixnum.getInstance(maxlen.intValue() - 1);
+					if (fdigits.intValue() < 0) {
+						fdigits = Fixnum.getInstance(0);
+					}
+				}
+			}
+
+			LispObject[] varN = new LispObject[] { number, maxlen, fdigits, scale, slimit };
+			//System.err.println("MID:" + Arrays.toString(varN));
+			LispObject res = Lisp.internInPackage("FLONUM-TO-STRING-OLD", "SYSTEM").execute(varN);
+
+			return res;
 		}
 
 		/**
