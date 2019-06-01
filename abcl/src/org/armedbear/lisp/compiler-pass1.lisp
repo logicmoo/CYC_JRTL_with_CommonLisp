@@ -1,7 +1,7 @@
 ;;; compiler-pass1.lisp
 ;;;
 ;;; Copyright (C) 2003-2008 Peter Graves
-;;; $Id$
+;;; $Id: compiler-pass1.lisp 15098 2017-08-18 21:52:08Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@
 ;;; obligated to do so.  If you do not wish to do so, delete this
 ;;; exception statement from your version.
 
-(in-package "JVM")
+(in-package :jvm)
 
 (require "LOOP")
 (require "FORMAT")

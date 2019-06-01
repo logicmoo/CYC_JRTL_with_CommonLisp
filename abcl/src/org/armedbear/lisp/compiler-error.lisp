@@ -1,7 +1,7 @@
 ;;; compiler-error.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id$
+;;; $Id: compiler-error.lisp 15004 2017-05-15 20:37:26Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,9 +40,9 @@
 
 (defvar *compiler-error-context* nil)
 
-(define-condition compiler-error (error))
-(define-condition internal-compiler-error (compiler-error))
-(define-condition compiler-unsupported-feature-error (compiler-error))
+(define-condition compiler-error (error) ())
+(define-condition internal-compiler-error (compiler-error) ())
+(define-condition compiler-unsupported-feature-error (compiler-error) ())
 
 (defun compiler-style-warn (format-control &rest format-arguments)
   (warn 'style-warning

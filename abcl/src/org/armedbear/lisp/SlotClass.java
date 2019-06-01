@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id$
+ * $Id: SlotClass.java 14478 2013-04-24 12:51:14Z rschlatte $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,7 +171,7 @@ public class SlotClass extends LispClass
         while (tail != NIL) {
             SlotDefinition slotDefinition = (SlotDefinition) tail.car();
             slotDefinition.setInstanceSlotValue(Symbol.LOCATION,
-                                                Fixnum.makeFixnum(i));
+                                                Fixnum.getInstance(i));
             instanceSlotNames[i++] =
               slotDefinition.getInstanceSlotValue(Symbol.NAME);
             tail = tail.cdr();

@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005-2006 Peter Graves
-;;; $Id$
+;;; $Id: compiler-types.lisp 15037 2017-06-03 04:35:50Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -60,6 +60,10 @@
 (defstruct (integer-type (:constructor %make-integer-type (low high)))
   low
   high)
+
+(defmethod print-object ((type integer-type) stream)
+  (print-unreadable-object (type stream :type t :identity t)
+    (format stream "~D ~D" (integer-type-low type) (integer-type-high type))))
 
 (defconstant +fixnum-type+  (%make-integer-type most-negative-fixnum
                                                 most-positive-fixnum))

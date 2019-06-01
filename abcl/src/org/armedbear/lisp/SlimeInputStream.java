@@ -2,7 +2,7 @@
  * SlimeInputStream.java
  *
  * Copyright (C) 2004 Andras Simon, Peter Graves
- * $Id$
+ * $Id: SlimeInputStream.java 15025 2017-06-01 06:45:26Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -125,7 +125,7 @@ public class SlimeInputStream extends Stream
     @Override
     protected boolean _charReady()
     {
-        return offset < length ? true : false;
+        return offset < length;
     }
 
 

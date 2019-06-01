@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2008 Peter Graves
-;;; $Id$
+;;; $Id: compile-system.lisp 14931 2016-12-27 20:06:20Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -198,7 +198,7 @@
                          combos
                          :key #'first)))
            (filter-setf-combos (combos)
-             (filter-combos
+             (filter-combos 
               (remove-multi-combo-symbols
                (remove-if (lambda (x) (member x '("clos") :test #'string=)) combos :key #'first))))
            (symbols-pathspec (filespec)
@@ -373,6 +373,7 @@
                            "fdefinition.lisp"
                            "fill.lisp"
                            "find-all-symbols.lisp"
+                           "get-pid.lisp"
                            "gentemp.lisp"
                            "gray-streams.lisp"
                            "gui.lisp"
@@ -514,10 +515,10 @@
          (home (pathname *lisp-home*))
          (src (format nil "~A**/*.*" home))
          (java (format nil "~A../../../**/*.*" home)))
-    (with-open-file (s system :direction :output
+    (with-open-file (s system :direction :output 
                        :if-exists :supersede)
       (pprint `(setf (logical-pathname-translations "sys")
                     '(("SYS:SRC;**;*.*" ,src)
                       ("SYS:JAVA;**;*.*" ,java)))
        s))))
-
+      

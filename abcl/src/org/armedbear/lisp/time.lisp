@@ -1,7 +1,7 @@
 ;;; time.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id$
+;;; $Id: time.lisp 14997 2017-04-17 13:47:31Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@
     (if time-zone
         (setf seconds-west (* time-zone 3600)
               daylight nil)
-        (multiple-value-bind (time-zone daylight-p) (default-time-zone)
+        (multiple-value-bind (time-zone daylight-p) (ext:get-time-zone universal-time)
           (setf seconds-west (* time-zone 3600)
                 daylight daylight-p)))
     (multiple-value-bind (weeks secs)
@@ -142,4 +142,7 @@
                              (- (leap-years-before year)
                                 (leap-years-before fake-year))))))))
           (t
-           (+ second (* (+ minute (* (+ hours (default-time-zone)) 60)) 60))))))
+           (let* ((tz-guess (ext:get-time-zone (* hours 3600)))
+		  (guess (+ second (* 60 (+ minute (* 60 (+ hours tz-guess))))))
+		  (tz (get-time-zone guess)))
+	     (+ guess (* 3600 (- tz tz-guess))))))))

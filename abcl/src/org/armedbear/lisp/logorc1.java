@@ -2,7 +2,7 @@
  * logorc1.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id$
+ * $Id: logorc1.java 14466 2013-04-24 12:50:40Z rschlatte $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ public final class logorc1 extends Primitive
     {
         if (first instanceof Fixnum) {
             if (second instanceof Fixnum)
-                return Fixnum.makeFixnum(~((Fixnum)first).value |
+                return Fixnum.getInstance(~((Fixnum)first).value |
                                   ((Fixnum)second).value);
             if (second instanceof Bignum) {
                 BigInteger n1 = ((Fixnum)first).getBigInteger();

@@ -2,7 +2,7 @@
  * SimpleBitVector.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id$
+ * $Id: SimpleBitVector.java 14466 2013-04-24 12:50:40Z rschlatte $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ public final class SimpleBitVector extends AbstractBitVector
     @Override
     public LispObject typeOf()
     {
-        return list(Symbol.SIMPLE_BIT_VECTOR, Fixnum.makeFixnum(capacity));
+        return list(Symbol.SIMPLE_BIT_VECTOR, Fixnum.getInstance(capacity));
     }
 
     @Override

@@ -113,7 +113,7 @@ public final class StringOutputStream extends Stream
 
             stringWriter.seek(offset);
             //if(true)setCharPos( offset );
-            if(OLD_WAY)this.offset = offset;
+            this.offset = offset;
         }
         catch (IllegalArgumentException e) {
             error(new StreamError(this, e));

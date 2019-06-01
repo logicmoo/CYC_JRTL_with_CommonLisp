@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte8.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id$
+ * $Id: BasicVector_UnsignedByte8.java 13708 2011-12-20 22:04:33Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,7 @@ public final class BasicVector_UnsignedByte8 extends AbstractVector
   @Override
   public LispObject typeOf()
   {
-    return list(Symbol.SIMPLE_ARRAY, UNSIGNED_BYTE_8, new Cons(Fixnum.makeFixnum(capacity)));
+    return list(Symbol.SIMPLE_ARRAY, UNSIGNED_BYTE_8, new Cons(Fixnum.getInstance(capacity)));
   }
 
   @Override

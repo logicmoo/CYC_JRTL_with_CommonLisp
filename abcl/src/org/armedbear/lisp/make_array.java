@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id$
+ * $Id: make_array.java 13461 2011-08-11 17:01:41Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,7 +148,7 @@ public final class make_array extends Primitive
               v = new ComplexString(size);
             else
               v = new SimpleString(size);
-            defaultInitialElement = LispCharacter.makeCharacter('\0');
+            defaultInitialElement = LispCharacter.getInstance('\0');
           }
         else if (upgradedType == Symbol.BIT)
           {

@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id$
+;;; $Id: open.lisp 14902 2016-10-13 10:10:27Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -146,7 +146,12 @@
             (error 'file-error
                    :pathname pathname
                    :format-control "The file ~S does not exist."
-                   :format-arguments (list namestring)))))
+                   :format-arguments (list namestring))))
+         (:create
+          ;; CREATE-NEW-FILE "atomically creates a new, empty file named by
+          ;; this abstract pathname if and only if a file with this name does
+          ;; not yet exist." See java.io.File.createNewFile().
+          (create-new-file namestring)))
        (make-file-stream pathname namestring element-type :input nil external-format))
       (:probe
        (case if-does-not-exist

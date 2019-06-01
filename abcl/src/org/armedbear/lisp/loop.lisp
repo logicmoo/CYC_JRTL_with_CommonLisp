@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id$
+;;; $Id: loop.lisp 15033 2017-06-01 06:46:25Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -760,9 +760,7 @@ code to be loaded.
                           (or (symbolp (cadr x))
 			      (and (consp (cadr x)) (eq (caadr x) 'setf)))
 			  1
-			  ;; FIXME: This tag appears not to be present
-			  ;; anywhere.
-			  (throw 'duplicatable-code-p nil)))
+			  (throw 'estimate-code-size nil)))
 		     ((eq fn 'multiple-value-setq)
 		      (f (length (second x)) (cddr x)))
 		     ((eq fn 'return-from)

@@ -2,7 +2,7 @@
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
 ;;; Copyright (C) 2008 Ville Voutilainen
-;;; $Id$
+;;; $Id: directory.lisp 14921 2016-12-07 18:44:11Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -137,7 +137,7 @@ error to its caller."
                     (when 
                         (or 
                          (and 
-                          (file-directory-p entry)
+                          (file-directory-p entry :wild-error-p nil)
                           (pathname-match-p (file-namestring (pathname-as-file entry)) 
                                             (file-namestring pathname)))
                          (pathname-match-p (or (file-namestring entry) "") 

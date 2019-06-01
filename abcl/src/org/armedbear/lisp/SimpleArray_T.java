@@ -2,7 +2,7 @@
  * SimpleArray_T.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id$
+ * $Id: SimpleArray_T.java 14465 2013-04-24 12:50:37Z rschlatte $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,7 +185,7 @@ public final class SimpleArray_T extends AbstractArray
   {
     LispObject result = NIL;
     for (int i = dimv.length; i-- > 0;)
-      result = new Cons(Fixnum.makeFixnum(dimv[i]), result);
+      result = new Cons(Fixnum.getInstance(dimv[i]), result);
     return result;
   }
 

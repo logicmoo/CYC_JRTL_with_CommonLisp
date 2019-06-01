@@ -2,7 +2,7 @@
  * Version.java
  *
  * Copyright (C) 2003-2008 Peter Graves
- * $Id$
+ * $Id: Version.java 15079 2017-06-11 10:00:13Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class Version
 {
   private Version() {}
   
-  static final String baseVersion = "1.4.0-dev";
+  static final String baseVersion = "1.6.0-dev";
   
   static void init() {
     try {
