@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,13 +50,13 @@ import java.util.WeakHashMap;
 
 abstract public class Lisp extends ABCLStatic
 {
-  public static boolean debug = true;
+  public static boolean debug = System.getProperty("lisp.debug","true").equals("true");
 
+  public static boolean ansi = true;
+  
   public static boolean cold = true;
 
   public static boolean initialized;
-
-  public static boolean NO_STACK_FRAMES = !debug && false;
 
   final public static boolean LISP_NOT_JAVA = true;
 
@@ -148,7 +150,8 @@ abstract public class Lisp extends ABCLStatic
 
   // End-of-file marker.
   public static final LispObject EOF = new SLispObject() {
-	  public String printObject() { return unreadableString("eof", false); }
+	  @Override
+	public String printObject() { return unreadableString("eof", false); }
   };
 
   // String hash randomization base
@@ -355,8 +358,8 @@ abstract public class Lisp extends ABCLStatic
 
   private static final void pushJavaStackFrames()
   {
-	  if(NO_STACK_FRAMES) return;
       final LispThread thread = LispThread.currentThread();
+	  if(thread.NO_STACK_FRAMES) return;
       final StackTraceElement[] frames = thread.getJavaStackTrace();
 
       // frames[0] java.lang.Thread.getStackTrace

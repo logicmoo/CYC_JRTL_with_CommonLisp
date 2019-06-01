@@ -2,7 +2,7 @@
  * file_write_date.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: file_write_date.java 14176 2012-10-11 11:33:19Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

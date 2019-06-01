@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java 14957 2017-01-18 07:24:47Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public abstract class Function extends Operator
+public abstract class Function extends Operator 
 {
     private LispObject propertyList = NIL;
     private int callCount;
@@ -44,7 +44,7 @@ public abstract class Function extends Operator
      * The value of *load-truename* which was current when this function
      * was loaded, used for fetching the class bytes in case of disassembly.
      */
-    public final LispObject loadedFrom;
+    private final LispObject loadedFrom;
 
     protected Function() {
 	LispObject loadTruename = Symbol.LOAD_TRUENAME.symbolValueNoThrow();

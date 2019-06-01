@@ -1,7 +1,7 @@
 ;;; define-symbol-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: define-symbol-macro.lisp 14914 2016-11-24 10:31:17Z mevenson $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,6 +39,4 @@
   (when (special-variable-p symbol) ;;TODO astalla also check local declarations?
     (error 'program-error "~S has already been defined as a global variable." symbol))
   `(eval-when (:compile-toplevel :load-toplevel :execute)
-     (record-source-information-for-type ',symbol :symbol-macro)
-     (record-source-information-for-type ',symbol :symbol-macro)
      (%define-symbol-macro ',symbol ',expansion)))

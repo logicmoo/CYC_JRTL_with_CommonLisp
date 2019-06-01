@@ -1,7 +1,7 @@
 ;;; compiler-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: compiler-macro.lisp 14914 2016-11-24 10:31:17Z mevenson $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -61,7 +61,6 @@
                          (declare (ignorable ,env))
                          (block ,block-name ,body))))
         `(progn
-	   (record-source-information-for-type ',name :compiler-macro)
            (setf (compiler-macro-function ',name) (function ,expander))
            ',name)))))
 

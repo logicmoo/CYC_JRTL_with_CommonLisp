@@ -2,7 +2,7 @@
  * JavaClassLoader.java
  *
  * Copyright (C) 2010 Alessio Stalla
- * $Id: FaslClassLoader.java 14015 2012-07-23 11:58:34Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

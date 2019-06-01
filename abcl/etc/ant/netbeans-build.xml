@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="antlib:org.apache.tools.ant"
+    name="abcl" default="default" basedir=".">
+
+<!-- XXX need way to autodetect NetBeans as installed, as this will
+     probably fail otherwise.  -->
+  <import file="../../nbproject/build-impl.xml"/>
+
+
+  <target name="-pre-compile" if="abcl.compile.lisp.skip">
+    <antcall target="abcl.copy.lisp"/>
+  </target>
+
+  <target name="-post-compile" unless="abcl.compile.lisp.skip">
+    <antcall>
+	  <target name="abcl.compile.lisp"/>
+	  <target name="abcl.jar" />
+      <target name="abcl-contrib.jar"/>
+	  <target name="abcl.wrapper" />
+	</antcall>
+  </target>
+
+</project>
+

@@ -159,8 +159,8 @@ public class Symbol extends ALispObject implements java.io.Serializable
     parts = parts.push(new Cons("value", value));
     parts = parts.push(new Cons("function", function));
     parts = parts.push(new Cons("plist", propertyList));
-    parts = parts.push(new Cons("flags", Fixnum.makeFixnum(flags)));
-    parts = parts.push(new Cons("hash", Fixnum.makeFixnum(hash)));
+    parts = parts.push(new Cons("flags", Fixnum.getInstance(flags)));
+    parts = parts.push(new Cons("hash", Fixnum.getInstance(hash)));
     return parts.nreverse();
   }
 
@@ -946,6 +946,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
     
     @Override
     public String toString() {
+    	if(true) return getQualifiedName();
         StringBuilder sb = new StringBuilder();
         if (pkg instanceof Package) {
             sb.append(((Package)pkg).getName());
@@ -3084,6 +3085,10 @@ public class Symbol extends ALispObject implements java.io.Serializable
     PACKAGE_SYS.addExternalSymbol("DIRECT-DEFAULT-INITARGS");
   public static final Symbol DIRECT_SUPERCLASSES =
     PACKAGE_SYS.addExternalSymbol("DIRECT-SUPERCLASSES");
+  public static final Symbol __DISASSEMBLERS__ =
+    PACKAGE_SYS.addExternalSymbol("*DISASSEMBLERS*");
+  public static final Symbol CHOOSE_DISASSEMBLER =
+    PACKAGE_SYS.addExternalSymbol("CHOOSE-DISASSEMBLER");
   public static final Symbol _DOCUMENTATION =
     PACKAGE_SYS.addExternalSymbol("%DOCUMENTATION");
   public static final Symbol _ENABLE_AUTOCOMPILE_ =
@@ -3116,6 +3121,8 @@ public class Symbol extends ALispObject implements java.io.Serializable
     PACKAGE_SYS.addExternalSymbol("PRECEDENCE-LIST");
   public static final Symbol PUTHASH =
     PACKAGE_SYS.addExternalSymbol("PUTHASH");
+  public static final Symbol RECORD_SOURCE_INFORMATION_FOR_TYPE =
+    PACKAGE_SYS.addExternalSymbol("RECORD-SOURCE-INFORMATION-FOR-TYPE");
   public static final Symbol SET_CHAR =
     PACKAGE_SYS.addExternalSymbol("SET-CHAR");
   public static final Symbol _SET_CLASS_SLOTS =
@@ -3131,6 +3138,8 @@ public class Symbol extends ALispObject implements java.io.Serializable
   public static final Symbol SLOTS = PACKAGE_SYS.addExternalSymbol("SLOTS");
   public static final Symbol SLOT_DEFINITION =
     PACKAGE_SYS.addExternalSymbol("SLOT-DEFINITION");
+  public static final Symbol __SOURCE =
+    PACKAGE_SYS.addInternalSymbol("SOURCE");
   public static final Symbol STD_SLOT_BOUNDP =
     PACKAGE_SYS.addExternalSymbol("STD-SLOT-BOUNDP");
   public static final Symbol STD_SLOT_VALUE =
@@ -3227,6 +3236,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
     PACKAGE_SYS.addInternalSymbol("READERS");
   public static final Symbol REQUIRED_ARGS =
     PACKAGE_SYS.addInternalSymbol("REQUIRED-ARGS");
+  // DEPRECATED: to be removed with abcl-1.7
   public static final Symbol _SOURCE =
     PACKAGE_SYS.addInternalSymbol("%SOURCE");
   public static final Symbol SOCKET_STREAM =
@@ -3257,4 +3267,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
   public static final Symbol THREAD =
     PACKAGE_THREADS.addExternalSymbol("THREAD");
 
+  // JVM
+  public static final Symbol _RESIGNAL_COMPILER_WARINGS_ =
+    PACKAGE_JVM.addExternalSymbol("*RESIGNAL-COMPILER-WARNINGS*");
 }

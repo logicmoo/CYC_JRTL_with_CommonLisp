@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte32.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: BasicVector_UnsignedByte32.java 12588 2010-04-10 17:17:08Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
   public LispObject typeOf()
   {
     return list(Symbol.SIMPLE_ARRAY, UNSIGNED_BYTE_32,
-                 new Cons(Fixnum.getInstance(capacity)));
+                 new Cons(Fixnum.makeFixnum(capacity)));
   }
 
   @Override

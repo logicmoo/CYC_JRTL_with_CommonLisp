@@ -2,7 +2,7 @@
  * SimpleArray_UnsignedByte8.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleArray_UnsignedByte8.java 14465 2013-04-24 12:50:37Z rschlatte $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,7 +156,7 @@ public final class SimpleArray_UnsignedByte8 extends AbstractArray
     {
         LispObject result = NIL;
         for (int i = dimv.length; i-- > 0;)
-            result = new Cons(Fixnum.getInstance(dimv[i]), result);
+            result = new Cons(Fixnum.makeFixnum(dimv[i]), result);
         return result;
     }
 

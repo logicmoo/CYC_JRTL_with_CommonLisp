@@ -2,7 +2,7 @@
  * StackFrame.java
  *
  * Copyright (C) 2009 Mark Evenson
- * $Id: StackFrame.java 13462 2011-08-11 17:04:30Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ package org.armedbear.lisp;
 import static org.armedbear.lisp.Lisp.*;
 
 public abstract class StackFrame 
-  extends SLispObject
+  extends ALispObject
 {
   @Override
     public LispObject typep(LispObject typeSpecifier) 

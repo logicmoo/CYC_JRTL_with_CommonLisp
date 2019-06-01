@@ -37,7 +37,7 @@ import static org.armedbear.lisp.Lisp.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class LispCharacter extends ALispObject
+public final class LispCharacter extends NLispObject
 {
 
   // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one

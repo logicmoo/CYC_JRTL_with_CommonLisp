@@ -61,13 +61,19 @@ public final class EMFCache extends ALispObject
       type_error(obj, Symbol.STANDARD_GENERIC_FUNCTION);
   }
 
-  private static class EqlSpecialization extends ALispObject
+  private static class EqlSpecialization extends SLispObject
   {
     public LispObject eqlTo;
 
     public EqlSpecialization(LispObject eqlTo)
     {
         this.eqlTo = eqlTo;
+    }
+
+    @Override
+    public String printObject()
+    {
+    	return unreadableString("EqlSpecialization", false);
     }
   }
 

@@ -2,7 +2,7 @@
  * ProgramError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ProgramError.java 15001 2017-04-27 07:08:40Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public class ProgramError extends LispError
     public ProgramError(String message)
     {
         super(StandardClass.PROGRAM_ERROR);
-        setFormatControl(message.replaceAll("~","~~"));
+        setFormatControl(message);
         setFormatArguments(NIL);
     }
 

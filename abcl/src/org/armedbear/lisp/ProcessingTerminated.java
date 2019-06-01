@@ -2,7 +2,7 @@
  * ProcessingTerminated.java
  *
  * Copyright (C) 2011 Erik Huelsmann
- * $Id: ProcessingTerminated.java 13156 2011-01-18 16:33:29Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

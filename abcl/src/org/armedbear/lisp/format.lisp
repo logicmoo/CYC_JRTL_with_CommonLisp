@@ -363,13 +363,13 @@
            (setf x (* x (expt 10 scale))))
          (let* ((s (float-string x))
                 (length (length s))
-                (index (or (position #\. s) length)))
+                (index (position #\. s)))
            (when (and (< x 1)
                       (> length 0)
                       (eql (schar s 0) #\0))
              (setf s (subseq s 1)
                    length (length s)
-                   index (or (position #\. s) length)))
+                   index (position #\. s)))
            (when fdigits
              ;; "Leading zeros are not permitted, except that a single zero
              ;; digit is output before the decimal point if the printed value

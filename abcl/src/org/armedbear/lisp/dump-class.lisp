@@ -1,7 +1,7 @@
 ;;; dump-class.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: dump-class.lisp 14144 2012-09-01 21:03:05Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

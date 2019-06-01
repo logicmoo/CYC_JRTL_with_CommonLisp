@@ -86,13 +86,10 @@ public final class StringOutputStream extends Stream
     {
         if (elementType == NIL)
             return 0;
-        if(OLD_WAY)return offset;
         return stringWriter.getOffset();
 //        
 //        return  getCharPos();
     }
-
-    boolean OLD_WAY = false;
 
     @Override
     protected boolean _setFilePosition(LispObject arg) {

@@ -251,6 +251,10 @@ public final class Interpreter
                     arglist = new Cons(args[i], arglist);
                 } else if (arg.equals("--")) {
                     doubledash = true;
+                } else if (arg.equals("--noansi")) {
+                	ansi = false;
+                } else if (arg.equals("--ansi")) {
+                    ansi = true;
                 } else if (arg.equals("--noinit")) {
                     noinit = true;
                 } else if (arg.equals("--nosystem")) {

@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Keyword.java 15028 2017-06-01 06:45:39Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,8 +97,6 @@ public final class Keyword
         JAVA_1_5            = internKeyword("JAVA-1.5"),
         JAVA_1_6            = internKeyword("JAVA-1.6"),
         JAVA_1_7            = internKeyword("JAVA-1.7"),
-        JAVA_1_8            = internKeyword("JAVA-1.8"),
-        JAVA_1_9            = internKeyword("JAVA-1.9"),
         KEY                 = internKeyword("KEY"),
         KEY_AND_VALUE       = internKeyword("KEY-AND-VALUE"),
         KEY_OR_VALUE        = internKeyword("KEY-OR-VALUE"),
@@ -124,7 +122,6 @@ public final class Keyword
         PACKAGE             = internKeyword("PACKAGE"),
         PATHNAME            = internKeyword("PATHNAME"),
         PROBE               = internKeyword("PROBE"),
-        PREFIX              = internKeyword("PREFIX"), // EXT:MAKE-TEMP-FILE
         PUBLIC              = internKeyword("PUBLIC"),
         PRESERVE            = internKeyword("PRESERVE"),
         REF                 = internKeyword("REF"),
@@ -137,7 +134,6 @@ public final class Keyword
         STATUS              = internKeyword("STATUS"),
         STREAM              = internKeyword("STREAM"),
         SUNOS               = internKeyword("SUNOS"),
-        SUFFIX              = internKeyword("SUFFIX"),  // EXT:MAKE-TEMP-FILE
         SUPERSEDE           = internKeyword("SUPERSEDE"),
         TEST                = internKeyword("TEST"),
         TEST_NOT            = internKeyword("TEST-NOT"),
@@ -154,7 +150,6 @@ public final class Keyword
         VALUE               = internKeyword("VALUE"),
         VERSION             = internKeyword("VERSION"),
         WILD                = internKeyword("WILD"),
-        WILD_ERROR_P        = internKeyword("WILD-ERROR-P"),
         WILD_INFERIORS      = internKeyword("WILD-INFERIORS"),
         WINDOWS             = internKeyword("WINDOWS"),
         X86                 = internKeyword("X86"),

@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Nil.java 15027 2017-06-01 06:45:36Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,20 +44,6 @@ public final class Nil extends Symbol
         super("NIL", pkg);
         pkg.addSymbol(this);
         initializeConstant(this);
-    }
-
-    @Override
-    public Object javaInstance()
-    {
-        return null;
-    }
-
-    @Override
-    public Object javaInstance(Class c)
-    {
-        if (c == Boolean.class || c == boolean.class)
-            return Boolean.FALSE;
-        return javaInstance();
     }
 
     @Override

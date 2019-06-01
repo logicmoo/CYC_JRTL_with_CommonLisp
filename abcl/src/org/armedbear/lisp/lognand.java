@@ -2,7 +2,7 @@
  * lognand.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: lognand.java 14466 2013-04-24 12:50:40Z rschlatte $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public final class lognand extends Primitive
     {
         if (first instanceof Fixnum) {
             if (second instanceof Fixnum)
-                return Fixnum.getInstance(~(((Fixnum)first).value &
+                return Fixnum.makeFixnum(~(((Fixnum)first).value &
                                     ((Fixnum)second).value));
             if (second instanceof Bignum) {
                 BigInteger n1 = ((Fixnum)first).getBigInteger();

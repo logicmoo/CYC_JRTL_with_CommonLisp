@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Complex.java 14757 2015-04-11 07:44:42Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public final class Complex extends ALispObject
+public final class Complex extends NLispObject
 {
   public final LispObject realpart;
   public final LispObject imagpart;

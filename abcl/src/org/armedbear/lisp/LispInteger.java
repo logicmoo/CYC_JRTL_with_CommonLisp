@@ -2,7 +2,7 @@
  * LispInteger.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: LispInteger.java 12713 2010-05-20 17:58:13Z astalla $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

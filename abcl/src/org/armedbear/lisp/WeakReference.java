@@ -2,7 +2,7 @@
  * WeakReference.java
  *
  * Copyright (C) 2011 Erik Huelsmann
- * $Id: WeakReference.java 13440 2011-08-05 21:25:10Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public class WeakReference extends SLispObject {
+public class WeakReference extends ALispObject {
 
     java.lang.ref.WeakReference<LispObject> ref;
 
