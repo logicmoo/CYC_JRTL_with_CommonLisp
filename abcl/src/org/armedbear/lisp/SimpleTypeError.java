@@ -2,7 +2,7 @@
  * SimpleTypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id$
+ * $Id: SimpleTypeError.java 12298 2009-12-18 21:50:54Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

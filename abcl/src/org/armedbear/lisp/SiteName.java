@@ -2,7 +2,7 @@
  * SiteName.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id$
+ * $Id: SiteName.java 12513 2010-03-02 22:35:36Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

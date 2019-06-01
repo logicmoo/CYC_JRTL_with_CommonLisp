@@ -7,8 +7,8 @@ systems the code in this package will recursively package all the
 required source and fasls in a jar archive .
 
 To install ASDF systems, [Quicklisp]() is probably the best
-contemporary solution, although a version of ASDF-INSTALL is also
-packaged in ABCL contribs.
+contemporary solution.  The QUICKLISP-ABCL <file:../quicklisp-abcl>
+may be used to install Quicklisp at runtime from within ABCL.
 
 [Quicklisp]: http://www.quicklisp.org
 
@@ -56,7 +56,6 @@ load is indeed coming from the jar.
 
 # Colophon
 
-Mark Evenson
-Created: 20-JUN-2011
-Modified: 20-JUN-2011
-<> abcl:documents <release#asdf-jar> .
+     Mark Evenson
+     Created: 20-JUN-2011
+     Revised: 11-JUN-2017

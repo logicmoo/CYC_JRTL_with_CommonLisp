@@ -1,7 +1,7 @@
 ;;; adjoin.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id$
+;;; $Id: adjoin.lisp 11695 2009-03-03 22:10:25Z ehuelsmann $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

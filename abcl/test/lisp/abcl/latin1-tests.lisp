@@ -1,7 +1,7 @@
 ;;; latin1-tests.lisp
 ;;;
 ;;; Copyright (C) 2010 Ville Voutilainen
-;;; $Id$
+;;; $Id: latin1-tests.lisp 12902 2010-08-28 11:09:13Z vvoutilainen $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

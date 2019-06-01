@@ -1,7 +1,7 @@
 ;;; make-load-form-saving-slots.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id$
+;;; $Id: make-load-form-saving-slots.lisp 14478 2013-04-24 12:51:14Z rschlatte $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

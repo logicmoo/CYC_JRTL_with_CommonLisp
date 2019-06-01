@@ -2,7 +2,7 @@
  * lisp_implementation_type.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id$
+ * $Id: lisp_implementation_type.java 11488 2008-12-27 10:50:33Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

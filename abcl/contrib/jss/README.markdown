@@ -21,7 +21,6 @@ name. When ambiguous, you need to be more specific. A simple example
 from CL-USER:
 
     (require :jss)
-    (in-package :jss)
     (let ((sw (new 'StringWriter)))
        (#"write" sw "Hello ")
        (#"write" sw "World")
@@ -44,7 +43,7 @@ or
 
 The call 
 
-     (#"write" sw "Hello ")
+    (#"write" sw "Hello ")
      
 uses the code in invoke.java to call the method named "write" with
 the arguments sw and "Hello ".  JSS figures out the right java method
@@ -52,8 +51,8 @@ to call, and calls it.
 
 An interactive restart is available to resolve class ambiguity.
 
-Static calls are possible as well with the #" macro, but the
-first argument MUST BE A SYMBOL to distinguish 
+Static calls are possible as well with the SHARPSIGN-QUOTATION_MARK
+macro, but the first argument *must* be a symbol to distinguish
 
      (#"getProperties" "java.lang.System")
      
@@ -78,7 +77,7 @@ want to avoid the overhead of a the dynamic dispatch.
 e.g.
  
     (with-constant-signature ((tostring "toString")) 
-        (time (dotimes (i 10000) (tostring "foo"))))
+      (time (dotimes (i 10000) (tostring "foo"))))
 
 runs about three times faster than 
  
@@ -86,7 +85,8 @@ runs about three times faster than
 
 So, something like
 
-    (with-constant-signature ((tostring "toString" t)) ...) 
+    (with-constant-signature
+      ((tostring "toString" t)) ...) 
     
 will cause the toString to be a raw java call. See
 JSS::GET-ALL-JAR-CLASSNAMES for an example.
@@ -96,12 +96,33 @@ method is looked up based on the arguments passed, and thereafter
 that method is called directly.  Doesn't work for static methods at
 the moment (lazy)
 
-(japropos string) finds all class names matching string
+    (japropos string) 
 
-(jcmn class-name) lists the names of all methods for the class
+finds all class names matching STRING.
 
-Compatibility
--------------
+    (jcmn class-name) 
+    
+lists the names of all methods for the CLASS-NAME.
+
+Java static fields may be addressed via the SHARPSIGN-QUOTATION_MARK macro as 
+  
+    (#"{java.lang.System}.{fileSeparator}")
+  
+### Javaparser
+
+On the reference of the JAVAPARSER system, one may use a Java DSL to
+specify invocation and chains:
+
+    (asdf:make :javaparser)
+    (#1"new ByteBuddy()
+      .subclass(Object.class,t)
+      .method(ElementMatchers.named("toString"))
+      .intercept(FixedValue.value("Hello World!"))
+      .make()
+      .load(getClass().getClassLoader())
+      .getLoaded()" 
+   
+# Compatibility
 
 The function ENSURE-COMPATIBILITY attempts to provide a compatibility
 mode to existing users of JSS by importing the necessary symbols into
@@ -118,22 +139,22 @@ Some notes on other compatibility issues:
 
   1.0 
     Equivalent to Alan Ruttenberg's version included with the original
-    [lsw]().  
+    [lsw2]().  
     
 [lsw]: http://mumble.net:8080/svn/lsw/trunk/
-[lsw2]: let-me-google-that-for-you    
+[lsw2]: https://github.com/alanruttenberg/lsw2
     
 
   3.0 
-     In the JSS package loaded from [abcl-contrib]() 
+     The results the of having JSS package loaded from [abcl-contrib][]
      
-abcl-contrib: http://abcl.org/svn/trunk/abcl/contrib/     
-   
+[abcl-contrib]: http://abcl.org/svn/trunk/abcl/contrib/
+
 # Colophon
 
-<> dc:created "2005" ;
-   dc:author "Mark <evenson.not.org@gmail.com>";
-   dc:revised "06-DEC-2012" ;
-   <> abcl:documents <urn:abcl.org/release/1.3.0-dev/contrib/jss#3.0.5" .
+    <> dc:created "2005" ;
+       dc:author "Mark <evenson.not.org@gmail.com>";
+       dc:revised "11-JUN-2017" .
+
 
    

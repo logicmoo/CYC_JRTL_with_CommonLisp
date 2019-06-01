@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id$
+ * $Id: TwoWayStream.java 13444 2011-08-06 13:51:26Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

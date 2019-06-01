@@ -388,7 +388,7 @@ not-documented
 \paragraph{}
 \label{EXTENSIONS:FILE-DIRECTORY-P}
 \index{FILE-DIRECTORY-P}
---- Function: \textbf{file-directory-p} [\textbf{extensions}] \textit{pathspec}
+--- Function: \textbf{file-directory-p} [\textbf{extensions}] \textit{pathspec \&key (wild-error-p t)}
 
 \begin{adjustwidth}{5em}{5em}
 not-documented
@@ -438,6 +438,15 @@ not-documented
 \begin{adjustwidth}{5em}{5em}
 :ELEMENT-TYPE must be CHARACTER or (UNSIGNED-BYTE 8); the default is CHARACTER.
 EXTERNAL-FORMAT must be of the same format as specified for OPEN.
+\end{adjustwidth}
+
+\paragraph{}
+\label{EXTENSIONS:GET-TIME-ZONE}
+\index{GET-TIME-ZONE}
+--- Function: \textbf{get-time-zone} [\textbf{extensions}] \textit{time-in-millis}
+
+\begin{adjustwidth}{5em}{5em}
+Returns as the first value the timezone difference in hours from the Greenwich meridian for TIME-IN-MILLIS via the Daylight Savings Time assumptions that were in place at the instant's occurance.  Returns as the second value a boolean as to whether daylight savings time was in effect at the occurance.
 \end{adjustwidth}
 
 \paragraph{}
@@ -560,7 +569,7 @@ Create and return the pathname of a previously non-existent directory.
 \paragraph{}
 \label{EXTENSIONS:MAKE-TEMP-FILE}
 \index{MAKE-TEMP-FILE}
---- Function: \textbf{make-temp-file} [\textbf{extensions}] \textit{}
+--- Function: \textbf{make-temp-file} [\textbf{extensions}] \textit{\&key prefix suffix}
 
 \begin{adjustwidth}{5em}{5em}
 Create and return the pathname of a previously non-existent file.
@@ -636,6 +645,24 @@ not-documented
 
 \begin{adjustwidth}{5em}{5em}
 not-documented
+\end{adjustwidth}
+
+\paragraph{}
+\label{EXTENSIONS:OS-UNIX-P}
+\index{OS-UNIX-P}
+--- Function: \textbf{os-unix-p} [\textbf{extensions}] \textit{}
+
+\begin{adjustwidth}{5em}{5em}
+Is the underlying operating system some Unix variant?
+\end{adjustwidth}
+
+\paragraph{}
+\label{EXTENSIONS:OS-WINDOWS-P}
+\index{OS-WINDOWS-P}
+--- Function: \textbf{os-windows-p} [\textbf{extensions}] \textit{}
+
+\begin{adjustwidth}{5em}{5em}
+Is the underlying operating system Microsoft Windows?
 \end{adjustwidth}
 
 \paragraph{}

@@ -261,6 +261,9 @@ public final class Interpreter
                     help = true;
                 } else if (arg.equals("--batch")) {
                     _BATCH_MODE_.setSymbolValue(T);
+                    } else if (arg.equals("--compile-system")) {
+                        nosystem = true;
+                        noinform = true;
                 } else if (arg.equals("--eval")) {
                     if (i + 1 < args.length) {
                         ++i;
@@ -326,7 +329,34 @@ public final class Interpreter
                         System.err.println("No argument supplied to --eval");
                         exit(1); // FIXME
                     }
-                } else if (arg.equals("--load") ||
+                } 
+                else if (arg.equals("--compile-system")) {
+                    {
+                        try {
+                        	evaluate("(setf *load-verbose* t)");
+                        	evaluate("(setf trace-lisp 10)");
+                        	evaluate("(handler-case (compile-system :zip nil :quit t :output-path \"build/classes/\") "
+                                    + "(t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))");
+                        } catch (UnhandledCondition c) {
+                            final String separator = System.getProperty("line.separator");
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(separator);
+                            sb.append("Caught ");
+                            sb.append(c.getCondition().typeOf().printObject());
+                            sb.append(" while processing --compile-system");
+                            sb.append(separator);
+                            sb.append("  ");
+                            final LispThread thread = LispThread.currentThread();
+                            thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
+                            sb.append(c.getCondition().princToString());
+                            sb.append(separator);
+                            System.err.print(sb.toString());
+                            exit(2); // FIXME
+                        }
+                        ++i;
+                    }
+                }
+                else if (arg.equals("--load") ||
                            arg.equals("--load-system-file")) {
                     if (i + 1 < args.length) {
                         if (arg.equals("--load"))

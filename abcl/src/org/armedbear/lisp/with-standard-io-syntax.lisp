@@ -1,7 +1,7 @@
 ;;; with-standard-io-syntax.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id$
+;;; $Id: with-standard-io-syntax.lisp 12510 2010-02-27 19:31:45Z vvoutilainen $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

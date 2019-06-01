@@ -2,7 +2,7 @@
  * logeqv.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id$
+ * $Id: logeqv.java 15023 2017-06-01 06:45:14Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,11 +56,7 @@ public final class logeqv extends Primitive
     @Override
     public LispObject execute(LispObject arg)
     {
-        if (arg instanceof Fixnum)
-            return arg;
-        if (arg instanceof Bignum)
-            return arg;
-        return type_error(arg, Symbol.INTEGER);
+        return checkInteger(arg);
     }
 
     @Override

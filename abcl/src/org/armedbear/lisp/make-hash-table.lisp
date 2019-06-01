@@ -1,7 +1,7 @@
 ;;; make-hash-table.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id$
+;;; $Id: make-hash-table.lisp 13309 2011-06-07 15:38:11Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

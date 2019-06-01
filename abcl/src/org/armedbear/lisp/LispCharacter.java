@@ -37,15 +37,21 @@ import static org.armedbear.lisp.Lisp.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class LispCharacter extends NLispObject
+public final class LispCharacter extends ALispObject
 {
 
+  // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one
+ public static LispCharacter getInstance(char l) {
+    return makeCharacter( l );
+  }
+ 
   public static final LispCharacter[] constants;
   public static final CharHashMap<LispCharacter> lispChars;
 
   static
   {
     lispChars = new CharHashMap<LispCharacter>(LispCharacter.class,null){
+      @Override
       public LispCharacter get(char c) {
         LispCharacter lc = super.get(c);
         if (lc==null) {

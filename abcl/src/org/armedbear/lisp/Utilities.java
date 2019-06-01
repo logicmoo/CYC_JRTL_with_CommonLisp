@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id$
+ * $Id: Utilities.java 14176 2012-10-11 11:33:19Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

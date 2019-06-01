@@ -2,7 +2,7 @@
  * BuiltInClass.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id$
+ * $Id: BuiltInClass.java 13769 2012-01-12 19:22:42Z rschlatte $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

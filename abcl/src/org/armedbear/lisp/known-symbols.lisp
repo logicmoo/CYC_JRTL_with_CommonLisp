@@ -1,7 +1,7 @@
 ;;; known-symbols.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id$
+;;; $Id: known-symbols.lisp 13792 2012-01-20 01:10:39Z astalla $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

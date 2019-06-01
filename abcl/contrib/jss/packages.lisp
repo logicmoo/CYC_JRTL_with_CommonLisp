@@ -5,6 +5,7 @@
    #:*inhibit-add-to-classpath*
    #:*added-to-classpath*
    #:*do-auto-imports*
+   #:*muffle-warnings*
 
    #:invoke-restargs
    #:with-constant-signature
@@ -25,6 +26,10 @@
    #:set-to-list
    #:vector-to-list
    #:jarray-to-list
+   #:to-hashset
+
+   #:j2list
+   #:jmap
 
 ;;; XXX Necessary to work in OSGi?
    #:get-java-field ; use JAVA:JFIELD

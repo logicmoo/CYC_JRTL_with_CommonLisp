@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2011 Erik Huelsmann
  * Copyright (C) 2010 Alessio Stalla
- * $Id$
+ * $Id: MemoryClassLoader.java 14363 2013-01-29 08:36:14Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

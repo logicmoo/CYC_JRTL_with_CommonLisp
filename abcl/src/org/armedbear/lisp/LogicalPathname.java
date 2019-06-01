@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id$
+ * $Id: LogicalPathname.java 14793 2015-08-31 20:55:22Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

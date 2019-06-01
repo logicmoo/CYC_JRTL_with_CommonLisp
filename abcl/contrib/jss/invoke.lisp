@@ -1,8 +1,8 @@
 ;; Copyright (C) 2005 Alan Ruttenberg
 ;; Copyright (C) 2011-2 Mark Evenson
 ;;
-;; Since most of this code is derivative of the Jscheme System, it is
-;; licensed under the same terms, namely:
+;; Since JSS 1.0 was largely derivative of the Jscheme System, the
+;; current system is licensed under the same terms, namely:
 
 ;; This software is provided 'as-is', without any express or
 ;; implied warranty.
@@ -89,6 +89,7 @@
 ;;   - Maybe get rid of second " in reader macro. #"toString looks nicer, but might 
 ;;     confuse lisp mode.
 ;;   - write jmap, analogous to map, but can take java collections, java arrays etc.
+;;      In progress with jss-3.5.0's JSS:MAP
 ;;   - write loop clauses for java collections. 
 ;;   - Register classes in .class files below classpath directories (when :wild-inferiors works)
 ;;   - Make documentation like Edi Weitz
@@ -122,6 +123,8 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defvar *do-auto-imports* t 
     "Whether to automatically introspect all Java classes on the classpath when JSS is loaded."))
+
+(defvar *muffle-warnings* t)
 
 (defvar *imports-resolved-classes* (make-hash-table :test 'equalp))
 
@@ -205,10 +208,12 @@ NAME can either string or a symbol according to the usual JSS conventions."
   (defun read-invoke (stream char arg) 
     (unread-char char stream)
     (let ((name (read stream)))
-      (let ((object-var (gensym))
-            (args-var (gensym)))
-        `(lambda (,object-var &rest ,args-var) 
-           (invoke-restargs ,name  ,object-var ,args-var ,(eql arg 0))))))
+      (if (or (find #\. name) (find #\{ name))
+          (jss-transform-to-field name arg)
+          (let ((object-var (gensym))
+                (args-var (gensym)))
+            `(lambda (,object-var &rest ,args-var) 
+               (invoke-restargs ,name  ,object-var ,args-var ,(eql arg 0)))))))
   (set-dispatch-macro-character #\# #\" 'read-invoke))
 
 (defmacro with-constant-signature (fname-jname-pairs &body body)
@@ -241,7 +246,28 @@ want to avoid the overhead of the dynamic dispatch."
                (with-constant-signature ,(cdr fname-jname-pairs)
                  ,@body)))))))
 
-(defun lookup-class-name (name)
+(defvar *class-lookup-overrides*)
+
+(defmacro with-class-lookup-disambiguated (overrides &body body)
+  "Suppose you have code that references class using the symbol 'object, and this is ambiguous. E.g. in my system java.lang.Object, org.omg.CORBA.Object. Use (with-class-lookup-disambiguated (lang.object) ...). Within dynamic scope, find-java-class first sees if any of these match, and if so uses them to lookup the class."
+  `(let ((*class-lookup-overrides* ',overrides))
+     ,@body))
+
+(defun maybe-found-in-overridden (name)
+  (when (boundp '*class-lookup-overrides*)
+      (let ((found (find-if (lambda(el) (#"matches" (string el) (concatenate 'string "(?i).*" (string name) "$")))
+			    *class-lookup-overrides*)))
+	(if found
+	    (let ((*class-lookup-overrides* nil))
+	      (lookup-class-name found))))))
+
+
+(defun lookup-class-name (name &key
+                                 (table *class-name-to-full-case-insensitive*)
+                                 (muffle-warning *muffle-warnings*)
+                                 (return-ambiguous nil))
+  (let ((overridden (maybe-found-in-overridden name)))
+    (when overridden (return-from lookup-class-name overridden)))
   (setq name (string name))
   (let* (;; cant (last-name-pattern (#"compile" '|java.util.regex.Pattern| ".*?([^.]*)$"))
          ;; reason: bootstrap - the class name would have to be looked up...
@@ -261,9 +287,11 @@ want to avoid the overhead of the dynamic dispatch."
                          (length end))
                       (length full)))
                  (ambiguous (choices)
-                   (error "Ambiguous class name: ~a can be ~{~a~^, ~}" name choices)))
+		   (if return-ambiguous 
+		       (return-from lookup-class-name choices)
+		       (error "Ambiguous class name: ~a can be ~{~a~^, ~}" name choices))))
             (if (zerop bucket-length)
-                name
+		(progn (unless muffle-warning (warn "can't find class named ~a" name)) nil)
                 (let ((matches (loop for el in bucket when (matches-end name el 'char=) collect el)))
                   (if (= (length matches) 1)
                       (car matches)
@@ -272,7 +300,7 @@ want to avoid the overhead of the dynamic dispatch."
                             (if (= (length matches) 1)
                                 (car matches)
                                 (if (= (length matches) 0)
-                                    name
+				    (progn (unless muffle-warning (warn "can't find class named ~a" name)) nil)
                                     (ambiguous matches))))
                           (ambiguous matches))))))))))
 
@@ -286,8 +314,8 @@ want to avoid the overhead of the dynamic dispatch."
                               (group "group"))
       (loop while (hasmore entries)
          for name =  (getname (next entries))
-         with class-pattern = (#"compile" '|java.util.regex.Pattern| "[^$]*\\.class$")
-         with name-pattern = (#"compile" '|java.util.regex.Pattern| ".*?([^.]*)$")
+         with class-pattern = (jstatic "compile" "java.util.regex.Pattern" ".*\\.class$")
+         with name-pattern = (jstatic "compile" "java.util.regex.Pattern" ".*?([^.]*)$")
          when (matches (matcher class-pattern name))
          collect
            (let* ((fullname (substring (jreplace name #\/ #\.) 0 (- (jlength name) 6)))
@@ -479,7 +507,7 @@ current classpath."
         (format stream "~a~%" method))
       (jclass-method-names class)))
 
-(setf (symbol-function 'jcmn) 'java-class-method-names)
+(setf (symbol-function 'jcmn) #'java-class-method-names)
 
 (defun path-to-class (classname)
   (let ((full (lookup-class-name classname)))
@@ -560,84 +588,6 @@ current classpath."
      do
        (pushnew full-class-name (gethash name *class-name-to-full-case-insensitive*) 
                 :test 'equal)))
-
-(defun set-to-list (set)
-  (declare (optimize (speed 3) (safety 0)))
-  (with-constant-signature ((iterator "iterator" t) (hasnext "hasNext") (next "next"))
-    (loop with iterator = (iterator set)
-       while (hasNext iterator)
-       for item = (next iterator)
-       collect item)))
-
-(defun jlist-to-list (list)
-  "Convert a LIST implementing java.util.List to a Lisp list."
-  (declare (optimize (speed 3) (safety 0)))
-  (loop :for i :from 0 :below (jcall "size" list)
-     :collecting (jcall "get" list i)))
-
-(defun jarray-to-list (jarray)
-  "Convert the Java array named by JARRARY into a Lisp list."
-  (declare (optimize (speed 3) (safety 0)))
-  (loop :for i :from 0 :below (jarray-length jarray)
-     :collecting (jarray-ref jarray i)))
-
-;;; Deprecated 
-;;; 
-;;; XXX unclear what sort of list this would actually work on, as it
-;;; certainly doesn't seem to be any of the Java collection types
-;;; (what implements getNext())?
-(defun list-to-list (list)
-  (declare (optimize (speed 3) (safety 0)))
-  (with-constant-signature ((isEmpty "isEmpty") (getfirst "getFirst")
-                            (getNext "getNext"))
-    (loop until (isEmpty list)
-       collect (getFirst list)
-       do (setq list (getNext list)))))
-
-;; Contribution of Luke Hope. (Thanks!)
-
-(defun iterable-to-list (iterable)
-  "Return the items contained the java.lang.Iterable ITERABLE as a list."
-  (declare (optimize (speed 3) (safety 0)))
-  (let ((it (#"iterator" iterable)))
-    (with-constant-signature ((has-next "hasNext")
-                              (next "next"))
-      (loop :while (has-next it)
-         :collect (next it)))))
-
-(defun vector-to-list (vector)
-  "Return the elements of java.lang.Vector VECTOR as a list."
-  (declare (optimize (speed 3) (safety 0)))
-  (with-constant-signature ((has-more "hasMoreElements")
-                            (next "nextElement"))
-    (let ((elements (#"elements" vector)))
-      (loop :while (has-more elements)
-         :collect (next elements)))))
-
-(defun hashmap-to-hashtable (hashmap &rest rest &key (keyfun #'identity) (valfun #'identity) (invert? nil)
-                                                  table 
-                             &allow-other-keys )
-  "Converts the a HASHMAP reference to a java.util.HashMap object to a Lisp hashtable.
-
-The REST paramter specifies arguments to the underlying MAKE-HASH-TABLE call.
-
-KEYFUN and VALFUN specifies functions to be run on the keys and values
-of the HASHMAP right before they are placed in the hashtable.
-
-If INVERT? is non-nil than reverse the keys and values in the resulting hashtable."
-  (let ((keyset (#"keySet" hashmap))
-        (table (or table (apply 'make-hash-table
-                                (loop for (key value) on rest by #'cddr
-                                   unless (member key '(:invert? :valfun :keyfun :table)) 
-                                   collect key and collect value)))))
-    (with-constant-signature ((iterator "iterator" t) (hasnext "hasNext") (next "next"))
-      (loop with iterator = (iterator keyset)
-         while (hasNext iterator)
-         for item = (next iterator)
-         do (if invert?
-                (setf (gethash (funcall valfun (#"get" hashmap item)) table) (funcall keyfun item))
-                (setf (gethash (funcall keyfun item) table) (funcall valfun (#"get" hashmap item)))))
-      table)))
 
 (defun jclass-all-interfaces (class)
   "Return a list of interfaces the class implements"

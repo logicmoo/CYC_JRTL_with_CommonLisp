@@ -2,7 +2,7 @@
  * socket_stream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id$
+ * $Id: socket_stream.java 12362 2010-01-11 20:03:29Z vvoutilainen $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

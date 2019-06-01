@@ -2,7 +2,7 @@
  * FaslReader.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id$
+ * $Id: FaslReader.java 12710 2010-05-19 22:27:21Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

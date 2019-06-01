@@ -1,7 +1,7 @@
 ;;; socket.lisp
 ;;;
 ;;; Copyright (C) 2004-2006 Peter Graves
-;;; $Id$
+;;; $Id: socket.lisp 14214 2012-10-24 17:34:18Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

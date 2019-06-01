@@ -52,7 +52,26 @@ directory to search for classes or a list of such values.
 --- Macro: \textbf{chain} [\textbf{java}] \textit{}
 
 \begin{adjustwidth}{5em}{5em}
-not-documented
+Performs chained method invocations. 
+
+TARGET is either the receiver object when the first call is a virtual method
+call or a list in the form (:static <jclass>) when the first method
+call is a static method call. 
+
+OP and each of the OPS are either method designators or lists in the
+form (<method designator> \&rest args), where a method designator is
+either a string naming a method, or a jmethod object. CHAIN will
+perform the method call specified by OP on TARGET; then, for each
+of the OPS, CHAIN will perform the specified method call using the
+object returned by the previous method call as the receiver, and will
+ultimately return the result of the last method call.  For example,
+the form:
+
+  (chain (:static "java.lang.Runtime") "getRuntime" ("exec" "ls"))
+
+is equivalent to the following Java code:
+
+  java.lang.Runtime.getRuntime().exec("ls");
 \end{adjustwidth}
 
 \paragraph{}
@@ -67,10 +86,10 @@ not-documented
 \paragraph{}
 \label{JAVA:DESCRIBE-JAVA-OBJECT}
 \index{DESCRIBE-JAVA-OBJECT}
---- Function: \textbf{describe-java-object} [\textbf{java}] \textit{}
+--- Function: \textbf{describe-java-object} [\textbf{java}] \textit{object stream}
 
 \begin{adjustwidth}{5em}{5em}
-not-documented
+Print a human friendly description of Java OBJECT to STREAM.
 \end{adjustwidth}
 
 \paragraph{}
@@ -648,7 +667,7 @@ Returns a new Java array with base type ELEMENT-TYPE (a string or a class-ref)
 \paragraph{}
 \label{JAVA:JNEW-RUNTIME-CLASS}
 \index{JNEW-RUNTIME-CLASS}
---- Function: \textbf{jnew-runtime-class} [\textbf{java}] \textit{class-name \&rest args \&key (superclass java.lang.Object) interfaces constructors methods fields (access-flags (quote (public))) annotations}
+--- Function: \textbf{jnew-runtime-class} [\textbf{java}] \textit{class-name \&rest args \&key (superclass java.lang.Object) interfaces constructors methods fields (access-flags (quote (public))) annotations (class-loader (make-memory-class-loader))}
 
 \begin{adjustwidth}{5em}{5em}
 Creates and loads a Java class with methods calling Lisp closures
@@ -672,12 +691,12 @@ Creates and loads a Java class with methods calling Lisp closures
 
      (METHOD-NAME RETURN-TYPE ARGUMENT-TYPES FUNCTION \&key MODIFIERS ANNOTATIONS)
 
-   where 
-      METHOD-NAME is a string 
+   where
+      METHOD-NAME is a string
       RETURN-TYPE denotes the type of the object returned by the method
       ARGUMENT-TYPES is a list of parameters to the method
-      
-        The types are either strings naming fully qualified java classes or Lisp keywords referring to 
+
+        The types are either strings naming fully qualified java classes or Lisp keywords referring to
         primitive types (:void, :int, etc.).
 
      FUNCTION is a Lisp function of minimum arity (1+ (length

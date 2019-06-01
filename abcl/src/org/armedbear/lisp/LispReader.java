@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2007 Peter Graves
- * $Id$
+ * $Id: LispReader.java 12646 2010-05-01 21:43:28Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

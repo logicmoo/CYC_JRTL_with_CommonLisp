@@ -789,15 +789,11 @@ public class Symbol
 
   @Override
   @SuppressWarnings("FinalizeDeclaration")
-  protected void finalize() throws Throwable
-  {
-    try
-    {
-      if( this.specialIndex != LispThread.UNASSIGNED_SPECIAL_INDEX )
+    protected void finalize() throws Throwable {
+        try {
+            if (specialIndex != LispThread.UNASSIGNED_SPECIAL_INDEX)
         LispThread.releaseSpecialIndex( this );
-    }
-    finally
-    {
+        } finally {
       super.finalize();
     }
   }

@@ -1,7 +1,7 @@
 ;;; search.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id$
+;;; $Id: search.lisp 14121 2012-08-18 11:37:34Z ehuelsmann $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

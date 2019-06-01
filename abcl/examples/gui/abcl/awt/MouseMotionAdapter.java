@@ -1,5 +1,5 @@
 /*
- * KeyAdapter.java
+ * MouseMotionAdapter.java
  *
  * Copyright (C) 2003 Peter Graves
  *
@@ -18,36 +18,38 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-package awt;
+package abcl.awt;
 
 import org.armedbear.lisp.JHandler;
 import java.awt.Component;
-import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
-public class KeyAdapter extends java.awt.event.KeyAdapter {
-
+public class MouseMotionAdapter extends java.awt.event.MouseMotionAdapter 
+{
     public static synchronized void addTo(Component component) {
-        component.addKeyListener(new KeyAdapter());
+        component.addMouseMotionListener(new MouseMotionAdapter());
     }
 
-    private void call(String s, KeyEvent keyevent) {
+    private void call(String s, MouseEvent mouseevent) {
         int ai[] = {
-            keyevent.getModifiers(), 
-	    keyevent.isActionKey() ? 1 : 0, 
-	    keyevent.getKeyCode()
+            mouseevent.getModifiers(), 
+	    mouseevent.isPopupTrigger() ? 1 : 0, 
+	    mouseevent.getClickCount(), 
+	    mouseevent.getX(), 
+	    mouseevent.getY()
         };
-        JHandler.callLisp(s, keyevent.getComponent(), keyevent.paramString(), ai);
+        JHandler.callLisp(s, mouseevent.getComponent(), mouseevent.paramString(), ai);
     }
 
-    public void keyPressed(KeyEvent keyevent) {
-        call("KEYPRESSED", keyevent);
+    public void mouseDragged(MouseEvent mouseevent) {
+        call("MOUSEDRAGGED", mouseevent);
     }
 
-    public void keyReleased(KeyEvent keyevent) {
-        call("KEYRELEASED", keyevent);
+    public void mouseMoved(MouseEvent mouseevent) {
+        call("MOUSEMOVED", mouseevent);
     }
 
-    public void keyTyped(KeyEvent keyevent) {
-        call("KEYTYPED", keyevent);
+    public void mouseWheel(MouseEvent mouseevent) {
+        call("MOUSEWHEEL", mouseevent);
     }
 }

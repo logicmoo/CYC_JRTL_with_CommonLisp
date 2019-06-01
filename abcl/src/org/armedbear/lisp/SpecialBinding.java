@@ -2,7 +2,7 @@
  * SpecialBinding.java
  *
  * Copyright (C) 2002-2008 Peter Graves
- * $Id$
+ * $Id: SpecialBinding.java 13137 2011-01-13 20:54:59Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

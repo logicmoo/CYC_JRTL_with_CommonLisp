@@ -2,7 +2,7 @@
  * AbstractString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id$
+ * $Id: AbstractString.java 13443 2011-08-06 13:03:00Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

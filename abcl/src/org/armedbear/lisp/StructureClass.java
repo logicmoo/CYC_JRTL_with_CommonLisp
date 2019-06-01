@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id$
+ * $Id: StructureClass.java 14463 2013-04-24 12:50:30Z rschlatte $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

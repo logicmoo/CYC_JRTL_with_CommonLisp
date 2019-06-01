@@ -1,7 +1,7 @@
 ;;; require.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id$
+;;; $Id: require.lisp 14296 2012-12-06 09:23:15Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

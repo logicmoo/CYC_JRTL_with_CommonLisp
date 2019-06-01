@@ -2,7 +2,7 @@
  * Site.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id$
+ * $Id: Site.java 13095 2010-12-15 21:43:14Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

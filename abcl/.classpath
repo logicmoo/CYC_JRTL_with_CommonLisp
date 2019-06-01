@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="examples/gui"/>
-	<classpathentry kind="src" path="examples/java-exception"/>
-	<classpathentry kind="src" path="examples/jsr-223"/>
-	<classpathentry kind="src" path="examples/misc"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="test/src"/>
-	<classpathentry kind="src" path="contrib/jank/java"/>
-	<classpathentry kind="lib" path="dist/abcl-contrib.jar"/>
-	<classpathentry kind="lib" path="dist/abcl.jar"/>
+	<classpathentry including="**/*|**/*.*|org/armedbear/lisp/*.lisp" kind="src" path="src"/>
+	<classpathentry including="**/*.*" kind="src" path="examples/gui"/>
+	<classpathentry including="**/*.*" kind="src" path="examples/java-exception"/>
+	<classpathentry including="**/*.*" kind="src" path="examples/jsr-223"/>
+	<classpathentry including="**/*.*" kind="src" path="examples/misc"/>
+	<classpathentry excluding="org/abcl/util/StreamTaskTest.java" including="**/*.*" kind="src" path="test/src"/>
+	<classpathentry kind="src" path="examples/google-app-engine/src"/>
+	<classpathentry kind="src" path="examples/java-interface"/>
+	<classpathentry kind="src" path="examples/java-to-lisp-1"/>
+	<classpathentry kind="src" path="examples/java-to-lisp-2"/>
+	<classpathentry kind="src" path="examples/lisp-to-java"/>
+	<classpathentry kind="src" path="examples/pure-lisp-to-java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="output" path="bin-eclipse"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="output" path="build/classes"/>
 </classpath>

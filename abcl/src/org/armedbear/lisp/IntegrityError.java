@@ -2,7 +2,7 @@
  * IntegrityError.java
  *
  * Copyright (C) 2011 Erik Huelsmann
- * $Id$
+ * $Id: IntegrityError.java 13146 2011-01-14 09:43:43Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * AutoloadMacro.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id$
+ * $Id: AutoloadMacro.java 13445 2011-08-06 14:46:28Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

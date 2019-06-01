@@ -2,7 +2,7 @@
  * JavaClassLoader.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id$
+ * $Id: JavaClassLoader.java 14363 2013-01-29 08:36:14Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id$
+;;; $Id: pathname-tests.lisp 15032 2017-06-01 06:46:20Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1722,3 +1722,13 @@
        (pathname-name p) (pathname-type p) (pathname-version p) (pathname-directory p)))
   :wild :wild :wild (:absolute :wild))
       
+
+(deftest pathname.make-pathname.3
+    (signals-error
+     (make-pathname :directory '(:absolute ("a" "b")))
+     'file-error)
+  t)
+
+(deftest pathname.make-pathname.4
+    (directory-namestring (make-pathname :directory :unspecific))
+  "")

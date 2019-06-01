@@ -2,7 +2,7 @@
  * ClosureBinding.java
  *
  * Copyright (C) 2009 Erik Huelsmann
- * $Id$
+ * $Id: ClosureBinding.java 11866 2009-05-15 09:30:10Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

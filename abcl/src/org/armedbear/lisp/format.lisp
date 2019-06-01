@@ -190,7 +190,7 @@
 (defun float-to-digits* (digits number position relativep)
   "Does what float-to-digits, but also detects if result is zero."
   (multiple-value-bind (exp string)
-      (float-to-digits-java digits
+      (float-to-digits digits
                        number
                        position
                        relativep)
@@ -363,13 +363,13 @@
            (setf x (* x (expt 10 scale))))
          (let* ((s (float-string x))
                 (length (length s))
-                (index (position #\. s)))
+                (index (or (position #\. s) length)))
            (when (and (< x 1)
                       (> length 0)
                       (eql (schar s 0) #\0))
              (setf s (subseq s 1)
                    length (length s)
-                   index (position #\. s)))
+                   index (or (position #\. s) length)))
            (when fdigits
              ;; "Leading zeros are not permitted, except that a single zero
              ;; digit is output before the decimal point if the printed value

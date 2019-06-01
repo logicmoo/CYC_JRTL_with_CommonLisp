@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005-2006 Peter Graves
-;;; $Id$
+;;; $Id: known-functions.lisp 14478 2013-04-24 12:51:14Z rschlatte $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

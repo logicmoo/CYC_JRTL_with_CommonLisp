@@ -2,7 +2,7 @@
  * CompiledClosure.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id$
+ * $Id: CompiledClosure.java 14023 2012-07-29 20:04:53Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

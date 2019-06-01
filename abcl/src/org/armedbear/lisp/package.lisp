@@ -1,7 +1,7 @@
 ;;; package.lisp
 ;;;
 ;;; Copyright (C) 2008 Erik Huelsmann
-;;; $Id$
+;;; $Id: package.lisp 14431 2013-03-10 15:52:36Z rschlatte $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id$
+;;; $Id: signal.lisp 14038 2012-08-01 20:49:12Z ehuelsmann $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

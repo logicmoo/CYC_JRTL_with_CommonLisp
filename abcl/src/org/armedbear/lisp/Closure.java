@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2002-2008 Peter Graves
  * Copyright (C) 2008 Ville Voutilainen
- * $Id$
+ * $Id: Closure.java 14465 2013-04-24 12:50:37Z rschlatte $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

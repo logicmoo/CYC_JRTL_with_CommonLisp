@@ -2,7 +2,7 @@
  * MainAlternative.java
  *
  * Copyright (C) 2008 Ville Voutilainen
- * $Id$
+ * $Id: MainAlternative.java 14570 2013-07-22 13:21:06Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

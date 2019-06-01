@@ -1,7 +1,7 @@
 ;;; java-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id$
+;;; $Id: java-tests.lisp 14694 2014-04-25 07:55:53Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

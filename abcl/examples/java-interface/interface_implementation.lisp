@@ -1,7 +1,7 @@
 ;;; interface_implementation.lisp
 ;;;
 ;;; Copyright (C) 2008 Ville Voutilainen
-;;; $Id$
+;;; $Id: interface_implementation.lisp 11384 2008-11-08 09:27:29Z vvoutilainen $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

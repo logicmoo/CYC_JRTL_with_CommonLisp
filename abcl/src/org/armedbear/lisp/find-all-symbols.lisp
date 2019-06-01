@@ -1,7 +1,7 @@
 ;;; find-all-symbols.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id$
+;;; $Id: find-all-symbols.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

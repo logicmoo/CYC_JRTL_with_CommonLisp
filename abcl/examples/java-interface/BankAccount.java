@@ -1,3 +1,4 @@
+
 public interface BankAccount {
   public int getBalance();
   public void deposit(int amount);

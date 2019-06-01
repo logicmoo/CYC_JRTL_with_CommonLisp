@@ -2,7 +2,7 @@
  * SeriousCondition.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id$
+ * $Id: SeriousCondition.java 13180 2011-01-23 11:26:46Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

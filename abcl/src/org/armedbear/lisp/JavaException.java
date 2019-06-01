@@ -2,7 +2,7 @@
  * JavaException.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id$
+ * $Id: JavaException.java 13093 2010-12-12 09:54:44Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

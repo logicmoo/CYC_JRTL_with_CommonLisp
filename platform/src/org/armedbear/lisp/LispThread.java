@@ -1470,6 +1470,7 @@ public abstract class LispThread extends LispObject
   static Symbol INITIAL_BINDING = internKeyword( "INITIAL-BINDING" ), //
       CSTACK_SIZE = internKeyword( "CSTACK-SIZE" ), //
       VSTACK_SIZE = internKeyword( "VSTACK-SIZE" );
+
   @DocString(name = "make-thread", args = "function &key name :INITIAL-BINDINGS :CSTACK-SIZE :VSTACK-SIZE")
   private static final Primitive MAKE_THREAD = new Primitive( "make-thread", PACKAGE_THREADS, true, "function &key name :INITIAL-BINDINGS :CSTACK-SIZE :VSTACK-SIZE" )
   {

@@ -2,7 +2,7 @@
  * PrintNotReadable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id$
+ * $Id: PrintNotReadable.java 13440 2011-08-05 21:25:10Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

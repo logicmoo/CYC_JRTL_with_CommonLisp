@@ -1,28 +1,50 @@
 % -*- mode: latex; -*-
 % http://en.wikibooks.org/wiki/LaTeX/
 \documentclass[10pt]{book}
+% also need to have cm-super installed for high quality rendering
+\usepackage[T1]{fontenc}
 \usepackage{abcl}
 
 \usepackage{hyperref} % Put this one last, it redefines lots of internals
 
-
 \begin{document}
 \title{Armed Bear Common Lisp User Manual}
-\date{Version 1.4.0-dev\\
+\date{Version 1.6.0-dev\\
 \smallskip
-April 2015}
+June 2017}
 \author{Mark Evenson \and Erik H\"{u}lsmann \and Rudolf Schlatte \and
   Alessio Stalla \and Ville Voutilainen}
 
 \maketitle
 
 \tableofcontents
+%%Preface to the Sixth edition, abcl-1.5.0
+\subsection{Preface to the Sixth Edition}
+
+With the sixth major release of the implementation, we make the
+following explicit revision of our compatibility to the underlying
+JVM.  Since we are an open source implementation, we insist on
+possible open access to the sources from with an JDK may both be built
+and run upon.  This requirement is no longer met by Java 5, so
+henceforth with the release of \textsc{ABCL} 1.5, we will support
+Java 6, Java 7 and Java 8 runtimes.
+
+%% We should probably not release a 1.5.0, go straight for abcl-1.6.0?
+%% Not worth the effort: Java 9 is the current abcl-1.6.0 release driver.
+
+%%Preface to the Fifth edition, abcl-1.4.0
+\subsection{Preface to the Fifth Edition}
+
+\textsc{ABCL} 1.4 consolidates eighteen months of production bugfixes,
+and substantially improves the support for invoking external
+processes via \code{SYS:RUN-PROGRAM}.
+
 %%Preface to the Fourth edition, abcl-1.3.
 \subsection{Preface to the Fourth Edition}
 
 \textsc{ABCL} 1.3 now implements an optimized implementation of the
-LispStack abstraction thanks to Dmitry Nadezhin which runs on ORCL
-JVMs from 1.[5-8] conformantly.
+\code{org.armedbear.lisp.LispStack} abstraction thanks to Dmitry
+Nadezhin which runs on ORCL JVMs from 1.[5-8] conformantly.
 
 %%Preface to the Third edition, abcl-1.2.
 \subsection{Preface to the Third Edition}
@@ -38,11 +60,16 @@ test suite.
 
 \chapter{Introduction}
 
-Armed Bear Common Lisp (\textsc{ABCL}) is an implementation of Common
-Lisp that runs on the Java Virtual Machine.  It compiles Common Lisp
-to Java 5 bytecode \footnote{The class file version is ``49.0''.},
-providing the following integration methods for interfacing with Java
-code and libraries:
+Armed Bear Common Lisp (\textsc{ABCL}) is an implementation of
+\textsc{Common Lisp} that runs on the Java Virtual Machine
+(\textsc{JVM}).  \textsc{ABCL} compiles \textsc{Common Lisp} to
+\textsc{Java} bytecode\footnote{The class file version is ``49.0''.},
+with an efficiency that varies on the hosting JVM implementation.
+\textsc{ABCL} supports running on the Java 6, Java 7, and Java 8
+\textsc{JVM} implementations.
+
+Armed Bear provides the following integration methods for interfacing
+with Java code and libraries:
 \begin{itemize}
 \item Lisp code can create Java objects and call their methods (see
   Section~\ref{sec:lisp-java}, page~\pageref{sec:lisp-java}).
@@ -56,10 +83,10 @@ code and libraries:
   similar.
 \item \code{java:jnew-runtime-class} can inject fully synthetic Java
   classes--and their objects-- into the current JVM process whose
-  behavior is specified via closures expressed in Common Lisp.. \footnote{Parts of
-    the current implementation are not fully finished, so the status
-    of some interfaces here should be treated with skepticism if you
-    run into problems.}
+  behavior is specified via closures expressed in \textsc{Common
+    Lisp}. \footnote{Parts of the current implementation are not fully
+    finished, so the status of some interfaces here should be treated
+    with skepticism if you run into problems.}
 
 \end{itemize}
 \textsc{ABCL} is supported by the Lisp library manager
@@ -105,24 +132,27 @@ Any other behavior should be reported as a bug.
 
 \subsection{Contemporary Common Lisp}
 In addition to \textsc{ANSI} conformance, \textsc{ABCL} strives to implement
-features expected of a contemporary Common Lisp, i.e. a Lisp of the
+features expected of a contemporary \textsc{Common Lisp}, i.e. a Lisp of the
 post-2005 Renaissance.
 
 The following known problems detract from \textsc{ABCL} being a proper
 contemporary Common Lisp.
 \begin{itemize}
-\item An incomplete implementation of interactive debugging mechanisms,
-  namely a no-op version of \code{STEP} \footnote{Somewhat surprisingly
-    allowed by \textsc{ANSI}}, the inability to inspect local variables
-  in a given call frame, and the inability to resume a halted
-  computation at an arbitrarily selected call frame.
-\item Incomplete streams abstraction, in that \textsc{ABCL} needs
-  suitable abstraction between \textsc{ANSI} and Gray
-  streams.  \footnote{The streams could be optimized to the
+\item An incomplete implementation of interactive debugging
+  mechanisms, namely a no-op version of \code{STEP}\footnote{Somewhat
+    surprisingly allowed by \textsc{ANSI}}, the inability to inspect
+  local variables in a given call frame, and the inability to resume a
+  halted computation at an arbitrarily selected call frame.
+\item Incomplete streams abstraction, in that \textsc{ABCL} needs a
+  suitable abstraction between \textsc{ANSI} and \textsc{Gray streams}
+  with a runtime switch for the beyond conforming
+  behavior\footnote{The streams could be optimized to the
     \textsc{JVM} NIO \cite{nio} abstractions at great profit for
-    binary byte-level manipulations.}
-\item Incomplete documentation (missing docstrings from exported
-  symbols and the draft status of this user manual).
+    binary byte-level manipulations.}.
+\item Incomplete documentation: source code is missing docstrings from
+  all exported symbols from the \code{EXTENSIONS}, \code{SYSTEM},
+  \code{JAVA}, \code{MOP}, and \code{THREADS} packages.  This user
+  manual is currently in draft status.
 \end{itemize}
 
 
@@ -130,26 +160,27 @@ contemporary Common Lisp.
 \section{License}
 
 \textsc{ABCL} is licensed under the terms of the \textsc{GPL} v2 of
-June 1991 with the ``classpath-exception'' (see the file
-\texttt{COPYING} in the source distribution \footnote{See
-  \url{http://abcl.org/svn/trunk/tags/1.3.0/COPYING}} for
-the license, term 13 in the same file for the classpath exception).
-This license broadly means that you must distribute the sources to
-ABCL, including any changes you make, together with a program that
-includes ABCL, but that you are not required to distribute the sources
-of the whole program.  Submitting your changes upstream to the ABCL
+June 1991 with an added ``classpath-exception'' clause (see the file
+\texttt{COPYING} in the source distribution\footnote{See
+  \url{http://abcl.org/svn/trunk/tags/1.5.0/COPYING}} for the license,
+term 13 in the same file for the classpath exception).  This license
+broadly means that you must distribute the sources to \textsc{ABCL},
+including any changes you make, together with a program that includes
+\textsc{ABCL}, but that you are not required to distribute the sources
+of the whole program.  Submitting your changes upstream to the \textsc{ABCL}
 development team is actively encouraged and very much appreciated, of
 course.
 
 \section{Contributors}
 
 \begin{itemize}
-\item Philipp Marek \texttt{Thanks for the markup}
+\item Philipp Marek \texttt{Thanks for the markup, and review of the Manual}
 \item Douglas Miles \texttt{Thanks for the whacky IKVM stuff and keeping the flame alive
   in the dark years.}
 \item Alan Ruttenberg \texttt{Thanks for JSS.}
-\item and of course
-\emph{Peter Graves}
+\item Olof-Joachim Frahm  
+\item piso
+\item and of course \emph{Peter Graves}
 \end{itemize}
 
 
@@ -157,7 +188,7 @@ course.
 
 
 \textsc{ABCL} is packaged as a single jar file usually named either
-\texttt{abcl.jar} or possibly something like \texttt{abcl-1.3.0.jar} if
+\texttt{abcl.jar} or possibly something like \texttt{abcl-1.5.0.jar} if
 using a versioned package on the local filesystem from your system
 vendor.  This jar file can be executed from the command line to obtain a
 \textsc{REPL}\footnote{Read-Eval Print Loop, a Lisp command-line}, viz:
@@ -243,13 +274,13 @@ objects, and construction of new Java objects.
 
 When calling Java routines, some values will automatically be
 converted by the FFI\footnote{Foreign Function Interface, is the term
-  of art for the part of a Lisp implementation which implements
+  of art for the part of a \textsc{Lisp} implementation which implements
   calling code written in other languages, typically normalized to the
-  local C compiler calling conventions.}  from Lisp values to Java
+  local C compiler calling conventions.}  from \textsc{Lisp} values to Java
 values. These conversions typically apply to strings, integers and
-floats. Other values need to be converted to their Java equivalents by
+floats. Other values need to be converted to their \textsc{Java} equivalents by
 the programmer before calling the Java object method. Java values
-returned to Lisp are also generally converted back to their Lisp
+returned to \textsc{Lisp} are also generally converted back to their Lisp
 counterparts. Some operators make an exception to this rule and do not
 perform any conversion; those are the ``raw'' counterparts of certain
 FFI functions and are recognizable by their name ending with
@@ -258,7 +289,7 @@ FFI functions and are recognizable by their name ending with
 \subsection{Low-level Java API}
 
 This subsection covers the low-level API available after evaluating
-\code{(require 'JAVA)}.  A higher level Java API, developed by Alan
+\code{(require :java)}.  A higher level \textsc{Java} API, developed by Alan
 Ruttenberg, is available in the \code{contrib/} directory and described
 later in this document, see Section~\ref{section:jss} on page
 \pageref{section:jss}.
@@ -306,7 +337,7 @@ select the best matching method and dispatch the call.
 \subsubsection{Dynamic dispatch: Caveats}
 
 Dynamic dispatch is performed by using the Java reflection
-API \footnote{The Java reflection API is found in the
+API\footnote{The Java reflection API is found in the
   \code{java.lang.reflect} package}. Generally the dispatch works
 fine, but there are corner cases where the API does not correctly
 reflect all the details involved in calling a Java method. An example
@@ -385,7 +416,7 @@ using the \code{JAVA:JMETHOD} primitive. Static methods are called with
 
 Like \code{JAVA:JCALL}, \code{JAVA:JSTATIC} supports dynamic dispatch by
 passing the name of the method as a string instead of passing a method reference.
-The parameter values should be values to pass in the function call instead of
+The parameters should be values to pass in the function call instead of
 a specification of classes for each parameter.
 
 \subsubsection{Parameter matching for FFI dynamic dispatch}
@@ -399,10 +430,10 @@ Specification. Any deviation should be reported as a bug.
 
 \subsubsection{Instantiating Java objects}
 
-Java objects can be instantiated (created) from Lisp by calling
+\textsc{Java} objects can be instantiated (created) from \textsc{Lisp} by calling
 a constructor from the class of the object to be created. The
 \code{JAVA:JCONSTRUCTOR} primitive is used to acquire a constructor
-reference. It's arguments specify the types of arguments of the constructor
+reference. Its arguments specify the types of arguments of the constructor
 method the same way as with \code{JAVA:JMETHOD}.
 
 The obtained constructor is passed as an argument to \code{JAVA:JNEW},
@@ -422,8 +453,8 @@ be converted.
 
 \section{Java to Lisp}
 
-This section describes the various ways that one interacts with Lisp
-from Java code.  In order to access the Lisp world from Java, one needs
+This section describes the various ways that one interacts with \textsc{Lisp}
+from \textsc{Java} code.  In order to access the \textsc{Lisp} world from \textsc{Java}, one needs
 to be aware of a few things, the most important ones being listed below:
 
 \begin{itemize}
@@ -441,17 +472,18 @@ to be aware of a few things, the most important ones being listed below:
 \subsection{Calling Lisp from Java}
 \label{sec:calling-lisp-from-java}
 
-Note: the entire ABCL Lisp system resides in the
-\texttt{org.armedbear.lisp} package, but the following code snippets do
-not show the relevant import statements in the interest of brevity.  An
-example of the import statement would be
+Note: the entire \textsc{ABCL} \textsc{Lisp} system implementation in
+\textsc{Java} is resident in the \texttt{org.armedbear.lisp} package,
+but the following code snippets do not show the relevant import
+statements in the interest of brevity.  An example of the import
+statement would be
 \begin{listing-java}
   import org.armedbear.lisp.*;
 \end{listing-java}
-to potentially import all the JVM symbol from the `org.armedbear.lisp'
+to potentially import all the JVM symbol from the \code{org.armedbear.lisp}
 namespace.
 
-There can only ever be a single Lisp interpreter per JVM instance.  A
+There can only ever be a single Lisp interpreter per \textsc{JVM} instance.  A
 reference to this interpreter is obtained by calling the static method
 \code{Interpreter.createInstance()}.
 
@@ -460,8 +492,8 @@ reference to this interpreter is obtained by calling the static method
 \end{listing-java}
 
 If this method has already been invoked in the lifetime of the current
-Java process it will return \texttt{null}, so if you are writing Java
-whose life-cycle is a bit out of your control (like in a Java servlet),
+Java process it will return \texttt{null}, so if you are writing \textsc{Java}
+whose life-cycle is a bit out of your control (like in a \textsc{Java} servlet),
 a safer invocation pattern might be:
 
 \begin{listing-java}
@@ -511,19 +543,21 @@ the ABCL Java source, we can invoke the symbol directly.  For instance,
 to tell if a \code{LispObject} is (Lisp) \texttt{NIL}, we can invoke the
 CL function \code{NULL} in the following way:
 
+
 \begin{listing-java}
   boolean nullp(LispObject object) {
     LispObject result = Primitives.NULL.execute(object);
-    if (result == NIL) { // the symbol 'NIL' is explicitly named in the Java
-                         // namespace at ``Symbol.NIL''
-                         // but is always present in the
-                         // local namespace in its unadorned form for
-                         // the convenience of the User.
+    if (result == NIL) { 
       return false;
     }
     return true;
  }
 \end{listing-java}
+
+Note, that the symbol \code{nil} is explicitly named in the
+\textsc{Java} namespace as \code{Symbol.NIL} but is always present in
+the local namespace in its unadorned form for the convenience of the
+User.
 
 \subsubsection{Multiple Values}
 
@@ -716,25 +750,26 @@ evaluation of short scripts does the Right Thing.
 
 \subsection{Compilation}
 
-AbclScriptEngine implements the \code{javax.script.Compilable}
+\code{AbclScriptEngine} implements the \code{javax.script.Compilable}
 interface. Currently it only supports compilation using temporary
 files. Compiled code, returned as an instance of
-\texttt{javax.script.CompiledScript}, is read, compiled and executed by
-default in the \texttt{ABCL-SCRIPT-USER} package, just like evaluated
-code.  In contrast to evaluated code, though, due to the way the ABCL
-compiler works, compiled code contains no reference to top-level
-self-evaluating objects (like numbers or strings). Thus, when evaluated,
-a piece of compiled code will return the value of the last
-non-self-evaluating form: for example the code ``\code{(do-something)
-  42}'' will return 42 when interpreted, but will return the result of
-(do-something) when compiled and later evaluated. To ensure consistency
-of behavior between interpreted and compiled code, make sure the last
-form is always a compound form - at least \code{(identity
-some-literal-object)}. Note that this issue should not matter in real
-code, where it is unlikely a top-level self-evaluating form will appear
-as the last form in a file (in fact, the Common Lisp load function
-always returns \texttt{T} upon success; with JSR-223 this policy has been changed
-to make evaluation of small code snippets work as intended).
+\texttt{javax.script.CompiledScript}, is read, compiled and executed
+by default in the \code{abcl-script-user} package, just like evaluated
+code.  In contrast to evaluated code, though, due to the way the
+\textsc{ABCL} compiler works, compiled code contains no reference to
+top-level self-evaluating objects (like numbers or strings). Thus,
+when evaluated, a piece of compiled code will return the value of the
+last non-self-evaluating form: for example the code
+``\code{(do-something) 42}'' will return 42 when interpreted, but will
+return the result of (do-something) when compiled and later
+evaluated. To ensure consistency of behavior between interpreted and
+compiled code, make sure the last form is always a compound form - at
+least \code{(identity some-literal-object)}. Note that this issue
+should not matter in real code, where it is unlikely that a top-level
+self-evaluating form will appear as the last form in a file (in fact,
+the Common Lisp load function always returns \code{t} upon success;
+with \textsc{JSR-223} this policy has been changed to make evaluation
+of small code snippets work as intended).
 
 \subsection{Invocation of functions and methods}
 
@@ -772,8 +807,8 @@ implemented with Lisp functions.
 Built-in interface-implementation types include:
 
 \begin{itemize}
-\item a single Lisp function which upon invocation of any method in
-  the interface will be passed the method name, the Lisp-this object,
+\item a single Lisp function which, upon invocation of any method in
+  the interface, will be passed the method name, the Lisp-this object,
   and all the parameters. Useful for interfaces with a single method,
   or to implement custom interface-implementation strategies.
 \item a hash-map of method-name $\rightarrow$ Lisp function mappings. Function
@@ -794,31 +829,31 @@ be passed to the \code{jmake-proxy} generic function.
 
 \subsection{Implementation of Java classes in Lisp}
 
-See \code{JAVA:JNEW-RUNTIME-CLASS} on \ref{JAVA:JNEW-RUNTIME-CLASS}.
+See \code{JAVA:JNEW-RUNTIME-CLASS} in \ref{JAVA:JNEW-RUNTIME-CLASS}.
 
 
 \chapter{Implementation Dependent Extensions}
 
-As outlined by the CLHS ANSI conformance guidelines, we document the
-extensions to the Armed Bear Lisp implementation made accessible to
-the user by virtue of being an exported symbol in the JAVA, THREADS,
-or EXTENSIONS packages.
+As outlined by the \textsc{CLHS} \textsc{ANSI} conformance guidelines,
+we document the extensions to the Armed Bear Common Lisp implementation made
+accessible to the user by virtue of being an exported symbol in the
+\code{java}, \code{threads}, or \code{extensions} packages.
 
 \section{JAVA}
 
 \subsection{Modifying the JVM CLASSPATH}
 
-The JAVA:ADD-TO-CLASSPATH generic functions allows one to add the
+The \code{JAVA:ADD-TO-CLASSPATH} generic functions allows one to add the
 specified pathname or list of pathnames to the current classpath
-used by ABCL, allowing the dynamic loading of JVM objects:
+used by \textsc{ABCL}, allowing the dynamic loading of \textsc{JVM} objects:
 
 \begin{listing-lisp}
 CL-USER> (add-to-classpath "/path/to/some.jar")
 \end{listing-lisp}
 
-N.b \code{ADD-TO-CLASSPATH} only affects the classloader used by ABCL
+N.b \code{ADD-TO-CLASSPATH} only affects the classloader used by \textsc{ABCL}
 (the value of the special variable \code{JAVA:*CLASSLOADER*}. It has
-no effect on Java code outside ABCL.
+no effect on \textsc{Java} code outside \textsc{ABCL}.
 
 \subsection{Creating a synthetic Java Class at Runtime}
 
@@ -832,18 +867,19 @@ See \code{JAVA:JNEW-RUNTIME-CLASS} on \ref{JAVA:JNEW-RUNTIME-CLASS}.
 The extensions for handling multithreaded execution are collected in
 the \code{THREADS} package.  Most of the abstractions in Doug Lea's
 excellent \code{java.util.concurrent} packages may be manipulated
-directly via the JSS contrib to great effect.
+directly via the JSS contrib to great effect \cite{lea-1998}
 
 % include autogen docs for the THREADS package.
 \include{threads}
 
 \section{EXTENSIONS}
 
-The symbols in the EXTENSIONS package (nicknamed ``EXT'') constitutes
-extensions to the \textsc{ANSI} standard that are potentially useful to the
-user.  They include functions for manipulating network sockets,
-running external programs, registering object finalizers, constructing
-reference weakly held by the garbage collector and others.
+The symbols in the \code{extensions} package (often referenced by its
+shorter nickname \code{ext}) constitutes extensions to the
+\textsc{ANSI} standard that are potentially useful to the user.  They
+include functions for manipulating network sockets, running external
+programs, registering object finalizers, constructing reference weakly
+held by the garbage collector and others.
 
 See \cite{RHODES2007} for a generic function interface to the native
 \textsc{JVM} contract for \code{java.util.List}.
@@ -853,8 +889,8 @@ See \cite{RHODES2007} for a generic function interface to the native
 
 \chapter{Beyond ANSI}
 
-Naturally, in striving to be a useful contemporary Common Lisp
-implementation, ABCL endeavors to include extensions beyond the ANSI
+Naturally, in striving to be a useful contemporary \textsc{Common Lisp}
+implementation, \textsc{ABCL} endeavors to include extensions beyond the ANSI
 specification which are either widely adopted or are especially useful
 in working with the hosting \textsc{JVM}.
 
@@ -864,6 +900,15 @@ The \code{CL:COMPILE-FILE} interface emits a packed fasl format whose
 Pathname has the type  ``abcl''.  These fasls are operating system neutral
 byte archives packaged by the zip compression format which contain
 artifacts whose loading \code{CL:LOAD} understands.
+
+\subsection{Compiler Diagnostics}
+
+By default, the interface to the compiler does not signal warnings
+that result in its invocation, outputing diagnostics to the standard
+reporting stream.  The generalized boolean
+\code{JVM:*RESIGNAL-COMPILER-WARNINGS*} provides the interface to
+enabling the compiler to signal all warnings.
+
 
 \section{Pathname}
 
@@ -892,12 +937,13 @@ components of zip archives.
 % RDF description of type hierarchy 
 % TODO Render via some LaTeX mode for graphviz?
 \begin{verbatim}
-  @prefix ext:   <http://abcl.not.org/cl-packages/extensions/> .
-  @prefix cl:    <http://abcl.not.org/cl-packages/common-lisp/> .
+  @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+  @prefix ext:   <http://abcl.org/cl/package/extensions/> .
+  @prefix cl:    <http://abcl.org/cl/package/common-lisp/> .
   
-  <ext:jar-pathname> a <ext:url-pathname>.
-  <ext:url-pathname> a <cl:pathname>.
-  <cl:logical-pathname> a <cl:pathname> .
+  <ext:jar-pathname>    rdfs:subClassOf <ext:url-pathname> .
+  <ext:url-pathname>    rdfs:subClassOf <cl:pathname> .
+  <cl:logical-pathname> rdfs:subClassOf <cl:pathname> .
 \end{verbatim}
 
 \label{EXTENSIONS:URL-PATHNAME}
@@ -917,18 +963,22 @@ following caveats:
 
 \index{URI}
 \item Any results of canonicalization procedures performed on the
-  underlying \textsc{URI} are discarded between resolutions (i.e. the
-  implementation does not attempt to cache the results of current name
-  resolution of the representing resource unless it is requested to be
-  resolved.)  Upon resolution, any canonicalization procedures
-  followed in resolving the resource (e.g. following redirects) are
-  discarded.  Users may programatically initiate a new, local
-  computation of the resolution of the resource by applying the
-  \code{CL:TRUENAME} function to a \code{EXT:URL-PATHNAME} object.
-  Depending on the reliability and properties of your local
-  \textsc{REST} infrastructure, these results may not necessarily be
-  idempotent over time\footnote {See \cite{evenson2011} for the draft
-    of the publication of the technical details}.
+  \textsc{URI} via local or network resolutions are discarded between
+  attempts (i.e. the implementation does not attempt to cache the
+  results of current name resolution of the URI for underlying
+  resource unless it is requested to be resolved.)  Upon resolution,
+  any canonicalization procedures followed in resolving the resource
+  (e.g. following redirects) are discarded.  Users may programatically
+  initiate a new, local computation of the resolution of the resource
+  by applying the \code{CL:TRUENAME} function to a
+  \code{EXT:URL-PATHNAME} object.  Depending on the reliability and
+  properties of your local \textsc{REST} infrastructure, these results
+  may not necessarily be idempotent over time\footnote {See
+    \cite{uri-pathname} for the design and implementation notes for
+    the technical details}.  A future implementation may attempt to
+  expose an API to observer/customize the content negotiation
+  initiated during retrieval of the representation of a given
+  resource, which is currently handled at the application level.
 
 \end{itemize}
 
@@ -1112,13 +1162,12 @@ designated package.
          
 \section{Extensible Sequences}
 
-See Rhodes2007 \cite{RHODES2007} for the design.
-
 The SEQUENCE package fully implements Christopher Rhodes' proposal for
 extensible sequences.  These user extensible sequences are used
 directly in \code{java-collections.lisp} provide these CLOS
 abstractions on the standard Java collection classes as defined by the
 \code{java.util.List} contract.
+
 
 %% an Example of using java.util.Lisp in Lisp would be nice
 
@@ -1126,22 +1175,26 @@ This extension is not automatically loaded by the implementation.   It
 may be loaded via:
 
 \begin{listing-lisp}
-CL-USER> (require 'java-collections)
+CL-USER> (require :java-collections)
 \end{listing-lisp}
 
 if both extensible sequences and their application to Java collections
 is required, or
 
 \begin{listing-lisp}
-CL-USER> (require 'extensible-sequences)
+CL-USER> (require :extensible-sequences)
 \end{listing-lisp}
 
 if only the extensible sequences API as specified in \cite{RHODES2007} is
 required.
 
-Note that \code{(require 'java-collections)} must be issued before
+Note that \code{(require :java-collections)} must be issued before
 \code{java.util.List} or any subclass is used as a specializer in a \textsc{CLOS}
 method definition (see the section below).
+
+See Rhodes2007 \cite{RHODES2007} for the an overview of the
+abstractions of the \code{java.util.collection} package afforded by
+\code{JAVA-COLLECTIONS}.
 
 \section{Extensions to CLOS}
 
@@ -1156,6 +1209,9 @@ the metaclass \code{funcallable-standard-object} has
 \code{funcallable-standard-class} as metaclass instead of
 \code{standard-class}.
 
+\textsc{ABCL}'s fidelity to the AMOP specification is codified as part
+of Pascal Costanza's \code{closer-mop} \ref{closer-mop} \cite{closer-mop}.
+
 \subsection{Specializing on Java classes}
 
 There is an additional syntax for specializing the parameter of a
@@ -1164,7 +1220,7 @@ where \code{CLASS-STRING} is a string naming a Java class in dotted package
 form.
 
 For instance the following specialization would perhaps allow one to
-print more information about the contents of a java.util.Collection
+print more information about the contents of a \code{java.util.Collection}
 object
 
 \begin{listing-lisp}
@@ -1202,7 +1258,22 @@ bit characters to the Lisp reader\footnote{This represents a
 allow a sequences of the form \verb~#\U~\emph{\texttt{xxxx}} to be processed
 by the reader as character whose code is specified by the hexadecimal
 digits \emph{\texttt{xxxx}}.  The hexadecimal sequence may be one to four digits
-long.  % Why doesn't ALEXANDRIA work?
+long.
+
+% Why doesn't ALEXANDRIA work?  Good question: Alexandria from
+% Quicklisp 2010-10-07 fails a number of tests:
+%% Form: (ALEXANDRIA.0.DEV:TYPE= 'LIST '(OR NULL CONS))
+%% Expected values: T
+%%                  T
+%% Actual values: NIL
+%%                T.
+%% Test ALEXANDRIA-TESTS::TYPE=.3 failed
+%% Form: (ALEXANDRIA.0.DEV:TYPE= 'NULL '(AND SYMBOL LIST))
+%% Expected values: T
+%%                  T
+%% Actual values: NIL
+%%                NIL.
+
 
 Note that this sequence is never output by the implementation.  Instead,
 the corresponding Unicode character is output for characters whose
@@ -1222,8 +1293,8 @@ semantics to the execution of \code{REQUIRE} on the following symbols:
     otherwise unresolved, are passed to ASDF for a chance for
     resolution.  This means, for instance if \code{CL-PPCRE} can be
     located as a loadable \textsc{ASDF} system \code{(require
-      'cl-ppcre)} is equivalent to \code{(asdf:load-system
-      'cl-ppcre)}.
+      :cl-ppcre)} is equivalent to \code{(asdf:load-system
+      :cl-ppcre)}.
 
   \item{\code{ABCL-CONTRIB}} 
     Locates and pushes the toplevel contents of
@@ -1242,18 +1313,25 @@ semantics to the execution of \code{REQUIRE} on the following symbols:
         the distributed pom.xml graph of Maven Aether:
         \begin{enumerate}
           \item \code{jna} 
-            Dynamically load 'jna.jar' version 4.0.0
+            Dynamically load 'jna.jar' version 4.2.2
             from the network \footnote{This loading can be inhibited
               if, at runtime, the Java class corresponding
               ``:classname'' clause of the system defition is present.}
         \end{enumerate}
       \item \code{quicklisp-abcl} Boot a local Quicklisp installation
-        via the ASDF:IRI type introduced bia ABCL-ASDF.
+        via the ASDF:IRI type introduced via ABCL-ASDF.
 
-\begin{listing-lisp}
-CL-USER> (asdf:load-system :quicklisp-abcl)
-\end{listing-lisp}
-
+      \item \code{jfli} A descendent of Rich Hickey's pre-Clojure work
+        on the JVM.
+      \item \code{jss} Introduces dynamic inspection of present
+        symbols via the \code{SHARPSIGN-QUOTATION\_MARK} macros as Java Syntax
+        Sucks
+      \item \code{abcl-introspect} Provides a framework for
+        introspecting runtime Java and Lisp object values.
+      \item \code{abcl-build} Provides a toolkit for building ABCL
+        from source, as well as installing the necessary tools for
+        such builds.
+        
 \end{enumerate}
 
 \end{description}
@@ -1273,7 +1351,7 @@ reader in the definition of the \code{SHARPSIGN-DOUBLE-QUOTE}
 
 \section{ASDF}
 
-asdf-3.1.4 (see \cite{asdf}) is packaged as core component of \textsc{ABCL},
+asdf-3.2.2 (see \cite{asdf}) is packaged as core component of \textsc{ABCL},
 but not initialized by default, as it relies on the \textsc{CLOS} subsystem
 which can take a bit of time to start \footnote{While this time is
   ``merely'' on the order of seconds for contemporary 2011 machines,
@@ -1283,19 +1361,19 @@ may be loaded by the \textsc{ANSI} \code{REQUIRE} mechanism as
 follows:
 
 \begin{listing-lisp}
-CL-USER> (require 'asdf)
+CL-USER> (require :asdf)
 \end{listing-lisp}
 
 \chapter{Contrib}
 
 The \textsc{ABCL} contrib is packaged as a separate jar archive usually named
 \code{abcl-contrib.jar} or possibly something like
-\code{abcl-contrib-1.3.0.jar}.  The contrib jar is not loaded by the
+\code{abcl-contrib-1.5.0.jar}.  The contrib jar is not loaded by the
 implementation by default, and must be first intialized by the
 \code{REQUIRE} mechanism before using any specific contrib:
 
 \begin{listing-lisp}
-CL-USER> (require 'abcl-contrib)
+CL-USER> (require :abcl-contrib)
 \end{listing-lisp}
 
 \section{abcl-asdf}
@@ -1323,11 +1401,13 @@ definitions, as the following example references the
 abstraction for handling logging systems:
 
 \begin{listing-lisp}
-;;;; -*- Mode: LISP -*-
-(in-package :asdf)
+  ;;;; -*- Mode: LISP -*-
+  (require :asdf)
+  (in-package :cl-user)
 
-(defsystem :log4j
-  :components ((:mvn "log4j/log4j" :version "1.4.9")))
+  (asdf:defsystem :log4j
+     :defsystem-depends-on (abcl-asdf)
+     :components ((:mvn "log4j/log4j" :version "1.4.9")))
 \end{listing-lisp}
 
 \subsection{API}
@@ -1339,8 +1419,8 @@ ASDF classes:
 \code{CLASS-FILE-DIRECTORY} for JVM artifacts that have a currently
 valid pathname representation.
 
-Both the MVN and IRI classes descend from ASDF-COMPONENT, but do not
-directly have a filesystem location.
+Both the \code{MVN} and \code{IRI} classes descend from
+\code{ASDF-COMPONENT}, but do not directly have a filesystem location.
 
 For use outside of ASDF system definitions, we currently define one
 method, \code{ABCL-ASDF:RESOLVE-DEPENDENCIES} which locates,
@@ -1377,8 +1457,7 @@ Notice that all recursive dependencies have been located and installed
 locally from the network as well.
 
 More extensive documentations and examples can be found at
-\url{http://abcl.org/svn/tags/1.3.0/contrib/abcl-asdf/README.markdown}.
-
+\url{http://abcl.org/svn/tags/1.5.0/contrib/abcl-asdf/README.markdown}.
 
 \section{asdf-jar}
 
@@ -1389,8 +1468,7 @@ this package will recursively package all the required source and
 fasls in a jar archive.
 
 The documentation for this contrib can be found at
-\url{http://abcl.org/svn/tags/1.3.0/contrib/asdf-jar/README.markdown}.
-
+\url{http://abcl.org/svn/tags/1.5.0/contrib/asdf-jar/README.markdown}.
 
 \section{jss}
 \label{section:jss}
@@ -1414,9 +1492,9 @@ last experiment in wrangling Java from Common Lisp.
 Example:
 
 \begin{listing-lisp}
-CL-USER> (require 'abcl-contrib)
+CL-USER> (require :abcl-contrib)
 ==> ("ABCL-CONTRIB")
-CL-USER> (require 'jss)
+CL-USER> (require :jss)
 ==> ("JSS")
 CL-USER) (#"getProperties" 'java.lang.System)
 ==> #<java.util.Properties {java.runtime.name=Java.... {2FA21ACF}>
@@ -1425,30 +1503,93 @@ CL-USER) (#"propertyNames" (#"getProperties" 'java.lang.System))
 \end{listing-lisp} %$ <-- un-confuse Emacs font-lock
 
 Some more information on jss can be found in its documentation at
-\url{http://abcl.org/svn/tags/1.3.0/contrib/jss/README.markdown}
+\url{http://abcl.org/svn/tags/1.5.0/contrib/jss/README.markdown}
 
 \section{jfli}
 \label{section:jfli}
 
 The contrib contains a pure-Java version of JFLI. 
 
-\url{http://abcl.org/svn/tags/1.3.0/contrib/jfli/README}.
+\url{http://abcl.org/svn/tags/1.5.0/contrib/jfli/README}.
 
+\section{abcl-introspect}
 
-\section{asdf-install}
+\textsc{ABCL-INTROSPECT} offers more extensive systems for inspecting the state
+of the implementation, most notably in integration with SLIME, where
+the backtrace mechanism is augmented to the poiont that local
+variables are inspectable.
 
-The asdf-install contrib provides an implementation of ASDF-INSTALL.
-Superseded by Quicklisp (see Xach2011 \cite{quicklisp}).
+A compiled function is an instance of a class - This class has
+multiple instances if it represents a closure, or a single instance if
+it represents a non-closed-over function.
 
-The \code{require} of the \code{asdf-install} symbol has the side
-effect of pushing the directory \verb+~/.asdf-install-dir/systems/+ into
-the value of the \textsc{ASDF} central registry in
-\code{asdf:*central-registry*}, providing a convenient mechanism for
-stashing \textsc{ABCL} specific system definitions for convenient
-access.
+The \textsc{ABCL} compiler stores constants that are used in function
+execution as private java fields. This includes symbols used to invoke
+function, locally-defined functions (such as via \code{LABEL} or
+\code{flet}) and string and other literal objects.
+\textsc{ABCL-INTROSPECT} implements a ``do what I mean'' API for
+introspecting these constants.
 
-\url{http://abcl.org/tags/1.3.0/contrib/asdf-install/README}.
+ABCL-INTROSPECT provides access to those internal values, and
+uses them in at least two ways. First, to annotate locally defined
+functions with the top-level function they are defined within, and
+second to search for callers of a give function \footnote{ Since java
+  functions are strings, local fields also have these strings. In the
+  context of looking for callers of a function you can also give a
+  string that names a java method. Same caveat re: false positives.}
+. This may yield some false positives, such as when a symbol that
+names a function is also used for some other purpose. It can also have
+false negatives, as when a function is inlined. Still, it's pretty
+useful. The second use to to find source locations for frames in the
+debugger. If the source location for a local function is asked for the
+location of its 'owner' is instead returns.
 
+In order to record information about local functions, ABCL defines a
+function-plist, which is for the most part unused, but is used here
+with set of keys indicating where the local function was defined and
+in what manner, i.e. as normal local function, as a method function,
+or as an initarg function. There may be other places functions are
+stashed away (defstructs come to mind) and this file should be added
+to to take them into account as they are discovered.
+
+ABCL-INTROSPECT does not depend on jss, but provides a bit of
+jss-specific functionality if jss *is* loaded.
+
+\url{http://abcl.org/svn/tags/1.5.0/contrib/abcl-introspect/}.
+
+\section{abcl-build}
+
+\textsc{ABCL-BUILD} constitutes a new implementation for the original
+Lisp-hosted ABCL build system API in the package \code{ABCL-BUILD}
+that uses the same build artifacts as all of the other current builds.
+
+\subsection{Utilities}
+
+\textsc{ABCL-BUILD} consolidates various utilities that are useful
+for system construction, namely
+\begin{itemize}
+
+\item The ability to introspect the invocation of given executable in
+  the current implementation process PATH.
+
+\item Downloading and unpackages selected JVM artifacts, namely the
+  Ant and Maven build tools.  The \code{ABCL-BUILD:WITH-ANT} and
+  \code{ABCL-BUILD:WITH-MVN} macros abstracts this installation
+  procedure conveniently away from the User.
+
+\item The beginings of a generic framework to download arbitrary
+    archives from the network.
+\end{itemize}
+
+\url{http://abcl.org/svn/tags/1.5.0/contrib/abcl-build/}.
+
+\section{named-readtables}
+
+\code{NAMED-READTABLES} is a library that provides a namespace for
+readtables akin to the already-existing namespace of packages.
+
+\url{https://github.com/melisgl/named-readtables/}.
+\url{http://abcl.org/svn/tags/1.5.0/contrib/named-readtables/}.
 
 \chapter{History}
 \index{History}
@@ -1483,6 +1624,19 @@ In March 2014, we introduced the Fourth Edition of the implementation
 with abcl-1.3.0.  At the end of April 2014, we released abcl-1.3.1 as
 a maintainence release.
 
+In October 2016 we blessed the current \textsc{svn} trunk
+\url{http://abcl.org/svn/trunk/} as 1.4.0, which includes the
+community contributions from Vihbu, Olof, Pipping, and Cyrus.  We
+gingerly stepped into current century by establishing \textsc{git}
+bridges to the source repository at
+\url{https://github.com/easye/abcl/} and
+\url{https://gitlab.common-lisp.net/abcl/abcl/} so that pull
+requests for enhancements to the implementation many be more easily
+facilitated.
+
+In June 2017, we released ABCL 1.5.0 which dropped support for running
+upon Java 5.
+
 \appendix 
 
 \chapter{The MOP Dictionary}
@@ -1492,7 +1646,7 @@ a maintainence release.
 \chapter{The SYSTEM Dictionary}
 
 The public interfaces in this package are subject to change with
-\textsc{ABCL} 1.5.
+\textsc{ABCL} 1.7.
 
 \include{system}
 

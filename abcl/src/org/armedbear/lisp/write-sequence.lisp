@@ -1,7 +1,7 @@
 ;;; write-sequence.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id$
+;;; $Id: write-sequence.lisp 14070 2012-08-11 12:07:52Z ehuelsmann $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; with-accessors.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id$
+;;; $Id: with-accessors.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

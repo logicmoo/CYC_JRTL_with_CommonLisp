@@ -1,7 +1,7 @@
 ;;; lispfunctions.lisp
 ;;;
 ;;; Copyright (C) 2008 Ville Voutilainen
-;;; $Id$
+;;; $Id: lispfunctions.lisp 12909 2010-08-30 18:03:37Z vvoutilainen $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

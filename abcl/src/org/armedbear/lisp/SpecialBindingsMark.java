@@ -2,7 +2,7 @@
  * SpecialBindingsMark.java
  *
  * Copyright (C) 2009 Erik Huelsmann
- * $Id$
+ * $Id: SpecialBindingsMark.java 12603 2010-04-12 21:06:03Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

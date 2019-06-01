@@ -2,7 +2,7 @@
  * LispInteger.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id$
+ * $Id: LispInteger.java 12713 2010-05-20 17:58:13Z astalla $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,20 +33,31 @@
 
 package org.armedbear.lisp;
 
+import java.math.BigInteger;
+
 /** This class merely serves as the super class for
  * Fixnum and Bignum
  */
-abstract public class LispInteger extends NLispObject implements java.io.Serializable
+public class LispInteger extends NLispObject implements java.io.Serializable
 {
 
+  // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one
   public static LispInteger getInstance(long l) {
+    return makeInteger( l );
+  }
+  // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one
+  public static LispInteger getInstance(int s) {
+    return makeInteger( s );
+  }
+
+  public static LispInteger makeInteger(long l) { 
       if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
           return Fixnum.makeFixnum((int)l);
       else
           return Bignum.makeBignum(l);
   }
 
-  public static LispInteger getInstance(int i) {
+  public static LispInteger makeInteger(int i) {
       return Fixnum.makeFixnum(i);
   }
 

@@ -2,7 +2,7 @@
 ;;;
 ;;; Copyright (C) 2010 Erik Huelsmann
 ;;;
-;;; $Id$
+;;; $Id: class-file.lisp 14095 2012-08-15 22:16:20Z ehuelsmann $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

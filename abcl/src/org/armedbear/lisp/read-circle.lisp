@@ -1,7 +1,7 @@
 ;;; read-circle.lisp
 ;;;
 ;;; Copyright (C) 2009 Erik Huelsmann
-;;; $Id$
+;;; $Id: read-circle.lisp 13601 2011-09-19 20:50:37Z ehuelsmann $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

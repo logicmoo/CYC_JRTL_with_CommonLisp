@@ -1,18 +1,12 @@
 (in-package :abcl-asdf-test)
 
+;;;(deftest LOG4J.2
+;;;    (progn
 (defun test-LOG4J.2 ()
-  "Output a message to the Console. 
-
-Note:  for users of SLIME, this will appear in the associated *inferior-lisp* buffer."
-  (#"configure" 'log4j.BasicConfigurator)
-  (#"info" (#"getRootLogger" 'log4j.Logger) "Kilroy wuz here."))
-
-(rt:deftest LOG4j.2 
-    (test-LOG4J.2)
-  t)
-
-
-
+  (asdf:load-system "log4j")
+  (let ((logger (#"getLogger" 'log4j.Logger (symbol-name (gensym)))))
+    (#"trace" logger "Kilroy wuz here.")))
+;;;  t)
 
 
 

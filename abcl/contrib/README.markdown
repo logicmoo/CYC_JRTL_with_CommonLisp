@@ -4,6 +4,15 @@ ABCL-CONTRIB
 The contributions to Armed Bear constitute Common Lisp only code that
 is potentially useful for system construction and distribution.
 
+As such, these contributions have varying license terms which the end
+user needs to accept on her own terms.  Please see the licensing
+metadata as expressed in the ASDF definitions for the status of your
+usage.
+
+quicklisp-abcl
+
+    Loads and installs the Quicklisp library manager from the network
+    if not locally present.
 
 abcl-asdf 
 
@@ -16,7 +25,6 @@ asdf-jar
 
     Package ASDF system definitions into JVM artifacts for
     distribution
-    
 
 jss
     
@@ -26,7 +34,7 @@ jss
     [lsw2][] Semantic Web package for dealing with OWL2 ontologies in
     RDF(S) and other notations.
     
-[lsw2]: http://code.google.com/p/lsw2/    
+[lsw2]: https://github.com/alanruttenberg/lsw2/
     
 jfli
 
@@ -37,47 +45,62 @@ jfli
     interface.
     
 [jfli]: http://sourceforge.net/projects/jfli/
-
-quicklisp-abcl
-
-    Stub for loading Quicklisp from main repository if not locally
-    present.  Must currently be invoked with the force option:
-    
-    CL-USER> (asdf:load-system :quicklisp-abcl :force t)
    
 mvn
-    A collection of various useful JVM artifacts downloaded and cached by
-    the Aether Maven connector.  Requires the maven-3.0.3 executable "mvn"
-    (or "mvn.bat" under MSFT Windows) to be in the current processes's
-    path.
-    
-    mvn currently includes only the single artifact:
-    
-    jna     
-         Cache, from the network if necessary, the jna-3.4.0.jar in
-         the current JVM process, allowing the bootstrapping of
-         dynamically linking to shared executables on the host platform.
 
+    A collection of various useful JVM artifacts downloaded and cached
+    by the Aether Maven connector.  Requires the maven-3.0.3
+    executable "mvn" (or "mvn.bat" under MSFT Windows) to be in the
+    current processes's path. These artifacts load the binary
+    artifacts necessary in the current JVM process, 
 
-Deprecated
-----------
+    
+    mvn currently includes:
+    
+    jna
+        JNA provides an the ability to dynamically link to shared
+        executables on the host platform, needed by CFFI.
 
-asdf-install
-    
-    Install ASDF system definitions from the network.  
-    
-    Deprecated, use Quicklisp from the REPL via
-    
-        CL-USER> (load "http://beta.quicklisp.org/quicklisp.lisp")
-       
-    instead.
+    log4j
+        An example of a dependency without an explicit version.
+
+abcl-introspect
+
+    Advanced introspection of Java and Lisp runtime classes
+    representation.
+
+abcl-build
+
+    The ABCL build system plus associated utilities for manipulating
+    external tools via UIOP.
+
+named-readtables
+    (BSD Licensed)
+    From <https://github.com/melisgl/named-readtables>:
+
+    NAMED-READTABLES is a library that provides a namespace for
+    readtables akin to the already-existing namespace of packages. In
+    particular:
+
+    - you can associate readtables with names, and retrieve
+      readtables by names;
+
+    - you can associate source files with readtable names, and be
+      sure that the right readtable is active when compiling/loading
+      the file;
+
+    - similiarly, your development environment now has a chance to
+      automatically determine what readtable should be active while
+      processing source forms on interactive commands. (E.g. think of
+      `C-c C-c` in Slime (yet to be done))
+
 
 # Colophon
 
-Mark <evenson.not.org@gmail.com>
-Created:  2011-09-11
-Revised:  2012-12-06
-<> abcl:documents <release#abcl-contrib.jar> .
+     Mark <evenson.not.org@gmail.com>
+     Created:  2011-09-11
+     Revised:  2017-06-11
+     <> abcl:documents <abcl.org/release/1.5.0/#abcl-contrib.jar> .
 
 
 

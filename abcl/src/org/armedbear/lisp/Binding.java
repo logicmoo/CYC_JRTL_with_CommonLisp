@@ -2,7 +2,7 @@
  * Binding.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id$
+ * $Id: Binding.java 13695 2011-11-08 23:24:05Z astalla $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
