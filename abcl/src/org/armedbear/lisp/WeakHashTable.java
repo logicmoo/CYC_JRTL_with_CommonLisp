@@ -4,7 +4,7 @@
  * Copyright (C) 2002-2007 Peter Graves
  * Copyright (C) 2010 Erik Huelsmann
  * Copyright (C) 2011 Mark Evenson
- * $Id$
+ * $Id: WeakHashTable.java 13440 2011-08-05 21:25:10Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -509,13 +509,15 @@ public class WeakHashTable
         }
     }
 
-    @Deprecated
+    @Override
+	@Deprecated
     public LispObject ENTRIES() {
         return getEntries();
     }
 
     /** @returns A list of (key . value) pairs. */
-    public LispObject getEntries() {
+    @Override
+	public LispObject getEntries() {
         HashEntry[] b = getTable();
         LispObject list = NIL;
         for (int i = b.length; i-- > 0;) {
@@ -703,28 +705,33 @@ public class WeakHashTable
             entryLookup.put(this.key, this);
         }
 
-        public LispObject getKey() {
+        @Override
+		public LispObject getKey() {
             return key.get();
         }
 
-        public void setKey(LispObject key) {
+        @Override
+		public void setKey(LispObject key) {
             java.lang.ref.WeakReference<LispObject> old = this.key;
             old.clear();
             this.key = new WeakReference<LispObject>(key, queue);
             entryLookup.put(this.key, this);
         }
 
-        HashEntryWeakKey[] makeArray(int length) {
+        @Override
+		HashEntryWeakKey[] makeArray(int length) {
             return new HashEntryWeakKey[length];
         }
 
-        HashEntry makeInstance(LispObject key, int hash, LispObject value, 
+        @Override
+		HashEntry makeInstance(LispObject key, int hash, LispObject value, 
                                HashEntry next, int slot) 
         {
             return new HashEntryWeakKey(key, hash, value, next, slot);
         } 
 
-        void expungeQueue() {
+        @Override
+		void expungeQueue() {
             Reference ref = queue.poll();
             while (ref != null) {
                 WeakHashTable.this.remove(ref);
@@ -734,7 +741,8 @@ public class WeakHashTable
         }
 
         /** Remove referenced objects from GC queue structures. */
-        void clear() {
+        @Override
+		void clear() {
             key.clear();
             assert entryLookup.containsKey(key) 
                 : "Key was not in lookup table";
@@ -761,28 +769,33 @@ public class WeakHashTable
             entryLookup.put(this.value, this);
         }
 
-        public LispObject getValue() {
+        @Override
+		public LispObject getValue() {
             return value.get();
         }
 
-        public void setValue(LispObject value) {
+        @Override
+		public void setValue(LispObject value) {
             java.lang.ref.WeakReference<LispObject> old = this.value;
             old.clear();
             this.value = new WeakReference<LispObject>(value, queue);
             entryLookup.put(this.value, this);
         }
 
-        HashEntryWeakValue[] makeArray(int length) {
+        @Override
+		HashEntryWeakValue[] makeArray(int length) {
             return new HashEntryWeakValue[length];
         }
 
-        HashEntryWeakValue makeInstance(LispObject key, int hash, LispObject value, 
+        @Override
+		HashEntryWeakValue makeInstance(LispObject key, int hash, LispObject value, 
                                HashEntry next, int slot) 
         {
             return new HashEntryWeakValue(key, hash, value, next, slot);
         } 
 
-        void expungeQueue() {
+        @Override
+		void expungeQueue() {
             Reference ref = queue.poll();
             while (ref != null) {
                 WeakHashTable.this.remove(ref);
@@ -792,7 +805,8 @@ public class WeakHashTable
         }
 
         /** Remove referenced objects from GC queue structures. */
-        void clear() {
+        @Override
+		void clear() {
             value.clear();
             assert entryLookup.containsKey(value) 
                 : "Value was not in lookup table.";
@@ -824,11 +838,13 @@ public class WeakHashTable
             
         }
 
-        public LispObject getKey() {
+        @Override
+		public LispObject getKey() {
             return key.get();
         }
 
-        public void setKey(LispObject key) {
+        @Override
+		public void setKey(LispObject key) {
             java.lang.ref.WeakReference<LispObject> old = this.key;
             entryLookup.remove(old);
             old.clear();
@@ -836,11 +852,13 @@ public class WeakHashTable
             entryLookup.put(this.key, this);
         }
 
-        public LispObject getValue() {
+        @Override
+		public LispObject getValue() {
             return value.get();
         }
 
-        public void setValue(LispObject value) {
+        @Override
+		public void setValue(LispObject value) {
             java.lang.ref.WeakReference<LispObject> old = this.value;
             entryLookup.remove(old);
             old.clear();
@@ -848,18 +866,21 @@ public class WeakHashTable
             entryLookup.put(this.value, this);
         }
 
-        HashEntryWeakKeyAndValue[] makeArray(int length) {
+        @Override
+		HashEntryWeakKeyAndValue[] makeArray(int length) {
             return new HashEntryWeakKeyAndValue[length];
         }
 
-        HashEntryWeakKeyAndValue makeInstance(LispObject key, int hash, 
+        @Override
+		HashEntryWeakKeyAndValue makeInstance(LispObject key, int hash, 
                                               LispObject value, 
                                               HashEntry next, int slot) 
         {
             return new HashEntryWeakKeyAndValue(key, hash, value, next, slot);
         } 
 
-        void expungeQueue() {
+        @Override
+		void expungeQueue() {
             Reference ref = queue.poll();
             while (ref != null) {
                 HashEntry entry = entryLookup.get(ref);
@@ -879,7 +900,8 @@ public class WeakHashTable
         }
 
         /** Remove referenced objects from GC queue structures. */
-        void clear() {
+        @Override
+		void clear() {
             key.clear();
             value.clear();
             entryLookup.remove(key);
@@ -898,18 +920,21 @@ public class WeakHashTable
         {
             super(key, hash, value, next, slot);
         }
-        HashEntryWeakKeyOrValue[] makeArray(int length) {
+        @Override
+		HashEntryWeakKeyOrValue[] makeArray(int length) {
             return new HashEntryWeakKeyOrValue[length];
         }
 
-        HashEntryWeakKeyOrValue makeInstance(LispObject key, int hash, 
+        @Override
+		HashEntryWeakKeyOrValue makeInstance(LispObject key, int hash, 
                                              LispObject value, 
                                              HashEntry next, int slot) 
         {
             return new HashEntryWeakKeyOrValue(key, hash, value, next, slot);
         } 
 
-        void expungeQueue() {
+        @Override
+		void expungeQueue() {
             Reference ref = queue.poll();
             while (ref != null) {
                 HashEntry entry = entryLookup.get(ref);

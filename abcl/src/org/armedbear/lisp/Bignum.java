@@ -46,7 +46,30 @@ public final class Bignum extends LispInteger
   private static BigInteger MOST_POSITIVE_FIXNUM =
           BigInteger.valueOf(Integer.MAX_VALUE);
 
+
   public static LispInteger makeBignum(long l) {
+      if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
+          return Fixnum.getInstance(l);
+      else
+          return new Bignum(l);
+  }
+
+  public static LispInteger makeBignum(BigInteger n) {
+      if (MOST_NEGATIVE_FIXNUM.compareTo(n) < 0 ||
+              MOST_POSITIVE_FIXNUM.compareTo(n) > 0)
+          return new Bignum(n);
+      else
+          return Fixnum.getInstance(n.intValue());
+  }
+
+  public static LispInteger makeBignum(String s, int radix) {
+      BigInteger value = new BigInteger(s, radix);
+
+      return Bignum.getInstance(value);
+  }
+
+
+  public static LispInteger getInstance(long l) {
       if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
           return Fixnum.getInstance(l);
       else
@@ -58,10 +81,10 @@ public final class Bignum extends LispInteger
               MOST_POSITIVE_FIXNUM.compareTo(n) > 0)
           return new Bignum(n);
       else
-          return Fixnum.makeFixnum(n.intValue());
+          return Fixnum.getInstance(n.intValue());
   }
 
-  public static LispInteger makeBignum(String s, int radix) {
+  public static LispInteger getInstance(String s, int radix) {
       BigInteger value = new BigInteger(s, radix);
 
       return Bignum.getInstance(value);
@@ -85,14 +108,13 @@ public final class Bignum extends LispInteger
 
   @Override
   public Object javaInstance(Class c) {
-    String cn = c.getName();
-    if (cn.equals("java.lang.Byte") || cn.equals("byte"))
+    if (c == Byte.class || c == byte.class)
       return Byte.valueOf((byte)value.intValue());
-    if (cn.equals("java.lang.Short") || cn.equals("short"))
+    if (c == Short.class || c == short.class)
       return Short.valueOf((short)value.intValue());
-    if (cn.equals("java.lang.Integer") || cn.equals("int"))
+    if (c == Integer.class || c == int.class)
       return Integer.valueOf(value.intValue());
-    if (cn.equals("java.lang.Long") || cn.equals("long"))
+    if (c == Long.class || c == long.class)
       return Long.valueOf((long)value.longValue());
     return javaInstance();
   }
@@ -669,7 +691,7 @@ public final class Bignum extends LispInteger
   public LispObject LOGAND(int n)
   {
     if (n >= 0)
-      return Fixnum.makeFixnum(value.intValue() & n);
+      return Fixnum.getInstance(value.intValue() & n);
     else
       return number(value.and(BigInteger.valueOf(n)));
   }
@@ -681,7 +703,7 @@ public final class Bignum extends LispInteger
       {
         int n = ((Fixnum)obj).value;
         if (n >= 0)
-          return Fixnum.makeFixnum(value.intValue() & n);
+          return Fixnum.getInstance(value.intValue() & n);
         else
           return number(value.and(BigInteger.valueOf(n)));
       }

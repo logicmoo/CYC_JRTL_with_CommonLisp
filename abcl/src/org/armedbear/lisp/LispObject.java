@@ -39,6 +39,35 @@ import java.util.WeakHashMap;
 public abstract class LispObject // extends Number
 {
 
+	static Object TO_STRING_OBJ;
+
+	@Override
+	public String toString() {
+    if (ansi) return super.toString();
+		final Object waz = TO_STRING_OBJ;
+		if (waz == this) {
+			return super.toString();
+		} else if (waz == null) {
+			TO_STRING_OBJ = this;
+		}
+		try {			
+			return printObject();
+		} catch (Throwable t) {
+			return toStringSimple();
+		} finally {
+			TO_STRING_OBJ = waz;
+		}
+	}
+
+	public String toStringSimple() {
+    if (ansi) return super.toString();	
+		LispObject parts = getParts();
+		if (parts != null && parts != NIL) {
+			return parts.toString();
+		}
+		return super.toString();
+	}
+
 	protected LispObject() {
 		
 	}

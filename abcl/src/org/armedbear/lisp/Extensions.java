@@ -288,7 +288,7 @@ public final class Extensions
   }
 
   public static final Primitive MAKE_TEMP_DIRECTORY = new make_temp_directory();
-  @DocString(name="make_temp_directory",
+  @DocString(name="make-temp-directory",
              doc="Create and return the pathname of a previously non-existent directory.")
   private static class make_temp_directory extends Primitive { 
     make_temp_directory() {

@@ -59,10 +59,10 @@ abstract public class Lisp extends ABCLStatic
   public static boolean initialized;
 
   final public static boolean LISP_NOT_JAVA = true;
-
+/*
   static final WeakHashMap<LispObject, LispObject>
       documentationHashTable = new WeakHashMap<LispObject, LispObject>();
-
+*/
   // Packages.
   public static final Package PACKAGE_CL =
     Packages.createPackage("COMMON-LISP", 2048); // EH 10-10-2010: Actual number = 1014
@@ -1238,9 +1238,9 @@ abstract public class Lisp extends ABCLStatic
   public static final LispObject number(long n)
   {
     if (n >= Integer.MIN_VALUE && n <= Integer.MAX_VALUE)
-      return Fixnum.makeFixnum((int)n);
+      return Fixnum.getInstance((int)n);
     else
-      return Bignum.makeBignum(n);
+      return Bignum.getInstance(n);
   }
 
   private static final BigInteger INT_MIN = BigInteger.valueOf(Integer.MIN_VALUE);
@@ -1272,7 +1272,7 @@ abstract public class Lisp extends ABCLStatic
   public static final LispObject number(BigInteger n)
   {
     if (n.compareTo(INT_MIN) >= 0 && n.compareTo(INT_MAX) <= 0)
-      return Fixnum.makeFixnum(n.intValue());
+      return Fixnum.getInstance(n.intValue());
     else
       return Bignum.getInstance(n);
   }
@@ -1561,7 +1561,7 @@ abstract public class Lisp extends ABCLStatic
     list(Symbol.UNSIGNED_BYTE, Fixnum.constants[32]);
 
   public static final LispObject UNSIGNED_BYTE_32_MAX_VALUE =
-    Bignum.makeBignum(4294967296L);
+    Bignum.getInstance(4294967296L);
 
   public static final LispObject getUpgradedArrayElementType(LispObject type)
 
@@ -1784,7 +1784,7 @@ abstract public class Lisp extends ABCLStatic
 
   {
     if (n < 0 || n > 255)
-      type_error(Fixnum.makeFixnum(n), UNSIGNED_BYTE_8);
+      type_error(Fixnum.getInstance(n), UNSIGNED_BYTE_8);
     checkStream(obj)._writeByte(n);
   }
 
@@ -2350,10 +2350,10 @@ abstract public class Lisp extends ABCLStatic
 
   static
   {
-    Symbol.MOST_POSITIVE_FIXNUM.initializeConstant(Fixnum.makeFixnum(Integer.MAX_VALUE));
-    Symbol.MOST_NEGATIVE_FIXNUM.initializeConstant(Fixnum.makeFixnum(Integer.MIN_VALUE));
-    Symbol.MOST_POSITIVE_JAVA_LONG.initializeConstant(Bignum.makeBignum(Long.MAX_VALUE));
-    Symbol.MOST_NEGATIVE_JAVA_LONG.initializeConstant(Bignum.makeBignum(Long.MIN_VALUE));
+    Symbol.MOST_POSITIVE_FIXNUM.initializeConstant(Fixnum.getInstance(Integer.MAX_VALUE));
+    Symbol.MOST_NEGATIVE_FIXNUM.initializeConstant(Fixnum.getInstance(Integer.MIN_VALUE));
+    Symbol.MOST_POSITIVE_JAVA_LONG.initializeConstant(Bignum.getInstance(Long.MAX_VALUE));
+    Symbol.MOST_NEGATIVE_JAVA_LONG.initializeConstant(Bignum.getInstance(Long.MIN_VALUE));
   }
 
   public static void exit(int status)
@@ -2423,6 +2423,10 @@ abstract public class Lisp extends ABCLStatic
         featureList = new Cons(Keyword.JAVA_1_6, featureList);
     } else if (javaVersion.startsWith("1.7")) {
         featureList = new Cons(Keyword.JAVA_1_7, featureList);
+    } else if (javaVersion.startsWith("1.8")) {
+        featureList = new Cons(Keyword.JAVA_1_8, featureList);
+    } else if (javaVersion.startsWith("1.9")) {
+        featureList = new Cons(Keyword.JAVA_1_9, featureList);
     }
     // Processor architecture
     if(osArch != null) {
@@ -2515,7 +2519,7 @@ abstract public class Lisp extends ABCLStatic
   static
   {
     // ### array-dimension-limit
-    Symbol.ARRAY_DIMENSION_LIMIT.initializeConstant(Fixnum.makeFixnum(ARRAY_DIMENSION_MAX));
+    Symbol.ARRAY_DIMENSION_LIMIT.initializeConstant(Fixnum.getInstance(ARRAY_DIMENSION_MAX));
   }
 
   // ### char-code-limit
@@ -2523,7 +2527,7 @@ abstract public class Lisp extends ABCLStatic
   public static final int CHAR_MAX = Character.MAX_VALUE;
   static
   {
-    Symbol.CHAR_CODE_LIMIT.initializeConstant(Fixnum.makeFixnum(CHAR_MAX + 1));
+    Symbol.CHAR_CODE_LIMIT.initializeConstant(Fixnum.getInstance(CHAR_MAX + 1));
   }
 
   static
@@ -2668,7 +2672,7 @@ abstract public class Lisp extends ABCLStatic
   static
   {
     // ### internal-time-units-per-second
-    Symbol.INTERNAL_TIME_UNITS_PER_SECOND.initializeConstant(Fixnum.makeFixnum(1000));
+    Symbol.INTERNAL_TIME_UNITS_PER_SECOND.initializeConstant(Fixnum.getInstance(1000));
   }
 
   static

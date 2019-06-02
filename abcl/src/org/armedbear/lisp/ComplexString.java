@@ -135,7 +135,7 @@ public final class ComplexString extends AbstractString
     if (array != null)
       {
         value1 = array;
-        value2 = Fixnum.makeFixnum(displacement);
+        value2 = Fixnum.getInstance(displacement);
       }
     else
       {
@@ -442,7 +442,7 @@ public final class ComplexString extends AbstractString
 
   {
     vectorPushExtend(element);
-    return Fixnum.makeFixnum(fillPointer - 1);
+    return Fixnum.getInstance(fillPointer - 1);
   }
 
   @Override
@@ -464,7 +464,7 @@ public final class ComplexString extends AbstractString
       }
     else
       array.aset(fillPointer + displacement, element);
-    return Fixnum.makeFixnum(fillPointer++);
+    return Fixnum.getInstance(fillPointer++);
   }
 
   public final void ensureCapacity(int minCapacity)

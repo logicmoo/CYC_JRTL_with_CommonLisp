@@ -120,8 +120,8 @@ public final class FloatFunctions
                 else
                     m = (bits & 0x7fffff) | 0x800000;
                 LispObject significand = number(m);
-                Fixnum exponent = Fixnum.makeFixnum(e - 150);
-                Fixnum sign = Fixnum.makeFixnum(s);
+                Fixnum exponent = Fixnum.getInstance(e - 150);
+                Fixnum sign = Fixnum.getInstance(s);
                 return LispThread.currentThread().setValues(significand,
                                                             exponent,
                                                             sign);
@@ -137,8 +137,8 @@ public final class FloatFunctions
                 else
                     m = (bits & 0xfffffffffffffL) | 0x10000000000000L;
                 LispObject significand = number(m);
-                Fixnum exponent = Fixnum.makeFixnum(e - 1075);
-                Fixnum sign = Fixnum.makeFixnum(s);
+                Fixnum exponent = Fixnum.getInstance(e - 1075);
+                Fixnum sign = Fixnum.getInstance(s);
                 return LispThread.currentThread().setValues(significand,
                                                             exponent,
                                                             sign);
@@ -199,8 +199,8 @@ public final class FloatFunctions
         }
     };
 
-    static final Fixnum FIXNUM_24 = Fixnum.makeFixnum(24);
-    static final Fixnum FIXNUM_53 = Fixnum.makeFixnum(53);
+    static final Fixnum FIXNUM_24 = Fixnum.getInstance(24);
+    static final Fixnum FIXNUM_53 = Fixnum.getInstance(53);
 
     // ### float-digits
     // float-digits float => float-digits
@@ -310,7 +310,7 @@ public final class FloatFunctions
         {
             if (arg instanceof SingleFloat) {
                 SingleFloat f = (SingleFloat) arg;
-                return Fixnum.makeFixnum(Float.floatToIntBits(f.value));
+                return Fixnum.getInstance(Float.floatToIntBits(f.value));
             }
             return type_error(arg, Symbol.FLOAT);
         }
@@ -636,7 +636,7 @@ public final class FloatFunctions
 		CHR22784 = LispCharacter.makeCharacter('0');
 		SYM22785 = Symbol.LENGTH;
 		SYM22790 = Lisp.internInPackage("FLOAT-TO-DIGITS*", "SYSTEM");
-		INT22797 = Fixnum.makeFixnum(-1);
+		INT22797 = Fixnum.getInstance(-1);
 		SYM22804 = Symbol.VALUES_LIST;
 		SYM22805 = Symbol.MAKE_STRING_OUTPUT_STREAM;
 		SYM22808 = Symbol.WRITE_STRING;

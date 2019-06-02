@@ -252,9 +252,13 @@ public final class Interpreter
                 } else if (arg.equals("--")) {
                     doubledash = true;
                 } else if (arg.equals("--noansi")) {
-                	ansi = false;
+                    ansi = false;
                 } else if (arg.equals("--ansi")) {
                     ansi = true;
+                } else if (arg.equals("--nodebug")) {
+                    debug = false;
+                } else if (arg.equals("--debug")) {
+                    debug = true;
                 } else if (arg.equals("--noinit")) {
                     noinit = true;
                 } else if (arg.equals("--nosystem")) {
@@ -360,6 +364,10 @@ public final class Interpreter
                         ++i;
                     }
                 }
+                else if (arg.equals("--notrace")) 
+                    evaluate("(trace-lisp nil)");
+                else if (arg.equals("--trace"))
+                    evaluate("(trace-lisp t)");
                 else if (arg.equals("--load") ||
                            arg.equals("--load-system-file")) {
                     if (i + 1 < args.length) {

@@ -1,9 +1,43 @@
+/*
+ * LispObject.java
+ *
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: LispObject.java 15027 2017-06-01 06:45:36Z mevenson $
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ *
+ * As a special exception, the copyright holders of this library give you
+ * permission to link this library with independent modules to produce an
+ * executable, regardless of the license terms of these independent
+ * modules, and to copy and distribute the resulting executable under
+ * terms of your choice, provided that you also meet, for each linked
+ * independent module, the terms and conditions of the license of that
+ * module.  An independent module is a module which is not derived from
+ * or based on this library.  If you modify this library, you may extend
+ * this exception to your version of the library, but you are not
+ * obligated to do so.  If you do not wish to do so, delete this
+ * exception statement from your version.
+ */
+
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+import java.util.WeakHashMap;
 import static org.armedbear.lisp.Lisp.NIL;
 import static org.armedbear.lisp.Lisp.T;
 import static org.armedbear.lisp.Lisp.assq;
-import static org.armedbear.lisp.Lisp.documentationHashTable;
 import static org.armedbear.lisp.Lisp.error;
 import static org.armedbear.lisp.Lisp.list;
 import static org.armedbear.lisp.Lisp.type_error;
@@ -148,7 +182,7 @@ abstract public class ALispObject extends LispObject {
 
 	public final LispObject nthcdr(int n) {
 	    if (n < 0)
-	      return type_error(Fixnum.makeFixnum(n),
+	      return type_error(Fixnum.getInstance(n),
 	                             list(Symbol.INTEGER, Fixnum.ZERO));
 	    if (this instanceof Cons) {
 	      LispObject result = this;
@@ -354,7 +388,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public final LispObject LENGTH() {
-	    return Fixnum.makeFixnum(length());
+	    return Fixnum.getInstance(length());
 	  }
 
 	public LispObject CHAR(int index) {
@@ -402,7 +436,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public void aset(int index, int n) {
-	          aset(index, Fixnum.makeFixnum(n));
+	          aset(index, Fixnum.getInstance(n));
 	  }
 
 	public void aset(int index, LispObject newValue) {
@@ -467,25 +501,39 @@ abstract public class ALispObject extends LispObject {
 	    return false;
 	  }
 
-	public final LispObject ENDP() {
+  @Override
+public final LispObject ENDP()
+  {
 	    return endp() ? T : NIL;
 	  }
 
-	public LispObject NOT() {
+  @Override
+public LispObject NOT()
+  {
 	    return NIL;
 	  }
 
-	public boolean isSpecialOperator() {
+  @Override
+public boolean isSpecialOperator()
+  {
 	    type_error(this, Symbol.SYMBOL);
 	    // Not reached.
 	    return false;
 	  }
 
-	public boolean isSpecialVariable() {
+  @Override
+public boolean isSpecialVariable()
+  {
 	    return false;
 	  }
 
-	public LispObject getDocumentation(LispObject docType) {
+  private static final WeakHashMap<LispObject, LispObject>
+      documentationHashTable = new WeakHashMap<LispObject, LispObject>();
+
+  @Override
+public LispObject getDocumentation(LispObject docType)
+
+  {
 	    LispObject alist;
 	    synchronized (documentationHashTable) {
 	      alist = documentationHashTable.get(this);
@@ -518,7 +566,10 @@ abstract public class ALispObject extends LispObject {
 	    return NIL;
 	  }
 
-	public void setDocumentation(LispObject docType, LispObject documentation) {
+  @Override
+public void setDocumentation(LispObject docType, LispObject documentation)
+
+  {
 	    synchronized (documentationHashTable) {
 	      LispObject alist = documentationHashTable.get(this);
 	      if (alist == null)
@@ -536,34 +587,54 @@ abstract public class ALispObject extends LispObject {
 	    }
 	  }
 
-	public LispObject getPropertyList() {
+  @Override
+public LispObject getPropertyList()
+  {
 	    return null;
 	  }
 
-	public void setPropertyList(LispObject obj) {
+  @Override
+public void setPropertyList(LispObject obj)
+  {
 	  }
 
-	public LispObject getSymbolValue() {
+  @Override
+public LispObject getSymbolValue()
+  {
 	    return type_error(this, Symbol.SYMBOL);
 	  }
 
-	public LispObject getSymbolFunction() {
+  @Override
+public LispObject getSymbolFunction()
+  {
 	    return type_error(this, Symbol.SYMBOL);
 	  }
 
-	public LispObject getSymbolFunctionOrDie() {
+  @Override
+public LispObject getSymbolFunctionOrDie()
+  {
 	    return type_error(this, Symbol.SYMBOL);
 	  }
 
-	public LispObject getSymbolSetfFunction() {
+  @Override
+public LispObject getSymbolSetfFunction()
+  {
 	    return type_error(this, Symbol.SYMBOL);
 	  }
 
-	public LispObject getSymbolSetfFunctionOrDie() {
+  @Override
+public LispObject getSymbolSetfFunctionOrDie()
+  {
 	    return type_error(this, Symbol.SYMBOL);
 	  }
 
-	public String princToString() {
+  /** PRINC-TO-STRING function to be used with Java objects
+   * 
+   * @return A string in human-readable format, as per PRINC definition
+   */
+  @Override
+public String princToString()
+  {
 	      LispThread thread = LispThread.currentThread();
 	      SpecialBindingsMark mark = thread.markSpecialBindings();
 	      try {
@@ -576,7 +647,9 @@ abstract public class ALispObject extends LispObject {
 	      }
 	  }
 
-	public String printObject() {
+  @Override
+public String printObject()
+  {
 	      return unreadableString(toString(), false);
 	  }
 
@@ -711,7 +784,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public LispObject add(int n) {
-	    return add(Fixnum.makeFixnum(n));
+	    return add(Fixnum.getInstance(n));
 	  }
 
 	public LispObject add(LispObject obj) {
@@ -719,7 +792,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public LispObject subtract(int n) {
-	    return subtract(Fixnum.makeFixnum(n));
+	    return subtract(Fixnum.getInstance(n));
 	  }
 
 	public LispObject subtract(LispObject obj) {
@@ -727,7 +800,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public LispObject multiplyBy(int n) {
-	    return multiplyBy(Fixnum.makeFixnum(n));
+	    return multiplyBy(Fixnum.getInstance(n));
 	  }
 
 	public LispObject multiplyBy(LispObject obj) {
@@ -739,7 +812,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public boolean isEqualTo(int n) {
-	    return isEqualTo(Fixnum.makeFixnum(n));
+	    return isEqualTo(Fixnum.getInstance(n));
 	  }
 
 	public boolean isEqualTo(LispObject obj) {
@@ -753,7 +826,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public boolean isNotEqualTo(int n) {
-	    return isNotEqualTo(Fixnum.makeFixnum(n));
+	    return isNotEqualTo(Fixnum.getInstance(n));
 	  }
 
 	public boolean isNotEqualTo(LispObject obj) {
@@ -767,7 +840,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public boolean isLessThan(int n) {
-	    return isLessThan(Fixnum.makeFixnum(n));
+	    return isLessThan(Fixnum.getInstance(n));
 	  }
 
 	public boolean isLessThan(LispObject obj) {
@@ -781,7 +854,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public boolean isGreaterThan(int n) {
-	    return isGreaterThan(Fixnum.makeFixnum(n));
+	    return isGreaterThan(Fixnum.getInstance(n));
 	  }
 
 	public boolean isGreaterThan(LispObject obj) {
@@ -795,7 +868,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public boolean isLessThanOrEqualTo(int n) {
-	    return isLessThanOrEqualTo(Fixnum.makeFixnum(n));
+	    return isLessThanOrEqualTo(Fixnum.getInstance(n));
 	  }
 
 	public boolean isLessThanOrEqualTo(LispObject obj) {
@@ -809,7 +882,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public boolean isGreaterThanOrEqualTo(int n) {
-	    return isGreaterThanOrEqualTo(Fixnum.makeFixnum(n));
+	    return isGreaterThanOrEqualTo(Fixnum.getInstance(n));
 	  }
 
 	public boolean isGreaterThanOrEqualTo(LispObject obj) {
@@ -848,11 +921,11 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public LispObject MOD(int divisor) {
-	    return MOD(Fixnum.makeFixnum(divisor));
+	    return MOD(Fixnum.getInstance(divisor));
 	  }
 
 	public LispObject ash(int shift) {
-	    return ash(Fixnum.makeFixnum(shift));
+	    return ash(Fixnum.getInstance(shift));
 	  }
 
 	public LispObject ash(LispObject obj) {
@@ -864,7 +937,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public LispObject LOGAND(int n) {
-	    return LOGAND(Fixnum.makeFixnum(n));
+	    return LOGAND(Fixnum.getInstance(n));
 	  }
 
 	public LispObject LOGAND(LispObject obj) {
@@ -872,7 +945,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public LispObject LOGIOR(int n) {
-	    return LOGIOR(Fixnum.makeFixnum(n));
+	    return LOGIOR(Fixnum.getInstance(n));
 	  }
 
 	public LispObject LOGIOR(LispObject obj) {
@@ -880,7 +953,7 @@ abstract public class ALispObject extends LispObject {
 	  }
 
 	public LispObject LOGXOR(int n) {
-	    return LOGXOR(Fixnum.makeFixnum(n));
+	    return LOGXOR(Fixnum.getInstance(n));
 	  }
 
 	public LispObject LOGXOR(LispObject obj) {

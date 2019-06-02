@@ -2198,7 +2198,7 @@ public final class Primitives {
 
         @Override
         public LispObject execute(LispObject arg) {
-            return Fixnum.makeFixnum(checkArray(arg).getRank());
+            return Fixnum.getInstance(checkArray(arg).getRank());
 
         }
     };
@@ -2229,7 +2229,7 @@ public final class Primitives {
 
         {
             final AbstractArray array = checkArray(first);
-            return Fixnum.makeFixnum(array.getDimension(Fixnum.getValue(second)));
+            return Fixnum.getInstance(array.getDimension(Fixnum.getValue(second)));
         }
     };
 
@@ -2242,7 +2242,7 @@ public final class Primitives {
 
         @Override
         public LispObject execute(LispObject arg) {
-            return Fixnum.makeFixnum(checkArray(arg).getTotalSize());
+            return Fixnum.getInstance(checkArray(arg).getTotalSize());
         }
     };
 
@@ -2480,7 +2480,7 @@ public final class Primitives {
             if (arg instanceof AbstractArray) {
                 AbstractArray aa = (AbstractArray)arg;
                 if (aa.hasFillPointer())
-                    return Fixnum.makeFixnum(aa.getFillPointer());
+                    return Fixnum.getInstance(aa.getFillPointer());
             }
             return type_error(arg, list(Symbol.AND, Symbol.VECTOR,
                                         list(Symbol.SATISFIES,
@@ -2534,7 +2534,7 @@ public final class Primitives {
                 return NIL;
             v.aset(fillPointer, first);
             v.setFillPointer(fillPointer + 1);
-            return Fixnum.makeFixnum(fillPointer);
+            return Fixnum.getInstance(fillPointer);
         }
     };
 
@@ -4161,7 +4161,7 @@ public final class Primitives {
 
         @Override
         public LispObject execute(LispObject arg) {
-            return Fixnum.makeFixnum(arg.getCallCount());
+            return Fixnum.getInstance(arg.getCallCount());
         }
     };
 
@@ -4190,7 +4190,7 @@ public final class Primitives {
 
         @Override
         public LispObject execute(LispObject arg) {
-            return Fixnum.makeFixnum(arg.getHotCount());
+            return Fixnum.getInstance(arg.getHotCount());
         }
     };
 
@@ -5052,10 +5052,10 @@ public final class Primitives {
                     n = n >>> 1;
                     ++count;
                 }
-                return Fixnum.makeFixnum(count);
+                return Fixnum.getInstance(count);
             }
             if (arg instanceof Bignum)
-                return Fixnum.makeFixnum(((Bignum)arg).value.bitLength());
+                return Fixnum.getInstance(((Bignum)arg).value.bitLength());
             return type_error(arg, Symbol.INTEGER);
         }
     };
@@ -5097,7 +5097,7 @@ public final class Primitives {
 
         @Override
         public LispObject execute(LispObject arg) {
-            return Fixnum.makeFixnum(System.identityHashCode(arg));
+            return Fixnum.getInstance(System.identityHashCode(arg));
         }
     };
 
@@ -5136,7 +5136,7 @@ public final class Primitives {
                             }
                         }
                         if (match)
-                            return Fixnum.makeFixnum(i);
+                            return Fixnum.getInstance(i);
                     }
                 }
             } else {
@@ -5157,7 +5157,7 @@ public final class Primitives {
                             }
                         }
                         if (match)
-                            return Fixnum.makeFixnum(i);
+                            return Fixnum.getInstance(i);
                     }
                 }
             }
@@ -5663,7 +5663,7 @@ public final class Primitives {
                 int n = bytes[i];
                 if (n < 0)
                     n += 256;
-                objects[i] = Fixnum.makeFixnum(n);
+                objects[i] = Fixnum.getInstance(n);
             }
             return new SimpleVector(objects);
         }

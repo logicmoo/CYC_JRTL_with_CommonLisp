@@ -396,7 +396,7 @@ public class Stream extends StructureObject {
     SortedMap<String, Charset> available = Charset.availableCharsets();
     Set<String> encodings = available.keySet();
     for (String charset : encodings) {
-      result.add(new Symbol(charset, PACKAGE_KEYWORD));
+      result.add (PACKAGE_KEYWORD.intern (charset));
     }
     return result;
   }
@@ -589,7 +589,7 @@ public class Stream extends StructureObject {
         }
         else if (handler != null && handler != NIL) {
             thread._values = null;
-            value = handler.execute(this, LispCharacter.makeCharacter(c));
+            value = handler.execute(this, LispCharacter.getInstance(c));
         }
         else
             return readToken(c, rt);
@@ -813,8 +813,8 @@ public class Stream extends StructureObject {
                 return ((DispatchMacroFunction)fun).execute(this, c, numArg);
             else
                 return
-                    thread.execute(fun, this, LispCharacter.makeCharacter(c),
-                       (numArg < 0) ? NIL : Fixnum.makeFixnum(numArg));
+                    thread.execute(fun, this, LispCharacter.getInstance(c),
+                       (numArg < 0) ? NIL : Fixnum.getInstance(numArg));
         }
 
         if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
@@ -948,11 +948,11 @@ public class Stream extends StructureObject {
             if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
                 return NIL;
             if (sb.length() == 1)
-                return LispCharacter.makeCharacter(sb.charAt(0));
+                return LispCharacter.getInstance(sb.charAt(0));
             String token = sb.toString();
             n = LispCharacter.nameToChar(token);
             if (n >= 0)
-                return LispCharacter.makeCharacter((char)n); // ### BUG: Codepoint conversion
+                return LispCharacter.getInstance((char)n); // ### BUG: Codepoint conversion
             return error(new LispError("Unrecognized character name: \"" + token + '"'));
         } catch (IOException e) {
             return error(new StreamError(this, e));
@@ -1190,16 +1190,17 @@ public class Stream extends StructureObject {
                     return symbol;
 
                 // Error!
-                if (pkg.findInternalSymbol(symbolName) != null)
-                    return error(new ReaderError("The symbol \"" + symbolName +
-                                                 "\" is not external in package " +
-                                                 packageName + '.',
-                                                 this));
-                else
-                    return error(new ReaderError("The symbol \"" + symbolName +
-                                                 "\" was not found in package " +
-                                                 packageName + '.',
-                                                 this));
+                if (pkg.findInternalSymbol(symbolName) != null) {
+                    return error(new ReaderError("The symbol \"~A\" is not external in package ~A.",
+                                                 this,
+                                                 new SimpleString(symbolName),
+                                                 new SimpleString(packageName)));
+                } else {
+                    return error(new ReaderError("The symbol \"~A\" was not found in package ~A.",
+                                                 this,
+                                                 new SimpleString(symbolName),
+                                                 new SimpleString(packageName)));
+                }
             }
         } else {                // token.length == 0
             Package pkg = (Package)Symbol._PACKAGE_.symbolValue(thread);
@@ -1390,11 +1391,11 @@ public class Stream extends StructureObject {
             token = token.substring(1);
         try {
             int n = Integer.parseInt(token, radix);
-            return (n >= 0 && n <= 255) ? Fixnum.constants[n] : Fixnum.makeFixnum(n);
+            return (n >= 0 && n <= 255) ? Fixnum.constants[n] : Fixnum.getInstance(n);
         } catch (NumberFormatException e) {}
         // parseInt() failed.
         try {
-            return Bignum.makeBignum(token, radix);
+            return Bignum.getInstance(token, radix);
         } catch (NumberFormatException e) {}
         // Not a number.
         return null;
@@ -1513,11 +1514,11 @@ public class Stream extends StructureObject {
             s = s.substring(1);
         try {
             int n = Integer.parseInt(s, radix);
-            return (n >= 0 && n <= 255) ? Fixnum.constants[n] : Fixnum.makeFixnum(n);
+            return (n >= 0 && n <= 255) ? Fixnum.constants[n] : Fixnum.getInstance(n);
         } catch (NumberFormatException e) {}
         // parseInt() failed.
         try {
-            return Bignum.makeBignum(s, radix);
+            return Bignum.getInstance(s, radix);
         } catch (NumberFormatException e) {}
         // Not a number.
         return error(new LispError());
@@ -1597,7 +1598,7 @@ public class Stream extends StructureObject {
             int n = _readChar();
             if (n < 0)
                 return error(new EndOfFile(this));
-            return LispCharacter.makeCharacter((char)n); // ### BUG: Codepoint conversion
+            return LispCharacter.getInstance((char)n); // ### BUG: Codepoint conversion
         } catch (IOException e) {
             return error(new StreamError(this, e));
         }
@@ -1615,7 +1616,7 @@ public class Stream extends StructureObject {
                 else
                     return eofValue;
             }
-            return LispCharacter.makeCharacter((char)n); // ### BUG: Codepoint conversion
+            return LispCharacter.getInstance((char)n); // ### BUG: Codepoint conversion
         } catch (IOException e) {
             return error(new StreamError(this, e));
         }
@@ -2385,7 +2386,7 @@ public class Stream extends StructureObject {
                                                      thread, currentReadtable);
             else
                 result = in.read(eofError, third, false, thread, currentReadtable);
-            return thread.setValues(result, Fixnum.makeFixnum(in.getOffset()));
+            return thread.setValues(result, Fixnum.getInstance(in.getOffset()));
         }
     };
 
@@ -2600,7 +2601,7 @@ public class Stream extends StructureObject {
                 int n = stream._readByte();
                 if (n < 0) {
                     // End of file.
-                    return Fixnum.makeFixnum(i);
+                    return Fixnum.getInstance(i);
                 }
                 v.aset(i, n);
             }
@@ -2628,7 +2629,7 @@ public class Stream extends StructureObject {
     new Primitive("stream-line-number", PACKAGE_SYS, false, "stream") {
         @Override
         public LispObject execute(LispObject arg) {
-            return Fixnum.makeFixnum(checkStream(arg).getLineNumber() + 1);
+            return Fixnum.getInstance(checkStream(arg).getLineNumber() + 1);
         }
     };
 
@@ -2647,7 +2648,7 @@ public class Stream extends StructureObject {
         @Override
         public LispObject execute(LispObject arg) {
             Stream stream = checkCharacterOutputStream(arg);
-            return Fixnum.makeFixnum(stream.getCharPos());
+            return Fixnum.getInstance(stream.getCharPos());
         }
     };
 

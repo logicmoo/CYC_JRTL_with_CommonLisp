@@ -52,13 +52,13 @@ public class LispInteger extends NLispObject implements java.io.Serializable
 
   public static LispInteger makeInteger(long l) { 
       if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
-          return Fixnum.makeFixnum((int)l);
+          return Fixnum.getInstance((int)l);
       else
-          return Bignum.makeBignum(l);
+          return Bignum.getInstance(l);
   }
 
   public static LispInteger makeInteger(int i) {
-      return Fixnum.makeFixnum(i);
+      return Fixnum.getInstance(i);
   }
 
 

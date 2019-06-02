@@ -421,7 +421,7 @@ public class StructureObject extends ALispObject
   private LispObject badIndex(int n)
   {
     StringBuilder sb = new StringBuilder("Invalid slot index ");
-    sb.append(Fixnum.makeFixnum(n).princToString());
+    sb.append(Fixnum.getInstance(n).princToString());
     sb.append(" for ");
     sb.append(princToString());
     return error(new LispError(sb.toString()));
@@ -555,7 +555,7 @@ public class StructureObject extends ALispObject
     public LispObject execute(LispObject arg)
     {
       if (arg instanceof StructureObject)
-        return Fixnum.makeFixnum(((StructureObject)arg).slots.length);
+        return Fixnum.getInstance(((StructureObject)arg).slots.length);
       return type_error(arg, Symbol.STRUCTURE_OBJECT);
     }
   };

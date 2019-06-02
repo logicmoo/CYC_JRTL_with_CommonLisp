@@ -790,7 +790,7 @@ public class Pathname extends ALispObject {
         // :UNSPECIFIC cause the field to be treated as if it were empty. That
         // is, both NIL and :UNSPECIFIC cause the component not to appear in
         // the namestring." 19.2.2.2.3.1
-        if (directory != NIL) {
+        if (directory != NIL && directory != Keyword.UNSPECIFIC) {
             final char separatorChar = '/';
             LispObject temp = directory;
             LispObject part = temp.car();
@@ -820,7 +820,7 @@ public class Pathname extends ALispObject {
                 } else if (part == Keyword.UP) {
                     sb.append("..");
                 } else {
-                    error(new FileError("Unsupported directory component " + part.princToString() + ".",
+                    if (!ansi) error(new FileError("Unsupported directory component " + part.princToString() + ".",
                       this));
                 }
                 sb.append(separatorChar);
@@ -1319,6 +1319,7 @@ public class Pathname extends ALispObject {
         return new Pathname(namestring);
     }
 
+
     static final Pathname _makePathname(LispObject[] args) {
         if (args.length % 2 != 0) {
             program_error("Odd number of keyword arguments.");
@@ -1330,6 +1331,7 @@ public class Pathname extends ALispObject {
         LispObject type = NIL;
         LispObject version = NIL;
         Pathname defaults = null;
+        boolean hostSupplied = false;
         boolean deviceSupplied = false;
         boolean nameSupplied = false;
         boolean typeSupplied = false;
@@ -1340,6 +1342,7 @@ public class Pathname extends ALispObject {
             LispObject value = args[i + 1];
             if (key == Keyword.HOST) {
                 host = value;
+                hostSupplied = true;
             } else if (key == Keyword.DEVICE) {
                 device = value;
                 deviceSupplied = true;
@@ -1384,7 +1387,7 @@ public class Pathname extends ALispObject {
             }
         }
         if (defaults != null) {
-            if (host == NIL) {
+            if (!hostSupplied) {
                 host = defaults.host;
             }
             if (!directorySupplied) {
@@ -1477,6 +1480,7 @@ public class Pathname extends ALispObject {
         }
         
         p.version = version;
+        p.validateDirectory(true);
         return p;
     }
 
@@ -1498,6 +1502,9 @@ public class Pathname extends ALispObject {
 
     private final boolean validateDirectory(boolean signalError) {
         LispObject temp = directory;
+        if (temp == Keyword.UNSPECIFIC) {
+            return true;
+        }
         while (temp != NIL) {
             LispObject first = temp.car();
             temp = temp.cdr();
@@ -1514,6 +1521,16 @@ public class Pathname extends ALispObject {
                     }
                     return false;
                 }
+            } else if (first != Keyword.RELATIVE
+                       && first != Keyword.WILD
+                       && first != Keyword.UP
+                       && first != Keyword.BACK
+                       && !(first instanceof AbstractString)) {
+                if (signalError) {
+                    error(new FileError("Unsupported directory component " + first.princToString() + ".",
+                      this));
+                }
+                return false;
             }
         }
         return true;
@@ -1653,6 +1670,11 @@ public class Pathname extends ALispObject {
                 if (f.isDirectory()) {
                     try {
                         File[] files = f.listFiles();
+                        if (files == null) {
+                            return error(new FileError("Unable to list directory "
+                                                       + pathname.princToString() + ".",
+                                                       pathname));
+                        }
                         for (int i = files.length; i-- > 0;) {
                             File file = files[i];
                             Pathname p;

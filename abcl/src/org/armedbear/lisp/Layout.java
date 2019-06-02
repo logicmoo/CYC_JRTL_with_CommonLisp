@@ -87,7 +87,7 @@ public class Layout extends ALispObject
   {
     ConcurrentHashMap ht = new ConcurrentHashMap(slotNames.length);
     for (int i = slotNames.length; i-- > 0;)
-      ht.put(slotNames[i], Fixnum.makeFixnum(i));
+      ht.put(slotNames[i], Fixnum.getInstance(i));
     return ht;
   }
 
@@ -183,7 +183,7 @@ public class Layout extends ALispObject
       @Override
       public LispObject execute(LispObject arg)
       {
-          return Fixnum.makeFixnum(checkLayout(arg).slotNames.length);
+          return Fixnum.getInstance(checkLayout(arg).slotNames.length);
       }
     };
 
@@ -221,7 +221,7 @@ public class Layout extends ALispObject
           for (int i = slotNames.length; i-- > 0;)
             {
               if (slotNames[i] == second)
-                return Fixnum.makeFixnum(i);
+                return Fixnum.getInstance(i);
             }
           return NIL;
       }
@@ -241,7 +241,7 @@ public class Layout extends ALispObject
             for (int i = 0; i < limit; i++)
               {
                 if (slotNames[i] == second)
-                  return Fixnum.makeFixnum(i);
+                  return Fixnum.getInstance(i);
               }
             // Reaching here, it's not an instance slot.
             LispObject rest = layOutFirst.sharedSlots;

@@ -69,7 +69,7 @@ public final class ComplexVector extends AbstractVector
     @Override
     public LispObject typeOf()
     {
-        return list(Symbol.VECTOR, T, Fixnum.makeFixnum(capacity));
+        return list(Symbol.VECTOR, T, Fixnum.getInstance(capacity));
     }
 
     @Override
@@ -132,7 +132,7 @@ public final class ComplexVector extends AbstractVector
         LispObject value1, value2;
         if (array != null) {
             value1 = array;
-            value2 = Fixnum.makeFixnum(displacement);
+            value2 = Fixnum.getInstance(displacement);
         } else {
             value1 = NIL;
             value2 = Fixnum.ZERO;
@@ -310,7 +310,7 @@ public final class ComplexVector extends AbstractVector
 
     {
         vectorPushExtend(element);
-        return Fixnum.makeFixnum(fillPointer - 1);
+        return Fixnum.getInstance(fillPointer - 1);
     }
 
     @Override
@@ -326,7 +326,7 @@ public final class ComplexVector extends AbstractVector
             ensureCapacity(capacity + ext);
         }
         aset(fillPointer, element);
-        return Fixnum.makeFixnum(fillPointer++);
+        return Fixnum.getInstance(fillPointer++);
     }
 
     private final void ensureCapacity(int minCapacity)

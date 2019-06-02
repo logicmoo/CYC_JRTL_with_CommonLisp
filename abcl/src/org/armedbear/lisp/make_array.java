@@ -148,7 +148,7 @@ public final class make_array extends Primitive
               v = new ComplexString(size);
             else
               v = new SimpleString(size);
-            defaultInitialElement = LispCharacter.makeCharacter('\0');
+            defaultInitialElement = LispCharacter.getInstance('\0');
           }
         else if (upgradedType == Symbol.BIT)
           {

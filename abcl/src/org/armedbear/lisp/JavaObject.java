@@ -221,7 +221,7 @@ public final class JavaObject extends ALispObject {
             // estimated chances of occurrance
 
             if (obj instanceof Integer)
-                return Fixnum.makeFixnum(((Integer)obj).intValue());
+                return Fixnum.getInstance(((Integer)obj).intValue());
 
             if (obj instanceof Float)
                 return new SingleFloat((Float)obj);
@@ -236,10 +236,10 @@ public final class JavaObject extends ALispObject {
                 return Bignum.getInstance((BigInteger)obj);
 
             if (obj instanceof Short)
-                return Fixnum.makeFixnum(((Short)obj).shortValue());
+                return Fixnum.getInstance(((Short)obj).shortValue());
 
             if (obj instanceof Byte)
-                return Fixnum.makeFixnum(((Byte)obj).byteValue());
+                return Fixnum.getInstance(((Byte)obj).byteValue());
             // We don't handle BigDecimal: it doesn't map to a Lisp type
         }
 

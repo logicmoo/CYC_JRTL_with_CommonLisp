@@ -515,7 +515,7 @@ public final class MathFunctions
 
         {
             if (number.realp() && !number.minusp()
-                && base.isEqualTo(Fixnum.makeFixnum(10))) {
+                && base.isEqualTo(Fixnum.getInstance(10))) {
                 double d =
                     Math.log10(DoubleFloat.coerceToFloat(number).value);
                 if (number instanceof DoubleFloat

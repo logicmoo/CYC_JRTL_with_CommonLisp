@@ -246,7 +246,7 @@ public final class Cons extends ALispObject implements java.io.Serializable
   public LispObject NTH(int index)
   {
     if (index < 0)
-      type_error(Fixnum.makeFixnum(index), Symbol.UNSIGNED_BYTE);
+      type_error(Fixnum.getInstance(index), Symbol.UNSIGNED_BYTE);
     int i = 0;
     LispObject obj = this;
     while (true)
@@ -264,7 +264,7 @@ public final class Cons extends ALispObject implements java.io.Serializable
   public LispObject elt(int index)
   {
     if (index < 0)
-      type_error(Fixnum.makeFixnum(index), Symbol.UNSIGNED_BYTE);
+      type_error(Fixnum.getInstance(index), Symbol.UNSIGNED_BYTE);
     int i = 0;
     Cons cons = this;
     while (true)
@@ -281,9 +281,9 @@ public final class Cons extends ALispObject implements java.io.Serializable
             if (conscdr == NIL)
               {
                 // Index too large.
-                type_error(Fixnum.makeFixnum(index),
+                type_error(Fixnum.getInstance(index),
                                 list(Symbol.INTEGER, Fixnum.ZERO,
-                                      Fixnum.makeFixnum(length() - 1)));
+                                      Fixnum.getInstance(length() - 1)));
               }
             else
               {

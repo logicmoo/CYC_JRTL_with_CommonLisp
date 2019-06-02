@@ -236,8 +236,7 @@ public final class DoubleFloat extends NLispObject
     @Override
     public Object javaInstance(Class c)
     {
-        String cn = c.getName();
-        if (cn.equals("java.lang.Float") || cn.equals("float"))
+        if (c == Float.class || c == float.class)
             return Float.valueOf((float)value);
         return javaInstance();
     }
@@ -473,7 +472,7 @@ public final class DoubleFloat extends NLispObject
                 MathFunctions.OverUnderFlowCheck(quotient);
             if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
                 int q = (int) quotient;
-                return thread.setValues(Fixnum.makeFixnum(q),
+                return thread.setValues(Fixnum.getInstance(q),
                                         new DoubleFloat(value - q * divisor));
             }
             // We need to convert the quotient to a bignum.
@@ -486,8 +485,8 @@ public final class DoubleFloat extends NLispObject
             else
                 m = (bits & 0xfffffffffffffL) | 0x10000000000000L;
             LispObject significand = number(m);
-            Fixnum exponent = Fixnum.makeFixnum(e - 1075);
-            Fixnum sign = Fixnum.makeFixnum(s);
+            Fixnum exponent = Fixnum.getInstance(e - 1075);
+            Fixnum sign = Fixnum.getInstance(s);
             LispObject result = significand;
             result =
                 result.multiplyBy(MathFunctions.EXPT.execute(Fixnum.TWO, exponent));
@@ -508,7 +507,7 @@ public final class DoubleFloat extends NLispObject
 //             Debug.trace("quotient = " + quotient);
             if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
                 int q = (int) quotient;
-                return thread.setValues(Fixnum.makeFixnum(q),
+                return thread.setValues(Fixnum.getInstance(q),
                                         new DoubleFloat(value - q * divisor));
             }
             // We need to convert the quotient to a bignum.
@@ -522,9 +521,9 @@ public final class DoubleFloat extends NLispObject
                 m = (bits & 0xfffffffffffffL) | 0x10000000000000L;
             LispObject significand = number(m);
 //             Debug.trace("significand = " + significand.printObject());
-            Fixnum exponent = Fixnum.makeFixnum(e - 1075);
+            Fixnum exponent = Fixnum.getInstance(e - 1075);
 //             Debug.trace("exponent = " + exponent.printObject());
-            Fixnum sign = Fixnum.makeFixnum(s);
+            Fixnum sign = Fixnum.getInstance(s);
 //             Debug.trace("sign = " + sign.printObject());
             LispObject result = significand;
 //             Debug.trace("result = " + result.printObject());

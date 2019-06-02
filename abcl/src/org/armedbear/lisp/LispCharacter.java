@@ -334,7 +334,7 @@ public final class LispCharacter extends NLispObject
       public LispObject execute(LispObject arg)
       {
           int n = LispCharacter.getValue(arg);
-          return Fixnum.makeFixnum(n);
+          return Fixnum.getInstance(n);
       }
     };
 
@@ -346,7 +346,7 @@ public final class LispCharacter extends NLispObject
       public LispObject execute(LispObject arg)
       {
           int n = LispCharacter.getValue(arg);
-          return Fixnum.makeFixnum(n);
+          return Fixnum.getInstance(n);
       }
     };
 
@@ -496,7 +496,7 @@ public final class LispCharacter extends NLispObject
       public LispObject execute(LispObject arg)
       {
           final int n = Character.digit(LispCharacter.getValue(arg), 10);
-          return n < 0 ? NIL : Fixnum.makeFixnum(n);
+          return n < 0 ? NIL : Fixnum.getInstance(n);
       }
       @Override
       public LispObject execute(LispObject first, LispObject second)

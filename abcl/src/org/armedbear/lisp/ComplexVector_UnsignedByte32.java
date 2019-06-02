@@ -70,7 +70,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
     @Override
     public LispObject typeOf()
     {
-        return list(Symbol.VECTOR, UNSIGNED_BYTE_32, Fixnum.makeFixnum(capacity));
+        return list(Symbol.VECTOR, UNSIGNED_BYTE_32, Fixnum.getInstance(capacity));
     }
 
     @Override
@@ -133,7 +133,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
         LispObject value1, value2;
         if (array != null) {
             value1 = array;
-            value2 = Fixnum.makeFixnum(displacement);
+            value2 = Fixnum.getInstance(displacement);
         } else {
             value1 = NIL;
             value2 = Fixnum.ZERO;
@@ -312,7 +312,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
 
     {
         vectorPushExtend(element);
-        return Fixnum.makeFixnum(fillPointer - 1);
+        return Fixnum.getInstance(fillPointer - 1);
     }
 
     @Override
@@ -328,7 +328,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
             ensureCapacity(capacity + ext);
         }
         aset(fillPointer, element);
-        return Fixnum.makeFixnum(fillPointer++);
+        return Fixnum.getInstance(fillPointer++);
     }
 
     private final void ensureCapacity(int minCapacity)
