@@ -1725,6 +1725,7 @@ compare the method combination name to the symbol 'standard.")
         ',function-name
         :lambda-list ',lambda-list
         ,@(canonicalize-defgeneric-options options))
+       (sys::record-source-information-for-type ',function-name '(:generic-function ,function-name))
        ,@methods)))
 
 (defun canonicalize-defgeneric-options (options)
@@ -2891,6 +2892,7 @@ to ~S with argument list ~S."
                (push `',specializer specializers-form))))
       (setf specializers-form `(list ,@(nreverse specializers-form)))
       `(progn
+	 (sys::record-source-information-for-type ',function-name '(:method ,function-name ,qualifiers ,specializers))
          (ensure-method ',function-name
                         :lambda-list ',lambda-list
                         :qualifiers ',qualifiers
@@ -3238,12 +3240,14 @@ instance and, for setters, `new-value' the new value."
   (unless (>= (length form) 3)
     (error 'program-error "Wrong number of arguments for DEFCLASS."))
   (check-declaration-type name)
-  `(ensure-class ',name
+  `(progn
+     (sys::record-source-information-for-type ',name :class)
+     (ensure-class ',name
                  :direct-superclasses
                  (canonicalize-direct-superclasses ',direct-superclasses)
                  :direct-slots
                  ,(canonicalize-direct-slots direct-slots)
-                 ,@(canonicalize-defclass-options options)))
+                 ,@(canonicalize-defclass-options options))))
 
 
 ;;; AMOP pg. 180
@@ -4127,10 +4131,12 @@ or T when any keyword is acceptable due to presence of
     (typecase report
       (null
        `(progn
+	  (sys::record-source-information-for-type  ',name :condition)
           (defclass ,name ,parent-types ,slot-specs ,@options)
           ',name))
       (string
        `(progn
+	  (sys::record-source-information-for-type  ',name :condition)
           (defclass ,name ,parent-types ,slot-specs ,@options)
           (defmethod print-object ((condition ,name) stream)
             (if *print-escape*
@@ -4139,6 +4145,7 @@ or T when any keyword is acceptable due to presence of
           ',name))
       (t
        `(progn
+	  (sys::record-source-information-for-type  ',name :condition)
           (defclass ,name ,parent-types ,slot-specs ,@options)
           (defmethod print-object ((condition ,name) stream)
             (if *print-escape*

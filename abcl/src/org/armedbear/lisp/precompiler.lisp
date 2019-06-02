@@ -382,8 +382,9 @@
   (let ((op (car form)))
     (when (and (consp op) (eq (%car op) 'LAMBDA))
       (return-from precompile-function-call
+	(or (precompile-function-position-lambda op (cdr form))
                    (cons (precompile-lambda op)
-                         (mapcar #'precompile1 (cdr form)))))
+		  (mapcar #'precompile1 (cdr form))))))
     (when (or (not *in-jvm-compile*) (notinline-p op))
       (return-from precompile-function-call (precompile-cons form)))
     (when (source-transform op)
@@ -398,6 +399,34 @@
               (format t ";   inlining call to ~S~%" op)))
           (return-from precompile-function-call (precompile1 (expand-inline form expansion))))))
     (cons op (mapcar #'precompile1 (cdr form)))))
+
+(defun precompile-function-position-lambda (lambda args)
+  (let* ((arglist (second lambda))
+	 (body (cddr lambda))
+	 (simple-arglist? (not (or (memq '&KEY arglist) (memq '&OPTIONAL arglist) (memq '&REST arglist)))))
+    (or
+     ;;give a chance for someone to transform single-form function bodies
+     (and (= (length body) 1) (consp (car body)) (get (caar body) 'sys::function-position-lambda-transform)
+	  (funcall (get (caar body) 'sys::function-position-lambda-transform) (caar body) (car body) (mapcar #'precompile1 args)))
+     (and simple-arglist?
+	  (let ((arglist-length (if (memq '&aux arglist) (position '&aux arglist) (length arglist))))
+	    (if (= (length args) arglist-length)
+		;; simplest case - we have a simple arglist with as many
+		;; arguments as call args. Transform to let.
+		(return-from precompile-function-position-lambda
+		  `(let* ,(append
+			    (loop for arg-name in arglist
+				  for arg in (mapcar #'precompile1 args)
+				  until (eq arg-name '&aux)
+				  collect (list arg-name arg))
+			    (subseq arglist (1+ arglist-length)))
+		      ,@body))
+		(error "Argument mismatch for lambda in function position: ~a applied to ~a" `(lambda ,arglist body) args)))))))
+
+(defmacro define-function-position-lambda-transform (body-function-name (arglist form args) &body body)
+  `(put ',body-function-name 'sys::function-position-lambda-transform 
+	#'(lambda(,arglist ,form ,args)
+	    ,@body)))
 
 (defun precompile-locally (form)
   (let ((*inline-declarations* *inline-declarations*))
@@ -845,7 +874,7 @@
                     (return)))
                 ))))
         (unless used-p
-          (format t "; Note: deleting unused local function ~A ~S~%"
+          (compiler-style-warn "; Note: deleting unused local function ~A ~S~%"
                   operator name)
           (setf applicable-locals (remove local applicable-locals)))))
     (if applicable-locals
@@ -1099,14 +1128,14 @@
       (sys::set-function-definition name result definition))
     (values (or name result) nil nil)))
 
-(defun precompile-package (pkg &key verbose)
+(defun precompile-package (pkg &key (verbose cl:*compile-verbose*))
   (dolist (sym (package-symbols pkg))
     (when (fboundp sym)
       (unless (special-operator-p sym)
         (let ((f (fdefinition sym)))
           (unless (compiled-function-p f)
             (when verbose
-              (format t "Precompiling ~S~%" sym)
+              (format t "~&; precompiler; Precompiling ~S~%" sym)
               (finish-output))
             (precompile sym))))))
   t)
@@ -1166,21 +1195,34 @@
                   ;; when JVM.lisp isn't loaded yet, this variable isn't bound
                   ;; meaning that we're not trying to compile to a file:
                   ;; Both COMPILE and COMPILE-FILE bind this variable.
-                  ;; This function is also triggered by MACROEXPAND, though
+		    ;; This function is also triggered by MACROEXPAND, though.
                   jvm::*file-compilation*)
              `(progn
                 (fset ',name ,lambda-expression)
+		  ;; the below matter, for example when loading a
+		  ;; compiled defun that is inside some other form
+		  ;; (e.g. flet)
+		  (record-source-information-for-type ',(if (consp name) (second name) name) '(:function ,name))
+		  (%set-arglist (fdefinition ',name) ',(third lambda-expression))
+		  ,@(when doc
+		      `((%set-documentation ',name 'function ,doc)))
                 ',name))
             (t
              (when (and env (empty-environment-p env))
                (setf env nil))
              (when (null env)
                (setf lambda-expression (precompiler:precompile-form lambda-expression nil)))
+	       (let ((sym (if (consp name) (second name) name)))
              `(prog1
                   (%defun ',name ,lambda-expression)
+		    (record-source-information-for-type ',sym '(:function ,name))
+		    (%set-arglist (fdefinition ',name) ',(third lambda-expression))
+		    ;; don't do this. building abcl fails autoloading
+		    ;; stuff it shouldn't yet
+		    ;;(%set-arglist (symbol-function ',name) ,(format nil "~{~s~^ ;; ~}" (third lambda-expression)))
                 ,@(when doc
-                   `((%set-documentation ',name 'function ,doc)))))))))
-
+			`((%set-documentation ',name 'function ,doc)))
+		    )))))))
 (export '(precompile))
 
 ;;(provide "PRECOMPILER")

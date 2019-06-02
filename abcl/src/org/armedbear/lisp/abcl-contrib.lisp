@@ -10,10 +10,13 @@
     (java:jcall +get-classloader+ boot-class)))
 
 (defun system-jar-p (p)
-  (named-jar-p "abcl" p))
+  (or (named-jar-p "abcl" p)
+      (named-jar-p "abcl-aio" p)))
 
 (defun contrib-jar-p (p)
-  (named-jar-p "abcl-contrib" p))
+  (or 
+   (named-jar-p "abcl-contrib" p)
+   (named-jar-p "abcl-aio" p)))
 
 (defun named-jar-p (name p)
   (and (pathnamep p)
@@ -30,7 +33,7 @@
        p))
 
 (defun find-system ()
-  "Find the location of the system.
+  "Find the location of the Armed Bear system implementation
 
 Used to determine relative pathname to find 'abcl-contrib.jar'."
   (or
@@ -63,39 +66,89 @@ Used to determine relative pathname to find 'abcl-contrib.jar'."
   (find-jar #'contrib-jar-p))
 
 (defvar *abcl-contrib* nil
-  "Pathname of the ABCL contrib.
+  "Pathname of the abcl-contrib artifact.
+
 Initialized via SYSTEM:FIND-CONTRIB.")
 
-(defparameter *verbose* t)
-
-(defun add-contrib (abcl-contrib-jar)
-  "Introspects ABCL-CONTRIB-JAR for asdf systems to add to ASDF:*CENTRAL-REGISTRY*"
-  (when abcl-contrib-jar
+;;; FIXME: stop using the obsolete ASDF:*CENTRAL-REGISTRY*
+(defun add-contrib (abcl-contrib-jar
+                    &key (verbose cl:*load-verbose*))
+  "Introspects the ABCL-CONTRIB-JAR path for sub-directories which
+  contain asdf definitions, adding those found to asdf."
+  (let ((jar-path (if (ext:pathname-jar-p abcl-contrib-jar)
+                      abcl-contrib-jar
+                      (make-pathname :device (list abcl-contrib-jar)))))
     (dolist (asdf-file
-             (directory (make-pathname :device (list abcl-contrib-jar)
-                                       :directory '(:absolute :wild)
-                                       :name :wild
-                                       :type "asd")))
+             (directory (merge-pathnames "*/*.asd" jar-path)))
       (let ((asdf-directory (make-pathname :defaults asdf-file :name nil :type nil)))
         (unless (find asdf-directory asdf:*central-registry* :test #'equal)
           (push asdf-directory asdf:*central-registry*)
-          (format *verbose* "~&Added ~A to ASDF.~&" asdf-directory))))))
+          (format verbose "~&; abcl-contrib; Added ~A to ASDF.~&" asdf-directory))))))
 
-(defun find-and-add-contrib (&key (verbose nil))
+(defun find-and-add-contrib (&key (verbose cl:*load-verbose*))
   "Attempt to find the ABCL contrib jar and add its contents to ASDF.
-Returns the pathname of the contrib if it can be found."
+returns the pathname of the contrib if it can be found."
   (if *abcl-contrib*
-      (format verbose "~&Using already initialized value of abcl-contrib:~&'~A'.~%"
+       (format verbose "~&; abcl-contrib; Using already initialized value of SYS:*ABCL-CONTRIB* '~A'.~%"
               *abcl-contrib*)
     (progn
-      (setf *abcl-contrib* (find-contrib))
-      (format verbose "~&Using probed value of abcl-contrib:~&'~A'.~%"
-              *abcl-contrib*)))
-  (add-contrib *abcl-contrib*))
+         (let ((contrib (find-contrib)))
+           (when contrib
+             (format verbose "~&; abcl-contrib; Using probed value of SYS:*ABCL-CONTRIB* '~A'.~%"
+                     contrib)
+             (setf *abcl-contrib* contrib)))))
+   (when *abcl-contrib*  ;; For bootstrap compile there will be no contrib
+     (add-contrib *abcl-contrib*)))
+
+(defun find-name-for-implementation-title (file id)
+  "For a jar FILE containing a manifest, return the name of the
+  section which annotates 'Implementation-Title' whose string value is
+  ID."
+  (declare (type pathname file))
+  (let* ((jar (java:jnew "java.util.jar.JarFile" (namestring file)))
+         (manifest (java:jcall "getManifest" jar))
+         (entries (java:jcall "toArray"
+                              (java:jcall "entrySet"
+                                          (java:jcall "getEntries" manifest)))))
+    (dolist (entry 
+              (loop :for entry :across entries
+                 :collecting entry))
+      (let ((title (java:jcall "getValue"
+                               (java:jcall "getValue" entry)
+                               "Implementation-Title")))
+        (when (string-equal title id)
+          (return-from find-name-for-implementation-title
+            (java:jcall "getKey" entry))))
+    nil)))
 
 (defun find-contrib ()
-  "Introspect runtime classpaths to find a loadable ABCL-CONTRIB."
-  (or (ignore-errors
+  "Introspect runtime classpaths to return a pathname containing
+  subdirectories containing ASDF definitions."
+
+  (or
+   ;; We identify the location of the directory within a jar file
+   ;; containing abcl-contrib ASDF definitions by looking for a section
+   ;; which contains the Implementation-Title "org.abcl-contrib".  The
+   ;; name of that section then identifies the relative pathname to the
+   ;; top-most directory in the Jar
+   ;;
+   ;; e.g. for an entry of the form
+   ;;
+   ;;     Name: contrib
+   ;;     Implementation-Title: org.abcl-contrib
+   ;;
+   ;; the directory 'contrib' would be searched for ASDF definitions.
+   (ignore-errors
+        (let* ((system-jar
+                (find-system-jar))
+               (relative-pathname 
+                (find-name-for-implementation-title system-jar "org.abcl-contrib")))
+          (when (and system-jar relative-pathname)
+            (merge-pathnames (pathname (concatenate 'string
+                                                   relative-pathname "/"))
+                            (make-pathname
+                             :device (list system-jar))))))
+   (ignore-errors
         (find-contrib-jar))
       (ignore-errors
         (let ((system-jar (find-system-jar)))
@@ -112,9 +165,10 @@ Returns the pathname of the contrib if it can be found."
                       :name "abcl-contrib")))
        (java:jcall "getURLs" (boot-classloader)))))
 
-(export `(find-system
+(export '(find-system
           find-contrib
-          *abcl-contrib*))
+          *abcl-contrib*)
+        :system)
 
-(when (find-and-add-contrib :verbose t)
+(when (find-and-add-contrib :verbose cl:*load-verbose*)
   (provide :abcl-contrib))

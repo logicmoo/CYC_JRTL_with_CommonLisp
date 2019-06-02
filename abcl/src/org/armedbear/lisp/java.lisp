@@ -381,6 +381,15 @@ calls on the java.util.Enumeration `jenumeration`."
                           object)
                          collecting
                          (jclass-name arg-type))))
+     ((string= class-name "java.lang.reflect.Field")
+      `(let ((field 
+	       (find ,(jcall "getName" object) 
+		     (jcall "getDeclaredFields"
+			    ,(jcall "getDeclaringClass" object))
+		     :key (lambda(el) (jcall "getName" el))
+		     :test 'equal)))
+	 (jcall "setAccessible" field t)
+	 field))
      ((jinstance-of-p object "java.lang.Class")
       `(java:jclass ,(jcall (jmethod "java.lang.Class" "getName") object)))
      (t
@@ -396,17 +405,20 @@ calls on the java.util.Enumeration `jenumeration`."
 ;;; higher-level operators
 
 (defmacro chain (target op &rest ops)
-  "Performs chained method invocations. `target' is the receiver
-object (when the first call is a virtual method call) or a list in the
-form (:static <jclass>) when the first method call is a static method
-call. `op' and each of the `ops' are either method designators or lists
-in the form (<method designator> &rest args), where a method designator
-is either a string naming a method, or a jmethod object. `chain' will
-perform the method call specified by `op' on `target'; then, for each
-of the `ops', `chain' will perform the specified method call using the
+  "Performs chained method invocations. 
+
+TARGET is either the receiver object when the first call is a virtual method
+call or a list in the form (:static <jclass>) when the first method
+call is a static method call. 
+
+OP and each of the OPS are either method designators or lists in the
+form (<method designator> &rest args), where a method designator is
+either a string naming a method, or a jmethod object. CHAIN will
+perform the method call specified by OP on TARGET; then, for each
+of the OPS, CHAIN will perform the specified method call using the
 object returned by the previous method call as the receiver, and will
-ultimately return the result of the last method call.
-  For example, the form:
+ultimately return the result of the last method call.  For example,
+the form:
 
   (chain (:static \"java.lang.Runtime\") \"getRuntime\" (\"exec\" \"ls\"))
 
@@ -428,7 +440,8 @@ ultimately return the result of the last method call.
 		      (reduce #'make-binding ops
 			      :initial-value (list (make-binding-for first))))))
       `(let* ,bindings
-	 (declare (ignore ,@(mapcar #'car bindings)))))))
+	 (declare (ignore ,@(butlast (mapcar #'car bindings))))
+	 ,(caar (last bindings))))))
 
 (defmacro jmethod-let (bindings &body body)
   (let ((args (gensym)))
@@ -444,9 +457,38 @@ ultimately return the result of the last method call.
 ;;; print-object
 
 (defmethod print-object ((obj java:java-object) stream)
+  (if (jnull-ref-p obj)
+      (write-string "#<null>" stream)
+      (print-java-object-by-class (intern (jclass-name (jobject-class obj)) 'keyword) obj stream)))
+
+;;define extensions by eql methods on class name interned in keyword package
+;;e.g. (defmethod java::print-java-object-by-class ((class (eql ':|uk.ac.manchester.cs.owl.owlapi.concurrent.ConcurrentOWLOntologyImpl|)) obj stream) 
+;;	   (print 'hi)
+;;         (call-next-method))
+(defmethod print-java-object-by-class :around (class obj stream)
+  (handler-bind ((java-exception #'(lambda(c)
+				     (format stream "#<~a, while printing a ~a>"
+					     (jcall "toString" (java-exception-cause  c))
+					     (jcall "getName" (jcall "getClass" obj)))
+				     (return-from print-java-object-by-class))))
+    (call-next-method)))
+
+;; we have to do our own inheritence for the java class
+(defmethod print-java-object-by-class (class obj stream)
+  (loop for super = class then (jclass-superclass super)
+	for keyword = (intern (jcall "getName" super) 'keyword)
+	for method = (find-method #'print-java-object-by-class nil (list `(eql ,keyword) t t) nil)
+	while (jclass-superclass super)
+	when method do (return-from print-java-object-by-class
+			 (print-java-object-by-class keyword obj stream)))
   (write-string (sys::%write-to-string obj) stream))
 
 (defmethod print-object ((e java:java-exception) stream)
+  (handler-bind ((java-exception #'(lambda(c)
+				     (format stream "#<~a,while printing a ~a>"
+					     (jcall "toString" (java-exception-cause  c))
+					     (jcall "getName" (jcall "getClass" e)))
+				     (return-from print-object))))
   (if *print-escape*
       (print-unreadable-object (e stream :type t :identity t)
         (format stream "~A"
@@ -454,7 +496,7 @@ ultimately return the result of the last method call.
                             (java:java-exception-cause e))))
       (format stream "Java exception '~A'."
               (java:jcall (java:jmethod "java.lang.Object" "toString")
-                          (java:java-exception-cause e)))))
+			    (java:java-exception-cause e))))))
 
 ;;; JAVA-CLASS support
 (defconstant +java-lang-object+ (jclass "java.lang.Object"))

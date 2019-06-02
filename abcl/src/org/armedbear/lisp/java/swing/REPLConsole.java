@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2008-2009 Alessio Stalla
  *
- * $Id$
+ * $Id: REPLConsole.java 13145 2011-01-13 23:20:19Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
