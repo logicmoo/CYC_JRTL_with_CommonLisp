@@ -45,8 +45,7 @@ public class LispStackFrame
   {
     public UnavailableArgument () { }
     @Override
-    public String printObject()
-    {
+    public String printObject() { 
       return unreadableString("unavailable arg", false);
     }
   }
@@ -99,6 +98,7 @@ public class LispStackFrame
     return super.typep(typeSpecifier);
    }
 
+  @Override
   public LispObject toLispList()
 
   {
@@ -128,6 +128,7 @@ public class LispStackFrame
     return result.nreverse();
   }
 
+  @Override
   public SimpleString toLispString()
 
   {

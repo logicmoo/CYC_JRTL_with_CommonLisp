@@ -407,7 +407,7 @@ public final class JavaObject extends ALispObject {
                 int length = Array.getLength(obj);
                 for (int i = 0; i < length; i++) {
                     parts = parts
-                        .push(new Cons(new SimpleString(i), 
+		      .push(new Cons(new SimpleString(String.valueOf(i)), 
                                        JavaObject.getInstance(Array.get(obj, i))));
                 }
             } else {
@@ -599,14 +599,18 @@ public final class JavaObject extends ALispObject {
         return sb.toString();
     }
 
-    // ### describe-java-object
-    private static final Primitive DESCRIBE_JAVA_OBJECT =
-        new Primitive("describe-java-object", PACKAGE_JAVA, true)
+  private static final Primitive DESCRIBE_JAVA_OBJECT 
+    = new pf_describe_java_object();
+  @DocString(name="describe-java-object",
+	     args="object stream",
+	     doc="Print a human friendly description of Java OBJECT to STREAM.")
+  private static final class pf_describe_java_object extends Primitive 
     {
+    pf_describe_java_object() {
+      super("describe-java-object", PACKAGE_JAVA, true);
+    }
         @Override
-        public LispObject execute(LispObject first, LispObject second)
-
-        {
+    public LispObject execute(LispObject first, LispObject second) {
             if (!(first instanceof JavaObject))
                 return type_error(first, Symbol.JAVA_OBJECT);
             final Stream stream = checkStream(second);
@@ -642,6 +646,7 @@ public final class JavaObject extends ALispObject {
     }
 
     private static final Primitive _FIND_JAVA_CLASS = new Primitive("%find-java-class", PACKAGE_JAVA, false, "class-name-or-class") {
+            @Override
             public LispObject execute(LispObject arg) {
                 try {
                     if(arg instanceof AbstractString) {
@@ -657,6 +662,7 @@ public final class JavaObject extends ALispObject {
         };
 
     private static final Primitive _REGISTER_JAVA_CLASS = new Primitive("%register-java-class", PACKAGE_JAVA, false, "jclass class-metaobject") {
+            @Override
             public LispObject execute(LispObject jclass, LispObject classMetaObject) {
                 return registerJavaClass((Class<?>) jclass.javaInstance(), classMetaObject);
             }

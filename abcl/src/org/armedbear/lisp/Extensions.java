@@ -264,24 +264,70 @@ public final class Extensions
   }
 
   public static final Primitive MAKE_TEMP_FILE = new make_temp_file();
-  @DocString(name="make_temp_file",
-             doc="Create and return the pathname of a previously non-existent file.")
+  @DocString(name="make-temp-file",
+             doc="Create and return the pathname of a previously non-existent file.",
+             args="&key prefix suffix")
   private static class make_temp_file extends Primitive { 
     make_temp_file() {
-      super("make-temp-file", PACKAGE_EXT, true, "");
+      super("make-temp-file", PACKAGE_EXT, true, "&key prefix suffix");
     }
     @Override
-    public LispObject execute()
+    public LispObject execute(LispObject ... args)
     {
-      try
-        {
-          File file = File.createTempFile("abcl", null, null);
+      String prefix = "abcl";
+      String suffix = null; 
+      if ( args.length % 2 != 0) {
+        error(new WrongNumberOfArgumentsException("Expecting an even number of arguments including keywords."));
+      }
+
+      for (int i = 0; i < args.length; i++ ) {
+        if (args[i].SYMBOLP() != NIL) {
+          if (args[i].equals(Keyword.PREFIX)) {
+            String specifiedPrefix = args[i + 1].getStringValue();
+            if (specifiedPrefix != null) {
+              if (specifiedPrefix.equals(NIL.getStringValue())) {
+                error (new TypeError("Cannot create temporary file with NIL prefix."));
+              }
+              prefix = specifiedPrefix;
+              i += 1;
+            }
+          } else if (args[i].equals(Keyword.SUFFIX)) {
+            String specifiedSuffix = args[i + 1].getStringValue();
+            if (specifiedSuffix != null) {
+              if (specifiedSuffix.equals(NIL.getStringValue())) {
+                suffix =null;
+              } else {
+                suffix = specifiedSuffix;
+              }
+              i += 1;
+            }
+          }
+        } else {
+          error(new TypeError("Expected matching keyword argument.", args[i], Keyword.PREFIX.classOf()));
+        }
+      }
+      return createTempFile(prefix, suffix);
+    }
+
+    @Override
+    public LispObject execute() {
+      return createTempFile("abcl", null);
+    }
+
+    private LispObject createTempFile(String prefix, String suffix) {
+      try {
+        File file = File.createTempFile(prefix, suffix, null);
           if (file != null)
             return new Pathname(file.getPath());
-        }
-      catch (IOException e)
-        {
-          Debug.trace(e);
+      } catch (IllegalArgumentException e) {
+        // "Failed to create temporary file due to argument problems."
+        error(new JavaException(e));
+      } catch (SecurityException e) {
+        //"Failed to create problem due to problems with JVM SecurityManager."
+        error(new JavaException(e));
+      } catch (IOException e) {
+        // "Failed to create temporary file."
+        error(new JavaException(e));
         }
       return NIL;
     }

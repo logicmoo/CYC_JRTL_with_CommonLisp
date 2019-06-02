@@ -44,7 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import java.text.MessageFormat;
 
-public final class LispThread extends ALispObject {
+public final class LispThread extends SLispObject
+{
 	// use a concurrent hashmap: we may want to add threads
 	// while at the same time iterating the hash
 	final static ConcurrentHashMap<Thread, LispThread> map = new ConcurrentHashMap<Thread, LispThread>();
@@ -119,178 +120,209 @@ public final class LispThread extends ALispObject {
 		javaThread.start();
 	}
 
-	public StackTraceElement[] getJavaStackTrace() {
-		return javaThread.getStackTrace();
-	}
+    public StackTraceElement[] getJavaStackTrace() {
+        return javaThread.getStackTrace();
+    }
 
-	@Override
-	public LispObject typeOf() {
-		return Symbol.THREAD;
-	}
+    @Override
+    public LispObject typeOf()
+    {
+        return Symbol.THREAD;
+    }
 
-	@Override
-	public LispObject classOf() {
-		return BuiltInClass.THREAD;
-	}
+    @Override
+    public LispObject classOf()
+    {
+        return BuiltInClass.THREAD;
+    }
 
-	@Override
-	public LispObject typep(LispObject typeSpecifier) {
-		if (typeSpecifier == Symbol.THREAD)
-			return T;
-		if (typeSpecifier == BuiltInClass.THREAD)
-			return T;
-		return super.typep(typeSpecifier);
-	}
+    @Override
+    public LispObject typep(LispObject typeSpecifier)
+    {
+        if (typeSpecifier == Symbol.THREAD)
+            return T;
+        if (typeSpecifier == BuiltInClass.THREAD)
+            return T;
+        return super.typep(typeSpecifier);
+    }
 
-	public final synchronized boolean isDestroyed() {
-		return destroyed;
-	}
+    public final synchronized boolean isDestroyed()
+    {
+        return destroyed;
+    }
 
-	final synchronized boolean isInterrupted() {
-		return threadInterrupted;
-	}
+    final synchronized boolean isInterrupted()
+    {
+        return threadInterrupted;
+    }
 
-	final synchronized void setDestroyed(boolean b) {
-		destroyed = b;
-	}
+    final synchronized void setDestroyed(boolean b)
+    {
+        destroyed = b;
+    }
 
-	final synchronized void interrupt(LispObject function, LispObject args) {
-		pending = new Cons(args, pending);
-		pending = new Cons(function, pending);
-		threadInterrupted = true;
-		javaThread.interrupt();
-	}
+    final synchronized void interrupt(LispObject function, LispObject args)
+    {
+        pending = new Cons(args, pending);
+        pending = new Cons(function, pending);
+        threadInterrupted = true;
+        javaThread.interrupt();
+    }
 
-	final synchronized void processThreadInterrupts()
+    final synchronized void processThreadInterrupts()
 
-	{
-		while (pending != NIL) {
-			LispObject function = pending.car();
-			LispObject args = pending.cadr();
-			pending = pending.cddr();
-			Primitives.APPLY.execute(function, args);
-		}
-		threadInterrupted = false;
-	}
+    {
+        while (pending != NIL) {
+            LispObject function = pending.car();
+            LispObject args = pending.cadr();
+            pending = pending.cddr();
+            Primitives.APPLY.execute(function, args);
+        }
+        threadInterrupted = false;
+    }
 
-	public final LispObject[] getValues() {
-		return _values;
-	}
+    public final LispObject[] getValues()
+    {
+        return _values;
+    }
 
-	public final LispObject[] getValues(LispObject result, int count) {
-		if (_values == null) {
-			LispObject[] values = new LispObject[count];
-			if (count > 0)
-				values[0] = result;
-			for (int i = 1; i < count; i++)
-				values[i] = NIL;
-			return values;
-		}
-		// If the caller doesn't want any extra values, just return the ones
-		// we've got.
-		if (count <= _values.length)
-			return _values;
-		// The caller wants more values than we have. Pad with NILs.
-		LispObject[] values = new LispObject[count];
-		for (int i = _values.length; i-- > 0;)
-			values[i] = _values[i];
-		for (int i = _values.length; i < count; i++)
-			values[i] = NIL;
-		return values;
-	}
+    public final LispObject[] getValues(LispObject result, int count)
+    {
+        if (_values == null) {
+            LispObject[] values = new LispObject[count];
+            if (count > 0)
+                values[0] = result;
+            for (int i = 1; i < count; i++)
+                values[i] = NIL;
+            return values;
+        }
+        // If the caller doesn't want any extra values, just return the ones
+        // we've got.
+        if (count <= _values.length)
+            return _values;
+        // The caller wants more values than we have. Pad with NILs.
+        LispObject[] values = new LispObject[count];
+        for (int i = _values.length; i-- > 0;)
+            values[i] = _values[i];
+        for (int i = _values.length; i < count; i++)
+            values[i] = NIL;
+        return values;
+    }
 
-	/** Used by the JVM compiler for MULTIPLE-VALUE-CALL. */
-	public final LispObject[] accumulateValues(LispObject result, LispObject[] oldValues) {
-		if (oldValues == null) {
-			if (_values != null)
-				return _values;
-			LispObject[] values = new LispObject[1];
-			values[0] = result;
-			return values;
-		}
-		if (_values != null) {
-			if (_values.length == 0)
-				return oldValues;
-			final int totalLength = oldValues.length + _values.length;
-			LispObject[] values = new LispObject[totalLength];
-			System.arraycopy(oldValues, 0, values, 0, oldValues.length);
-			System.arraycopy(_values, 0, values, oldValues.length, _values.length);
-			return values;
-		}
-		// _values is null.
-		final int totalLength = oldValues.length + 1;
-		LispObject[] values = new LispObject[totalLength];
-		System.arraycopy(oldValues, 0, values, 0, oldValues.length);
-		values[totalLength - 1] = result;
-		return values;
-	}
+    /** Used by the JVM compiler for MULTIPLE-VALUE-CALL. */
+    public final LispObject[] accumulateValues(LispObject result,
+                                               LispObject[] oldValues)
+    {
+        if (oldValues == null) {
+            if (_values != null)
+                return _values;
+            LispObject[] values = new LispObject[1];
+            values[0] = result;
+            return values;
+        }
+        if (_values != null) {
+            if (_values.length == 0)
+                return oldValues;
+            final int totalLength = oldValues.length + _values.length;
+            LispObject[] values = new LispObject[totalLength];
+            System.arraycopy(oldValues, 0,
+                             values, 0,
+                             oldValues.length);
+            System.arraycopy(_values, 0,
+                             values, oldValues.length,
+                             _values.length);
+            return values;
+        }
+        // _values is null.
+        final int totalLength = oldValues.length + 1;
+        LispObject[] values = new LispObject[totalLength];
+        System.arraycopy(oldValues, 0,
+                         values, 0,
+                         oldValues.length);
+        values[totalLength - 1] = result;
+        return values;
+    }
 
-	public final LispObject setValues() {
-		_values = new LispObject[0];
-		return NIL;
-	}
+    public final LispObject setValues()
+    {
+        _values = new LispObject[0];
+        return NIL;
+    }
 
-	public final LispObject setValues(LispObject value1) {
-		_values = null;
-		return value1;
-	}
+    public final LispObject setValues(LispObject value1)
+    {
+        _values = null;
+        return value1;
+    }
 
-	public final LispObject setValues(LispObject value1, LispObject value2) {
-		_values = new LispObject[2];
-		_values[0] = value1;
-		_values[1] = value2;
-		return value1;
-	}
+    public final LispObject setValues(LispObject value1, LispObject value2)
+    {
+        _values = new LispObject[2];
+        _values[0] = value1;
+        _values[1] = value2;
+        return value1;
+    }
 
-	public final LispObject setValues(LispObject value1, LispObject value2, LispObject value3) {
-		_values = new LispObject[3];
-		_values[0] = value1;
-		_values[1] = value2;
-		_values[2] = value3;
-		return value1;
-	}
+    public final LispObject setValues(LispObject value1, LispObject value2,
+                                      LispObject value3)
+    {
+        _values = new LispObject[3];
+        _values[0] = value1;
+        _values[1] = value2;
+        _values[2] = value3;
+        return value1;
+    }
 
-	public final LispObject setValues(LispObject value1, LispObject value2, LispObject value3, LispObject value4) {
-		_values = new LispObject[4];
-		_values[0] = value1;
-		_values[1] = value2;
-		_values[2] = value3;
-		_values[3] = value4;
-		return value1;
-	}
+    public final LispObject setValues(LispObject value1, LispObject value2,
+                                      LispObject value3, LispObject value4)
+    {
+        _values = new LispObject[4];
+        _values[0] = value1;
+        _values[1] = value2;
+        _values[2] = value3;
+        _values[3] = value4;
+        return value1;
+    }
 
-	public final LispObject setValues(LispObject[] values) {
-		switch (values.length) {
-		case 0:
-			_values = values;
-			return NIL;
-		case 1:
-			_values = null;
-			return values[0];
-		default:
-			_values = values;
-			return values[0];
-		}
-	}
+    public final LispObject setValues(LispObject[] values)
+    {
+        switch (values.length) {
+            case 0:
+                _values = values;
+                return NIL;
+            case 1:
+                _values = null;
+                return values[0];
+            default:
+                _values = values;
+                return values[0];
+        }
+    }
 
-	public final void clearValues() {
-		_values = null;
-	}
+    public final void clearValues()
+    {
+        _values = null;
+    }
 
-	public final LispObject nothing() {
-		_values = new LispObject[0];
-		return NIL;
-	}
+    public final LispObject nothing()
+    {
+        _values = new LispObject[0];
+        return NIL;
+    }
 
-	/**
-	 * Force a single value, for situations where multiple values should be ignored.
-	 */
-	public final LispObject value(LispObject obj) {
-		_values = null;
-		return obj;
-	}
+   /** 
+    * Force a single value, for situations where multiple values should be
+    * ignored.
+    */
+    public final LispObject value(LispObject obj)
+    {
+        _values = null;
+        return obj;
+    }
 
-	final static int UNASSIGNED_SPECIAL_INDEX = 0;
+
+
+    final static int UNASSIGNED_SPECIAL_INDEX = 0;
 
 	/**
 	 * Indicates the last special slot which has been assigned. Symbols which don't
@@ -900,7 +932,7 @@ public final class LispThread extends ALispObject {
 	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
 			LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh) {
 		if (NO_STACK_FRAMES)
-			return prevRet = function.execute(first, second, third, fourth, fifth, sixth, seventh);
+			return function.execute(first, second, third, fourth, fifth, sixth, seventh);
 		ensureStackCapacity(7 + STACK_FRAME_EXTRA);
 		stack[stackPtr] = function;
 		stack[stackPtr + 1] = first;
@@ -920,10 +952,14 @@ public final class LispThread extends ALispObject {
 		}
 	}
 
-	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
-			LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh, LispObject eighth) {
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth, LispObject fifth,
+                              LispObject sixth, LispObject seventh,
+                              LispObject eighth)
+    {
 		if (NO_STACK_FRAMES)
-			return prevRet = function.execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
+			return function.execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
 		ensureStackCapacity(8 + STACK_FRAME_EXTRA);
 		stack[stackPtr] = function;
 		stack[stackPtr + 1] = first;
@@ -946,7 +982,7 @@ public final class LispThread extends ALispObject {
 
 	public LispObject execute(LispObject function, LispObject[] args) {
 		if (NO_STACK_FRAMES)
-			return prevRet = function.execute(args);
+			return function.execute(args);
 		ensureStackCapacity(args.length + STACK_FRAME_EXTRA);
 		stack[stackPtr] = function;
 		System.arraycopy(args, 0, stack, stackPtr + 1, args.length);
@@ -1398,20 +1434,25 @@ public final class LispThread extends ALispObject {
 		}
 	};
 
-	@DocString(name = "thread-alive-p", args = "thread", doc = "Returns T if THREAD is alive.")
-	private static final Primitive THREAD_ALIVE_P = new Primitive("thread-alive-p", PACKAGE_THREADS, true, "thread",
-			"Boolean predicate whether THREAD is alive.") {
-		@Override
-		public LispObject execute(LispObject arg) {
-			final LispThread lispThread;
-			if (arg instanceof LispThread) {
-				lispThread = (LispThread) arg;
-			} else {
-				return type_error(arg, Symbol.THREAD);
-			}
-			return lispThread.javaThread.isAlive() ? T : NIL;
-		}
-	};
+    @DocString(name="thread-alive-p", args="thread",
+    doc="Returns T if THREAD is alive.")
+    private static final Primitive THREAD_ALIVE_P =
+        new Primitive("thread-alive-p", PACKAGE_THREADS, true, "thread",
+              "Boolean predicate whether THREAD is alive.")
+    {
+        @Override
+        public LispObject execute(LispObject arg)
+        {
+            final LispThread lispThread;
+            if (arg instanceof LispThread) {
+                lispThread = (LispThread) arg;
+            }
+            else {
+                return type_error(arg, Symbol.THREAD);
+            }
+            return lispThread.javaThread.isAlive() ? T : NIL;
+        }
+    };
 
 	@DocString(name = "thread-active-p", args = "thread", doc = "Returns T if THREAD is alive.")
 	private static final Primitive THREAD_ACTIVE_P = new Primitive("thread-alive-p", PACKAGE_THREADS, true, "thread",
@@ -1428,10 +1469,14 @@ public final class LispThread extends ALispObject {
 		}
 	};
 
-	@DocString(name = "thread-name", args = "thread", doc = "Return the name of THREAD, if it has one.")
-	private static final Primitive THREAD_NAME = new Primitive("thread-name", PACKAGE_THREADS, true) {
+    @DocString(name="thread-name", args="thread",
+    doc="Return the name of THREAD, if it has one.")
+    private static final Primitive THREAD_NAME =
+        new Primitive("thread-name", PACKAGE_THREADS, true)
+    {
 		@Override
-		public LispObject execute(LispObject arg) {
+        public LispObject execute(LispObject arg)
+        {
 			if (arg instanceof LispThread) {
 				return ((LispThread) arg).name;
 			}
@@ -1439,10 +1484,13 @@ public final class LispThread extends ALispObject {
 		}
 	};
 
-	private static final Primitive THREAD_JOIN = new Primitive("thread-join", PACKAGE_THREADS, true, "thread",
-			"Waits for thread to finish.") {
+    private static final Primitive THREAD_JOIN =
+        new Primitive("thread-join", PACKAGE_THREADS, true, "thread",
+                      "Waits for thread to finish.")
+    {
 		@Override
-		public LispObject execute(LispObject arg) {
+        public LispObject execute(LispObject arg)
+        {
 			// join the thread, and returns it's value. The second return
 			// value is T if the thread finishes normally, NIL if its
 			// interrupted.
@@ -1451,10 +1499,12 @@ public final class LispThread extends ALispObject {
 				final LispThread waitingThread = currentThread();
 				try {
 					joinedThread.javaThread.join();
-					return waitingThread.setValues(joinedThread.threadValue, T);
+                    return 
+                        waitingThread.setValues(joinedThread.threadValue, T);
 				} catch (InterruptedException e) {
 					waitingThread.processThreadInterrupts();
-					return waitingThread.setValues(joinedThread.threadValue, NIL);
+                    return 
+                        waitingThread.setValues(joinedThread.threadValue, NIL);
 				}
 			} else {
 				return type_error(arg, Symbol.THREAD);
@@ -1465,7 +1515,8 @@ public final class LispThread extends ALispObject {
 	final static DoubleFloat THOUSAND = new DoubleFloat(1000);
 
 	static final long sleepMillisPart(LispObject seconds) {
-		double d = checkDoubleFloat(seconds.multiplyBy(THOUSAND)).getValue();
+      double d 
+        = checkDoubleFloat(seconds.multiplyBy(THOUSAND)).getValue();
 		if (d < 0) {
 			type_error(seconds, list(Symbol.REAL, Fixnum.ZERO));
 		}
@@ -1482,15 +1533,19 @@ public final class LispThread extends ALispObject {
 		return (n < Integer.MAX_VALUE ? (int) n : Integer.MAX_VALUE);
 	}
 
-	@DocString(name = "sleep", args = "seconds", doc = "Causes the invoking thread to sleep for an interveral expressed in SECONDS.\n"
+
+    @DocString(name="sleep", args="seconds",
+    doc="Causes the invoking thread to sleep for an interveral expressed in SECONDS.\n"
 			+ "SECONDS may be specified as a fraction of a second, with intervals\n"
 			+ "less than or equal to a nanosecond resulting in a yield of execution\n"
 			+ "to other waiting threads rather than an actual sleep.\n"
 			+ "A zero value of SECONDS *may* result in the JVM sleeping indefinitely,\n"
 			+ "depending on the implementation.")
-	private static final Primitive SLEEP = new Primitive("sleep", PACKAGE_CL, true) {
+    private static final Primitive SLEEP = new Primitive("sleep", PACKAGE_CL, true)
+    {
 		@Override
-		public LispObject execute(LispObject arg) {
+        public LispObject execute(LispObject arg)
+        {
 			long millis = sleepMillisPart(arg);
 			int nanos = sleepNanosPart(arg);
 			boolean zeroArgP = arg.ZEROP() != NIL;
@@ -1512,10 +1567,14 @@ public final class LispThread extends ALispObject {
 		}
 	};
 
-	@DocString(name = "mapcar-threads", args = "function", doc = "Applies FUNCTION to all existing threads.")
-	private static final Primitive MAPCAR_THREADS = new Primitive("mapcar-threads", PACKAGE_THREADS, true) {
+    @DocString(name="mapcar-threads", args= "function",
+    doc="Applies FUNCTION to all existing threads.")
+    private static final Primitive MAPCAR_THREADS =
+        new Primitive("mapcar-threads", PACKAGE_THREADS, true)
+    {
 		@Override
-		public LispObject execute(LispObject arg) {
+        public LispObject execute(LispObject arg)
+        {
 			Function fun = checkFunction(arg);
 			final LispThread thread = LispThread.currentThread();
 			LispObject result = NIL;
@@ -1530,13 +1589,17 @@ public final class LispThread extends ALispObject {
 	};
 
 	@DocString(name = "destroy-thread", args = "thread", doc = "Mark THREAD as destroyed")
-	private static final Primitive DESTROY_THREAD = new Primitive("destroy-thread", PACKAGE_THREADS, true) {
+    private static final Primitive DESTROY_THREAD =
+        new Primitive("destroy-thread", PACKAGE_THREADS, true)
+    {
 		@Override
-		public LispObject execute(LispObject arg) {
+        public LispObject execute(LispObject arg)
+        {
 			final LispThread thread;
 			if (arg instanceof LispThread) {
 				thread = (LispThread) arg;
-			} else {
+            }
+            else {
 				return type_error(arg, Symbol.THREAD);
 			}
 			thread.setDestroyed(true);
@@ -1545,14 +1608,19 @@ public final class LispThread extends ALispObject {
 	};
 
 	// => T
-	@DocString(name = "interrupt-thread", args = "thread function &rest args", doc = "Interrupts thread and forces it to apply function to args. When the\n"
-			+ "function returns, the thread's original computation continues. If\n"
-			+ "multiple interrupts are queued for a thread, they are all run, but the\n" + "order is not guaranteed.")
-	private static final Primitive INTERRUPT_THREAD = new Primitive("interrupt-thread", PACKAGE_THREADS, true,
+    @DocString(name="interrupt-thread", args="thread function &rest args",
+    doc="Interrupts thread and forces it to apply function to args. When the\n"+
+        "function returns, the thread's original computation continues. If\n"+
+        "multiple interrupts are queued for a thread, they are all run, but the\n"+
+        "order is not guaranteed.")
+    private static final Primitive INTERRUPT_THREAD =
+        new Primitive("interrupt-thread", PACKAGE_THREADS, true,
 			"thread function &rest args",
-			"Interrupts THREAD and forces it to apply FUNCTION to ARGS.\nWhen the function returns, the thread's original computation continues. If  multiple interrupts are queued for a thread, they are all run, but the order is not guaranteed.") {
+              "Interrupts THREAD and forces it to apply FUNCTION to ARGS.\nWhen the function returns, the thread's original computation continues. If  multiple interrupts are queued for a thread, they are all run, but the order is not guaranteed.")
+    {
 		@Override
-		public LispObject execute(LispObject[] args) {
+        public LispObject execute(LispObject[] args)
+        {
 			if (args.length < 2)
 				return error(new WrongNumberOfArgumentsException(this, 2, -1));
 			final LispThread thread;

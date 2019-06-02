@@ -47,6 +47,20 @@ public final class Nil extends Symbol
     }
 
     @Override
+    public Object javaInstance()
+    {
+        return null;
+    }
+
+    @Override
+    public Object javaInstance(Class c)
+    {
+        if (c == Boolean.class || c == boolean.class)
+            return Boolean.FALSE;
+        return javaInstance();
+    }
+
+    @Override
     public LispObject typeOf()
     {
         return Symbol.NULL;

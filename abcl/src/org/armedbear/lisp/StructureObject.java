@@ -181,6 +181,7 @@ public class StructureObject extends ALispObject
     return value;
   }
 
+  @Override
   public void setSlotValue(LispObject slotName, LispObject newValue) {
       final int index = getSlotIndex(slotName);
       if (index >= 0) {
@@ -338,7 +339,7 @@ public class StructureObject extends ALispObject
   {
     try
       {
-        return slots[index] != NIL ? true : false;
+        return slots[index] != NIL;
       }
     catch (ArrayIndexOutOfBoundsException e)
       {

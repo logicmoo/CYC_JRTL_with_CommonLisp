@@ -351,11 +351,13 @@ public class HashTable
     }
 
 
+    @Override
     public LispObject ENTRIES() {
         return getEntries();
     }
 
     // Returns a list of (key . value) pairs.        
+    @Override
     public LispObject getEntries() {
         // No need to take out a read lock, for the same reason as MAPHASH
         HashEntry[] b = buckets;

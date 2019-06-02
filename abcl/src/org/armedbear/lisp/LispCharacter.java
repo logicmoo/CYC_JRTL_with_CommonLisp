@@ -41,7 +41,12 @@ public final class LispCharacter extends NLispObject
 {
 
   // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one
- public static LispCharacter getInstance(char l) {
+  public static LispCharacter getInstance(char l) {
+    return makeCharacter( l );
+  }
+ 
+  // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one
+  public static LispCharacter getInstance(int l) {
     return makeCharacter( l );
   }
  
@@ -71,6 +76,10 @@ public final class LispCharacter extends NLispObject
   public static LispCharacter makeCharacter(char c)
   {
     return lispChars.get(c);
+  }
+  public static LispCharacter makeCharacter(int c)
+  {
+    return lispChars.get((char)c);
   }
 
   // This needs to be public for the compiler.

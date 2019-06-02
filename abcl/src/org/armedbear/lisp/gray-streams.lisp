@@ -216,7 +216,7 @@
 (defmethod gray-streamp ((s fundamental-stream))
   s)
 
-(defclass fundamental-input-stream (fundamental-stream))
+(defclass fundamental-input-stream (fundamental-stream) ())
 
 (defmethod gray-input-character-stream-p (s)  ;; # fb 1.01
   (and (gray-input-stream-p s)
@@ -226,7 +226,7 @@
   (declare (ignore s))
   t)
 
-(defclass fundamental-output-stream (fundamental-stream))
+(defclass fundamental-output-stream (fundamental-stream) ())
 
 (defmethod gray-input-stream-p ((s fundamental-output-stream))
   (typep s 'fundamental-input-stream))
@@ -238,19 +238,19 @@
 (defmethod gray-output-stream-p ((s fundamental-input-stream))
   (typep s 'fundamental-output-stream))
 
-(defclass fundamental-character-stream (fundamental-stream))
+(defclass fundamental-character-stream (fundamental-stream) ())
 
 (defmethod gray-stream-element-type ((s fundamental-character-stream))
   (declare (ignore s))
   'character)
 
-(defclass fundamental-binary-stream (fundamental-stream))
+(defclass fundamental-binary-stream (fundamental-stream) ())
 
 (defgeneric stream-read-byte (stream))
 (defgeneric stream-write-byte (stream integer))
 
 (defclass fundamental-character-input-stream
-  (fundamental-input-stream fundamental-character-stream))
+  (fundamental-input-stream fundamental-character-stream) ())
 
 (defgeneric stream-read-char (stream))
 (defgeneric stream-unread-char (stream character))
@@ -292,7 +292,7 @@
   nil)
 
 (defclass fundamental-character-output-stream
-  (fundamental-output-stream fundamental-character-stream))
+  (fundamental-output-stream fundamental-character-stream) ())
 
 (defgeneric stream-write-char (stream character))
 (defgeneric stream-line-column (stream))
@@ -386,10 +386,10 @@
                         'character #'stream-write-char))
 
 (defclass fundamental-binary-input-stream
-  (fundamental-input-stream fundamental-binary-stream))
+  (fundamental-input-stream fundamental-binary-stream) ())
 
 (defclass fundamental-binary-output-stream
-  (fundamental-output-stream fundamental-binary-stream))
+  (fundamental-output-stream fundamental-binary-stream) ())
 
 (defmethod stream-read-sequence ((stream fundamental-binary-input-stream)
                                  sequence &optional (start 0) end)
@@ -654,6 +654,38 @@
 (setf (symbol-function 'common-lisp::write-sequence) #'gray-write-sequence)
 (setf (symbol-function 'common-lisp::file-position) #'gray-file-position)
 (setf (symbol-function 'common-lisp::listen) #'gray-listen)
+
+(dolist (e '((common-lisp::read-char gray-read-char)
+	     (common-lisp::peek-char gray-peek-char)
+	     (common-lisp::unread-char gray-unread-char)
+	     (common-lisp::read-line gray-read-line)
+	     (common-lisp::clear-input gray-clear-input)
+	     (common-lisp::read-char-no-hang gray-read-char-no-hang)
+	     (common-lisp::write-char gray-write-char)
+	     (common-lisp::fresh-line gray-fresh-line)
+	     (common-lisp::terpri gray-terpri)
+	     (common-lisp::write-string gray-write-string)
+	     (common-lisp::write-line gray-write-line)
+	     (sys::%force-output gray-force-output)
+	     (sys::%finish-output gray-finish-output)
+	     (sys::%clear-output gray-clear-output)
+	     (sys::%output-object gray-output-object)
+	     (common-lisp::read-byte gray-read-byte)
+	     (common-lisp::write-byte gray-write-byte)
+	     (common-lisp::stream-column gray-stream-column)
+	     (common-lisp::stream-element-type gray-stream-element-type)
+	     (common-lisp::close gray-close)
+	     (common-lisp::input-stream-p gray-input-stream-p)
+	     (common-lisp::input-character-stream-p gray-input-character-stream-p) ;; # fb 1.01
+	     (common-lisp::output-stream-p gray-output-stream-p)
+	     (common-lisp::open-stream-p gray-open-stream-p)
+	     (common-lisp::streamp gray-streamp)
+	     (common-lisp::read-sequence gray-read-sequence)
+	     (common-lisp::write-sequence gray-write-sequence)
+	     (common-lisp::file-position gray-file-position)
+	     (common-lisp::listen gray-listen)))
+  (sys::put (car e) 'sys::source (cl:get (second e) 'sys::source)))
+
 #|
 (setf (symbol-function 'common-lisp::make-two-way-stream) #'gray-make-two-way-stream)
 (setf (symbol-function 'common-lisp::two-way-stream-input-stream) #'gray-two-way-stream-input-stream)
