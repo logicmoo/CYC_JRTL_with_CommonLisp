@@ -13,7 +13,7 @@ public class URLDirModelRepoSpec extends RepoSpecForDirectory
     
     @Override
 	public Model getDirectoryModel() {
-        return FancyRepoLoader$.MODULE$.readDirectoryModelFromURL(this.dirModelURL, (Map)null, (List)this.fileModelCLs);
+        return FancyRepoLoader.readDirectoryModelFromURL(this.dirModelURL, (Map)null, (List)this.fileModelCLs);
     }
     
     @Override

@@ -178,7 +178,7 @@ public class ArgumentListProcessor {
     boolean _allowOtherKeys = false;
     if (lambdaList instanceof Cons)
       {
-        final int length = lambdaList.length();
+        final int length = lambdaList.cl_length();
         ArrayList<Param> required = null;
         ArrayList<Param> optional = null;
         ArrayList<Param> keywords = null;
@@ -339,7 +339,7 @@ public class ArgumentListProcessor {
                     Symbol keyword;
                     Symbol var;
                     LispObject initForm = NIL;
-                    Symbol svar = NIL;
+                    Symbol svar = (Symbol) NIL;
                     LispObject first = obj.car();
                     if (first instanceof Cons)
                       {
@@ -847,7 +847,8 @@ public class ArgumentListProcessor {
           this.value = value;
       }
       
-      LispObject getValue(Environment ext, LispThread thread) {
+      @Override
+	LispObject getValue(Environment ext, LispThread thread) {
           return value;
       }
   }
@@ -862,7 +863,8 @@ public class ArgumentListProcessor {
           this.form = form;
       }
       
-      LispObject getValue(Environment ext, LispThread thread) {
+      @Override
+	LispObject getValue(Environment ext, LispThread thread) {
           return eval(form, ext, thread);
       }
       
@@ -921,7 +923,8 @@ public class ArgumentListProcessor {
           return index;
       }
       
-      void addVars(List vars) {
+      @Override
+	void addVars(List vars) {
           vars.add(var);
       }
   }
@@ -986,7 +989,8 @@ public class ArgumentListProcessor {
           return initForm.needsEnvironment();
       }
 
-      void addVars(List vars) {
+      @Override
+	void addVars(List vars) {
           vars.add(var);
           if (suppliedVar != null)
               vars.add(suppliedVar);
@@ -1035,7 +1039,7 @@ public class ArgumentListProcessor {
           super(var, special, suppliedVar, suppliedSpecial, form);
           
           this.keyword = (keyword == null)
-                  ? PACKAGE_KEYWORD.intern(var.getName()) : keyword;
+                  ? PACKAGE_KEYWORD.intern(var.cl_symbol_name()) : keyword;
       }
       
       @Override

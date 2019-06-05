@@ -106,7 +106,7 @@ public final class JHandler
                 return error(new WrongNumberOfArgumentsException(this, 5));
             Map<String,Entry> entryTable = null;
             Object object = args[0].javaInstance();
-            String event = ((Symbol)args[1]).getName();
+            String event = ((Symbol)args[1]).cl_symbol_name();
             if (!table.containsKey(object)) {
                 entryTable = new HashMap<String,Entry>();
                 table.put(object,entryTable);

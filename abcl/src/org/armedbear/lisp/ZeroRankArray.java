@@ -94,7 +94,7 @@ public final class ZeroRankArray extends AbstractArray
     }
 
     @Override
-    public LispObject getElementType()
+    public LispObject getArrayElementType()
     {
         return elementType;
     }
@@ -151,7 +151,7 @@ public final class ZeroRankArray extends AbstractArray
                 StringOutputStream stream = new StringOutputStream();
                 thread.execute(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
                                data, stream);
-                sb.append(stream.getString().getStringValue());
+                sb.append(stream.getStringBuffer().getStringValue());
             } else
                 sb.append(data.printObject());
             return sb.toString();

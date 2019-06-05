@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2008-2009 Alessio Stalla
  *
- * $Id$
+ * $Id: REPLConsole.java 13145 2011-01-13 23:20:19Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,17 +34,12 @@
 
 package org.armedbear.lisp.java.swing;
 
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
-
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.PrintStream;
+import java.lang.RuntimeException;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -60,29 +55,23 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.JTextComponent;
 import org.armedbear.lisp.Function;
 import org.armedbear.lisp.Interpreter;
-import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
-import org.armedbear.lisp.Main;
-import org.armedbear.lisp.ReaderInputStream;
 import org.armedbear.lisp.SpecialBindingsMark;
 import org.armedbear.lisp.Stream;
 import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.TwoWayStream;
-import org.armedbear.lisp.WriterOutputStream;
-import org.logicmoo.system.SystemCurrent;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
+import static org.armedbear.lisp.Lisp.*;
 
 public class REPLConsole extends DefaultStyledDocument {
 
   private StringBuffer inputBuffer = new StringBuffer();
-
+	
   private Reader reader = new Reader() {
 
-		@Override
-		public void close() throws RuntimeException {
-		}
+      @Override
+      public void close() throws RuntimeException {}
 
       @Override
       public synchronized int read(char[] cbuf, int off, int len) throws RuntimeException {
@@ -100,16 +89,14 @@ public class REPLConsole extends DefaultStyledDocument {
         }
       }
     };
-
+	
   private Writer writer = new Writer() {
+	    
+      @Override
+      public void close() throws RuntimeException {}
 
-		@Override
-		public void close() throws RuntimeException {
-		}
-
-		@Override
-		public void flush() throws RuntimeException {
-		}
+      @Override
+      public void flush() throws RuntimeException {}
 
       @Override
       public void write(final char[] cbuf, final int off, final int len) throws RuntimeException {
@@ -128,10 +115,11 @@ public class REPLConsole extends DefaultStyledDocument {
 			public void run() {
                 synchronized(reader) {
                   try {
-								superInsertString(insertOffs, new String(cbuf, off, len), null);
+                    superInsertString(insertOffs,
+                                      new String(cbuf, off, len),
+                                      null);
                   } catch(Exception e) {
-								assert (false); // BadLocationException should
-												// not happen here
+                    assert(false); //BadLocationException should not happen here
                   }
                 }
               }
@@ -142,41 +130,29 @@ public class REPLConsole extends DefaultStyledDocument {
         }
       }
     };
-
+	
   private boolean disposed = false;
-	private Thread replThread;
-
-	private Interpreter interpreter;
-
-	public REPLConsole(Interpreter interp) {
-		this.interpreter = interp;
-	}
-
-	final public LispObject[] result = new LispObject[1];
-
-	public Thread eval(final String string) {
-
-		final Runnable replWrapper = makeReplWrapper(Stream.createStream(Symbol.SYSTEM_STREAM, new BufferedReader(reader)),
-				Stream.createStream(Symbol.SYSTEM_STREAM, new BufferedWriter(writer)), string);
-
+  private final Thread replThread;
+	
+  public REPLConsole(LispObject replFunction) {
+    final LispObject replWrapper = makeReplWrapper(new Stream(Symbol.SYSTEM_STREAM, new BufferedReader(reader)),
+                                                   new Stream(Symbol.SYSTEM_STREAM, new BufferedWriter(writer)),
+                                                   replFunction);
     replThread = new Thread("REPL-thread-" + System.identityHashCode(this)) {
         @Override
 		public void run() {
-				// while (true) {
-				try {
-					replWrapper.run();
-				} finally {
+          while(true) {
+            replWrapper.execute();
             yield();
           }
-
-				// }
         }
       };
-		return replThread;
+    replThread.start();
   }
 
-	@Override
-	public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+  @Override
+  public void insertString(int offs, String str, AttributeSet a)
+    throws BadLocationException {
     synchronized(reader) {
       int bufferStart = getLength() - inputBuffer.length();
       if(offs < bufferStart) {
@@ -189,11 +165,12 @@ public class REPLConsole extends DefaultStyledDocument {
       }
     }
   }
-
-	protected void superInsertString(int offs, String str, AttributeSet a) throws BadLocationException {
+	
+  protected void superInsertString(int offs, String str, AttributeSet a)
+    throws BadLocationException {
     super.insertString(offs, str, a);
   }
-
+	
   /**
    * Guaranteed to run with exclusive access to the buffer.
    * @param sb NB sb MUST NOT be destructively modified!!
@@ -218,7 +195,7 @@ public class REPLConsole extends DefaultStyledDocument {
     }
     return parenCount <= 0;
   }
-
+	
   @Override
   public void remove(int offs, int len) throws BadLocationException {
     synchronized(reader) {
@@ -230,15 +207,15 @@ public class REPLConsole extends DefaultStyledDocument {
       inputBuffer.delete(offs - bufferStart, offs - bufferStart + len);
     }
   }
-
+	
   public Reader getReader() {
     return reader;
   }
-
+	
   public Writer getWriter() {
     return writer;
   }
-
+	
   public void setupTextComponent(final JTextComponent txt) {
     addDocumentListener(new DocumentListener() {
 
@@ -251,9 +228,7 @@ public class REPLConsole extends DefaultStyledDocument {
         @Override
 		public void insertUpdate(DocumentEvent e) {
           int len = getLength();
-				if (len - e.getLength() == e.getOffset()) { // The insert was at
-															// the end of the
-															// document
+          if(len - e.getLength() == e.getOffset()) { //The insert was at the end of the document
             txt.setCaretPosition(getLength());
           }
         }
@@ -265,7 +240,7 @@ public class REPLConsole extends DefaultStyledDocument {
       });
     txt.setCaretPosition(getLength());
   }
-
+	
   public void dispose() {
     disposed = true;
     for(DocumentListener listener : getDocumentListeners()) {
@@ -279,9 +254,9 @@ public class REPLConsole extends DefaultStyledDocument {
     }
     replThread.interrupt(); //really?
   }
-
+	
   private final LispObject debuggerHook = new Function() {
-
+	    
       @Override
       public LispObject execute(LispObject condition, LispObject debuggerHook) {
         if(disposed) {
@@ -290,65 +265,33 @@ public class REPLConsole extends DefaultStyledDocument {
           return NIL;
         }
       }
-
+	    
     };
-
-	public Runnable makeReplWrapper(final Stream in, final Stream out, final String string) {
-		return new Runnable() {
-			@Override
-			public void run() {
-				final LispThread thread = LispThread.currentThread();
-				SpecialBindingsMark lastSpecialBinding = thread.markSpecialBindings();
-        try {
-          TwoWayStream ioStream = TwoWayStream.createTwoWayStream(in, out ,true);
-					thread.bindSpecial(Symbol.DEBUGGER_HOOK, debuggerHook);
-					thread.bindSpecial(Symbol.STANDARD_INPUT, in);
-					thread.bindSpecial(Symbol.STANDARD_OUTPUT, out);
-					thread.bindSpecial(Symbol.ERROR_OUTPUT, out);
-					thread.bindSpecial(Symbol.TERMINAL_IO, ioStream);
-					thread.bindSpecial(Symbol.DEBUG_IO, ioStream);
-					thread.bindSpecial(Symbol.QUERY_IO, ioStream);
-					SystemCurrent.setIn(new ReaderInputStream(reader));
-					SystemCurrent.setOut(new PrintStream(new WriterOutputStream(writer)));
-					// return fn.execute();
-					result[0] = interpreter.eval(string);// fn.run();
-					System.out.println("Result=" + getResult());
-        } finally {
-					thread.resetSpecialBindings(lastSpecialBinding);
-				}
-			}
-
-		};
-	}
-
-	public Runnable evalRepl(final String string) {
-		final Stream in = Stream.createStream(Symbol.SYSTEM_STREAM, new BufferedReader(reader));
-		final Stream out = Stream.createStream(Symbol.SYSTEM_STREAM, new BufferedWriter(writer));
-		return new Runnable() {
-			@Override
-			public void run() {
-				final LispThread thread = LispThread.currentThread();
-				SpecialBindingsMark lastSpecialBinding = thread.markSpecialBindings();
+	
+  public LispObject makeReplWrapper(final Stream in, final Stream out, final LispObject fn) {
+    return new Function() {	
+      @Override
+      public LispObject execute() {
+        final LispThread currentThread = LispThread.currentThread();
+		SpecialBindingsMark lastSpecialBinding = currentThread.markSpecialBindings();
         try {
           TwoWayStream ioStream = TwoWayStream.createTwoWayStream(in, out, true);
-					thread.bindSpecial(Symbol.DEBUGGER_HOOK, debuggerHook);
-					thread.bindSpecial(Symbol.STANDARD_INPUT, in);
-					thread.bindSpecial(Symbol.STANDARD_OUTPUT, out);
-					thread.bindSpecial(Symbol.ERROR_OUTPUT, out);
-					thread.bindSpecial(Symbol.TERMINAL_IO, ioStream);
-					thread.bindSpecial(Symbol.DEBUG_IO, ioStream);
-					thread.bindSpecial(Symbol.QUERY_IO, ioStream);
-					// return fn.execute();
-					result[0] = interpreter.eval(string);// fn.run();
-					System.out.println("Result=" + getResult());
+          currentThread.bindSpecial(Symbol.DEBUGGER_HOOK, debuggerHook);
+          currentThread.bindSpecial(Symbol.STANDARD_INPUT, in);
+          currentThread.bindSpecial(Symbol.STANDARD_OUTPUT, out);
+          currentThread.bindSpecial(Symbol.ERROR_OUTPUT, out);
+          currentThread.bindSpecial(Symbol.TERMINAL_IO, ioStream);
+          currentThread.bindSpecial(Symbol.DEBUG_IO, ioStream);
+          currentThread.bindSpecial(Symbol.QUERY_IO, ioStream);
+          return fn.execute();
         } finally {
-					thread.resetSpecialBindings(lastSpecialBinding);
+          currentThread.resetSpecialBindings(lastSpecialBinding);
         }
       }
-
+	    
     };
   }
-
+	
   public void disposeOnClose(final Window parent) {
     parent.addWindowListener(new WindowAdapter() {
         @Override
@@ -358,24 +301,16 @@ public class REPLConsole extends DefaultStyledDocument {
         }
       });
   }
-
-  ///  (compile-system :zip nil :output-path *LISP-HOME*)
-  //(compile-system :zip nil  :output-path "eclipse-classes/org/armedbear/lisp/")
+	
   public static void main(String[] args) {
-
-	  SubLMain.commonSymbolsOK = true;
-	  Main.setSubLisp(false);
-		if (args.length == 1 && args[0].equals("--compile")) {
-			args = new String[] { "--noinit", "--nosystem",
-					"(progn (setf *load-verbose* t) (compile-system :zip nil :output-path *LISP-HOME*) )" };
+    LispObject repl = null;
+    try {		
+      repl = Interpreter.createInstance().eval("#'top-level::top-level-loop");
+    } catch (Throwable e) {
+      e.printStackTrace();
+      System.exit(1);  // Ok. We haven't done anything useful yet.
     }
-		Interpreter interpreter = null;
-    try {
-
-
-			interpreter = Interpreter.createDefaultInstance(args);
-
-			final REPLConsole d = new REPLConsole(interpreter);
+    final REPLConsole d = new REPLConsole(repl);
     final JTextComponent txt = new JTextArea(d);
     d.setupTextComponent(txt);
     JFrame f = new JFrame();
@@ -383,39 +318,7 @@ public class REPLConsole extends DefaultStyledDocument {
     d.disposeOnClose(f);
     f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
     f.pack();
-			f.setSize(800, 400);
-			centerWindow(f);
     f.setVisible(true);
-			Thread todo = null;
-			d.eval("(+ 1 1)").run();
-			f.toFront();
-			d.evalRepl("(+ 1 1)").run();
-
-			f.toFront();
-			// d.evalRepl( ) .run();
-			todo = d.eval("(funcall #'top-level::top-level-loop)");
-			todo.start();
-		} catch (Throwable e) {
-			e.printStackTrace();
-			Lisp.exit(1); // Ok. We haven't done anything useful yet.
-		}
-	}
-
-	public LispObject getResult() {
-		return result[0];
-	}
-
-	private static void centerWindow(JFrame f) {
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-
-		// Determine the new location of the window
-		int w = f.getSize().width;
-		int h = f.getSize().height;
-		int x = (dim.width - w) / 2;
-		int y = (dim.height - h) / 2;
-
-		// Move the window
-		f.setLocation(x, y);
   }
-
+	
 }

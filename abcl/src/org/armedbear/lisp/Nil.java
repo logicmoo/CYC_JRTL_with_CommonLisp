@@ -37,6 +37,12 @@ import static org.armedbear.lisp.Lisp.*;
 
 public final class Nil extends Symbol
 {
+	@Override
+	public boolean isNil()
+	  {
+	    return true;
+	  }
+
     final public static Symbol NIL = new Nil(PACKAGE_CL);
 
     public Nil(Package pkg)
@@ -121,7 +127,7 @@ public final class Nil extends Symbol
     }
 
     @Override
-    public int length()
+    public int cl_length()
     {
         return 0;
     }
@@ -138,7 +144,7 @@ public final class Nil extends Symbol
     @Override
     public LispObject elt(int index)
     {
-        return error(new TypeError("ELT: invalid index " + index + " for " + this + "."));
+        return error(new TypeError("ELT: invalid index " + index + " for " + stringValueOf(this) + "."));
     }
 
     @Override
@@ -171,7 +177,8 @@ public final class Nil extends Symbol
         return null;
     }
 
-    public Object readResolve() throws java.io.ObjectStreamException {
+    @Override
+	public Object readResolve() throws java.io.ObjectStreamException {
        return NIL;
     }
 

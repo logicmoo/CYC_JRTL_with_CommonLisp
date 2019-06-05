@@ -34,7 +34,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public class WeakReference extends SLispObject {
+final public class WeakReference extends SLispObject {
 
     java.lang.ref.WeakReference<LispObject> ref;
 
@@ -55,7 +55,7 @@ public class WeakReference extends SLispObject {
     @Override
     public String printObject() {
         return unreadableString("WEAK-REFERENCE "
-                + toString());
+                + this.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(this)));
     }
 
     @Override

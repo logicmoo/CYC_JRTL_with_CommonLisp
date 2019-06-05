@@ -197,7 +197,7 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 	}
 
 	@Override
-	public String printObjectImpl()
+	public String printObject()
 	{
 		try
 		{

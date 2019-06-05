@@ -107,7 +107,7 @@ public final class FileStream extends Stream
         racf = new RandomAccessCharacterFile(raf, encoding);
 
         this.pathname = pathname;
-        this.elementType = elementType;
+        this.setStreamElementType(elementType);
         if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {
             isCharacterStream = true;
             bytesPerUnit = 1;

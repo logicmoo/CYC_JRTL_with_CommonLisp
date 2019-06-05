@@ -64,7 +64,7 @@ public final class ComplexArray_UnsignedByte32 extends AbstractArray
         final int rank = dimv.length;
         LispObject rest = initialContents;
         for (int i = 0; i < rank; i++) {
-            dimv[i] = rest.length();
+            dimv[i] = rest.cl_length();
             rest = rest.elt(0);
         }
         totalSize = computeTotalSize(dimv);
@@ -96,7 +96,8 @@ public final class ComplexArray_UnsignedByte32 extends AbstractArray
             ++index;
         } else {
             int dim = dims[0];
-            if (dim != contents.length()) {
+            final int cl_length = contents.cl_length();
+			if (dim != cl_length) {
                 error(new LispError("Bad initial contents for array."));
                 return -1;
             }
@@ -104,7 +105,7 @@ public final class ComplexArray_UnsignedByte32 extends AbstractArray
             for (int i = 1; i < dims.length; i++)
                 newDims[i-1] = dims[i];
             if (contents.listp()) {
-                for (int i = contents.length();i-- > 0;) {
+                for (int i = cl_length;i-- > 0;) {
                     LispObject content = contents.car();
                     index =
                         setInitialContents(axis + 1, newDims, content, index);
@@ -112,7 +113,7 @@ public final class ComplexArray_UnsignedByte32 extends AbstractArray
                 }
             } else {
                 AbstractVector v = checkVector(contents);
-                final int length = v.length();
+                final int length = v.cl_length();
                 for (int i = 0; i < length; i++) {
                     LispObject content = v.AREF(i);
                     index =
@@ -163,7 +164,7 @@ public final class ComplexArray_UnsignedByte32 extends AbstractArray
     }
 
     @Override
-    public LispObject getElementType()
+    public LispObject getArrayElementType()
     {
         return UNSIGNED_BYTE_32;
     }

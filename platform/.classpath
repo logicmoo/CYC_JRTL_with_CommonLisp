@@ -5,13 +5,14 @@
 	<classpathentry kind="src" path="main/opencyc-server-jsrc"/>
 	<classpathentry kind="src" path="main/objectweb-asm-src"/>
 	<classpathentry kind="src" path="main/armedbear-j-src"/>
-	<classpathentry excluding="org/appdapter/core/matdat/FancyRepoLoader.java|org/appdapter/core/matdat/GoogSheetRepoLoader.java|org/appdapter/core/matdat/OmniLoaderRepo.java|org/appdapter/core/matdat/OnlineSheetRepoSpec.java|org/appdapter/core/matdat/RepoSpecDefaultNames.java|org/appdapter/core/matdat/XLSXSheetRepoLoader.java|org/appdapter/core/matdat/OfflineXlsSheetRepoSpec.java" kind="src" path="main/appdapter-src"/>
+	<classpathentry excluding="org/appdapter/core/matdat/DerivedGraphSpecReader$.java|org/appdapter/core/matdat/MatrixData$.java|org/appdapter/core/matdat/CsvFileSheetLoader$.java|org/appdapter/core/matdat/GoogSheetRepoLoader$.java" kind="src" path="main/appdapter-src"/>
 	<classpathentry kind="src" path="main/jpl7-hacked"/>
 	<classpathentry kind="src" path="main/java"/>
 	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
 	<classpathentry kind="src" path="main/server-4q"/>
 	<classpathentry kind="src" path="main/platform-1.1"/>
-	<classpathentry excluding="test/|bsh/ClassGenerator.java" kind="src" path="main/beanshell"/>
+	<classpathentry excluding="test/" kind="src" path="main/beanshell"/>
+	<classpathentry kind="src" path="site-lisp/optop/demo"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-continuation-8.0.4.v20111024.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
@@ -230,7 +231,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/rhino-1.7.7.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/runnersFramework-2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/scala-compiler-2.10.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/scala-library-2.10.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/scala-library-2.10.2.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1559483046738/source/scala-library-2.10.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/scala-reflect-2.10.2.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/services_AdvertServiceEntry_stubs.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/services_IndexServiceProxyService_stubs.jar"/>
@@ -289,6 +290,7 @@
 	<classpathentry exported="true" kind="lib" path="ext/ordi-trree-adapter-3.1.a6.jar"/>
 	<classpathentry exported="true" kind="lib" path="ext/owlim-big-3.1.a7.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mpj.jar"/>
+	<classpathentry kind="lib" path="lib/ikvm-api.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="module" value="true"/>

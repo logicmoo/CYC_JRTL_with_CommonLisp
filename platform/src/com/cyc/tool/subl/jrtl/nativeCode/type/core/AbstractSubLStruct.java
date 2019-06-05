@@ -367,7 +367,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	}
 
 	@Override
-	abstract public String printObjectImpl();
+	abstract public String printObject();
 
 	@Override
 	public SubLStruct toStruct()

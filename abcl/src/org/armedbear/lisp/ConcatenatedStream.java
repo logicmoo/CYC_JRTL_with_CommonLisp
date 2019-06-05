@@ -97,11 +97,11 @@ public final class ConcatenatedStream extends Stream
     }
 
     @Override
-    public LispObject getElementType()
+    public LispObject getStreamElementType()
     {
         if (streams == NIL)
             return NIL;
-        return ((Stream)streams.car()).getElementType();
+        return ((Stream)streams.car()).getStreamElementType();
     }
 
     @Override
@@ -241,7 +241,7 @@ public final class ConcatenatedStream extends Stream
     private void outputStreamError()
     {
         error(new StreamError(this,
-                               String.valueOf(this) + " is not an output stream."));
+        		stringValueOf(this) + " is not an output stream."));
     }
 
     // ### make-concatenated-stream &rest streams => concatenated-stream
@@ -253,15 +253,16 @@ public final class ConcatenatedStream extends Stream
         {
             LispObject streams = NIL;
             for (int i = 0; i < args.length; i++) {
-                if (args[i] instanceof Stream) {
-                    Stream stream = (Stream) args[i];
+                final LispObject lispObject = args[i];
+				if (lispObject instanceof Stream) {
+                    Stream stream = (Stream) lispObject;
                     if (stream.isInputStream()) {
                         //                         streams[i] = (Stream) args[i];
                         streams = new Cons(stream, streams);
                         continue;
                     }
                 }
-                error(new TypeError(String.valueOf(args[i]) +
+                error(new TypeError(stringValueOf(lispObject) +
                                      " is not an input stream."));
             }
             return new ConcatenatedStream(streams.nreverse());

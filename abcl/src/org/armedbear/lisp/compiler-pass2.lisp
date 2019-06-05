@@ -4843,7 +4843,7 @@ given a specific common representation.")
     (cond ((eq (derive-compiler-type arg) 'STREAM)
            (compile-forms-and-maybe-emit-clear-values arg 'stack nil)
            (emit-checkcast +lisp-stream+)
-           (emit-invokevirtual +lisp-stream+ "getElementType"
+           (emit-invokevirtual +lisp-stream+ "getStreamElementType"
                                nil +lisp-object+)
            (emit-move-from-stack target representation))
           (t
@@ -5473,13 +5473,13 @@ We need more thought here.
     (compile-forms-and-maybe-emit-clear-values arg 'stack nil)
     (ecase representation
       (:int
-       (emit-invokevirtual +lisp-object+ "length" nil :int))
+       (emit-invokevirtual +lisp-object+ "cl_length" nil :int))
       ((:long :float :double)
-       (emit-invokevirtual +lisp-object+ "length" nil :int)
+       (emit-invokevirtual +lisp-object+ "cl_length" nil :int)
        (convert-representation :int representation))
       (:boolean
        ;; FIXME We could optimize this all away in unsafe calls.
-       (emit-invokevirtual +lisp-object+ "length" nil :int)
+       (emit-invokevirtual +lisp-object+ "cl_length" nil :int)
        (emit 'pop)
        (emit 'iconst_1))
       (:char
@@ -6531,7 +6531,7 @@ We need more thought here.
     (cond ((and (eq (derive-compiler-type arg) 'SYMBOL) (< *safety* 3))
            (compile-forms-and-maybe-emit-clear-values arg 'stack nil)
            (emit-checkcast +lisp-symbol+)
-           (emit-invokevirtual +lisp-symbol+ "getPackage"
+           (emit-invokevirtual +lisp-symbol+ "getPackageOrNil"
                                nil +lisp-object+)
            (fix-boxing representation nil)
            (emit-move-from-stack target representation))

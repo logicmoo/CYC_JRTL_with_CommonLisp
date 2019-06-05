@@ -189,6 +189,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		return structureClass;
 	}
 
+	@Override
 	protected int getSlotIndex(LispObject slotName)
 	{
 		LispObject effectiveSlots = structureClass.getSlotDefinitions();
@@ -364,7 +365,6 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	}
 
-	@Override
 	public String printObjectImpl()
 	{
 		try
@@ -758,6 +758,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	}
 
 	//	@Override
+	@Override
 	public Layout updateLayout()
 	{
 		// TODO Auto-generated method stub

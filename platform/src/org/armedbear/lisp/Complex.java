@@ -311,7 +311,7 @@ public int psxhash()
   }
 
   @Override
-public String printObjectImpl()
+public String printObject()
   {
     StringBuilder sb = new StringBuilder("#C(");
     sb.append(realpart.printObject());

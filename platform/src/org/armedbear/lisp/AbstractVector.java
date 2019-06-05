@@ -205,7 +205,7 @@ public void setFillPointer(LispObject obj)
   }
 
   @Override
-  public String printObjectImpl()
+  public String printObject()
   {
     final LispThread thread = LispThread.currentThread();
     if (Lisp.isPrintReadable(thread))

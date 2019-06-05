@@ -36,7 +36,7 @@ import java.util.stream.Stream;
 
 /** The default CollectionManager supports iteration over objects of type:
  * Enumeration, Iterator, Iterable, CharSequence, and array. */
-public final class CollectionManager {
+public class CollectionManager {
 
     /** The Constant manager. */
     private static final CollectionManager manager = new CollectionManager();

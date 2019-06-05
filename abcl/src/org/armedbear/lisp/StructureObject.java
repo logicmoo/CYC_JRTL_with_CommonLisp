@@ -35,8 +35,13 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public class StructureObject extends ALispObject
+public class StructureObject extends LispObject
 {
+    @Override
+    final public int eq_hashCode() {
+    	return ref_hashCode();
+    }
+    
   private final StructureClass structureClass;
   final LispObject[] slots;
 
@@ -45,9 +50,9 @@ public class StructureObject extends ALispObject
   {
       structureClass = (StructureClass) LispClass.findClass(symbol/*, true*/); // Might return null.
     if (structureClass == null) {
-        System.err.println("No mitens sitten: " + BuiltInClass.SYSTEM_STREAM.toString());
+        System.err.println("No mitens sitten: " + BuiltInClass.SYSTEM_STREAM.getLispClassName());
         System.err.println("joopa joo:" + Symbol.SYSTEM_STREAM.name);
-        System.err.println("Oh noes, structure object got a null class:" + symbol.toString() + ", symbol name:" + symbol.name );
+        System.err.println("Oh noes, structure object got a null class:" + symbol.getQualifiedName() + ", symbol name:" + symbol.name );
     }
     slots = new LispObject[0];
   }
@@ -144,7 +149,7 @@ public class StructureObject extends ALispObject
   @Override
   public LispObject typeOf()
   {
-    return structureClass.getName();
+    return structureClass.getLispClassName();
   }
 
   @Override
@@ -219,7 +224,7 @@ public class StructureObject extends ALispObject
   {
     if (type instanceof StructureClass)
       return memq(type, structureClass.getCPL()) ? T : NIL;
-    if (type == structureClass.getName())
+    if (type == structureClass.getLispClassName())
       return T;
     if (type == Symbol.STRUCTURE_OBJECT)
       return T;
@@ -462,10 +467,10 @@ public class StructureObject extends ALispObject
             LispObject fun = PRINT_RESTART.getSymbolFunction();
             StringOutputStream stream = new StringOutputStream();
             thread.execute(fun, this, stream);
-            return stream.getString().getStringValue();
+            return stream.getStringBuffer().getStringValue();
           }
         if (_PRINT_STRUCTURE_.symbolValue(thread) == NIL)
-          return unreadableString(structureClass.getName().printObject());
+          return unreadableString(structureClass.getLispClassName().printObject());
         int maxLevel = Integer.MAX_VALUE;
         LispObject printLevel = Symbol.PRINT_LEVEL.symbolValue(thread);
         if (printLevel instanceof Fixnum)
@@ -476,7 +481,7 @@ public class StructureObject extends ALispObject
         if (currentLevel >= maxLevel && slots.length > 0)
           return "#";
         StringBuilder sb = new StringBuilder("#S(");
-        sb.append(structureClass.getName().printObject());
+        sb.append(structureClass.getLispClassName().printObject());
         if (currentLevel < maxLevel)
           {
             LispObject effectiveSlots = structureClass.getSlotDefinitions();
@@ -505,7 +510,7 @@ public class StructureObject extends ALispObject
                     StringOutputStream stream = new StringOutputStream();
                     thread.execute(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
                                    slots[i], stream);
-                    sb.append(stream.getString().getStringValue());
+                    sb.append(stream.getStringBuffer().getStringValue());
                   }
                 else
                   sb.append(slots[i].printObject());

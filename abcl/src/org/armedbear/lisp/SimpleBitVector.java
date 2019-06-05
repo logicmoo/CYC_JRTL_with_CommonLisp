@@ -109,7 +109,7 @@ public final class SimpleBitVector extends AbstractBitVector
     }
 
     @Override
-    public int length()
+    public int cl_length()
     {
         return capacity;
     }
@@ -117,8 +117,9 @@ public final class SimpleBitVector extends AbstractBitVector
     @Override
     public LispObject elt(int index)
     {
-        if (index < 0 || index >= length())
-            badIndex(index, length());
+        final int length = cl_length();
+		if (index < 0 || index >= length)
+            badIndex(index, length);
         int offset = index >> 6; // Divide by 64.
         return (bits[offset] & (1L << (index & LONG_MASK))) != 0 ? Fixnum.ONE : Fixnum.ZERO;
     }

@@ -108,7 +108,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 	//		//return super.updateLayout();
 	//	}
 
-	//	public String printObjectImpl() {
+	//	public String printObject() {
 	//		try {
 	//			return print_high.princ_to_string(this).getStringValue();
 	//		} catch (Throwable e) {
@@ -285,7 +285,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 
 		@Override
-		public String printObjectImpl()
+		public String printObject()
 		{
 			try
 			{

@@ -1293,7 +1293,7 @@ public abstract class LispThread extends LispObject
     }
 
     @Override
-    public String printObjectImpl()
+    public String printObject()
     {
         StringBuffer sb = new StringBuffer("THREAD");
         if (name != NIL) {

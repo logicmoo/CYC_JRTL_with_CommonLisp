@@ -48,9 +48,9 @@ public abstract class CaseFrobStream extends Stream
     }
 
     @Override
-    public LispObject getElementType()
+    public LispObject getStreamElementType()
     {
-        return target.getElementType();
+        return target.getStreamElementType();
     }
 
     @Override

@@ -1,0 +1,89 @@
+;;; The following lines added by ql:add-to-init-file:
+
+(print (user-homedir-pathname))
+
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
+#+Ignore
+(require :abcl-contrib)
+#+Ignore
+(require :asdf)
+
+#+Ignore
+(asdf:initialize-source-registry
+     '(:source-registry (:tree "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/shop3/") 
+      :inherit-configuration))
+ 
+#+Ignore
+(load "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/ytools/ytload/ytload")
+#+Ignore
+(setq ytools::config-directory* "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/ytconfig/abcl/")
+#+Ignore
+(setq ytools::ytload-directory* "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/ytools/ytload/")
+
+
+
+;; (in-package #:trivial-macroexpand-all)
+#+ignore
+#+abcl
+(defun cl-user::macroexpand-all (form &optional env)
+  (values (ext::macroexpand-all form env) t t))
+
+#+allegro
+(defun macroexpand-all (form &optional env)
+  (declare (ignore env))
+  #+(and allegro-version>= (version>= 8 0))
+  (values (excl::walk-form form) t nil)
+  #-(and allegro-version>= (version>= 8 0))
+  (values (excl::walk form) t nil))
+
+#+ccl
+(defun macroexpand-all (form &optional env)
+  (values (ccl:macroexpand-all form env) t t))
+
+#+clisp
+(defun macroexpand-all (form &optional env)
+  (declare (ignore env))
+  (values (ext:expand-form form) t nil))
+
+#+cmucl
+(defun macroexpand-all (form &optional env)
+  (values (walker:macroexpand-all form env) t t))
+
+#+corman
+(defun macroexpand-all (form &optional env)
+  (declare (ignore env))
+  (values (ccl:macroexpand-all form) t nil))
+
+#+ecl
+(defun macroexpand-all (form &optional env)
+  (values (walker:macroexpand-all form env) t t))
+
+#+lispworks
+(defun macroexpand-all (form &optional env)
+  (declare (ignore env))
+  (values (walker:walk-form form) t nil))
+
+#+mkcl
+(defun macroexpand-all (form &optional env)
+  (declare (ignore env))
+  (values (walker:macroexpand-all form) t nil))
+
+#+sbcl
+(defun macroexpand-all (form &optional env)
+  (values (sb-cltl2:macroexpand-all form env) t t))
+
+#+scl
+(defun macroexpand-all (form &optional env)
+  (declare (ignore env))
+  (values (macroexpand form) t nil))
+
+#-(or abcl allegro ccl clisp cmucl corman ecl lispworks mkcl sbcl scl)
+(defun macroexpand-all (form &optional env)
+  (declare (ignore env))
+  (values form nil nil))
+
+

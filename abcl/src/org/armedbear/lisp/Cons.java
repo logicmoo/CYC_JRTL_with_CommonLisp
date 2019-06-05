@@ -35,8 +35,13 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public final class Cons extends ALispObject implements java.io.Serializable
+public final class Cons extends LispObject implements java.io.Serializable
 {
+	@Override
+	final public int eq_hashCode() {
+		return ref_hashCode();
+	}
+	
   public LispObject car;
   public LispObject cdr;
 
@@ -228,7 +233,7 @@ public final class Cons extends ALispObject implements java.io.Serializable
   }
 
   @Override
-  public final int length()
+  public final int cl_length()
   {
     int length = 1;
     LispObject obj = cdr;
@@ -283,7 +288,7 @@ public final class Cons extends ALispObject implements java.io.Serializable
                 // Index too large.
                 type_error(Fixnum.getInstance(index),
                                 list(Symbol.INTEGER, Fixnum.ZERO,
-                                      Fixnum.getInstance(length() - 1)));
+                                      Fixnum.getInstance(cl_length() - 1)));
               }
             else
               {
@@ -349,7 +354,7 @@ public final class Cons extends ALispObject implements java.io.Serializable
   @Override
   public final LispObject[] copyToArray()
   {
-    final int length = length();
+    final int length = cl_length();
     LispObject[] array = new LispObject[length];
     LispObject rest = this;
     for (int i = 0; i < length; i++)

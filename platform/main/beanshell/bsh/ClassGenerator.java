@@ -33,8 +33,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ClassGenerator {
+public class ClassGenerator {
 
+	public ClassGenerator() {
+	}
+	
     enum Type { CLASS, INTERFACE, ENUM }
 
     private static ClassGenerator cg;

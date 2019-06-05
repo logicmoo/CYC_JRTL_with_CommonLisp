@@ -818,7 +818,7 @@ public final class StringFunctions {
             char c = LispCharacter.getValue(first);
             AbstractString string = checkString(second);
             int start = Fixnum.getValue(third);
-            for (int i = start, limit = string.length(); i < limit; i++) {
+            for (int i = start, limit = string.cl_length(); i < limit; i++) {
                 if (string.charAt(i) == c)
                     return number(i);
             }
@@ -840,7 +840,7 @@ public final class StringFunctions {
             if (first instanceof LispCharacter) {
                 final char c = ((LispCharacter)first).value;
                 AbstractString string = Lisp.checkString(second);
-                final int limit = string.length();
+                final int limit = string.cl_length();
                 for (int i = 0; i < limit; i++) {
                     if (string.charAt(i) == c)
                         return first;

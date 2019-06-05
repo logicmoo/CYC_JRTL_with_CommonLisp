@@ -172,7 +172,7 @@ public class Lisp {
     // End-of-file marker.
     public static final LispObject EOF = new LispObject() {
         @Override
-        public String printObjectImpl() {
+        public String printObject() {
             return readableString(Symbol.JCALL, JavaObject.getInstance(Lisp.class), JavaObject.getInstance("EOF"));
         }
     };
@@ -2422,7 +2422,7 @@ public class Lisp {
 
     private static class unboundValue extends LispObject {
         @Override
-        public String printObjectImpl() {
+        public String printObject() {
             return unreadableString("UNBOUND", false);
         }
 
@@ -2444,7 +2444,7 @@ public class Lisp {
         }
 
         @Override
-        public String printObjectImpl() {
+        public String printObject() {
             return unreadableString("null", false);
         }
 

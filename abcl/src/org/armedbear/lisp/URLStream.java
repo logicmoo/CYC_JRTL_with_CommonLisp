@@ -67,7 +67,7 @@ public final class URLStream extends Stream
         super.setExternalFormat(format);
         
         this.pathname = pathname;
-        this.elementType = elementType;
+        this.setStreamElementType(elementType);
 
         this.input = pathname.getInputStream();
         if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {

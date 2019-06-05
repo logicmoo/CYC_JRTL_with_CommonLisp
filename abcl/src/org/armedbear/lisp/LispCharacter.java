@@ -224,6 +224,11 @@ public final class LispCharacter extends NLispObject
   {
     return value;
   }
+	
+  @Override
+  public int eq_hashCode() {
+	return value;
+  }
 
   @Override
   public int psxhash()
@@ -311,12 +316,12 @@ public final class LispCharacter extends NLispObject
           return arg;
         if (arg instanceof AbstractString)
           {
-            if (arg.length() == 1)
+            if (arg.cl_length() == 1)
               return ((AbstractString)arg).AREF(0);
           }
         else if (arg instanceof Symbol)
           {
-            String name = ((Symbol)arg).getName();
+            String name = ((Symbol)arg).cl_symbol_name();
             if (name.length() == 1)
               return LispCharacter.makeCharacter(name.charAt(0));
           }

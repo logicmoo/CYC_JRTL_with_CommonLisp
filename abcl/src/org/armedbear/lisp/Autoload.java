@@ -163,7 +163,7 @@ public class Autoload extends Function
     {
         if (fileName != null)
             return fileName;
-        return symbol.getName().toLowerCase();
+        return symbol.cl_symbol_name().toLowerCase();
     }
 
     @Override

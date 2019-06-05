@@ -34,7 +34,10 @@
 
 package org.armedbear.lisp;
 
-abstract public class Closure extends Function {
+import static org.armedbear.lisp.Lisp.*;
+
+abstract public class Closure extends Function
+{
     // Parameter types.
     public static final int REQUIRED = 0;
     public static final int OPTIONAL = 1;
@@ -150,7 +153,7 @@ abstract public class Closure extends Function {
     }
 
     @Override
-    final public String printObjectImpl() {
+    final public String printObject() {
         LispObject name = getLambdaName();
         StringBuilder sb = new StringBuilder(getDotName(getClass()) + " ");
         final LispThread thread = LispThread.currentThread();

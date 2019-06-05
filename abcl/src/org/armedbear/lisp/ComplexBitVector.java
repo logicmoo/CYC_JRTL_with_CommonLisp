@@ -124,7 +124,7 @@ public final class ComplexBitVector extends AbstractBitVector
     }
 
     @Override
-    public int length()
+    public int cl_length()
     {
         return fillPointer >= 0 ? fillPointer : capacity;
     }
@@ -132,8 +132,9 @@ public final class ComplexBitVector extends AbstractBitVector
     @Override
     public LispObject elt(int index)
     {
-        if (index >= length())
-            badIndex(index, length());
+        final int cl_length = cl_length();
+		if (index >= cl_length)
+            badIndex(index, cl_length);
         return AREF(index);
     }
 

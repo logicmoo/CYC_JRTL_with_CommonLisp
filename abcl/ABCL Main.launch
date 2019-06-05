@@ -15,5 +15,6 @@
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.armedbear.lisp.Main"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="abcl"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-d64 -XX:+UseG1GC -XshowSettings:vm -Xmx8g -Xss4g -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-d64 -XX:+UseG1GC -XshowSettings:vm -Xmx8g -Xss4g -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g -Duser.home=${workspace_loc:abcl/site-lisp}"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:abcl/site-lisp}"/>
 </launchConfiguration>

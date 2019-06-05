@@ -547,7 +547,7 @@ public final class DoubleFloat extends NLispObject
     }
 
     @Override
-    public int hashCode()
+    public int eq_hashCode()
     {
         long bits = Double.doubleToLongBits(value);
         return (int) (bits ^ (bits >>> 32));
@@ -559,7 +559,7 @@ public final class DoubleFloat extends NLispObject
         if ((value % 1) == 0)
             return (((int)value) & 0x7fffffff);
         else
-            return (hashCode() & 0x7fffffff);
+            return (eq_hashCode() & 0x7fffffff);
     }
 
     @Override

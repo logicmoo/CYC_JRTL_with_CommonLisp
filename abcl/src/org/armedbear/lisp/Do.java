@@ -76,7 +76,7 @@ public final class Do {
         LispObject result_forms = second.cdr();
         LispObject body = args.cddr();
         // Process variable specifications.
-        final int numvars = varlist.length();
+        final int numvars = varlist.cl_length();
         Symbol[] vars = new Symbol[numvars];
         LispObject[] initforms = new LispObject[numvars];
         LispObject[] stepforms = new LispObject[numvars];

@@ -323,7 +323,7 @@ public void fill(LispObject obj)
   }
 
   @Override
-public String printObjectImpl()
+public String printObject()
   {
     return printObject(dimv);
   }

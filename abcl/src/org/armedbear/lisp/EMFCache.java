@@ -36,7 +36,7 @@ import static org.armedbear.lisp.Lisp.*;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class EMFCache extends ALispObject
+public final class EMFCache extends SLispObject
 {
   ConcurrentHashMap<CacheEntry,LispObject> cache
     = new ConcurrentHashMap<CacheEntry,LispObject>();;
@@ -91,7 +91,7 @@ public final class EMFCache extends ALispObject
     {
       int result = 0;
       for (int i = array.length; i-- > 0;)
-        result ^= array[i].hashCode();
+        result ^= array[i].eq_hashCode();
       return result;
     }
 
@@ -144,7 +144,7 @@ public final class EMFCache extends ALispObject
       final FuncallableStandardObject gf = checkStandardGenericFunction(generic_function);
       EMFCache cache = gf.cache;
       cache.clearCache();
-      cache.eqlSpecializations = new EqlSpecialization[eql_specializers.length()];
+      cache.eqlSpecializations = new EqlSpecialization[eql_specializers.cl_length()];
       for (int i = 0; i < cache.eqlSpecializations.length; i++) {
         cache.eqlSpecializations[i] = new EqlSpecialization(eql_specializers.car());
         eql_specializers = eql_specializers.cdr();
@@ -171,7 +171,7 @@ public final class EMFCache extends ALispObject
       EMFCache cache = gf.cache;
       LispObject args = second;
       int numberOfRequiredArgs
-        = gf.getInstanceSlotValue(Symbol.REQUIRED_ARGS).length();
+        = gf.getInstanceSlotValue(Symbol.REQUIRED_ARGS).cl_length();
       LispObject[] array = new LispObject[numberOfRequiredArgs];
       for (int i = numberOfRequiredArgs; i-- > 0;)
         {
@@ -201,7 +201,7 @@ public final class EMFCache extends ALispObject
       EMFCache cache = gf.cache;
       LispObject args = second;
       int numberOfRequiredArgs
-        = gf.getInstanceSlotValue(Symbol.REQUIRED_ARGS).length();
+        = gf.getInstanceSlotValue(Symbol.REQUIRED_ARGS).cl_length();
       LispObject[] array = new LispObject[numberOfRequiredArgs];
       for (int i = numberOfRequiredArgs; i-- > 0;)
         {

@@ -60,7 +60,7 @@ public abstract class AbstractString extends AbstractVector
     }
 
     @Override
-    public LispObject getElementType()
+    public LispObject getArrayElementType()
     {
         return Symbol.CHARACTER;
     }
@@ -89,7 +89,7 @@ public abstract class AbstractString extends AbstractVector
         if (beginIndex < 0)
             beginIndex = 0;
         final int limit;
-        limit = length();
+        limit = cl_length();
         if (endIndex > limit)
             endIndex = limit;
         final LispThread thread = LispThread.currentThread();
@@ -112,11 +112,17 @@ public abstract class AbstractString extends AbstractVector
     @Override
     public String printObject()
     {
-        return printObject(0, length());
+        return printObject(0, cl_length());
     }
 
-    public String toString() {
-	    int length = length();
+    @Override
+	public String toString() {
+        Thread.currentThread().dumpStack();
+       return getStringValue();
+    }
+   @Override
+	public String getStringValue()  {
+	    int length = cl_length();
 	    StringBuilder sb = new StringBuilder(length);
 	    for(int i = 0; i < length; ++i) {
 			sb.append(charAt(i));

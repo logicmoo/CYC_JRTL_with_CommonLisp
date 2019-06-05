@@ -331,7 +331,7 @@ public class SubLRegexPattern extends FromSubLisp implements SubLObject {
     }
 
     @Override
-    public String printObjectImpl() {
+    public String printObject() {
         return new String("<#" + toTypeName() + " pattern: \"" + patternStr + "\" @" + this.hashCode(0) + ">");
     }
 

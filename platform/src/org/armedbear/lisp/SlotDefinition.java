@@ -121,7 +121,7 @@ public final class SlotDefinition extends StandardObject
   }
 
   @Override
-public String printObjectImpl()
+public String printObject()
   {
     StringBuilder sb =
       new StringBuilder(Symbol.SLOT_DEFINITION.printObject());

@@ -45,12 +45,13 @@ public final class BroadcastStream extends Stream
         this.streams = streams;
         isOutputStream = true;
         if (streams.length == 0) {
-            elementType = T;
+            setStreamElementType(T);
             isBinaryStream = true;
             isCharacterStream = true;
         } else {
-            elementType = streams[streams.length-1].getElementType();
-            if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR)
+            setStreamElementType(streams[streams.length-1].getStreamElementType());
+            final LispObject streamElementType = getStreamElementType();
+			if (streamElementType == Symbol.CHARACTER || streamElementType == Symbol.BASE_CHAR)
                 isCharacterStream = true;
             else
                 isBinaryStream = true;

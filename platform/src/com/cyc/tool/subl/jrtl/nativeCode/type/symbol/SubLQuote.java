@@ -483,7 +483,7 @@ public class SubLQuote extends FromSubLisp implements SubLObject, SubLSymbol {
 	}
 
 	@Override
-	public String printObjectImpl() {
+	public String printObject() {
 		return symbol.printObject();
 	}
 

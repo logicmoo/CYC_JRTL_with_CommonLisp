@@ -38,7 +38,7 @@ import java.math.BigInteger;
 /** This class merely serves as the super class for
  * Fixnum and Bignum
  */
-public class LispInteger extends NLispObject implements java.io.Serializable
+abstract public class LispInteger extends NLispObject implements java.io.Serializable
 {
 
   // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one

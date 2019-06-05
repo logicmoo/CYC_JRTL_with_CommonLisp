@@ -58,14 +58,14 @@ abstract public class SubLAlienObject extends FromSubLisp implements SubLObject 
 		final Object alien = getAlien(); 
 		if (alien instanceof CharSequence)
 			return alien.toString();
-		return super.printObjectImpl();		
+		return super.printObject();		
 	}
 	@Override
-	public String printObjectImpl() {
+	public String printObject() {
 		final Object alien = getAlien(); 
 		if (alien != null)
 			return alien.toString();
-		return super.printObjectImpl();
+		return super.printObject();
 	}
 
 	@Override

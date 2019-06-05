@@ -954,7 +954,7 @@ public int hashCode()
   }
 
   @Override
-final public String printObjectImpl()
+final public String printObject()
   {
     final LispThread thread = LispThread.currentThread();
     int base;

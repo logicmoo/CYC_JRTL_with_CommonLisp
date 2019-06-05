@@ -2,7 +2,7 @@
  * Finalizer.java
  *
  * Copyright (C) 2011 Erik Huelsmann
- * $Id$
+ * $Id: Finalizer.java 13251 2011-03-13 19:59:41Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,8 +114,7 @@ public class Finalizer {
             Thread handler =
                     new Thread(new Runnable() {
 
-                @Override
-				public void run() {
+                public void run() {
                     while (true) {
                         try {
                             FinalizingWeakReference ref =

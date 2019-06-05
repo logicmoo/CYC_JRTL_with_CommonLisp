@@ -37,6 +37,7 @@ import static org.armedbear.lisp.Lisp.*;
 
 public abstract class DispatchMacroFunction extends Function
 {
+	
     public DispatchMacroFunction(String name)
     {
         super(name);

@@ -45,7 +45,7 @@ public class SlimeInputStream extends Stream
     public SlimeInputStream(Function f, Stream ostream)
     {
         super(Symbol.SLIME_INPUT_STREAM);
-        elementType = Symbol.CHARACTER;
+        setStreamElementType(Symbol.CHARACTER);
         isInputStream = true;
         isOutputStream = false;
         isCharacterStream = true;

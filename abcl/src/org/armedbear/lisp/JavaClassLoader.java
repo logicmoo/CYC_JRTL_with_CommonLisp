@@ -50,7 +50,8 @@ public class JavaClassLoader extends URLClassLoader {
 
     public static boolean checkPreCompiledClassLoader = true;
     
-    public Class<?> loadClass(String name) throws ClassNotFoundException {
+    @Override
+	public Class<?> loadClass(String name) throws ClassNotFoundException {
         if (checkPreCompiledClassLoader) {
             Class<?> c = findPrecompiledClassOrNull(name);
             if (c != null) {
@@ -326,7 +327,7 @@ public class JavaClassLoader extends URLClassLoader {
         if (jar instanceof Pathname) {
             jcl.addURL(((Pathname) jar).toURL());
         } else if (jar instanceof AbstractString) {
-            jcl.addURL(new Pathname(jar.toString()).toURL());
+            jcl.addURL(new Pathname(jar.getStringValue()).toURL());
         } else {
             error(new TypeError(jar + " must be a pathname designator"));
         }

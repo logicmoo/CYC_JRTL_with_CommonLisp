@@ -273,7 +273,7 @@
 //	//    return super.typep(type);
 //	//  }
 //	//
-//	//  public String printObjectImpl()
+//	//  public String printObject()
 //	//  {
 //	//    final LispThread thread = LispThread.currentThread();
 //	//    int maxLevel = Integer.MAX_VALUE;
@@ -558,9 +558,9 @@
 //
 //	@Override
 //
-//	public String printObjectImpl()
+//	public String printObject()
 //	{
-//		return printObjectImplSlotBased();
+//		return printObjectSlotBased();
 //	}
 //
 //}

@@ -17,7 +17,7 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>pl.poznan.put.cs.gui4pddl.PDDLProject</nature>
+		<!--nature>pl.poznan.put.cs.gui4pddl.PDDLProject</nature-->
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 </projectDescription>

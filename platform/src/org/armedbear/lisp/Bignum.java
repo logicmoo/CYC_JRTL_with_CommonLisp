@@ -772,7 +772,7 @@ public int psxhash()
 
 
   @Override
-final public String printObjectImpl()
+final public String printObject()
   {
     final LispThread thread = LispThread.currentThread();
     final int base = Fixnum.getValue(Symbol.PRINT_BASE.symbolValue(thread));

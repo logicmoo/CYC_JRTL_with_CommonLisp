@@ -135,7 +135,7 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
     }
 
     @Override
-    public String printObjectImpl() {
+    public String printObject() {
         final LispThread thread = LispThread.currentThread();
         final SpecialBindingsMark mark = thread.markSpecialBindings();
         thread.bindSpecial(Symbol.PRINT_LENGTH, Fixnum.THIRTY_TWO);

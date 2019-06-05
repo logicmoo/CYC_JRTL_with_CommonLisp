@@ -544,7 +544,7 @@ public final class Ratio extends NLispObject
     }
 
     @Override
-    public int hashCode()
+    public int eq_hashCode()
     {
         return numerator.hashCode() ^ denominator.hashCode();
     }

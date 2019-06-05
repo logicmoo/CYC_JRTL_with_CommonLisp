@@ -355,7 +355,7 @@ abstract public class SubLDoubleFloat extends AbstractSubLFloat implements SubLF
 	}
 
 	@Override
-	public String printObjectImpl() {
+	public String printObject() {
 		return "" + value;
 	}
 

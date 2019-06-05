@@ -35,8 +35,14 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public abstract class AbstractArray extends ALispObject implements java.io.Serializable
+public abstract class AbstractArray extends LispObject implements java.io.Serializable
 {
+	
+	@Override
+	public int eq_hashCode() {
+		return ref_hashCode();
+	}
+	
     @Override
     public LispObject typep(LispObject type)
     {
@@ -109,7 +115,7 @@ public abstract class AbstractArray extends ALispObject implements java.io.Seria
 
     public abstract int getDimension(int n);
 
-    public abstract LispObject getElementType();
+    public abstract LispObject getArrayElementType();
 
     public abstract int getTotalSize();
 
@@ -218,7 +224,7 @@ public abstract class AbstractArray extends ALispObject implements java.io.Seria
         sb.append('(');
         if (this instanceof SimpleArray_T)
             sb.append("SIMPLE-");
-        sb.append("ARRAY " + getElementType().printObject() + " (");
+        sb.append("ARRAY " + getArrayElementType().printObject() + " (");
         for (int i = 0; i < dimv.length; i++) {
             sb.append(dimv[i]);
             if (i < dimv.length - 1)
@@ -238,7 +244,7 @@ public abstract class AbstractArray extends ALispObject implements java.io.Seria
                 StringOutputStream stream = new StringOutputStream();
                 thread.execute(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
                                AREF(index), stream);
-                sb.append(stream.getString().getStringValue());
+                sb.append(stream.getStringBuffer().getStringValue());
             } else
                 sb.append(AREF(index).printObject());
         } else {

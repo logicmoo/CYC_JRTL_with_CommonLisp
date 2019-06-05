@@ -339,7 +339,7 @@ public class SubLLock extends FromSubLisp implements SubLObject
 	}
 
 	@Override
-	public String printObjectImpl()
+	public String printObject()
 	{
 		return "#<LOCK " + getName() + " @ " + this.hashCode(0) + ">";
 	}

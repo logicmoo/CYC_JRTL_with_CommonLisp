@@ -255,7 +255,7 @@ public class SubLKeyhashIterator extends FromSubLisp {
 	}
 //
 //	@Override
-//	public String printObjectImpl() {
+//	public String printObject() {
 //		return "#<" + toTypeName() + " @ " + super.toString() + ">";
 //	}
 

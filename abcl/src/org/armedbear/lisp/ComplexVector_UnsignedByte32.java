@@ -142,7 +142,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
     }
 
     @Override
-    public LispObject getElementType()
+    public LispObject getArrayElementType()
     {
         return UNSIGNED_BYTE_32;
     }
@@ -160,7 +160,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
     }
 
     @Override
-    public int length()
+    public int cl_length()
     {
         return fillPointer >= 0 ? fillPointer : capacity;
     }
@@ -168,7 +168,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
     @Override
     public LispObject elt(int index)
     {
-        final int limit = length();
+        final int limit = cl_length();
         if (index < 0 || index >= limit)
             badIndex(index, limit);
         return AREF(index);
@@ -255,7 +255,7 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
     @Override
     public LispObject reverse()
     {
-        int length = length();
+        int length = cl_length();
         SimpleVector result = new SimpleVector(length);
         int i, j;
         for (i = 0, j = length - 1; i < length; i++, j--)
@@ -266,9 +266,10 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
     @Override
     public LispObject nreverse()
     {
-        if (elements != null) {
+        final int length = cl_length();
+		if (elements != null) {
             int i = 0;
-            int j = length() - 1;
+            int j = length - 1;
             while (i < j) {
                 LispObject temp = elements[i];
                 elements[i] = elements[j];
@@ -278,7 +279,6 @@ public final class ComplexVector_UnsignedByte32 extends AbstractVector
             }
         } else {
             // Displaced array.
-            int length = length();
             LispObject[] data = new LispObject[length];
             int i, j;
             for (i = 0, j = length - 1; i < length; i++, j--)

@@ -60,7 +60,7 @@ public class JavaStackFrame
   public String printObject() { 
     final String JAVA_STACK_FRAME = "JAVA-STACK-FRAME";
     return unreadableString(JAVA_STACK_FRAME + " "
-				+ toLispString().toString());
+				+ toLispString().getStringValue());
   }
 
   @Override
@@ -80,7 +80,8 @@ public class JavaStackFrame
   static final Symbol LINE = internKeyword("LINE");
   static final Symbol NATIVE_METHOD = internKeyword("NATIVE-METHOD");
 
-  public LispObject toLispList()
+  @Override
+public LispObject toLispList()
   {
     LispObject result = Lisp.NIL;
     String fileName;

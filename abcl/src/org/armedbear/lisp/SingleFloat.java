@@ -537,7 +537,7 @@ public final class SingleFloat extends NLispObject
     }
 
     @Override
-    public int hashCode()
+    public int eq_hashCode()
     {
         return Float.floatToIntBits(value);
     }
@@ -548,7 +548,7 @@ public final class SingleFloat extends NLispObject
         if ((value % 1) == 0)
             return (((int)value) & 0x7fffffff);
         else
-            return (hashCode() & 0x7fffffff);
+            return (eq_hashCode() & 0x7fffffff);
     }
 
     @Override

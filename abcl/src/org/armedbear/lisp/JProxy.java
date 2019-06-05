@@ -220,7 +220,7 @@ public final class JProxy
 	      		if(!(args[0] instanceof Cons)) {
 			    return type_error(args[0], Symbol.CONS);
 	      		}
-			Class[] ifaces = new Class[args[0].length()];
+			Class[] ifaces = new Class[args[0].cl_length()];
 			LispObject ifList = args[0];
 			for(int i = 0; i < ifaces.length; i++) {
                           ifaces[i] = (Class) ifList.car().javaInstance(Class.class);

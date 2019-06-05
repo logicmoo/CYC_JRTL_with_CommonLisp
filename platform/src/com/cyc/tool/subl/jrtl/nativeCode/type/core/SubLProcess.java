@@ -1563,7 +1563,7 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
     }
 
     @Override
-    public String printObjectImpl() {
+    public String printObject() {
         return "#<PROCESS " + name + " " + getState() + " " + this.easyToString() + ">";
     }
 

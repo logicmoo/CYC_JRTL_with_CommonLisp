@@ -131,7 +131,7 @@ public final class URLStream extends Stream
     }
 
     @Override
-	public String printObjectImpl()
+	public String printObject()
     {
         StringBuffer sb = new StringBuffer();
         sb.append(Symbol.URL_STREAM.printObject());

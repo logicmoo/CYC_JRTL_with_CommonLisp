@@ -354,7 +354,7 @@ public class WeakHashTable
     }
 
     @Override
-	public String printObjectImpl() {
+	public String printObject() {
         if (Symbol.PRINT_READABLY.symbolValue(LispThread.currentThread()) != NIL) {
             error(new PrintNotReadable(list(Keyword.OBJECT, this)));
             return null; // Not reached.

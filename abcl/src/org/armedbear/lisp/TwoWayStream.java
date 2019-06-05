@@ -56,10 +56,10 @@ public class TwoWayStream extends Stream
     }
 
     @Override
-    public LispObject getElementType()
+    public LispObject getStreamElementType()
     {
-        LispObject itype = in.getElementType();
-        LispObject otype = out.getElementType();
+        LispObject itype = in.getStreamElementType();
+        LispObject otype = out.getStreamElementType();
         if (itype.equal(otype))
             return itype;
         return list(Symbol.AND, itype, otype);
@@ -125,6 +125,7 @@ public class TwoWayStream extends Stream
     @Override
     protected int _readChar() throws java.io.IOException
     {
+  		flush();
         return in._readChar();
     }
 

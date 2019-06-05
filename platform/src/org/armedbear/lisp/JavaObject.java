@@ -322,7 +322,8 @@ public final class JavaObject extends SubLAlienObject {
     }
 
     @Override
-    public final boolean equal(LispObject other) {
+    public final boolean equal(LispObject other)
+    {
         if (this == other)
             return true;
         if (other instanceof JavaObject)
@@ -331,12 +332,14 @@ public final class JavaObject extends SubLAlienObject {
     }
 
     @Override
-    public final boolean equalp(LispObject other) {
+    public final boolean equalp(LispObject other)
+    {
         return equal(other);
     }
 
     @Override
-    public int sxhash() {
+    public int sxhash()
+    {
         return obj == null ? 0 : (obj.hashCode() & 0x7ffffff);
     }
 
@@ -351,7 +354,7 @@ public final class JavaObject extends SubLAlienObject {
     }
 
     @Override
-    public String printObjectImpl() {
+    public String printObject() {
         if (obj instanceof ControlTransfer)
             return ((ControlTransfer) obj).toString();
         String s = "ERROR_Unseen";

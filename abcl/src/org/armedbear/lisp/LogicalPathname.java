@@ -128,7 +128,7 @@ public final class LogicalPathname extends Pathname
     public static final SimpleString canonicalizeStringComponent(AbstractString s)
 
     {
-        final int limit = s.length();
+        final int limit = s.cl_length();
         for (int i = 0; i < limit; i++) {
             char c = s.charAt(i);
             if (LOGICAL_PATHNAME_COMPONENT_CHARS.indexOf(c) < 0) {
@@ -291,7 +291,7 @@ public final class LogicalPathname extends Pathname
         public LispObject execute(LispObject arg)
         {
             AbstractString s = checkString(arg);
-            if (s.length() == 0) {
+            if (s.cl_length() == 0) {
                 // "The null string, "", is not a valid value for any
                 // component of a logical pathname." 19.3.2.2
                 return error(new LispError("Invalid logical host name: \"" +

@@ -47,7 +47,7 @@ public final class ByteArrayInputStream extends Stream
     ByteArrayInputStream(byte[] bytes, LispObject elementType)
     {
         super(Symbol.SYSTEM_STREAM);
-        this.elementType = elementType;
+        this.setStreamElementType(elementType);
         initAsBinaryInputStream(byteArrayInputStream = new java.io.ByteArrayInputStream(bytes));
     }
 

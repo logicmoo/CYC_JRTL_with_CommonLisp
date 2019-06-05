@@ -104,9 +104,9 @@ public final class SynonymStream extends Stream
     }
 
     @Override
-    public LispObject getElementType()
+    public LispObject getStreamElementType()
     {
-        return checkStream(symbol.symbolValue()).getElementType();
+        return checkStream(symbol.symbolValue()).getStreamElementType();
     }
 
     @Override

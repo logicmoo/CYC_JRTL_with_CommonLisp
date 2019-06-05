@@ -1,2 +1,10 @@
 /Debug/
 /.compiled/
+/lib/*.dll
+/IKVM*
+/ikvm*
+/ICSharpCode.SharpZipLib.dll
+/JVM.DLL
+/bin/modern/
+/lib/ALL/
+

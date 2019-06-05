@@ -57,7 +57,7 @@ public final class StringInputStream extends Stream
     public StringInputStream(String s, int start, int end)
     {
         super(Symbol.STRING_INPUT_STREAM);
-        elementType = Symbol.CHARACTER;
+        setStreamElementType(Symbol.CHARACTER);
         setExternalFormat(keywordDefault);
         eolStyle = EolStyle.RAW;
 
@@ -176,7 +176,7 @@ public final class StringInputStream extends Stream
         {
             if (arg instanceof StringInputStream)
                 return Fixnum.getInstance(((StringInputStream)arg).getOffset());
-            return error(new TypeError(String.valueOf(arg) +
+            return error(new TypeError(stringValueOf(arg) +
                                         " is not a string input stream."));
         }
     };

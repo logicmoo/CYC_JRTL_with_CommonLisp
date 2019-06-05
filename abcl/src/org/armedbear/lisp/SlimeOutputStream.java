@@ -45,7 +45,7 @@ public final class SlimeOutputStream extends Stream
     SlimeOutputStream(Function f)
     {
         super(Symbol.SLIME_OUTPUT_STREAM);
-        this.elementType = Symbol.CHARACTER;
+        this.setStreamElementType(Symbol.CHARACTER);
         isInputStream = false;
         isOutputStream = true;
         isCharacterStream = true;
@@ -81,36 +81,40 @@ public final class SlimeOutputStream extends Stream
         return super.typep(type);
     }
 
+	/**
+	 * 
+	 */
+	private void checkElementType() {
+		if (getStreamElementType() == NIL)
+            writeError();
+	}
+
     @Override
     public void _writeChar(char c)
     {
-        if (elementType == NIL)
-            writeError();
+        checkElementType();
         super._writeChar(c);
     }
-
+    
     @Override
     public void _writeChars(char[] chars, int start, int end)
 
     {
-        if (elementType == NIL)
-            writeError();
+        checkElementType();
         super._writeChars(chars, start, end);
     }
 
     @Override
     public void _writeString(String s)
     {
-        if (elementType == NIL)
-            writeError();
+        checkElementType();
         super._writeString(s);
     }
 
     @Override
     public void _writeLine(String s)
     {
-        if (elementType == NIL)
-            writeError();
+        checkElementType();
         super._writeLine(s);
     }
 
@@ -122,7 +126,7 @@ public final class SlimeOutputStream extends Stream
     @Override
     protected long _getFilePosition()
     {
-        if (elementType == NIL)
+        if (getStreamElementType() == NIL)
             return 0;
         return stringWriter.toString().length();
     }

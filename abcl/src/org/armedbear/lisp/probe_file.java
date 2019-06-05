@@ -120,7 +120,7 @@ public final class probe_file
         @Override
         public LispObject execute(LispObject arg, LispObject wildErrorPKeyword, LispObject wildErrorP)
         {
-            if (!(wildErrorPKeyword.equals(Keyword.WILD_ERROR_P))) {
+            if (!(Keyword.WILD_ERROR_P.symbolSame(wildErrorPKeyword))) {
                 type_error(wildErrorPKeyword, Keyword.WILD_ERROR_P);
             }
             Pathname pathname = coerceToPathname(arg);

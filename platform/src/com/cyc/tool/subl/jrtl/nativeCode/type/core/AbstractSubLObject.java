@@ -386,6 +386,11 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
     public String princToString() {
         return printObject();
     }
+    /* (non-Javadoc)
+     * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject#printObject()
+     */
+    @Override
+    abstract public String printObject();
 
     @Override
     public SubLSymbol getType() {

@@ -395,7 +395,7 @@ public final class PackageFunctions
                     else
                         return error(new LispError(symbolName +
                                                     " not found in package " +
-                                                    otherPkg.getName() + "."));
+                                                    otherPkg.cl_name() + "."));
                     symbolNames = symbolNames.cdr();
                 }
                 shadowingImports = shadowingImports.cdr();
@@ -426,7 +426,7 @@ public final class PackageFunctions
                     else
                         return error(new LispError(symbolName +
                                                     " not found in package " +
-                                                    otherPkg.getName() + "."));
+                                                    otherPkg.cl_name() + "."));
                     symbolNames = symbolNames.cdr();
                 }
                 imports = imports.cdr();

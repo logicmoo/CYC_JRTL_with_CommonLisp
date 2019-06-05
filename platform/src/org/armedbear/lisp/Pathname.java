@@ -917,7 +917,7 @@ public class Pathname extends LispObject {
     }
 
     @Override
-	public String printObjectImpl() {
+	public String printObject() {
         final LispThread thread = LispThread.currentThread();
         final boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
         final boolean printEscape = (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL);

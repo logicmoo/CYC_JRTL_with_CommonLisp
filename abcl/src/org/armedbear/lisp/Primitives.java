@@ -1780,7 +1780,7 @@ public final class Primitives {
             if (name instanceof Symbol) {
                 Symbol symbol = (Symbol) name;
                 if (symbol.getSymbolFunction() instanceof SpecialOperator) {
-                    return program_error(symbol.getName() + " is a special operator and may not be redefined.");
+                    return program_error(symbol.cl_symbol_name() + " is a special operator and may not be redefined.");
                 }
             } else if (!isValidSetfFunctionName(name))
                 return type_error(name, FUNCTION_NAME);
@@ -2257,7 +2257,7 @@ public final class Primitives {
 
         @Override
         public LispObject execute(LispObject arg) {
-            return checkArray(arg).getElementType();
+            return checkArray(arg).getArrayElementType();
         }
     };
 
@@ -2786,7 +2786,7 @@ public final class Primitives {
 
         {
             final LispThread thread = LispThread.currentThread();
-            final int length = args.length();
+            final int length = args.cl_length();
             switch (length) {
             case 0:
                 return thread.execute(fun);
@@ -2816,7 +2816,7 @@ public final class Primitives {
 
         {
             if (third.listp()) {
-                final int numFunArgs = 1 + third.length();
+                final int numFunArgs = 1 + third.cl_length();
                 final LispObject[] funArgs = new LispObject[numFunArgs];
                 funArgs[0] = second;
                 int j = 1;
@@ -2833,7 +2833,7 @@ public final class Primitives {
             final int numArgs = args.length;
             LispObject spread = args[numArgs - 1];
             if (spread.listp()) {
-                final int numFunArgs = numArgs - 2 + spread.length();
+                final int numFunArgs = numArgs - 2 + spread.cl_length();
                 final LispObject[] funArgs = new LispObject[numFunArgs];
                 int j = 0;
                 for (int i = 1; i < numArgs - 1; i++)
@@ -2918,7 +2918,7 @@ public final class Primitives {
             for (int i = 1; i < numArgs; i++) {
                 if (!args[i].listp())
                     type_error(args[i], Symbol.LIST);
-                int len = args[i].length();
+                int len = args[i].cl_length();
                 if (commonLength < 0)
                     commonLength = len;
                 else if (commonLength > len)
@@ -2994,7 +2994,7 @@ public final class Primitives {
             for (int i = 1; i < numArgs; i++) {
                 if (!args[i].listp())
                     type_error(args[i], Symbol.LIST);
-                int len = args[i].length();
+                int len = args[i].cl_length();
                 if (commonLength < 0)
                     commonLength = len;
                 else if (commonLength > len)
@@ -3185,7 +3185,7 @@ public final class Primitives {
                 return pkg != null ? pkg : NIL;
             }
             if (arg instanceof Symbol) {
-                Package pkg = getCurrentPackage().findPackage(checkSymbol(arg).getName());
+                Package pkg = getCurrentPackage().findPackage(checkSymbol(arg).cl_symbol_name());
                 return pkg != null ? pkg : NIL;
             }
             if (arg instanceof LispCharacter) {
@@ -3706,7 +3706,7 @@ public final class Primitives {
         public LispObject execute(LispObject args, Environment env)
 
         {
-            if (args.length() != 1)
+            if (args.cl_length() != 1)
                 return error(new WrongNumberOfArgumentsException(this, 1));
             Binding binding = env.getTagBinding(args.car());
             if (binding == null)
@@ -3764,7 +3764,7 @@ public final class Primitives {
         public LispObject execute(LispObject args, Environment env)
 
         {
-            final int length = args.length();
+            final int length = args.cl_length();
             if (length < 1 || length > 2)
                 return error(new WrongNumberOfArgumentsException(this, 1, 2));
             Symbol symbol;
@@ -3788,7 +3788,7 @@ public final class Primitives {
         public LispObject execute(LispObject args, Environment env)
 
         {
-            if (args.length() < 1)
+            if (args.cl_length() < 1)
                 return error(new WrongNumberOfArgumentsException(this, 1, -1));
             final LispThread thread = LispThread.currentThread();
             LispObject tag = eval(args.car(), env, thread);
@@ -3822,7 +3822,7 @@ public final class Primitives {
         public LispObject execute(LispObject args, Environment env)
 
         {
-            if (args.length() != 2)
+            if (args.cl_length() != 2)
                 return error(new WrongNumberOfArgumentsException(this, 2));
             final LispThread thread = LispThread.currentThread();
             thread.throwToTag(eval(args.car(), env, thread),
@@ -3973,7 +3973,7 @@ public final class Primitives {
         public LispObject execute(LispObject args, Environment env)
 
         {
-            if (args.length() == 0)
+            if (args.cl_length() == 0)
                 return error(new WrongNumberOfArgumentsException(this, 1, -1));
             final LispThread thread = LispThread.currentThread();
             LispObject result = eval(args.car(), env, thread);
@@ -3999,7 +3999,7 @@ public final class Primitives {
         public LispObject execute(LispObject args, Environment env)
 
         {
-            if (args.length() == 0)
+            if (args.cl_length() == 0)
                 return error(new WrongNumberOfArgumentsException(this, 1, -1));
             final LispThread thread = LispThread.currentThread();
             LispObject function;
@@ -4105,7 +4105,7 @@ public final class Primitives {
         public LispObject execute(LispObject args, Environment env)
 
         {
-            if (args.length() != 1)
+            if (args.cl_length() != 1)
                 return error(new WrongNumberOfArgumentsException(this, 1));
             final LispThread thread = LispThread.currentThread();
             LispObject result = eval(((Cons)args).car, env, thread);
@@ -4134,7 +4134,7 @@ public final class Primitives {
         public LispObject execute(LispObject args, Environment env)
 
         {
-            if (args.length() != 2)
+            if (args.cl_length() != 2)
                 return error(new WrongNumberOfArgumentsException(this, 2));
             final LispThread thread = LispThread.currentThread();
             int n = Fixnum.getValue(eval(args.car(), env, thread));
@@ -4303,7 +4303,7 @@ public final class Primitives {
                 return list_subseq(first, start, -1);
             if (first instanceof AbstractVector) {
                 final AbstractVector v = (AbstractVector) first;
-                return v.subseq(start, v.length());
+                return v.subseq(start, v.cl_length());
             }
             return type_error(first, Symbol.SEQUENCE);
         }
@@ -4337,7 +4337,7 @@ public final class Primitives {
             if (first instanceof AbstractVector) {
                 final AbstractVector v = (AbstractVector) first;
                 if (end < 0)
-                    end = v.length();
+                    end = v.cl_length();
                 return v.subseq(start, end);
             }
             return type_error(first, Symbol.SEQUENCE);
@@ -5115,10 +5115,10 @@ public final class Primitives {
 
         {
             AbstractVector v = checkVector(second);
-            if (first.length() == 0)
+            final int patternLength = first.cl_length();
+            if (patternLength == 0)
                 return Fixnum.ZERO;
-            final int patternLength = first.length();
-            final int limit = v.length() - patternLength;
+            final int limit = v.cl_length() - patternLength;
             if (first instanceof AbstractVector) {
                 AbstractVector pattern = (AbstractVector) first;
                 LispObject element = pattern.AREF(0);
@@ -5240,7 +5240,7 @@ public final class Primitives {
 
         @Override
         public LispObject execute(LispObject arg) {
-            return checkSymbol(arg).getPackage();
+            return checkSymbol(arg).getPackageOrNil();
         }
     };
 
@@ -5300,7 +5300,7 @@ public final class Primitives {
         @Override
         public LispObject execute(LispObject arg) {
             if (arg instanceof Symbol) {
-                if (checkSymbol(arg).getPackage() == PACKAGE_KEYWORD)
+                if (checkSymbol(arg).getPackageOrNil() == PACKAGE_KEYWORD)
                     return T;
             }
             return NIL;
@@ -5349,7 +5349,7 @@ public final class Primitives {
         @Override
         public LispObject execute(LispObject arg) {
             if (arg instanceof LispClass)
-                return ((LispClass)arg).getName();
+                return ((LispClass)arg).getLispClassName();
 
             return ((StandardObject)arg).getInstanceSlotValue(StandardClass.symName);
         }
@@ -5367,7 +5367,7 @@ public final class Primitives {
 
         {
             if (second instanceof LispClass)
-                ((LispClass)second).setName(checkSymbol(first));
+                ((LispClass)second).setLispClassName(checkSymbol(first));
             else
                 ((StandardObject)second).setInstanceSlotValue(StandardClass.symName,
                                                            checkSymbol(first));

@@ -190,7 +190,7 @@ abstract public class SpecialOperator extends SubLSpecialOperator
 
 
 //      @Override
-//    public String printObjectImpl()
+//    public String printObject()
 //    {
 //		StringBuilder sb = new StringBuilder("SPECIAL-OPERATOR ");
 //		if (lambdaName != null) {

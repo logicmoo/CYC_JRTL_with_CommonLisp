@@ -10,7 +10,7 @@ public abstract class RepoSpecForDirectory extends RepoSpec
 {
     @Override
 	public SheetRepo makeRepo() {
-        return (SheetRepo)FancyRepoLoader$.MODULE$.makeRepoWithDirectory((RepoSpec)this, this.getDirectoryModel(), (List)null, FancyRepoLoader$.MODULE$.makeRepoWithDirectory$default$4());
+        return (SheetRepo)FancyRepoLoader.makeRepoWithDirectory((RepoSpec)this, this.getDirectoryModel(), (List)null, FancyRepoLoader$.MODULE$.makeRepoWithDirectory$default$4());
     }
     
     @Override

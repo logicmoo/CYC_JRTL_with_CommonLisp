@@ -64,7 +64,7 @@ public final class make_array extends Primitive
         return error(new LispError("MAKE-ARRAY: cannot specify both " +
                                     "initial element and initial contents."));
       }
-    final int rank = dimensions.listp() ? dimensions.length() : 1;
+    final int rank = dimensions.listp() ? dimensions.cl_length() : 1;
     int[] dimv = new int[rank];
     if (dimensions.listp())
       {
@@ -94,7 +94,7 @@ public final class make_array extends Primitive
         if (rank == 1)
           {
             AbstractVector v;
-            LispObject arrayElementType = array.getElementType();
+            LispObject arrayElementType = array.getArrayElementType();
             if (arrayElementType == Symbol.CHARACTER)
               v = new ComplexString(dimv[0], array, displacement);
             else if (arrayElementType == Symbol.BIT)

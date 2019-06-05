@@ -21,7 +21,7 @@ public class SubLInOutBinaryStreamImpl extends AbstractSubLBinaryStream
 	}
 
 	@Override
-	public String printObjectImpl() {
+	public String printObject() {
 		String st = super.printObject();
 		return st;
 	}

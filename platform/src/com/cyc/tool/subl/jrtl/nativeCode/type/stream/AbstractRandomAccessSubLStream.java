@@ -741,7 +741,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 	}
 
 	@Override
-	public String printObjectImpl() {
+	public String printObject() {
 		return toString();
 	}
 

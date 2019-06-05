@@ -50,7 +50,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-public class Pathname extends ALispObject {
+public class Pathname extends LispObject {
 
     /** The path component separator used by internally generated
      * path namestrings.
@@ -128,7 +128,7 @@ public class Pathname extends ALispObject {
                 } else {
                     Debug.assertTrue(false);
                 }
-                if (!jars.cdr().equals(NIL)) {
+                if (!NULL(jars.cdr())) {
                     if (jars.cdr() instanceof Cons) {
                         ((Cons)device).cdr = new Cons(new Pathname((Pathname)jars.cdr().car()), NIL);
                     } else { 
@@ -1347,8 +1347,8 @@ public class Pathname extends ALispObject {
                 device = value;
                 deviceSupplied = true;
                 if (!(value instanceof AbstractString
-                      || value.equals(Keyword.UNSPECIFIC)
-                      || value.equals(NIL)
+                      || Keyword.UNSPECIFIC.symbolSame(value)
+                      || NULL(value)
                       || value instanceof Cons))
                   error(new TypeError("DEVICE is not a string, :UNSPECIFIC, NIL, or a list.", value, NIL));
             } else if (key == Keyword.DIRECTORY) {
@@ -1365,7 +1365,7 @@ public class Pathname extends ALispObject {
                   if ((value instanceof Cons 
                        // XXX check that the elements of a list are themselves valid
                        || value == Keyword.UNSPECIFIC
-                       || value.equals(NIL))) {
+                       || NULL(value))) {
                       directory = value;
                   } else {
                       error(new TypeError("DIRECTORY argument not a string, list of strings, nil, :WILD, or :UNSPECIFIC.", value, NIL));
@@ -1485,7 +1485,7 @@ public class Pathname extends ALispObject {
     }
 
     private static final AbstractString validateStringComponent(AbstractString s) {
-        final int limit = s.length();
+        final int limit = s.cl_length();
         for (int i = 0; i < limit; i++) {
             char c = s.charAt(i);
             // XXX '\\' should be illegal in all Pathnames at this point?
@@ -1580,7 +1580,38 @@ public class Pathname extends ALispObject {
         public LispObject execute(LispObject[] args) {
             switch (args.length) {
             case 0: {
-                String s = System.getProperty("user.home");
+				String s = System.getenv("LARKC_HOME");
+				if (s != null) {
+					if (!s.endsWith(File.separator)) {
+						s = s.concat(File.separator);
+					}
+					File f = new File(s);
+					File f2;
+					if (f.isDirectory() && f.canRead()) {
+						f2 = new File(f, "platform/");
+						if (f2.isDirectory() && f2.canRead()) {
+							s = f2.getAbsolutePath();
+							f = f2;
+						}
+						f2 = new File(f, "site-lisp/");
+						if (f2.isDirectory() && f2.canRead()) {
+							s = f2.getAbsolutePath();
+							f = f2;
+						}
+						f2 = new File(f, ".abclrc");
+						if (f.isFile() && f.canRead()) {
+							s = f2.getAbsolutePath();
+						}
+					}
+				} else {
+				if (s == null)
+					System.getenv("USERPROFILE");
+				if (s == null)
+					System.getenv("HOME");
+				}
+				if (s == null) {
+					s = System.getProperty("user.home");
+				}
                 if (!s.endsWith(File.separator)) {
                     s = s.concat(File.separator);
                 }
@@ -1649,7 +1680,7 @@ public class Pathname extends ALispObject {
                         matches = Symbol.PATHNAME_MATCH_P.
                             execute(new SimpleString(entryName), wildcard);
                     }
-                    if (!matches.equals(NIL)) {
+                    if (!NULL(matches)) {
                         String namestring = new String(pathname.getNamestring());
                         namestring = namestring.substring(0, namestring.lastIndexOf("!/") + 2)
                                  + entry.getName();
@@ -1763,7 +1794,7 @@ public class Pathname extends ALispObject {
                         LispObject matches = Symbol.PATHNAME_MATCH_P
                             .execute(new SimpleString(entryName), wildcard);
                     
-                        if (!matches.equals(NIL)) {
+                        if (!NULL(matches)) {
                             String namestring = new String(pathname.getNamestring());
                             namestring = namestring.substring(0, namestring.lastIndexOf("!/") + 2)
                                 + entry.getName();
@@ -1785,7 +1816,7 @@ public class Pathname extends ALispObject {
                         LispObject matches = Symbol.PATHNAME_MATCH_P
                             .execute(new SimpleString(entryName), wildcard);
 
-                        if (!matches.equals(NIL)) {
+                        if (!NULL(matches)) {
                             String namestring = new String(pathname.getNamestring());
                             namestring = namestring.substring(0, namestring.lastIndexOf("!/") + 2)
                                 + entry.getName();
@@ -1799,9 +1830,9 @@ public class Pathname extends ALispObject {
     }
 
     public boolean isAbsolute()  {
-        if (!directory.equals(NIL) || !(directory == null)) {
+        if (!NULL(directory) || !(directory == null)) {
             if (directory instanceof Cons) {
-                if (((Cons)directory).car().equals(Keyword.ABSOLUTE)) {
+                if (Keyword.ABSOLUTE.symbolSame(((Cons)directory).car())) {
                     return true;
                 }
             }
@@ -1866,16 +1897,18 @@ public class Pathname extends ALispObject {
             }
             Cons d = (Cons) directory;
             while (true) {
-                if (d.car() instanceof AbstractString) {
-                    String s = d.car().printObject();
+                final LispObject car = d.car();
+				if (car instanceof AbstractString) {
+                    String s = car.printObject();
                     if (s.contains("*")) {
                         return true;
                     }
                 }
-                if (d.cdr() == NIL || ! (d.cdr() instanceof Cons)) {
+                final LispObject cdr = d.cdr();
+				if (cdr == NIL || ! (cdr instanceof Cons)) {
                     break;
                 }
-                d = (Cons)d.cdr();
+                d = (Cons)cdr;
             }
         }
         if (name == Keyword.WILD || name == Keyword.WILD_INFERIORS) {
@@ -2053,7 +2086,7 @@ public class Pathname extends ALispObject {
                 }
                 Pathname o = mergePathnames((Pathname)jar, defaults);
                 if (o.directory instanceof Cons
-                    && ((Cons)o.directory).length() == 1) { // i.e. (:ABSOLUTE) or (:RELATIVE)
+                    && ((Cons)o.directory).cl_length() == 1) { // i.e. (:ABSOLUTE) or (:RELATIVE)
                     o.directory = NIL;
                 }
                 ((Cons)result.device).car = o;
@@ -2189,7 +2222,8 @@ public class Pathname extends ALispObject {
     public static final LispObject truename(Pathname pathname,
                                             boolean errorIfDoesNotExist) 
     {
-        if (pathname == null || pathname.equals(NIL)) {  
+        if (pathname == null //|| pathname == NIL // || pathname.equals(NIL)
+        		) {  
            return doTruenameExit(pathname, errorIfDoesNotExist); 
         }
         if (pathname instanceof LogicalPathname) {
@@ -2436,7 +2470,7 @@ public class Pathname extends ALispObject {
             // 4.  Entry in JAR in JAR
             String entryPath = asEntryPath();
             Cons d = (Cons)device;
-            if (d.cdr().equals(NIL)) {
+            if (NULL(d.cdr())) {
                 if (entryPath.length() == 0) {
                     LispObject o = d.car();
                         // 0. JAR from URL
@@ -2650,7 +2684,7 @@ public class Pathname extends ALispObject {
         if(!isURL()) {
             return new File(getNamestring());
         } else {
-            throw new RuntimeException(this + " does not represent a file");
+            throw new RuntimeException(getNamestring() + " does not represent a file");
         }
     }
 
@@ -2674,7 +2708,7 @@ public class Pathname extends ALispObject {
             if (!(arg instanceof AbstractString)) {
                 return type_error(arg, Symbol.STRING);
             }
-            String result = uriDecode(((AbstractString)arg).toString());
+            String result = uriDecode(((AbstractString)arg).getStringValue());
             return new SimpleString(result);
         }
     };
@@ -2701,7 +2735,7 @@ public class Pathname extends ALispObject {
             if (!(arg instanceof AbstractString)) {
                 return type_error(arg, Symbol.STRING);
             }
-            String result = uriEncode(((AbstractString)arg).toString());
+            String result = uriEncode(((AbstractString)arg).getStringValue());
             return new SimpleString(result);
         }
     };
@@ -2755,5 +2789,9 @@ public class Pathname extends ALispObject {
         }
     }
 
+    @Override
+    final public int eq_hashCode() {
+    	return ref_hashCode();
+    }
 }
 

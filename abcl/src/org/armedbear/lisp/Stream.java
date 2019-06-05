@@ -63,7 +63,7 @@ import org.armedbear.lisp.util.DecodingReader;
  *
  */
 public class Stream extends StructureObject {
-    protected LispObject elementType;
+    private LispObject elementType;
     protected boolean isInputStream;
     protected boolean isOutputStream;
     protected boolean isCharacterStream;
@@ -154,7 +154,7 @@ public class Stream extends StructureObject {
     public Stream(Symbol structureClass, InputStream inputStream,
                   LispObject elementType, LispObject format) {
         this(structureClass);
-        this.elementType = elementType;
+        this.setStreamElementType(elementType);
         setExternalFormat(format);
 
         if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {
@@ -183,7 +183,7 @@ public class Stream extends StructureObject {
     // Output stream constructors.
     public Stream(Symbol structureClass, OutputStream outputStream, LispObject elementType, LispObject format) {
         this(structureClass);
-        this.elementType = elementType;
+        this.setStreamElementType(elementType);
         setExternalFormat(format);
         if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {
             Writer w =
@@ -311,7 +311,7 @@ public class Stream extends StructureObject {
             enc = format;
 
         if (enc.numberp())
-            encoding = enc.toString();
+            encoding = ""+enc.javaInstance();
         else if (enc instanceof AbstractString)
             encoding = enc.getStringValue();
         else if (enc == keywordDefault)
@@ -321,7 +321,7 @@ public class Stream extends StructureObject {
             // (e.g. :EOL-STYLE)
             encoding = null;
         else if (enc instanceof Symbol)
-            encoding = ((Symbol)enc).getName();
+            encoding = ((Symbol)enc).cl_symbol_name();
         else
             ; //###FIXME: raise an error!
 
@@ -346,7 +346,8 @@ public class Stream extends StructureObject {
     pf_stream_external_format() {
       super("stream-external-format", "stream");
     }
-    public LispObject execute(LispObject arg) {
+    @Override
+	public LispObject execute(LispObject arg) {
       if (arg instanceof Stream) {
         return ((Stream)arg).getExternalFormat();
       } else {
@@ -366,7 +367,8 @@ public class Stream extends StructureObject {
         super("%set-stream-external-format",
               PACKAGE_SYS, false, "stream external-format");
     }
-    public LispObject execute(LispObject stream, LispObject format) {
+    @Override
+	public LispObject execute(LispObject stream, LispObject format) {
       Stream s = checkStream(stream);
       s.setExternalFormat(format);
       return format;
@@ -381,7 +383,8 @@ public class Stream extends StructureObject {
     pf_available_encodings() {
       super("available-encodings", PACKAGE_SYS, true);
     }
-    public LispObject execute() {
+    @Override
+	public LispObject execute() {
       LispObject result = NIL;
       for (Symbol encoding : availableEncodings()) {
         result = result.push(encoding);
@@ -429,10 +432,21 @@ public class Stream extends StructureObject {
             return T;
         return super.typep(typeSpecifier);
     }
-    
-    public LispObject getElementType() {
-        return elementType;
-    }
+
+
+	/**
+	 * @return the elementType
+	 */
+	protected LispObject getStreamElementType() {
+		return elementType;
+	}
+
+	/**
+	 * @param elementType the elementType to set
+	 */
+	protected void setStreamElementType(LispObject elementType) {
+		this.elementType = elementType;
+	}
 
     // Character input.
     public int getOffset() {
@@ -476,7 +490,8 @@ public class Stream extends StructureObject {
    public static ReadtableAccessor currentReadtable
         = new ReadtableAccessor()
     {
-      public Readtable rt(LispThread thread)
+      @Override
+	public Readtable rt(LispThread thread)
       {
         return
           (Readtable)Symbol.CURRENT_READTABLE.symbolValue(thread);
@@ -487,7 +502,8 @@ public class Stream extends StructureObject {
     public static ReadtableAccessor faslReadtable
         = new ReadtableAccessor()
     {
-      public Readtable rt(LispThread thread)
+      @Override
+	public Readtable rt(LispThread thread)
       {
         return FaslReadtable.getInstance();
       }
@@ -639,7 +655,7 @@ public class Stream extends StructureObject {
             Symbol structure = checkSymbol(obj.car());
             LispClass c = LispClass.findClass(structure);
             if (!(c instanceof StructureClass))
-                return error(new ReaderError(structure.getName() +
+                return error(new ReaderError(structure.cl_symbol_name() +
                                              " is not a defined structure type.",
                                              this));
             LispObject args = obj.cdr();
@@ -647,7 +663,7 @@ public class Stream extends StructureObject {
                 PACKAGE_SYS.intern("DEFSTRUCT-DEFAULT-CONSTRUCTOR");
             LispObject constructor =
                 DEFSTRUCT_DEFAULT_CONSTRUCTOR.getSymbolFunctionOrDie().execute(structure);
-            final int length = args.length();
+            final int length = args.cl_length();
             if ((length % 2) != 0)
                 return error(new ReaderError("Odd number of keyword arguments following #S: " +
                                              obj.princToString(),
@@ -656,7 +672,7 @@ public class Stream extends StructureObject {
             LispObject rest = args;
             for (int i = 0; i < length; i += 2) {
                 LispObject key = rest.car();
-                if (key instanceof Symbol && ((Symbol)key).getPackage() == PACKAGE_KEYWORD) {
+                if (key instanceof Symbol && ((Symbol)key).getPackageOrNil() == PACKAGE_KEYWORD) {
                     array[i] = key;
                 } else {
                     array[i] = PACKAGE_KEYWORD.intern(javaString(key));
@@ -1010,7 +1026,7 @@ public class Stream extends StructureObject {
         LispObject obj = read(true, NIL, true, thread, rta);
         if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
             return NIL;
-        if (obj instanceof Cons && obj.length() == 2)
+        if (obj instanceof Cons && obj.cl_length() == 2)
             return Complex.getInstance(obj.car(), obj.cadr());
         // Error.
         StringBuilder sb = new StringBuilder("Invalid complex number format");
@@ -1768,7 +1784,7 @@ public class Stream extends StructureObject {
                 return number(fileStringLength);
 
             }
-            return number(arg.length());
+            return number(arg.cl_length());
         }
         return error(new TypeError(arg.princToString() +
                                    " is neither a string nor a character."));
@@ -2594,7 +2610,7 @@ public class Stream extends StructureObject {
             Stream stream = checkBinaryInputStream(second);
             int start = Fixnum.getValue(third);
             int end = Fixnum.getValue(fourth);
-            if (!v.getElementType().equal(UNSIGNED_BYTE_8))
+            if (!v.getArrayElementType().equal(UNSIGNED_BYTE_8))
                 return type_error(first, list(Symbol.VECTOR,
                                               UNSIGNED_BYTE_8));
             for (int i = start; i < end; i++) {
@@ -2680,5 +2696,25 @@ public class Stream extends StructureObject {
     public PushbackReader getWrappedReader() {
 	return reader;
     }
+
+	/**
+	 * 
+	 */
+	public void flush() {
+		if(writer!=null) {
+			try {
+				writer.flush();
+			} catch (IOException e) {
+				
+			}
+		}
+		if(out!=null) {
+			try {
+				out.flush();
+			} catch (IOException e) {
+				
+			}
+		}		
+	}
 
 }

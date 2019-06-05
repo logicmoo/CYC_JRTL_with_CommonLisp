@@ -1103,16 +1103,12 @@ public abstract class AbstractSubLNumber extends FromSubLisp implements SubLNumb
 	}
 
 	@Override
-	public String printObject() {
-		  return printObjectImpl();
-	  }
-	@Override
 	public String princToString()
 	{
 		return printObject();
 	}
 	@Override
-	public String printObjectImpl() {
+	public String printObject() {
 		return getNativeNumber().toString();
 	}
 

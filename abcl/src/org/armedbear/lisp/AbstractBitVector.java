@@ -67,7 +67,7 @@ public abstract class AbstractBitVector extends AbstractVector
     }
 
     @Override
-    public final LispObject getElementType()
+    public final LispObject getArrayElementType()
     {
         return Symbol.BIT;
     }
@@ -79,9 +79,10 @@ public abstract class AbstractBitVector extends AbstractVector
             return true;
         if (obj instanceof AbstractBitVector) {
             AbstractBitVector v = (AbstractBitVector) obj;
-            if (length() != v.length())
+            final int cl_length = cl_length();
+			if (cl_length != v.cl_length())
                 return false;
-            for (int i = length(); i-- > 0;) {
+            for (int i = cl_length; i-- > 0;) {
                 if (getBit(i) != v.getBit(i))
                     return false;
             }
@@ -97,9 +98,10 @@ public abstract class AbstractBitVector extends AbstractVector
             return true;
         if (obj instanceof AbstractBitVector) {
             AbstractBitVector v = (AbstractBitVector) obj;
-            if (length() != v.length())
+            final int cl_length = cl_length();
+			if (cl_length != v.cl_length())
                 return false;
-            for (int i = length(); i-- > 0;) {
+            for (int i = cl_length; i-- > 0;) {
                 if (getBit(i) != v.getBit(i))
                     return false;
             }
@@ -161,11 +163,11 @@ public abstract class AbstractBitVector extends AbstractVector
     }
 
     @Override
-    public int hashCode()
+    public int eq_hashCode()
     {
         int hashCode = 1;
         // Consider first 64 bits only.
-        final int limit = Math.min(length(), 64);
+        final int limit = Math.min(cl_length(), 64);
         for (int i = 0; i < limit; i++)
             hashCode = hashCode * 31 + getBit(i);
         return hashCode;
@@ -175,7 +177,7 @@ public abstract class AbstractBitVector extends AbstractVector
     public String printObject()
     {
         final LispThread thread = LispThread.currentThread();
-        final int length = length();
+        final int length = cl_length();
         if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL ||
             Symbol.PRINT_ARRAY.symbolValue(thread) != NIL)
         {
@@ -194,7 +196,7 @@ public abstract class AbstractBitVector extends AbstractVector
     @Override
     public LispObject reverse()
     {
-        int length = length();
+        int length = cl_length();
         SimpleBitVector result = new SimpleBitVector(length);
         int i, j;
         for (i = 0, j = length - 1; i < length; i++, j--) {

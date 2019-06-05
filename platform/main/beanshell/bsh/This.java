@@ -51,7 +51,7 @@ import java.util.stream.Stream;
  * This holds a reference to the declaring interpreter for callbacks from
  * outside of bsh.
  */
-public final class This implements java.io.Serializable, Runnable
+public class This implements java.io.Serializable, Runnable
 {
   enum Keys
   {
@@ -737,7 +737,8 @@ public final class This implements java.io.Serializable, Runnable
       { // Evaluate the initializer block
         instanceInitBlock.evalBlock( new CallStack( instanceNameSpace ), instanceThis.declaringInterpreter, true/*
                                                                                                                  * override
-                                                                                                                 */, CLASSINSTANCE );
+                                                                                                                 */, 
+                                                                                                                 CLASSINSTANCE );
       }
       catch( Exception e )
       {

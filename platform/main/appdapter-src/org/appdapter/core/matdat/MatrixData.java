@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import scala.runtime.BoxedUnit;
 import scala.Function1;
 import java.util.Map;
+import java.io.IOException;
 import java.io.Reader;
 import scala.reflect.ScalaSignature;
 
@@ -42,11 +43,11 @@ public final class MatrixData
         return MatrixData$.MODULE$.readJavaMapFromSheet(sheetURL, headerCnt, keyColIdx, vlColIdx);
     }
     
-    public static void processSheetR(final Reader rawReader, final Function1<MatrixRow, BoxedUnit> processor) {
+    public static void processSheetR(final Reader rawReader, final Function1<MatrixRow, BoxedUnit> processor) throws IOException {
         MatrixData$.MODULE$.processSheetR(rawReader, processor);
     }
     
-    public static void processSheet(final String url, final Function1<MatrixRow, BoxedUnit> processor) {
+    public static void processSheet(final String url, final Function1<MatrixRow, BoxedUnit> processor) throws IOException {
         MatrixData$.MODULE$.processSheet(url, processor);
     }
     

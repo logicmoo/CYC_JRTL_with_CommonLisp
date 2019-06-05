@@ -43,8 +43,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class Package extends ALispObject implements java.io.Serializable
+public final class Package extends LispObject implements java.io.Serializable
 {
+    @Override
+    final public int eq_hashCode() {
+    	return ref_hashCode();
+    }
+
     private String name;
     private transient SimpleString lispName;
 
@@ -117,7 +122,7 @@ public final class Package extends ALispObject implements java.io.Serializable
         return super.typep(type);
     }
 
-    public final String getName()
+    public final String cl_name()
     {
         return name;
     }
@@ -153,7 +158,7 @@ public final class Package extends ALispObject implements java.io.Serializable
         for (Iterator<Symbol> it = symbolMap.values().iterator();
                 it.hasNext();) {
             sym = it.next();
-            if (sym.getPackage() == this) {
+            if (sym.getPackageOrNil() == this) {
                 sym.setPackage(NIL);
             }
         }
@@ -221,7 +226,7 @@ public final class Package extends ALispObject implements java.io.Serializable
 
     public Symbol findInternalSymbol(SimpleString name)
     {
-        return internalSymbols.get(name.toString());
+        return internalSymbols.get(name.getStringValue());
     }
 
     public Symbol findInternalSymbol(String name)
@@ -231,7 +236,7 @@ public final class Package extends ALispObject implements java.io.Serializable
 
     public Symbol findExternalSymbol(SimpleString name)
     {
-        return externalSymbols.get(name.toString());
+        return externalSymbols.get(name.getStringValue());
     }
 
     public Symbol findExternalSymbol(String name)
@@ -241,7 +246,7 @@ public final class Package extends ALispObject implements java.io.Serializable
 
     public Symbol findExternalSymbol(SimpleString name, int hash)
     {
-        return externalSymbols.get(name.toString());
+        return externalSymbols.get(name.getStringValue());
     }
 
     // Returns null if symbol is not accessible in this package.
@@ -256,10 +261,10 @@ public final class Package extends ALispObject implements java.io.Serializable
 
     {
         // Look in external and internal symbols of this package.
-        Symbol symbol = externalSymbols.get(name.toString());
+        Symbol symbol = externalSymbols.get(name.getStringValue());
         if (symbol != null)
             return symbol;
-        symbol = internalSymbols.get(name.toString());
+        symbol = internalSymbols.get(name.getStringValue());
         if (symbol != null)
             return symbol;
         // Look in external symbols of used packages.
@@ -307,9 +312,9 @@ public final class Package extends ALispObject implements java.io.Serializable
     // Helper function to add NIL to PACKAGE_CL.
     public void addSymbol(Symbol symbol)
     {
-        Debug.assertTrue(symbol.getPackage() == this);
-        Debug.assertTrue(symbol.getName().equals("NIL"));
-        externalSymbols.put(symbol.name.toString(), symbol);
+        Debug.assertTrue(symbol.getPackageOrNil() == this);
+        Debug.assertTrue(symbol.cl_symbol_name().equals("NIL"));
+        externalSymbols.put(symbol.name.getStringValue(), symbol);
     }
 
     private Symbol addSymbol(String name)
@@ -326,7 +331,7 @@ public final class Package extends ALispObject implements java.io.Serializable
 
     private Symbol addSymbol(SimpleString name)
     {
-        return addSymbol(name.toString());
+        return addSymbol(name.getStringValue());
     }
 
     public Symbol addInternalSymbol(String symbolName)
@@ -345,7 +350,7 @@ public final class Package extends ALispObject implements java.io.Serializable
 
     public synchronized Symbol intern(SimpleString symbolName)
     {
-        return intern(symbolName.toString());
+        return intern(symbolName.getStringValue());
     }
 
     public synchronized Symbol intern(String symbolName)
@@ -376,10 +381,10 @@ public final class Package extends ALispObject implements java.io.Serializable
                                       final LispThread thread)
     {
         // Look in external and internal symbols of this package.
-        Symbol symbol = externalSymbols.get(s.toString());
+        Symbol symbol = externalSymbols.get(s.getStringValue());
         if (symbol != null)
             return (Symbol) thread.setValues(symbol, Keyword.EXTERNAL);
-        symbol = internalSymbols.get(s.toString());
+        symbol = internalSymbols.get(s.getStringValue());
         if (symbol != null)
             return (Symbol) thread.setValues(symbol, Keyword.INTERNAL);
         // Look in external symbols of used packages.
@@ -402,10 +407,11 @@ public final class Package extends ALispObject implements java.io.Serializable
     {
         final SimpleString s = new SimpleString(symbolName);
         // Look in external and internal symbols of this package.
-        Symbol symbol = externalSymbols.get(s.toString());
+        final String stringValue = s.getStringValue();
+		Symbol symbol = externalSymbols.get(stringValue);
         if (symbol != null)
             return symbol;
-        symbol = internalSymbols.get(s.toString());
+        symbol = internalSymbols.get(stringValue);
         if (symbol != null) {
             export(symbol);
             return symbol;
@@ -427,14 +433,14 @@ public final class Package extends ALispObject implements java.io.Serializable
         symbol = new Symbol(s, this);
         if (this == PACKAGE_KEYWORD)
             symbol.initializeConstant(symbol);
-        externalSymbols.put(s.toString(), symbol);
+        externalSymbols.put(stringValue, symbol);
         return symbol;
     }
 
     public synchronized LispObject unintern(final Symbol symbol)
 
     {
-        final String symbolName = symbol.getName();
+        final String symbolName = symbol.cl_symbol_name();
         final boolean shadow;
         if (shadowingSymbols != null && shadowingSymbols.get(symbolName) == symbol)
             shadow = true;
@@ -469,12 +475,12 @@ public final class Package extends ALispObject implements java.io.Serializable
         }
         // Reaching here, it's OK to remove the symbol.
         boolean found = false;
-        if (externalSymbols.get(symbol.name.toString()) == symbol) {
-            externalSymbols.remove(symbol.name.toString());
+        if (externalSymbols.get(symbol.name.getStringValue()) == symbol) {
+            externalSymbols.remove(symbol.name.getStringValue());
             found = true;
         }
-        if (internalSymbols.get(symbol.name.toString()) == symbol) {
-            internalSymbols.remove(symbol.name.toString());
+        if (internalSymbols.get(symbol.name.getStringValue()) == symbol) {
+            internalSymbols.remove(symbol.name.getStringValue());
             found = true;
         }
         if (! found)
@@ -484,14 +490,14 @@ public final class Package extends ALispObject implements java.io.Serializable
             Debug.assertTrue(shadowingSymbols != null);
             shadowingSymbols.remove(symbolName);
         }
-        if (symbol.getPackage() == this)
+        if (symbol.getPackageOrNil() == this)
             symbol.setPackage(NIL);
         return T;
     }
 
     public synchronized void importSymbol(Symbol symbol)
     {
-        if (symbol.getPackage() == this)
+        if (symbol.getPackageOrNil() == this)
             return; // Nothing to do.
         Symbol sym = findAccessibleSymbol(symbol.name);
         if (sym != null && sym != symbol) {
@@ -502,16 +508,16 @@ public final class Package extends ALispObject implements java.io.Serializable
             sb.append('.');
             error(new PackageError(sb.toString(), this));
         }
-        internalSymbols.put(symbol.name.toString(), symbol);
-        if (symbol.getPackage() == NIL)
+        internalSymbols.put(symbol.name.getStringValue(), symbol);
+        if (symbol.getPackageOrNil() == NIL)
             symbol.setPackage(this);
     }
 
     public synchronized void export(final Symbol symbol)
     {
-        final String symbolName = symbol.getName();
+        final String symbolName = symbol.cl_symbol_name();
         boolean added = false;
-        if (symbol.getPackage() != this) {
+        if (symbol.getPackageOrNil() != this) {
             Symbol sym = findAccessibleSymbol(symbol.name);
             if (sym != symbol) {
                 StringBuilder sb = new StringBuilder("The symbol ");
@@ -522,10 +528,10 @@ public final class Package extends ALispObject implements java.io.Serializable
                 error(new PackageError(sb.toString(), this));
                 return;
             }
-            internalSymbols.put(symbol.name.toString(), symbol);
+            internalSymbols.put(symbol.name.getStringValue(), symbol);
             added = true;
         }
-        if (added || internalSymbols.get(symbol.name.toString()) == symbol) {
+        if (added || internalSymbols.get(symbol.name.getStringValue()) == symbol) {
             if (usedByList != null) {
                 for (Iterator it = usedByList.iterator(); it.hasNext();) {
                     Package pkg = (Package) it.next();
@@ -538,7 +544,7 @@ public final class Package extends ALispObject implements java.io.Serializable
                             StringBuilder sb = new StringBuilder("The symbol ");
                             sb.append(sym.getQualifiedName());
                             sb.append(" is already accessible in package ");
-                            sb.append(pkg.getName());
+                            sb.append(pkg.cl_name());
                             sb.append('.');
                             error(new PackageError(sb.toString(), pkg));
                             return;
@@ -547,11 +553,11 @@ public final class Package extends ALispObject implements java.io.Serializable
                 }
             }
             // No conflicts.
-            internalSymbols.remove(symbol.name.toString());
-            externalSymbols.put(symbol.name.toString(), symbol);
+            internalSymbols.remove(symbol.name.getStringValue());
+            externalSymbols.put(symbol.name.getStringValue(), symbol);
             return;
         }
-        if (externalSymbols.get(symbol.name.toString()) == symbol)
+        if (externalSymbols.get(symbol.name.getStringValue()) == symbol)
             // Symbol is already exported; there's nothing to do.
             return;
         StringBuilder sb = new StringBuilder("The symbol ");
@@ -565,10 +571,10 @@ public final class Package extends ALispObject implements java.io.Serializable
     public synchronized void unexport(final Symbol symbol)
 
     {
-      if (externalSymbols.get(symbol.name.toString()) == symbol) {
-        externalSymbols.remove(symbol.name.toString());
-        internalSymbols.put(symbol.name.toString(), symbol);
-      } else if (findAccessibleSymbol(symbol.name.toString()) != symbol) {
+      if (externalSymbols.get(symbol.name.getStringValue()) == symbol) {
+        externalSymbols.remove(symbol.name.getStringValue());
+        internalSymbols.put(symbol.name.getStringValue(), symbol);
+      } else if (findAccessibleSymbol(symbol.name.getStringValue()) != symbol) {
         StringBuilder sb = new StringBuilder("The symbol ");
         sb.append(symbol.getQualifiedName());
         sb.append(" is not accessible in package ");
@@ -583,12 +589,12 @@ public final class Package extends ALispObject implements java.io.Serializable
         if (shadowingSymbols == null)
             shadowingSymbols = new HashMap<String,Symbol>();
         final SimpleString s = new SimpleString(symbolName);
-        Symbol symbol = externalSymbols.get(s.toString());
+        Symbol symbol = externalSymbols.get(s.getStringValue());
         if (symbol != null) {
             shadowingSymbols.put(symbolName, symbol);
             return;
         }
-        symbol = internalSymbols.get(s.toString());
+        symbol = internalSymbols.get(s.getStringValue());
         if (symbol != null) {
             shadowingSymbols.put(symbolName, symbol);
             return;
@@ -596,16 +602,16 @@ public final class Package extends ALispObject implements java.io.Serializable
         if (shadowingSymbols.get(symbolName) != null)
             return;
         symbol = new Symbol(s, this);
-        internalSymbols.put(s.toString(), symbol);
+        internalSymbols.put(s.getStringValue(), symbol);
         shadowingSymbols.put(symbolName, symbol);
     }
 
     public synchronized void shadowingImport(Symbol symbol)
     {
-        final String symbolName = symbol.getName();
+        final String symbolName = symbol.cl_symbol_name();
         Symbol sym = externalSymbols.get(symbolName);
         if (sym == null)
-            sym = internalSymbols.get(symbol.name.toString());
+            sym = internalSymbols.get(symbol.name.getStringValue());
 
         // if a different symbol with the same name is accessible,
         // [..] which implies that it must be uninterned if it was present
@@ -618,7 +624,7 @@ public final class Package extends ALispObject implements java.io.Serializable
         if (sym == null || sym != symbol) {
             // there was no symbol, or we just unintered it another one
             // intern the new one
-            internalSymbols.put(symbol.name.toString(), symbol);
+            internalSymbols.put(symbol.name.getStringValue(), symbol);
         }
 
         if (shadowingSymbols == null)
@@ -642,9 +648,9 @@ public final class Package extends ALispObject implements java.io.Serializable
                 Symbol existing = findAccessibleSymbol(symbol.name);
                 if (existing != null && existing != symbol) {
                     if (shadowingSymbols == null ||
-                        shadowingSymbols.get(symbol.getName()) == null)
+                        shadowingSymbols.get(symbol.cl_symbol_name()) == null)
                     {
-                        error(new PackageError("A symbol named " + symbol.getName() +
+                        error(new PackageError("A symbol named " + symbol.cl_symbol_name() +
                                                 " is already accessible in package " +
                                                 name + ".", this));
                         return;
@@ -757,7 +763,7 @@ public final class Package extends ALispObject implements java.io.Serializable
     if (localNicknames.containsKey(name)) {
       if (localNicknames.get(name) != pack) {
         return error(new LispError(name + " is already a nickname for "
-                                   + pack.getName()));
+                                   + pack.cl_name()));
       } else {
         // nothing to do
         return this;
@@ -870,9 +876,9 @@ public final class Package extends ALispObject implements java.io.Serializable
                 Collection externals = pkg.getExternalSymbols();
                 for (Iterator<Symbol> i = externals.iterator(); i.hasNext();) {
                     Symbol symbol = i.next();
-                    if (shadowingSymbols != null && shadowingSymbols.get(symbol.getName()) != null)
+                    if (shadowingSymbols != null && shadowingSymbols.get(symbol.cl_symbol_name()) != null)
                         continue;
-                    if (externalSymbols.get(symbol.name.toString()) == symbol)
+                    if (externalSymbols.get(symbol.name.getStringValue()) == symbol)
                         continue;
                     list = new Cons(symbol, list);
                 }

@@ -67,9 +67,10 @@ public final class AutoloadMacro extends Autoload
     public String printObject()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(getSymbol().princToString());
+        sb.append(getSymbol().printObject());
         sb.append(" \"");
         sb.append(getFileName());
+        sb.append(" \"");
         return unreadableString(sb.toString());
     }
 

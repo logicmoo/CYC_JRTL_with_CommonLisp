@@ -37,6 +37,10 @@ import static org.armedbear.lisp.Lisp.*;
 
 public abstract class Function extends Operator 
 {
+	@Override
+	final public int eq_hashCode() {
+		return ref_hashCode();
+	}
     private LispObject propertyList = NIL;
     private int callCount;
     private int hotCount;

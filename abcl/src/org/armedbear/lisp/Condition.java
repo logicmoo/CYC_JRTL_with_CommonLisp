@@ -143,7 +143,7 @@ public class Condition extends StandardObject
   {
     LispObject c = getLispClass();
     if (c instanceof LispClass)
-        return ((LispClass)c).getName();
+        return ((LispClass)c).getLispClassName();
     else if (c != null)
       return Symbol.CLASS_NAME.execute(c);
     return Symbol.CONDITION;
@@ -195,7 +195,7 @@ public class Condition extends StandardObject
           {
             StringOutputStream stream = new StringOutputStream();
             Symbol.APPLY.execute(formatControl, stream, getFormatArguments());
-            return stream.getString().getStringValue();
+            return stream.getStringBuffer().getStringValue();
           }
         if (formatControl instanceof AbstractString)
           {

@@ -49,8 +49,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.jidesoft.icons.IconSet.File;
 
+import JFlex.Out;
+
 public final class Main
 {
+	static {
+		System.out.println("Loading " + Main.class.getName());
+	}
   public static final long startTimeMillis = System.currentTimeMillis();
   public static boolean isSublispDefault = false;
   public static InheritableThreadLocal<Boolean> isSubLisp = new InheritableThreadLocal<Boolean>()
@@ -73,6 +78,7 @@ public final class Main
 
   public static void main(String[] args) throws InterruptedException
   {
+	System.out.println("Staring main...");
     SystemCurrent.setupIO();
     SystemCurrent.attachConsole();
     assert ( System.in instanceof In );

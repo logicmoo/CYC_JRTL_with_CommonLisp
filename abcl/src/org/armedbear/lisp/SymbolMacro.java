@@ -33,8 +33,13 @@
 
 package org.armedbear.lisp;
 
-public final class SymbolMacro extends ALispObject
+public final class SymbolMacro extends LispObject
 {
+	@Override
+	final public int eq_hashCode() {
+		 return ref_hashCode();
+	}
+	
     private LispObject expansion;
 
     public SymbolMacro(LispObject expansion)

@@ -67,7 +67,7 @@ public final class SpecialOperators {
 
         {
             final LispThread thread = LispThread.currentThread();
-            switch (args.length()) {
+            switch (args.cl_length()) {
             case 2: {
                 if (eval(((Cons)args).car, env, thread) != NIL)
                     return eval(args.cadr(), env, thread);
@@ -138,7 +138,7 @@ public final class SpecialOperators {
                 LispObject value;
                 LispObject obj = varList.car();
                 if (obj instanceof Cons) {
-                    if (obj.length() > 2)
+                    if (obj.cl_length() > 2)
                         return error(new LispError("The " + (sequential ? "LET*" : "LET")
                                                    + " binding specification " +
                                                    obj.princToString() + " is invalid."));
@@ -192,10 +192,10 @@ for (Cons x : nonSequentialVars)
                 // Declare our free specials, this will correctly raise
                 LispObject body = ext.processDeclarations(args.cdr());
 
-                for (int i = varList.length(); i-- > 0;) {
+                for (int i = varList.cl_length(); i-- > 0;) {
                     LispObject obj = varList.car();
                     varList = varList.cdr();
-                    if (obj instanceof Cons && obj.length() == 2) {
+                    if (obj instanceof Cons && obj.cl_length() == 2) {
                         Symbol symbol = checkSymbol(obj.car());
                         if (symbol.isSpecialVariable()
                                 || ext.isDeclaredSpecial(symbol)) {
@@ -229,7 +229,7 @@ for (Cons x : nonSequentialVars)
         public LispObject execute(LispObject args, Environment env)
 
         {
-            switch (args.length()) {
+            switch (args.cl_length()) {
             case 1:
             case 2:
                 return eval(args.car(), new Environment(),
@@ -320,7 +320,7 @@ for (Cons x : nonSequentialVars)
             if (name instanceof Symbol) {
                 symbol = checkSymbol(name);
                 if (symbol.getSymbolFunction() instanceof SpecialOperator) {
-                  return program_error(symbol.getName()
+                  return program_error(symbol.cl_symbol_name()
                                        + " is a special operator and may not be redefined.");
                 }
             } else if (isValidSetfFunctionName(name))
@@ -374,7 +374,7 @@ for (Cons x : nonSequentialVars)
         public LispObject execute(LispObject args, Environment env)
 
         {
-            if (args.length() != 2)
+            if (args.cl_length() != 2)
                 return error(new WrongNumberOfArgumentsException(this, 2));
             LispObject rv = eval(args.cadr(), env, LispThread.currentThread());
 
@@ -412,7 +412,7 @@ for (Cons x : nonSequentialVars)
         public LispObject execute(LispObject args, Environment env)
 
         {
-            if (args.length() < 2)
+            if (args.cl_length() < 2)
                 return error(new WrongNumberOfArgumentsException(this, 2, -1));
             final LispThread thread = LispThread.currentThread();
             final LispObject symbols = checkList(eval(args.car(), env, thread));

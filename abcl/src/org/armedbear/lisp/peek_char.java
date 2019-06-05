@@ -123,7 +123,7 @@ public final class peek_char extends Primitive
                     return result;
             }
         }
-        return error(new SimpleError(String.valueOf(peekType) +
+        return error(new SimpleError(stringValueOf(peekType) +
                                       " is an illegal peek-type."));
     }
 

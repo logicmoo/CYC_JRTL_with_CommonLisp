@@ -56,9 +56,13 @@ import java.util.concurrent.locks.ReentrantLock;
 // to simplify/beautify things here, but I couldn't get the
 // WeakHashTable type to be parameterized on an enclosed type.
 public class WeakHashTable
-    extends ALispObject
+    extends LispObject
     implements org.armedbear.lisp.protocol.Hashtable
 {
+    @Override
+    final public int eq_hashCode() {
+    	return ref_hashCode();
+    }
     protected static final float loadFactor = 0.75f;
     protected final LispObject rehashSize;
     protected final LispObject rehashThreshold;
@@ -84,13 +88,13 @@ public class WeakHashTable
         this.rehashThreshold = rehashThreshold;
         bucketType = null;
         this.weakness = weakness;
-        if (weakness.equals(Keyword.KEY)) {
+        if (Keyword.KEY.symbolSame(weakness)) {
             bucketType = this.new HashEntryWeakKey();
-        } else if (weakness.equals(Keyword.VALUE)) {
+        } else if (Keyword.VALUE.symbolSame(weakness)) {
             bucketType = this.new HashEntryWeakValue();
-        } else if (weakness.equals(Keyword.KEY_AND_VALUE)) {
+        } else if (Keyword.KEY_AND_VALUE.symbolSame(weakness)) {
             bucketType = this.new HashEntryWeakKeyAndValue();
-        } else if (weakness.equals(Keyword.KEY_OR_VALUE)) {
+        } else if (Keyword.KEY_OR_VALUE.symbolSame(weakness)) {
             bucketType = this.new HashEntryWeakKeyOrValue();
         } else {
             // We handle this check in the wrapping Lisp code.

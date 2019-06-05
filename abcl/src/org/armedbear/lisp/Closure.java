@@ -47,7 +47,7 @@ public class Closure extends Function
 
   private final LispObject body;
   private final LispObject executionBody;
-  private final Environment environment;
+  protected final Environment environment;
 
   private final Symbol[] freeSpecials;
   private final ArgumentListProcessor arglist;

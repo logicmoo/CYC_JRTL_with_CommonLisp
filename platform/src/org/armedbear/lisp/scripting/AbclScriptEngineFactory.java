@@ -27,37 +27,29 @@ import java.util.List;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
-import org.armedbear.lisp.Lisp;
-
 public class AbclScriptEngineFactory implements ScriptEngineFactory {
 
     private static AbclScriptEngine THE_ONLY_ONE_ENGINE = null;
-
-    @Override
-	public String getEngineName() {
+	
+    public String getEngineName() {
 	return "ABCL Script";
     }
 
-    @Override
-	public String getEngineVersion() {
+    public String getEngineVersion() {
 	return "0.1";
     }
 
-    @Override
-	public List<String> getExtensions() {
+    public List<String> getExtensions() {
 	List<String> extensions = new ArrayList<String>(1);
-	//extensions.add("lisp");
-	extensions.add(Lisp._LISP_FILE_TYPE_.symbolValue().getStringValue());
+	extensions.add("lisp");
 	return Collections.unmodifiableList(extensions);
     }
 
-    @Override
-	public String getLanguageName() {
+    public String getLanguageName() {
 	return "ANSI Common Lisp";
     }
 
-    @Override
-	public String getLanguageVersion() {
+    public String getLanguageVersion() {
 	return "ANSI X3.226:1994";
     }
 
@@ -75,9 +67,8 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	}
 	return sb.toString();
     }
-
-    @Override
-	public String getMethodCallSyntax(String obj, String method, String... args) {
+	
+    public String getMethodCallSyntax(String obj, String method, String... args) {
 	StringBuilder sb = new StringBuilder();
 	sb.append("(jcall \"");
 	sb.append(method);
@@ -90,14 +81,12 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	sb.append(")");
 	return sb.toString();
     }
-
-    @Override
-	public List<String> getMimeTypes() {
+    
+    public List<String> getMimeTypes() {
 	return Collections.unmodifiableList(new ArrayList<String>());
     }
 
-    @Override
-	public List<String> getNames() {
+    public List<String> getNames() {
 	List<String> names = new ArrayList<String>(1);
 	names.add("ABCL");
 	names.add("cl");
@@ -106,19 +95,16 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	return Collections.unmodifiableList(names);
     }
 
-    @Override
-	public String getOutputStatement(String str) {
+    public String getOutputStatement(String str) {
 	return "(cl:print \"" + str + "\")";
     }
 
-    @Override
-	public Object getParameter(String key) {
+    public Object getParameter(String key) {
 	// TODO Auto-generated method stub
 	return null;
     }
 
-    @Override
-	public String getProgram(String... statements) {
+    public String getProgram(String... statements) {
 	StringBuilder sb = new StringBuilder();
 	sb.append("(cl:progn");
 	for(String stmt : statements) {
@@ -128,9 +114,8 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	sb.append(")");
 	return sb.toString();
     }
-
-    @Override
-	public synchronized ScriptEngine getScriptEngine() {
+    
+    public synchronized ScriptEngine getScriptEngine() {
         if (THE_ONLY_ONE_ENGINE == null) {
             THE_ONLY_ONE_ENGINE = new AbclScriptEngine();
         }

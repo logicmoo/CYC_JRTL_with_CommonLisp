@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="armedbear-j-src"/>
 	<classpathentry including="**/*|**/*.*|org/armedbear/lisp/*.lisp" kind="src" path="src"/>
 	<classpathentry including="**/*.*" kind="src" path="examples/gui"/>
 	<classpathentry including="**/*.*" kind="src" path="examples/java-exception"/>
@@ -13,6 +14,6 @@
 	<classpathentry kind="src" path="examples/lisp-to-java"/>
 	<classpathentry kind="src" path="examples/pure-lisp-to-java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

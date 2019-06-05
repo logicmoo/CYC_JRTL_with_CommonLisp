@@ -75,7 +75,7 @@ abstract public class SubLEnvironment extends FromSubLisp {
 	static {
 		defaultEnvironment = new Environment(null) {
 			@Override
-			public String printObjectImpl() {
+			public String printObject() {
 				return "#<Environment defaultEnvironment>";
 			}
 		};

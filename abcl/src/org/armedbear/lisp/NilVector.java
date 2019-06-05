@@ -118,7 +118,7 @@ public final class NilVector extends AbstractString
             return true;
         }
         if (obj instanceof AbstractString) {
-            if (capacity != obj.length())
+            if (capacity != obj.cl_length())
                 return false;
             if (capacity != 0) {
                 accessError();
@@ -140,7 +140,7 @@ public final class NilVector extends AbstractString
     }
 
     @Override
-    public int length()
+    public int cl_length()
     {
         return capacity;
     }
@@ -152,7 +152,7 @@ public final class NilVector extends AbstractString
     }
 
     @Override
-    public LispObject getElementType()
+    public LispObject getArrayElementType()
     {
         return NIL;
     }
@@ -233,7 +233,7 @@ public final class NilVector extends AbstractString
 
     private void storeError(LispObject obj)
     {
-        error(new TypeError(String.valueOf(obj) + " is not of type NIL."));
+        error(new TypeError(stringValueOf(obj) + " is not of type NIL."));
     }
 
     @Override

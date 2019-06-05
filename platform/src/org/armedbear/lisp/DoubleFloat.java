@@ -567,7 +567,7 @@ public final class DoubleFloat extends SubLDoubleFloat
     }
 
     @Override
-	final public String printObjectImpl()
+	final public String printObject()
     {
         if (value == Double.POSITIVE_INFINITY) {
             StringBuilder sb = new StringBuilder("#.");

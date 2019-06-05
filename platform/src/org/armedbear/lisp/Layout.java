@@ -284,7 +284,7 @@ abstract public class Layout extends LispObject
 	}
 
 	@Override
-	public String printObjectImpl()
+	public String printObject()
 	{
 		return unreadableString("LAYOUT " + this.getStructName());
 	}

@@ -443,7 +443,7 @@ public class LispObject
   }
 
   public final LispObject ODDP()
-  {
+  { 
     return oddp() ? T : NIL;
   }
 

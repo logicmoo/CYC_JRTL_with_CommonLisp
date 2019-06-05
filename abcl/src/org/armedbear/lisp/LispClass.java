@@ -97,7 +97,7 @@ public abstract class LispClass extends StandardObject
   protected LispClass(Layout layout)
   {
     super(layout, layout == null ? 0 : layout.getLength());
-    sxhash = hashCode() & 0x7fffffff;
+    sxhash = ref_hashCode() & 0x7fffffff;
   }
 
   protected LispClass(Symbol symbol)
@@ -108,16 +108,16 @@ public abstract class LispClass extends StandardObject
   protected LispClass(Layout layout, Symbol symbol)
   {
     super(layout, layout == null ? 0 : layout.getLength());
-    setName(symbol);
-    sxhash = hashCode() & 0x7fffffff;
+    setLispClassName(symbol);
+    sxhash = eq_hashCode() & 0x7fffffff;
   }
 
   protected LispClass(Layout layout,
                       Symbol symbol, LispObject directSuperclasses)
   {
     super(layout, layout == null ? 0 : layout.getLength());
-    sxhash = hashCode() & 0x7fffffff;
-    setName(symbol);
+    sxhash = eq_hashCode() & 0x7fffffff;
+    setLispClassName(symbol);
     setDirectSuperclasses(directSuperclasses);
   }
 
@@ -144,12 +144,12 @@ public abstract class LispClass extends StandardObject
     return sxhash;
   }
 
-  public LispObject getName()
+  public LispObject getLispClassName()
   {
     return name;
   }
 
-  public void setName(LispObject name)
+  public void setLispClassName(LispObject name)
   {
     this.name = name;
   }

@@ -115,7 +115,7 @@ public class FaslClassLoader extends JavaClassLoader {
       } else if (truename instanceof Pathname) {
           return Pathname.mergePathnames(name, (Pathname) truename, Keyword.NEWEST)
                   .getInputStream();
-      } else if (!Pathname.truename(name).equals(NIL)) {
+      } else if (!NULL(Pathname.truename(name))) {
               return name.getInputStream();
       }
 

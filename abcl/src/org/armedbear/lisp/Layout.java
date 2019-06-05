@@ -36,7 +36,7 @@ package org.armedbear.lisp;
 import java.util.concurrent.ConcurrentHashMap;
 import static org.armedbear.lisp.Lisp.*;
 
-public class Layout extends ALispObject
+public class Layout extends SLispObject
 {
   private final LispObject lispClass;
   public final ConcurrentHashMap<LispObject, LispObject> slotTable;
@@ -50,7 +50,7 @@ public class Layout extends ALispObject
   {
     this.lispClass = lispClass;
     Debug.assertTrue(instanceSlots.listp());
-    int length = instanceSlots.length();
+    int length = instanceSlots.cl_length();
     slotNames = new LispObject[length];
     int i = 0;
 

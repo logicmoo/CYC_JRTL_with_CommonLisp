@@ -35,7 +35,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public class Symbol extends ALispObject implements java.io.Serializable
+public class Symbol extends LispObject implements java.io.Serializable
 {
   // Bit flags.
   private static final int FLAG_SPECIAL           = 0x0001;
@@ -139,7 +139,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
             Symbol sym = ((Package)pkg).findExternalSymbol(name);
             sb.append(sym == this ? "external" : "internal");
             sb.append(" symbol in the ");
-            sb.append(((Package)pkg).getName());
+            sb.append(((Package)pkg).cl_name());
             sb.append(" package");
           }
         return new SimpleString(sb);
@@ -157,7 +157,10 @@ public class Symbol extends ALispObject implements java.io.Serializable
     parts = parts.push(new Cons("name", name));
     parts = parts.push(new Cons("package", pkg));
     parts = parts.push(new Cons("value", value));
-    parts = parts.push(new Cons("function", function));
+    final LispObject fBinding = getFBinding();
+    parts = parts.push(new Cons("function", fBinding));
+		if (fBinding != function)
+			parts = parts.push(new Cons("symbol-function", fBinding));
     parts = parts.push(new Cons("plist", propertyList));
     parts = parts.push(new Cons("flags", Fixnum.getInstance(flags)));
     parts = parts.push(new Cons("hash", Fixnum.getInstance(hash)));
@@ -190,7 +193,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
     return name;
   }
 
-  public final LispObject getPackage()
+  public final LispObject getPackageOrNil()
   {
     return pkg;
   }
@@ -203,7 +206,8 @@ public class Symbol extends ALispObject implements java.io.Serializable
   @Override
   public final boolean isSpecialOperator()
   {
-    return (function instanceof SpecialOperator);
+    final LispObject fBinding = getFBinding();
+	return (fBinding instanceof SpecialOperator);
   }
 
   @Override
@@ -250,7 +254,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
       flags &= ~FLAG_BUILT_IN_FUNCTION;
   }
 
-  public final String getName()
+  public final String cl_symbol_name()
   {
     return name.getStringValue();
   }
@@ -262,7 +266,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
       return("#:".concat(n));
     if (pkg == PACKAGE_KEYWORD)
       return ":".concat(n);
-    StringBuilder sb = new StringBuilder(((Package)pkg).getName());
+    StringBuilder sb = new StringBuilder(((Package)pkg).cl_name());
     if (((Package)pkg).findExternalSymbol(name) != null)
       sb.append(':');
     else
@@ -397,11 +401,28 @@ public class Symbol extends ALispObject implements java.io.Serializable
   {
     return function;
   }
+  /**
+   * @return
+   */
+  private LispObject getFBinding() {
+  	return function;
+  }
+  
+	public boolean fboundp() {
+		final LispObject function = getFBinding();
+		return function != null;
+	}
+
+	public boolean boundp() {
+		final LispObject value = getSymbolValue();
+		return value != null;
+	}
 
   @Override
   public final LispObject getSymbolFunctionOrDie()
   {
-    if (function == null)
+	    final LispObject function = getFBinding();
+	if (function == null)
       return error(new UndefinedFunction(this));
     if (function instanceof Autoload)
       {
@@ -414,14 +435,14 @@ public class Symbol extends ALispObject implements java.io.Serializable
   @Override
   public final LispObject getSymbolSetfFunction()
   {
-    return get(this, Symbol.SETF_FUNCTION, NIL);
+    return get(this, SETF_FUNCTION, NIL);
   }
 
 
   @Override
   public final LispObject getSymbolSetfFunctionOrDie()
   {
-    LispObject obj = get(this, Symbol.SETF_FUNCTION, null);
+    LispObject obj = get(this, SETF_FUNCTION, null);
     if (obj == null)
       error(new UndefinedFunction(list(Keyword.NAME,
                                          list(Symbol.SETF,
@@ -474,7 +495,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
         if (pkg == PACKAGE_KEYWORD) {
           sb.append(':');
         } else if (pkg instanceof Package) {
-          sb.append(multipleEscape(((Package)pkg).getName()));
+          sb.append(multipleEscape(((Package)pkg).cl_name()));
           sb.append("::");
         } else {
           sb.append("#:");
@@ -562,7 +583,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
     if (currentPackage.findInternalSymbol(name) == this)
       return symbolName;
     // Package prefix is necessary.
-    String packageName = ((Package)pkg).getName();
+    String packageName = ((Package)pkg).cl_name();
     if (currentPackage.getLocallyNicknamedPackages().contains(pkg)) {
       LispObject nicknames = currentPackage.getLocalPackageNicknames();
       while (nicknames != NIL) {
@@ -771,6 +792,11 @@ public class Symbol extends ALispObject implements java.io.Serializable
     return sb.toString();
   }
 
+   @Override
+	public int eq_hashCode() {
+		return sxhash();
+	}
+
   @Override
   public final int sxhash()
   {
@@ -787,7 +813,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
   final public LispObject execute()
   {
     LispObject fun;
-    if ((fun = function) == null)
+    if ((fun = getFBinding()) == null)
         return undefinedFunction(NIL);
 
     return fun.execute();
@@ -797,7 +823,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
   final public LispObject execute(LispObject arg)
   {
     LispObject fun;
-    if ((fun = function) == null)
+    if ((fun = getFBinding()) == null)
         return undefinedFunction(list(arg));
 
     return fun.execute(arg);
@@ -808,7 +834,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
 
   {
     LispObject fun;
-    if ((fun = function) == null)
+    if ((fun = getFBinding()) == null)
         return undefinedFunction(list(first, second));
 
     return fun.execute(first, second);
@@ -820,7 +846,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
 
   {
     LispObject fun;
-    if ((fun = function) == null)
+    if ((fun = getFBinding()) == null)
         return undefinedFunction(list(first, second, third));
 
     return fun.execute(first, second, third);
@@ -832,7 +858,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
 
   {
     LispObject fun;
-    if ((fun = function) == null)
+    if ((fun = getFBinding()) == null)
         return undefinedFunction(list(first, second, third, fourth));
 
     return fun.execute(first, second, third, fourth);
@@ -845,7 +871,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
 
   {
     LispObject fun;
-    if ((fun = function) == null)
+    if ((fun = getFBinding()) == null)
         return undefinedFunction(list(first, second, third, fourth,
                                       fifth));
 
@@ -860,7 +886,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
 
   {
     LispObject fun;
-    if ((fun = function) == null)
+    if ((fun = getFBinding()) == null)
         return undefinedFunction(list(first, second, third, fourth,
                                       fifth, sixth));
 
@@ -876,7 +902,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
 
   {
     LispObject fun;
-    if ((fun = function) == null)
+    if ((fun = getFBinding()) == null)
         return undefinedFunction(list(first, second, third, fourth,
                                       fifth, sixth, seventh));
 
@@ -892,7 +918,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
 
   {
     LispObject fun;
-    if ((fun = function) == null)
+    if ((fun = getFBinding()) == null)
         return undefinedFunction(list(first, second, third, fourth,
                                       fifth, sixth, seventh, eighth));
 
@@ -904,7 +930,7 @@ public class Symbol extends ALispObject implements java.io.Serializable
   final public LispObject execute(LispObject[] args)
   {
     LispObject fun;
-    if ((fun = function) == null) {
+    if ((fun = getFBinding()) == null) {
         LispObject list = NIL;
         for (int i = args.length; i-- > 0;)
           list = new Cons(args[i], list);
@@ -924,14 +950,16 @@ public class Symbol extends ALispObject implements java.io.Serializable
   @Override
   public void incrementCallCount()
   {
-    if (function != null)
+    final LispObject function = getFBinding();
+	if (function != null)
       function.incrementCallCount();
   }
 
   @Override
   public void incrementHotCount()
   {
-    if (function != null)
+    final LispObject function = getFBinding();
+	if (function != null)
       function.incrementHotCount();
   }
 
@@ -945,11 +973,11 @@ public class Symbol extends ALispObject implements java.io.Serializable
     }
     
     @Override
-    public String toString() {
+    public String toStringSimple() {
     	if(true) return getQualifiedName();
         StringBuilder sb = new StringBuilder();
         if (pkg instanceof Package) {
-            sb.append(((Package)pkg).getName());
+            sb.append(((Package)pkg).cl_name());
             sb.append(":");
         } else {
             sb.append("#:");
@@ -3270,4 +3298,13 @@ public class Symbol extends ALispObject implements java.io.Serializable
   // JVM
   public static final Symbol _RESIGNAL_COMPILER_WARINGS_ =
     PACKAGE_JVM.addExternalSymbol("*RESIGNAL-COMPILER-WARNINGS*");
+
+/**
+ * @param lispObject
+ * @return
+ */
+public boolean symbolSame(LispObject lispObject) {
+	// TODO Auto-generated method stub
+	return lispObject == this;
+}
 }

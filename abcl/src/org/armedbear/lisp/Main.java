@@ -34,6 +34,7 @@ package org.armedbear.lisp;
 
 public final class Main {
 
+	public static boolean noGUI = false;
     public static final long startTimeMillis = System.currentTimeMillis();
 
     public static void main(final String[] args) {
@@ -41,7 +42,8 @@ public final class Main {
         // size.
         Runnable r = new Runnable() {
 
-            public void run() {
+            @Override
+			public void run() {
                try {
                     Interpreter interpreter = Interpreter.createDefaultInstance(args);
                     if (interpreter != null)
@@ -53,4 +55,12 @@ public final class Main {
         };
         new Thread(null, r, "interpreter", 4194304L).start();
     }
+
+	/**
+	 * @param argsIn
+	 * @return
+	 */
+	public static String[] extractOptions(String[] argsIn) {
+		return argsIn;
+	}
 }

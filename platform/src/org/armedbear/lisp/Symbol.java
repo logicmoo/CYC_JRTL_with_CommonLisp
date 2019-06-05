@@ -1674,12 +1674,12 @@ public class Symbol
   }
 
   @Override
-  final public String printObjectImpl()
+  final public String printObject()
   {
     final LispThread thread = LispThread.currentThread();
     final boolean printEscape = ( PRINT_ESCAPE.symbolValue( thread ) != NIL );
     final boolean printReadably = ( PRINT_READABLY.symbolValue( thread ) != NIL );
-    final String unquoted = this.printObjectImpl( printReadably, printEscape );
+    final String unquoted = this.printObject( printReadably, printEscape );
     // if(printReadably) return "'"+ unquoted;
     return unquoted;
   }
@@ -1690,7 +1690,7 @@ public class Symbol
     return this.name.getStringValue();
   }
 
-  String printObjectImpl(boolean printReadably, boolean printEscape)
+  String printObject(boolean printReadably, boolean printEscape)
   {
     if( Lisp.printingObject == this )
     {

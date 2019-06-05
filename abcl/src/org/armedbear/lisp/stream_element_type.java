@@ -46,7 +46,7 @@ public final class stream_element_type extends Primitive
     @Override
     public LispObject execute(LispObject arg)
     {
-        return checkStream(arg).getElementType();
+        return checkStream(arg).getStreamElementType();
     }
 
     private static final Primitive STREAM_ELEMENT_TYPE = new stream_element_type();

@@ -75,10 +75,10 @@ public class FuncallableStandardClass extends StandardClass
   {
     StringBuilder sb =
       new StringBuilder(Symbol.FUNCALLABLE_STANDARD_CLASS.printObject());
-    if (getName() != null)
+    if (getLispClassName() != null)
       {
         sb.append(' ');
-        sb.append(getName().printObject());
+        sb.append(getLispClassName().printObject());
       }
     return unreadableString(sb.toString());
   }

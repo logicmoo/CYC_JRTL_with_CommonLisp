@@ -174,13 +174,13 @@ public class StandardClass extends SlotClass
   }
 
   @Override
-  public LispObject getName()
+  public LispObject getLispClassName()
   {
     return getInstanceSlotValue(symName);
   }
 
   @Override
-  public void setName(LispObject newName)
+  public void setLispClassName(LispObject newName)
   {
     setInstanceSlotValue(symName, newName);
   }
@@ -369,10 +369,10 @@ public class StandardClass extends SlotClass
   {
     StringBuilder sb =
       new StringBuilder(Symbol.STANDARD_CLASS.printObject());
-    if (getName() != null)
+    if (getLispClassName() != null)
       {
         sb.append(' ');
-        sb.append(getName().printObject());
+        sb.append(getLispClassName().printObject());
       }
     return unreadableString(sb.toString());
   }

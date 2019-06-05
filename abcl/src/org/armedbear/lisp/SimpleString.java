@@ -171,9 +171,10 @@ public final class SimpleString extends AbstractString
         }
         if (obj instanceof AbstractString) {
             AbstractString string = (AbstractString) obj;
-            if (string.length() != capacity)
+            final int stringlength = string.cl_length();
+			if (stringlength != capacity)
                 return false;
-            for (int i = length(); i-- > 0;)
+            for (int i = cl_length(); i-- > 0;)
                 if (string.charAt(i) != chars[i])
                     return false;
             return true;
@@ -202,9 +203,10 @@ public final class SimpleString extends AbstractString
         }
         if (obj instanceof AbstractString) {
             AbstractString string = (AbstractString) obj;
-            if (string.length() != capacity)
+            final int length = string.cl_length();
+			if (length != capacity)
                 return false;
-            for (int i = length(); i-- > 0;) {
+			for (int i = cl_length(); i-- > 0;) {
                 if (string.charAt(i) != chars[i]) {
                     if (LispCharacter.toLowerCase(string.charAt(i)) != LispCharacter.toLowerCase(chars[i]))
                         return false;
@@ -325,7 +327,7 @@ public final class SimpleString extends AbstractString
     }
 
     @Override
-    public final int length()
+    public final int cl_length()
     {
         return capacity;
     }
@@ -491,7 +493,7 @@ public final class SimpleString extends AbstractString
     }
 
     @Override
-    public String toString()  {
+    public String toStringSimple()  {
         return String.valueOf(chars);
     }
 }

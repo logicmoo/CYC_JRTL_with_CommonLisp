@@ -35,8 +35,13 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public class StandardObject extends ALispObject
+public class StandardObject extends LispObject
 {
+    @Override
+    final public int eq_hashCode() {
+    	return ref_hashCode();
+    }
+    
   protected Layout layout;
   protected LispObject[] slots;
 
@@ -112,7 +117,7 @@ public class StandardObject extends ALispObject
   {
     final LispObject c1 = layout.getLispClass();
     if (c1 instanceof LispClass)
-        return ((LispClass)c1).getName();
+        return ((LispClass)c1).getLispClassName();
     else
         return LispThread.currentThread().execute(Symbol.CLASS_NAME, c1);
   }
@@ -136,7 +141,7 @@ public class StandardObject extends ALispObject
     final LispObject c1 = layout.getLispClass();
     LispObject name;
     if (c1 instanceof LispClass)
-        name = ((LispClass)c1).getName();
+        name = ((LispClass)c1).getLispClassName();
     else
         name = LispThread.currentThread().execute(Symbol.CLASS_NAME, c1);
 
@@ -181,7 +186,7 @@ public class StandardObject extends ALispObject
             LispObject otherName;
             LispObject otherClass = cpl.car();
             if (otherClass instanceof LispClass) {
-              if (type == ((LispClass)otherClass).getName())
+              if (type == ((LispClass)otherClass).getLispClassName())
                 return T;
             }
             else

@@ -55,7 +55,7 @@ public final class Extensions
     @Override
     public LispObject execute(LispObject args, Environment env)
     {
-      if (args.length() != 2)
+      if (args.cl_length() != 2)
         return error(new WrongNumberOfArgumentsException(this, 2));
       return eval(args.cadr(), env, LispThread.currentThread());
     }
@@ -281,8 +281,9 @@ public final class Extensions
       }
 
       for (int i = 0; i < args.length; i++ ) {
-        if (args[i].SYMBOLP() != NIL) {
-          if (args[i].equals(Keyword.PREFIX)) {
+        final LispObject lispObject = args[i];
+		if (lispObject.SYMBOLP() != NIL) {
+          if (Keyword.PREFIX.symbolSame(lispObject)) {
             String specifiedPrefix = args[i + 1].getStringValue();
             if (specifiedPrefix != null) {
               if (specifiedPrefix.equals(NIL.getStringValue())) {
@@ -291,7 +292,7 @@ public final class Extensions
               prefix = specifiedPrefix;
               i += 1;
             }
-          } else if (args[i].equals(Keyword.SUFFIX)) {
+          } else if (Keyword.SUFFIX.symbolSame(lispObject)) {
             String specifiedSuffix = args[i + 1].getStringValue();
             if (specifiedSuffix != null) {
               if (specifiedSuffix.equals(NIL.getStringValue())) {
@@ -303,7 +304,7 @@ public final class Extensions
             }
           }
         } else {
-          error(new TypeError("Expected matching keyword argument.", args[i], Keyword.PREFIX.classOf()));
+          error(new TypeError("Expected matching keyword argument.", lispObject, Keyword.PREFIX.classOf()));
         }
       }
       return createTempFile(prefix, suffix);

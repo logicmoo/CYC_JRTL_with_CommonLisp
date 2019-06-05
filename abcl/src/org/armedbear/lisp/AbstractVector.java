@@ -61,10 +61,11 @@ public abstract class AbstractVector extends AbstractArray
   {
     if (obj instanceof AbstractVector)
       {
-        if (length() != obj.length())
+        final int cl_length = cl_length();
+		if (cl_length != obj.cl_length())
           return false;
         AbstractVector v = (AbstractVector) obj;
-        for (int i = length(); i-- > 0;)
+        for (int i = cl_length; i-- > 0;)
           if (!AREF(i).equalp(v.AREF(i)))
             return false;
         return true;
@@ -108,7 +109,7 @@ public abstract class AbstractVector extends AbstractArray
 
   public LispObject deleteEq(LispObject item)
   {
-    final int limit = length();
+    final int limit = cl_length();
     int i = 0;
     int j = 0;
     while (i < limit)
@@ -125,7 +126,7 @@ public abstract class AbstractVector extends AbstractArray
 
   public LispObject deleteEql(LispObject item)
   {
-    final int limit = length();
+    final int limit = cl_length();
     int i = 0;
     int j = 0;
     while (i < limit)
@@ -191,7 +192,7 @@ public abstract class AbstractVector extends AbstractArray
   public LispObject nreverse()
   {
     int i = 0;
-    int j = length() - 1;
+    int j = cl_length() - 1;
     while (i < j)
       {
         LispObject temp = AREF(i);
@@ -210,7 +211,7 @@ public abstract class AbstractVector extends AbstractArray
     if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL)
       {
         StringBuilder sb = new StringBuilder("#(");
-        final int limit = length();
+        final int limit = cl_length();
         for (int i = 0; i < limit; i++)
           {
             if (i > 0)
@@ -238,7 +239,7 @@ public abstract class AbstractVector extends AbstractArray
               Symbol.PRINT_LENGTH.symbolValue(thread);
             if (printLength instanceof Fixnum)
               maxLength = ((Fixnum)printLength).value;
-            final int length = length();
+            final int length = cl_length();
             final int limit = Math.min(length, maxLength);
             final SpecialBindingsMark mark = thread.markSpecialBindings();
             thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
@@ -276,7 +277,7 @@ public abstract class AbstractVector extends AbstractArray
   @Override
   public int psxhash()
   {
-    final int length = length();
+    final int length = cl_length();
     final int limit = length < 4 ? length : 4;
     long result = 48920713; // Chosen at random.
     for (int i = 0; i < limit; i++)

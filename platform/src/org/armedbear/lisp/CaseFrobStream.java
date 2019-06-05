@@ -207,7 +207,7 @@ public abstract class CaseFrobStream extends Stream
     }
 
     @Override
-	public String printObjectImpl()
+	public String printObject()
     {
         return unreadableString("CASE-FROB-STREAM");
     }

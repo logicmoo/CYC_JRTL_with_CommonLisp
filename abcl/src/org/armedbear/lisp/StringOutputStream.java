@@ -50,7 +50,7 @@ public final class StringOutputStream extends Stream
     StringOutputStream(LispObject elementType)
     {
         super(Symbol.STRING_OUTPUT_STREAM);
-        this.elementType = elementType;
+        this.setStreamElementType(elementType);
         this.eolStyle = EolStyle.RAW;
         initAsCharacterOutputStream(stringWriter = new SeekableStringWriter());
     }
@@ -84,7 +84,7 @@ public final class StringOutputStream extends Stream
     @Override
     protected long _getFilePosition()
     {
-        if (elementType == NIL)
+        if (getStreamElementType() == NIL)
             return 0;
         return stringWriter.getOffset();
 //        
@@ -93,7 +93,7 @@ public final class StringOutputStream extends Stream
 
     @Override
     protected boolean _setFilePosition(LispObject arg) {
-        if (elementType == NIL)
+        if (getStreamElementType() == NIL)
             return false;
 
         try {
@@ -120,8 +120,8 @@ public final class StringOutputStream extends Stream
     }
 
 
-    public LispObject getString() {
-      if (elementType == NIL) {
+    public LispObject getStringBuffer() {
+      if (getStreamElementType() == NIL) {
             return new NilVector(0);
       }
 
@@ -133,7 +133,7 @@ public final class StringOutputStream extends Stream
 
     public LispObject getSimpleStringAndClear()
     {
-        if (elementType == NIL)
+        if (getStreamElementType() == NIL)
             return new NilVector(0);
         String contents = stringWriter.toStringAndClear();
         

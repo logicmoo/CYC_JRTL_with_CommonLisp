@@ -40,7 +40,7 @@ import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.util.*;
 
-public final class JavaObject extends ALispObject {
+public final class JavaObject extends LispObject {
     final Object obj;
     private final Class<?> intendedClass;
 
@@ -339,6 +339,11 @@ public final class JavaObject extends ALispObject {
         return obj == null ? 0 : (obj.hashCode() & 0x7ffffff);
     }
 
+    @Override
+    final public int eq_hashCode() {
+    	return ref_hashCode();
+    }
+    
     public static LispObject JAVA_OBJECT_TO_STRING_LENGTH 
         = LispInteger.getInstance(32);
 
@@ -421,7 +426,7 @@ public final class JavaObject extends ALispObject {
                     for (int i = 0; i < classes.length; i++) {
                         classesList = classesList.push(JavaObject.getInstance(classes[i]));
                     }
-                    if (!classesList.equals(NIL)) {
+                    if (!NULL(classesList)) {
                         parts = parts
                             .push(new Cons("Member classes", classesList.nreverse()));
                     }
@@ -433,7 +438,7 @@ public final class JavaObject extends ALispObject {
                 for (int i = 0; i < interfaces.length; i++) {
                     interfacesList = interfacesList.push(JavaObject.getInstance(interfaces[i]));
                 }
-                if (!interfacesList.equals(NIL)) {
+                if (!NULL(interfacesList)) {
                     parts = parts
                         .push(new Cons("Interfaces", interfacesList.nreverse()));
                 }
@@ -443,7 +448,7 @@ public final class JavaObject extends ALispObject {
                     superclassList = superclassList.push(JavaObject.getInstance(superclass));
                     superclass = superclass.getSuperclass();
                 }
-                if (!superclassList.equals(NIL)) {
+                if (!NULL(superclassList)) {
                     parts = parts
                         .push(new Cons("Superclasses", superclassList.nreverse()));
                 }

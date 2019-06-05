@@ -52,7 +52,8 @@ public final class JarStream extends Stream
 {
     private final Pathname pathname;
     private final InputStream input;
-    private final Reader reader;
+    @SuppressWarnings("hiding") // @FIXME: really?
+	private final Reader reader;
     private final int bytesPerUnit;
 
     public JarStream(Pathname pathname, String namestring,
@@ -68,7 +69,7 @@ public final class JarStream extends Stream
         super.setExternalFormat(format);
         
         this.pathname = pathname;
-        this.elementType = elementType;
+        this.setStreamElementType(elementType);
 
         this.input = pathname.getInputStream();
         if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {

@@ -47,7 +47,7 @@ public final class Interpreter
     // There can only be one interpreter.
     public static Interpreter interpreter;
 
-    private final boolean jlisp;
+    //private final boolean jlisp;
     private final InputStream inputStream;
     private final OutputStream outputStream;
 
@@ -116,7 +116,7 @@ public final class Interpreter
         InputStream in,
         OutputStream out,
         String initialDirectory,
-        String version)
+        String version, boolean isJ)
     {
         if (interpreter != null)
             return null;
@@ -140,7 +140,7 @@ public final class Interpreter
 
     private Interpreter()
     {
-        jlisp = false;
+        //jlisp = false;
         inputStream = null;
         outputStream = null;
     }
@@ -148,7 +148,7 @@ public final class Interpreter
     private Interpreter(InputStream inputStream, OutputStream outputStream,
                         String initialDirectory)
     {
-        jlisp = true;
+        //jlisp = true;
         this.inputStream = inputStream;
         this.outputStream = outputStream;
         resetIO(new Stream(Symbol.SYSTEM_STREAM, inputStream, Symbol.CHARACTER),
@@ -212,8 +212,11 @@ public final class Interpreter
     private static synchronized void processInitializationFile()
     {
         try {
+        	File file = new File(".abclrc");
+        	if(!file.isFile()&& file.canRead()) {
             String userHome = System.getProperty("user.home");
-            File file = new File(userHome, ".abclrc");
+            file = new File(userHome, ".abclrc");
+        	}
             if (file.isFile()) {
                 final double startLoad = System.currentTimeMillis();
                 Load.load(file.getCanonicalPath());
@@ -364,10 +367,20 @@ public final class Interpreter
                         ++i;
                     }
                 }
+                else if (arg.equals("--nodebug")) 
+                	debug = false;
+                else if (arg.equals("--debug"))
+                	debug = true;
+                else if (arg.equals("--nocheck")) 
+                	checkCallers = false;
+                else if (arg.equals("--check"))
+                	checkCallers = true;
                 else if (arg.equals("--notrace")) 
                     evaluate("(trace-lisp nil)");
                 else if (arg.equals("--trace"))
                     evaluate("(trace-lisp t)");
+                else if (arg.equals("--junicode"))
+                    LISP_NOT_JAVA = false;
                 else if (arg.equals("--load") ||
                            arg.equals("--load-system-file")) {
                     if (i + 1 < args.length) {
@@ -408,6 +421,7 @@ public final class Interpreter
             throw e;
         }
         catch (IntegrityError e) {
+            e.printStackTrace();
             return;
         }
         catch (Throwable t) {
@@ -504,9 +518,9 @@ public final class Interpreter
             thread.printBacktrace();
     }
 
-    public void kill(int status)
+    public void kill(int status, boolean isJlisp)
     {
-        if (jlisp) {
+        if (isJlisp) {
             try {
                 inputStream.close();
             }
@@ -737,4 +751,9 @@ public final class Interpreter
        
         return sb.toString();
     }
+    
+    static public void exit(int i) {
+    	System.exit(i);
+    }
+
 }

@@ -260,7 +260,7 @@ public final class FileStream extends Stream
     }
 
     @Override
-	public String printObjectImpl()
+	public String printObject()
     {
         return unreadableString("FILE-STREAM");
     }

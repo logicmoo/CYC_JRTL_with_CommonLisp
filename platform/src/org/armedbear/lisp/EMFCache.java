@@ -46,7 +46,7 @@ public final class EMFCache extends LispObject
   }
 
   @Override
-public String printObjectImpl()
+public String printObject()
   {
     return unreadableString("EMF-CACHE");
   }

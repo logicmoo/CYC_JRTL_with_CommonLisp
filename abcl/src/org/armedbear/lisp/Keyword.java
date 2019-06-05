@@ -37,6 +37,7 @@ import static org.armedbear.lisp.Lisp.*;
 
 public final class Keyword
 {
+	public static Symbol TEXT_KEYWORD_CHARACTER = Symbol.CHARACTER;
     public static final Symbol
         ABCL                = internKeyword("ABCL"),
         ABORT               = internKeyword("ABORT"),

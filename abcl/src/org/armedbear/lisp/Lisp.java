@@ -52,13 +52,15 @@ abstract public class Lisp extends ABCLStatic
 {
   public static boolean debug = System.getProperty("lisp.debug","true").equals("true");
 
-  public static boolean ansi = true;
+  public static boolean checkCallers = System.getProperty("lisp.checks","false").equals("true");
+  
+  public static boolean ansi = System.getProperty("lisp.ansi","false").equals("true");
   
   public static boolean cold = true;
 
   public static boolean initialized;
 
-  final public static boolean LISP_NOT_JAVA = true;
+  public static boolean LISP_NOT_JAVA = !System.getProperty("lisp.junicode","false").equals("true");
 /*
   static final WeakHashMap<LispObject, LispObject>
       documentationHashTable = new WeakHashMap<LispObject, LispObject>();
@@ -641,7 +643,7 @@ abstract public class Lisp extends ABCLStatic
                               sixth, seventh, eighth);
       }
     // More than CALL_REGISTERS_MAX arguments.
-    final int length = args.length() + CALL_REGISTERS_MAX;
+    final int length = args.cl_length() + CALL_REGISTERS_MAX;
     LispObject[] array = new LispObject[length];
     array[0] = first;
     array[1] = second;
@@ -810,7 +812,7 @@ abstract public class Lisp extends ABCLStatic
   {
     if (binding == null)
       {
-        return error(new LispError("No block named " + block.getName() +
+        return error(new LispError("No block named " + block.cl_symbol_name() +
                                    " is currently visible."));
       }
 
@@ -1226,7 +1228,7 @@ abstract public class Lisp extends ABCLStatic
     if (arg instanceof AbstractString)
       return arg.getStringValue();
     if (arg instanceof Symbol)
-      return ((Symbol)arg).getName();
+      return ((Symbol)arg).cl_symbol_name();
     if (arg instanceof LispCharacter)
       return String.valueOf(new char[] {((LispCharacter)arg).value});
     type_error(arg, list(Symbol.OR, Symbol.STRING, Symbol.SYMBOL,
@@ -1369,7 +1371,7 @@ abstract public class Lisp extends ABCLStatic
       } else if (truename instanceof Pathname) {
           load = Pathname.mergePathnames(name, (Pathname) truename, Keyword.NEWEST);
       } else {
-          if (!Pathname.truename(name).equals(NIL)) {
+          if (!NULL(Pathname.truename(name))) {
               load = name;
           } else {
               load = null;
@@ -2360,7 +2362,7 @@ abstract public class Lisp extends ABCLStatic
   {
     Interpreter interpreter = Interpreter.getInstance();
     if (interpreter != null)
-      interpreter.kill(status);
+      interpreter.kill(status, false);
   }
 
   // ### t
@@ -2867,5 +2869,21 @@ abstract public class Lisp extends ABCLStatic
 	return error(new SimpleError("This is a placeholder. It should only be called in compiled code, and tranformed by the compiler using special form handlers."));
     }
   }
+/**
+ * @param lispObject
+ * @return
+ */
+public static boolean NULL(LispObject lispObject) {
+	return lispObject.isNil();
+}
+
+/**
+ * @param arg
+ * @return
+ */
+public static String stringValueOf(LispObject arg) {
+	if(arg==null) return "#<JNULL-STRING-VALUE-OF>";
+	return arg.printObject();
+}
 
 }

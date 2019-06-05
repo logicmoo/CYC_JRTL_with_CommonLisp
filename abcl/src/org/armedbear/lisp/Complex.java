@@ -305,6 +305,11 @@ public final class Complex extends NLispObject
   {
     return (mix(realpart.sxhash(), imagpart.sxhash()) & 0x7fffffff);
   }
+  
+  @Override
+	public int eq_hashCode() {
+		return sxhash();
+	}
 
   @Override
   public int psxhash()

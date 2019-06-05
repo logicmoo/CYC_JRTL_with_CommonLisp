@@ -68,7 +68,7 @@ public final class Packages
   public static final synchronized void addPackage(Package pkg)
 
   {
-    final String name = pkg.getName();
+    final String name = pkg.cl_name();
     if (map.get(name) != null)
       {
         error(new LispError("A package named " + name + " already exists."));
@@ -140,7 +140,7 @@ public final class Packages
   public static final boolean deletePackage(Package pkg)
   {
 	  synchronized(Packages.packagesLock) {
-    String name = pkg.getName();
+    String name = pkg.cl_name();
     if (name != null)
       {
         map.remove(name);
@@ -182,7 +182,7 @@ public final class Packages
     LispObject result = NIL;
     for (Package pkg : packages) {
       for (Package nicknamedPackage : pkg.getLocallyNicknamedPackages()) {
-        if (thePackage.equals(nicknamedPackage)) {
+        if (thePackage.equalp(nicknamedPackage)) {
           result = new Cons(pkg, result);
         }
       }

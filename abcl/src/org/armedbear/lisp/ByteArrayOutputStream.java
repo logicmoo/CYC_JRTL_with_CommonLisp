@@ -47,7 +47,7 @@ public final class ByteArrayOutputStream extends Stream
     ByteArrayOutputStream(LispObject elementType)
     {
         super(Symbol.SYSTEM_STREAM);
-        this.elementType = elementType;
+        this.setStreamElementType(elementType);
         initAsBinaryOutputStream(byteArrayOutputStream = new java.io.ByteArrayOutputStream(2048));
         // based on statistics of ABCL's own .cls files
         // as per 20100111, 2048 is the 70th percentile,
@@ -78,14 +78,14 @@ public final class ByteArrayOutputStream extends Stream
     @Override
     protected long _getFilePosition()
     {
-        if (elementType == NIL)
+        if (getStreamElementType() == NIL)
             return 0;
         return byteArrayOutputStream.size();
     }
 
     public byte[] getByteArray()
     {
-        if (elementType == NIL) {
+        if (getStreamElementType() == NIL) {
             return new byte[0];
 	} else {
 	    return byteArrayOutputStream.toByteArray();

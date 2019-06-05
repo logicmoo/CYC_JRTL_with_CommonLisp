@@ -36,7 +36,7 @@ package org.armedbear.lisp;
 import static org.armedbear.lisp.Lisp.*;
 import java.util.Iterator;
 
-public class Readtable extends ALispObject
+public class Readtable extends SLispObject
 {
   public static final byte SYNTAX_TYPE_CONSTITUENT           = 0;
   public static final byte SYNTAX_TYPE_WHITESPACE            = 1;
@@ -54,6 +54,10 @@ public class Readtable extends ALispObject
   public Readtable()
   {
     initialize();
+  }
+  @Override
+  public String printObject() {
+  	return unreadableString(typeOf().getStringValue(),true);
   }
 
   protected void initialize()
@@ -582,4 +586,5 @@ public class Readtable extends ALispObject
                                                  Keyword.UPCASE));
       }
     };
+
 }

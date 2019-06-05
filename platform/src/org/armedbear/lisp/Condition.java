@@ -214,7 +214,7 @@ public LispObject typep(LispObject type)
   }
 
   @Override
-public final String printObjectImpl()
+public final String printObject()
   {
     final LispThread thread = LispThread.currentThread();
     if (Symbol.PRINT_ESCAPE.symbolValue(thread) == NIL)

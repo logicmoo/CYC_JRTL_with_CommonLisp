@@ -358,15 +358,18 @@
         ((atom form)
          form)
         (t
-         (let ((op (%car form))
+         (let ((op (%car form)) expanded-2
                handler)
            (when (symbolp op)
              (cond ((setf handler (get op 'precompile-handler))
                     (return-from precompile1 (funcall handler form)))
                    ((macro-function op *precompile-env*)
-                    (return-from precompile1 (precompile1 (expand-macro form))))
+                    (return-from precompile1 (precompile1 (expand-macro form))))            
                    ((special-operator-p op)
-                    (error "PRECOMPILE1: unsupported special operator ~S." op))))
+                    (setq expanded-2 (system::compiler-macroexpand form))
+                    (unless (equal form expanded-2) 
+                      (return-from precompile1 (precompile1 expanded-2)))
+                   (error "PRECOMPILE1: unsupported special operator ~S." op))))
            (precompile-function-call form)))))
 
 (defun precompile-identity (form)

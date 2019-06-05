@@ -154,7 +154,7 @@ public final class ComplexString extends AbstractString
     char[] copy = new char[capacity];
     if (array instanceof AbstractString)
       System.arraycopy(array.chars(), displacement, copy, 0, capacity);
-    else if (array.getElementType() == Symbol.CHARACTER)
+    else if (array.getArrayElementType() == Symbol.CHARACTER)
       {
         for (int i = 0; i < capacity; i++)
           {
@@ -185,9 +185,9 @@ public final class ComplexString extends AbstractString
     if (obj instanceof AbstractString)
       {
         AbstractString string = (AbstractString) obj;
-        if (string.length() != length())
+        if (string.cl_length() != cl_length())
           return false;
-        for (int i = length(); i-- > 0;)
+        for (int i = cl_length(); i-- > 0;)
           if (string.charAt(i) != charAt(i))
             return false;
         return true;
@@ -205,9 +205,9 @@ public final class ComplexString extends AbstractString
     if (obj instanceof AbstractString)
       {
         AbstractString string = (AbstractString) obj;
-        if (string.length() != length())
+        if (string.cl_length() != cl_length())
           return false;
-        for (int i = length(); i-- > 0;)
+        for (int i = cl_length(); i-- > 0;)
           {
             if (string.charAt(i) != charAt(i))
               {
@@ -243,7 +243,7 @@ public final class ComplexString extends AbstractString
   @Override
   public void fill(char c)
   {
-    for (int i = length(); i-- > 0;)
+    for (int i = cl_length(); i-- > 0;)
       setCharAt(i, c);
   }
 
@@ -294,7 +294,7 @@ public final class ComplexString extends AbstractString
   @Override
   public LispObject reverse()
   {
-    int length = length();
+    int length = cl_length();
     SimpleString result = new SimpleString(length);
     int i, j;
     for (i = 0, j = length - 1; i < length; i++, j--)
@@ -306,7 +306,7 @@ public final class ComplexString extends AbstractString
   public LispObject nreverse()
   {
     int i = 0;
-    int j = length() - 1;
+    int j = cl_length() - 1;
     while (i < j)
       {
         char temp = charAt(i);
@@ -346,7 +346,7 @@ public final class ComplexString extends AbstractString
   }
 
   @Override
-  public final int length()
+  public final int cl_length()
   {
     return fillPointer >= 0 ? fillPointer : capacity;
   }
@@ -391,7 +391,7 @@ public final class ComplexString extends AbstractString
   @Override
   public LispObject elt(int index)
   {
-    final int limit = length();
+    final int limit = cl_length();
     if (index < 0 || index >= limit)
       badIndex(index, limit);
     return LispCharacter.makeCharacter(charAt(index));
@@ -518,7 +518,7 @@ public final class ComplexString extends AbstractString
   public int sxhash()
   {
     int hashCode = randomStringHashBase;
-    final int limit = length();
+    final int limit = cl_length();
     for (int i = 0; i < limit; i++)
       {
         hashCode += charAt(i);
@@ -536,7 +536,7 @@ public final class ComplexString extends AbstractString
   public int psxhash()
   {
     int hashCode = randomStringHashBase;
-    final int limit = length();
+    final int limit = cl_length();
     for (int i = 0; i < limit; i++)
       {
         hashCode += Character.toUpperCase(charAt(i));

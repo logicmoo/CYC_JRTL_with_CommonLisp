@@ -81,7 +81,7 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
     }
 
     @Override
-    public LispObject getElementType()
+    public LispObject getArrayElementType()
     {
         return UNSIGNED_BYTE_16;
     }
@@ -111,7 +111,7 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
     }
 
     @Override
-    public int length()
+    public int cl_length()
     {
         return capacity;
     }

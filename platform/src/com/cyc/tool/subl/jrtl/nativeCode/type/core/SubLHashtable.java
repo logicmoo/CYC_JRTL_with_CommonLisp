@@ -393,7 +393,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
     }
 
     @Override
-    public String printObjectImpl() {
+    public String printObject() {
         return "#<HASH-TABLE " + test.getFunction().getFunctionSymbol() + " " + toTypeName() + " with " + this.size() + " entries @ " + super.toString() + ">";
     }
 

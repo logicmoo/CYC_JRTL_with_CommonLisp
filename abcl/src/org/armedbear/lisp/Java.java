@@ -337,8 +337,9 @@ public final class Java
                     argCount = Fixnum.getValue(args[1]);
                 } else {
                     Class<?>[] parameterTypes = new Class[args.length-1];
-                    for (int i = 1; i < args.length; i++) {
-                        parameterTypes[i-1] = javaClass(args[i]);
+                    int im1 = 0;
+                    for (int i = 1; i < args.length; i++, im1++) {
+						parameterTypes[im1] = javaClass(args[i]);
                     }
                     return JavaObject.getInstance(c.getConstructor(parameterTypes));
                 }
@@ -390,8 +391,10 @@ public final class Java
                     argCount = ((Fixnum)args[2]).value;
                 } else {
                     Class<?>[] parameterTypes = new Class[args.length-2];
-                    for (int i = 2; i < args.length; i++)
-                        parameterTypes[i-2] = javaClass(args[i]);
+                    int j = 0;
+                    for (int i = 2; i < args.length; i++, j++) {					    
+						parameterTypes[j] = javaClass(args[i]);
+					}
                     return JavaObject.getInstance(c.getMethod(methodName,
                                                               parameterTypes));
                 }
@@ -465,14 +468,15 @@ public final class Java
             }
             Object[] methodArgs = new Object[args.length-2];
             Class[] argTypes = m.getParameterTypes();
-            for (int i = 2; i < args.length; i++) {
+            int im2 = 0;
+            for (int i = 2; i < args.length; i++, im2++) {
                 LispObject arg = args[i];
-                if (arg.equals(NIL)) {
-                  methodArgs[i-2] = false;
-                } else if (arg.equals(T)) {
-                  methodArgs[i-2] = true;
+				if (NULL(arg)) {
+                  methodArgs[im2] = false;
+                } else if (arg== T) {
+                  methodArgs[im2] = true;
                 } else {
-                  methodArgs[i-2] = arg.javaInstance(argTypes[i-2]);
+                  methodArgs[im2] = arg.javaInstance(argTypes[im2]);
                 }
             }
             m.setAccessible(true);
@@ -567,14 +571,15 @@ public final class Java
 		}
                 Class[] argTypes = constructor.getParameterTypes();
                 Object[] initargs = new Object[args.length-1];
-                for (int i = 1; i < args.length; i++) {
+                int im1 = 0;
+                for (int i = 1; i < args.length; i++, im1++) {
                     LispObject arg = args[i];
-                    if (arg.equals(NIL)) {
-                      initargs[i-1] = false ;
-                    } else if (arg.equals(T)) {
-                      initargs[i-1] = true;
+                    if (NULL(arg)) {
+                      initargs[im1] = false ;
+                    } else if (arg== T) {
+                      initargs[im1] = true;
                     } else {
-                      initargs[i-1] = arg.javaInstance(argTypes[i-1]);
+                      initargs[im1] = arg.javaInstance(argTypes[im1]);
                     }
                 }
                 return JavaObject.getInstance(constructor.newInstance(initargs));
@@ -620,8 +625,10 @@ public final class Java
             try {
                 Class c = javaClass(args[0]);
                 int[] dimensions = new int[args.length - 1];
-                for (int i = 1; i < args.length; i++)
-                    dimensions[i-1] = ((Integer)args[i].javaInstance()).intValue();
+                int im1 = 0;
+                for (int i = 1; i < args.length; i++, im1++) {
+					dimensions[im1] = ((Integer)args[i].javaInstance()).intValue();
+				}
                 return JavaObject.getInstance(Array.newInstance(c, dimensions));
             }
             catch (Throwable t) { // no code -> no ControlTransfer
@@ -886,14 +893,15 @@ public final class Java
 		return error(new WrongNumberOfArgumentsException("Wrong number of arguments for " + method + ": expected " + argTypes.length + ", got " + (args.length - 2)));
 	    }
             methodArgs = new Object[argTypes.length];
-            for (int i = 2; i < args.length; i++) {
+            int im2 = 0;
+            for (int i = 2; i < args.length; i++, im2++) {
               LispObject arg = args[i];
-              if (arg.equals(NIL)) {
-                methodArgs[i-2] = false;
-              } else if (arg.equals(T)) {
-                methodArgs[i-2] = true;
+			if (NULL(arg)) {
+                methodArgs[im2] = false;
+              } else if (arg == T) {
+                methodArgs[im2] = true;
               } else {
-                methodArgs[i-2] = arg.javaInstance(argTypes[i-2]);
+                methodArgs[im2] = arg.javaInstance(argTypes[im2]);
               }
             }
             if (!method.isAccessible()) {
@@ -935,13 +943,13 @@ public final class Java
 	int argCount = args.length - offs;
         Object[] javaArgs = new Object[argCount];
         for (int i = 0; i < argCount; ++i) {
-          Object x = args[i + offs];
-          if (x.equals(NIL)) {
+          final LispObject x = args[i + offs];
+          if (NIL == x) {
             javaArgs[i] = false;
-          } else if (x.equals(T)) {
+          } else if (T == x) {
             javaArgs[i] = true;
           } else {
-            javaArgs[i] = ((LispObject) x).javaInstance();
+            javaArgs[i] = x.javaInstance();
           }
         }
 	return javaArgs;

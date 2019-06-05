@@ -226,7 +226,7 @@ public class SynonymStream extends Stream
     }
 
     @Override
-	public String printObjectImpl()
+	public String printObject()
     {
         StringBuffer sb = new StringBuffer("SYNONYM-STREAM ");
         sb.append(streamSymbol.printObject());

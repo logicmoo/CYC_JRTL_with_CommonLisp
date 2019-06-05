@@ -111,7 +111,8 @@ public class REPLConsole extends DefaultStyledDocument {
             reader.notifyAll();
           }
           Runnable r = new Runnable() {
-              public void run() {
+              @Override
+			public void run() {
                 synchronized(reader) {
                   try {
                     superInsertString(insertOffs,
@@ -138,7 +139,8 @@ public class REPLConsole extends DefaultStyledDocument {
                                                    new Stream(Symbol.SYSTEM_STREAM, new BufferedWriter(writer)),
                                                    replFunction);
     replThread = new Thread("REPL-thread-" + System.identityHashCode(this)) {
-        public void run() {
+        @Override
+		public void run() {
           while(true) {
             replWrapper.execute();
             yield();
@@ -218,11 +220,13 @@ public class REPLConsole extends DefaultStyledDocument {
     addDocumentListener(new DocumentListener() {
 
         //			@Override
-        public void changedUpdate(DocumentEvent e) {
+        @Override
+		public void changedUpdate(DocumentEvent e) {
         }
 
         // @Override
-        public void insertUpdate(DocumentEvent e) {
+        @Override
+		public void insertUpdate(DocumentEvent e) {
           int len = getLength();
           if(len - e.getLength() == e.getOffset()) { //The insert was at the end of the document
             txt.setCaretPosition(getLength());
@@ -230,7 +234,8 @@ public class REPLConsole extends DefaultStyledDocument {
         }
 
         // @Override
-        public void removeUpdate(DocumentEvent e) {
+        @Override
+		public void removeUpdate(DocumentEvent e) {
         }
       });
     txt.setCaretPosition(getLength());
@@ -267,19 +272,20 @@ public class REPLConsole extends DefaultStyledDocument {
     return new Function() {	
       @Override
       public LispObject execute() {
-        SpecialBindingsMark lastSpecialBinding = LispThread.currentThread().markSpecialBindings();
+        final LispThread currentThread = LispThread.currentThread();
+		SpecialBindingsMark lastSpecialBinding = currentThread.markSpecialBindings();
         try {
           TwoWayStream ioStream = new TwoWayStream(in, out);
-          LispThread.currentThread().bindSpecial(Symbol.DEBUGGER_HOOK, debuggerHook);
-          LispThread.currentThread().bindSpecial(Symbol.STANDARD_INPUT, in);
-          LispThread.currentThread().bindSpecial(Symbol.STANDARD_OUTPUT, out);
-          LispThread.currentThread().bindSpecial(Symbol.ERROR_OUTPUT, out);
-          LispThread.currentThread().bindSpecial(Symbol.TERMINAL_IO, ioStream);
-          LispThread.currentThread().bindSpecial(Symbol.DEBUG_IO, ioStream);
-          LispThread.currentThread().bindSpecial(Symbol.QUERY_IO, ioStream);
+          currentThread.bindSpecial(Symbol.DEBUGGER_HOOK, debuggerHook);
+          currentThread.bindSpecial(Symbol.STANDARD_INPUT, in);
+          currentThread.bindSpecial(Symbol.STANDARD_OUTPUT, out);
+          currentThread.bindSpecial(Symbol.ERROR_OUTPUT, out);
+          currentThread.bindSpecial(Symbol.TERMINAL_IO, ioStream);
+          currentThread.bindSpecial(Symbol.DEBUG_IO, ioStream);
+          currentThread.bindSpecial(Symbol.QUERY_IO, ioStream);
           return fn.execute();
         } finally {
-          LispThread.currentThread().resetSpecialBindings(lastSpecialBinding);
+          currentThread.resetSpecialBindings(lastSpecialBinding);
         }
       }
 	    

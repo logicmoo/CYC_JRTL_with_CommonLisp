@@ -290,7 +290,7 @@ public final class SimpleArray_UnsignedByte16 extends AbstractArray
     }
 
     @Override
-	public String printObjectImpl()
+	public String printObject()
     {
         if (Symbol.PRINT_READABLY.symbolValue() != NIL) {
             error(new PrintNotReadable(list(Keyword.OBJECT, this)));

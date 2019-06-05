@@ -61,7 +61,7 @@ public final class SlotDefinition extends StandardObject
     setInstanceSlotValue(Symbol.NAME, name);
     setInstanceSlotValue(Symbol.INITFUNCTION, NIL);
     setInstanceSlotValue(Symbol.INITARGS,
-                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName())));
+                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).cl_symbol_name())));
     setInstanceSlotValue(Symbol.READERS, NIL);
     setInstanceSlotValue(Symbol.ALLOCATION, Keyword.INSTANCE);
     setInstanceSlotValue(Symbol.LOCATION, NIL);
@@ -76,7 +76,7 @@ public final class SlotDefinition extends StandardObject
     setInstanceSlotValue(Symbol.NAME, name);
     setInstanceSlotValue(Symbol.INITFUNCTION, NIL);
     setInstanceSlotValue(Symbol.INITARGS,
-                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName())));
+                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).cl_symbol_name())));
     setInstanceSlotValue(Symbol.READERS, readers);
     setInstanceSlotValue(Symbol.ALLOCATION, Keyword.INSTANCE);
   }
@@ -90,7 +90,7 @@ public final class SlotDefinition extends StandardObject
     setInstanceSlotValue(Symbol.INITFUNCTION, NIL);
     setInstanceSlotValue(Symbol.INITFORM, initForm);
     setInstanceSlotValue(Symbol.INITARGS,
-                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName())));
+                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).cl_symbol_name())));
     setInstanceSlotValue(Symbol.READERS, readers);
     setInstanceSlotValue(Symbol.ALLOCATION, Keyword.INSTANCE);
   }
@@ -104,7 +104,7 @@ public final class SlotDefinition extends StandardObject
     setInstanceSlotValue(Symbol.INITFUNCTION, initFunction);
     setInstanceSlotValue(Symbol.INITFORM, NIL);
     setInstanceSlotValue(Symbol.INITARGS,
-                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName())));
+                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).cl_symbol_name())));
     setInstanceSlotValue(Symbol.READERS, readers);
     setInstanceSlotValue(Symbol.ALLOCATION, Keyword.INSTANCE);
   }

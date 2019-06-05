@@ -571,6 +571,7 @@ from ${abcl.home.dir}
       <path id="abcl.runtime.classpath">
         <pathelement location="${abcl.runtime.jar.path}"/>
         <pathelement path="${additional.jars}"/>
+         <pathelement path="c:\pf\Java\jdk1.8.0_162\lib\tools.jar"/>
       </path>
       <!-- set via '-Djava.options=JAVA_OPTIONS' or in 'build.properties -->
       <property name="java.options" value=""/>
@@ -1031,7 +1032,7 @@ ${basedir}/../cl-bench
       <javac destdir="${abcl.test.classes.dir}"
              classpathref="abcl.test.compile.classpath"
              debug="true"
-             target="1.5">
+             target="${cv}">
         <src path="${abcl.test.src.dir}"/>
         <patternset refid="abcl.test.source.java"/>
       </javac>

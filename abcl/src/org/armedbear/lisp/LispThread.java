@@ -59,21 +59,35 @@ public final class LispThread extends SLispObject
 		@Override
 		public LispThread initialValue() {
 			Thread thisThread = Thread.currentThread();
-			LispThread thread = LispThread.map.get(thisThread);
-			if (thread == null) {
-				thread = new LispThread(thisThread);
-				oneOnlyJT = thisThread;
-				oneOnlyLT = thread;
-				LispThread.map.put(thisThread, thread);
+			synchronized (threads) {
+				LispThread thread = LispThread.map.get(thisThread);
+				if (thread == null) {
+					thread = new LispThread(thisThread);
+					oneOnlyJT = thisThread;
+					oneOnlyLT = thread;
+					LispThread.map.put(thisThread, thread);
+				}
+				return thread;	
 			}
-			return thread;
 		}
 	};
+	
+	/**
+	 * @param thread
+	 */
+	public static void remove(Thread thread) {
+		synchronized (threads) {		
+			map.remove(thread);
+		}
+	}
 
 	public static final LispThread currentThread() {
-		if (Thread.currentThread() == oneOnlyJT)
+		final Thread currentThread = Thread.currentThread();
+		synchronized (threads) {
+		if (currentThread == oneOnlyJT)
 			return oneOnlyLT;
-		return threads.get();
+			return threads.get();
+		}
 	}
 
 	final Thread javaThread;
@@ -93,6 +107,7 @@ public final class LispThread extends SLispObject
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
+				final Thread currentThread = Thread.currentThread();
 				try {
 					threadValue = funcall(wrapper, new LispObject[] { fun }, LispThread.this);
 				} catch (ThreadDestroyed ignored) {
@@ -107,7 +122,7 @@ public final class LispThread extends SLispObject
 					Debug.warn(msg);
 				} finally {
 					// make sure the thread is *always* removed from the hash again
-					map.remove(Thread.currentThread());
+					remove(currentThread);
 				}
 			}
 		};
@@ -1144,6 +1159,8 @@ public final class LispThread extends SLispObject
 	int lastDepth = 0;
 	Object[] lastFrameAt = new Object[15];
 	Object lastFrame;
+	private boolean enableTrace;
+
 	public boolean NO_STACK_FRAMES = System.getProperty("lisp.noframes","false").equals("true");
 
 	/**
@@ -1258,6 +1275,7 @@ public final class LispThread extends SLispObject
 					+ Integer.toHexString(System.identityHashCode(obj)) + ">";
 
 		} catch (Throwable e) {
+			e.printStackTrace();
 			return "#<safePrintObject " + e + obj.getClass().getName() + "@"
 					+ Integer.toHexString(System.identityHashCode(obj)) + ">";
 		} finally {
@@ -1272,7 +1290,7 @@ public final class LispThread extends SLispObject
 	 */
 	boolean trace_calls() {
 		// if (debug) return true;
-		if (debug && _TRACE_LISP_ != null) {
+		if (enableTrace && _TRACE_LISP_ != null) {
 			pauseTime = 1;
 			return _TRACE_LISP_.symbolValue(this).getBooleanValue();
 		}
@@ -1373,10 +1391,14 @@ public final class LispThread extends SLispObject
 			Symbol sym = Symbol.PRINT_PPRINT_DISPATCH;
 			LispThread thread = currentThread();
 			PrintStream ps = thread.ps;
-			new Throwable("FAKE TRACE_LISP: ").printStackTrace(ps);
+			_TRACE_LISP_.setSymbolValue(args[0]);
+			final boolean traceOn = !args[0].isNil();
+			thread.enableTrace = traceOn;
+			
+			if(traceOn)new Throwable("FAKE TRACE_LISP: ").printStackTrace(ps);
 			LispThread olt = map.get(mainThread);
 
-			if (false) {
+			if (Packages.findPackage("SWANK")!=null) {
 				Symbol symb = (Symbol) Lisp
 						.readObjectFromString("swank::*backtrace-pprint-dispatch-table*".toUpperCase());
 				ps.println(olt + " " + symb + "=" + symb.symbolValue(olt));
@@ -1384,7 +1406,6 @@ public final class LispThread extends SLispObject
 				ps.println(olt + " " + sym + "=" + symb.symbolValue(olt));
 				ps.println(thread + " " + sym + "=" + symb.symbolValue(thread));
 			}
-			_TRACE_LISP_.setSymbolValue(args[0]);
 
 			Symbol.ERROR.setSymbolFunction(new signal_2());
 
@@ -1811,5 +1832,6 @@ public final class LispThread extends SLispObject
 			}
 			return NIL;
 		}
-	};
+	}
+
 }

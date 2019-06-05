@@ -231,7 +231,7 @@ public final class ComplexArray extends AbstractArray
     }
 
     @Override
-	public String printObjectImpl()
+	public String printObject()
     {
         return printObject(dimv);
     }

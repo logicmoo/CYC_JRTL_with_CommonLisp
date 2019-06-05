@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2008 Hideo at Yokohama
  * Copyright (C) 2008-2009 Erik Huelsmann
- * $Id$
+ * $Id: RandomAccessCharacterFile.java 14863 2016-09-04 07:16:19Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ import org.armedbear.lisp.Debug;
 import static org.armedbear.lisp.Lisp.error;
 
 import org.armedbear.lisp.SimpleError;
-import org.armedbear.lisp.AbstractString;
+import org.armedbear.lisp.SimpleString;
 
 public class RandomAccessCharacterFile {
 
@@ -147,8 +147,7 @@ public class RandomAccessCharacterFile {
         }
 
         private byte[] buf = new byte[1];
-        @Override
-		public final void write(int b) throws IOException {
+        public final void write(int b) throws IOException {
             buf[0] = (byte)b;
             RandomAccessCharacterFile.this.write(buf, 0, 1);
         }
@@ -248,13 +247,11 @@ public class RandomAccessCharacterFile {
         RandomAccessWriter() {
         }
 
-        @Override
-		public final void close() throws IOException {
+        public final void close() throws IOException {
             RandomAccessCharacterFile.this.close();
         }
 
-        @Override
-		public final void flush() throws IOException {
+        public final void flush() throws IOException {
             RandomAccessCharacterFile.this.flush();
         }
 
@@ -304,8 +301,7 @@ public class RandomAccessCharacterFile {
         // there is no write pending data in the buffers.
         bbufIsDirty = false;
 
-        //NEW bbufIsReadable = true;
-        bbufIsReadable = false;
+        bbufIsReadable = true;
 
         bbufpos = fcn.position();
 
@@ -363,33 +359,6 @@ public class RandomAccessCharacterFile {
             // need to read from the file.
 
             if (bbufIsDirty) {
-                bbuf.flip();
-                fcn.position(bbufpos);
-                fcn.write(bbuf);
-                bbufpos += bbuf.position();
-                bbuf.clear();
-            } else {
-                int bbufEnd = bbufIsReadable ? bbuf.limit() : bbuf.position();
-                fcn.position(bbufpos + bbufEnd);
-                bbufpos += bbuf.position();
-                  bbuf.compact();
-            }
-
-            bufReady = (fcn.read(bbuf) != -1);
-            bbuf.flip();
-            bbufIsReadable = true;
-        }
-
-        return bufReady;
-    }
-
-    private final boolean ensureReadBbuf_new(boolean force) throws IOException {
-        boolean bufReady = true;
-
-        if ((bbuf.remaining() == 0) || force || ! bbufIsReadable) {
-            // need to read from the file.
-
-            if (bbufIsDirty) {
                 flushBbuf(false);
                 bbuf.clear();
                 bbufIsReadable = false;
@@ -411,6 +380,7 @@ public class RandomAccessCharacterFile {
 
         return bufReady;
     }
+
 
     final int read(char[] cb, int off, int len) throws IOException {
         CharBuffer cbuf = CharBuffer.wrap(cb, off, len);
@@ -464,7 +434,7 @@ public class RandomAccessCharacterFile {
             if (CoderResult.OVERFLOW == r || bbuf.remaining() == 0) {
                 flushBbuf(false);
                 bbuf.clear();
-                //NEW bbufIsReadable = false;
+                bbufIsReadable = false;
             }
             if (r.isUnmappable()) {
                 throw new RACFUnmappableCharacterException(cbuf.position(),
@@ -492,22 +462,6 @@ public class RandomAccessCharacterFile {
             + (bbufIsReadable ? bbuf.limit() : bbuf.position()); // beyond position()
         if (newPosition >= bbufpos && newPosition < bbufend) {
             // near seek. within existing data of bbuf.
-            bbuf.position((int)(newPosition - bbufpos));
-        } else {
-            fcn.position(newPosition);
-            // far seek; discard the buffer (it's already cleared)
-            bbuf.clear();
-            bbuf.flip(); // "there is no useful data on this buffer yet."
-            bbufpos = newPosition;
-        }
-    }
-
-    public final void position_new(long newPosition) throws IOException {
-        flushBbuf(true);
-        long bbufend = bbufpos // in case bbuf is readable, its contents is valid
-            + (bbufIsReadable ? bbuf.limit() : bbuf.position()); // beyond position()
-        if (newPosition >= bbufpos && newPosition < bbufend) {
-            // near seek. within existing data of bbuf.
             if (!bbufIsReadable) { //rewinding. keep tail buffered.
               bbuf.limit(bbuf.position());
               bbufIsReadable = true;
@@ -528,42 +482,11 @@ public class RandomAccessCharacterFile {
     }
 
     public final long length() throws IOException {
-        flushBbuf(false);
-        return fcn.size();
-    }
-
-    public final long length_new() throws IOException {
         flushBbuf(true);
         return fcn.size();
     }
 
-
-    private final void flushBbuf(boolean commitOnly) throws IOException {
-        if (! bbufIsDirty)
-            return;
-
-        fcn.position(bbufpos);
-
-        // if the buffer is dirty, the modifications have to be
-        // before position(): before re-positioning, this.position()
-        // calls this function.
-        if (commitOnly || bbufIsReadable) {
-            ByteBuffer dup = bbuf.duplicate();
-            dup.flip();
-            fcn.write(dup);
-            return;
-        }
-          bbuf.flip();
-          fcn.write(bbuf);
-
-        bbufpos += bbuf.position();
-        bbuf.clear();
-        bbuf.flip(); // there's no useable data in this buffer
-        bbufIsDirty = false;
-        bbufIsReadable = false;
-    }
-
-    final void flushBbuf_new(boolean commitOnly) throws IOException {
+    final void flushBbuf(boolean commitOnly) throws IOException {
         if (commitOnly && !bbufIsDirty)
             return;
         //otherwise, we do at least need to increase bbufpos
@@ -596,22 +519,6 @@ public class RandomAccessCharacterFile {
     }
 
     public final int read(byte[] b, int off, int len) throws IOException {
-        int pos = off;
-        boolean atEof = false;
-        while (pos - off < len && ! atEof) {
-
-            atEof = ! ensureReadBbuf(false);
-            int want = len - pos;
-            if (want > bbuf.remaining()) {
-                want = bbuf.remaining();
-            }
-            bbuf.get(b, pos, want);
-            pos += want;
-        }
-        return pos - off;
-    }
-
-    public final int read_new(byte[] b, int off, int len) throws IOException {
         int pos = off;
         boolean atEof = false;
         while (pos - off < len && ! atEof) {
@@ -667,23 +574,6 @@ public class RandomAccessCharacterFile {
     final void write(byte[] b, int off, int len) throws IOException {
         int pos = off;
         while (pos < off + len) {
-            int want = len - pos + off;
-            if (want > bbuf.remaining()) {
-                want = bbuf.remaining();
-            }
-            bbuf.put(b, pos, want);
-            pos += want;
-            bbufIsDirty = true;
-            if (bbuf.remaining() == 0) {
-                flushBbuf(false);
-                bbuf.clear();
-            }
-        }
-    }
-
-    final void write_new(byte[] b, int off, int len) throws IOException {
-        int pos = off;
-        while (pos < off + len) {
             if (bbuf.remaining() == 0) {
                 flushBbuf(false);
                 bbuf.clear();
@@ -695,5 +585,4 @@ public class RandomAccessCharacterFile {
             bbufIsDirty = true;
         }
     }
-
 }

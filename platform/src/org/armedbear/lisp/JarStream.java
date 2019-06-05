@@ -132,7 +132,7 @@ public final class JarStream extends Stream
     }
 
     @Override
-	public String printObjectImpl()
+	public String printObject()
     {
         StringBuffer sb = new StringBuffer();
         sb.append(Symbol.JAR_STREAM.princToString());

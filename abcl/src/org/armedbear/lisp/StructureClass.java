@@ -79,7 +79,7 @@ public class StructureClass extends SlotClass
     public String printObject()
     {
         StringBuilder sb = new StringBuilder("STRUCTURE-CLASS ");
-        sb.append(getName().princToString());
+        sb.append(getLispClassName().princToString());
         return unreadableString(sb.toString(), false);
     }
 

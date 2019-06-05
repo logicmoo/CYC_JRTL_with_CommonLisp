@@ -227,7 +227,7 @@ public abstract class BroadcastStream extends Stream
     }
 
     @Override
-	public String printObjectImpl()
+	public String printObject()
     {
         return unreadableString("BROADCAST-STREAM", true);
     }

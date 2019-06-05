@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>site-lisp</name>
+			<type>2</type>
+			<location>G:/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp</location>
+		</link>
+	</linkedResources>
 </projectDescription>

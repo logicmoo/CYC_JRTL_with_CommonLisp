@@ -165,7 +165,7 @@ public class SlotClass extends LispClass
             cpl = cpl.cdr();
         }
         setSlotDefinitions(defs.nreverse());
-        LispObject[] instanceSlotNames = new LispObject[defs.length()];
+        LispObject[] instanceSlotNames = new LispObject[defs.cl_length()];
         int i = 0;
         LispObject tail = getSlotDefinitions();
         while (tail != NIL) {
