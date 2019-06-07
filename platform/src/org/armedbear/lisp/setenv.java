@@ -38,35 +38,105 @@ import static org.armedbear.lisp.Lisp.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-// ###setenv var string
-public final class setenv extends Primitive {
-	public setenv() {
-		super("setenv", PACKAGE_EXT, true);
-	}
+public class setenv {
 
-	public static void setEnv(String key, String value) {
-		try {
-			Map<String, String> env = System.getenv();
-			Class<?> cl = env.getClass();
-			Field field = cl.getDeclaredField("m");
-			field.setAccessible(true);
-			Map<String, String> writableEnv = (Map<String, String>) field.get(env);
-			writableEnv.put(key, value);
-		} catch (Exception e) {
-			throw new IllegalStateException("Failed to set environment variable (*Nix-Only)", e);
+	// ###setenv var string
+	static class pf_setenv extends Primitive {
+		public pf_setenv() {
+			super("setenv", PACKAGE_EXT, true);
+		}
+
+		public static void setEnv(String name, String value) {
+			try {
+				Map<String, String> env = System.getenv();
+				Class<?> cl = env.getClass();
+				Field field = cl.getDeclaredField("m");
+				field.setAccessible(true);
+				Map<String, String> writableEnv = (Map<String, String>) field.get(env);
+				writableEnv.put(name, value);
+			} catch (Exception e) {
+				throw new IllegalStateException("Failed to set environment variable (*Nix-Only)", e);
+			}
+		}
+
+		@Override
+		public LispObject execute(LispObject[] args) {
+
+			if (args.length != 2)
+				return error(new WrongNumberOfArgumentsException(this, 2));
+			String name = args[0].STRING().getStringValue();
+			LispObject valu = args[1].STRING();
+			setEnv(name, valu.getStringValue());
+			return valu;
 		}
 	}
 
-	@Override
-	public LispObject execute(LispObject[] args) {
+	private static final Primitive var_pf_setenv = new pf_setenv();
 
-		if (args.length != 2)
-			return error(new WrongNumberOfArgumentsException(this, 2));
-		String name = args[0].STRING().getStringValue();
-		LispObject valu = args[1].STRING();
-		setEnv(name, valu.getStringValue());
-		return valu;
+	// ###set-system-property var string
+	public static class set_system_property extends Primitive {
+		public set_system_property() {
+			super("set-system-property", PACKAGE_JVM, true);
+		}
+
+		public static String setProp(String name, String value) {
+			try {
+				System.setProperty(name, value);
+				return System.getProperty(name, null);
+			} catch (Exception e) {
+				throw new IllegalStateException("Failed to set Property variable " + name + " from "
+						+ System.getProperty(name, null) + " to " + value, e);
+			}
+		}
+
+		@Override
+		public LispObject execute(LispObject[] args) {
+
+			if (args.length != 2)
+				return error(new WrongNumberOfArgumentsException(this, 2));
+			String name = args[0].STRING().getStringValue();
+			LispObject valu = args[1].STRING();
+			String result = setProp(name, valu.getStringValue());
+			return makeStringOrJNull(result);
+		}
+
 	}
 
-    private static final Primitive SETENV = new setenv();
+	private static final Primitive pf_set_system_property = new set_system_property();
+
+	// ###get-system-property var string
+	public static class get_system_property extends Primitive {
+		public get_system_property() {
+			super("get-system-property", PACKAGE_JVM, true);
+		}
+
+		public static String getProp(String name, String defalt) {
+			try {
+
+				return System.getProperty(name, defalt);
+			} catch (Exception e) {
+				throw new IllegalStateException("Failed to get Property variable " + name, e);
+			}
+		}
+
+		@Override
+		public LispObject execute(LispObject[] args) {
+
+			final boolean d = args.length == 2;
+			if (!d && args.length != 1)
+				return error(new WrongNumberOfArgumentsException(this, 1));
+			if (args.length != 2)
+				return error(new WrongNumberOfArgumentsException(this, 2));
+			LispObject valu = null;
+			String name = args[0].STRING().getStringValue();
+			if (d) {
+				valu = args[1].STRING();
+			}
+			String result = getProp(name, valu.getStringValue());
+			return makeStringOrJNull(result);
+		}
+
+	}
+
+	private static final Primitive pf_get_system_property = new get_system_property();
 }

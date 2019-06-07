@@ -138,6 +138,14 @@ public final class JavaObject extends SubLAlienObject {
     public LispObject STRING() {
         return new SimpleString(obj != null ? obj.toString() : "null");
     }
+    /* (non-Javadoc)
+     * @see org.armedbear.lisp.LispObject#getStringValue()
+     */
+    @Override
+    public String getStringValue() {
+    	if(obj == null) return null;
+    	return obj.toString();
+    }
 
     public final Object getObject() {
         return obj;

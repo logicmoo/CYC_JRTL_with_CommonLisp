@@ -13,7 +13,7 @@ public class Integers
         public Int64(final Integer64 jsciNum) {
             super((Integer64)jsciNum);
         }
-
+        
         @Override
 		public boolean isScalar() {
             return true;

@@ -58,6 +58,29 @@ public class Bignum extends AbstractSubLInteger
   private static BigInteger MOST_POSITIVE_FIXNUM =
           BigInteger.valueOf(Integer.MAX_VALUE);
 
+
+  public static LispInteger makeBignum(long l) {
+      if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
+          return Fixnum.getInstance(l);
+      else
+          return new Bignum(l);
+  }
+
+  public static LispInteger makeBignum(BigInteger n) {
+      if (MOST_NEGATIVE_FIXNUM.compareTo(n) < 0 ||
+              MOST_POSITIVE_FIXNUM.compareTo(n) > 0)
+          return new Bignum(n);
+      else
+          return Fixnum.getInstance(n.intValue());
+  }
+
+  public static LispInteger makeBignum(String s, int radix) {
+      BigInteger value = new BigInteger(s, radix);
+
+      return Bignum.getInstance(value);
+  }
+
+
   public static LispInteger getInstance(long l) {
       if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
           return (LispInteger)(Object)Fixnum.getInstance(l);
@@ -96,15 +119,14 @@ public Object javaInstance()
   }
 
   @Override
-public Object javaInstanceImpl(Class c) {
-    String cn = c.getName();
-    if (cn.equals("java.lang.Byte") || cn.equals("byte"))
+  public Object javaInstance(Class c) {
+    if (c == Byte.class || c == byte.class)
       return Byte.valueOf((byte)value.intValue());
-    if (cn.equals("java.lang.Short") || cn.equals("short"))
+    if (c == Short.class || c == short.class)
       return Short.valueOf((short)value.intValue());
-    if (cn.equals("java.lang.Integer") || cn.equals("int"))
+    if (c == Integer.class || c == int.class)
       return Integer.valueOf(value.intValue());
-    if (cn.equals("java.lang.Long") || cn.equals("long"))
+    if (c == Long.class || c == long.class)
       return Long.valueOf((long)value.longValue());
     return javaInstance();
   }

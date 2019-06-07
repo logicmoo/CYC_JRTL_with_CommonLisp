@@ -2,6 +2,25 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/ontology/InconsistentReasonerFactory/InconsistenReasonerFactory.iml" filepath="$PROJECT_DIR$/site-lisp/3t/ontology/InconsistentReasonerFactory/InconsistenReasonerFactory.iml" />
+      <module fileurl="file://$PROJECT_DIR$/main/SxxMachine/SxxMachine.SxxProlog.iml" filepath="$PROJECT_DIR$/main/SxxMachine/SxxMachine.SxxProlog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/att.grappa.eclipse/att.grappa.eclipse.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/att.grappa.eclipse/att.grappa.eclipse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/ihammer-gui/com.traclabs.ihammer.state/com.traclabs.ihammer.state.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/ihammer-gui/com.traclabs.ihammer.state/com.traclabs.ihammer.state.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/com.traclabs.planner.eclipse.ui/com.traclabs.planner.eclipse.ui.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/com.traclabs.planner.eclipse.ui/com.traclabs.planner.eclipse.ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/com.traclabs.planner.eclipse.ui.web/com.traclabs.planner.eclipse.ui.web.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/com.traclabs.planner.eclipse.ui.web/com.traclabs.planner.eclipse.ui.web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/raps-gui/com.traclabs.raps.eclipse.ui/com.traclabs.raps.eclipse.ui.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/raps-gui/com.traclabs.raps.eclipse.ui/com.traclabs.raps.eclipse.ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/de.jaret.util.ui.timebars.eclipse/de.jaret.util.ui.timebars.eclipse.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/de.jaret.util.ui.timebars.eclipse/de.jaret.util.ui.timebars.eclipse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/edu.cmu.cs.ipc/edu.cmu.cs.ipc.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/edu.cmu.cs.ipc/edu.cmu.cs.ipc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/edu.uci.ics.jung/edu.uci.ics.jung.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/edu.uci.ics.jung/edu.uci.ics.jung.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.apache.batik/org.apache.batik.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.apache.batik/org.apache.batik.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.apache.commons/org.apache.commons.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.apache.commons/org.apache.commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.apache.log4j/org.apache.log4j.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.apache.log4j/org.apache.log4j.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.apache.poi/org.apache.poi.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.apache.poi/org.apache.poi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.coode.owl/org.coode.owl.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.coode.owl/org.coode.owl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.eclipse.nebula.widgets.ganttchart/org.eclipse.nebula.widgets.ganttchart.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.eclipse.nebula.widgets.ganttchart/org.eclipse.nebula.widgets.ganttchart.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.jacorb.eclipse/org.jacorb.eclipse.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.jacorb.eclipse/org.jacorb.eclipse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.jfree.chart.eclipse/org.jfree.chart.eclipse.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.jfree.chart.eclipse/org.jfree.chart.eclipse.iml" />
+      <module fileurl="file://$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.mindswap.pellet/org.mindswap.pellet.iml" filepath="$PROJECT_DIR$/site-lisp/3t/apps/planner-gui/utilities/org.mindswap.pellet/org.mindswap.pellet.iml" />
       <module fileurl="file://$PROJECT_DIR$/platform.iml" filepath="$PROJECT_DIR$/platform.iml" />
     </modules>
   </component>

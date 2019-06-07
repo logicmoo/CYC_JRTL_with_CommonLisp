@@ -1,3 +1,0 @@
-% Redefining a built-in:
-
-write( X ).

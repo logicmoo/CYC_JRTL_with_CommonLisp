@@ -39,6 +39,10 @@
          :format-arguments (list size type)))
 
 (defun make-sequence (type size	&key (initial-element nil iesp))
+  "Returns a sequence of SIZE elements, of type TYPE.
+Each element is set to INITIAL-ELEMENT.
+TYPE must be equivalent to either LIST or some sort of ARRAY.
+If the value is a list, it is completely cdr-coded."
   (let (element-type sequence class)
     (setf type (normalize-type type))
     (cond ((atom type)

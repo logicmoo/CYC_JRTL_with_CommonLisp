@@ -81,6 +81,10 @@ public class LispObject
     return result;
   }
 
+  final public int cl_length() {
+	  return length();
+  }
+  
   // public static final LispObject eval(final LispObject obj,
   // final Environment env,
   // final LispThread thread){
@@ -192,7 +196,7 @@ public class LispObject
     return javaInstance();
   }
 
-  final public Object javaInstance(Class< ? > cIn)
+  public Object javaInstance(Class< ? > cIn)
   {
     return javaInstance( cIn, false );
   }
@@ -1585,7 +1589,7 @@ public class LispObject
 
   public LispObject STRING()
   {
-    return error( new TypeError( princToString() + " cannot be coerced to a string." ) );
+    return error( new TypeError( printObject() + " cannot be coerced to a string." ) );
   }
 
   public char[] charsOld()

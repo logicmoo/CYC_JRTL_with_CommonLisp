@@ -82,7 +82,7 @@ After you have downloaded a binary release from either [the
 distributed Maven POM graph][maven-abcl] or from
 [abcl.org][abcl.org-release] archive unpack it into its own
 directory. To run ABCL directly from this directory, make sure Java
-(version 1.6 or up) is in your shell's path.
+(version 1.5 or up) is in your shell's path.
 
 [maven-abcl]:          <https://mvnrepository.com/artifact/org.abcl/abcl/1.5.0>
 [maven-abcl-contrib]:  <https://mvnrepository.com/artifact/org.abcl/abcl-contrib/1.5.0>
@@ -109,6 +109,21 @@ Yer now at the interactive ABCL "Read Eval Print Loop" (REPL): hacks
 BUILDING FROM SOURCE RELEASE
 ============================
 
+There are three ways to build ABCL from the source release with the
+preferred (and most tested way) is to being to use the Ant build tool:
+
+* Use the Ant build tool for Java environments.
+
+* Use the NetBeans [678].x IDE to open ABCL as a project.
+
+* Bootstrap ABCL using a Common Lisp implementation. Supported
+  implementations for this process: SBCL, CMUCL, OpenMCL, Allegro
+  CL, LispWorks or CLISP.
+
+In all cases you need a Java 5 or later JDK (JDK 1.[5678] have been
+tested).  Just the JRE isn't enough, as you need the Java compiler
+('javac') to compile the Java source of the ABCL implementation.
+
 ABCL may be built from its source code by executing the build
 instructions <file:build.xml> expressed by the venerable Apache Ant
 tool.
@@ -118,15 +133,34 @@ installed locally. Just the Java Runtime Environment (JRE) isn't
 enough, as you need the Java compiler ('javac') to compile the Java
 source of the ABCL implementation.
 
-Download a binary distribution [Ant version 1.7.1 or greater][ant].
+Note that when deploying ABCL having JDK isn't a requirement for the
+installation site, just the equivalent JRE, as ABCL compiles directly
+to byte code, avoiding the need for the 'javac' compiler in deployment
+environments.
+
+
+Using Ant
+---------
+
+Download a binary distribution [Ant version 1.7.1 or greater][1].
 Unpack the files somewhere convenient, ensuring that the 'ant' (or
 'ant.bat' under Windows) executable is in your path and executable.
 
-[ant]: http://ant.apache.org/bindownload.cgi
+[1]: http://ant.apache.org/bindownload.cgi
 
 Then simply executing 
 
-    cmd$ ant
+    unix$ ant
+
+or
+
+    dos> ant.bat
+
+from the directory containing this README file will create an
+executable wrapper ('abcl' under UNIX, 'abcl.bat' under Windows).  Use
+this wrapper to start ABCL.
+or
+
 
 from the directory containing the <file:build.xml> instructions will
 create an executable wrapper ('abcl' under UNIX, 'abcl.bat' under
@@ -152,7 +186,83 @@ in the GUI are available.  Use the 'slime' config with a suitably
 linked 'swank.asd' in '~/.asdf-install-dir/systems/' to connect a REPL
 to the NetBeans debug process.
 
-[netbeans]: http://netbeans.org/downloads/
+
+
+Using NetBeans
+--------------
+
+Obtain and install the [NetBeans IDE][2]. One should be able to open
+the ABCL directory as a project in the Netbeans application, whereupon
+the usual build, run, and debug targets as invoked in the GUI are
+available.  Use the 'slime' config with a suitably linked 'swank.asd'
+in '~/.asdf-install-dir/systems/' to connect a REPL to the NetBeans
+debug process.
+
+[2]: http://netbeans.org/downloads/
+
+
+Building from Lisp
+------------------
+
+Building from another Common Lisp implementation is the most venerable
+and least tested way of building ABCL.  It produces a "non-standard"
+version of the distribution that doesn't share build instructions with
+the previous two methods, but it still may be of interest to those who
+absolutely don't want to know anything about Java.  The other Common
+Lisp implementation does not actually perform any compliation, but is
+merely used to orchestrate the invocation of tools in the JDK.
+
+First, copy the file 'customizations.lisp.in' to 'customization.lisp',
+in the directory containing this README file, editing to suit your
+situation, paying attention to the comments in the file.  The critical
+step is to have Lisp special variable '*JDK*' point to the root of the
+Java Development Kit.  Underneath the directory referenced by the
+value of '*JDK*' there should be an executable Java compiler in
+'bin/javac' ('bin/javac.exe' under Windows).
+
+Then, one may either use the 'build-from-lisp.bash' shell script or load
+the necessary files into your Lisp image by hand.
+
+** Using the 'build-from-lisp.bash' script
+
+Under UNIX-like systems, one may simply invoke the
+'build-from-lisp.bash' script.  As noted above, one must first copy the
+'customizations.lisp.in' file to 'customizations.lisp', then edit it
+to reflect the local configuration most importantly the path to the
+Java Development Kit.
+
+After configuring 'customizations.lisp', the following would use SBCL
+as the compilation driver to build ABCL:
+
+    unix$ ./build-from-lisp.bash sbcl
+
+After a successful build, you may use 'abcl' ('abcl.bat' on Windows)
+to start ABCL.  Note that this wrappers contain absolute paths, so
+you'll need to edit them if you move things around after the build.
+
+If you're developing on ABCL, you may want to use
+
+    unix$ ./build-from-lisp.bash <implementation> --clean=nil
+
+to not do a full rebuild.
+
+In case of failure in the javac stage, you might try this:
+
+    unix$ ./build-from-lisp.bash <implementation> --full=t --clean=t --batch=nil
+
+This invokes javac separately for each .java file, which avoids running
+into limitations on command line length (but is a lot slower).
+
+** Building from another Lisp manually
+
+There is also an ASDF definition in 'abcl.asd' for the BUILD-ABCL
+which can be used to load the necessary Lisp definitions, after which
+
+    CL-USER> (build-abcl:build-abcl :clean t :full t)
+
+will build ABCL.  If ASDF isn't present, simply LOAD the
+'customizations.lisp' and 'build-abcl.lisp' files to achieve the same
+effect as loading the ASDF definition.
 
 
 BUGS
@@ -165,8 +275,13 @@ ABCL now has a manual stating its conformance to the ANSI standard,
 providing a compliant and practical Common Lisp implementation.
 
 
-Tests
------
+### Tests 
+DMiles ver now fails 37 out of 21708 total tests
+
+ABCL 1.4.0 now fails 47 out of 21708 total tests in the [revised and
+expanded ANSI CL test suite][ansi-test] (derived from the tests
+originally written for GCL).
+
 
 ABCL 1.5.0 now fails 48 out of 21708 total tests in the [revised and
 expanded ANSI CL test suite][ansi-test] (derived from the tests
@@ -193,8 +308,7 @@ Please report problems to the development mailing list:
 
 Have fun!
 
-AUTHORS
-=======
+# Authors 
 
 On behalf of all ABCL development team and contributors,
 

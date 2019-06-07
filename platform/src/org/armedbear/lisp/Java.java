@@ -217,8 +217,9 @@ public final class Java {
             error(new LispError("illegal access"));
         } catch (final IllegalArgumentException e) {
             error(new LispError("illegal argument"));
-        } catch (final ControlTransfer e) {
-            throw e;
+        }
+        catch (Error ct) {  //ControlTransfer's
+            throw ct;      
         } catch (final Throwable t) { // no code -> no ControlTransfer
             error(new LispError(getMessage(t)));
         }

@@ -1,3 +1,0 @@
-test :- load_dync('a.P'),
-        p(X),writeln(p(X)),fail.
-

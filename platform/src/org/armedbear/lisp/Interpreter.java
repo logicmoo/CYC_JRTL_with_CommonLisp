@@ -33,21 +33,7 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.EOF;
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
-import static org.armedbear.lisp.Lisp.PACKAGE_TPL;
-import static org.armedbear.lisp.Lisp.T;
-import static org.armedbear.lisp.Lisp._BATCH_MODE_;
-import static org.armedbear.lisp.Lisp._COMMAND_LINE_ARGUMENT_LIST_;
-import static org.armedbear.lisp.Lisp._NOINFORM_;
-import static org.armedbear.lisp.Lisp.checkPathname;
-import static org.armedbear.lisp.Lisp.error;
-import static org.armedbear.lisp.Lisp.exit;
-import static org.armedbear.lisp.Lisp.getStandardInput;
-import static org.armedbear.lisp.Lisp.getStandardOutput;
-import static org.armedbear.lisp.Lisp.initialized;
-import static org.armedbear.lisp.Lisp.intern;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -70,9 +56,9 @@ public final class Interpreter implements Runnable {
     private final InputStream inputStream;
     private final OutputStream outputStream;
 
-    public static boolean noinit = true;
+    private static boolean noinit = false;
     public static boolean nosystem = false;
-    public static boolean noinform = false;
+    private static boolean noinform = false;
     public static boolean postProcess = true;
     private static boolean help = false;
     public static boolean doubledash = false;
@@ -322,7 +308,7 @@ public final class Interpreter implements Runnable {
                 Interpreter.noinit = true;
                 // checks local directory firsts
                 File file = new File(".abclrc");
-                if (!file.isFile()) {
+        	if(!file.isFile()&& file.canRead()) {
                     String userHome = System.getProperty("user.home");
                     file = new File(userHome, ".abclrc");
                 }
@@ -330,9 +316,11 @@ public final class Interpreter implements Runnable {
                     final double startLoad = System.currentTimeMillis();
                     Load.load(file.getCanonicalPath());
                     if (!noinform) {
-                        final double loadtime = (System.currentTimeMillis() - startLoad) / 1000.0;
+                    final double loadtime 
+                        = (System.currentTimeMillis() - startLoad) / 1000.0;
                         getStandardOutput()
-                                ._writeString("Loading " + file + " completed in " + loadtime + " seconds.\n");
+                        ._writeString("Loading " + file + " completed in " 
+                                      + loadtime + " seconds.\n");
                     }
                     return;
                 }
@@ -417,22 +405,43 @@ arg.equals("--load-system-file")) {
                     continue;
                 } else if (arg.equals("--")) {
                     doubledash = true;
-                } else if (arg.equals("--cyc")) {
-                    if (Main.subLisp != null) {
-                        SubLPackage.setCurrentPackage("CYC");
-                        //CycEval.init_kb();
-                        Eval.eval("(init-kb)");
-                        //Eval.eval("(sl:load \"init/jrtl-release-init.lisp\")");
-                        SubLPackage.setCurrentPackage("CL-USER");
+                } else if (arg.equals("--eval")) {
+                    if (i + 1 < args.length) {
+                        try {
+                            evaluate(args[i + 1]);
+                        }
+                        catch (UnhandledCondition c) {
+                            final String separator =
+                                System.getProperty("line.separator");
+                            StringBuilder sb = new StringBuilder();
+                            sb.append(separator);
+                            sb.append("Caught ");
+                            sb.append(c.getCondition().typeOf().printObject());
+                            sb.append(" while processing --eval option \"" +
+                                      args[i + 1] + "\":");
+                            sb.append(separator);
+                            sb.append("  ");
+                            final LispThread thread = LispThread.currentThread();
+                            thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
+                            sb.append(c.getCondition().princToString());
+                            sb.append(separator);
+                            System.err.print(sb.toString());
+                            exit(2); // FIXME
+                        }
+                        ++i;
+                    } else {
+                        // Shouldn't happen.
+                        System.err.println("No argument supplied to --eval");
+                        exit(1); // FIXME
                     }
                 }
-
                 else if (arg.equals("--compile-system")) {
                     {
                         try {
-                            evaluate("(setf *load-verbose* t)"
-                                    + "(handler-case (compile-system :zip nil :quit t :output-path \"build/classes/\") "
-                                    + "(t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))");
+                        	evaluate("(setf *load-verbose* t)");
+                        	evaluate("(setf trace-lisp 10)");
+                        	evaluate("(handler-case (compile-system :zip nil :quit t :output-path \"build/classes/\") "
+                                    + "(t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))");
                         } catch (UnhandledCondition c) {
                             final String separator = System.getProperty("line.separator");
                             StringBuilder sb = new StringBuilder();
@@ -452,41 +461,29 @@ arg.equals("--load-system-file")) {
                         ++i;
                     }
                 }
-
-                else if (arg.equals("--eval")) {
+                else if (arg.equals("--nodebug")) 
+                	debug = false;
+                else if (arg.equals("--debug"))
+                	debug = true;
+                else if (arg.equals("--nocheck")) 
+                	checkCallers = false;
+                else if (arg.equals("--check"))
+                	checkCallers = true;
+                else if (arg.equals("--notrace")) 
+                    evaluate("(trace-lisp nil)");
+                else if (arg.equals("--trace"))
+                    evaluate("(trace-lisp t)");
+                else if (arg.equals("--junicode"))
+                    LISP_NOT_JAVA = false;
+                else if (arg.equals("--load") ||
+                           arg.equals("--load-system-file")) {
                     if (i + 1 < args.length) {
-                        try {
-                            evaluate(args[i + 1]);
-                        } catch (UnhandledCondition c) {
-                            final String separator = System.getProperty("line.separator");
-                            StringBuilder sb = new StringBuilder();
-                            sb.append(separator);
-                            sb.append("Caught ");
-                            sb.append(c.getCondition().typeOf().printObject());
-                            sb.append(" while processing --eval option \"" + args[i + 1] + "\":");
-                            sb.append(separator);
-                            sb.append("  ");
-                            final LispThread thread = LispThread.currentThread();
-                            thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
-                            sb.append(c.getCondition().princToString());
-                            sb.append(separator);
-                            System.err.print(sb.toString());
-                            exit(2); // FIXME
-                        }
-                        ++i;
-                    } else {
-                        // Shouldn't happen.
-                        System.err.println("No argument supplied to --eval");
-                        exit(1); // FIXME
-                    }
-                } else if (arg.equals("--load") || arg.equals("--load-system-file")) {
-                    if (i + 1 < args.length) {
-                        if (arg.equals("--load")) {
+                        if (arg.equals("--load"))
+                            Load.load(Pathname.mergePathnames(new Pathname(args[i + 1]),
+                                    checkPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.getSymbolValue())),
+                                      false, false, true);
 
-                            Load.load(Pathname.mergePathnames(new Pathname(
-                                    args[i + 1]), checkPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS
-                                            .getSymbolValue())), false, false, true);
-                        } else
+                        else
                             Load.loadSystemFile(args[i + 1], false); // not being autoloaded
                         ++i;
                     } else {
@@ -672,37 +669,47 @@ arg.equals("--load-system-file")) {
 
     };
 
-    private static final Primitive _DEBUGGER_HOOK_FUNCTION = new Primitive("%debugger-hook-function", PACKAGE_SYS,
-            false) {
+    private static final Primitive _DEBUGGER_HOOK_FUNCTION =
+        new Primitive("%debugger-hook-function", PACKAGE_SYS, false)
+    {
         @Override
-        public LispObject execute(LispObject first, LispObject second) {
+        public LispObject execute(LispObject first, LispObject second)
+        {
             final LispObject condition = first;
             if (globalInterpreter == null) {
                 final LispThread thread = LispThread.currentThread();
                 final SpecialBindingsMark mark = thread.markSpecialBindings();
                 thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                 try {
-                    final LispObject truename = Symbol.LOAD_TRUENAME.symbolValue(thread);
+                    final LispObject truename =
+                        Symbol.LOAD_TRUENAME.symbolValue(thread);
                     if (truename != NIL) {
-                        final LispObject stream = _LOAD_STREAM_.symbolValue(thread);
+                        final LispObject stream =
+                            _LOAD_STREAM_.symbolValue(thread);
                         if (stream instanceof Stream) {
-                            final int lineNumber = ((Stream) stream).getLineNumber() + 1;
-                            final int offset = ((Stream) stream).getOffset();
-                            Debug.trace("Error loading " + truename.princToString() + " at line " + lineNumber
-                                    + " (offset " + offset + ")");
+                            final int lineNumber =
+                                ((Stream)stream).getLineNumber() + 1;
+                            final int offset =
+                                ((Stream)stream).getOffset();
+                            Debug.trace("Error loading " +
+                                        truename.princToString() +
+                                        " at line " + lineNumber +
+                                        " (offset " + offset + ")");
                         }
                     }
-                    Debug.trace("Encountered unhandled condition of type " + condition.typeOf().princToString() + ':');
+                    Debug.trace("Encountered unhandled condition of type " +
+                                condition.typeOf().princToString() + ':');
                     Debug.trace("  " + condition.princToString());
-                } catch (Throwable t) {
-                } // catch any exception to throw below
+                }
+                catch (Throwable t) {} // catch any exception to throw below
                 finally {
                     thread.resetSpecialBindings(mark);
                 }
             }
             UnhandledCondition uc = new UnhandledCondition(condition);
             if (condition.typep(Symbol.JAVA_EXCEPTION) != NIL)
-                uc.initCause((Throwable) JavaException.JAVA_EXCEPTION_CAUSE.execute(condition).javaInstance());
+                uc.initCause((Throwable)JavaException
+                        .JAVA_EXCEPTION_CAUSE.execute(condition).javaInstance());
             throw uc;
         }
     };
@@ -783,22 +790,28 @@ arg.equals("--load-system-file")) {
         }
         return sb.toString();
     }
-
-    private static String help() {
+    private static String help()
+    {
         final String sep = System.getProperty("line.separator");
         StringBuilder sb = new StringBuilder("Parameters:");
         sb.append(sep);
-        sb.append("--help").append(sep).append("    Displays this message.");
+        sb.append("--help").append(sep)
+          .append("    Displays this message.");
         sb.append(sep);
-        sb.append("--noinform").append(sep).append("    Suppresses the printing of startup information and banner.");
+        sb.append("--noinform").append(sep)
+          .append("    Suppresses the printing of startup information and banner.");
         sb.append(sep);
-        sb.append("--noinit").append(sep).append("    Suppresses the loading of the '~/.abclrc' startup file.");
+        sb.append("--noinit").append(sep)
+          .append("    Suppresses the loading of the '~/.abclrc' startup file.");
         sb.append(sep);
-        sb.append("--nosystem").append(sep).append("    Suppresses loading the 'system.lisp' customization file. ");
+        sb.append("--nosystem").append(sep)
+          .append("    Suppresses loading the 'system.lisp' customization file. ");
         sb.append(sep);
-        sb.append("--eval <FORM>").append(sep).append("    Evaluates the <FORM> before initializing REPL.");
+        sb.append("--eval <FORM>").append(sep)
+          .append("    Evaluates the <FORM> before initializing REPL.");
         sb.append(sep);
-        sb.append("--load <FILE>").append(sep).append("    Loads the file <FILE> before initializing REPL.");
+        sb.append("--load <FILE>").append(sep)
+          .append("    Loads the file <FILE> before initializing REPL.");
         sb.append(sep);
         sb.append("--load-system-file <FILE>").append(sep)
                 .append("    Loads the system file <FILE> before initializing REPL.");
@@ -820,6 +833,9 @@ arg.equals("--load-system-file")) {
         if (true)
             Errors.warn("Auto-generated method stub:  Interpreter.kill");
 
+    }
+    static public void exit(int i) {
+    	System.exit(i);
     }
 
     public void setIO(InputStream in, OutputStream out) {

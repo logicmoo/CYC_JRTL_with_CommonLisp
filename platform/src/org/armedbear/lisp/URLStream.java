@@ -33,11 +33,15 @@
 
 package org.armedbear.lisp;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import static org.armedbear.lisp.Lisp.*;
+
+import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
 
 /**
  * Stream interface for a URL.
@@ -56,7 +60,7 @@ public final class URLStream extends Stream
                      LispObject ifExists, LispObject format)
         throws IOException
     {
-        super(Symbol.URL_STREAM, Keyword.INPUT_KEYWORD);
+        super(Symbol.URL_STREAM);
         Debug.assertTrue(direction == Keyword.INPUT);
         isInputStream = true;
 

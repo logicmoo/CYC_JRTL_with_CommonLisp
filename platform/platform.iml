@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module classpath="eclipse" classpath-dir="$MODULE_DIR$" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="Osmorc" name="OSGi">
+      <configuration manifestGenerationMode="Manually" manifestLocation="META-INF/MANIFEST.MF" jarfileLocation="platform.jar" outputPathType="CompilerOutputPath" bndFileLocation="" bundlorFileLocation="" bundleActivator="" bundleSymbolicName="" bundleVersion="1.0.0" ignoreFilePattern="" useProjectDefaultManifestFileLocation="false" alwaysRebuildBundleJAR="false" doNotSynchronizeWithMaven="false">
+        <additionalProperties />
+        <additionalJARContents />
+      </configuration>
+    </facet>
+    <facet type="web" name="Web">
+      <configuration>
+        <descriptors>
+          <deploymentDescriptor name="web.xml" url="file://$MODULE_DIR$/examples/google-app-engine/war/WEB-INF/web.xml" />
+        </descriptors>
+        <webroots>
+          <root url="file://$MODULE_DIR$/examples/google-app-engine/war" relative="/" />
+        </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/main/cycjava-persistence-hacks" />
+          <root url="file://$MODULE_DIR$/main/logicmoo-main" />
+          <root url="file://$MODULE_DIR$/main/opencyc-server-jsrc" />
+          <root url="file://$MODULE_DIR$/main/objectweb-asm-src" />
+          <root url="file://$MODULE_DIR$/main/armedbear-j-src" />
+          <root url="file://$MODULE_DIR$/main/appdapter-src" />
+          <root url="file://$MODULE_DIR$/main/jpl7-hacked" />
+          <root url="file://$MODULE_DIR$/main/java" />
+          <root url="file://$MODULE_DIR$/src" />
+          <root url="file://$MODULE_DIR$/main/server-4q" />
+          <root url="file://$MODULE_DIR$/main/platform-1.1" />
+          <root url="file://$MODULE_DIR$/main/beanshell" />
+          <root url="file://$MODULE_DIR$/site-lisp/optop/demo" />
+          <root url="file://$MODULE_DIR$/.apt_generated" />
+        </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="google-app-engine" name="Google App Engine">
+      <configuration />
+    </facet>
+  </component>
+</module>

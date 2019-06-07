@@ -23,19 +23,26 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 
+
 public abstract class SubLStructNative extends AbstractSubLStruct implements SubLStruct
 {
 
-	@Override
+	
+	
+	
 	abstract public SubLStructDecl getStructDecl();
 
-	@Override
+	
+	
+	
 	public LispObject getSlotValue(int index)
 	{
 		return (LispObject) getField(index + 2);
 	}
 
-	@Override
+	
+	
+	
 	public LispObject SLOT_VALUE(LispObject slotName)
 	{
 		LispObject value;
@@ -65,7 +72,9 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		return value;
 	}
 
-	@Override
+	
+	
+	
 	public void setSlotValue(LispObject slotName, LispObject newValue)
 	{
 		if (slotName instanceof SubLSymbol)
@@ -96,12 +105,16 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		Symbol.SLOT_MISSING.execute(args);
 	}
 
+	
+	
 	public void setSlotValue(int index, LispObject newValue)
 	{
 		setField(index + 2, newValue);
 	}
 
-	@Override
+	
+	
+	
 	public void setLayout(Layout structdecl)
 	{
 		if (layout == structdecl) return;
@@ -138,19 +151,25 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		}
 	}
 
-	@Override
+	
+	
+	
 	public boolean equalp(SubLObject obj)
 	{
 		return super.equalpA(obj);
 	}
 
-	@Override
+	
+	
+	
 	public boolean equals(Object obj)
 	{
 		return super.equalsA(obj);
 	}
 
-	@Override
+	
+	
+	
 	public SubLObject getField(int fieldNum)
 	{
 		if (fieldNum == 0) return SubLNumberFactory.makeInteger(getFieldCount());
@@ -166,7 +185,9 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		}
 	}
 
-	@Override
+	
+	
+	
 	public void setFieldImpl(int fieldNum, SubLObject value)
 	{
 		if (fieldNum == 0) Errors.unimplementedMethod("SublStructNative.setField(0)");
@@ -182,24 +203,28 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		}
 	}
 
-	@Override
+	
+	
+	
 	public SubLObject setField0(SubLObject newVal)
 	{
 		Errors.unimplementedMethod("SublStructNative.setField0()");
 		return SubLNil.NIL;
 	}
 
-	@Override
+	
+	
+	
 	public SubLObject setField1(SubLObject newVal)
 	{
 		Errors.unimplementedMethod("SublStructNative.setField1()");
 		return SubLNil.NIL;
 	}
-
-	@Override
+	
+	
 	public String printObject()
 	{
-		try
+		try 
 		{
 			return print_high.princ_to_string(this).getStringValue();
 		} catch (Exception e)
@@ -208,7 +233,9 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		}
 	}
 
-	@Override
+	
+	
+	
 	public SubLObject setField2(SubLObject value)
 	{
 
@@ -223,7 +250,9 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		return value;
 	}
 
-	@Override
+	
+	
+	
 	public void setName(SubLSymbol name)
 	{
 		getStructDecl().setStructName(name);

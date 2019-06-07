@@ -2439,7 +2439,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         @Override
         public LispObject execute(LispObject arg) {
             return finishOutput(arg);
-        }
+        } 
     };
 
     static final LispObject finishOutput(LispObject arg)
@@ -3025,6 +3025,27 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	return reader;
     }
 
+	/**
+	 * 
+	 */
+	@Override
+	public void flush() {
+		if(writer!=null) {
+			try {
+				writer.flush();
+			} catch (IOException e) {
+				
+			}
+		}
+		if(out!=null) {
+			try {
+				out.flush();
+			} catch (IOException e) {
+				
+			}
+		}		
+	}
+	
 	@Override
 	public boolean freshLine() {
 		return freshLine;

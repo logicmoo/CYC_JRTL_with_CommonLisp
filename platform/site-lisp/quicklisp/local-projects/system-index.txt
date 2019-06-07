@@ -1,0 +1,5 @@
+shop3/shop3/shop3.asd
+shop3/shop3/shop3-theorem-prover.api/shop3-thmpr-api.asd
+shop3/shop3/examples/rovers/strips/rovers-problem-translator.asd
+shop3/shop3/examples/openstacks-adl/openstacks-problem-translator.asd
+shop3/shop3/examples/satellite/strips/translate-satellite-problems.asd

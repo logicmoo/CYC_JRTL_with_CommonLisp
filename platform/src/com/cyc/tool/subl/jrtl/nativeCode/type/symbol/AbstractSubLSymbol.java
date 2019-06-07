@@ -255,6 +255,17 @@ public abstract class AbstractSubLSymbol
   @Override
   abstract public void forceGlobalValue(SubLObject newValue);
 
+  public String cl_symbol_name() {
+	  return getName();
+  }
+  /* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispObject#getStringValue()
+	 */
+	@Override
+	public String getStringValue() {
+		// TODO Auto-generated method stub
+		return cl_symbol_name();
+	}
   @Override
   abstract public String getName();
 

@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
 // ### %adjust-array array new-dimensions element-type initial-element
 // initial-element-p initial-contents initial-contents-p fill-pointer
 // displaced-to displaced-index-offset => new-array
@@ -61,19 +63,19 @@ public final class adjust_array extends Primitive
         if (initialElementProvided && initialContentsProvided) {
             return error(new LispError("ADJUST-ARRAY: cannot specify both initial element and initial contents."));
         }
-        if (elementType != array.getElementType() &&
-            getUpgradedArrayElementType(elementType) != array.getElementType())
+        if (elementType != array.getArrayElementType() &&
+            getUpgradedArrayElementType(elementType) != array.getArrayElementType())
         {
             return error(new LispError("ADJUST-ARRAY: incompatible element type."));
         }
         if (array.getRank() == 0) {
             return array.adjustArray(new int[0], initialElement, initialContents);
         }
-        if (!initialElementProvided && array.getElementType() == T)
+        if (!initialElementProvided && array.getArrayElementType() == T)
             initialElement = Fixnum.ZERO;
         if (array.getRank() == 1) {
             final int newSize;
-            if (dimensions instanceof Cons && dimensions.length() == 1)
+            if (dimensions instanceof Cons && dimensions.cl_length() == 1)
                 newSize = Fixnum.getValue(dimensions.car());
             else
                 newSize = Fixnum.getValue(dimensions);
@@ -100,7 +102,7 @@ public final class adjust_array extends Primitive
             }
         }
         // rank > 1
-        final int rank = dimensions.listp() ? dimensions.length() : 1;
+        final int rank = dimensions.listp() ? dimensions.cl_length() : 1;
         int[] dimv = new int[rank];
         if (dimensions.listp()) {
             for (int i = 0; i < rank; i++) {

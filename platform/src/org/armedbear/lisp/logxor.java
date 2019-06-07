@@ -2,7 +2,7 @@
  * logxor.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id$
+ * $Id: logxor.java 15023 2017-06-01 06:45:14Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
 // ### logxor &rest integers => result-integer
 public final class logxor extends Primitive
 {
@@ -50,9 +52,7 @@ public final class logxor extends Primitive
     @Override
 	public LispObject execute(LispObject arg)
     {
-        if (arg instanceof Fixnum || arg instanceof Bignum)
-            return arg;
-        return type_error(arg, Symbol.INTEGER);
+        return checkInteger(arg);
     }
 
     @Override

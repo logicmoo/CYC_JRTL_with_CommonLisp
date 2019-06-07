@@ -3479,4 +3479,14 @@ public class Symbol
   public static final Symbol COMPILER_LET = PACKAGE_LISP.addExternalSymbol( "COMPILER-LET" );
   // THREADS
   public static final Symbol THREAD = PACKAGE_THREADS.addExternalSymbol( "THREAD" );
+
+/**
+ * TODO Describe the purpose of this method.
+ * @param value2
+ * @return
+ */
+public boolean symbolSame(LispObject value2) {
+	// TODO Auto-generated method stub
+	return this == value2;
+}
 }

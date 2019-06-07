@@ -1,5 +1,0 @@
-% The argument of once/1 not so good:
-
-head:-
-       goal,
-       once( Whatever ).

@@ -147,6 +147,7 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
     @Override
 	protected int _readChar() throws java.io.IOException
     {
+  		flush();
         return inStream._readChar();
     }
 

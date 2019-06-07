@@ -1,0 +1,1 @@
+dists/quicklisp/software/trivial-garbage-20190521-git/trivial-garbage.asd

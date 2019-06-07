@@ -1,3 +1,7 @@
+build
+dist
+abcl
+/bin-eclipse/
 /Debug/
 /.compiled/
 /lib/*.dll
@@ -8,3 +12,4 @@
 /bin/modern/
 /lib/ALL/
 
+/.apt_generated/

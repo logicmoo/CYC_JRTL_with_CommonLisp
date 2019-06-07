@@ -32,7 +32,8 @@
  */
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.error;
+import org.armedbear.lisp.util.HttpHead;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +49,6 @@ import java.util.Locale;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import org.armedbear.lisp.util.HttpHead;
 
 /**
  * A cache for all zip/jar file accesses by URL that uses the last
@@ -97,7 +97,7 @@ public class ZipCache {
         zipCache.clear();
     }
 
-    static HashMap<String, Entry> zipCache = new HashMap<String, Entry>();
+    static HashMap<URL, Entry> zipCache = new HashMap<URL, Entry>();
 
     synchronized public static ZipFile get(Pathname p) {
         return get(Pathname.makeURL(p));
@@ -185,7 +185,7 @@ public class ZipCache {
 
                 if (date == null || date.getTime() > entry.lastModified) {
                     entry = fetchURL(url, false);
-                    zipCache.put(url.toString(), entry);
+                    zipCache.put(url, entry);
                 }
                 if (date == null) {
                     if (dateString == null)
@@ -198,7 +198,7 @@ public class ZipCache {
 
            } else {
                 entry = fetchURL(url, false);
-                zipCache.put(url.toString(), entry);
+                zipCache.put(url, entry);
             }
         } else {
             if (url.getProtocol().equals("file")) {
@@ -227,7 +227,7 @@ public class ZipCache {
             } else {
                 entry = fetchURL(url, true);
             }
-            zipCache.put(url.toString(), entry);
+            zipCache.put(url, entry);
         }
         return entry.file;
     }

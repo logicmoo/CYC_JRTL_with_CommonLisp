@@ -1,0 +1,27 @@
+
+language: java
+install: ant deps
+
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
+
+
+jdk:
+  - oraclejdk8
+  - oraclejdk9
+  - openjdk8
+
+
+before_script:
+  - sudo apt-add-repository ppa:swi-prolog/devel -y
+  - sudo apt-get update -q
+  - sudo apt-get install swi-prolog-nox
+
+script:
+  - jdk_switcher use oraclejdk8
+  - # do stuff with Java 8
+  - jdk_switcher use openjdk8
+  - # do stuff with open Java 8
+ 

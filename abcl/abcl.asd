@@ -145,6 +145,17 @@ be in a directory named '../ansi-test/'."
                (:module wrapper :pathname "test/lisp/cl-bench/" 
                         :depends-on (package) :components
                         ((:file "wrapper")))))
+ 
+;;; aka the "Lisp-hosted build system" which doesn't share build
+;;; instructions with the canonical build system in <file:build.xml>
+;;; Works for: abcl, sbcl, clisp, cmu, lispworks, allegro, openmcl
+(defsystem :abcl/build
+  :description "Build ABCL from a Lisp.  Not the canonical build recipe."
+  :components
+  ((:module build :pathname ""  :components
+            ((:file "build-abcl") 
+             (:file "customizations" :depends-on ("build-abcl"))))))
+
 (defsystem abcl/documentation
   :description "Tools to generate LaTeX source from docstrings."
   :depends-on (swank)

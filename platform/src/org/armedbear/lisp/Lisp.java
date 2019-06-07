@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
- * $Id$
+ * $Id: Lisp.java 14552 2013-06-18 19:20:51Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,19 +60,23 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
-public class Lisp {
-    public static boolean debug = false;
+abstract public class Lisp extends ABCLStatic
+{
+  public static boolean debug = System.getProperty("lisp.debug","true").equals("true");
+
+  public static boolean checkCallers = System.getProperty("lisp.checks","false").equals("true");
+
+  public static boolean ansi = System.getProperty("lisp.ansi","false").equals("true");
 
     public static boolean cold = true;
 
     public static boolean initialized;
 
-    public static boolean NO_STACK_FRAMES = !debug;
+    public static boolean LISP_NOT_JAVA = !System.getProperty("lisp.junicode","false").equals("true");
     public static int insideToString = 0;
 
     static final WeakHashMap<LispObject, LispObject> documentationHashTable = new WeakHashMap<LispObject, LispObject>();
 
-    final public static boolean LISP_NOT_JAVA = true;
     // Packages.
     public static final Package PACKAGE_CL = Packages.createPackage("COMMON-LISP", 2048); // EH 10-10-2010: Actual number = 1014
     public static final Package PACKAGE_CL_USER = Packages.createPackage("COMMON-LISP-USER", 1024);
@@ -181,7 +183,8 @@ public class Lisp {
     // Sets a base offset hashing value per JVM session, as an antidote to
     // http://www.nruns.com/_downloads/advisory28122011.pdf
     //    (Denial of Service through hash table multi-collisions)
-    public static final int randomStringHashBase = (int) (new java.util.Date().getTime());
+  public static final int randomStringHashBase =
+          (int)(new java.util.Date().getTime());
 
     public static boolean profiling;
 
@@ -190,7 +193,8 @@ public class Lisp {
     public static volatile boolean sampleNow;
 
     // args must not be null!
-    public static final LispObject funcall(LispObject fun, LispObject[] args, LispThread thread)
+  public static final LispObject funcall(LispObject fun, LispObject[] args,
+                                         LispThread thread)
 
     {
         thread._values = null;
@@ -198,7 +202,8 @@ public class Lisp {
         // 26-07-2009: For some reason we cannot "just" call the array version;
         // it causes an error (Wrong number of arguments for LOOP-FOR-IN)
         // which is probably a sign of an issue in our design?
-        switch (args.length) {
+    switch (args.length)
+      {
             case 0:
                 return thread.execute(fun);
             case 1:
@@ -210,26 +215,34 @@ public class Lisp {
             case 4:
                 return thread.execute(fun, args[0], args[1], args[2], args[3]);
             case 5:
-                return thread.execute(fun, args[0], args[1], args[2], args[3], args[4]);
+        return thread.execute(fun, args[0], args[1], args[2], args[3],
+                              args[4]);
             case 6:
-                return thread.execute(fun, args[0], args[1], args[2], args[3], args[4], args[5]);
+        return thread.execute(fun, args[0], args[1], args[2], args[3],
+                              args[4], args[5]);
             case 7:
-                return thread.execute(fun, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+        return thread.execute(fun, args[0], args[1], args[2], args[3],
+                              args[4], args[5], args[6]);
             case 8:
-                return thread.execute(fun, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+        return thread.execute(fun, args[0], args[1], args[2], args[3],
+                              args[4], args[5], args[6], args[7]);
             default:
                 return thread.execute(fun, args);
         }
     }
 
-    public static final LispObject macroexpand(LispObject form, final Environment env, final LispThread thread)
+  public static final LispObject macroexpand(LispObject form,
+                                             final Environment env,
+                                             final LispThread thread)
 
     {
         LispObject expanded = NIL;
-        while (true) {
+    while (true)
+      {
             form = macroexpand_1(form, env, thread);
             LispObject[] values = thread._values;
-            if (values[1] == NIL) {
+        if (values[1] == NIL)
+          {
                 values[1] = expanded;
                 return form;
             }
@@ -237,7 +250,9 @@ public class Lisp {
         }
     }
 
-    public static final LispObject macroexpand_1(final LispObject form, final Environment env, final LispThread thread)
+  public static final LispObject macroexpand_1(final LispObject form,
+                                               final Environment env,
+                                               final LispThread thread)
 
     {
         if (form instanceof Cons) {
@@ -332,6 +347,7 @@ public class Lisp {
 
     private static final void pushJavaStackFrames() {
         final LispThread thread = LispThread.currentThread();
+	  if(thread.NO_STACK_FRAMES) return;
         final StackTraceElement[] frames = thread.getJavaStackTrace();
 
         // frames[0] java.lang.Thread.getStackTrace
@@ -1033,28 +1049,33 @@ public class Lisp {
 
     {
         StringBuilder sb = new StringBuilder(prefix);
-        SpecialBinding binding = thread.getSpecialBinding(Symbol.GENSYM_COUNTER);
+    final Symbol gensymCounter = Symbol.GENSYM_COUNTER;
+	SpecialBinding binding = thread.getSpecialBinding(gensymCounter);
         final LispObject oldValue;
         if (binding != null) {
             oldValue = binding.value;
-            if (oldValue instanceof Fixnum || oldValue instanceof Bignum)
+        if ((oldValue instanceof Fixnum
+                || oldValue instanceof Bignum) && Fixnum.ZERO.isLessThanOrEqualTo(oldValue)) {
                 binding.value = oldValue.incr();
+        }
             else {
-                Symbol.GENSYM_COUNTER.setSymbolValue(Fixnum.ZERO);
-                error(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: "
-                        + oldValue.princToString() + " New value: 0"));
+           binding.value = Fixnum.ZERO;
+           error(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: " +
+                                oldValue.princToString() + " New value: 0"));
             }
         } else {
             // we're manipulating a global resource
             // make sure we operate thread-safely
-            synchronized (Symbol.GENSYM_COUNTER) {
-                oldValue = Symbol.GENSYM_COUNTER.getSymbolValue();
-                if (oldValue instanceof Fixnum || oldValue instanceof Bignum)
-                    Symbol.GENSYM_COUNTER.setSymbolValue(oldValue.incr());
+        synchronized (gensymCounter) {
+            oldValue = gensymCounter.getSymbolValue();
+            if ((oldValue instanceof Fixnum
+                    || oldValue instanceof Bignum) && Fixnum.ZERO.isLessThanOrEqualTo(oldValue))  {
+                gensymCounter.setSymbolValue(oldValue.incr());
+            }
                 else {
-                    Symbol.GENSYM_COUNTER.setSymbolValue(Fixnum.ZERO);
-                    error(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: "
-                            + oldValue.princToString() + " New value: 0"));
+               gensymCounter.setSymbolValue(Fixnum.ZERO);
+               error(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: " +
+                                    oldValue.princToString() + " New value: 0"));
                 }
             }
         }
@@ -1199,7 +1220,7 @@ public class Lisp {
         } else if (truename instanceof Pathname) {
             load = Pathname.mergePathnames(name, (Pathname) truename, Keyword.NEWEST);
         } else {
-            if (!Pathname.truename(name).equals(NIL)) {
+          if (!NULL(Pathname.truename(name))) {
                 load = name;
             } else {
                 load = null;
@@ -2141,6 +2162,8 @@ public class Lisp {
             featureList = new Cons(Keyword.JAVA_1_7, featureList);
         } else if (javaVersion.startsWith("1.8")) {
             featureList = new Cons(Keyword.JAVA_1_8, featureList);
+    } else if (javaVersion.startsWith("1.9")) {
+        featureList = new Cons(Keyword.JAVA_1_9, featureList);
         }
         // Processor architecture
         if (osArch != null) {
@@ -2478,6 +2501,7 @@ public class Lisp {
     protected static boolean TRAP_OVERFLOW = true;
     protected static boolean TRAP_UNDERFLOW = true;
 
+
     // Extentions
     static {
         Symbol._INSPECTOR_HOOK_.initializeSpecial(NIL);
@@ -2510,8 +2534,7 @@ public class Lisp {
         loadClass("org.armedbear.lisp.ash");
         loadClass("org.armedbear.lisp.Java");
         loadClass("org.armedbear.lisp.PackageFunctions");
-
-        
+        loadClass("org.armedbear.lisp.setenv");
         Symbol GETENV = PACKAGE_EXT.findAccessibleSymbol( "GETENV" );
           PACKAGE_SYS.shadowingImport( GETENV );
           PACKAGE_SYS.export( GETENV );
@@ -2571,11 +2594,28 @@ public class Lisp {
         }
 
         @Override
-        public LispObject execute(LispObject args, Environment env) {
-            return error(new SimpleError(
-                    "This is a placeholder. It should only be called in compiled code, and tranformed by the compiler using special form handlers."));
+    public LispObject execute(LispObject args, Environment env)
+    {
+	return error(new SimpleError("This is a placeholder. It should only be called in compiled code, and tranformed by the compiler using special form handlers."));
         }
     }
+
+/**
+ * @param lispObject
+ * @return
+ */
+public static boolean NULL(LispObject lispObject) {
+	return lispObject.isNil();
+}
+
+/**
+ * @param arg
+ * @return
+ */
+public static String stringValueOf(LispObject arg) {
+	if(arg==null) return "#<JNULL-STRING-VALUE-OF>";
+	return arg.printObject();
+}
 
     public static String valueOfString(Object obj) {
         if (obj == null)
@@ -2712,4 +2752,13 @@ public class Lisp {
             thread = LispThread.currentThread();
         return Symbol.PRINT_READABLY.symbolValue() != NIL;
     }
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param result
+	 * @return
+	 */
+	public static LispObject makeStringOrJNull(String result) {
+		if(result==null) return JavaObject.getInstance(null, String.class);
+		return new SimpleString(result);
+	}	
 }

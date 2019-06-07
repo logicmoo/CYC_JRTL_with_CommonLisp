@@ -55,7 +55,7 @@
     (if time-zone
         (setf seconds-west (* time-zone 3600)
               daylight nil)
-        (multiple-value-bind (time-zone daylight-p) (default-time-zone) ;; (ext:get-time-zone ) ;; universal-time
+        (multiple-value-bind (time-zone daylight-p) (ext:get-time-zone universal-time)
           (setf seconds-west (* time-zone 3600)
                 daylight daylight-p)))
     (multiple-value-bind (weeks secs)
@@ -116,46 +116,6 @@
 	(incf sum days-in-month))
       (coerce (nreverse reversed-result) 'simple-vector)))
 
-(defun encode-universal-time-new (second minute hour date month year
-				     &optional time-zone)
-  (let* ((year (if (< year 100)
-		   (pick-obvious-year year)
-		   year))
-	 (days (+ (1- date)
-		  (aref *days-before-month* month)
-		  (if (> month 2)
-		      (leap-years-before (1+ year))
-		      (leap-years-before year))
-		  (* (- year 1900) 365)))
-	 (hours (+ hour (* days 24))))
-    (cond (time-zone
-           (let* ((tz-guess (ext:get-time-zone (* hours 3600)))
-		  (guess (+ second (* 60 (+ minute (* 60 (+ hours tz-guess))))))
-		  (tz (get-time-zone guess)))
-             (+ guess (* 3600 (- tz tz-guess)))))
-          ((> year 2037)
-           (labels ((leap-year-p (year)
-                      (cond ((zerop (mod year 400)) t)
-                            ((zerop (mod year 100)) nil)
-                            ((zerop (mod year 4)) t)
-                            (t nil))))
-             (let* ((fake-year (if (leap-year-p year) 2036 2037))
-                    (fake-time (encode-universal-time second minute hour
-                                                      date month fake-year)))
-               (+ fake-time
-                 (* 86400 (+ (* 365 (- year fake-year))
-                             (- (leap-years-before year)
-                                (leap-years-before fake-year))))))))
-          (t
-           (+ second (* (+ minute (* (+ hours (default-time-zone)) 60)) 60))))))
-
-#|
-(intern "GET-TIME-ZONE" (find-package :ext))
-(define-symbol-macro EXT:GET-TIME-ZONE
-    `(get-time-zone))
-(export (intern "GET-TIME-ZONE" (find-package :ext)))
-|#
-
 (defun encode-universal-time (second minute hour date month year
 				     &optional time-zone)
   (let* ((year (if (< year 100)
@@ -184,4 +144,7 @@
                              (- (leap-years-before year)
                                 (leap-years-before fake-year))))))))
           (t
-           (+ second (* (+ minute (* (+ hours (default-time-zone)) 60)) 60))))))
+           (let* ((tz-guess (ext:get-time-zone (* hours 3600)))
+		  (guess (+ second (* 60 (+ minute (* 60 (+ hours tz-guess))))))
+		  (tz (get-time-zone guess)))
+	     (+ guess (* 3600 (- tz tz-guess))))))))

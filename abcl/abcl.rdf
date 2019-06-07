@@ -91,6 +91,10 @@ _:user dc:identifier <http://ville.not.org/#me>  ;
 <> doap:license  [
      dc:license <http://usefulinc.com/doap/licenses/gplv2> ;
      dc:license <http://usefulinc.com/doap/licenses/gplv2-classpath-exception> ;
+
+     rdfs:seeAlso <urn:abcl.org/release/1.3.3> ;
+     rdfs:seeAlso <urn:abcl.org/release/1.4.0> ;
+     dc:licenseDocument <file:COPYING> ;
      dc:licenseDocument 
        <http://abcl.org/svn/tags/1.5.0/src/org/armedbear/COPYING> ;
 ] .
@@ -102,6 +106,7 @@ doap:Project rdfs:seeAlso [
   rdf:_2 <http://abcl.org/trac/wiki> ;
   rdf:_4 <https://github.com/easye/abcl/> ;
   rdf:_5 <https://gitlab.common-lisp.net/abcl/abcl/> ;
+  rdf:_6 <http://abcl.org/releases/1.4.0/abcl-1.4.0.jar> ;
   dc:source   abcl:tag ;
   dc:Software [ 
      a rdf:Bag;

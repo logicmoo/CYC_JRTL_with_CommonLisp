@@ -1,1 +1,1 @@
-@"c:\pf\java\jdk\jre/bin/java" -cp "D:\workspace\phasexx-abcl\abcl\dist\abcl.jar";"%CLASSPATH%"  org.armedbear.lisp.Main %1 %2 %3 %4 %5 %6 %7 %8 %9 
+@"C:\Program Files (x86)\Java\jdk1.8.0_172\jre/bin/java" -cp "G:\opt\CYC_JRTL_with_CommonLisp\abcl\dist\abcl.jar;c:\pf\Java\jdk1.8.0_162\lib\tools.jar";"%CLASSPATH%" -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC org.armedbear.lisp.Main %1 %2 %3 %4 %5 %6 %7 %8 %9 

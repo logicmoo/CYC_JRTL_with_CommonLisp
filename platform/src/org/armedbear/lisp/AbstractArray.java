@@ -123,7 +123,9 @@ public abstract class AbstractArray extends AbstractSubLVector implements java.i
     public abstract int getDimension(int n);
 
     public abstract LispObject getElementType();
-
+    public LispObject getArrayElementType() {
+  	  return getElementType();
+    }
     public abstract int getTotalSize();
 
     @Override

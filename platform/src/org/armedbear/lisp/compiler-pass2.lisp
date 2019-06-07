@@ -30,7 +30,7 @@
 ;;; obligated to do so.  If you do not wish to do so, delete this
 ;;; exception statement from your version.
 
-(in-package "JVM")
+(in-package :jvm)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (require "LOOP")
@@ -1194,24 +1194,24 @@ extend the class any further."
         (emit 'aaload))
        ((<= most-negative-fixnum n most-positive-fixnum)
         (emit-push-constant-int n)
-        (emit-invokestatic +lisp-fixnum+ "getInstance"
+        (emit-invokestatic +lisp-fixnum+ "makeFixnum"
                            '(:int) +lisp-fixnum+))
        ((<= most-negative-java-long n most-positive-java-long)
         (emit-push-constant-long n)
-        (emit-invokestatic +lisp-bignum+ "getInstance"
+        (emit-invokestatic +lisp-bignum+ "makeBignum"
                            '(:long) +lisp-integer+))
        (t
         (let* ((*print-base* 10)
                (s (with-output-to-string (stream) (dump-form n stream))))
           (emit 'ldc (pool-string s))
           (emit-push-constant-int 10)
-          (emit-invokestatic +lisp-bignum+ "getInstance"
+          (emit-invokestatic +lisp-bignum+ "makeBignum"
                              (list +java-string+ :int) +lisp-integer+)))))
 
 (defun serialize-character (c)
   "Generates code to restore a serialized character."
   (emit-push-constant-int (char-code c))
-  (emit-invokestatic +lisp-character+ "getInstance" '(:char)
+  (emit-invokestatic +lisp-character+ "makeCharacter" '(:char)
                      +lisp-character+))
 
 (defun serialize-float (s)
@@ -3691,9 +3691,9 @@ given a specific common representation.")
     (when (tagbody-id-variable block)
       ;; we have a block variable; that should be a closure variable
       (assert (not (null (variable-closure-index (tagbody-id-variable block)))))
-      (emit-new +lisp-object+)
+      (emit-new +block-lisp-object+)
       (emit 'dup)
-      (emit-invokespecial-init +lisp-object+ '())
+      (emit-invokespecial-init +block-lisp-object+ '())
       (emit-new-closure-binding (tagbody-id-variable block)))
     (when (tagbody-non-local-go-p block)
       (save-dynamic-environment specials-register))
@@ -3888,9 +3888,9 @@ given a specific common representation.")
     (when (block-id-variable block)
       ;; we have a block variable; that should be a closure variable
       (assert (not (null (variable-closure-index (block-id-variable block)))))
-      (emit-new +lisp-object+)
+      (emit-new +block-lisp-object+)
       (emit 'dup)
-      (emit-invokespecial-init +lisp-object+ '())
+      (emit-invokespecial-init +block-lisp-object+ '())
       (emit-new-closure-binding (block-id-variable block)))
     (dformat t "*all-variables* = ~S~%"
              (mapcar #'variable-name *all-variables*))
@@ -5289,7 +5289,7 @@ for use with derive-type-times.")
         one-integer-type
       (derive-compiler-types args op))))
 
-(define-int-bounds-derivation max (low1 low2 high1 high2)
+(define-int-bounds-derivation max (low1 high1 low2 high2)
   (values (or (when (and low1 low2) (max low1 low2)) low1 low2)
           ; if either maximum is unbound, their maximum is unbound
           (when (and high1 high2) (max high1 high2))))
@@ -5513,13 +5513,13 @@ We need more thought here.
     (compile-forms-and-maybe-emit-clear-values arg 'stack nil)
     (ecase representation
       (:int
-       (emit-invokevirtual +lisp-object+ "length" nil :int))
+       (emit-invokevirtual +lisp-object+ "cl_length" nil :int))
       ((:long :float :double)
-       (emit-invokevirtual +lisp-object+ "length" nil :int)
+       (emit-invokevirtual +lisp-object+ "cl_length" nil :int)
        (convert-representation :int representation))
       (:boolean
        ;; FIXME We could optimize this all away in unsafe calls.
-       (emit-invokevirtual +lisp-object+ "length" nil :int)
+       (emit-invokevirtual +lisp-object+ "cl_length" nil :int)
        (emit 'pop)
        (emit 'iconst_1))
       (:char
@@ -5571,8 +5571,12 @@ We need more thought here.
 
 (define-inlined-function compile-nth (form target representation)
   ((check-arg-count form 2))
-  (let ((index-form (second form))
-        (list-form (third form)))
+  (let* ((index-form (second form))
+         (list-form (third form))
+         (index-type (derive-compiler-type index-form)))
+    (unless (fixnum-type-p index-type)
+      (compile-function-call form target representation)
+      (return-from compile-nth))
     (with-operand-accumulation
         ((compile-operand index-form :int)
          (compile-operand list-form nil)
@@ -6895,7 +6899,11 @@ We need more thought here.
 			 (lisp-object-arg-types 2) nil))
   ;; Following code will not be reached.
   (when target
-    (emit-push-nil)
+    (ecase representation
+      ((:int :boolean :char)
+       (emit 'iconst_0))
+      ((nil)
+       (emit-push-nil)))
     (emit-move-from-stack target)))
 
 (defun p2-unwind-protect-node (block target)
@@ -7414,9 +7422,12 @@ We need more thought here.
 
 (defvar *compiler-error-bailout*)
 
-(defun make-compiler-error-form (form)
+(defun make-compiler-error-form (form condition)
   `(lambda ,(cadr form)
-     (error 'program-error :format-control "Execution of a form compiled with errors.")))
+     (error 'program-error :format-control "Program error while compiling ~a" :format-arguments 
+	    (if ,condition 
+		(list (apply 'format nil ,(slot-value condition 'sys::format-control) ',(slot-value condition 'sys::format-arguments)))
+		(list "a form")))))
 
 (defun compile-defun (name form environment filespec stream *declare-inline*)
   "Compiles a lambda expression `form'. If `filespec' is NIL,
@@ -7427,9 +7438,9 @@ Returns the a abcl-class-file structure containing the description of the
 generated class."
   (aver (eq (car form) 'LAMBDA))
   (catch 'compile-defun-abort
-    (flet ((compiler-bailout ()
+    (flet ((compiler-bailout (&optional condition)
              (let ((class-file (make-abcl-class-file :pathname filespec))
-                   (error-form (make-compiler-error-form form)))
+                   (error-form (make-compiler-error-form form condition)))
                (compile-1 (make-compiland :name name
                                           :lambda-expression error-form
                                           :class-file class-file)
@@ -7464,7 +7475,12 @@ generated class."
 
 
 (defvar *resignal-compiler-warnings* nil
-  "Bind this to t inside slime compilation")
+  "This generalized boolean JVM:*RESIGNAL-COMPILER-WARNINGS* controls whether the compiler signals dignaostics to the condition system or merely outputs them to the standard reporting stream.
+
+The default is to not signal.
+
+Could arguably better named as *SIGNAL-COMPILE-WARNINGS-P*.")
+
 
 (defun handle-warning (condition)
   (cond (*resignal-compiler-warnings*
@@ -7481,7 +7497,7 @@ generated class."
   (fresh-line *error-output*)
   (note-error-context)
   (format *error-output* "; Caught ERROR:~%;   ~A~2%" condition)
-  (throw 'compile-defun-abort (funcall *compiler-error-bailout*)))
+  (throw 'compile-defun-abort (funcall *compiler-error-bailout* condition)))
 
 (defvar *in-compilation-unit* nil)
 

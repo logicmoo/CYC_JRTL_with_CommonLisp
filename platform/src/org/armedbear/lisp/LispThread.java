@@ -421,65 +421,60 @@ public abstract class LispThread extends LispObject
 
     final static int UNASSIGNED_SPECIAL_INDEX = 0;
 
-    /** Indicates the last special slot which has been assigned.
-     * Symbols which don't have a special slot assigned use a slot
-     * index of 0 for efficiency reasons: it eliminates the need to
-     * check for index validity before accessing the specials array.
+	/**
+	 * Indicates the last special slot which has been assigned. Symbols which don't
+	 * have a special slot assigned use a slot index of 0 for efficiency reasons: it
+	 * eliminates the need to check for index validity before accessing the specials
+	 * array.
      *
      */
-    final static AtomicInteger lastSpecial
-        = new AtomicInteger(UNASSIGNED_SPECIAL_INDEX);
+	final static AtomicInteger lastSpecial = new AtomicInteger(UNASSIGNED_SPECIAL_INDEX);
 
-    /** A list of indices which can be (re)used for symbols to
-     * be assigned a special slot index.
+	/**
+	 * A list of indices which can be (re)used for symbols to be assigned a special
+	 * slot index.
      */
-    final static ConcurrentLinkedQueue<Integer> freeSpecialIndices
-        = new ConcurrentLinkedQueue<Integer>();
+	final static ConcurrentLinkedQueue<Integer> freeSpecialIndices = new ConcurrentLinkedQueue<Integer>();
 
-    final static int specialsInitialSize
-        = Integer.valueOf(System.getProperty("abcl.specials.initialSize","4096"));
+	final static int specialsInitialSize = Integer.valueOf(System.getProperty("abcl.specials.initialSize", "4096"));
 
-    /** This array stores the current special binding for every symbol
-     * which has been globally or locally declared special.
+	/**
+	 * This array stores the current special binding for every symbol which has been
+	 * globally or locally declared special.
      *
-     * If the array element has a null value, this means there currently
-     * is no active binding. If the array element contains a valid
-     * SpecialBinding object, but the value field of it is null, that
-     * indicates an "UNBOUND VARIABLE" situation.
+	 * If the array element has a null value, this means there currently is no
+	 * active binding. If the array element contains a valid SpecialBinding object,
+	 * but the value field of it is null, that indicates an "UNBOUND VARIABLE"
+	 * situation.
      */
-    SpecialBinding[] specials
-        = new SpecialBinding[specialsInitialSize + 1];
+	SpecialBinding[] specials = new SpecialBinding[specialsInitialSize + 1];
 
+	final static ConcurrentHashMap<Integer, WeakReference<Symbol>> specialNames = new ConcurrentHashMap<Integer, WeakReference<Symbol>>();
 
-    public final void clearBindings()
-    {
-    	Arrays.fill(specials, null);
-    }
-
-    final static ConcurrentHashMap<Integer, WeakReference<Symbol>> specialNames
-        = new ConcurrentHashMap<Integer, WeakReference<Symbol>>();
-
-    /** The number of slots to grow the specials table in
-     * case of insufficient storage.
+	/**
+	 * The number of slots to grow the specials table in case of insufficient
+	 * storage.
      */
-    final static int specialsDelta
-        = Integer.valueOf(System.getProperty("abcl.specials.grow.delta","1024"));
+	final static int specialsDelta = Integer.valueOf(System.getProperty("abcl.specials.grow.delta", "1024"));
 
-    /** This variable points to the head of a linked list of saved
-     * special bindings. Its main purpose is to allow a mark/reset
-     * interface to special binding and unbinding.
+	/**
+	 * This variable points to the head of a linked list of saved special bindings.
+	 * Its main purpose is to allow a mark/reset interface to special binding and
+	 * unbinding.
      */
     private SpecialBindingsMark savedSpecials = null;
 
-    /** Marks the state of the special bindings,
-     * for later rewinding by resetSpecialBindings().
+	/**
+	 * Marks the state of the special bindings, for later rewinding by
+	 * resetSpecialBindings().
      */
     public final SpecialBindingsMark markSpecialBindings() {
         return savedSpecials;
     }
 
-    /** Restores the state of the special bindings to what
-     * was captured in the marker 'mark' by a call to markSpecialBindings().
+	/**
+	 * Restores the state of the special bindings to what was captured in the marker
+	 * 'mark' by a call to markSpecialBindings().
      */
     public final void resetSpecialBindings(SpecialBindingsMark mark) {
         SpecialBindingsMark c = savedSpecials;
@@ -499,8 +494,9 @@ public abstract class LispThread extends LispObject
         resetSpecialBindings(null);
     }
 
-    /** Assigns a specials array index number to the symbol,
-     * if it doesn't already have one.
+	/**
+	 * Assigns a specials array index number to the symbol, if it doesn't already
+	 * have one.
      */
     private void assignSpecialIndex(Symbol sym)
     {
@@ -668,21 +664,18 @@ public abstract class LispThread extends LispObject
         return value != null ? value : NIL;
     }
 
-    public final void rebindSpecial(Symbol name, LispObject value)
-    {
+	public final void rebindSpecial(Symbol name, LispObject value) {
         SpecialBinding binding = getSpecialBinding(name);
         binding.value = value;
     }
 
     private LispObject catchTags = NIL;
 
-    public void pushCatchTag(LispObject tag)
-    {
+	public void pushCatchTag(LispObject tag) {
         catchTags = new Cons(tag, catchTags);
     }
 
-    public void popCatchTag()
-    {
+	public void popCatchTag() {
         if (catchTags != NIL)
             catchTags = catchTags.cdr();
         else
@@ -857,7 +850,7 @@ public abstract class LispThread extends LispObject
 
     private void pushedStackFrame(int numArgs) {
       if(trace_calls()) {
-        printCurrentFrame(">>>");
+			printCurrentFrame(">>>", false);
       }
     }
 
@@ -867,7 +860,7 @@ public abstract class LispThread extends LispObject
     		return;
     	}
       if(trace_calls()) {
-        printCurrentFrame("<<<");
+			printCurrentFrame("<<<", true);
       }
         // Pop off intervening JavaFrames until we get back to a LispFrame
         Object stackObj = stack[stackPtr - 1];
@@ -894,9 +887,9 @@ public abstract class LispThread extends LispObject
     }
 
     private void popStackSegment() {
-		if (NO_STACK_FRAMES) {
+		if (NO_STACK_FRAMES)
 			return;
-        }
+
         topStackSegment.stackPtr = 0;
         if (topStackSegment.next != null) {
             spareStackSegment = topStackSegment;
@@ -911,9 +904,9 @@ public abstract class LispThread extends LispObject
         return (stackTop != null) ? stackTop.setEnv(env) : null;
     }
 
-    public void resetStack()
-    {
-        if (NO_STACK_FRAMES) {return;}
+	public void resetStack() {
+		if (NO_STACK_FRAMES)
+			return;
         topStackSegment = new StackSegment(INITIAL_SEGMENT_SIZE, null);
         stack = topStackSegment.stack;
         spareStackSegment = null;
@@ -921,27 +914,25 @@ public abstract class LispThread extends LispObject
     }
 
     @Override
-    public LispObject execute(LispObject function)
-    {
-        if (NO_STACK_FRAMES) {return function.execute();}
+	public LispObject execute(LispObject function) {
+		if (NO_STACK_FRAMES)
+			return prevRet = function.execute();
         ensureStackCapacity(STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = STACK_MARKER_0;
         stackPtr += STACK_FRAME_EXTRA;
         try {
           pushedStackFrame( 0 );
-            return function.execute();
-        }
-        finally {
+			return prevRet = function.execute();
+		} finally {
             popStackFrame(0);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject arg)
-    {
+	public LispObject execute(LispObject function, LispObject arg) {
 		if (NO_STACK_FRAMES)
-			return function.execute(arg);
+			return prevRet = function.execute(arg);
         ensureStackCapacity(1 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = arg;
@@ -949,19 +940,16 @@ public abstract class LispThread extends LispObject
         stackPtr += 1 + STACK_FRAME_EXTRA;
         try {
           pushedStackFrame( 1 );
-            return function.execute(arg);
-        }
-        finally {
+			return prevRet = function.execute(arg);
+		} finally {
             popStackFrame(1);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second) {
 		if (NO_STACK_FRAMES)
-			return function.execute(first, second);
+			return prevRet = function.execute(first, second);
         ensureStackCapacity(2 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -970,19 +958,16 @@ public abstract class LispThread extends LispObject
         stackPtr += 2 + STACK_FRAME_EXTRA;
         try {
           pushedStackFrame( 2 );
-            return function.execute(first, second);
-        }
-        finally {
+			return prevRet = function.execute(first, second);
+		} finally {
             popStackFrame(2);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third) {
 		if (NO_STACK_FRAMES)
-			return function.execute(first, second, third);
+			return prevRet = function.execute(first, second, third);
         ensureStackCapacity(3 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -992,20 +977,17 @@ public abstract class LispThread extends LispObject
         stackPtr += 3 + STACK_FRAME_EXTRA;
         try {
           pushedStackFrame( 3 );
-            return function.execute(first, second, third);
-        }
-        finally {
+			return prevRet = function.execute(first, second, third);
+		} finally {
             popStackFrame(3);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
+			LispObject fourth) {
 		if (NO_STACK_FRAMES)
-			return function.execute(first, second, third, fourth);
+			return prevRet = function.execute(first, second, third, fourth);
         ensureStackCapacity(4 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -1016,20 +998,17 @@ public abstract class LispThread extends LispObject
         stackPtr += 4 + STACK_FRAME_EXTRA;
         try {
           pushedStackFrame(4);
-            return function.execute(first, second, third, fourth);
-        }
-        finally {
+			return prevRet = function.execute(first, second, third, fourth);
+		} finally {
           popStackFrame(4);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
+			LispObject fourth, LispObject fifth) {
 		if (NO_STACK_FRAMES)
-			return function.execute(first, second, third, fourth, fifth);
+			return prevRet = function.execute(first, second, third, fourth, fifth);
         ensureStackCapacity(5 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -1041,21 +1020,17 @@ public abstract class LispThread extends LispObject
         stackPtr += 5 + STACK_FRAME_EXTRA;
         try {
           pushedStackFrame( 5 );
-            return function.execute(first, second, third, fourth, fifth);
-        }
-        finally {
+			return prevRet = function.execute(first, second, third, fourth, fifth);
+		} finally {
             popStackFrame(5);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth,
-                              LispObject sixth)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
+			LispObject fourth, LispObject fifth, LispObject sixth) {
 		if (NO_STACK_FRAMES)
-			return function.execute(first, second, third, fourth, fifth, sixth);
+			return prevRet = function.execute(first, second, third, fourth, fifth, sixth);
         ensureStackCapacity(6 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -1068,19 +1043,15 @@ public abstract class LispThread extends LispObject
         stackPtr += 6 + STACK_FRAME_EXTRA;
         try {
           pushedStackFrame( 6 );
-            return function.execute(first, second, third, fourth, fifth, sixth);
-        }
-        finally {
+			return prevRet = function.execute(first, second, third, fourth, fifth, sixth);
+		} finally {
             popStackFrame(6);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth,
-                              LispObject sixth, LispObject seventh)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
+			LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh) {
 		if (NO_STACK_FRAMES)
 			return function.execute(first, second, third, fourth, fifth, sixth, seventh);
         ensureStackCapacity(7 + STACK_FRAME_EXTRA);
@@ -1096,15 +1067,12 @@ public abstract class LispThread extends LispObject
         stackPtr += 7 + STACK_FRAME_EXTRA;
         try {
           pushedStackFrame( 7 );
-            return function.execute(first, second, third, fourth, fifth, sixth,
-                                    seventh);
-        }
-        finally {
+			return prevRet = function.execute(first, second, third, fourth, fifth, sixth, seventh);
+		} finally {
             popStackFrame(7);
         }
     }
 
-    @Override
 	public LispObject execute(LispObject function, LispObject first,
                               LispObject second, LispObject third,
                               LispObject fourth, LispObject fifth,
@@ -1125,18 +1093,15 @@ public abstract class LispThread extends LispObject
         stack[stackPtr + 8] = eighth;
         stack[stackPtr + 9] = STACK_MARKER_8;
         stackPtr += 8 + STACK_FRAME_EXTRA;
+		pushedStackFrame(8);
         try {
-          pushedStackFrame( 8 );
-            return function.execute(first, second, third, fourth, fifth, sixth,
-                                    seventh, eighth);
-        }
-        finally {
+			return prevRet = function.execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
+		} finally {
             popStackFrame(8);
         }
     }
 
-    public LispObject execute(LispObject function, LispObject[] args)
-    {
+	public LispObject execute(LispObject function, LispObject[] args) {
 		if (NO_STACK_FRAMES)
 			return function.execute(args);
         ensureStackCapacity(args.length + STACK_FRAME_EXTRA);
@@ -1146,25 +1111,21 @@ public abstract class LispThread extends LispObject
         stackPtr += args.length + STACK_FRAME_EXTRA;
         try {
           pushedStackFrame( args.length );
-            return function.execute(args);
-        }
-        finally {
+			return prevRet = function.execute(args);
+		} finally {
             popStackFrame(args.length);
         }
     }
 
-    public void printBacktrace()
-    {
+	public void printBacktrace() {
         printBacktrace(0);
     }
 
-    public void printBacktrace(int limit)
-    {
+	public void printBacktrace(int limit) {
         StackFrame stackTop = getStackTop();
         if (stackTop != null) {
             int count = 0;
-            Stream out =
-                checkCharacterOutputStream(Symbol.TRACE_OUTPUT.symbolValue());
+			Stream out = checkCharacterOutputStream(Symbol.TRACE_OUTPUT.symbolValue());
             out._writeLine("Evaluation stack:");
             out._finishOutput();
 
@@ -1184,8 +1145,7 @@ public abstract class LispThread extends LispObject
         }
     }
 
-    public LispObject backtrace(int limit)
-    {
+	public LispObject backtrace(int limit) {
 		if (NO_STACK_FRAMES)
 			return NIL;
         StackFrame stackTop = getStackTop();
@@ -1203,8 +1163,7 @@ public abstract class LispThread extends LispObject
         return result.nreverse();
     }
 
-    public void incrementCallCounts()
-    {
+	public void incrementCallCounts() {
 	   if (NO_STACK_FRAMES)
 			return;
         topStackSegment.stackPtr = stackPtr;
@@ -1238,7 +1197,7 @@ public abstract class LispThread extends LispObject
         }
     }
 
-    private static void pprint(LispObject obj, int indentBy, Stream stream)
+	private void pprint(LispObject obj, int indentBy, Stream stream)
 
     {
         if (stream.getCharPos() == 0) {
@@ -1247,7 +1206,7 @@ public abstract class LispThread extends LispObject
                 sb.append(' ');
             stream._writeString(sb.toString());
         }
-        String raw = obj.printObject();
+		String raw = safePrintObject(obj);
         if (stream.getCharPos() + raw.length() < 80) {
             // It fits.
             stream._writeString(raw);
@@ -1293,8 +1252,7 @@ public abstract class LispThread extends LispObject
     }
 
     @Override
-    public String printObject()
-    {
+	public String printObject() {
         StringBuffer sb = new StringBuffer("THREAD");
         if (name != NIL) {
             sb.append(" \"");
@@ -1304,13 +1262,23 @@ public abstract class LispThread extends LispObject
         return unreadableString(sb.toString());
     }
 
+	int lastDepth = 0;
+	Object[] lastFrameAt = new Object[15];
+	Object lastFrame;
+	private boolean enableTrace;
+
+	public boolean NO_STACK_FRAMES = System.getProperty("lisp.noframes","false").equals("true");
 
     /**
      * TODO (ext:trace-lisp t)
      */
-  private void printCurrentFrame(String why)
-  {
-    SystemCurrent.originalSystemOut.flush();
+	PrintStream ps = System.err;
+	private LispObject prevRet;
+
+	private void printCurrentFrame(String why, boolean iSOut) {
+		if (insideSafePrintObject != null)
+			return;
+		System.out.flush();
     Object sf = backtrace( 1 ).car();
     int fromTop = stackPtr;
     int depth = 0;
@@ -1319,38 +1287,122 @@ public abstract class LispThread extends LispObject
          depth++;
        }       
     }
-    if( sf instanceof StackFrame )
-    {
-      sf = ( (StackFrame) sf ).toLispString();
+		int indent = depth % 15;
+		boolean retFrame = false;
+
+		if (sf instanceof StackFrame) {
+			if (lastFrame == sf) {
+				retFrame = true;
+			} else {
+				if (indent != lastDepth) {
+
+				}
+			}
+			if (retFrame) {
+				lastFrameAt[indent] = null;
+				lastFrame = null;
+			} else {
+				if (lastFrameAt[indent] == null) {
+					lastFrameAt[indent] = sf;
+				}
+				lastFrame = sf;
+			}
+			lastDepth = indent;
+			sf = safePrintObject(((StackFrame) sf).toLispList());
+			insideSafePrintObject = null;
     }
-    int indent = depth % 10;
+
     indent = indent*2;
-    PrintStream ps = SystemCurrent.originalSystemErr;
+		if (Thread.currentThread() != mainThread)
+			ps.print("<" + name + "> ");
+
+		while (indent-- > 0)
+			ps.print(" ");
+		ps.print("(" + depth + ") " + why + " ");
+
+		if (retFrame) {
+			ps.print(" +++ ");
+			ps.print(safePrintObject(prevRet));
+		} else {
+			ps.print(sf);
+			if (iSOut) {
+				ps.print(" +++ ");
+				ps.print(safePrintObject(prevRet));
+			}
+		}
     
-    ps.print( "<" + name + "> "); 
-    while(indent-->0) ps.print(" ");
-    ps.println("("+depth+") " +why+ " "+ sf );
-    ps.flush();
-    try
-    {
-      Thread.sleep( 300L );
+		if (iSOut) {
+			if (retFrame) {
+
+			}
+		}
+		ps.println();
+		try {
+			Thread.sleep(LispThread.pauseTime);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public Object insideSafePrintObject = null;
+
+	/**
+	 * @param obj
+	 * @return
+	 */
+	public String safePrintObject(LispObject obj) {
+		final LispThread thread = LispThread.currentThread();
+		if (obj == null)
+			return "#<@JNULL>";
+		Object wasInErr = insideSafePrintObject;
+		try {
+			if (wasInErr != null) {
+				if (wasInErr == obj) {
+					return "#<LOOPED " + obj.getClass().getName() + "@"
+							+ Integer.toHexString(System.identityHashCode(obj)) + ">";
+
+				} else {
+					return "#<wasInErr " + obj.getClass().getName() + "@"
+							+ Integer.toHexString(System.identityHashCode(obj)) + ">";
+				}
     }
-    catch( InterruptedException e )
-    {
+			insideSafePrintObject = obj;
+			final SpecialBindingsMark mark = thread.markSpecialBindings();
+			//thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
+			thread.bindSpecial(Symbol.PRINT_READABLY, NIL);
+			try {
+				return obj.printObject();
+			} finally {
+				thread.resetSpecialBindings(mark);
+			}
+		} catch (StackOverflowError e) {
+			wasInErr = e;
+			return "#<StackOverflowError " + e + obj.getClass().getName() + "@"
+					+ Integer.toHexString(System.identityHashCode(obj)) + ">";
+
+		} catch (Throwable e) {
       e.printStackTrace();
+			return "#<safePrintObject " + e + obj.getClass().getName() + "@"
+					+ Integer.toHexString(System.identityHashCode(obj)) + ">";
+		} finally {
+			insideSafePrintObject = wasInErr;
     }
   }
   /**
    * TODO Describe the purpose of this method.
+	 * 
    * @return
    */
   boolean trace_calls() {
-    if(_TRACE_LISP_!=null && _TRACE_LISP_.boundp_at_all() ) {
+		// if (debug) return true;
+		if (enableTrace && _TRACE_LISP_ != null) {
+			pauseTime = 1;
       return _TRACE_LISP_.symbolValue( this ).getBooleanValue();
     }
     return false;
   }
   
+	private static long pauseTime;
 
   static final class signal_2 extends Primitive {
      static final LispInteger INT283202;
@@ -1375,13 +1427,15 @@ public abstract class LispThread extends LispObject
         thread.execute(Symbol.SIGNAL, var3);
         thread._values = null;
         SpecialBindingsMark var4 = thread.markSpecialBindings();
-        SpecialBinding var5 = thread.bindSpecial(CURRENT_ERROR_DEPTH, CURRENT_ERROR_DEPTH.symbolValue(thread).incr());
+			SpecialBinding var5 = thread.bindSpecial(CURRENT_ERROR_DEPTH,
+					CURRENT_ERROR_DEPTH.symbolValue(thread).incr());
         LispObject var10000;
         if (var5.value.isGreaterThan(SYM283191.symbolValue(thread))) {
            thread.execute(SYM283192, SYM283193.symbolValue(thread), STR283194, var5.value, var3);
            thread.execute(SYM283195, Symbol.ERROR, Lisp.T);
            thread._values = null;
-           var10000 = thread.execute(SYM283198, SYM283199) != Lisp.NIL ? thread.execute(SYM283199) : thread.execute(SYM283200, SYM283201, INT283202);
+				var10000 = thread.execute(SYM283198, SYM283199) != Lisp.NIL ? thread.execute(SYM283199)
+						: thread.execute(SYM283200, SYM283201, INT283202);
         } else {
            var10000 = thread.execute(Symbol.INVOKE_DEBUGGER, var3);
         }
@@ -1396,7 +1450,6 @@ public abstract class LispThread extends LispObject
 
      static {
 
-        
         CURRENT_ERROR_DEPTH = Lisp.internInPackage("*CURRENT-ERROR-DEPTH*", "SYSTEM");
         SYM283191 = Lisp.internInPackage("*MAXIMUM-ERROR-DEPTH*", "SYSTEM");
         SYM283192 = Lisp.internInPackage("%FORMAT", "SYSTEM");
@@ -1413,51 +1466,58 @@ public abstract class LispThread extends LispObject
   }
 
   /*
-    DECOMPILATION REPORT
-
-    Decompiled from: G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\subl.jar\org\armedbear\lisp\signal_2.class
-    Total time: 20 ms
-    
-    Decompiled with FernFlower.
+	 * DECOMPILATION REPORT
+	 * 
+	 * Decompiled from:
+	 * G:\opt\CYC_JRTL_with_CommonLisp\platform\lib\subl.jar\org\armedbear\lisp\
+	 * signal_2.class Total time: 20 ms
+	 * 
+	 * Decompiled with FernFlower.
   */
   
   final static Thread mainThread = Thread.currentThread();
   
-  final static Object yourthead = new Object() { /* (non-Javadoc)
+	final static Object yourthead = new Object() { /*
+													 * (non-Javadoc)
+													 * 
   * @see org.armedbear.lisp.LispObject#toString()
   */
   @Override
-  public String toString()
-  {
+		public String toString() {
      return Thread.currentThread().getName();
   } 
   };
     
   @DocString(name = "trace-lisp", args = "value &optional function")
-  private static final Primitive TRACE_LISP = new Primitive( "trace-lisp", PACKAGE_EXT, true, "value &optional function" )
-  {
+	private static final Primitive TRACE_LISP = new Primitive("trace-lisp", PACKAGE_EXT, true,
+			"value &optional function") {
     @Override
-    public LispObject execute(LispObject[] args)
-    {
-      Symbol sym = Symbol.PRINT_PPRINT_DISPATCH.toLispObject();
-      PrintStream ps = SystemCurrent.originalSystemErr;
-      new Throwable("TRACE_LISP: ").printStackTrace( ps );
+		public LispObject execute(LispObject[] args) {
+			Symbol sym = Symbol.PRINT_PPRINT_DISPATCH;
+			LispThread thread = currentThread();
+			PrintStream ps = thread.ps;
+			_TRACE_LISP_.setSymbolValue(args[0]);
+			final boolean traceOn = !args[0].isNil();
+			thread.enableTrace = traceOn;
+			
+			if(traceOn)new Throwable("FAKE TRACE_LISP: ").printStackTrace(ps);
       LispThread olt = map.get( mainThread );
-      LispThread thread = currentThread();
       
-      Symbol symb = Lisp.readObjectFromString( "swank::*backtrace-pprint-dispatch-table*".toUpperCase() ).toSymbol().toLispObject();
+			if (Packages.findPackage("SWANK")!=null) {
+				Symbol symb = (Symbol) Lisp
+						.readObjectFromString("swank::*backtrace-pprint-dispatch-table*".toUpperCase());
       ps.println( olt + " " + symb + "=" + symb.symbolValue( olt ) );
       ps.println( thread + " " + symb + "=" + symb.symbolValue( thread ) );
       ps.println( olt + " " + sym + "=" + symb.symbolValue( olt ) );
       ps.println( thread + " " + sym + "=" + symb.symbolValue( thread ) );
-      _TRACE_LISP_.setSymbolValue( args[ 0 ] );
+			}
 
       Symbol.ERROR.setSymbolFunction( new signal_2());
       
       return NIL;
     }
   };
-  static Symbol _TRACE_LISP_ = TRACE_LISP.getLambdaName().toSymbol().toLispObject();
+	static Symbol _TRACE_LISP_ = (Symbol) TRACE_LISP.getLambdaName();
   
   
 
@@ -1500,14 +1560,10 @@ public abstract class LispThread extends LispObject
     }
   };
 
-    @DocString(name="threadp", args="object",
-    doc="Boolean predicate testing if OBJECT is a thread.")
-    private static final Primitive THREADP =
-        new Primitive("threadp", PACKAGE_THREADS, true)
-    {
+	@DocString(name = "threadp", args = "object", doc = "Boolean predicate testing if OBJECT is a thread.")
+	private static final Primitive THREADP = new Primitive("threadp", PACKAGE_THREADS, true) {
         @Override
-        public LispObject execute(LispObject arg)
-        {
+		public LispObject execute(LispObject arg) {
             return arg instanceof LispThread ? T : NIL;
         }
     };
@@ -1532,26 +1588,20 @@ public abstract class LispThread extends LispObject
         }
     };
     
-    @DocString(name="thread-active-p", args="thread",
-    doc="Returns T if THREAD is alive.")
-    private static final Primitive THREAD_ACTIVE_P =
-        new Primitive("thread-alive-p", PACKAGE_THREADS, true, "thread",
-              "Boolean predicate whether THREAD is already terminated.")
-    {
+	@DocString(name = "thread-active-p", args = "thread", doc = "Returns T if THREAD is alive.")
+	private static final Primitive THREAD_ACTIVE_P = new Primitive("thread-alive-p", PACKAGE_THREADS, true, "thread",
+			"Boolean predicate whether THREAD is already terminated.") {
         @Override
-        public LispObject execute(LispObject arg)
-        {
+		public LispObject execute(LispObject arg) {
             final LispThread lispThread;
             if (arg instanceof LispThread) {
                 lispThread = (LispThread) arg;
-            }
-            else {
+			} else {
                 return type_error(arg, Symbol.THREAD);
             }
             return lispThread.javaThread.isAlive() ? T : NIL;
         }
     };
-
 
     @DocString(name="thread-name", args="thread",
     doc="Return the name of THREAD, if it has one.")
@@ -1710,8 +1760,7 @@ public abstract class LispThread extends LispObject
             final LispThread thread;
             if (args[0] instanceof LispThread) {
                 thread = (LispThread) args[0];
-            }
-            else {
+			} else {
                 return type_error(args[0], Symbol.THREAD);
             }
             LispObject fun = args[1];
@@ -1723,10 +1772,9 @@ public abstract class LispThread extends LispObject
         }
     };
 
-    public static final Primitive CURRENT_THREAD
-      = new pf_current_thread();
-    @DocString(name="current-thread",
-               doc="Returns a reference to invoking thread.")
+	public static final Primitive CURRENT_THREAD = new pf_current_thread();
+
+	@DocString(name = "current-thread", doc = "Returns a reference to invoking thread.")
     private static final class pf_current_thread extends Primitive {
       pf_current_thread() {
         super("current-thread", PACKAGE_THREADS, true);
@@ -1737,10 +1785,9 @@ public abstract class LispThread extends LispObject
       }
     };
 
-    public static final Primitive BACKTRACE
-      = new pf_backtrace();
-    @DocString(name="backtrace",
-               doc="Returns a Java backtrace of the invoking thread.")
+	public static final Primitive BACKTRACE = new pf_backtrace();
+
+	@DocString(name = "backtrace", doc = "Returns a Java backtrace of the invoking thread.")
     private static final class pf_backtrace extends Primitive {
       pf_backtrace() {
         super("backtrace", PACKAGE_SYS, true);
@@ -1754,11 +1801,9 @@ public abstract class LispThread extends LispObject
       }
     };
 
-    public static final Primitive FRAME_TO_STRING
-      = new pf_frame_to_string();
-    @DocString(name="frame-to-string",
-               args="frame",
-               doc="Convert stack FRAME to a (potentially) readable string.")
+	public static final Primitive FRAME_TO_STRING = new pf_frame_to_string();
+
+	@DocString(name = "frame-to-string", args = "frame", doc = "Convert stack FRAME to a (potentially) readable string.")
     private static final class pf_frame_to_string extends Primitive {
       pf_frame_to_string() {
         super("frame-to-string", PACKAGE_SYS, true);
@@ -1787,9 +1832,8 @@ public abstract class LispThread extends LispObject
       }
     };
 
+	public static final SpecialOperator SYNCHRONIZED_ON = new so_synchronized_on();
 
-    public static final SpecialOperator SYNCHRONIZED_ON
-      = new so_synchronized_on();
     @DocString(name="synchronized-on", args="form &body body")
     private static final class so_synchronized_on extends SpecialOperator {
       so_synchronized_on() {
@@ -1807,19 +1851,13 @@ public abstract class LispThread extends LispObject
       }
     };
 
+	public static final Primitive OBJECT_WAIT = new pf_object_wait();
 
-    public static final Primitive OBJECT_WAIT
-      = new pf_object_wait();
-    @DocString(
-    name="object-wait", args="object &optional timeout",
-    doc="Causes the current thread to block until object-notify or object-notify-all is called on OBJECT.\n"
+	@DocString(name = "object-wait", args = "object &optional timeout", doc = "Causes the current thread to block until object-notify or object-notify-all is called on OBJECT.\n"
        + "Optionally unblock execution after TIMEOUT seconds.  A TIMEOUT of zero\n"
        + "means to wait indefinitely.\n"
-       + "A non-zero TIMEOUT of less than a nanosecond is interpolated as a nanosecond wait."
-       + "\n"
-       + "See the documentation of java.lang.Object.wait() for further\n"
-       + "information.\n"
-    )
+			+ "A non-zero TIMEOUT of less than a nanosecond is interpolated as a nanosecond wait." + "\n"
+			+ "See the documentation of java.lang.Object.wait() for further\n" + "information.\n")
     private static final class pf_object_wait extends Primitive {
       pf_object_wait() {
         super("object-wait", PACKAGE_THREADS, true);
@@ -1861,15 +1899,12 @@ public abstract class LispThread extends LispObject
       }
     };
 
-    public static final Primitive OBJECT_NOTIFY
-      = new pf_object_notify();
-    @DocString(name="object-notify",
-               args="object",
-               doc="Wakes up a single thread that is waiting on OBJECT's monitor."
+	public static final Primitive OBJECT_NOTIFY = new pf_object_notify();
+
+	@DocString(name = "object-notify", args = "object", doc = "Wakes up a single thread that is waiting on OBJECT's monitor."
 + "\nIf any threads are waiting on this object, one of them is chosen to be"
 + " awakened. The choice is arbitrary and occurs at the discretion of the"
-+ " implementation. A thread waits on an object's monitor by calling one"
-+ " of the wait methods.")
+			+ " implementation. A thread waits on an object's monitor by calling one" + " of the wait methods.")
     private static final class pf_object_notify extends Primitive {
       pf_object_notify() {
         super("object-notify", PACKAGE_THREADS, true, "object");
@@ -1885,11 +1920,9 @@ public abstract class LispThread extends LispObject
       }
     };
 
-    public static final Primitive OBJECT_NOTIFY_ALL
-      = new pf_object_notify_all();
-    @DocString(name="object-notify-all",
-               args="object",
-               doc="Wakes up all threads that are waiting on this OBJECT's monitor."
+	public static final Primitive OBJECT_NOTIFY_ALL = new pf_object_notify_all();
+
+	@DocString(name = "object-notify-all", args = "object", doc = "Wakes up all threads that are waiting on this OBJECT's monitor."
 + "\nA thread waits on an object's monitor by calling one of the wait methods.")
     private static final class pf_object_notify_all extends Primitive {
       pf_object_notify_all() {

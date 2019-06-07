@@ -48,6 +48,7 @@ public final class JarStream extends Stream
 {
     private final Pathname pathname;
     private final InputStream input;
+    @SuppressWarnings("hiding") // @FIXME: really?
     private final Reader reader;
     private final int bytesPerUnit;
 

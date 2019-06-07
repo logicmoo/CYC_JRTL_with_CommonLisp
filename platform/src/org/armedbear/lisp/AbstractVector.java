@@ -32,6 +32,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
 public abstract class AbstractVector extends AbstractArray
 {
   @Override
@@ -59,10 +61,11 @@ public abstract class AbstractVector extends AbstractArray
   {
     if (obj instanceof AbstractVector)
       {
-        if (length() != obj.length())
+        final int cl_length = cl_length();
+	    	if (cl_length != obj.cl_length())
           return false;
         AbstractVector v = (AbstractVector) obj;
-        for (int i = length(); i-- > 0;)
+        for (int i = cl_length; i-- > 0;)
           if (!AREF(i).equalp(v.AREF(i)))
             return false;
         return true;
@@ -123,7 +126,7 @@ public abstract class AbstractVector extends AbstractArray
 
   public LispObject deleteEql(LispObject item)
   {
-    final int limit = length();
+    final int limit = cl_length();
     int i = 0;
     int j = 0;
     while (i < limit)

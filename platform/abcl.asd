@@ -1,17 +1,14 @@
 ;;; -*- Mode: LISP; Syntax: COMMON-LISP -*-
-
-(require :asdf)
-(in-package :asdf)
-
-(defsystem :abcl :version "1.5.0"
+(defsystem abcl
+  :version "1.5.0"
            :in-order-to ((test-op (test-op "abcl/test/lisp"))))
 
-(defsystem :abcl/test/lisp :version "1.5.0"
+(defsystem abcl/test/lisp
+  :version "1.5.0"
            :description "Test ABCL with the its own collection of unit tests."
            :perform  (test-op (o s)
                               (uiop:symbol-call :abcl.test.lisp '#:run))
-           :components
-	   ((:module abcl-rt 
+  :components ((:module abcl-rt 
                      :pathname "test/lisp/abcl/" :serial t :components
 		     ((:file "rt-package") 
                       (:file "rt")
@@ -31,23 +28,23 @@
                       #+abcl
                       (:file "mop-tests-setup")
                       #+abcl
-                      (:file "mop-tests" :depends-on 
-                             ("mop-tests-setup"))
+                         (:file "mop-tests"
+                                :depends-on ("mop-tests-setup"))
                       (:file "clos-tests")
                       (:file "file-system-tests")
                       #+abcl
-                      (:file "jar-pathname" :depends-on 
-                             ("utilities" "pathname-tests" "file-system-tests"))
+                         (:file "jar-pathname"
+                                :depends-on ("utilities" "pathname-tests" "file-system-tests"))
                       #+abcl
                       (:file "url-pathname")
-                      (:file "math-tests" :depends-on 
-                             ("compiler-tests"))
+                         (:file "math-tests"
+                                :depends-on ("compiler-tests"))
                       (:file "misc-tests")
                       (:file "latin1-tests")
                       (:file "bugs" :depends-on 
                              ("file-system-tests"))
-                      (:file "wild-pathnames" :depends-on 
-                             ("file-system-tests"))
+                         (:file "wild-pathnames"
+                                :depends-on ("file-system-tests"))
                       #+abcl 
                       (:file "weak-hash-tables")
                       #+abcl 
@@ -61,6 +58,29 @@
                       (:file "runtime-class")
                       #+abcl
                       (:file "package-local-nicknames-tests")))))
+
+;;; FIXME Currently requires ACBL-CONTRIB and QUICKLISP-ABCL to be
+;;; loaded, but can't seem to put in the :defsystem-depends-on stanza
+(defsystem abcl/t
+  :description "Tests for ABCL via PROVE."
+  :defsystem-depends-on (prove-asdf)
+  :depends-on (abcl
+               prove)
+  :perform (asdf:test-op (op c)
+                         (uiop:symbol-call :prove-asdf :run-test-system c))
+  :components ((:module package
+                        :pathname "t/"
+                        :components ((:file "package")))
+               (:module java6
+                        :depends-on (package)
+                        :pathname "t/"
+                        :components ((:test-file "run-program")))
+               (:module build
+                        :depends-on (package)
+                        :pathname "t/"
+                        :components ((:test-file "resolve-multiple-maven-dependencies")
+                                     (:test-file "disassemble")
+                                     (:test-file "pathname")))))
 
 ;;;
 ;;; ASDF definitions and the ANSI-TEST suite
@@ -76,7 +96,7 @@
 ;;; whether the test suite is present, which provides a more useful
 ;;; diagnostic, but I can't seem to find a way to hook this into the
 ;;; ASDF:LOAD-OP phase.
-(defsystem :abcl/ansi-rt
+(defsystem abcl/ansi-rt
   :description "Enapsulation of the REGRESSION-TEST framework used by ~
 the ANSI test suite, so that we may build on its 'API'.
 
@@ -87,7 +107,7 @@ be in a directory named '../ansi-test/'."
   :components ((:file "rt-package")
                (:file "rt" :depends-on (rt-package))))
 
-(defsystem :abcl/test/ansi
+(defsystem abcl/test/ansi
   :depends-on (abcl/ansi-rt)
   :components 
   ((:module ansi-tests :pathname "test/lisp/ansi/" :components
@@ -95,25 +115,28 @@ be in a directory named '../ansi-test/'."
              (:file "abcl-ansi" :depends-on ("packages"))
              (:file "parse-ansi-errors" :depends-on ("abcl-ansi"))))))
 
-(defsystem :abcl/test/ansi/interpreted 
+(defsystem abcl/test/ansi/interpreted 
   :version "1.2" 
   :description "Test ABCL with the interpreted ANSI tests." 
   :depends-on (abcl/test/ansi)
   :perform (test-op (o s)
                     (uiop:symbol-call :abcl.test.ansi 'run :compile-tests nil)))
   
-(defsystem :abcl/test/ansi/compiled :version "1.2" 
+(defsystem abcl/test/ansi/compiled
+  :version "1.2" 
            :description "Test ABCL with the compiled ANSI tests." 
            :depends-on (abcl/test/ansi)
            :perform (test-op (o s)
                              (uiop:symbol-call :abcl.test.ansi 'run :compile-tests t))
-           :components 
-           ((:module ansi-tests :pathname "test/lisp/ansi/" :components
-                     ((:file "packages")
-                      (:file "abcl-ansi" :depends-on ("packages"))
-                      (:file "parse-ansi-errors" :depends-on ("abcl-ansi"))))))
+  :components ((:module ansi-tests
+                        :pathname "test/lisp/ansi/"
+                        :components ((:file "packages")
+                                     (:file "abcl-ansi"
+                                            :depends-on ("packages"))
+                                     (:file "parse-ansi-errors"
+                                            :depends-on ("abcl-ansi"))))))
 
-(defsystem :abcl/test/cl-bench 
+(defsystem abcl/test/cl-bench 
   :description "Test ABCL with CL-BENCH."
   :perform (test-op (o s)
                     (uiop:symbol-call :abcl.test.cl-bench 'run))
@@ -133,11 +156,45 @@ be in a directory named '../ansi-test/'."
             ((:file "build-abcl") 
              (:file "customizations" :depends-on ("build-abcl"))))))
 
-(defsystem :abcl/documentation
+(defsystem abcl/documentation
   :description "Tools to generate LaTeX source from docstrings."
   :depends-on (swank)
   :components
-  ((:module grovel :pathname "doc/manual/" :serial t
-            :components ((:file "package")
+  ((:module package
+            :pathname "doc/manual/" :components ((:file "package")))
+   (:module grovel
+            :depends-on (package)
+            :pathname "doc/manual/" 
+            :components ((:file "index" :depends-on (grovel))
                          (:file "grovel")))))
 
+(defsystem abcl/tools
+  :version "0.2.0"
+  :components (#+(or) ;; TODO Untangle source unit compile time execution
+               (:module grapher
+                        :pathname "tools/"
+                        :components ((:file "code-grapher")))
+               (:module digest
+                        :pathname "tools/"
+                        :components ((:file "digest")))))
+
+#+(or) ;; TODO Untangle source unit compile time execution
+(defsystem abcl/tools/bisect
+  :version "0.1.0"
+  :depends-on (abcl/test/ansi/compiled)
+  :components ((:module bisect
+                        :pathname "tools/"
+                        :components ((:file "check")))))
+
+(defsystem abcl/tools/resource
+  :version "0.1.0"
+  :depends-on (dexador alexandria)
+  :components ((:module http :pathname "tools/"
+                        :components ((:file "resource")))))
+
+(defsystem abcl/model/changes
+  :version "0.1.0"
+  :depends-on (jeannie) ;;; <https://bitbucket.org/easye/jeannie>
+  :components ((:module n3 :pathname "etc/"
+                        :components ((:static-file "changes.n3")
+                                     (:file "changes")))))

@@ -1,0 +1,852 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component jdk="12" jdk_type="JavaSDK">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$">
+		<excludeFolder url="file://$MODULE_DIR$/data"/>
+		<excludeFolder url="file://$MODULE_DIR$/dist"/>
+		<excludeFolder url="file://$MODULE_DIR$/ext"/>
+		<excludeFolder url="file://$MODULE_DIR$/httpd"/>
+		<excludeFolder url="file://$MODULE_DIR$/main/1.0-unused"/>
+		<excludeFolder url="file://$MODULE_DIR$/main/appdapter-src"/>
+		<excludeFolder url="file://$MODULE_DIR$/main/jsrc-jpl-works-ref-unused"/>
+		<excludeFolder url="file://$MODULE_DIR$/main/lm-main"/>
+		<excludeFolder url="file://$MODULE_DIR$/main/opencyc-client-only-jsrc"/>
+		<excludeFolder url="file://$MODULE_DIR$/site-lisp-saved"/>
+	</contentEntry>
+	<lib name="jetty-continuation-8.0.4.v20111024.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jetty-continuation-8.0.4.v20111024.jar!/"/>
+	</lib>
+	<lib name="jsp-2.1-glassfish-2.1.v20100127.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jsp-2.1-glassfish-2.1.v20100127.jar!/"/>
+	</lib>
+	<lib name="jsp-api-2.1-glassfish-2.1.v20100127.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jsp-api-2.1-glassfish-2.1.v20100127.jar!/"/>
+	</lib>
+	<lib name="servlet-api-3.0.20100224.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/servlet-api-3.0.20100224.jar!/"/>
+	</lib>
+	<lib name="jena-dig.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jena-dig.jar!/"/>
+	</lib>
+	<lib name="arq-extra.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/arq-extra.jar!/"/>
+	</lib>
+	<lib name="cycSparqlEndpoint.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cycSparqlEndpoint.jar!/"/>
+	</lib>
+	<lib name="org.openl.lib.poi.dev-5.9.4.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.openl.lib.poi.dev-5.9.4.1.jar!/"/>
+	</lib>
+	<lib name="ext.bundle.jena_all_2_10_1-1.1.6-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ext.bundle.jena_all_2_10_1-1.1.6-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="ext.bundle.apache_httpclient-1.1.6-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ext.bundle.apache_httpclient-1.1.6-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="ext.bundle.math.jscience_50SNAP-1.0.9.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ext.bundle.math.jscience_50SNAP-1.0.9.jar!/"/>
+	</lib>
+	<lib name="ext.bundle.openconverters-1.1.6-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ext.bundle.openconverters-1.1.6-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="ext.bundle.osgi.common-1.1.6-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ext.bundle.osgi.common-1.1.6-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="ext.bundle.xml.dom4j_161-1.1.6-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ext.bundle.xml.dom4j_161-1.1.6-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="ext.bundle.xml.xerces-1.1.6-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ext.bundle.xml.xerces-1.1.6-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="commons-logging-1.1.3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-logging-1.1.3.jar!/"/>
+	</lib>
+	<lib name="bsf-all-3.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/bsf-all-3.1.jar!/"/>
+	</lib>
+	<lib name="2p.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/2p.jar!/"/>
+	</lib>
+	<lib name="activation.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/activation.jar!/"/>
+	</lib>
+	<lib name="addressing-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/addressing-1.0.jar!/"/>
+	</lib>
+	<lib name="antlr-2.7.5.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/antlr-2.7.5.jar!/"/>
+	</lib>
+	<lib name="axis-1.4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/axis-1.4.jar!/"/>
+	</lib>
+	<lib name="axis-jaxrpc-1.4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/axis-jaxrpc-1.4.jar!/"/>
+	</lib>
+	<lib name="backport-util-concurrent.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/backport-util-concurrent.jar!/"/>
+	</lib>
+	<lib name="bcprov-jdk15-133.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/bcprov-jdk15-133.jar!/"/>
+	</lib>
+	<lib name="BrowserLauncher2-1_3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/BrowserLauncher2-1_3.jar!/"/>
+	</lib>
+	<lib name="bsf-api-3.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/bsf-api-3.1.jar!/"/>
+	</lib>
+	<lib name="bsf-utils-3.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/bsf-utils-3.1.jar!/"/>
+	</lib>
+	<lib name="bsf.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/bsf.jar!/"/>
+	</lib>
+	<lib name="castor-0.9.6.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/castor-0.9.6.jar!/"/>
+	</lib>
+	<lib name="cog-abstraction-common-2.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-abstraction-common-2.1.jar!/"/>
+	</lib>
+	<lib name="cog-abstraction-examples-2.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-abstraction-examples-2.1.jar!/"/>
+	</lib>
+	<lib name="cog-axis.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-axis.jar!/"/>
+	</lib>
+	<lib name="cog-certmanagement-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-certmanagement-1.0.jar!/"/>
+	</lib>
+	<lib name="cog-certrequest-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-certrequest-1.0.jar!/"/>
+	</lib>
+	<lib name="cog-grapheditor-0.47.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-grapheditor-0.47.jar!/"/>
+	</lib>
+	<lib name="cog-gridfaces-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-gridfaces-1.0.jar!/"/>
+	</lib>
+	<lib name="cog-gridshell-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-gridshell-1.0.jar!/"/>
+	</lib>
+	<lib name="cog-jglobus.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-jglobus.jar!/"/>
+	</lib>
+	<lib name="cog-jobmanager.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-jobmanager.jar!/"/>
+	</lib>
+	<lib name="cog-karajan-0.33.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-karajan-0.33.jar!/"/>
+	</lib>
+	<lib name="cog-provider-clref-gt3_2_1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-provider-clref-gt3_2_1.jar!/"/>
+	</lib>
+	<lib name="cog-provider-clref-gt4_0_0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-provider-clref-gt4_0_0.jar!/"/>
+	</lib>
+	<lib name="cog-provider-condor-2.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-provider-condor-2.0.jar!/"/>
+	</lib>
+	<lib name="cog-provider-gt2-2.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-provider-gt2-2.2.jar!/"/>
+	</lib>
+	<lib name="cog-provider-gt2ft-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-provider-gt2ft-1.0.jar!/"/>
+	</lib>
+	<lib name="cog-provider-gt3_2_1-2.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-provider-gt3_2_1-2.0.jar!/"/>
+	</lib>
+	<lib name="cog-provider-gt4_0_0-2.3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-provider-gt4_0_0-2.3.jar!/"/>
+	</lib>
+	<lib name="cog-provider-local-2.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-provider-local-2.0.jar!/"/>
+	</lib>
+	<lib name="cog-provider-ssh-2.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-provider-ssh-2.1.jar!/"/>
+	</lib>
+	<lib name="cog-provider-webdav-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-provider-webdav-1.0.jar!/"/>
+	</lib>
+	<lib name="cog-resources-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-resources-1.0.jar!/"/>
+	</lib>
+	<lib name="cog-setup-0.91.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-setup-0.91.jar!/"/>
+	</lib>
+	<lib name="cog-trap-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-trap-1.0.jar!/"/>
+	</lib>
+	<lib name="cog-url.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-url.jar!/"/>
+	</lib>
+	<lib name="cog-util-0.91.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cog-util-0.91.jar!/"/>
+	</lib>
+	<lib name="com.springsource.com.ibm.icu-3.4.5.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/com.springsource.com.ibm.icu-3.4.5.jar!/"/>
+	</lib>
+	<lib name="com.springsource.org.apache.log4j-1.2.16.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/com.springsource.org.apache.log4j-1.2.16.jar!/"/>
+	</lib>
+	<lib name="CommandlineSshAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/CommandlineSshAdaptor.jar!/"/>
+	</lib>
+	<lib name="commonj.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commonj.jar!/"/>
+	</lib>
+	<lib name="commons-beanutils.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-beanutils.jar!/"/>
+	</lib>
+	<lib name="commons-cli-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-cli-1.0.jar!/"/>
+	</lib>
+	<lib name="commons-codec-1.6.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-codec-1.6.jar!/"/>
+	</lib>
+	<lib name="commons-collections-3.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-collections-3.0.jar!/"/>
+	</lib>
+	<lib name="commons-digester.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-digester.jar!/"/>
+	</lib>
+	<lib name="commons-discovery-0.4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-discovery-0.4.jar!/"/>
+	</lib>
+	<lib name="commons-httpclient-3.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-httpclient-3.1.jar!/"/>
+	</lib>
+	<lib name="commons-lang-2.4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-lang-2.4.jar!/"/>
+	</lib>
+	<lib name="commons-lang3-3.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-lang3-3.1.jar!/"/>
+	</lib>
+	<lib name="commons-math-3.0-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-math-3.0-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="commons-vfs-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-vfs-1.0.jar!/"/>
+	</lib>
+	<lib name="commons-vfs2-2.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/commons-vfs2-2.1.jar!/"/>
+	</lib>
+	<lib name="cryptix-asn1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cryptix-asn1.jar!/"/>
+	</lib>
+	<lib name="cryptix.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cryptix.jar!/"/>
+	</lib>
+	<lib name="cryptix32.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/cryptix32.jar!/"/>
+	</lib>
+	<lib name="customSysParam.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/customSysParam.jar!/"/>
+	</lib>
+	<lib name="docking-frames-common.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/docking-frames-common.jar!/"/>
+	</lib>
+	<lib name="docking-frames-core.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/docking-frames-core.jar!/"/>
+	</lib>
+	<lib name="dom4j-1.6.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/dom4j-1.6.1.jar!/"/>
+	</lib>
+	<lib name="drmaa.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/drmaa.jar!/"/>
+	</lib>
+	<lib name="ecj-3.5.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ecj-3.5.1.jar!/"/>
+	</lib>
+	<lib name="edtftpj-1.5.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/edtftpj-1.5.2.jar!/"/>
+	</lib>
+	<lib name="ekitspell.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ekitspell.jar!/"/>
+	</lib>
+	<lib name="forms-1.3.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/forms-1.3.0.jar!/"/>
+	</lib>
+	<lib name="ganymed-ssh2-build211beta4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ganymed-ssh2-build211beta4.jar!/"/>
+	</lib>
+	<lib name="GenericAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/GenericAdaptor.jar!/"/>
+	</lib>
+	<lib name="glite-jdl-api-java.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/glite-jdl-api-java.jar!/"/>
+	</lib>
+	<lib name="glite-security-delegation-java.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/glite-security-delegation-java.jar!/"/>
+	</lib>
+	<lib name="glite-security-trustmanager.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/glite-security-trustmanager.jar!/"/>
+	</lib>
+	<lib name="glite-security-util-java.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/glite-security-util-java.jar!/"/>
+	</lib>
+	<lib name="GliteAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/GliteAdaptor.jar!/"/>
+	</lib>
+	<lib name="globus_delegation_service.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/globus_delegation_service.jar!/"/>
+	</lib>
+	<lib name="globus_delegation_stubs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/globus_delegation_stubs.jar!/"/>
+	</lib>
+	<lib name="globus_wsrf_mds_aggregator_stubs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/globus_wsrf_mds_aggregator_stubs.jar!/"/>
+	</lib>
+	<lib name="globus_wsrf_rendezvous_service.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/globus_wsrf_rendezvous_service.jar!/"/>
+	</lib>
+	<lib name="globus_wsrf_rendezvous_stubs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/globus_wsrf_rendezvous_stubs.jar!/"/>
+	</lib>
+	<lib name="globus_wsrf_rft_client.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/globus_wsrf_rft_client.jar!/"/>
+	</lib>
+	<lib name="globus_wsrf_rft_stubs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/globus_wsrf_rft_stubs.jar!/"/>
+	</lib>
+	<lib name="globus_wsrf_rft.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/globus_wsrf_rft.jar!/"/>
+	</lib>
+	<lib name="GlobusAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/GlobusAdaptor.jar!/"/>
+	</lib>
+	<lib name="gram-client.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/gram-client.jar!/"/>
+	</lib>
+	<lib name="gram-stubs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/gram-stubs.jar!/"/>
+	</lib>
+	<lib name="gram-utils.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/gram-utils.jar!/"/>
+	</lib>
+	<lib name="graphlayout-1.2.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/graphlayout-1.2.1.jar!/"/>
+	</lib>
+	<lib name="gridsam-client.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/gridsam-client.jar!/"/>
+	</lib>
+	<lib name="gridsam-core-2.0.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/gridsam-core-2.0.1.jar!/"/>
+	</lib>
+	<lib name="gridsam-schema-2.0.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/gridsam-schema-2.0.1.jar!/"/>
+	</lib>
+	<lib name="GridsamAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/GridsamAdaptor.jar!/"/>
+	</lib>
+	<lib name="gson-2.3.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/gson-2.3.1.jar!/"/>
+	</lib>
+	<lib name="guava-12.0-sources.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/guava-12.0-sources.jar!/"/>
+	</lib>
+	<lib name="guava-12.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/guava-12.0.jar!/"/>
+	</lib>
+	<lib name="h2-1.3.157.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/h2-1.3.157.jar!/"/>
+	</lib>
+	<lib name="hamcrest-core-1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/hamcrest-core-1.1.jar!/"/>
+	</lib>
+	<lib name="hivemind-1.1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/hivemind-1.1.1.jar!/"/>
+	</lib>
+	<lib name="hivemind-jmx-1.1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/hivemind-jmx-1.1.1.jar!/"/>
+	</lib>
+	<lib name="hivemind-lib-1.1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/hivemind-lib-1.1.1.jar!/"/>
+	</lib>
+	<lib name="httpclient-osgi-4.3.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/httpclient-osgi-4.3.1.jar!/"/>
+	</lib>
+	<lib name="httpcore-osgi-4.3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/httpcore-osgi-4.3.jar!/"/>
+	</lib>
+	<lib name="icu4j_3.4.4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/icu4j_3.4.4.jar!/"/>
+	</lib>
+	<lib name="itinnov-grid-client-cli-omii1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-grid-client-cli-omii1.1.jar!/"/>
+	</lib>
+	<lib name="itinnov-grid-client-echo-omii1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-grid-client-echo-omii1.jar!/"/>
+	</lib>
+	<lib name="itinnov-grid-client-helpers-omii1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-grid-client-helpers-omii1.jar!/"/>
+	</lib>
+	<lib name="itinnov-grid-client-staterepos-omii1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-grid-client-staterepos-omii1.1.jar!/"/>
+	</lib>
+	<lib name="itinnov-grid-client-swing-omii1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-grid-client-swing-omii1.jar!/"/>
+	</lib>
+	<lib name="itinnov-grid-comms-omii1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-grid-comms-omii1.1.jar!/"/>
+	</lib>
+	<lib name="itinnov-grid-service-types-omii1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-grid-service-types-omii1.jar!/"/>
+	</lib>
+	<lib name="itinnov-grid-service-utils-omii1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-grid-service-utils-omii1.jar!/"/>
+	</lib>
+	<lib name="itinnov-grid-types-omii1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-grid-types-omii1.jar!/"/>
+	</lib>
+	<lib name="itinnov-grid-utils-omii1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-grid-utils-omii1.jar!/"/>
+	</lib>
+	<lib name="itinnov-gridservit-0.3.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/itinnov-gridservit-0.3.0.jar!/"/>
+	</lib>
+	<lib name="j2ssh-common-0.2.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/j2ssh-common-0.2.2.jar!/"/>
+	</lib>
+	<lib name="j2ssh-core-0.2.9.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/j2ssh-core-0.2.9.jar!/"/>
+	</lib>
+	<lib name="jaas.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jaas.jar!/"/>
+	</lib>
+	<lib name="jacl-1.2.6.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jacl-1.2.6.jar!/"/>
+	</lib>
+	<lib name="jakarta-regexp-1.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jakarta-regexp-1.2.jar!/"/>
+	</lib>
+	<lib name="jakarta-slide-webdavlib-2.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jakarta-slide-webdavlib-2.0.jar!/"/>
+	</lib>
+	<lib name="java_websocket.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/java_websocket.jar!/"/>
+	</lib>
+	<lib name="java-json.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/java-json.jar!/"/>
+	</lib>
+	<lib name="javaff_lrta_bounded_children_heap-0.0.1-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/javaff_lrta_bounded_children_heap-0.0.1-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="javassist-3.12.1.GA.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/javassist-3.12.1.GA.jar!/"/>
+	</lib>
+	<lib name="javax.xml.soap-api-1.3.6.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/javax.xml.soap-api-1.3.6.jar!/"/>
+	</lib>
+	<lib name="jaxen-1.1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jaxen-1.1.1.jar!/"/>
+	</lib>
+	<lib name="jaxrpc.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jaxrpc.jar!/"/>
+	</lib>
+	<lib name="jcalendar.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jcalendar.jar!/"/>
+	</lib>
+	<lib name="jce-jdk13-131.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jce-jdk13-131.jar!/"/>
+	</lib>
+	<lib name="jcommon-1.0.16.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jcommon-1.0.16.jar!/"/>
+	</lib>
+	<lib name="jdom.jar" scope="COMPILE">
+		<srcroot url="file://C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1557998638135/source/jdom-1.1.1-sources.jar"/>
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jdom.jar!/"/>
+	</lib>
+	<lib name="jep-2.4.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jep-2.4.1.jar!/"/>
+	</lib>
+	<lib name="jetty-http-8.0.4.v20111024.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jetty-http-8.0.4.v20111024.jar!/"/>
+	</lib>
+	<lib name="jetty-io-8.0.4.v20111024.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jetty-io-8.0.4.v20111024.jar!/"/>
+	</lib>
+	<lib name="jetty-security-8.0.4.v20111024.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jetty-security-8.0.4.v20111024.jar!/"/>
+	</lib>
+	<lib name="jetty-server-8.0.4.v20111024.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jetty-server-8.0.4.v20111024.jar!/"/>
+	</lib>
+	<lib name="jetty-servlet-8.0.4.v20111024.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jetty-servlet-8.0.4.v20111024.jar!/"/>
+	</lib>
+	<lib name="jetty-util-8.0.4.v20111024.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jetty-util-8.0.4.v20111024.jar!/"/>
+	</lib>
+	<lib name="jetty-webapp-8.0.4.v20111024.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jetty-webapp-8.0.4.v20111024.jar!/"/>
+	</lib>
+	<lib name="jetty-xml-8.0.4.v20111024.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jetty-xml-8.0.4.v20111024.jar!/"/>
+	</lib>
+	<lib name="JFlex.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JFlex.jar!/"/>
+	</lib>
+	<lib name="jfreechart-1.0.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jfreechart-1.0.0.jar!/"/>
+	</lib>
+	<lib name="jfreechart-1.0.13.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jfreechart-1.0.13.jar!/"/>
+	</lib>
+	<lib name="JGo.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JGo.jar!/"/>
+	</lib>
+	<lib name="JGoInstruments.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JGoInstruments.jar!/"/>
+	</lib>
+	<lib name="JGoLayout.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JGoLayout.jar!/"/>
+	</lib>
+	<lib name="JGoSVG.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JGoSVG.jar!/"/>
+	</lib>
+	<lib name="JGoWeb.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JGoWeb.jar!/"/>
+	</lib>
+	<lib name="jgraph.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jgraph.jar!/"/>
+	</lib>
+	<lib name="jgss.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jgss.jar!/"/>
+	</lib>
+	<lib name="jide-oss-3.5.5.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jide-oss-3.5.5.jar!/"/>
+	</lib>
+	<lib name="json.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/json.jar!/"/>
+	</lib>
+	<lib name="jsr305-1.3.9.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jsr305-1.3.9.jar!/"/>
+	</lib>
+	<lib name="junit-4.10.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/junit-4.10.jar!/"/>
+	</lib>
+	<lib name="junit.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/junit.jar!/"/>
+	</lib>
+	<lib name="kaon2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/kaon2.jar!/"/>
+	</lib>
+	<lib name="kazuki.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/kazuki.jar!/"/>
+	</lib>
+	<lib name="KoalaAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/KoalaAdaptor.jar!/"/>
+	</lib>
+	<lib name="kshared-2.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/kshared-2.0.jar!/"/>
+	</lib>
+	<lib name="lb.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/lb.jar!/"/>
+	</lib>
+	<lib name="LocalAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/LocalAdaptor.jar!/"/>
+	</lib>
+	<lib name="log4j-1.2.12.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/log4j-1.2.12.jar!/"/>
+	</lib>
+	<lib name="looks.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/looks.jar!/"/>
+	</lib>
+	<lib name="mail.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/mail.jar!/"/>
+	</lib>
+	<lib name="MercuryAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/MercuryAdaptor.jar!/"/>
+	</lib>
+	<lib name="miglayout-core-4.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/miglayout-core-4.2.jar!/"/>
+	</lib>
+	<lib name="miglayout-swing-4.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/miglayout-swing-4.2.jar!/"/>
+	</lib>
+	<lib name="naming-common.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/naming-common.jar!/"/>
+	</lib>
+	<lib name="naming-factory.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/naming-factory.jar!/"/>
+	</lib>
+	<lib name="naming-java.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/naming-java.jar!/"/>
+	</lib>
+	<lib name="naming-resources.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/naming-resources.jar!/"/>
+	</lib>
+	<lib name="omii-security-utils-1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/omii-security-utils-1.1.jar!/"/>
+	</lib>
+	<lib name="opensaml.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/opensaml.jar!/"/>
+	</lib>
+	<lib name="org.apache.servicemix.bundles.javax.mail-1.4.1_4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.apache.servicemix.bundles.javax.mail-1.4.1_4.jar!/"/>
+	</lib>
+	<lib name="org.apache.servicemix.bundles.junit-4.7_3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.apache.servicemix.bundles.junit-4.7_3.jar!/"/>
+	</lib>
+	<lib name="org.apache.servicemix.bundles.lucene-3.0.3_2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.apache.servicemix.bundles.lucene-3.0.3_2.jar!/"/>
+	</lib>
+	<lib name="org.apache.servicemix.bundles.xerces-2.11.0_1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.apache.servicemix.bundles.xerces-2.11.0_1.jar!/"/>
+	</lib>
+	<lib name="org.apache.servicemix.bundles.xmlresolver-1.2_3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.apache.servicemix.bundles.xmlresolver-1.2_3.jar!/"/>
+	</lib>
+	<lib name="org.apache.servicemix.specs.activation-api-1.1-1.8.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.apache.servicemix.specs.activation-api-1.1-1.8.0.jar!/"/>
+	</lib>
+	<lib name="org.appdapter.bundle.core-1.1.6-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.appdapter.bundle.core-1.1.6-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="org.appdapter.bundle.debug-1.1.6-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.appdapter.bundle.debug-1.1.6-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="org.appdapter.bundle.fileconv-1.1.6-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.appdapter.bundle.fileconv-1.1.6-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="org.appdapter.bundle.xload-1.2.4-20160803.212610-8.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.appdapter.bundle.xload-1.2.4-20160803.212610-8.jar!/"/>
+	</lib>
+	<lib name="org.appdapter.lib.bind.jena-1.2.3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.appdapter.lib.bind.jena-1.2.3.jar!/"/>
+	</lib>
+	<lib name="org.appdapter.lib.core-1.1.6-SNAPSHOT.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.appdapter.lib.core-1.1.6-SNAPSHOT.jar!/"/>
+	</lib>
+	<lib name="org.appdapter.lib.remote-1.2.4-20160803.212630-10.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.appdapter.lib.remote-1.2.4-20160803.212630-10.jar!/"/>
+	</lib>
+	<lib name="org.osgi.compendium-4.2.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.osgi.compendium-4.2.0.jar!/"/>
+	</lib>
+	<lib name="org.osgi.core-1.4.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.osgi.core-1.4.0.jar!/"/>
+	</lib>
+	<lib name="org.osgi.core-4.2.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/org.osgi.core-4.2.0.jar!/"/>
+	</lib>
+	<lib name="orphanNodesAlg.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/orphanNodesAlg.jar!/"/>
+	</lib>
+	<lib name="owlapi-distribution-4.1.4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/owlapi-distribution-4.1.4.jar!/"/>
+	</lib>
+	<lib name="owlapi-osgidistribution-4.1.4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/owlapi-osgidistribution-4.1.4.jar!/"/>
+	</lib>
+	<lib name="owlsyntax.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/owlsyntax.jar!/"/>
+	</lib>
+	<lib name="pddl4j.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/pddl4j.jar!/"/>
+	</lib>
+	<lib name="postgresql-9.1-901.jdbc4.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/postgresql-9.1-901.jdbc4.jar!/"/>
+	</lib>
+	<lib name="procyon-compilertools-0.5.33-enigma.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/procyon-compilertools-0.5.33-enigma.jar!/"/>
+	</lib>
+	<lib name="procyon-core-0.5.33-enigma.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/procyon-core-0.5.33-enigma.jar!/"/>
+	</lib>
+	<lib name="puretls.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/puretls.jar!/"/>
+	</lib>
+	<lib name="reflections-0.9.8.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/reflections-0.9.8.jar!/"/>
+	</lib>
+	<lib name="rhino-1.7.7.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/rhino-1.7.7.1.jar!/"/>
+	</lib>
+	<lib name="runnersFramework-2.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/runnersFramework-2.0.jar!/"/>
+	</lib>
+	<lib name="scala-compiler-2.10.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/scala-compiler-2.10.2.jar!/"/>
+	</lib>
+	<lib name="scala-library-2.10.2.jar" scope="COMPILE">
+		<srcroot url="file://C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1559483046738/source/scala-library-2.10.2-sources.jar"/>
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/scala-library-2.10.2.jar!/"/>
+	</lib>
+	<lib name="scala-reflect-2.10.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/scala-reflect-2.10.2.jar!/"/>
+	</lib>
+	<lib name="services_AdvertServiceEntry_stubs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/services_AdvertServiceEntry_stubs.jar!/"/>
+	</lib>
+	<lib name="services_IndexServiceProxyService_stubs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/services_IndexServiceProxyService_stubs.jar!/"/>
+	</lib>
+	<lib name="SftpAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/SftpAdaptor.jar!/"/>
+	</lib>
+	<lib name="SftpGanymedAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/SftpGanymedAdaptor.jar!/"/>
+	</lib>
+	<lib name="SftpTrileadAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/SftpTrileadAdaptor.jar!/"/>
+	</lib>
+	<lib name="SgeAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/SgeAdaptor.jar!/"/>
+	</lib>
+	<lib name="slf4j-api-1.7.5.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/slf4j-api-1.7.5.jar!/"/>
+	</lib>
+	<lib name="slf4j-log4j12-1.7.5.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/slf4j-log4j12-1.7.5.jar!/"/>
+	</lib>
+	<lib name="smartsockets-1.51.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/smartsockets-1.51.jar!/"/>
+	</lib>
+	<lib name="srm.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/srm.jar!/"/>
+	</lib>
+	<lib name="SshTrileadAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/SshTrileadAdaptor.jar!/"/>
+	</lib>
+	<lib name="stax-api-1.0.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/stax-api-1.0.1.jar!/"/>
+	</lib>
+	<lib name="swingx-1.6.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/swingx-1.6.jar!/"/>
+	</lib>
+	<lib name="syntax.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/syntax.jar!/"/>
+	</lib>
+	<lib name="tcljava-1.2.6.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/tcljava-1.2.6.jar!/"/>
+	</lib>
+	<lib name="trilead-ssh2-build213-RK.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/trilead-ssh2-build213-RK.jar!/"/>
+	</lib>
+	<lib name="ublsupport.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ublsupport.jar!/"/>
+	</lib>
+	<lib name="unicode_panel.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/unicode_panel.jar!/"/>
+	</lib>
+	<lib name="wms3.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wms3.1.jar!/"/>
+	</lib>
+	<lib name="wsdl4j.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wsdl4j.jar!/"/>
+	</lib>
+	<lib name="wsrf_core_stubs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wsrf_core_stubs.jar!/"/>
+	</lib>
+	<lib name="wsrf_core.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wsrf_core.jar!/"/>
+	</lib>
+	<lib name="wsrf_mds_index_stubs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wsrf_mds_index_stubs.jar!/"/>
+	</lib>
+	<lib name="wsrf_mds_usefulrp_schema_stubs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wsrf_mds_usefulrp_schema_stubs.jar!/"/>
+	</lib>
+	<lib name="wsrf_provider_jce.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wsrf_provider_jce.jar!/"/>
+	</lib>
+	<lib name="wsrf_tools.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wsrf_tools.jar!/"/>
+	</lib>
+	<lib name="wss4j-1.5.0-itinnov-2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wss4j-1.5.0-itinnov-2.jar!/"/>
+	</lib>
+	<lib name="wss4j.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wss4j.jar!/"/>
+	</lib>
+	<lib name="wstx-asl-3.2.9.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/wstx-asl-3.2.9.jar!/"/>
+	</lib>
+	<lib name="xalan.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/xalan.jar!/"/>
+	</lib>
+	<lib name="xbean-2.1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/xbean-2.1.0.jar!/"/>
+	</lib>
+	<lib name="xercesImpl.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/xercesImpl.jar!/"/>
+	</lib>
+	<lib name="xml-apis-1.4.01.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/xml-apis-1.4.01.jar!/"/>
+	</lib>
+	<lib name="xml-apis.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/xml-apis.jar!/"/>
+	</lib>
+	<lib name="xml4j.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/xml4j.jar!/"/>
+	</lib>
+	<lib name="xmlsec.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/xmlsec.jar!/"/>
+	</lib>
+	<lib name="xpp3-1.1.3.4d_b4_min.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/xpp3-1.1.3.4d_b4_min.jar!/"/>
+	</lib>
+	<lib name="xstream-1.1.1-patched.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/xstream-1.1.1-patched.jar!/"/>
+	</lib>
+	<lib name="zoni.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/zoni.jar!/"/>
+	</lib>
+	<lib name="ZorillaAdaptor.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ZorillaAdaptor.jar!/"/>
+	</lib>
+	<lib name="concurrent.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/concurrent.jar!/"/>
+	</lib>
+	<lib name="iri.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/iri.jar!/"/>
+	</lib>
+	<lib name="openrdf-sesame-2.2.4-onejar.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/openrdf-sesame-2.2.4-onejar.jar!/"/>
+	</lib>
+	<lib name="ordi-model-0.5.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ordi-model-0.5.jar!/"/>
+	</lib>
+	<lib name="ordi-trree-adapter-3.1.a6.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ordi-trree-adapter-3.1.a6.jar!/"/>
+	</lib>
+	<lib name="owlim-big-3.1.a7.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/owlim-big-3.1.a7.jar!/"/>
+	</lib>
+	<lib name="commons-logging-1.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ext/javagat/commons-logging-1.1.jar!/"/>
+	</lib>
+	<lib name="GAT-API.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ext/javagat/GAT-API.jar!/"/>
+	</lib>
+	<lib name="GAT-engine.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ext/javagat/GAT-engine.jar!/"/>
+	</lib>
+	<lib name="log4j-1.2.13.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ext/javagat/log4j-1.2.13.jar!/"/>
+	</lib>
+	<lib name="xmlParserAPIs.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ext/javagat/xmlParserAPIs.jar!/"/>
+	</lib>
+	<lib name="ext/iri.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ext/iri.jar!/"/>
+	</lib>
+	<lib name="ext/openrdf-sesame-2.2.4-onejar.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ext/openrdf-sesame-2.2.4-onejar.jar!/"/>
+	</lib>
+	<lib name="ext/ordi-model-0.5.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ext/ordi-model-0.5.jar!/"/>
+	</lib>
+	<lib name="ext/ordi-trree-adapter-3.1.a6.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ext/ordi-trree-adapter-3.1.a6.jar!/"/>
+	</lib>
+	<lib name="ext/owlim-big-3.1.a7.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/ext/owlim-big-3.1.a7.jar!/"/>
+	</lib>
+	<lib name="mpj.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/mpj.jar!/"/>
+	</lib>
+	<lib name="ikvm-api.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ikvm-api.jar!/"/>
+	</lib>
+</component>

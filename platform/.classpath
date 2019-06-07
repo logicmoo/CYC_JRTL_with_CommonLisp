@@ -2,18 +2,18 @@
 <classpath>
 	<classpathentry kind="src" path="main/cycjava-persistence-hacks"/>
 	<classpathentry excluding="bsh/" kind="src" path="main/logicmoo-main"/>
-	<classpathentry kind="src" path="main/opencyc-server-jsrc"/>
+	<classpathentry kind="src" path="main/opencyc-server-jsrc-in-progress"/>
 	<classpathentry kind="src" path="main/objectweb-asm-src"/>
 	<classpathentry kind="src" path="main/armedbear-j-src"/>
-	<classpathentry excluding="org/appdapter/core/matdat/DerivedGraphSpecReader$.java|org/appdapter/core/matdat/MatrixData$.java|org/appdapter/core/matdat/CsvFileSheetLoader$.java|org/appdapter/core/matdat/GoogSheetRepoLoader$.java" kind="src" path="main/appdapter-src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="main/jpl7-hacked"/>
 	<classpathentry kind="src" path="main/java"/>
 	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
 	<classpathentry kind="src" path="main/server-4q"/>
 	<classpathentry kind="src" path="main/platform-1.1"/>
 	<classpathentry excluding="test/" kind="src" path="main/beanshell"/>
-	<classpathentry kind="src" path="site-lisp/optop/demo"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-continuation-8.0.4.v20111024.jar"/>
+	<classpathentry kind="src" path="site-lisp/optop/demo"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/servlet-api-3.0.20100224.jar"/>

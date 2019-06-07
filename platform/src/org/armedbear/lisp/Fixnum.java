@@ -66,6 +66,15 @@ public class Fixnum extends AbstractSubLIntegerBignum
     return (Fixnum) ((n >= 0 && n < MAX_POS_CACHE) ? constants[n] : SubLNumberFactory.makeInteger(n));
   }
 
+  // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one
+  public static LispInteger makeFixnum(long l) {
+    return getInstance( l );
+  }
+
+  // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one
+  public static Fixnum makeFixnum(int l) {
+    return getInstance( l );
+  }
   public static Fixnum getInstanceInternal(int n)
   {
     return (Fixnum) ((n >= 0 && n < MAX_POS_CACHE) ? constants[n] : new SubLFixnum(n));
@@ -86,14 +95,13 @@ public Object javaInstance()
   }
 
   @Override
-public Object javaInstanceImpl(Class c)
+  public Object javaInstance(Class c)
   {
-    String cn = c.getName();
-    if (cn.equals("java.lang.Byte") || cn.equals("byte"))
+    if (c == Byte.class || c == byte.class)
       return Byte.valueOf((byte)value);
-    if (cn.equals("java.lang.Short") || cn.equals("short"))
+    if (c == Short.class || c == short.class)
       return Short.valueOf((short)value);
-    if (cn.equals("java.lang.Long") || cn.equals("long"))
+    if (c == Long.class || c == long.class)
       return Long.valueOf((long)value);
     return javaInstance();
   }

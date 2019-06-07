@@ -2,3 +2,14 @@ build
 dist
 abcl
 /bin-eclipse/
+/Debug/
+/.compiled/
+/lib/*.dll
+/IKVM*
+/ikvm*
+/ICSharpCode.SharpZipLib.dll
+/JVM.DLL
+/bin/modern/
+/lib/ALL/
+
+/.apt_generated/

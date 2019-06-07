@@ -2062,6 +2062,28 @@
 	  (let ((directives (tokenize-control-string string)))
 	    (walk-directive-list directives args)))))))
 
+#|
+(defun format-print-named-character (char stream)
+  (let* ((name (char-name char)))
+    (cond ((and name
+                ;;; Fixes ANSI-TEST FORMATTER.C.2A and FORMAT.C.2A
+                (not (eq 160 (char-code char))))
+	   (write-string (string-capitalize name) stream))
+	  (t
+	   (write-char char stream)))))
+
+;;; "printing" as defined in the ANSI CL glossary, which is normative.
+(defun char-printing-p (char)
+  (and (not (eql char #\Space))
+       (graphic-char-p char)))
+
+(defun format-print-named-character (char stream)
+  (cond ((not (char-printing-p char))
+         (write-string (string-capitalize (char-name char)) stream))
+        (t
+         (write-char char stream))))
+|#
+
 ;;; From target-format.lisp.
 
 (in-package #:format)

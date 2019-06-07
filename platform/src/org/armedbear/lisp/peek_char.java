@@ -33,16 +33,17 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
 // ### peek-char
 public final class peek_char extends Primitive
 {
-    public static LispObject internalEOF = new LispObject() {
+    private static LispObject internalEOF = new SLispObject() {
+
     	@Override
-    	final public String printObject()
+        public String printObject()
     	{
-    		if(isPrintReadable(null)) {
-    		}
-    		return unreadableString("internalEOF");
+        	return unreadableString("internalEOF", false);
     	}
     };
     
@@ -122,7 +123,7 @@ public final class peek_char extends Primitive
                     return result;
             }
         }
-        return error(new SimpleError(String.valueOf(peekType) +
+        return error(new SimpleError(stringValueOf(peekType) +
                                       " is an illegal peek-type."));
     }
 

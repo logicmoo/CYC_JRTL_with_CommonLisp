@@ -202,7 +202,8 @@ abstract public class LispCharacter extends LispObject
     return Character.valueOf(value);
   }
 
-  public Object javaInstanceImpl(Class c)
+  @Override
+public Object javaInstanceImpl(Class c)
   {
     return javaInstance();
   }
@@ -2539,4 +2540,14 @@ public void addName(String string) {
 			return (LispCharacter.toUpperCase(c));
 		return c;
     }
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param c
+	 * @return
+	 */
+	public static LispCharacter makeCharacter(char c) {
+		// TODO Auto-generated method stub
+		return getInstance(c);
+	}
 }

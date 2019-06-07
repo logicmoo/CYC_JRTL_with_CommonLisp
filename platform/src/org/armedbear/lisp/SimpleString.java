@@ -544,4 +544,5 @@ public final class SimpleString extends AbstractString
     	return string;
 
     }
+
 }

@@ -3035,13 +3035,6 @@ generic functions without providing sensible behaviour."
   (let ((temp-sym (gensym)))
     `(progn
        (defgeneric ,temp-sym ,@rest)
-       (sys::record-source-information-for-type ',function-name '(:generic-function ,function-name))
-       ,@(loop for method-form in rest
-	       when (eq (car method-form) :method)
-		    collect
-		    (multiple-value-bind (function-name qualifiers lambda-list specializers documentation declarations body) 
-			(mop::parse-defmethod `(,function-name ,@(rest method-form)))
-		      `(sys::record-source-information-for-type ',function-name '(:method ,function-name ,qualifiers ,specializers))))
        (let ((gf (symbol-function ',temp-sym)))
          ;; FIXME (rudi 2012-07-08): fset gets the source location info
          ;; to charpos 23 always (but (setf fdefinition) leaves the

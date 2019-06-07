@@ -25,17 +25,23 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
-import sun.reflect.FieldAccessor;
+//import sun.reflect.FieldAccessor;
 
 public class SubLStructDeclNative extends SubLStructDecl
 {
-	@Override
+	
+	
+	
+	
 	public LispObject isInstance(SubLObject v_object)
 	{
 		boolean was = ((v_object.getClass() == structClass));
 		return was ? SubLT.T : SubLNil.NIL;
 	}
 
+	
+	
+	
 	public LispObject getLispClass()
 	{
 		return lispClass;
@@ -53,7 +59,10 @@ public class SubLStructDeclNative extends SubLStructDecl
 
 		}
 
-		@Override
+		
+		
+		
+		
 		public LispObject execute(LispObject arg)
 		{
 			return clazz.isInstance(arg) ? SubLT.T : SubLNil.NIL;
@@ -155,12 +164,14 @@ public class SubLStructDeclNative extends SubLStructDecl
 				Field f = structClass.getDeclaredField(this.actualFieldNames[i]);
 				if (i == 0 || i == pingAt)
 				{
+					/* FIXME TODO Make work in JDK 11
 					FieldAccessor before = (FieldAccessor) afa.invoke(f, true);
 					if (!(before instanceof SpyFA))
 					{
 						SpyFA spy = new SpyFA(pingAt, i, before);
 						sfa.invoke(f, spy, true);
 					}
+					*/
 				}
 				fieldDecls[i] = f;
 			}
@@ -174,7 +185,10 @@ public class SubLStructDeclNative extends SubLStructDecl
 	//	{
 	//	}
 
-	@Override
+	
+	
+	
+	
 	public SubLStruct newInstance()
 	{
 		try
@@ -236,7 +250,9 @@ public class SubLStructDeclNative extends SubLStructDecl
 		}
 
 	}
+/*
 
+TODO make wiork in JDK 11
 	public class SpyFA implements FieldAccessor
 	{
 		final FieldAccessor before;
@@ -252,62 +268,89 @@ public class SubLStructDeclNative extends SubLStructDecl
 
 		}
 
-		@Override
+
+		
+		
+		
 		public Object get(Object arg0) throws IllegalArgumentException
 		{
 			return before.get(arg0);
 		}
 
-		@Override
+		
+		
+		
 		public boolean getBoolean(Object arg0) throws IllegalArgumentException
 		{
 			return before.getBoolean(arg0);
 		}
 
-		@Override
+		
+
+		
 		public byte getByte(Object arg0) throws IllegalArgumentException
 		{
 			return before.getByte(arg0);
 		}
 
-		@Override
+		
+		
+		
 		public char getChar(Object arg0) throws IllegalArgumentException
 		{
 			return before.getChar(arg0);
 		}
 
-		@Override
+		
+		
+		
+		
 		public double getDouble(Object arg0) throws IllegalArgumentException
 		{
 			return before.getDouble(arg0);
 		}
 
-		@Override
+		
+		
+		
+		
 		public float getFloat(Object arg0) throws IllegalArgumentException
 		{
 
 			return before.getFloat(arg0);
 		}
 
-		@Override
+
+		
+		
+		
 		public int getInt(Object arg0) throws IllegalArgumentException
 		{
 			return before.getInt(arg0);
 		}
 
-		@Override
+		
+		
+		
+		
 		public long getLong(Object arg0) throws IllegalArgumentException
 		{
 			return before.getLong(arg0);
 		}
 
-		@Override
+		
+		
+		
+		
 		public short getShort(Object arg0) throws IllegalArgumentException
 		{
 			return before.getShort(arg0);
 		}
 
-		@Override
+		
+		
+		
+		
 		public void set(Object arg0, Object arg1) throws IllegalArgumentException, IllegalAccessException
 		{
 			if (pingAt == index || index == 0)
@@ -320,56 +363,80 @@ public class SubLStructDeclNative extends SubLStructDecl
 			before.set(arg0, arg1);
 		}
 
-		@Override
+		
+		
+		
+		
 		public void setBoolean(Object arg0, boolean arg1) throws IllegalArgumentException, IllegalAccessException
 		{
 			before.setBoolean(arg0, arg1);
 
 		}
 
-		@Override
+		
+		
+		
+		
 		public void setByte(Object arg0, byte arg1) throws IllegalArgumentException, IllegalAccessException
 		{
 			before.setByte(arg0, arg1);
 
 		}
 
-		@Override
+		
+		
+		
+		
 		public void setChar(Object arg0, char arg1) throws IllegalArgumentException, IllegalAccessException
 		{
 			before.setChar(arg0, arg1);
 
 		}
 
-		@Override
+		
+		
+		
+		
 		public void setDouble(Object arg0, double arg1) throws IllegalArgumentException, IllegalAccessException
 		{
 			before.setDouble(arg0, arg1);
 
 		}
 
-		@Override
+		
+		
+		
+		
 		public void setFloat(Object arg0, float arg1) throws IllegalArgumentException, IllegalAccessException
 		{
 			before.setFloat(arg0, arg1);
 
 		}
 
-		@Override
+		
+		
+		
+		
 		public void setInt(Object arg0, int arg1) throws IllegalArgumentException, IllegalAccessException
 		{
 			before.setInt(arg0, arg1);
 
 		}
 
-		@Override
+		
+		
+		
+		
 		public void setLong(Object arg0, long arg1) throws IllegalArgumentException, IllegalAccessException
 		{
 			before.setLong(arg0, arg1);
 
 		}
 
-		@Override
+		
+		
+		
+		
 		public void setShort(Object arg0, short arg1) throws IllegalArgumentException, IllegalAccessException
 		{
 			before.setShort(arg0, arg1);
@@ -377,12 +444,15 @@ public class SubLStructDeclNative extends SubLStructDecl
 		}
 
 	}
+	
+ */
 
 	// public static Unsafe unsafe = Unsafe.getUnsafe();
 	static Method afa;
 	static Method sfa;
 	static
 	{
+		/* TODO Make work in JDK11
 		try
 		{
 			afa = Field.class.getDeclaredMethod("acquireFieldAccessor", boolean.class);
@@ -393,10 +463,13 @@ public class SubLStructDeclNative extends SubLStructDecl
 		{
 			throw new RuntimeException(e);
 		}
-
+*/
 	}
 
-	@Override
+	
+	
+	
+	
 	public void setTrackStructInstance(boolean track, int pingAt)
 	{
 		this.izTracked = track;
@@ -418,13 +491,14 @@ public class SubLStructDeclNative extends SubLStructDecl
 			if (pingAt < 0) { return; }
 			this.pongAt = pingAt;
 			Field f = fields[pingAt];
-
+			/*
+			 TODO for JDK11
 			FieldAccessor before;
 			before = (FieldAccessor) afa.invoke(f, true);
 			if (before instanceof SpyFA) return;
 			for (int i = 0; i < fields.length; i++)
 			{
-				f = fields[i];
+	 			f = fields[i];
 
 				before = (FieldAccessor) afa.invoke(f, true);
 				if (!(before instanceof SpyFA))
@@ -433,7 +507,7 @@ public class SubLStructDeclNative extends SubLStructDecl
 					sfa.invoke(f, spy, true);
 				}
 			}
-
+*/
 		} catch (Throwable e)
 		{
 			throw new RuntimeException(e);
@@ -451,12 +525,16 @@ public class SubLStructDeclNative extends SubLStructDecl
 
 			if (pingAt < 0) { return; }
 			Field f = fields[pingAt];
+			/*
+			 TODO for JDK11
+		
 			FieldAccessor before = (FieldAccessor) afa.invoke(f, true);
 			if (!(before instanceof SpyFA))
 			{
 				SpyFA spy = new SpyFA(pingAt, pingAt, before);
 				sfa.invoke(f, spy, true);
 			}
+	*/
 
 		} catch (Throwable e)
 		{

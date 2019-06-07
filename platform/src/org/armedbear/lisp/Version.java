@@ -41,7 +41,7 @@ public final class Version
 {
   private Version() {}
 
-  final static String baseVersion = "1.5.0-uabcl-dev";
+  static final String baseVersion = "1.6.0-uabcl";
 
   static void init() {
     try {
@@ -58,7 +58,7 @@ public final class Version
     }
   }
 
-  public static String version = "";
+  static String version = "";
   public synchronized static String getVersion()
   {
     if ("".equals(version)) {

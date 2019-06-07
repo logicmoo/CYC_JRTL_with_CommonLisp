@@ -34,6 +34,7 @@
 package org.armedbear.lisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLNumber;
+import java.math.BigInteger;
 
 /** This class merely serves as the super class for
  * Fixnum and Bignum
@@ -46,6 +47,19 @@ abstract public class LispInteger extends AbstractSubLNumber implements java.io.
     	return this;
     }
 
+
+  public static LispInteger makeInteger(long l) { 
+      if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
+          return Fixnum.getInstance((int)l);
+      else
+          return Bignum.getInstance(l);
+  }
+
+  public static LispInteger makeInteger(int i) {
+      return Fixnum.getInstance(i);
+  }
+
+  // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one
   public static LispInteger getInstance(long l) {
       if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
           return (LispInteger)(Object)Fixnum.getInstance((int)l);
