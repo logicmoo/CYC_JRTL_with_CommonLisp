@@ -47,6 +47,8 @@ public class SystemCurrent {
 	public static InputStream originalSystemIn = System.in;
 	public static PrintStream originalSystemOut = System.out;
 	public static PrintStream originalSystemErr = System.err;
+	
+	
 	public static Thread originalSystemThread = Thread.currentThread();
 	public static InOutErr originalInOutErr = new InOutErr("originalInOutErr " + originalSystemThread.getName());
 	static {
@@ -244,7 +246,8 @@ public class SystemCurrent {
 		} while (true);
 	}
 
-	public static final In in = new SystemCurrent.In("#<System.in>");
+	public static InputStream in = System.in;
+    public static final In sin = new SystemCurrent.In("#<System.in>");
 
 	/**
 	 * Reassigns the "standard" output stream.
@@ -303,7 +306,8 @@ public class SystemCurrent {
 			return is;
 		}
 	};
-	public static final Out out = new Out("#<System.out>", tlout);
+	public static PrintStream out = System.out;
+	public static final Out sout = new Out("#<System.out>", tlout);
 
 	/**
 	 * Reassigns the "standard" error output stream.
@@ -363,7 +367,8 @@ public class SystemCurrent {
 			return is;
 		}
 	};
-	public static final Out err = new Out("#<System.err>", tlerr);
+	public static PrintStream err = System.err;
+	public static final Out serr = new Out("#<System.err>", tlerr);
 
 	static {
 		setupIO();

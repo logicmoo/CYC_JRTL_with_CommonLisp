@@ -663,6 +663,9 @@ public abstract class LispThread extends LispObject {
 
 	final StackFrameArrayBased arrayStack = new StackFrameArrayBased() {
 
+		public boolean skipStackFrame() {
+			return NO_STACK_FRAMES; 
+		}
 		@Override
 		void printCurrentFrame(String why, boolean iSOut) {
 			LispThread.this.printCurrentFrame(why, iSOut);
@@ -689,6 +692,7 @@ public abstract class LispThread extends LispObject {
 	};
 
 	protected void popStackFrame(int numArgs) {
+		if (NO_STACK_FRAMES) return; 
 		if (trace_calls()) {
 			printCurrentFrame("<<<", true);
 		}
@@ -1009,7 +1013,8 @@ public abstract class LispThread extends LispObject {
 			childHider = first;
 		}
 
-		sf = safePrintObject(lispList);
+	    sf = (""+safePrintObject(lispList)).substring(0, 1023);
+		
 		insideSafePrintObject = null;
 		indent = indent * 2;
 
@@ -1023,14 +1028,15 @@ public abstract class LispThread extends LispObject {
 
 			if (retFrame) {
 				ps.print(" +++ ");
-				ps.print(safePrintObject(prevRet));
+				final String substring = (""+safePrintObject(prevRet)).substring(0,1023);
+				ps.print(substring);
 				return;
 			} else {
 				ps.print(sf);
 				if (iSOut) {
 					ps.print(" +++ ");
-					ps.print(safePrintObject(prevRet));
-				}
+					final String substring = (""+safePrintObject(prevRet)).substring(0,1023);
+					ps.print(substring);				}
 				return;
 			}
 		} finally {
@@ -1195,6 +1201,7 @@ public abstract class LispThread extends LispObject {
 	 */
 
 	boolean trace_calls() {
+		disableTrace = true;
 		if (disableTrace)
 			return false;
 		if (enableTraceAll)

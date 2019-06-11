@@ -43,358 +43,390 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLSpecialOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class Function extends Operator implements SubLFunction {
-    @Override
-    public boolean isSpecial() {
-        return false;
-    }
+	@Override
+	public boolean isSpecial() {
+		return false;
+	}
 
-    @Override
-    public LispObject arrayify(LispObject... args) {
-        return error(new WrongNumberOfArgumentsException(this, args.length));
-    }
+	@Override
+	public LispObject arrayify(LispObject... args) {
+		return error(new WrongNumberOfArgumentsException(this, args.length));
+	}
 
-    @Override
-    public SubLSpecialOperator toSpecialOperator() {
-        //if(this instanceof SubLSpecialOperator) return (SubLSpecialOperator) this;
-        org.armedbear.lisp.Lisp.lisp_type_error(this, "SPECIAL-OPERATOR");
-        return null;
-    }
+	@Override
+	public SubLSpecialOperator toSpecialOperator() {
+		// if(this instanceof SubLSpecialOperator) return (SubLSpecialOperator) this;
+		org.armedbear.lisp.Lisp.lisp_type_error(this, "SPECIAL-OPERATOR");
+		return null;
+	}
 
-    @Override
-    public SubLSymbol getFunctionSymbol() {
-        return (SubLSymbol) getLambdaName();
-    }
+	@Override
+	public SubLSymbol getFunctionSymbol() {
+		return (SubLSymbol) getLambdaName();
+	}
 
-    @Override
-    public SubLFunction getFunc() {
-        return this;
-    }
+	@Override
+	public SubLFunction getFunc() {
+		return this;
+	}
 
-    private LispObject propertyList = NIL;
-    private int callCount;
-    private int hotCount;
-    /**
-     * The value of *load-truename* which was current when this function
-     * was loaded, used for fetching the class bytes in case of disassembly.
-     */
-    private final LispObject loadedFrom;
+	private LispObject propertyList = NIL;
+	private int callCount;
+	private int hotCount;
+	/**
+	 * The value of *load-truename* which was current when this function was loaded,
+	 * used for fetching the class bytes in case of disassembly.
+	 */
+	private final LispObject loadedFrom;
 
-    protected Function() {
-        super(null);
-        LispObject loadTruename = Symbol.LOAD_TRUENAME.symbolValueNoThrow();
-        loadedFrom = loadTruename != null ? loadTruename : NIL;
-    }
+	protected Function() {
+		super(null);
+		LispObject loadTruename = Symbol.LOAD_TRUENAME.symbolValueNoThrow();
+		loadedFrom = loadTruename != null ? loadTruename : NIL;
+	}
 
-    public Function(String name) {
-        this(name, (String) null);
-    }
+	public Function(String name) {
+		this(name, (String) null);
+	}
 
-    public Function(String name, String arglist) {
-        this();
-        if (arglist != null)
-            setLambdaList(new SimpleString(arglist));
-        if (name != null) {
-            Symbol symbol = Symbol.addCLFunction(name.toUpperCase(), this);
-            if (cold)
-                symbol.setBuiltInFunction(true);
-            setLambdaName(symbol);
-        }
-    }
+	public Function(String name, String arglist) {
+		this();
+		if (arglist != null)
+			setLambdaList(new SimpleString(arglist));
+		if (name != null) {
+			Symbol symbol = Symbol.addCLFunction(name.toUpperCase(), this);
+			if (cold)
+				symbol.setBuiltInFunction(true);
+			setLambdaName(symbol);
+		}
+	}
 
-    public Function(Symbol symbol) {
-        this(symbol, null, null);
-    }
+	public Function(Symbol symbol) {
+		this(symbol, null, null);
+	}
 
-    public Function(Symbol symbol, String arglist) {
-        this(symbol, arglist, null);
-    }
+	public Function(Symbol symbol, String arglist) {
+		this(symbol, arglist, null);
+	}
 
-    public Function(Symbol symbol, String arglist, String docstring) {
-        this();
-        symbol.setSymbolFunction(this);
-        if (cold)
-            symbol.setBuiltInFunction(true);
-        setLambdaName(symbol);
-        if (arglist != null)
-            setLambdaList(new SimpleString(arglist));
-        if (docstring != null)
-            symbol.setDocumentation(Symbol.FUNCTION, new SimpleString(docstring));
-    }
+	public Function(Symbol symbol, String arglist, String docstring) {
+		this();
+		symbol.setSymbolFunction(this);
+		if (cold)
+			symbol.setBuiltInFunction(true);
+		setLambdaName(symbol);
+		if (arglist != null)
+			setLambdaList(new SimpleString(arglist));
+		if (docstring != null)
+			symbol.setDocumentation(Symbol.FUNCTION, new SimpleString(docstring));
+	}
 
-    public Function(String name, Package pkg) {
-        this(name, pkg, false);
-    }
+	public Function(String name, Package pkg) {
+		this(name, pkg, false);
+	}
 
-    public Function(String name, Package pkg, boolean exported) {
-        this(name, pkg, exported, null, null);
-    }
+	public Function(String name, Package pkg, boolean exported) {
+		this(name, pkg, exported, null, null);
+	}
 
-    public Function(String name, Package pkg, boolean exported, String arglist) {
-        this(name, pkg, exported, arglist, null);
-    }
+	public Function(String name, Package pkg, boolean exported, String arglist) {
+		this(name, pkg, exported, arglist, null);
+	}
 
-    public Function(String name, Package pkg, boolean exported, String arglist, String docstring) {
-        this();
-        if (arglist instanceof String)
-            setLambdaList(new SimpleString(arglist));
-        if (name != null) {
-            Symbol symbol;
-            if (exported)
-                symbol = pkg.internAndExport(name.toUpperCase());
-            else
-                symbol = pkg.intern(name.toUpperCase());
-            symbol.setSymbolFunction(this);
-            if (cold)
-                symbol.setBuiltInFunction(true);
-            setLambdaName(symbol);
-            if (docstring != null)
-                symbol.setDocumentation(Symbol.FUNCTION, new SimpleString(docstring));
-        }
-    }
+	public Function(String name, Package pkg, boolean exported, String arglist, String docstring) {
+		this();
+		if (arglist instanceof String)
+			setLambdaList(new SimpleString(arglist));
+		if (name != null) {
+			Symbol symbol;
+			if (exported)
+				symbol = pkg.internAndExport(name.toUpperCase());
+			else
+				symbol = pkg.intern(name.toUpperCase());
+			symbol.setSymbolFunction(this);
+			if (cold)
+				symbol.setBuiltInFunction(true);
+			setLambdaName(symbol);
+			if (docstring != null)
+				symbol.setDocumentation(Symbol.FUNCTION, new SimpleString(docstring));
+		}
+	}
 
-    public Function(LispObject name) {
-        this();
-        setLambdaName(name);
-    }
+	public Function(LispObject name) {
+		this();
+		setLambdaName(name);
+	}
 
-    public Function(SubLSymbol name) {
-        this();
-        setLambdaName((LispObject) name);
-    }
+	public Function(SubLSymbol name) {
+		this();
+		setLambdaName((LispObject) name);
+	}
 
-    public Function(LispObject name, LispObject lambdaList) {
-        this();
-        setLambdaName(name);
-        setLambdaList(lambdaList);
-    }
+	public Function(LispObject name, LispObject lambdaList) {
+		this();
+		setLambdaName(name);
+		setLambdaList(lambdaList);
+	}
 
-    public Function(SubLSymbol functionSymbol, int requiredArgCount, int optionalArgCount, boolean allowsRest) {
-        this(functionSymbol);
-        this.requiredArgCount = requiredArgCount;
-        this.optionalArgCount = optionalArgCount;
-        this.allowsRest = allowsRest;
-    }
+	public Function(SubLSymbol functionSymbol, int requiredArgCount, int optionalArgCount, boolean allowsRest) {
+		this(functionSymbol);
+		this.requiredArgCount = requiredArgCount;
+		this.optionalArgCount = optionalArgCount;
+		this.allowsRest = allowsRest;
+	}
 
-    @Override
-    public LispObject typeOf() {
-        return Symbol.FUNCTION;
-    }
+	@Override
+	public LispObject typeOf() {
+		return Symbol.FUNCTION;
+	}
 
-    @Override
-    public LispObject classOf() {
-        return BuiltInClass.FUNCTION;
-    }
+	@Override
+	public LispObject classOf() {
+		return BuiltInClass.FUNCTION;
+	}
 
-    @Override
-    public LispObject typep(LispObject typeSpecifier) {
-        if (typeSpecifier == Symbol.FUNCTION)
-            return T;
-        if (typeSpecifier == BuiltInClass.FUNCTION)
-            return T;
-        return super.typep(typeSpecifier);
-    }
+	@Override
+	public LispObject typep(LispObject typeSpecifier) {
+		if (typeSpecifier == Symbol.FUNCTION)
+			return T;
+		if (typeSpecifier == BuiltInClass.FUNCTION)
+			return T;
+		return super.typep(typeSpecifier);
+	}
 
-    @Override
-    public final LispObject getPropertyList() {
-        if (propertyList == null)
-            propertyList = NIL;
-        return propertyList;
-    }
+	@Override
+	public final LispObject getPropertyList() {
+		if (propertyList == null)
+			propertyList = NIL;
+		return propertyList;
+	}
 
-    @Override
-    public final void setPropertyList(LispObject obj) {
-        if (obj == null)
-            throw new NullPointerException();
-        propertyList = obj;
-    }
+	@Override
+	public final void setPropertyList(LispObject obj) {
+		if (obj == null)
+			throw new NullPointerException();
+		propertyList = obj;
+	}
 
-    public final void setClassBytes(byte[] bytes) {
-        propertyList = putf(propertyList, Symbol.CLASS_BYTES, new JavaObject(bytes));
-    }
+	public final void setClassBytes(byte[] bytes) {
+		propertyList = putf(propertyList, Symbol.CLASS_BYTES, new JavaObject(bytes));
+	}
 
-    public final LispObject getClassBytes() {
-        LispObject o = getf(propertyList, Symbol.CLASS_BYTES, NIL);
-        if (o != NIL) {
-            return o;
-        } else {
-            ClassLoader c = getClass().getClassLoader();
-            if (c instanceof FaslClassLoader) {
-                final LispThread thread = LispThread.currentThread();
-                SpecialBindingsMark mark = thread.markSpecialBindings();
-                try {
-                    thread.bindSpecial(Symbol.LOAD_TRUENAME, loadedFrom);
-                    return new JavaObject(((FaslClassLoader) c).getFunctionClassBytes(this));
-                } catch (Throwable t) {
-                    //This is because unfortunately getFunctionClassBytes uses
-                    //Debug.assertTrue(false) to signal errors
-                    if (t instanceof ControlTransfer) {
-                        throw (ControlTransfer) t;
-                    } else {
-                        return NIL;
-                    }
-                } finally {
-                    thread.resetSpecialBindings(mark);
-                }
-            } else {
-                return NIL;
-            }
-        }
-    }
+	public final LispObject getClassBytes() {
+		LispObject o = getf(propertyList, Symbol.CLASS_BYTES, NIL);
+		if (o != NIL) {
+			return o;
+		} else {
+			ClassLoader c = getClass().getClassLoader();
+			if (c instanceof FaslClassLoader) {
+				final LispThread thread = LispThread.currentThread();
+				SpecialBindingsMark mark = thread.markSpecialBindings();
+				try {
+					thread.bindSpecial(Symbol.LOAD_TRUENAME, loadedFrom);
+					return new JavaObject(((FaslClassLoader) c).getFunctionClassBytes(this));
+				} catch (Throwable t) {
+					// This is because unfortunately getFunctionClassBytes uses
+					// Debug.assertTrue(false) to signal errors
+					if (t instanceof ControlTransfer) {
+						throw (ControlTransfer) t;
+					} else {
+						return NIL;
+					}
+				} finally {
+					thread.resetSpecialBindings(mark);
+				}
+			} else {
+				return NIL;
+			}
+		}
+	}
 
-    public static final Primitive FUNCTION_CLASS_BYTES = new pf_function_class_bytes();
+	public static final Primitive FUNCTION_CLASS_BYTES = new pf_function_class_bytes();
 
-    public static final class pf_function_class_bytes extends Primitive {
-        public pf_function_class_bytes() {
-            super("function-class-bytes", PACKAGE_SYS, false, "function");
-        }
+	public static final class pf_function_class_bytes extends Primitive {
+		public pf_function_class_bytes() {
+			super("function-class-bytes", PACKAGE_SYS, false, "function");
+		}
 
-        @Override
-        public LispObject execute(LispObject arg) {
-            if (arg instanceof Function) {
-                return ((Function) arg).getClassBytes();
-            }
-            return type_error(arg, Symbol.FUNCTION);
-        }
-    }
+		@Override
+		public LispObject execute(LispObject arg) {
+			if (arg instanceof Function) {
+				return ((Function) arg).getClassBytes();
+			}
+			return type_error(arg, Symbol.FUNCTION);
+		}
+	}
 
-    @Override
-    public SubLObject apply(SubLCons p0, SubLEnvironment p1) {
-        final BinaryFunction binaryFunction = getBinaryFunction();
-        if (binaryFunction != null) {
-            return binaryFunction.processItem(p0, p1);
-        }
-        return execute((LispObject) p0, (Environment) p1);
-        //Errors.unimplementedMethod("Auto-generated method stub:  SubLFunction.apply");
-        //return null;
-    }
+	@Override
+	public SubLObject apply(SubLCons p0, SubLEnvironment p1) {
+		final BinaryFunction binaryFunction = getBinaryFunction();
+		if (binaryFunction != null) {
+			return binaryFunction.processItem(p0, p1);
+		}
+		return execute((LispObject) p0, (Environment) p1);
+		// Errors.unimplementedMethod("Auto-generated method stub: SubLFunction.apply");
+		// return null;
+	}
 
-    @Override
-    public LispObject funcallCL(LispObject... args) {
-        return this.execute((LispObject[]) args);
-    }
+	@Override
+	public LispObject funcallCL(LispObject... args) {
+		return this.execute((LispObject[]) args);
+	}
 
-    // Special operator
-    @Override
-    public LispObject execute(LispObject form, Environment env) {
-        if (isSubLispBased()) {
-            SubLObject toEval = super.apply((SubLCons) form, env);
-            return (LispObject) toEval;//(LispObject) toEval.eval(env);
-        }
-        return Lisp.eval((Cons) form, (Environment) env);
-    }
+	// Special operator
+	@Override
+	public LispObject execute(LispObject form, Environment env) {
+		if (isSubLispBased()) {
+			SubLObject toEval = super.apply((SubLCons) form, env);
+			return (LispObject) toEval;// (LispObject) toEval.eval(env);
+		}
+		return Lisp.eval((Cons) form, (Environment) env);
+	}
 
-    @Override
-    public boolean isFunction() {
-        return true;
-    }
+	@Override
+	public boolean isFunction() {
+		return true;
+	}
 
-    @Override
-    public SubLObject evalViaApply(SubLCons form, SubLEnvironment env) {
-        final boolean subLispFunction = isSubLispBased();
-        if (subLispFunction) {
-            return super.evalViaApply(form, env);
-        }
-        return Lisp.eval((Cons) form, (Environment) env);
-    }
+	@Override
+	public SubLObject evalViaApply(SubLCons form, SubLEnvironment env) {
+		final boolean subLispFunction = isSubLispBased();
+		if (subLispFunction) {
+			return super.evalViaApply(form, env);
+		}
+		return Lisp.eval((Cons) form, (Environment) env);
+	}
 
-    @Override
-    public SubLObject apply(Object[] p0) {
-        LispObject[] args = (LispObject[]) p0[1];
+	@Override
+	public SubLObject apply(Object[] p0) {
+		LispObject[] args = (LispObject[]) p0[1];
 
-        LispThread thread = LispThread.currentThread();
+		LispThread thread = LispThread.currentThread();
 
-        thread._values = null;
-        //  (in-package :cl)(in-package :cyc)
-        // 26-07-2009: For some reason we cannot "just" call the array version;
-        // it causes an error (Wrong number of arguments for LOOP-FOR-IN)
-        // which is probably a sign of an issue in our design?
-        switch (args.length) {
-            case 0:
-                return thread.execute(this);
-            case 1:
-                return thread.execute(this, args[0]);
-            case 2:
-                return thread.execute(this, args[0], args[1]);
-            case 3:
-                return thread.execute(this, args[0], args[1], args[2]);
-            case 4:
-                return thread.execute(this, args[0], args[1], args[2], args[3]);
-            case 5:
-                return thread.execute(this, args[0], args[1], args[2], args[3], args[4]);
-            case 6:
-                return thread.execute(this, args[0], args[1], args[2], args[3], args[4], args[5]);
-            case 7:
-                return thread.execute(this, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
-            case 8:
-                return thread.execute(this, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
-            default:
-                return thread.execute(this, args);
-        }
-    }
+		thread._values = null;
+		// (in-package :cl)(in-package :cyc)
+		// 26-07-2009: For some reason we cannot "just" call the array version;
+		// it causes an error (Wrong number of arguments for LOOP-FOR-IN)
+		// which is probably a sign of an issue in our design?
+		switch (args.length) {
+		case 0:
+			return thread.execute(this);
+		case 1:
+			return thread.execute(this, args[0]);
+		case 2:
+			return thread.execute(this, args[0], args[1]);
+		case 3:
+			return thread.execute(this, args[0], args[1], args[2]);
+		case 4:
+			return thread.execute(this, args[0], args[1], args[2], args[3]);
+		case 5:
+			return thread.execute(this, args[0], args[1], args[2], args[3], args[4]);
+		case 6:
+			return thread.execute(this, args[0], args[1], args[2], args[3], args[4], args[5]);
+		case 7:
+			return thread.execute(this, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+		case 8:
+			return thread.execute(this, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+		default:
+			return thread.execute(this, args);
+		}
+	}
 
-    @Override
-    public boolean isInterpreted() {
-        return true;
-    }
+	@Override
+	public boolean isInterpreted() {
+		return true;
+	}
 
-    //	@Override
-    //	public int hashCode(int p0) {
-    //		return superHash();
-    //	}
-    @Override
-    public boolean isAlien() {
-        // TODO Auto-generated method stub
-        //if(true) Errors.unimplementedMethod("Auto-generated method stub:  SubLObject.isAlien");
-        return false;
-    }
+	// @Override
+	// public int hashCode(int p0) {
+	// return superHash();
+	// }
+	@Override
+	public boolean isAlien() {
+		// TODO Auto-generated method stub
+		// if(true) Errors.unimplementedMethod("Auto-generated method stub:
+		// SubLObject.isAlien");
+		return false;
+	}
 
-    @Override
-    public boolean isAtom() {
-        // TODO Auto-generated method stub
-        //if(true) Errors.unimplementedMethod("Auto-generated method stub:  SubLObject.isAtom");
-        return true;
-    }
+	@Override
+	public boolean isAtom() {
+		// TODO Auto-generated method stub
+		// if(true) Errors.unimplementedMethod("Auto-generated method stub:
+		// SubLObject.isAtom");
+		return true;
+	}
 
-    @Override
-    public LispObject execute(LispObject[] args) {
-        //if(args.length<10) return dispatch(args);
-        return error(new WrongNumberOfArgumentsException(this, args.length));
-    }
+	@Override
+	public LispObject execute(LispObject[] args) {
+		// if(args.length<10) return dispatch(args);
+		// LispThread thread = LispThread.currentThread();
+		// if(true) return thread.execute(this, args);
+		final LispObject name = getLambdaName();
+		LispObject symbolFunction = name.getSymbolFunction();
+		if (symbolFunction != this) {
+			symbolFunction.execute(args);
+		}
+		if(true) return super.execute(args);
+		switch (args.length) {
+		case 0:
+			return execute();
+		case 1:
+			return execute(args[0]);
+		case 2:
+			return execute(args[0], args[1]);
+		case 3:
+			return execute(args[0], args[1], args[2]);
+		case 4:
+			return execute(args[0], args[1], args[2], args[3]);
+		case 5:
+			return execute(args[0], args[1], args[2], args[3], args[4]);
+		case 6:
+			return execute(args[0], args[1], args[2], args[3], args[4], args[5]);
+		case 7:
+			return execute(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+		case 8:
+			return execute(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+		default:
+			//if(true)return super.execute(args);
+		}
+		return error(new WrongNumberOfArgumentsException(this, args.length));
+	}
 
-    // Used by the JVM compiler.
-    public final void argCountError() {
-        error(new WrongNumberOfArgumentsException(this));
-    }
+	// Used by the JVM compiler.
+	public final void argCountError() {
+		error(new WrongNumberOfArgumentsException(this));
+	}
 
-    // Profiling.
-    @Override
-    public final int getCallCount() {
-        return callCount;
-    }
+	// Profiling.
+	@Override
+	public final int getCallCount() {
+		return callCount;
+	}
 
-    @Override
-    public void setCallCount(int n) {
-        callCount = n;
-    }
+	@Override
+	public void setCallCount(int n) {
+		callCount = n;
+	}
 
-    @Override
-    public final void incrementCallCount() {
-        ++callCount;
-    }
+	@Override
+	public final void incrementCallCount() {
+		++callCount;
+	}
 
-    @Override
-    public final int getHotCount() {
-        return hotCount;
-    }
+	@Override
+	public final int getHotCount() {
+		return hotCount;
+	}
 
-    @Override
-    public void setHotCount(int n) {
-        hotCount = n;
-    }
+	@Override
+	public void setHotCount(int n) {
+		hotCount = n;
+	}
 
-    @Override
-    public final void incrementHotCount() {
-        ++hotCount;
-    }
+	@Override
+	public final void incrementHotCount() {
+		++hotCount;
+	}
 
 }

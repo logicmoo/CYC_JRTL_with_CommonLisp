@@ -1,11 +1,11 @@
+;;  (load "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/.abclrc")
 
-
-(print (DIRECTORY-NAMESTRING *load-truename*))
 ;; Dmiles added #'jvm:set-system-property 6/6/2019
-(jvm:set-system-property "user.home" (DIRECTORY-NAMESTRING *load-truename*))
-
+(defvar *site-lisp* (directory-namestring *load-truename*))
+(jvm:set-system-property "user.home" *site-lisp*)
 (print (user-homedir-pathname))
 (force-output)
+
 
 ;;; The following lines added by ql:add-to-init-file:
 #-quicklisp
@@ -14,27 +14,38 @@
     (load quicklisp-init)))
 
 #+quicklisp
-(pushnew (DIRECTORY-NAMESTRING *load-truename*) ql:*local-project-directories*)
+(pushnew *site-lisp* ql:*local-project-directories*)
 
 (require :abcl-contrib)
 (require :asdf)
 
+
 #+asdf
 (asdf:initialize-source-registry
-     '(:source-registry (:tree "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/fiveam-asdf/") 
+     `(:source-registry
+        (:tree ,(merge-pathnames "fiveam-asdf/" *site-lisp*))
+        (:tree ,(merge-pathnames "fiveam/" *site-lisp*))
+        (:tree ,(merge-pathnames "cusp/" *site-lisp*))
+        (:tree ,(merge-pathnames "slime/" *site-lisp*))
+        (:tree ,(merge-pathnames "shop3/shop3/examples/openstacks-adl/" *site-lisp*))
+        (:tree ,(merge-pathnames "shop3/shop3/examples/rovers/strips/" *site-lisp*))
+        (:tree ,(merge-pathnames "shop3/shop3/examples/satellite/strips/" *site-lisp*))
+        (:tree ,(merge-pathnames "shop3/shop3/shop3-theorem-prover.api/" *site-lisp*))
+        (:tree ,(merge-pathnames "shop3/shop3/" *site-lisp*))
+        (:tree ,(merge-pathnames "pddl-tools/" *site-lisp*))
       :inherit-configuration))
-       
-#+asdf
-(asdf:initialize-source-registry
-     '(:source-registry (:tree "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/shop3/") 
-      :inherit-configuration))
+
 
 #+quicklisp
 (ql:quickload "shop3")
+(ql:quickload "fiveam")
+(ql:quickload "pddl-utils")
+(ql:quickload "openstacks-problem-translator")
+(ql:quickload "shop3-thmpr-api")
   
-#+Ignore (load "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/ytools/ytload/ytload")
-#+Ignore (setq ytools::config-directory* "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/ytconfig/abcl/")
-#+Ignore (setq ytools::ytload-directory* "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/ytools/ytload/")
+#+Ignore (load "ytools/ytload/ytload")
+#+Ignore (setq ytools::config-directory* "ytconfig/abcl/")
+#+Ignore (setq ytools::ytload-directory* "ytools/ytload/")
 #+Ignore (defun cl-user::mexpand-all (form &optional env) (values (ext::macroexpand-all form env) t t))
 
 (print *LOAD-TRUENAME*)

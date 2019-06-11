@@ -60,6 +60,11 @@
 ;;; markings.
 (in-package :shop3)
 
+(require :fiveam-asdf)
+(require :fiveam)
+
+(import 'fiveam:run! )
+
 (fiveam:def-suite* pddl-tests)
 
 (fiveam:def-fixture simple-pddl-actions ()
@@ -920,6 +925,7 @@
 
 (fiveam:def-suite rovers-tests :in pddl-tests)
 (fiveam:in-suite rovers-tests)
+
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun def-rover-test (n)

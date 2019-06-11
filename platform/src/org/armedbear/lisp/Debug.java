@@ -33,10 +33,13 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
-import static org.armedbear.lisp.Lisp.T;
-import static org.armedbear.lisp.Lisp.exportSpecial;
+import static org.armedbear.lisp.Lisp.*;
+
+import java.io.InputStreamReader;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import bsh.EvalError;
 
 public final class Debug
 {
@@ -80,7 +83,23 @@ public final class Debug
     public static void bug()
     {
         trace(new Exception("BUG!"));
+//        try {
+//			BeanShellCntrl.bsh_repl();
+//		} catch (EvalError e) {
+//			Debug.trace(e);
+//		}
+		forkInterpreter();
     }
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	public static void forkInterpreter() {
+		final Interpreter globalInterpreter = Interpreter.globalInterpreter;
+		if (globalInterpreter != null) {
+			final LispThread thread = LispThread.currentThread();
+			globalInterpreter.run2(true);
+		}
+	}
 
     public static final void trace(String s)
     {
@@ -91,6 +110,9 @@ public final class Debug
     public static final void trace(Throwable t)
     {
         t.printStackTrace();
+		Throwable c = t.getCause();
+		if (c != null && c != t)
+			trace(c);
     }
 
     public static final void trace(String message, Throwable t)

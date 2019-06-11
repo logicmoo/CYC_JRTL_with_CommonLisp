@@ -48,8 +48,10 @@ echo ";"
 
 export ARGV=$(printf '%q' $@)
 
+#alias abcl='java -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96meAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -agentlib:jdwp=transport=dt_socket,server=y,address=6789,suspend=n -cp /opt/CYC_JRTL_with_CommonLisp/platform/target/classes:/usr/lib/jvm/java-8-openjdk-amd64/lib/tools.jar org.armedbear.lisp.Main
+
 export RUN_COMMAND="-server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC \
- -Dfile.lcd=\"$LCD\" -Dplatform.dir=\"$LARKC_HOME\" -Dlisp.jargv=\"$ARGV\" -Dswi.home=\"$SWI_HOME\" -Djava.library.path=$LD_LIBRARY_PATH:. \
+ -Dfile.lcd=\"$LCD\" -Duser.home=\"$LARKC_HOME/site-lisp/\" -Dplatform.dir=\"$LARKC_HOME\" -Dlisp.jargv=\"$ARGV\" -Dswi.home=\"$SWI_HOME\" -Djava.library.path=$LD_LIBRARY_PATH:. \
  -XshowSettings:vm \
  org.armedbear.lisp.Main"
 

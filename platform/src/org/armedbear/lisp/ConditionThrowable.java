@@ -23,7 +23,7 @@ package org.armedbear.lisp;
 
 public class ConditionThrowable extends Error
 {
-    public Condition condition;
+    public LispObject condition;
 
     public ConditionThrowable()
     {

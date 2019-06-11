@@ -18,8 +18,7 @@
 ;;;---------------------------------------------------------------------------
 
 (defpackage :fiveam-asdf-asd
-  (:use :common-lisp :asdf)
-  )
+  (:use :common-lisp :asdf))
 
 (in-package :fiveam-asdf-asd)
 

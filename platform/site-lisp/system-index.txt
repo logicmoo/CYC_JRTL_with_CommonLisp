@@ -2,9 +2,14 @@ cusp/cusp.asd
 slime/swank.asd
 3t/planner/ap.asd
 cl-fad/cl-fad.asd
+fiveam/fiveam.asd
+pddl-tools/pddl.asd
 shop3/shop3/shop3.asd
+pddl-tools/pddl-utils.asd
 fiveam-asdf/fiveam-asdf.asd
+pddl-tools/pddl-planners.asd
 3t/planner/user/debug/debug.asd
+pddl-tools/external-planners.asd
 quicklisp/quicklisp/quicklisp.asd
 3t/planner/belief-network/ap-beliefs.asd
 3t/planner/user/file-io/json/ap-json.asd
@@ -22,3 +27,6 @@ quicklisp/dists/quicklisp/software/alexandria-20181210-git/alexandria.asd
 3t/tools/utilities/lisp-utilities/cl-json_0.4.1/t/_darcs/pristine/cl-json.asd
 quicklisp/dists/quicklisp/software/alexandria-20181210-git/alexandria-tests.asd
 quicklisp/dists/quicklisp/software/trivial-garbage-20190521-git/trivial-garbage.asd
+quicklisp/dists/quicklisp/software/asdf-flv-version-2.1/net.didierverna.asdf-flv.asd
+quicklisp/dists/quicklisp/software/trivial-backtrace-20160531-git/trivial-backtrace.asd
+quicklisp/dists/quicklisp/software/trivial-backtrace-20160531-git/trivial-backtrace-test.asd

@@ -5585,11 +5585,7 @@ public final class Primitives {
 
         @Override
         public LispObject execute(LispObject arg) {
-            if (arg instanceof Symbol) {
-                if (checkSymbol(arg).getPackageOrNil() == PACKAGE_KEYWORD)
-                    return T;
-            }
-            return NIL;
+			       return arg.isKeyword() ? T : NIL;
         }
     };
 

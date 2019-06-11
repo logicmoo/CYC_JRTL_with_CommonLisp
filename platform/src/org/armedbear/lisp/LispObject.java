@@ -802,7 +802,11 @@ public class LispObject extends AbstractSubLObject {
 			return printObjectImpl();
 
 		final SpecialBindingsMark mark = thread.markSpecialBindings();
-		List set = printingObjectR.get();
+		final ThreadLocal<List> printingobjectr2 = printingObjectR;
+		if(printingobjectr2==null) {
+			return "#=( " +  easyToString() + ")=#";
+		}
+		List set = printingobjectr2.get();
 		int index = set.indexOf(this);
 		if (index >= 0) {
 			return "#=( " + index + " #|" + easyToString() + "|#)=#";
@@ -822,13 +826,13 @@ public class LispObject extends AbstractSubLObject {
 
 	public String printObjectImpl() // throws IOException
 	{
-		try {
+//		try {
 			SubLSymbol sym = getType();
 			return unreadableString(sym.getName(), true);
-		} catch (Throwable t) {
-			t.printStackTrace();
-			return unreadableString(easyToString(), true);
-		}
+//		} catch (Throwable t) {
+//			t.printStackTrace();
+//			return unreadableString(easyToString(), true);
+//		}
 	}
 
 	@Override

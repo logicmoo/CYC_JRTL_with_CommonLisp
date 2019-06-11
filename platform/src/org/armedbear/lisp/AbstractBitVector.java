@@ -202,18 +202,28 @@ public abstract class AbstractBitVector extends AbstractVector {
 	@Override
 	public String printObjectImpl() {
 		final LispThread thread = LispThread.currentThread();
-		final int length = length();
 		if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL || Symbol.PRINT_ARRAY.symbolValue(thread) != NIL) {
-			StringBuilder sb = new StringBuilder(length + 2);
-			sb.append("#*");
-			for (int i = 0; i < length; i++)
-				sb.append(getBit(i) == 1 ? '1' : '0');
-			return sb.toString();
+			return bitString();
 		} else {
 			final String str = "(%sBIT-VECTOR %d)";
 			final String pre = (this instanceof SimpleBitVector) ? "SIMPLE-" : "";
+			final int length = length();
 			return unreadableString(String.format(str, pre, length));
 		}
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param length
+	 * @return
+	 */
+	public String bitString() {
+		final int length = length();
+		StringBuilder sb = new StringBuilder(length + 2);
+		sb.append("#*");
+		for (int i = 0; i < length; i++)
+			sb.append(getBit(i) == 1 ? '1' : '0');
+		return sb.toString();
 	}
 
 	@Override

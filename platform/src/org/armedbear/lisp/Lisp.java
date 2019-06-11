@@ -68,6 +68,8 @@ abstract public class Lisp extends ABCLStatic
 
   public static boolean ansi = System.getProperty("lisp.ansi","false").equals("true");
 
+	public static boolean abclStrict = System.getProperty("lisp.abcl", "false").equals("true");
+
     public static boolean cold = true;
 
     public static boolean initialized;
@@ -2739,7 +2741,8 @@ public static String stringValueOf(LispObject arg) {
     }
 
     static {
-        Symbol.FEATURES.setSymbolValue(new Cons(internKeyword(":UABCL"), Symbol.FEATURES.getSymbolValue()));
+		Symbol.FEATURES.setSymbolValue(new Cons(internKeyword("UABCL"), Symbol.FEATURES.getSymbolValue()));
+
         loadClass("org.logicmoo.system.BeanShellCntrl");
     }
 
@@ -2749,8 +2752,8 @@ public static String stringValueOf(LispObject arg) {
     }
 
     public static boolean isPrintReadable(LispThread thread) {
-        if (thread == null)
-            thread = LispThread.currentThread();
+//		if (thread == null)
+//			thread = LispThread.currentThread();
         return Symbol.PRINT_READABLY.symbolValue() != NIL;
     }
 	/**
@@ -2779,4 +2782,27 @@ public static String stringValueOf(LispObject arg) {
 		// TODO Auto-generated method stub
 		return true;
 	}	
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * 
+	 * @param cname
+	 * @return
+	 */
+	public static SubLObject quote(LispObject cname) {
+		return list(Symbol.QUOTE, cname);
+	}
+	
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	static public void flushOutputStreams() {
+		LispObject sSTANDARD_OUTPUT = Symbol.STANDARD_OUTPUT;
+		if(sSTANDARD_OUTPUT instanceof Symbol) sSTANDARD_OUTPUT = ((Symbol) sSTANDARD_OUTPUT).getSymbolValue();
+		if(sSTANDARD_OUTPUT instanceof Stream)  ((Stream) sSTANDARD_OUTPUT)._finishOutput();
+		sSTANDARD_OUTPUT = Symbol.ERROR_OUTPUT;
+		if(sSTANDARD_OUTPUT instanceof Symbol) sSTANDARD_OUTPUT = ((Symbol) sSTANDARD_OUTPUT).getSymbolValue();
+		if(sSTANDARD_OUTPUT instanceof Stream)  ((Stream) sSTANDARD_OUTPUT)._finishOutput();
+	}
+
 }

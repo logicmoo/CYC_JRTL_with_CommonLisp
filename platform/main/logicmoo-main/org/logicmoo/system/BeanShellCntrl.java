@@ -520,7 +520,8 @@ public class BeanShellCntrl {
 
 	@LispMethod
 	static public void cl_imports_cyc() {
-		if(true) return;
+		if (true)
+			return;
 		if (SubLMain.Never_REDEFINE)
 			return;
 		synchronized (StartupLock) {
@@ -533,9 +534,9 @@ public class BeanShellCntrl {
 			PACKAGE_EXT.ALLOW_INHERIT_CONFLICTS = true;
 			PACKAGE_CL.ALLOW_INHERIT_CONFLICTS = true;
 			PACKAGE_CL_USER.ALLOW_INHERIT_CONFLICTS = true;
-			//PACKAGE_CL_USER.unusePackage(PACKAGE_CL);
-			//PACKAGE_CL_USER.unusePackage(PACKAGE_EXT);
-			//PACKAGE_CL_USER.unusePackage(PACKAGE_JAVA);
+			// PACKAGE_CL_USER.unusePackage(PACKAGE_CL);
+			// PACKAGE_CL_USER.unusePackage(PACKAGE_EXT);
+			// PACKAGE_CL_USER.unusePackage(PACKAGE_JAVA);
 			PACKAGE_CL_USER.usePackageIgnoringErrorsPreferPrevious(PACKAGE_EXT, false);
 			PACKAGE_CL_USER.usePackageIgnoringErrorsPreferPrevious(PACKAGE_JAVA, false);
 			PACKAGE_CL_USER.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL, false);
@@ -557,8 +558,8 @@ public class BeanShellCntrl {
 			if (inited_cyc_sees_cl)
 				return;
 			inited_cyc_sees_cl = true;
-			//PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
-			//PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_SUBLISP, false);
+			// PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
+			// PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_SUBLISP, false);
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_JAVA, true);
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_EXT, true);
 			PACKAGE_CYC.usePackageIgnoringErrorsPreferPrevious(PACKAGE_CL, true);
@@ -905,8 +906,13 @@ public class BeanShellCntrl {
 	static public bsh.Interpreter ensureBSH() {
 		synchronized (StartupLock) {
 			if (bshInterpreter == null) {
-				bshInterpreter = new bsh.Interpreter();
-				bshMasterNamespace = bshInterpreter.getNameSpace();
+				try {
+					bshInterpreter = new bsh.Interpreter();
+					bshMasterNamespace = bshInterpreter.getNameSpace();
+
+				} catch (Throwable e) {
+					Debug.trace(e);
+				}
 			}
 			return bshInterpreter;
 		}
@@ -1407,7 +1413,7 @@ public class BeanShellCntrl {
 				e.printStackTrace();
 				// TODO: handle exception
 			}
-			return Symbol.STAR.getSymbolValue();
+			return Symbol.STAR.symbolValue();
 			// return
 			// Lisp.PACKAGE_TPL.findAccessibleSymbol("TOP-LEVEL-LOOP").execute();
 		} finally {

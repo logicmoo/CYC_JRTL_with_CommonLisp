@@ -418,14 +418,15 @@ arg.equals("--load-system-file")) {
                             StringBuilder sb = new StringBuilder();
                             sb.append(separator);
                             sb.append("Caught ");
-                            sb.append(c.getCondition().typeOf().printObject());
+                            final LispObject condition = c.getCondition();
+							sb.append(condition.typeOf().princToString());
                             sb.append(" while processing --eval option \"" +
                                       args[i + 1] + "\":");
                             sb.append(separator);
                             sb.append("  ");
                             final LispThread thread = LispThread.currentThread();
                             thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
-                            sb.append(c.getCondition().princToString());
+                            sb.append(condition.princToString());
                             sb.append(separator);
                             System.err.print(sb.toString());
                             exit(2); // FIXME
@@ -526,80 +527,83 @@ arg.equals("--load-system-file")) {
         }
         // We only arrive here if something went wrong and we weren't able
         // to load top-level.lisp and run the normal top-level loop.
-        run2();
-    }
+		run2(false);
+	}
 
-    @SuppressWarnings("CallToThreadDumpStack")
-    public void run2() {
-        final LispThread thread = LispThread.currentThread();
-        // We only arrive here if something went wrong and we weren't able
-        // to load top-level.lisp and run the normal top-level loop.
-        Stream standardOut = getStandardOutput();
-        Stream standardInput = getStandardOutput();
-        while (true) {
-            try {
-                thread.resetStack();
-                thread.clearSpecialBindings();
-                standardOut._writeString("* ");
-                standardOut._finishOutput();
-                LispObject object = standardInput.read(false, EOF, false, thread, Stream.currentReadtable);
-                if (object == EOF)
-                    break;
-                standardOut.setCharPos(0);
-                Symbol.MINUS.setSymbolValue(object);
-                LispObject result = Lisp.eval(object, Environment.newEnvironment(), thread);
-                Debug.assertTrue(result != null);
-                Symbol.STAR_STAR_STAR.setSymbolValue(Symbol.STAR_STAR.getSymbolValue());
-                Symbol.STAR_STAR.setSymbolValue(Symbol.STAR.getSymbolValue());
-                Symbol.STAR.setSymbolValue(result);
-                Symbol.PLUS_PLUS_PLUS.setSymbolValue(Symbol.PLUS_PLUS.getSymbolValue());
-                Symbol.PLUS_PLUS.setSymbolValue(Symbol.PLUS.getSymbolValue());
-                Symbol.PLUS.setSymbolValue(Symbol.MINUS.getSymbolValue());
-                standardOut = getStandardOutput();
-                standardOut.FRESH_LINE();
-                LispObject[] values = thread.getValues();
-                Symbol.SLASH_SLASH_SLASH.setSymbolValue(Symbol.SLASH_SLASH.getSymbolValue());
-                Symbol.SLASH_SLASH.setSymbolValue(Symbol.SLASH.getSymbolValue());
-                if (values != null) {
-                    LispObject slash = NIL;
-                    for (int i = values.length; i-- > 0;)
-                        slash = new Cons(values[i], slash);
-                    Symbol.SLASH.setSymbolValue(slash);
-                    for (int i = 0; i < values.length; i++)
-                        standardOut._writeLine(values[i].printObject());
-                } else {
-                    Symbol.SLASH.setSymbolValue(new Cons(result));
-                    standardOut._writeLine(result.printObject());
-                }
-                standardOut._finishOutput();
-            } catch (StackOverflowError e) {
-            	addUncaught(e);
-                standardInput.clearInput();
-                standardOut._writeLine("Stack overflow");
-            } catch (ControlTransfer c) {
-                // We're on the toplevel, if this occurs,
-                // we're toast...
-            	addUncaught(c);
-            	reportError(c, thread);
-            } catch (ProcessingTerminated e) {
-                throw e;
-            } catch (IntegrityError e) {
-            	addUncaught(e);            	
-                return;
-            } catch (Throwable t) {
-            	addUncaught(t);
-                standardInput.clearInput();
-                standardOut.printStackTrace(t);
-                thread.printBacktrace();
-            }
-        }
-    }
+	@SuppressWarnings("CallToThreadDumpStack")
+	public void run2(boolean secondChance) {
+		final LispThread thread = LispThread.currentThread();
+		// We only arrive here if something went wrong and we weren't able
+		// to load top-level.lisp and run the normal top-level loop.
+		Stream standardOut = getStandardOutput();
+		Stream standardInput = getStandardInput();
+		while (true) {
+			try {
+				thread.NO_STACK_FRAMES = true;
+				thread.resetStack();
+				thread.clearSpecialBindings();
+				standardOut._writeString("* ");
+				standardOut._finishOutput();
+
+				LispObject object = standardInput.read(false, EOF, false, thread, Stream.currentReadtable);
+				if (object == EOF) {
+					if (!secondChance)
+						break;
+				}
+				standardOut.setCharPos(0);
+				Symbol.MINUS.setSymbolValue(object);
+				LispObject result = Lisp.eval(object, Environment.newEnvironment(), thread);
+				Debug.assertTrue(result != null);
+				Symbol.STAR_STAR_STAR.setSymbolValue(Symbol.STAR_STAR.symbolValue());
+				Symbol.STAR_STAR.setSymbolValue(Symbol.STAR.symbolValue());
+				Symbol.STAR.setSymbolValue(result);
+				Symbol.PLUS_PLUS_PLUS.setSymbolValue(Symbol.PLUS_PLUS.symbolValue());
+				Symbol.PLUS_PLUS.setSymbolValue(Symbol.PLUS.symbolValue());
+				Symbol.PLUS.setSymbolValue(Symbol.MINUS.symbolValue());
+				standardOut = getStandardOutput();
+				LispObject[] values = thread.getValues();
+				Symbol.SLASH_SLASH_SLASH.setSymbolValue(Symbol.SLASH_SLASH.symbolValue());
+				Symbol.SLASH_SLASH.setSymbolValue(Symbol.SLASH.symbolValue());
+				if (values != null) {
+					LispObject slash = NIL;
+					for (int i = values.length; i-- > 0;)
+						slash = new Cons(values[i], slash);
+					Symbol.SLASH.setSymbolValue(slash);
+					for (int i = 0; i < values.length; i++)
+						standardOut._writeLine(values[i].printObject());
+				} else {
+					Symbol.SLASH.setSymbolValue(new Cons(result));
+					standardOut._writeLine(result.printObject());
+				}
+				standardOut._finishOutput();
+			} catch (StackOverflowError e) {
+				addUncaught(e);
+				standardInput.clearInput();
+				standardOut._writeLine("Stack overflow");
+			} catch (ControlTransfer c) {
+				// We're on the toplevel, if this occurs,
+				// we're toast...
+				addUncaught(c);
+				reportError(c, thread);
+			} catch (ProcessingTerminated e) {
+				throw e;
+			} catch (IntegrityError e) {
+				addUncaught(e);
+				return;
+			} catch (Throwable t) {
+				addUncaught(t);
+				standardInput.clearInput();
+				standardOut.printStackTrace(t);
+				thread.printBacktrace();
+			}
+		}
+	}
 
     private static void reportError(ControlTransfer c, LispThread thread) {
         getStandardInput().clearInput();
         Stream out = getStandardOutput();
         out.FRESH_LINE();
-        Condition condition = (Condition) c.getCondition();
+        LispObject condition = c.getCondition();
         out._writeLine("Error: unhandled condition: " + condition.princToString());
         if (thread != null)
             thread.printBacktrace();
@@ -609,7 +613,7 @@ arg.equals("--load-system-file")) {
         getStandardInput().clearInput();
         Stream out = getStandardOutput();
         out.FRESH_LINE();
-        Condition condition = (Condition) c.getCondition();
+        LispObject condition = c.getCondition();
         out._writeLine("Error: unhandled condition: " + condition.princToString());
         if (thread != null)
             thread.printBacktrace();
@@ -630,9 +634,7 @@ arg.equals("--load-system-file")) {
                 Debug.trace(e);
             }
         } else {
-            ((Stream) Symbol.STANDARD_OUTPUT.getSymbolValue())._finishOutput();
-            ((Stream) Symbol.ERROR_OUTPUT.getSymbolValue())._finishOutput();
-
+			      flushOutputStreams();
             BeanShellCntrl.exit(status);
         }
     }
@@ -652,12 +654,12 @@ arg.equals("--load-system-file")) {
         //LispObject condition;
 
         UnhandledCondition(LispObject condition) {
-            this.condition = (Condition) condition;
+            this.condition = condition;
         }
 
-        public LispObject getCondition() {
-            return condition;
-        }
+//        public LispObject getCondition() {
+//            return condition;
+//        }
 
         @Override
         public String getMessage() {

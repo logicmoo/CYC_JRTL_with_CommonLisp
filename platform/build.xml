@@ -358,7 +358,10 @@ Compiling Lisp system
 from ${abcl.home.dir}
  to  ${abcl.lisp.output}</echo>
 
-     <!-- Not good if ${abcl.home.dir} == ${abcl.lisp.output} -->
+     <!-- Not good if ${abcl.home.dir} == ${abcl.lisp.output}
+     
+      <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=y,address=6789,suspend=y"/>
+       -->
      <delete>
        <fileset dir="${abcl.home.dir}" includes="**/*.abcl **/*.cls **/*._"/>
      </delete>
@@ -368,7 +371,9 @@ from ${abcl.home.dir}
             inputstring="(handler-case (compile-system :zip nil :quit t :output-path &quot;${abcl.lisp.output}/&quot;) (t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))"
             classname="org.armedbear.lisp.Main">
         <jvmarg value="-Dabcl.home=${abcl.home.dir}${file.separator}"/>
-        <jvmarg value="-Dabcl.autoload.verbose=Y"/>
+     	<jvmarg value="-Dabcl.autoload.verbose=Y"/>
+     	
+     	
         <additional.jvmarg/>
         <arg value="--noinit"/>
         <arg value="--nosystem"/>
