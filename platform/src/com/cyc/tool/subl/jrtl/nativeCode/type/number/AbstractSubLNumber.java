@@ -76,12 +76,11 @@ public abstract class AbstractSubLNumber extends FromSubLisp implements SubLNumb
 	}
 
 	@Override
-	final public int sxhash() {
+	public int sxhash() {
 		return psxhash();
 	}
 	@Override
 	abstract public int hashCode();
-
 
 	@Override
 	abstract public int psxhash();
@@ -1108,7 +1107,7 @@ public abstract class AbstractSubLNumber extends FromSubLisp implements SubLNumb
 		return printObject();
 	}
 	@Override
-	public String printObject() {
+	public String printObjectImpl() {
 		return getNativeNumber().toString();
 	}
 

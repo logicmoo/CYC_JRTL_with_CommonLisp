@@ -399,8 +399,9 @@ public class SubLReadWriteLock extends FromSubLisp implements SubLObject
 	}
 
 	@Override
-	public String printObject()
+	public String printObjectImpl()
 	{
+		checkReadable();
 		return "#<" + toTypeName() + " " + getName() + " @ " + this.hashCode(0) + ">";
 	}
 

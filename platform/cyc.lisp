@@ -1,6 +1,34 @@
 
 (in-package :CL-USER)
 
+(print (DIRECTORY-NAMESTRING *load-truename*))
+;; Dmiles added #'jvm:set-system-property 6/6/2019
+(jvm:set-system-property "user.home" (concatenate 'string (DIRECTORY-NAMESTRING *load-truename*) "site-lisp/"))
+(print (user-homedir-pathname))
+(force-output)
+
+;;; The following lines added by ql:add-to-init-file:
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
+#+quicklisp
+(pushnew (DIRECTORY-NAMESTRING *load-truename*) ql:*local-project-directories*)
+
+#+asdf
+(asdf:initialize-source-registry
+     '(:source-registry (:tree "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/fiveam-asdf/") 
+      :inherit-configuration))
+       
+#+asdf
+(asdf:initialize-source-registry
+     '(:source-registry (:tree "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/shop3/") 
+      :inherit-configuration))
+
+#+quicklisp
+(ql:quickload "shop3")
+
 
 (defpackage "COMMON-LISP-USER" (:nicknames "USER" "CL-USER"))
 (let ((*PACKAGE* *PACKAGE*))
@@ -8,7 +36,7 @@
 
 ;; (let ((*print-readably* t)) (prin1-to-string (find-class 'symbol)))
 (defmethod print-object ((obj class) stream)
-  (print1 "#." stream)
+  (prin1 "#." stream)
     (write `(find-class ',(class-name obj)) :stream stream :readably t))
 
 
@@ -29,7 +57,7 @@
 ;; Starts of SWI-Prolog Telnet Server  (implictly already started)
 ;; (swipl-init-server)
 
-(require :abcl-contrib)
+;; (require :abcl-contrib)
 ;; (require :jss)
 
 
@@ -91,15 +119,19 @@
  )
 
 
+(setf (symbol-plist 'SUBLISP::CSETQ) (symbol-plist 'cl::setq)) 
+
 ;; makes constant names slightly friendlier to prolog
 ;; #+CYC-EXTERNAL
 ;; (print (let ((*PACKAGE* *PACKAGE*))  (in-package :cyc) (sl:load "site-lisp/e2c/renames-fixed.lisp")))
 
 ;; uses com.cyc.cycjava.cycl.constants_low.lookup_constant_by_guid
 
+
 #+CYC-HTML
 (sl:csetq cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
 (defparameter cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
+
 
 
 '(ss)

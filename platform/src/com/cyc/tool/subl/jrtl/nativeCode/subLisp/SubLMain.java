@@ -71,7 +71,7 @@ public class SubLMain
 {
   public static boolean OPENCYC = false;
   public static boolean TINY_KB = false;
-  public static boolean Never_REDEFINE = true;
+  public static boolean Never_REDEFINE = false;
   public static boolean BOOTY_HACKZ = true;
 
   static

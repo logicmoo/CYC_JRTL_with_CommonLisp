@@ -84,7 +84,7 @@ public final class Mutex extends LispObject
 
 
     @Override
-	public String writeToString()
+	public String printObjectImpl()
     {
         return unreadableString("MUTEX");
     }
@@ -112,12 +112,12 @@ public final class Mutex extends LispObject
                 return T;
             }
             catch (ClassCastException e) {
-                return error(new TypeError("The value " + arg.writeToString() +
+                return error(new TypeError("The value " + arg.printObject() +
                                             " is not a mutex."));
             }
             catch (InterruptedException e) {
                 return error(new LispError(
-                    "The thread " + LispThread.currentThread().writeToString() +
+                    "The thread " + LispThread.currentThread().printObject() +
                     " was interrupted."));
             }
         }
@@ -135,7 +135,7 @@ public final class Mutex extends LispObject
                 return T;
             }
             catch (ClassCastException e) {
-                return error(new TypeError("The value " + arg.writeToString() +
+                return error(new TypeError("The value " + arg.printObject() +
                                             " is not a mutex."));
             }
         }

@@ -4,7 +4,7 @@
 	<comment>@key 32303037303632392D31303030204C61726B432F4C756661 </comment>
 	<projects>
 	</projects>
-	<buildSpec>	
+	<buildSpec>
 		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
@@ -12,7 +12,13 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<!--nature>pl.poznan.put.cs.gui4pddl.PDDLProject</nature-->
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>ansi-test</name>
+			<type>2</type>
+			<location>G:/opt/CYC_JRTL_with_CommonLisp/ansi-test</location>
+		</link>
+	</linkedResources>
 </projectDescription>

@@ -34,12 +34,14 @@
 package org.armedbear.lisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLNumber;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+
 import java.math.BigInteger;
 
 /** This class merely serves as the super class for
  * Fixnum and Bignum
  */
-abstract public class LispInteger extends AbstractSubLNumber implements java.io.Serializable
+abstract public class LispInteger extends AbstractSubLNumber implements java.io.Serializable, SubLInteger
 {
     @Override
     public LispInteger toLispObject()
@@ -62,13 +64,13 @@ abstract public class LispInteger extends AbstractSubLNumber implements java.io.
   // TODO Decide if compile-pass2.lisp/ make-runtime-class.lisp should use this or the new one
   public static LispInteger getInstance(long l) {
       if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
-          return (LispInteger)(Object)Fixnum.getInstance((int)l);
+          return Fixnum.getInstance((int)l);
       else
       return Bignum.getInstance(l);
   }
 
   public static LispInteger getInstance(int i) {
-      return (LispInteger)(Object)Fixnum.getInstance(i);
+      return Fixnum.getInstance(i);
   }
 
 

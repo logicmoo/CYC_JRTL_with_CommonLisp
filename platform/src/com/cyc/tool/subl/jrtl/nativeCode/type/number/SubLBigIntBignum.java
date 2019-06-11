@@ -16,9 +16,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 public class SubLBigIntBignum extends Bignum implements SubLBignum, SubLInteger, SubLNumber, SubLObject {
 	public SubLBigIntBignum(BigInteger theBigInt) {
 		super(theBigInt);
-	//	this.value = theBigInt;
+	 	this.value = theBigInt;
 	}
-
+	  public final BigInteger value;
 //	final public BigInteger value;
 	public static BigInteger ZERO_BIGINT;
 	public static BigInteger ONE_BIGINT;

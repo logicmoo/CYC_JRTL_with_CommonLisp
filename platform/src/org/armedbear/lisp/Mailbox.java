@@ -99,7 +99,7 @@ public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
   }
 
   @Override
-public String writeToString() throws ConditionThrowable
+public String printObjectImpl() throws ConditionThrowable
   {
     return super.unreadableString(Symbol.MAILBOX);
   }

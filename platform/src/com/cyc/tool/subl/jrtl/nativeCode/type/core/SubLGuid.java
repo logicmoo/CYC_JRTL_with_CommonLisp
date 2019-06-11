@@ -359,7 +359,7 @@ public class SubLGuid extends FromSubLisp implements SubLObject, Comparable<SubL
 	}
 
 	@Override
-	public String printObject() {
+	public String printObjectImpl() {
 		return "#G\"" + stringRepresentation() + "\"";
 	}
 

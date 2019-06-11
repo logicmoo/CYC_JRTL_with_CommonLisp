@@ -222,13 +222,14 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 	}
 	
 	
-	public String printObject()
+	public String printObjectImpl()
 	{
 		try 
 		{
 			return print_high.princ_to_string(this).getStringValue();
 		} catch (Exception e)
 		{
+			checkReadable();
 			return "#<" + toTypeName() + " " + getName() + " @ " + System.identityHashCode(this) + ">";
 		}
 	}

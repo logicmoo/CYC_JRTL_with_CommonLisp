@@ -6,6 +6,7 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 import java.util.ArrayList;
 
 import org.armedbear.lisp.Environment;
+import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -75,7 +76,8 @@ abstract public class SubLEnvironment extends FromSubLisp {
 	static {
 		defaultEnvironment = new Environment(null) {
 			@Override
-			public String printObject() {
+			public String printObjectImpl() {
+				checkReadable();
 				return "#<Environment defaultEnvironment>";
 			}
 		};

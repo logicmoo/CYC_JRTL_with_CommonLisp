@@ -6,6 +6,7 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.number;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.armedbear.lisp.Bignum;
 import org.armedbear.lisp.DoubleFloat;
 import org.armedbear.lisp.Fixnum;
 
@@ -89,7 +90,7 @@ public class SubLNumberFactory {
 		if (theBigInt.compareTo(SubLNumberFactory.MAX_LONG_VALUE_BIGNUM) <= 0
 				&& theBigInt.compareTo(SubLNumberFactory.MIN_LONG_VALUE_BIGNUM) >= 0)
 			return makeInteger(theBigInt.longValue());
-		return new SubLBigIntBignum(theBigInt);
+		return (SubLInteger) Bignum.getInstance(theBigInt);
 	}
 	public static SubLInteger makeInteger(int value) {
 		if (SubLNumberFactory.MIN_FIXNUM <= value && value <= SubLNumberFactory.MAX_FIXNUM) {
@@ -98,13 +99,13 @@ public class SubLNumberFactory {
 			SubLInteger result = cache[cacheIndex];
 			return result == null ? (cache[cacheIndex] = (SubLFixnum) Fixnum.getInstanceInternal(value)) : result;
 		}
-		return new SubLIntegerBignum(value);
+		return Fixnum.getInstanceInternal(value);
 	}
 
 	public static SubLInteger makeInteger(long theLong) {
 		if (theLong <= Integer.MAX_VALUE && theLong >= Integer.MIN_VALUE)
 			return makeInteger((int) theLong);
-		return new SubLLongBignum(theLong);
+		return Bignum.getInstance(theLong);
 	}
 
 	public static SubLInteger makeInteger(String stringRep) {

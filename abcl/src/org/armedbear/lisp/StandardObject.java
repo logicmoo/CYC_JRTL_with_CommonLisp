@@ -229,7 +229,7 @@ public class StandardObject extends LispObject
         newLayout = (Layout)Symbol.CLASS_LAYOUT.execute(cls);
 
     Debug.assertTrue(!newLayout.isInvalid());
-    StandardObject newInstance = new StandardObject(newLayout);
+		final StandardObject newInstance = new StandardObject(newLayout);
     Debug.assertTrue(newInstance.layout == newLayout);
     LispObject added = NIL;
     LispObject discarded = NIL;

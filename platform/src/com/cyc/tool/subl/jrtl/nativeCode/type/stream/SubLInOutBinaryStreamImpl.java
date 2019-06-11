@@ -20,11 +20,11 @@ public class SubLInOutBinaryStreamImpl extends AbstractSubLBinaryStream
 		init();
 	}
 
-	@Override
-	public String printObject() {
-		String st = super.printObject();
-		return st;
-	}
+//	@Override
+//	public String printObjectImpl() {
+//		String st = super.printObject();
+//		return st;
+//	}
 
 	SubLInOutBinaryStreamImpl(SubLInputBinaryStream inStream, SubLOutputBinaryStream outStream) {
 		super(BINARY_KEYWORD, IO_KEYWORD, ERROR_KEYWORD,

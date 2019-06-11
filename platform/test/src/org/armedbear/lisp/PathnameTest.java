@@ -24,7 +24,7 @@ public class PathnameTest
   {
     URL url = null;
     try {
-       url = new URL("file:///Users/evenson/work/abcl/build/classes/org/armedbear/lisp/boot.lisp");
+       url = new URL("file:./build/classes/org/armedbear/lisp/boot.lisp");
     } catch (MalformedURLException e) {
         System.out.println(e.getMessage());
     }

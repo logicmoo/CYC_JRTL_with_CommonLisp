@@ -12,6 +12,7 @@ import org.armedbear.lisp.JavaException;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.Main;
+import org.armedbear.lisp.Symbol;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 
@@ -141,7 +142,7 @@ public class Errors
   private static void showErrorMessage(String str)
   {
     showMessageOnErrorStream( "Error: " );
-    showMessageOnErrorStream( SubLObjectFactory.makeString( str ) );
+    showMessageOnErrorStream( ( str ) );
     showMessageOnErrorStream( "\n" );
   }
 
@@ -155,7 +156,7 @@ public class Errors
   private static void showWarnMessage(String str)
   {
     showMessageOnErrorStream( "Warning: " );
-    showMessageOnErrorStream( SubLObjectFactory.makeString( str ) );
+    showMessageOnErrorStream( ( str ) );
     showMessageOnErrorStream( "\n" );
   }
 
@@ -556,24 +557,30 @@ public class Errors
     return SubLObjectFactory.makeList( SubLErrorHistory.me.getAllErrors() );
   }
 
-  public static void showMessageOnErrorStream(String str)
-  {
-    showMessageOnErrorStream( SubLObjectFactory.makeString( str ) );
-  }
-
   public static void showMessageOnErrorStream(SubLString str)
   {
+    if(str!=null) showMessageOnErrorStream( str.getStringValue() );
+  }
+
+  public static void showMessageOnErrorStream(String str)
+  {
+		if (!isReady) {
+			System.err.print(str);
+			System.err.flush();
+			return;
+		}
     try
     {
       if( str != null )
       {
-        StreamsLow.$error_output$.getDynamicValue().toOutputTextStream().writeString( str.getStringValue() );
-        streams_high.force_output( StreamsLow.$error_output$.getDynamicValue().toOutputTextStream() );
+        final SubLOutputTextStream outputTextStream = StreamsLow.$error_output$.getDynamicValue().toOutputTextStream();
+		outputTextStream.writeString( str );
+        streams_high.force_output( outputTextStream );
       }
     }
     catch( RuntimeException e )
     {
-      System.err.println( str );
+    	System.err.println( str );
       throw e;
     }
   }
@@ -626,7 +633,7 @@ public class Errors
     if( !isReady )
     {
       System.err.println( "Warn: " + formatString );
-      return T;
+      return Lisp.T;
     }
     return warn( SubLObjectFactory.makeString( formatString ) );
   }

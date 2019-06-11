@@ -6,9 +6,9 @@ public class BlockLispObject extends SLispObject {
 //	final public int eq_hashCode() {
 //		return ref_hashCode();
 //	}
-	
+
 	@Override
-	public String printObject() {
-	     return "#<BLOCK "+ this.getClass().getName() + "@" + Integer.toHexString(this.superHash()) +">";
+	public String printObjectImpl() {
+		return unreadableString("BLOCK", true);
 	}
 }

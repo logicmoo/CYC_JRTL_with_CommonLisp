@@ -1721,7 +1721,9 @@ public final class shop_basic_planner_thread
     {
       SubLObject open_nodes;
       SubLObject cur_node;
-      for( open_nodes = NIL, open_nodes = instances.get_slot( self, $sym10$OPEN_NODES ); NIL != open_nodes; open_nodes = open_nodes )
+      for( open_nodes = NIL, open_nodes = instances.get_slot( self, $sym10$OPEN_NODES ); NIL != open_nodes; 
+    		  //open_nodes = open_nodes 
+    				  )
       {
         if( NIL != shop_basic_planner_thread_any_cutoff_reachedP_method( self ) )
         {

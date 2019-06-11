@@ -362,7 +362,7 @@ public final class JavaObject extends SubLAlienObject {
     }
 
     @Override
-    public String printObject() {
+    public String printObjectImpl() {
         if (obj instanceof ControlTransfer)
             return ((ControlTransfer) obj).toString();
         String s = "ERROR_Unseen";

@@ -274,7 +274,10 @@ abstract public class Layout extends LispObject
 
 	public int getLength()
 	{
-		assert (getterNames.length == slotNames.length);
+		// Required for StreamTest
+		if(getterNames!=null) {
+			assert (getterNames.length == slotNames.length);
+		}
 		return slotNames.length;
 	}
 
@@ -284,7 +287,7 @@ abstract public class Layout extends LispObject
 	}
 
 	@Override
-	public String printObject()
+	public String printObjectImpl()
 	{
 		return unreadableString("LAYOUT " + this.getStructName());
 	}

@@ -35,7 +35,7 @@ public class ArrayContentsPanel extends JPanel implements SmallBeanView.RemoveLi
 
   public ArrayContentsPanel(Object array, Collection collection) {
     this.array = array;
-    this.context = context;
+   // this.context = context;
     initGUI();
   }
 

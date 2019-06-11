@@ -330,7 +330,7 @@ public final class SpecialOperators {
             final Symbol symbol;
             if (name instanceof Symbol) {
                 symbol = checkSymbol(name);
-                if (symbol.getSymbolFunction() instanceof SpecialOperator) {
+                if (symbol.isSpecialOperator()) {
                     return program_error(symbol.getName() + " is a special operator and may not be redefined.");
                 }
             } else if (isValidSetfFunctionName(name))

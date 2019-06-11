@@ -324,7 +324,8 @@ public class SubLSemaphore extends FromSubLisp implements SubLObject {
 	}
 
 	@Override
-	public String printObject() {
+	public String printObjectImpl() {
+		checkReadable();
 		return "#<" + toTypeName() + " \"" + getName() + "\" Permits(" + sem.availablePermits() + ") @ "
 				+ this.hashCode(0) + ">";
 	}

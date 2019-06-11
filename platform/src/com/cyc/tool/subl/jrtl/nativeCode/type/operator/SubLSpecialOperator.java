@@ -27,6 +27,7 @@ public abstract class SubLSpecialOperator extends Operator implements SubLOperat
 	}
 
 
+	@Override
 	public boolean isSpecialRestOnly() {
 		return false;
 	}

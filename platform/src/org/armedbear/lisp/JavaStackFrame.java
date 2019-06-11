@@ -55,7 +55,7 @@ public LispObject typeOf() {
 public LispObject classOf()   { return BuiltInClass.JAVA_STACK_FRAME; }
 
   @Override
-public String printObject() { 
+public String printObjectImpl() { 
     final String JAVA_STACK_FRAME = "JAVA-STACK-FRAME";
     return unreadableString(JAVA_STACK_FRAME + " "
 				+ toLispString().toString());

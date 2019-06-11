@@ -53,7 +53,7 @@ public final class ThreadLock extends LispObject
     }
 
     @Override
-	public String writeToString()
+	public String printObjectImpl()
     {
         return unreadableString("THREAD-LOCK");
     }

@@ -34,6 +34,7 @@
 package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
+import static org.armedbear.lisp.Main.*;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -117,7 +118,7 @@ public final class Interpreter implements Runnable {
         if (noinform)
             _NOINFORM_.setSymbolValue(T);
         else {
-            double uptime = (System.currentTimeMillis() - Main.startTimeMillis) / 1000.0;
+            double uptime = (System.currentTimeMillis() - startTimeMillis) / 1000.0;
             getStandardOutput()._writeString("Low-level initialization completed in " + uptime + " seconds.\n");
         }
         if (jLisp || jlisp) {
@@ -411,6 +412,7 @@ arg.equals("--load-system-file")) {
                             evaluate(args[i + 1]);
                         }
                         catch (UnhandledCondition c) {
+                        	addUncaught(c);
                             final String separator =
                                 System.getProperty("line.separator");
                             StringBuilder sb = new StringBuilder();
@@ -443,6 +445,7 @@ arg.equals("--load-system-file")) {
                         	evaluate("(handler-case (compile-system :zip nil :quit t :output-path \"build/classes/\") "
                                     + "(t (x) (progn (format t \"~A: ~A~%\" (type-of x) x) (exit :status -1))))");
                         } catch (UnhandledCondition c) {
+                        	addUncaught(c);
                             final String separator = System.getProperty("line.separator");
                             StringBuilder sb = new StringBuilder();
                             sb.append(separator);
@@ -514,8 +517,10 @@ arg.equals("--load-system-file")) {
         } catch (ProcessingTerminated e) {
             throw e;
         } catch (IntegrityError e) {
+        	addUncaught(e);
             return;
         } catch (Throwable t) {
+        	addUncaught(t);
             t.printStackTrace();
             return;
         }
@@ -568,17 +573,21 @@ arg.equals("--load-system-file")) {
                 }
                 standardOut._finishOutput();
             } catch (StackOverflowError e) {
+            	addUncaught(e);
                 standardInput.clearInput();
                 standardOut._writeLine("Stack overflow");
             } catch (ControlTransfer c) {
                 // We're on the toplevel, if this occurs,
                 // we're toast...
-                reportError(c, thread);
+            	addUncaught(c);
+            	reportError(c, thread);
             } catch (ProcessingTerminated e) {
                 throw e;
             } catch (IntegrityError e) {
+            	addUncaught(e);            	
                 return;
             } catch (Throwable t) {
+            	addUncaught(t);
                 standardInput.clearInput();
                 standardOut.printStackTrace(t);
                 thread.printBacktrace();
@@ -639,11 +648,11 @@ arg.equals("--load-system-file")) {
         System.err.println("Interpreter.finalize");
     }
 
-    public static final class UnhandledCondition extends Error {
-        LispObject condition;
+    public static final class UnhandledCondition extends ConditionThrowable {
+        //LispObject condition;
 
         UnhandledCondition(LispObject condition) {
-            this.condition = condition;
+            this.condition = (Condition) condition;
         }
 
         public LispObject getCondition() {
@@ -657,8 +666,9 @@ arg.equals("--load-system-file")) {
             SpecialBindingsMark mark = thread.markSpecialBindings();
             thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
             try {
-                conditionText = getCondition().princToString();
-            } catch (Throwable t) {
+            	final LispObject condition =  getCondition();
+                conditionText = condition.princToString();
+            } catch (Throwable t) {            	
                 conditionText = "<error printing Lisp condition>";
             } finally {
                 thread.resetSpecialBindings(mark);

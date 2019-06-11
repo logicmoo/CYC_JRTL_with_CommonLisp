@@ -22,6 +22,7 @@
 exec @JAVA@ \
   -cp  @ABCL_CLASSPATH@:"$CLASSPATH" \
   @ABCL_JAVA_OPTIONS@ \
+  -agentlib:jdwp=transport=dt_socket,server=y,address=6789,suspend=n \
   org.armedbear.lisp.Main \
   "$@"
 

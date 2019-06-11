@@ -5165,7 +5165,8 @@ public final class string_utilities
             doneP = NIL;
             pos_find = number_utilities.f_1X( pos_now );
             quotedP = NIL;
-            for( doneP = NIL; NIL == doneP && NIL == list_utilities.lengthE( in_string, pos_find, UNPROVIDED ); pos_find = number_utilities.f_1X( pos_find ), quotedP = quotedP, doneP = doneP )
+            for( doneP = NIL; NIL == doneP && NIL == list_utilities.lengthE( in_string, pos_find, UNPROVIDED ); pos_find = number_utilities.f_1X( pos_find ) //, quotedP = quotedP, doneP = doneP
+            		)
             {
               cur_char_list = ConsesLow.cons( this_character, cur_char_list );
               pos_now = pos_find;

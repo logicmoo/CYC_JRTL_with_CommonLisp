@@ -177,7 +177,7 @@
 //                namestring = arg.getStringValue();
 //            if (namestring != null)
 //                return loadCompiledFunction(namestring);
-//            return error(new LispError("Unable to load " + arg.writeToString()));
+//            return error(new LispError("Unable to load " + arg.printObject()));
 //        }
 //    };
 //

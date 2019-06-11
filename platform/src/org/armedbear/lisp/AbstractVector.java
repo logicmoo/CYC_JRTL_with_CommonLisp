@@ -49,7 +49,7 @@ public abstract class AbstractVector extends AbstractArray
       return T;
     return super.typep(type);
   }
-
+  
   @Override
   public final boolean vectorp()
   {
@@ -208,7 +208,7 @@ public void setFillPointer(LispObject obj)
   }
 
   @Override
-  public String printObject()
+  public String printObjectImpl()
   {
     final LispThread thread = LispThread.currentThread();
     if (Lisp.isPrintReadable(thread))

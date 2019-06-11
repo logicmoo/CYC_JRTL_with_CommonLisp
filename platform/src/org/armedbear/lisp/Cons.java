@@ -515,7 +515,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 	}
 
 	@Override
-	public String printObject()
+	public String printObjectImpl()
 	{
 		final LispThread thread = LispThread.currentThread();
 		final LispObject printLength = Symbol.PRINT_LENGTH.symbolValueNoThrow(thread);

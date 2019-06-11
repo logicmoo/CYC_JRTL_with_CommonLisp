@@ -1243,12 +1243,12 @@ public final class module0642 extends SubLTranslatedFile
                 }
                 var41 = Sequences.position((SubLObject)Characters.CHAR_less, var5, Symbols.symbol_function((SubLObject)EQL), Symbols.symbol_function((SubLObject)IDENTITY), Numbers.add(var41, (SubLObject)ONE_INTEGER), (SubLObject)UNPROVIDED);
             }
-            var39 = var39;
-            var40 = var40;
-            var41 = var41;
-            var42 = var42;
-            var43 = var43;
-            var44 = var44;
+//            var39 = var39;
+//            var40 = var40;
+//            var41 = var41;
+//            var42 = var42;
+//            var43 = var43;
+//            var44 = var44;
         }
         f39013(var5, var33, (SubLObject)NIL);
         return var5;

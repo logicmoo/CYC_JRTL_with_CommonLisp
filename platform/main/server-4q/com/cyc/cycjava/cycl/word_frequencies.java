@@ -148,7 +148,7 @@ public final class word_frequencies
             }
             line = string_utilities.network_read_line( file, NIL, string_utilities.$empty_string$.getGlobalValue(), UNPROVIDED );
             tok_list = string_utilities.string_tokenize( line, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-            file_len = file_len;
+           // file_len = file_len;
           }
         }
         finally

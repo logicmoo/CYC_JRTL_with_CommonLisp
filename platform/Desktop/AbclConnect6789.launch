@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.remoteJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/abcl"/>
+<listEntry value="/platform"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
@@ -11,9 +11,9 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ALLOW_TERMINATE" value="false"/>
 <mapAttribute key="org.eclipse.jdt.launching.CONNECT_MAP">
-<mapEntry key="hostname" value="10.0.0.180"/>
+<mapEntry key="hostname" value="10.0.0.122"/>
 <mapEntry key="port" value="6789"/>
 </mapAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="abcl"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_CONNECTOR_ID" value="org.eclipse.jdt.launching.socketAttachConnector"/>
 </launchConfiguration>

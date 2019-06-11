@@ -43,7 +43,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class Fixnum extends AbstractSubLIntegerBignum
+abstract public class Fixnum extends AbstractSubLIntegerBignum
 {
   public static final int MAX_POS_CACHE = 256;//just like before - however never set this to less than 256
   public static final Fixnum[] constants = new Fixnum[MAX_POS_CACHE];
@@ -52,6 +52,7 @@ public class Fixnum extends AbstractSubLIntegerBignum
     for (int i = 0; i < MAX_POS_CACHE; i++)
       constants[i] = new SubLFixnum(i);
   }
+ 
 
   public static final Fixnum ZERO      = constants[0];
   public static final Fixnum ONE       = constants[1];
@@ -79,6 +80,7 @@ public class Fixnum extends AbstractSubLIntegerBignum
   {
     return (Fixnum) ((n >= 0 && n < MAX_POS_CACHE) ? constants[n] : new SubLFixnum(n));
   }
+
 
 //  public final int value;
 
@@ -949,20 +951,23 @@ public LispObject LDB(int size, int position)
   }
 
 
-  @Override
-public int psxhash()
-  {
-      return (hashCode() & 0x7fffffff);
-  }
+	@Override
+	public int psxhash() {
+		return (hashCode() & 0x7fffffff);
+	}
+
+	@Override
+	public int sxhash() {
+		return value;
+	}
+
+	@Override
+	public int hashCode() {
+		return value;
+	}
 
   @Override
-public int hashCode()
-  {
-    return value;
-  }
-
-  @Override
-final public String printObject()
+final public String printObjectImpl()
   {
     final LispThread thread = LispThread.currentThread();
     int base;

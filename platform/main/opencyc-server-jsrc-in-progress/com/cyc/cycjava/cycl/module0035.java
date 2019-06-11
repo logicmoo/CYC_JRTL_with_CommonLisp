@@ -8754,7 +8754,7 @@ public final class module0035 extends SubLTranslatedFile
         var655 = var654;
         var656 = var655.first();
         var657 = (SubLObject)ConsesLow.list((SubLObject)NIL);
-        for (var658 = (SubLObject)ZERO_INTEGER; NIL != var655; var655 = var655.rest(), var656 = var655.first(), var657 = var657, var658 = Numbers.add(var658, (SubLObject)ONE_INTEGER)) {
+        for (var658 = (SubLObject)ZERO_INTEGER; NIL != var655; var655 = var655.rest(), var656 = var655.first(),  var658 = Numbers.add(var658, (SubLObject)ONE_INTEGER)) {
             if (var658.numL(var15)) {
                 ConsesLow.rplaca(var657, (SubLObject)ConsesLow.cons(var656, var657.first()));
             }

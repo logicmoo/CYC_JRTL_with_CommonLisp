@@ -6,6 +6,7 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Main;
@@ -403,7 +404,7 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
     public SubLFixnum getTypeCode() {
         if (true) {
             SubLSymbol s = getType();
-            return (SubLFixnum) SubLFixnum.MINUS_ONE;
+            return (SubLFixnum) Fixnum.MINUS_ONE;
         }
         Errors.error(this + " does not have a typecode defined");
         return null;
@@ -714,7 +715,7 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
     }
 
     @Override
-    public int superHash() {
+    final public int superHash() {
         return super.hashCode();
     }
 

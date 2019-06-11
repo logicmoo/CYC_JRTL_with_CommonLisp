@@ -117,7 +117,7 @@ public abstract class AbstractString
   }
 
   @Override
-  public String printObject()
+  public String printObjectImpl()
   {
     return printObject( 0, length() );
   }

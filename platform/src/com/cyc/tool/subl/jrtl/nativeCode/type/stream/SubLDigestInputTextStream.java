@@ -1061,11 +1061,11 @@ public class SubLDigestInputTextStream extends LispObject implements SubLStream,
 	public SubLObject sub(SubLObject num) {
 		return wrapped.sub(num);
 	}
-
-	@Override
-	public int superHash() {
-		return wrapped.superHash();
-	}
+//
+//	@Override
+//	public int superHash() {
+//		return wrapped.superHash();
+//	}
 
 	@Override
 	public SubLObject tenth() {

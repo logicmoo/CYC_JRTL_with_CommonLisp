@@ -22,6 +22,7 @@ public class StreamTest
       System.out.println("Failed to create temp file" + e);
       return;
     }
+    
     Pathname pathname = Pathname.makePathname(file);
     Stream in = new Stream(Symbol.SYSTEM_STREAM, pathname.getInputStream(), Symbol.CHARACTER);
     LispObject o = in.read(false, Lisp.EOF, false,

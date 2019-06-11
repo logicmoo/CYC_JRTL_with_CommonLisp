@@ -307,7 +307,7 @@ public final class sxhash_external
           }
           else
           {
-            range_marker = range_marker;
+           //range_marker = range_marker;
           }
         }
       }

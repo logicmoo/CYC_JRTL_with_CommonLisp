@@ -33,7 +33,7 @@
 
 package org.armedbear.lisp;
 
-public class ThreadDestroyed extends Error
+public class ThreadDestroyed extends ConditionThrowable
 {
     public ThreadDestroyed()
     {

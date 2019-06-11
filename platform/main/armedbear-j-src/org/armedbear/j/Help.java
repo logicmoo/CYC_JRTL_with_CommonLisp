@@ -256,7 +256,7 @@ public final class Help
                     sb.append(commandString);
             } else if (command instanceof LispObject) {
                 try {
-                    String s = ((LispObject)command).writeToString();
+                    String s = ((LispObject)command).printObject();
                     sb.append(sanitize(s));
                 }
                 catch (Throwable t) {

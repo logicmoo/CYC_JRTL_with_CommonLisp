@@ -174,7 +174,7 @@ abstract public class Lisp extends ABCLStatic
     // End-of-file marker.
     public static final LispObject EOF = new LispObject() {
         @Override
-        public String printObject() {
+        public String printObjectImpl() {
             return readableString(Symbol.JCALL, JavaObject.getInstance(Lisp.class), JavaObject.getInstance("EOF"));
         }
     };
@@ -267,7 +267,7 @@ abstract public class Lisp extends ABCLStatic
                     autoload.load();
                     obj = car.getSymbolFunction();
                 }
-                if (obj instanceof SpecialOperator) {
+                if (isSpecialOperatorF(obj)) {
                     obj = get(car, Symbol.MACROEXPAND_MACRO, null);
                     if (obj instanceof Autoload) {
                         Autoload autoload = (Autoload) obj;
@@ -525,7 +525,7 @@ abstract public class Lisp extends ABCLStatic
             if (first instanceof Symbol) {
                 LispObject fun = env.lookupFunction(first);
 
-                if (fun instanceof SpecialOperator) {
+                if (isSpecialOperatorF(fun)) {
                     if (profiling)
                         if (!sampling)
                             fun.incrementCallCount();
@@ -2445,7 +2445,7 @@ abstract public class Lisp extends ABCLStatic
 
     private static class unboundValue extends LispObject {
         @Override
-        public String printObject() {
+        public String printObjectImpl() {
             return unreadableString("UNBOUND", false);
         }
 
@@ -2467,7 +2467,7 @@ abstract public class Lisp extends ABCLStatic
         }
 
         @Override
-        public String printObject() {
+        public String printObjectImpl() {
             return unreadableString("null", false);
         }
 
@@ -2739,6 +2739,7 @@ public static String stringValueOf(LispObject arg) {
     }
 
     static {
+        Symbol.FEATURES.setSymbolValue(new Cons(internKeyword(":UABCL"), Symbol.FEATURES.getSymbolValue()));
         loadClass("org.logicmoo.system.BeanShellCntrl");
     }
 
@@ -2760,5 +2761,22 @@ public static String stringValueOf(LispObject arg) {
 	public static LispObject makeStringOrJNull(String result) {
 		if(result==null) return JavaObject.getInstance(null, String.class);
 		return new SimpleString(result);
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param obj
+	 * @return
+	 */
+	public static boolean isSpecialOperatorF(LispObject function) {
+		if(function == null) return false;
+		boolean wasSO = (function instanceof SpecialOperator);
+		if (function instanceof Operator) {
+			return ((Operator) function).isSpecial();
+		}
+		if (!wasSO)
+			return false;
+		// TODO Auto-generated method stub
+		return true;
 	}	
 }

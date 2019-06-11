@@ -20,6 +20,7 @@ import org.armedbear.lisp.JavaObject;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Main;
 import org.armedbear.lisp.SimpleString;
+import org.armedbear.lisp.Symbol;
 import org.logicmoo.system.JVMImpl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
@@ -662,7 +663,8 @@ public class SubLObjectFactory
     return makeProcess( symbolName, safeRunnable );
   }
 
-  static final class SafeRunSubLFunction
+
+static final class SafeRunSubLFunction
       extends
         SafeRunnable
   {
@@ -784,6 +786,24 @@ public class SubLObjectFactory
     return makeSymbol( symbolName, SubLPackage.SUBLISP_PACKAGE.toPackage() );
   }
 
+  /**
+ * TODO Describe the purpose of this method.
+ */
+	public static SubLObject maybeMake(String... name) {
+		SubLPackage currentPackage = Packages.$package$.getDynamicValue().toPackage();		
+		if (name.length > 1) {
+			currentPackage = org.armedbear.lisp.Package.findPackageNamed(name[1]);
+		}
+		final String sname = name[0];
+		Symbol findAccessibleSymbol = currentPackage.findAccessibleSymbol(sname);
+		if (findAccessibleSymbol != null)
+			return findAccessibleSymbol;
+		findAccessibleSymbol = Lisp.PACKAGE_CL_USER.findAccessibleSymbol(sname);
+		if (findAccessibleSymbol != null)
+			return findAccessibleSymbol;
+ 		return makeSymbol(sname, currentPackage);
+	}
+  
   public static SubLSymbol makeSymbol(String symbolName)
   {
     SubLPackage currentPackage = Packages.$package$.getDynamicValue().toPackage();

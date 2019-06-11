@@ -33,180 +33,206 @@
 
 package org.armedbear.lisp;
 
-public abstract class AbstractBitVector extends AbstractVector
-{
-    protected static final int LONG_MASK = 0x3f;
+public abstract class AbstractBitVector extends AbstractVector {
+	protected static final int LONG_MASK = 0x3f;
 
-    protected int capacity;
+	protected int capacity;
 
-    // For non-displaced bit-vectors.
-    protected long[] bits;
+	// For non-displaced bit-vectors.
+	protected long[] bits;
 
-    @Override
-	public LispObject typep(LispObject type)
-    {
-        if (type == Symbol.BIT_VECTOR)
-            return T;
-        if (type == BuiltInClass.BIT_VECTOR)
-            return T;
-        return super.typep(type);
-    }
+	@Override
+	public LispObject typep(LispObject type) {
+		if (type == Symbol.BIT_VECTOR)
+			return T;
+		if (type == BuiltInClass.BIT_VECTOR)
+			return T;
+		return super.typep(type);
+	}
 
-    @Override
-	public LispObject classOf()
-    {
-        return BuiltInClass.BIT_VECTOR;
-    }
+	@Override
+	public LispObject classOf() {
+		return BuiltInClass.BIT_VECTOR;
+	}
 
-    @Override
-	public final int capacity()
-    {
-        return capacity;
-    }
+	@Override
+	public final int capacity() {
+		return capacity;
+	}
 
-    @Override
-	public final LispObject getElementType()
-    {
-        return Symbol.BIT;
-    }
+	@Override
+	public final LispObject getElementType() {
+		return Symbol.BIT;
+	}
 
-    @Override
-	public boolean equal(LispObject obj)
-    {
-        if (this == obj)
-            return true;
-        if (obj instanceof AbstractBitVector) {
-            AbstractBitVector v = (AbstractBitVector) obj;
-            if (length() != v.length())
-                return false;
-            for (int i = length(); i-- > 0;) {
-                if (getBit(i) != v.getBit(i))
-                    return false;
-            }
-            return true;
-        }
-        return false;
-    }
+	@Override
+	public boolean equal(LispObject obj) {
+		if (this == obj)
+			return true;
+		if (obj instanceof AbstractBitVector) {
+			AbstractBitVector v = (AbstractBitVector) obj;
+			if (length() != v.length())
+				return false;
+			for (int i = length(); i-- > 0;) {
+				if (getBit(i) != v.getBit(i))
+					return false;
+			}
+			return true;
+		}
+		return false;
+	}
 
-    @Override
-	public boolean equalp(LispObject obj)
-    {
-        if (this == obj)
-            return true;
-        if (obj instanceof AbstractBitVector) {
-            AbstractBitVector v = (AbstractBitVector) obj;
-            if (length() != v.length())
-                return false;
-            for (int i = length(); i-- > 0;) {
-                if (getBit(i) != v.getBit(i))
-                    return false;
-            }
-            return true;
-        }
-        if (obj instanceof AbstractString)
-            return false;
-        if (obj instanceof AbstractVector)
-            return ((AbstractVector)obj).equalp(this);
-        return false;
-    }
+	@Override
+	public boolean equalp(LispObject obj) {
+		if (this == obj)
+			return true;
+		if (obj instanceof AbstractBitVector) {
+			AbstractBitVector v = (AbstractBitVector) obj;
+			if (length() != v.length())
+				return false;
+			for (int i = length(); i-- > 0;) {
+				if (getBit(i) != v.getBit(i))
+					return false;
+			}
+			return true;
+		}
+		if (obj instanceof AbstractString)
+			return false;
+		if (obj instanceof AbstractVector)
+			return ((AbstractVector) obj).equalp(this);
+		return false;
+	}
 
-    @Override
-	public void fill(LispObject obj)
-    {
-        if (obj instanceof Fixnum) {
-            switch (((Fixnum)obj).value) {
-                case 0:
-                    if (bits != null) {
-                        for (int i = bits.length; i-- > 0;)
-                            bits[i] = 0;
-                    } else {
-                        for (int i = capacity; i-- > 0;)
-                            clearBit(i);
-                    }
-                    return;
-                case 1:
-                    if (bits != null) {
-                        for (int i = bits.length; i-- > 0;)
-                            bits[i] = -1L;
-                    } else {
-                        for (int i = capacity; i-- > 0;)
-                            setBit(i);
-                    }
-                    return;
-            }
-            // Fall through...
-        }
-        type_error(obj, Symbol.BIT);
-    }
+	@Override
+	public void fill(LispObject obj) {
+		if (obj instanceof Fixnum) {
+			switch (((Fixnum) obj).value) {
+			case 0:
+				if (bits != null) {
+					for (int i = bits.length; i-- > 0;)
+						bits[i] = 0;
+				} else {
+					for (int i = capacity; i-- > 0;)
+						clearBit(i);
+				}
+				return;
+			case 1:
+				if (bits != null) {
+					for (int i = bits.length; i-- > 0;)
+						bits[i] = -1L;
+				} else {
+					for (int i = capacity; i-- > 0;)
+						setBit(i);
+				}
+				return;
+			}
+			// Fall through...
+		}
+		type_error(obj, Symbol.BIT);
+	}
 
-    @Override
-	public LispObject subseq(int start, int end)
-    {
-        SimpleBitVector v = new SimpleBitVector(end - start);
-        int i = start, j = 0;
-        try {
-            while (i < end) {
-                if (getBit(i++) == 0)
-                    v.clearBit(j++);
-                else
-                    v.setBit(j++);
-            }
-            return v;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            return error(new TypeError("Array index out of bounds: " + i + "."));
-        }
-    }
+	@Override
+	public LispObject subseq(int start, int end) {
+		SimpleBitVector v = new SimpleBitVector(end - start);
+		int i = start, j = 0;
+		try {
+			while (i < end) {
+				if (getBit(i++) == 0)
+					v.clearBit(j++);
+				else
+					v.setBit(j++);
+			}
+			return v;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return error(new TypeError("Array index out of bounds: " + i + "."));
+		}
+	}
 
-    @Override
-	public int hashCode()
-    {
-        int hashCode = 1;
-        // Consider first 64 bits only.
-        final int limit = Math.min(length(), 64);
-        for (int i = 0; i < limit; i++)
-            hashCode = hashCode * 31 + getBit(i);
-        return hashCode;
-    }
+	@Override
+	final public int hashCode() {
+		int hashCode = 1;
+		// Consider first 64 bits only.
+		final int limit = Math.min(length(), 64);
+		for (int i = 0; i < limit; i++)
+			hashCode = hashCode * 31 + getBit(i);
+		return hashCode;
+	}
 
-    @Override
-	public String printObject()
-    {
-        final LispThread thread = LispThread.currentThread();
-        final int length = length();
-        if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL ||
-            Symbol.PRINT_ARRAY.symbolValue(thread) != NIL)
-        {
-            StringBuilder sb = new StringBuilder(length + 2);
-            sb.append("#*");
-            for (int i = 0; i < length; i++)
-                sb.append(getBit(i) == 1 ? '1' : '0');
-            return sb.toString();
-        } else {
-            final String str = "(%sBIT-VECTOR %d)";
-            final String pre = (this instanceof SimpleBitVector) ? "SIMPLE-" : "";
-            return unreadableString(String.format(str, pre, length));
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLVector#hashCode(int)
+	 */
+	@Override
+	final public int hashCode(int currentDepth) {
+		return hashCode();
+	}
 
-    @Override
-	public LispObject reverse()
-    {
-        int length = length();
-        SimpleBitVector result = new SimpleBitVector(length);
-        int i, j;
-        for (i = 0, j = length - 1; i < length; i++, j--) {
-            if (getBit(j) == 1)
-                result.setBit(i);
-            else
-                result.clearBit(i);
-        }
-        return result;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.armedbear.lisp.AbstractVector#psxhash()
+	 */
+	@Override
+	final public int psxhash() {
+		return hashCode();
+	}
 
-    protected abstract int getBit(int index);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.armedbear.lisp.LispObject#psxhash(int)
+	 */
+	@Override
+	final public int psxhash(int depth) {
+		return psxhash();
+	}
 
-    protected abstract void setBit(int index);
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.armedbear.lisp.AbstractArray#sxhash()
+	 */
+	@Override
+	final public int sxhash() {
+		return (hashCode() & 0x7fffffff);
+	}
 
-    protected abstract void clearBit(int index);
+	@Override
+	public String printObjectImpl() {
+		final LispThread thread = LispThread.currentThread();
+		final int length = length();
+		if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL || Symbol.PRINT_ARRAY.symbolValue(thread) != NIL) {
+			StringBuilder sb = new StringBuilder(length + 2);
+			sb.append("#*");
+			for (int i = 0; i < length; i++)
+				sb.append(getBit(i) == 1 ? '1' : '0');
+			return sb.toString();
+		} else {
+			final String str = "(%sBIT-VECTOR %d)";
+			final String pre = (this instanceof SimpleBitVector) ? "SIMPLE-" : "";
+			return unreadableString(String.format(str, pre, length));
+		}
+	}
+
+	@Override
+	public LispObject reverse() {
+		int length = length();
+		SimpleBitVector result = new SimpleBitVector(length);
+		int i, j;
+		for (i = 0, j = length - 1; i < length; i++, j--) {
+			if (getBit(j) == 1)
+				result.setBit(i);
+			else
+				result.clearBit(i);
+		}
+		return result;
+	}
+
+	protected abstract int getBit(int index);
+
+	protected abstract void setBit(int index);
+
+	protected abstract void clearBit(int index);
 }

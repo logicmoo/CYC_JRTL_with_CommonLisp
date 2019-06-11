@@ -3845,7 +3845,8 @@ public final class module0038 extends SubLTranslatedFile
                         var384 = (SubLObject)NIL;
                         var382 = module0048.f_1X(var376);
                         var383 = (SubLObject)NIL;
-                        for (var384 = (SubLObject)NIL; NIL == var384 && NIL == module0035.f1995(var355, var382, (SubLObject)UNPROVIDED); var382 = module0048.f_1X(var382), var383 = var383, var384 = var384) {
+                        for (var384 = (SubLObject)NIL; NIL == var384 && NIL == module0035.f1995(var355, var382, (SubLObject)UNPROVIDED); var382 = module0048.f_1X(var382) //, var383 = var383, var384 = var384                        		
+                        		) {
                             var371 = (SubLObject)ConsesLow.cons(var377, var371);
                             var376 = var382;
                             var377 = Strings.sublisp_char(var355, var376);

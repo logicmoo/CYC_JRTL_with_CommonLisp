@@ -1462,7 +1462,7 @@ public final class sksi_sks_manager
     {
       removal_reg_string = $str84$;
       removal_regP = NIL;
-      bgcolor = bgcolor;
+      //bgcolor = bgcolor;
     }
     pcase_var = storage_reg_state;
     if( pcase_var.eql( $kw76$PARTIAL ) )

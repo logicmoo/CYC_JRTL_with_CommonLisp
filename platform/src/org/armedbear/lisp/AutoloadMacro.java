@@ -49,7 +49,7 @@ public final class AutoloadMacro extends Autoload
 
     {
         AutoloadMacro am = new AutoloadMacro(symbol, fileName);
-        if (symbol.getSymbolFunction() instanceof SpecialOperator)
+        if (symbol.isSpecialOperator())
         	Lisp.put(symbol, Symbol.MACROEXPAND_MACRO, am);
         else
             symbol.setSymbolFunction(am);

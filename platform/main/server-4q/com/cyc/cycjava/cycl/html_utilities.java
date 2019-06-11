@@ -1585,12 +1585,12 @@ public final class html_utilities
         }
         lt_idx = Sequences.position( Characters.CHAR_less, string, Symbols.symbol_function( EQL ), Symbols.symbol_function( IDENTITY ), Numbers.add( lt_idx, ONE_INTEGER ), UNPROVIDED );
       }
-      hash_idx = hash_idx;
-      colon_idx = colon_idx;
-      lt_idx = lt_idx;
-      variable_idx = variable_idx;
-      url_idx = url_idx;
-      url_end_idx = url_end_idx;
+//      hash_idx = hash_idx;
+//      colon_idx = colon_idx;
+//      lt_idx = lt_idx;
+//      variable_idx = variable_idx;
+//      url_idx = url_idx;
+//      url_end_idx = url_end_idx;
     }
     html_string( string, last_idx, NIL );
     return string;

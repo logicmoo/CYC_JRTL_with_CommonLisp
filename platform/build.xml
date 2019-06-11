@@ -38,6 +38,8 @@ For help on the automatic tests available, use the Ant target 'help.test'.
               value="${basedir}/src"/>
     <property name="dist.dir"
               value="${basedir}/dist"/>
+    <property name="forked"
+                  value="true"/>
     <property name="abcl.jar.path"
               value="${dist.dir}/abcl.jar"/>
     <property name="abcl-aio.jar.path"
@@ -87,12 +89,8 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 	  <exclude name="**/*JUnit.java"/>
       <exclude name="**/test/**/*.java"/>
       <!--
-      <exclude name="org.logicmoo-kepp/**"/>
-
-      <exclude name="com/cyc/tool/subl/webserver/*.java"/>
     -  <include name="../../AppdatorGUI/src/**/*.java"/>
-      <exclude name="com/cyc/tool/subl/webserver/*.java"/> 
--->
+      -->
     </patternset>
 
     <patternset id="abcl.source.lisp">
@@ -154,7 +152,12 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 
     <path id="abcl.classpath.build">
       <pathelement location="${build.classes.dir}"/>
-      <pathelement location="${env.CLASSPATH}"/>
+    	<pathelement location="${env.CLASSPATH}"/>
+    	<pathelement location="bin-eclipse/"/>
+    	<pathelement location="${java.home}/../lib/tools.jar"/>
+    	  <fileset dir="lib">
+    	    <include name="**/*.jar" />
+    	  </fileset>    	
     </path>
 
     <target name="abcl.compile" depends="abcl.clean.maybe,abcl.compile.lisp">
@@ -233,22 +236,34 @@ For help on the automatic tests available, use the Ant target 'help.test'.
                 libraries in the CLASSPATH.
       </echo>
     </target>
+	
+	<path id="lib.class.path">
+	  <fileset dir="lib">
+	    <include name="**/*.jar" />
+	  </fileset>
+	</path>
 
     <target name="abcl.compile.java"
             depends="abcl.init,abcl.java.warning,abcl.jsr-223.notice">
       <mkdir dir="${build.dir}"/>
       <mkdir dir="${build.classes.dir}"/>
+    	<echo>${java.home}</echo>
+    	<echo>${env.JAVA_HOME}</echo>
+    	<echo>${lib.class.path}</echo>
+    	
       <!-- Stock build for Java 1.5 (aka Java 2) container -->
       <javac destdir="${build.classes.dir}"
              debug="true"
              target="${cv}"
              source="${cv}"          
-	     classpath="bin-eclipse/:${env.CLASSPATH}"
+      	 classpathref="abcl.classpath.build"
              includeantruntime="false"
              failonerror="true">
       	<src path="${src.dir}"/>
+      	 
       	<src path="main/appdapter-src"/>
-		<src path="main/armedbear-j-src"/>
+      	
+      	<src path="main/armedbear-j-src"/>
 		<src path="main/cycjava-persistence-hacks"/>
 		<src path="main/jpl7-hacked"/>
 		<src path="main/logicmoo-main"/>
@@ -338,7 +353,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
     <macrodef name="abcl.compile.lisp">
       <element name="additional.jvmarg" optional="true"/>
       <sequential>
-        <echo>
+      	 <echo>
 Compiling Lisp system
 from ${abcl.home.dir}
  to  ${abcl.lisp.output}</echo>
@@ -348,7 +363,7 @@ from ${abcl.home.dir}
        <fileset dir="${abcl.home.dir}" includes="**/*.abcl **/*.cls **/*._"/>
      </delete>
      <java classpath="${build.classes.dir}:bin-eclipse/:${env.CLASSPATH}"
-            fork="true"
+            fork="${forked}"
             failonerror="true"
             inputstring="(handler-case (compile-system :zip nil :quit t :output-path &quot;${abcl.lisp.output}/&quot;) (t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))"
             classname="org.armedbear.lisp.Main">
@@ -360,9 +375,12 @@ from ${abcl.home.dir}
         <arg value="--eval"/>
         <arg value="(setf *load-verbose* t)"/>
       </java>
+      	<echo> concat "${system.lisp.file} 
+      		${abcl.startup.file} </echo> 
       <concat destfile="${system.lisp.file}" append="true">
         <fileset file="${abcl.startup.file}"/>
       </concat>
+      	<echo> Done with abcl.compile.lisp</echo>
         </sequential>
     </macrodef>
 
@@ -630,7 +648,8 @@ from ${abcl.home.dir}
       <path id="abcl.runtime.classpath">
         <pathelement location="${abcl.runtime.jar.path}"/>
         <pathelement path="${additional.jars}"/>
-         <pathelement path="c:\pf\Java\jdk1.8.0_162\lib\tools.jar"/>
+      	<pathelement path="${java.home}/../lib/tools.jar"/>
+      	
       </path>
       <!-- set via '-Djava.options=JAVA_OPTIONS' or in 'build.properties -->
       <property name="java.options" value=""/>
@@ -1065,7 +1084,7 @@ ${basedir}/../cl-bench
 
       <mkdir dir="${abcl.ext.dir}"/>
       <get
-          src="http://cloud.github.com/downloads/KentBeck/junit/junit-4.8.1.jar"
+          src="http://central.maven.org/maven2/junit/junit/4.8.1/junit-4.8.1.jar"
           usetimestamp="true"
           dest="${junit.path}"/>
       <get 
@@ -1116,7 +1135,7 @@ ${basedir}/../cl-bench
     </target>
 
     <target name="abcl.test.lisp"
-            depends="test.ansi.compiled,test.abcl,test.cl-bench"/>
+            depends="test.abcl,test.cl-bench"/> 
 
     <target name="test.ansi.interpreted" depends="abcl.jar">
       <echo>Recording test output in ${abcl.test.log.file}.</echo>
@@ -1156,7 +1175,7 @@ ${basedir}/../cl-bench
     <target name="test.ansi.compiled" depends="abcl.jar">
       <echo>Recording test output in ${abcl.test.log.file}.</echo>
       <record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes"/>
-      <java fork="true" dir="${basedir}"
+      <java fork="${forked}" dir="${basedir}"
             classpathref="abcl.classpath.dist"
             classname="org.armedbear.lisp.Main">
         <!-- Run in 64bit mode-->
@@ -1174,19 +1193,31 @@ ${basedir}/../cl-bench
         <arg value="--noinit"/>
         <arg value="--eval"/><arg value="(require (quote asdf))"/>
         <arg value="--eval"/>
-          <arg value="(asdf:initialize-source-registry `(:source-registry (:directory ,*default-pathname-defaults*) :inherit-configuration)))"/>
+          <arg value="(asdf:initialize-source-registry `(:source-registry (:directory 	&#34;abcl/test/ansi/compiled&#34;) :inherit-configuration)))"/>
         <arg value="--eval"/><arg value="(asdf:test-system :abcl/test/ansi/compiled)"/>
         <arg value="--eval"/><arg value="(ext:exit)"/>
       </java>
       <record name="${abcl.test.log.file}" emacsmode="true" action="stop"/>
-      <echo>Finished recording test output in ${abcl.test.log.file}.</echo>
+    	<echo>Finished recording test output in ${abcl.test.log.file}.</echo>
     </target>
 
+    <path id="abcl.classpath.test">
+        <pathelement location="lib/junit-4.10.jar"/>
+        <pathelement location="lib/hamcrest-core-1.1.jar"/>
+        <pathelement location="${abcl.jar.path}"/>
+        <pathelement location="${env.CLASSPATH}"/>
+    	<pathelement location="${java.home}/../lib/tools.jar"/>
+    	 <fileset dir="lib">
+    	    <include name="**/*.jar" />
+    	  </fileset>
+    </path>
+	
     <target name="test.abcl" depends="abcl.jar">
       <echo>Recording test output in ${abcl.test.log.file}.</echo>
+      	<echo>Classpath is ${abcl.classpath.test}</echo>    	
       <record name="${abcl.test.log.file}" emacsmode="true" action="start" append="yes"/>
-      <java fork="true" dir="${basedir}"
-            classpathref="abcl.classpath.dist"
+      <java fork="${forked}" dir="${basedir}"
+            classpathref="abcl.classpath.test"
             classname="org.armedbear.lisp.Main">
         <arg value="--noinit"/>
         <arg value="--eval"/><arg value="(require (quote asdf))"/>
@@ -1306,13 +1337,13 @@ user.dir
             tofile="${dist.dir}/asdf.pdf"/>
     </target>
 
+        <import file="build-snapshot.xml" optional="true"/>
 
     <import file="netbeans-build.xml" optional="true"/>
     <import file="not.org-build.xml" optional="true"/>
-    <import file="build-snapshot.xml" optional="true"/>
     <import file="build-maven.xml" optional="true"/> 
     <import file="j-build.xml" optional="true"/> 
-<!--
+	<!--
     <import file="etc/ant/netbeans-build.xml" optional="true"/> 
     <import file="etc/ant/build-snapshot.xml" optional="true"/>
     <import file="etc/ant/build-maven.xml"  optional="true"/>

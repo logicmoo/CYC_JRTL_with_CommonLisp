@@ -71,7 +71,7 @@ public class Condition extends StandardObject
   protected Condition(LispClass cls)
   {
     super(cls);
-    //Debug.assertTrue(slots.length >= 2);
+//    assertSlotsLength( 2);
     setFormatArguments(NIL);
     marKCondition();
   }
@@ -85,7 +85,7 @@ public class Condition extends StandardObject
   public Condition(LispObject initArgs)
   {
     super(StandardClass.CONDITION);
-   // Debug.assertTrue(slots.length == 2);
+    assertSlotsLength( 2);
     initialize(initArgs);
     marKCondition();
   }
@@ -127,7 +127,7 @@ protected void initialize(LispObject initArgs)
   {
     super(StandardClass.CONDITION);
     assertSlotsLength( 2);
-    setFormatControl(message);
+    setFormatControl(message.replaceAll("~","~~"));
     setFormatArguments(NIL);
   }
 
@@ -214,7 +214,7 @@ public LispObject typep(LispObject type)
   }
 
   @Override
-public final String printObject()
+public final String printObjectImpl()
   {
     final LispThread thread = LispThread.currentThread();
     if (Symbol.PRINT_ESCAPE.symbolValue(thread) == NIL)
@@ -237,7 +237,7 @@ public final String printObject()
             return Symbol.APPLY.execute(f, NIL, formatControl, getFormatArguments()).getStringValue();
           }
         if(formatControl == UNBOUND_VALUE) {
-          SystemCurrent.originalSystemErr.println( "formatControl == " + formatControl );
+          if(debug) SystemCurrent.originalSystemErr.println( "formatControl == " + formatControl );
         }
       }
     final int maxLevel;

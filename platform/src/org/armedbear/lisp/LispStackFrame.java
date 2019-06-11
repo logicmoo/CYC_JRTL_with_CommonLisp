@@ -43,7 +43,7 @@ public class LispStackFrame
   {
     public UnavailableArgument () { }
     @Override
-	public String printObject() {
+	public String printObjectImpl() {
       return unreadableString("unavailable arg", false);
     }
   }
@@ -71,7 +71,7 @@ public LispObject classOf() {
    }
 
    @Override
-public String printObject()
+public String printObjectImpl()
    {
      String result = "";
      final String LISP_STACK_FRAME = "LISP-STACK-FRAME";

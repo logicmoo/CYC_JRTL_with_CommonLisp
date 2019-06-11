@@ -1389,7 +1389,7 @@ public final class multibindings
       thread.resetMultipleValues();
       cur_mbindings = cur_mbindings_$5;
       not_doneP = not_doneP_$6;
-      cur_mbindings = cur_mbindings;
+   //   cur_mbindings = cur_mbindings;
     }
     mbindings = cur_mbindings;
     return mbindings;

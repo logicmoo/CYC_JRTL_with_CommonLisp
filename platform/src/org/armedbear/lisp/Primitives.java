@@ -1955,7 +1955,7 @@ public final class Primitives {
         {
             if (name instanceof Symbol) {
                 Symbol symbol = (Symbol) name;
-                if (symbol.getSymbolFunction() instanceof SpecialOperator) {
+                if (symbol.isSpecialOperator()) {
                     return program_error(symbol.getName() + " is a special operator and may not be redefined.");
                 }
             } else if (!isValidSetfFunctionName(name))
@@ -2005,7 +2005,7 @@ public final class Primitives {
                 return NIL;
             if (obj instanceof MacroObject)
                 return ((MacroObject) obj).getExpander();
-            if (obj instanceof SpecialOperator) {
+            if (Lisp.isSpecialOperatorF(obj)) {
                 LispObject obj1 = get(arg, Symbol.MACROEXPAND_MACRO, NIL);
                 if (obj1 != NIL) {
                     obj = obj1;
@@ -2019,7 +2019,7 @@ public final class Primitives {
                 }
                 if (obj instanceof MacroObject)
                     return ((MacroObject) obj).getExpander();
-                if (obj instanceof SpecialOperator)
+                if (isSpecialOperatorF(obj))
                     obj1 = (LispObject) ((SpecialOperator) obj).getEvaluationFunction();
                 if (obj1 != null && obj1 != NIL) {
                     return obj1;
@@ -2044,7 +2044,7 @@ public final class Primitives {
             }
             if (obj instanceof MacroObject)
                 return ((MacroObject) obj).getExpander();
-            if (obj instanceof SpecialOperator) {
+            if (isSpecialOperatorF(obj)) {
                 obj = get(first, Symbol.MACROEXPAND_MACRO, NIL);
                 if (obj instanceof AutoloadMacro) {
                     ((AutoloadMacro) obj).load();
@@ -2073,7 +2073,7 @@ public final class Primitives {
             LispObject expander = MAKE_MACRO_EXPANDER.execute(args);
             Closure expansionFunction = new LambdaClosure(expander, env);
             MacroObject macroObject = new MacroObject(symbol, expansionFunction);
-            if (symbol.getSymbolFunction() instanceof SpecialOperator)
+            if (symbol.isSpecialOperator())
                 Lisp.put(symbol, Symbol.MACROEXPAND_MACRO, macroObject);
             else
                 symbol.setSymbolFunction(macroObject);

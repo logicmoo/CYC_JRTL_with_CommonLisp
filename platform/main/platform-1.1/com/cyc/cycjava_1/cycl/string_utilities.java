@@ -647,7 +647,8 @@ and whether or not embedded strings should be left alone. */
                       SubLObject quotedP = NIL;
                       SubLObject doneP = NIL;
                       for (pos_find = number_utilities.f_1X(pos_now), quotedP = NIL, doneP = NIL; (!(((NIL != doneP)
-                            || (NIL != list_utilities.lengthE(in_string, pos_find, UNPROVIDED))))); pos_find = number_utilities.f_1X(pos_find), quotedP = quotedP, doneP = doneP) {
+                            || (NIL != list_utilities.lengthE(in_string, pos_find, UNPROVIDED))))); pos_find = number_utilities.f_1X(pos_find) //, quotedP = quotedP, doneP = doneP
+                            ) {
                         cur_char_list = cons(this_character, cur_char_list);
                         pos_now = pos_find;
                         this_character = Strings.sublisp_char(in_string, pos_now);

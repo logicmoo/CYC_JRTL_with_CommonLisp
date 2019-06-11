@@ -26,7 +26,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
 
 //import org.apache.log4j.Category;
-import org.appdapter.gui.demo.DemoBrowser;
+//import org.appdapter.gui.demo.DemoBrowser;
 import org.logicmoo.bb.BeanBowl;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.ToplevelMethod;
@@ -364,12 +364,12 @@ protected void processEvent(AWTEvent e) {
 				//System.setProperty("log4j.defaultInitOverride", "true");
 				System.setProperty("log4j.debug", "true");
 				String loc = "mylog4j.properties";
-				URL url = DemoBrowser.class.getResource("mylog4j.properties");
+				URL url = BeanBowl.class.getResource("mylog4j.properties");
 				if (url != null) {
 					loc = url.toExternalForm();
 				}
 				System.setProperty("log4j.configuration", loc);
-				theLogger = LoggerFactory.getLogger(DemoBrowser.class);
+				theLogger = LoggerFactory.getLogger(BeanBowl.class);
 			}
 		} catch (Throwable t) {
 			printStackTrace(t);

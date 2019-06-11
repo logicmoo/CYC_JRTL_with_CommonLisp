@@ -28,7 +28,7 @@
 
 package bsh;
 
-class ReflectError extends RuntimeException
+public class ReflectError extends RuntimeException
 {
     public ReflectError() { super(); }
     public ReflectError(String s) { super(s); }

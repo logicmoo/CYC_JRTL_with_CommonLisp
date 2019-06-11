@@ -3256,7 +3256,7 @@ public final class cb_query
       }
       else
       {
-        mt = mt;
+        //mt = mt;
       }
       final SubLObject display_options = ConsesLow.list( $kw329$MONAD_CHOICES, $cb_query_default_mt_monad_choices$.getGlobalValue() );
       cb_form_widgets.cb_mt_input_section( mt, display_options );

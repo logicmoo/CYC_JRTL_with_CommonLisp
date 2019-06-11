@@ -406,7 +406,7 @@ abstract public class AbstractSubLVector extends AbstractSubLArraySequence imple
 	}
 
 	@Override
-	public String printObject() {
+	public String printObjectImpl() {
 		if (PrintLow.shouldPrintAtCurrentLevel()) {
 			SubLObject oldLevel = PrintLow.maybeIncreasePrintLevel();
 			try {

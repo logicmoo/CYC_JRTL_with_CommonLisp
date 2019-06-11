@@ -285,13 +285,14 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 
 		@Override
-		public String printObject()
+		public String printObjectImpl()
 		{
 			try
 			{
 				return print_high.princ_to_string(this).getStringValue();
 			} catch (Exception e)
 			{
+				checkReadable();
 				return "#<" + toTypeName() + " " + getName() + " @ " + System.identityHashCode(this) + ">";
 			}
 		}

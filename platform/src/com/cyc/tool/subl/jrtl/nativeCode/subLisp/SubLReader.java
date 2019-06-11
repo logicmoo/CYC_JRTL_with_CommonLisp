@@ -100,6 +100,7 @@ public class SubLReader {
 	private boolean isBusy;
 	private SubLInputTextStream inputStream;
 	private SubLThread thread;
+	private SubLObject result;
 	public static Errors.RestartMethod CONTINUE_RESTART_METHOD;
 	static {
 		CONTINUE_RESTART_METHOD = new Errors.RestartMethod() {
@@ -256,7 +257,7 @@ public class SubLReader {
 				setIsBusy(true);
 				SubLList resultValues = Values.multiple_value_list_eval(form, env);
 				long evalTime = System.nanoTime() - startTime;
-				SubLObject result = resultValues.first();
+				result = resultValues.first();
 				historyItem.setResultValues(resultValues, evalTime);
 				streams_high.force_output(StreamsLow.$standard_output$.getDynamicValue());
 				writeResults(historyItem.getResultsString());
@@ -265,7 +266,10 @@ public class SubLReader {
 			} catch (ResumeException re) {
 				writeResults("[ Resuming via jump to top level read loop... ]");
 			} catch (SubLProcess.TerminationRequest tr) {
-			} catch (SubLException e) {
+				shouldReadloopExit = true;
+			} catch (org.armedbear.lisp.ProcessingTerminated tr) {
+				shouldReadloopExit = true;
+		    } catch (SubLException e) {
 				lastException = e;
 			} catch (Exception e2) {
 				lastException = e2;

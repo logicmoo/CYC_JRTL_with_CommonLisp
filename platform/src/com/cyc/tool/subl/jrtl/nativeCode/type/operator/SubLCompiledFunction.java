@@ -81,9 +81,9 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 	}
 
     @Override
-	public String printObject()
+	public String printObjectImpl()
     {
-    	return super.printObject();
+    	return super.printObjectImpl();
     }
 	@Override
 	protected void extraInfo(StringBuilder sb) {

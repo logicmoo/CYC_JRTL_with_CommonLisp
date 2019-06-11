@@ -1,0 +1,68 @@
+digraph shop3_stack_machine {
+        node [shape="rectangle"];
+        
+        "START" [fontname="bold",color="blue",shape="rectangle",peripheries=2];
+        "TEST-FOR-DONE";
+        "LOOK-FOR-IMMEDIATE-TASK";
+        "POP-IMMEDIATE-TASK";
+        "PREPARE-TO-CHOOSE-TOPLEVEL-TASK";
+        "POP-TOPLEVEL-TASK";
+        "EXPAND-TASK";
+        "UNFOLD-LOOPING-TASK";
+        "EXPAND-PRIMITIVE-TASK";
+        "PREPARE-TO-CHOOSE-METHOD";
+        "CHOOSE-METHOD";
+        "CHOOSE-METHOD-BINDINGS";
+        "EXTRACT-PLAN";
+        {
+                node[fontname="bold"];
+                
+                "BACKTRACK" [color=red,shape="rectangle",peripheries=2];
+                "DONE" [color="blue",shape="rectangle",peripheries=2];
+        }
+        
+        
+        subgraph {
+                edge [labelfontcolor="blue"];
+
+                "START" -> "TEST-FOR-DONE";
+                
+                "LOOK-FOR-IMMEDIATE-TASK" -> "POP-IMMEDIATE-TASK";
+                "LOOK-FOR-IMMEDIATE-TASK" -> "PREPARE-TO-CHOOSE-TOPLEVEL-TASK";
+                "POP-IMMEDIATE-TASK" -> "EXPAND-TASK";
+                "POP-IMMEDIATE-TASK" -> "BACKTRACK";
+                "PREPARE-TO-CHOOSE-TOPLEVEL-TASK" -> "POP-TOPLEVEL-TASK";
+                "POP-TOPLEVEL-TASK" -> "EXPAND-TASK";
+                "POP-TOPLEVEL-TASK" -> "BACKTRACK";
+                {
+                        edge [labelfontcolor="blue"];
+                        
+                        "EXPAND-TASK" -> "EXPAND-PRIMITIVE-TASK" [taillabel="   primitive task"];
+                        "EXPAND-TASK" -> "UNFOLD-LOOPING-TASK" [taillabel="loop task",xlp="-20"];
+                        "EXPAND-TASK" -> "PREPARE-TO-CHOOSE-METHOD" [taillabel="complex task"];
+
+                        "TEST-FOR-DONE" -> "EXTRACT-PLAN" [taillabel="all tasks planned"];
+                        "TEST-FOR-DONE" -> "LOOK-FOR-IMMEDIATE-TASK" [taillabel="unplanned tasks remain"];
+                }
+        
+                "UNFOLD-LOOPING-TASK" -> "TEST-FOR-DONE";
+                "UNFOLD-LOOPING-TASK" -> "BACKTRACK";
+                "EXPAND-PRIMITIVE-TASK" -> "TEST-FOR-DONE";
+                "EXPAND-PRIMITIVE-TASK" -> "BACKTRACK";
+                "PREPARE-TO-CHOOSE-METHOD" -> "CHOOSE-METHOD";
+                "CHOOSE-METHOD" -> "CHOOSE-METHOD-BINDINGS";
+                "CHOOSE-METHOD" -> "BACKTRACK";
+                "CHOOSE-METHOD-BINDINGS" -> "TEST-FOR-DONE";
+                "CHOOSE-METHOD-BINDINGS" -> "BACKTRACK";
+                "EXTRACT-PLAN" -> "DONE";
+                
+        }
+
+        
+        
+        
+        
+
+        
+        
+}

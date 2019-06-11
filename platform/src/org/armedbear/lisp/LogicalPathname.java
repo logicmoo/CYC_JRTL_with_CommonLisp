@@ -237,7 +237,7 @@ public final class LogicalPathname extends Pathname
     }
 
     @Override
-	public String printObject()
+	public String printObjectImpl()
     {
         final LispThread thread = LispThread.currentThread();
         boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);

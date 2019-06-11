@@ -61,7 +61,7 @@ abstract public class SubLAlienObject extends FromSubLisp implements SubLObject 
 		return super.printObject();		
 	}
 	@Override
-	public String printObject() {
+	public String printObjectImpl() {
 		final Object alien = getAlien(); 
 		if (alien != null)
 			return alien.toString();

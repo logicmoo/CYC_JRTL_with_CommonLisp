@@ -228,7 +228,7 @@ public Object javaInstanceImpl(Class c)
   }
 
   @Override
-  public final String printObject()
+  public final String printObjectImpl()
   {
     final LispThread thread = LispThread.currentThread();
     boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);

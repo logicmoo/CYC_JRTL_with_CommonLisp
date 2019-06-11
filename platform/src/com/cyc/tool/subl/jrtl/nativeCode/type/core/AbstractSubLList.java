@@ -546,7 +546,7 @@ public abstract class AbstractSubLList extends AbstractSubLSequence implements S
 	}
 
 	@Override
-	public String printObject() {
+	public String printObjectImpl() {
 		if (PrintLow.shouldPrintAtCurrentLevel()) {
 			SubLObject oldLevel = PrintLow.maybeIncreasePrintLevel();
 			try {

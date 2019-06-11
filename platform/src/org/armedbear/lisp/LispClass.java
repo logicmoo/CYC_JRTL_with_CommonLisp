@@ -56,9 +56,10 @@ public abstract class LispClass extends StandardObject
 	}
 	
 	  @Override
-	final public String printObject()
+	final public String printObjectImpl()
 	  {
-	    return readableString(Symbol.FIND_CLASS, getLispClassName());
+	    final LispObject lispClassName = getLispClassName();
+		return readableString(Symbol.FIND_CLASS, lispClassName);
 	  }
 	  abstract public String printObjectUnreadable();
 	  

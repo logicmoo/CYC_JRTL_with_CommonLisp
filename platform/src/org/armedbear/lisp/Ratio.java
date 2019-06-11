@@ -543,7 +543,7 @@ public final class Ratio extends LispObject
     }
 
     @Override
-	public String printObject()
+	public String printObjectImpl()
     {
         final LispThread thread = LispThread.currentThread();
         int base = Fixnum.getValue(Symbol.PRINT_BASE.symbolValue(thread));

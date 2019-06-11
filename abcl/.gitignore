@@ -13,3 +13,4 @@ abcl
 /lib/ALL/
 
 /.apt_generated/
+/target/

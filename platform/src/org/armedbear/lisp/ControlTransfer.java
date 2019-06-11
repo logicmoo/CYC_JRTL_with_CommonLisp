@@ -50,7 +50,7 @@ package org.armedbear.lisp;
  */
 abstract public class ControlTransfer
     extends
-      Error
+    ConditionThrowable
 {
   public ControlTransfer()
   {}

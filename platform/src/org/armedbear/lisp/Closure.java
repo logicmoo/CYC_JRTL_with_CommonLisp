@@ -153,7 +153,7 @@ abstract public class Closure extends Function
     }
 
     @Override
-    final public String printObject() {
+    final public String printObjectImpl() {
         LispObject name = getLambdaName();
         StringBuilder sb = new StringBuilder(getDotName(getClass()) + " ");
         final LispThread thread = LispThread.currentThread();

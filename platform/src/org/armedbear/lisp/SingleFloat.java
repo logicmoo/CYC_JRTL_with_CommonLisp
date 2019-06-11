@@ -554,7 +554,7 @@ public final class SingleFloat extends SubLDoubleFloat
     }
 
     @Override
-	final public String printObject()
+	final public String printObjectImpl()
     {
         if (value == Float.POSITIVE_INFINITY) {
             StringBuffer sb = new StringBuffer("#.");

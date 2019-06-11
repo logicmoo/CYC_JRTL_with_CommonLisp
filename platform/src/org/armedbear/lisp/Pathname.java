@@ -53,6 +53,10 @@ import java.util.zip.ZipInputStream;
 import org.gridlab.gat.URI.URIEncoder;
 
 public class Pathname extends LispObject {
+	
+	static {
+		Lisp.initLisp();
+	}
 
     /** The path component separator used by internally generated
      * path namestrings.
@@ -921,7 +925,7 @@ public class Pathname extends LispObject {
     }
 
     @Override
-	public String printObject() {
+	public String printObjectImpl() {
         final LispThread thread = LispThread.currentThread();
         final boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
         final boolean printEscape = (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL);

@@ -237,7 +237,7 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
     }
 
     @Override
-	public String printObject()
+	public String printObjectImpl()
     {
         return unreadableString("TWO-WAY-STREAM");
     }

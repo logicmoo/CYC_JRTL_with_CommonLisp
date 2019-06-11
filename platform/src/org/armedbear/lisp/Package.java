@@ -736,7 +736,8 @@ public class Package
   {
     Symbol sym = null;
     boolean added = false;
-    if( symbol.getPackageOrNil() != this )
+    final LispObject packageOrNil = symbol.getPackageOrNil();
+	if( packageOrNil != this )
     {
       sym = findAccessibleSymbol( symbolName );
       if( sym != symbol && sym != null )
@@ -919,7 +920,7 @@ public class Package
   {
     if( oldStyleOverload )
     {
-      preferPrevious = false;
+      //preferPrevious = false;
     }
     if( pkg == this )
       return;
@@ -943,13 +944,13 @@ public class Package
             {
               if( existing.getPackage() == this )
               {
-                System.err.println( "Local Symbol " + existing + " will trump " + symbol + " in pkg " + name + "." );
+                System.err.println( ";; in pkg " + name +" Local Symbol " + existing + " will trump " + symbol + "." );
               }
               else
               {
                 if( !preferPrevious )
                 {
-                  System.err.println( "External Symbol " + symbol + " will trump " + existing + " in pkg " + name + "." );
+                  System.err.println( ";; in pkg " + name +" External Symbol " + symbol + " will trump " + existing +  "." );
                   shadowingImport( existing );
                   shadowingImport( symbol );
                 }
@@ -957,7 +958,7 @@ public class Package
             }
             else
             {
-              String msg = "A symbol named " + existing + " and wont be replaced by " + symbol + " in pkg " + name + ".";
+              String msg = ";; in pkg " + name + " A symbol named " + existing + " and wont be replaced by " + symbol + ".";
               if( !SubLMain.BOOTY_HACKZ )
               {
                 packageError( msg );
@@ -1439,7 +1440,7 @@ public class Package
   }
 
   @Override
-  public String printObject()
+  public String printObjectImpl()
   {
     boolean printReadable = Lisp.initialized && ( _PRINT_FASL_.symbolValue() != NIL || Lisp.isPrintReadable( null ) ) && name != null;
     if( printReadable )

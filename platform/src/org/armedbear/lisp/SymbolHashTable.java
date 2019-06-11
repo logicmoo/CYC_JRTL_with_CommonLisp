@@ -90,7 +90,7 @@ public final class SymbolHashTable
                 if (key.equal(e.symbol.name)) {
                     if (e.symbol != symbol) {
                         Debug.trace("replacing existing key for " + key.getStringValue() +
-                                    " in package " + e.symbol.getPackage().writeToString());
+                                    " in package " + e.symbol.getPackage().printObject());
                         Thread.dumpStack();
                         e.symbol = symbol;
                     }

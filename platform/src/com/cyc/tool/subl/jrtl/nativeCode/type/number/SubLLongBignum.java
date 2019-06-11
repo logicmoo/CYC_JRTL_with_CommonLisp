@@ -13,11 +13,16 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-final public class SubLLongBignum extends Bignum implements SubLBignum, SubLInteger, SubLNumber, SubLObject {
+public class SubLLongBignum extends Bignum implements SubLBignum, SubLInteger, SubLNumber, SubLObject {
 /* this fits into CL as a Bignum (haskish but it needs a 'long' type)*/
-	protected SubLLongBignum(long l) {
+	public SubLLongBignum(long l) {
 		super(BigInteger.valueOf(l));
 		longValue = l;
+	}
+
+	protected SubLLongBignum(BigInteger l) {
+		super(l);
+		longValue = l.longValue();
 	}
 
 	protected SubLLongBignum(Long theLong) {

@@ -791,7 +791,7 @@ public class SubLConsFacade extends AbstractSubLSequence
 	}
 
 	@Override
-	public String printObject() {
+	public String printObjectImpl() {
 		return list.printObject();
 	}
 

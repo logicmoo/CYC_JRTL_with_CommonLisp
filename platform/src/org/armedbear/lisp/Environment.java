@@ -279,7 +279,7 @@ public class Environment
   }
 
   @Override
-  public String printObject()
+  public String printObjectImpl()
   {
     return unreadableString( "ENVIRONMENT " + objectFieldsString( this ) );
   }

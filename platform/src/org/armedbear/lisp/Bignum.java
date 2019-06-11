@@ -41,10 +41,11 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLBigIntBignum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLLongBignum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class Bignum extends AbstractSubLInteger
+abstract public class Bignum extends AbstractSubLInteger
 {
   public final BigInteger value;
 
@@ -52,6 +53,7 @@ public class Bignum extends AbstractSubLInteger
 	public BigInteger bigIntegerValue() {
 		return value;
 	}
+
 
   private static BigInteger MOST_NEGATIVE_FIXNUM =
           BigInteger.valueOf(Integer.MIN_VALUE);
@@ -63,15 +65,15 @@ public class Bignum extends AbstractSubLInteger
       if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
           return Fixnum.getInstance(l);
       else
-          return new Bignum(l);
+          return new SubLLongBignum(l);
   }
 
   public static LispInteger makeBignum(BigInteger n) {
       if (MOST_NEGATIVE_FIXNUM.compareTo(n) < 0 ||
               MOST_POSITIVE_FIXNUM.compareTo(n) > 0)
-          return new Bignum(n);
-      else
           return Fixnum.getInstance(n.intValue());
+      else
+          return new SubLBigIntBignum(n);
   }
 
   public static LispInteger makeBignum(String s, int radix) {
@@ -83,17 +85,17 @@ public class Bignum extends AbstractSubLInteger
 
   public static LispInteger getInstance(long l) {
       if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
-          return (LispInteger)(Object)Fixnum.getInstance(l);
+          return Fixnum.getInstance(l);
       else
-          return (LispInteger) SubLNumberFactory.makeInteger(l);
+    	  return new SubLLongBignum(l);
   }
 
   public static LispInteger getInstance(BigInteger n) {
       if (MOST_NEGATIVE_FIXNUM.compareTo(n) < 0 ||
               MOST_POSITIVE_FIXNUM.compareTo(n) > 0)
-          return (LispInteger) SubLNumberFactory.makeInteger(n);
+    	  return getInstance(n.longValue());
       else
-          return (LispInteger)(Object) Fixnum.getInstance(n.intValue());
+          return new SubLBigIntBignum(n);
   }
 
   public static LispInteger getInstance(String s, int radix) {
@@ -778,23 +780,24 @@ public LispObject LDB(int size, int position)
     return number(n.and(mask));
   }
 
+	@Override
+	public int hashCode() {
+		long bits = value.longValue();
+		return (int) (bits ^ (bits >>> 32));
+	}
+
+	@Override
+	public int psxhash() {
+		return (hashCode() & 0x7fffffff);
+	}
+
+	@Override
+	public int sxhash() {
+		return hashCode();
+	}
 
   @Override
-public int hashCode()
-  {
-      long bits = value.longValue();
-      return (int) (bits ^ (bits >>> 32));
-  }
-
-  @Override
-public int psxhash()
-  {
-      return (hashCode() & 0x7fffffff);
-  }
-
-
-  @Override
-final public String printObject()
+final public String printObjectImpl()
   {
     final LispThread thread = LispThread.currentThread();
     final int base = Fixnum.getValue(Symbol.PRINT_BASE.symbolValue(thread));

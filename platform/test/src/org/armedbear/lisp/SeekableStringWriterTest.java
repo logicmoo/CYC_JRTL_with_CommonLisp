@@ -2,13 +2,14 @@ package org.armedbear.lisp;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
+import org.junit.*;
 
 public class SeekableStringWriterTest
 {
   @Test
   public void writeAndSeek() {
-    SeekableStringWriter writer = new SeekableStringWriter();
+    @SuppressWarnings("resource")
+	SeekableStringWriter writer = new SeekableStringWriter();
     String buf = "sdf";
     writer.append('a').append(buf).append(buf, 1, 2);
     assertEquals("asdfd", writer.toString());

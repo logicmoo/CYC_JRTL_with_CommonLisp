@@ -149,7 +149,7 @@ public abstract class AbstractSubLIntegerBignum extends AbstractSubLInteger impl
 	}
 
 	@Override
-	public String printObject() {
+	public String printObjectImpl() {
 		return "" + value;
 	}
 }

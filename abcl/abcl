@@ -1,7 +1,27 @@
 #!/bin/sh
+
+# abcl.in
+
+# Copyright (C) 2004 Peter Graves
+# Copyright (C) 2009 Erik Huelsmann
+
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
 exec /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java \
-  -cp  /mnt/gggg/opt/CYC_JRTL_with_CommonLisp/abcl/dist/abcl.jar:"$CLASSPATH" \
-  -d64 -XX:+UseG1GC -XshowSettings:vm -Xmx8g -Xss4g -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g \
+  -cp  /mnt/gggg/opt/CYC_JRTL_with_CommonLisp/abcl/dist/abcl.jar:/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/abcl/c:/pf/Java/jdk1.8.0_162/lib/tools.jar:"$CLASSPATH" \
+  -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC \
   org.armedbear.lisp.Main \
   "$@"
 

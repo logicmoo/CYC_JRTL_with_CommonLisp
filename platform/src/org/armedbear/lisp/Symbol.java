@@ -75,7 +75,7 @@ public class Symbol
 
   public void traceSymbol(boolean b)
   {
-    this.isTraced = b;
+    isTraced = b;
   }
   final public static String SYMBOL_TYPE_NAME = "SYMBOL";
   public static boolean USE_THREAD_LOCALS = true;
@@ -95,46 +95,46 @@ public class Symbol
   @Override
   public void bind(SubLObject newValue, SubLObject[] bindings)
   {
-    final int subLID = this.checkSubLId();
+    final int subLID = checkSubLId();
     bindings[ subLID ] = newValue;
   }
 
   @Override
   public void bind(SubLObject newValue, SubLThread thread)
   {
-    final int subLID = this.checkSubLId();
+    final int subLID = checkSubLId();
     thread.bindingsList[ subLID ] = newValue;
   }
 
   private int checkSubLId()
   {
-    this.checkOwned();
-    if( this.subLID == INVALID_BINDING_INDEX )
+    checkOwned();
+    if( subLID == INVALID_BINDING_INDEX )
     {
-      this.unboundError();
+      unboundError();
     }
-    return this.subLID;
+    return subLID;
   }
 
   private void checkOwned()
   {
-    if( this.disownedby != null )
+    if( disownedby != null )
     {
-      this.unboundError();
+      unboundError();
     }
   }
 
   @Override
   public SubLObject currentBinding(SubLObject[] bindings)
   {
-    final int subLID = this.checkSubLId();
+    final int subLID = checkSubLId();
     return bindings[ subLID ];
   }
 
   @Override
   public SubLObject currentBinding(SubLThread thread)
   {
-    final int subLID = this.checkSubLId();// if(clValueMode) return
+    final int subLID = checkSubLId();// if(clValueMode) return
                                           // symbolValue();
     return thread.bindingsList[ subLID ];
   }
@@ -142,47 +142,47 @@ public class Symbol
   @Override
   public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException
   {
-    return this.getValue();
+    return getValue();
   }
 
   @Override
   public void forceGlobalValue(SubLObject newValue)
   {
-    this.setTLValue( newValue );
-    this.value = newValue;
+    setTLValue( newValue );
+    value = newValue;
   }
 
   public SubLObject getTLValue0()
   {
     if( USE_THREAD_LOCALS )
-      if( this.threadLocalValue != null )
+      if( threadLocalValue != null )
       {
-        final SubLObject maybe = this.threadLocalValue.get();
+        final SubLObject maybe = threadLocalValue.get();
         if( maybe != null )
           return maybe;
       }
-    return this.value;
+    return value;
   }
 
   private SubLObject getTLValue()
   {
     if( !SubLMain.commonSymbolsOK )
     {
-      return this.getTLValue0();
+      return getTLValue0();
     }
-    return this.getValueSL( false );
+    return getValueSL( false );
   }
 
   private void checkChange(SubLObject value)
   {
-    if( !this.isTraced )
+    if( !isTraced )
     {
       return;
     }
-    final SubLObject waz = this.symbolValueNoThrow();
+    final SubLObject waz = symbolValueNoThrow();
     if( waz != value )
     {
-      this.notifyChange( value );
+      notifyChange( value );
       return;
     }
   }
@@ -191,45 +191,45 @@ public class Symbol
   {
     if( !USE_THREAD_LOCALS )
       return this;
-    if( this.accessModeVar == VariableAccessMode.GLOBAL_TOP_LEVEL )
+    if( accessModeVar == VariableAccessMode.GLOBAL_TOP_LEVEL )
     {
       if( tf )
         throw new UnsupportedOperationException( "setProcessScope(true) on " + this );
-      this.threadLocalValue = null;
+      threadLocalValue = null;
     }
     if( threadLocalValue == null )
     {
       if( tf )
-        this.threadLocalValue = new ThreadLocal();
+        threadLocalValue = new ThreadLocal();
     }
     else
     {
       if( !tf )
-        this.threadLocalValue = null;
+        threadLocalValue = null;
     }
     return this;
   }
 
-  public void setTLValue(SubLObject value)
+  public void setTLValue(SubLObject v)
   {
-    this.checkChange( value );
+    checkChange( v );
     if( !USE_THREAD_LOCALS )
     {
-      this.value = value;
+      value = v;
       return;
     }
-    if( this.threadLocalValue != null )
+    if( threadLocalValue != null )
     {
-      this.threadLocalValue.set( value );
-      // this.value = UNBOUND;
-      if( this.value == UNBOUND )
+      threadLocalValue.set( v );
+      // value = UNBOUND;
+      if( value == UNBOUND )
       {
-        this.value = value;
+        value = v;
       }
     }
     else
     {
-      this.value = value;
+      value = v;
     }
   }
 
@@ -245,52 +245,52 @@ public class Symbol
   @Override
   public int getBindingId()
   {
-    final int subLID = this.checkSubLId();
+    final int subLID = checkSubLId();
     return subLID;
   }
 
   @Override
   public SubLObject getValue()
   {
-    return this.symbolValue();
+    return symbolValue();
   }
 
   @Override
   public SubLObject getDynamicValue()
   {
-    return this.getDynamicValue( SubLProcess.currentSubLThread() );
+    return getDynamicValue( SubLProcess.currentSubLThread() );
   }
 
   protected LispObject unboundError()
   {
     // TODO Auto-generated method stub
     if( Lisp.insideToString > 0 )
-      return SubLObjectFactory.makeString( "UNBOUND VALUE: " + this.getQualifiedName() );
+      return SubLObjectFactory.makeString( "UNBOUND VALUE: " + getQualifiedName() );
     if( Main.isSubLisp() )
-      Errors.error( "UNBOUND VALUE: " + this.getQualifiedName() );
+      Errors.error( "UNBOUND VALUE: " + getQualifiedName() );
     return error( new UnboundVariable( this ) );
   }
 
   @Override
   public SubLObject getDynamicValue(SubLObject[] bindings)
   {
-    final int subLID = this.checkSubLId();
+    final int subLID = checkSubLId();
     final SubLObject result = bindings[ subLID ];
     if( result != SubLSymbol.UNBOUND )
       return result;
-    return this.symbolValue();
+    return symbolValue();
   }
 
   @Override
   public SubLObject getDynamicValue(SubLThread thread)
   {
-    return this.getDynamicValue( thread.bindingsList );
+    return getDynamicValue( thread.bindingsList );
   }
 
   @Override
   public SubLObject getGlobalValue()
   {
-    final SubLObject result = this.getTLValue();
+    final SubLObject result = getTLValue();
     if( result != SubLSymbol.UNBOUND )
       return result;
     if( insideToString == 1 )
@@ -298,7 +298,7 @@ public class Symbol
       try
       {
         insideToString = 2;
-        return this.symbolValueNoThrow();
+        return symbolValueNoThrow();
       }
       finally
       {
@@ -313,19 +313,19 @@ public class Symbol
     final SubLObject result = SubLEnvironment.currentEnvironment().lookupBinding( this );
     if( result != SubLSymbol.UNBOUND )
       return result;
-    return this.symbolValue();
+    return symbolValue();
   }
 
   protected SubLObject getValueSL(boolean canThrow)
   {
-    if( this.accessModeVar == VariableAccessMode.DYNAMIC )
+    if( accessModeVar == VariableAccessMode.DYNAMIC )
     {
-      final int subLID = this.checkSubLId();
+      final int subLID = checkSubLId();
       final SubLObject result = SubLProcess.currentSubLThread().bindingsList[ subLID ];
       if( result != SubLSymbol.UNBOUND )
         return result;
     }
-    if( this.accessModeVar == VariableAccessMode.UNDECLARED )
+    if( accessModeVar == VariableAccessMode.UNDECLARED )
     {
       final SubLEnvironment slenv = SubLEnvironment.currentEnvironment();
       if( slenv != null )
@@ -336,30 +336,30 @@ public class Symbol
       }
     }
     // SubLObject result = isConstantSymbol() ? value : value;
-    final SubLObject result = this.getTLValue0();
+    final SubLObject result = getTLValue0();
     if( result != SubLSymbol.UNBOUND )
       return result;
     if( !canThrow )
       return null;
-    this.unboundError();
+    unboundError();
     return null;
   }
 
   @Override
   public boolean isDynamic()
   {
-    return this.accessModeVar == VariableAccessMode.DYNAMIC;
+    return accessModeVar == VariableAccessMode.DYNAMIC;
   }
 
   public boolean isSpecialSymbol()
   {
-    return this.isDynamic() || this.isConstantSymbol() || this.getSymbolMacro() != null;
+    return isDynamic() || isConstantSymbol() || getSymbolMacro() != null;
   }
 
   @Override
   public boolean isFunctionSpec()
   {
-    if( ( this.function != null && this.function.isFunction() ) )
+    if( ( function != null && function.isFunction() ) )
       return true;
     return false;
   }
@@ -367,25 +367,25 @@ public class Symbol
   @Override
   public boolean isUndeclared()
   {
-    return this.accessModeVar == VariableAccessMode.UNDECLARED;
+    return accessModeVar == VariableAccessMode.UNDECLARED;
   }
 
   @Override
   public boolean isMacroOperator()
   {
-    return this.function != null && this.function.isMacroOperator();
+    return function != null && function.isMacroOperator();
   }
 
   @Override
   public boolean fboundp()
   {
-    return this.function != SubLSymbol.UNBOUND;
+    return function != SubLSymbol.UNBOUND;
   }
 
   @Override
   public SubLFunction getFunc()
   {
-    final LispObject function = this.getSymbolFunction();
+    final LispObject function = getSymbolFunction();
     if( function != null )
       return function.getFunc();
     Errors.error( this + " is not fboundp." );
@@ -395,7 +395,7 @@ public class Symbol
   @Override
   public SubLOperator getFunction()
   {
-    final LispObject function = this.getSymbolFunction();
+    final LispObject function = getSymbolFunction();
     if( function != null )
       return (SubLOperator) function;
     Errors.error( this + " is not fboundp." );
@@ -405,11 +405,11 @@ public class Symbol
   @Override
   public void setFunction(SubLOperator func)
   {
-    if( this.function == func )
+    if( function == func )
       return;
-    if( this.function == null )
+    if( function == null )
     {
-      this.function = (LispObject) func;
+      function = (LispObject) func;
       return;
     }
     if( func != null )
@@ -418,9 +418,9 @@ public class Symbol
       {
         final SubLSpecialOperatorImpl other = (SubLSpecialOperatorImpl) func;
         final SubLFunction compiled = other.getEvaluationFunction();
-        if( compiled == this.function )
+        if( compiled == function )
         {
-          this.function = (LispObject) func;
+          function = (LispObject) func;
           return;
         }
       }
@@ -428,39 +428,39 @@ public class Symbol
       {
         final SubLMacro other = (SubLMacro) func;
         final SubLFunction compiled = other.getMacroExpander();
-        if( compiled == this.function )
+        if( compiled == function )
         {
-          this.function = (LispObject) func;
+          function = (LispObject) func;
           return;
         }
       }
-      if( this.isBuiltInFunction() )
+      if( isBuiltInFunction() )
       {
-        Errors.warn( this.getQualifiedName() + " NOT redefining " + this.function + " with " + func );
+        Errors.warn( getQualifiedName() + " NOT redefining " + function + " with " + func );
         return;
       }
-      Errors.warn( this.getQualifiedName() + " redefining " + this.function + " with " + func );
+      Errors.warn( getQualifiedName() + " redefining " + function + " with " + func );
     }
-    this.function = (LispObject) func;
+    function = (LispObject) func;
   }
 
   @Override
   public boolean isGlobal()
   {
-    return this.accessModeVar == VariableAccessMode.LEXICAL || this.accessModeVar == VariableAccessMode.CONSTANT;
+    return accessModeVar == VariableAccessMode.LEXICAL || accessModeVar == VariableAccessMode.CONSTANT;
   }
 
   @Override
   public void rebind(SubLObject oldValue, SubLObject[] bindings)
   {
-    final int subLID = this.checkSubLId();
+    final int subLID = checkSubLId();
     bindings[ subLID ] = oldValue;
   }
 
   @Override
   public void rebind(SubLObject oldValue, SubLThread thread)
   {
-    final int subLID = this.checkSubLId();
+    final int subLID = checkSubLId();
     thread.bindingsList[ subLID ] = oldValue;
   }
 
@@ -474,67 +474,67 @@ public class Symbol
     {
       if( accessMode == VariableAccessMode.DYNAMIC )
       {
-        if( this.subLID == INVALID_BINDING_INDEX )
+        if( subLID == INVALID_BINDING_INDEX )
         {
-          this.subLID = idCounter++;
-          this.checkSubLId();
+          subLID = idCounter++;
+          checkSubLId();
         }
-        this.accessModeVar = accessMode;
-        this.flags |= FLAG_SPECIAL;
+        accessModeVar = accessMode;
+        flags |= FLAG_SPECIAL;
         return;
       }
       else
       {
-        this.subLID = INVALID_BINDING_INDEX;
-        this.flags &= ~FLAG_SPECIAL;
+        subLID = INVALID_BINDING_INDEX;
+        flags &= ~FLAG_SPECIAL;
       }
     }
     if( accessMode == VariableAccessMode.CONSTANT )
     {
-      this.flags |= ( FLAG_SPECIAL | FLAG_CONSTANT );
+      flags |= ( FLAG_SPECIAL | FLAG_CONSTANT );
     }
     else if( accessMode == VariableAccessMode.LEXICAL )
     {
-      this.flags &= ~FLAG_CONSTANT;
+      flags &= ~FLAG_CONSTANT;
     }
-    this.accessModeVar = accessMode;
+    accessModeVar = accessMode;
   }
 
   @Override
   public void setDynamicValue(SubLObject newValue)
   {
-    this.setDynamicValue( newValue, SubLProcess.currentSubLThread() );
+    setDynamicValue( newValue, SubLProcess.currentSubLThread() );
   }
 
   @Override
   public void setDynamicValue(SubLObject newValue, SubLObject[] bindings)
   {
-    this.resetCache();
-    final int subLID = this.checkSubLId();
+    resetCache();
+    final int subLID = checkSubLId();
     if( bindings[ subLID ] != SubLSymbol.UNBOUND )
       bindings[ subLID ] = newValue;
     else
-      this.setTLValue( newValue );
+      setTLValue( newValue );
   }
 
   @Override
   public void setDynamicValue(SubLObject newValue, SubLThread thread)
   {
-    this.setDynamicValue( newValue, thread.bindingsList );
+    setDynamicValue( newValue, thread.bindingsList );
   }
 
   @Override
   public void setGlobalValue(SubLObject newValue)
   {
-    this.resetCache();
-    this.setTLValue( newValue );
+    resetCache();
+    setTLValue( newValue );
   }
 
   @Deprecated
   private void setUndeclaredValue(SubLObject newValue)
   {
-    this.resetCache();
-    this.setTLValue( newValue );
+    resetCache();
+    setTLValue( newValue );
     final SubLEnvironment env = SubLEnvironment.currentEnvironment();
     if( env != null )
     {
@@ -544,35 +544,35 @@ public class Symbol
 
   public void setValueSL(SubLObject value)
   {
-    if( this.accessModeVar == VariableAccessMode.DYNAMIC )
+    if( accessModeVar == VariableAccessMode.DYNAMIC )
     {
-      final int subLID = this.checkSubLId();
+      final int subLID = checkSubLId();
       final SubLObject[] bindings = SubLProcess.currentSubLThread().bindingsList;
       if( bindings[ subLID ] != SubLSymbol.UNBOUND )
         bindings[ subLID ] = value;
       else
       {
-        this.setTLValue( value );
-        if( this.isSpecialVariable() )
+        setTLValue( value );
+        if( isSpecialVariable() )
         {
         }
       }
     }
-    else if( this.accessModeVar == VariableAccessMode.LEXICAL )
-      this.setTLValue( value ); // was setGlobalValue()
-    else if( this.accessModeVar == VariableAccessMode.CONSTANT )
+    else if( accessModeVar == VariableAccessMode.LEXICAL )
+      setTLValue( value ); // was setGlobalValue()
+    else if( accessModeVar == VariableAccessMode.CONSTANT )
     {
-      final SubLObject tlValue = this.getTLValue();
+      final SubLObject tlValue = getTLValue();
       if( tlValue == null )
       {
-        this.setTLValue( value );
+        setTLValue( value );
         return;
       }
       if( !tlValue.equal( value ) )
       {
-        if( this.isConstantSymbol() )
+        if( isConstantSymbol() )
         {
-          program_error( this.princToString() + " is a constant and thus cannot be set." );
+          program_error( princToString() + " is a constant and thus cannot be set." );
         }
         Errors.error( "Can't set the value of constant symbol: " + this );
       }
@@ -580,19 +580,19 @@ public class Symbol
       {
       }
     }
-    else if( this.accessModeVar == VariableAccessMode.UNDECLARED )
+    else if( accessModeVar == VariableAccessMode.UNDECLARED )
     {
       final SubLEnvironment env = SubLEnvironment.currentEnvironment();
       env.setBinding( this, value );
-      if( !this.isSpecialVariable() )
-        this.setTLValue( value );
+      if( !isSpecialVariable() )
+        setTLValue( value );
     }
-    else if( this.accessModeVar == VariableAccessMode.GLOBAL_TOP_LEVEL )
+    else if( accessModeVar == VariableAccessMode.GLOBAL_TOP_LEVEL )
     {
-      this.setTLValue( value );
+      setTLValue( value );
     }
     else
-      Errors.error( "Don't know about access mode: " + this.accessModeVar );
+      Errors.error( "Don't know about access mode: " + accessModeVar );
   }
 
   @Override
@@ -610,31 +610,31 @@ public class Symbol
   @Override
   protected SubLSymbol getBindingType()
   {
-    return this.accessModeVar.toSymbol();
+    return accessModeVar.toSymbol();
   }
 
   @Override
   public CharSequence getPackageNamePrecise()
   {
     // using this instead of getName() since the getName might be the shortened
-    if( this.pkg instanceof SubLPackage )
-      this.pkg.toPackage().getNameAsSubLString().getStringValue();
+    if( pkg instanceof SubLPackage )
+      pkg.toPackage().getNameAsSubLString().getStringValue();
     return "#";
   }
 
   @Override
   public boolean boundp()
   {
-    final SubLObject tlValue = this.getTLValue();
-    if( tlValue != SubLSymbol.UNBOUND || this.isKeyword() )
+    final SubLObject tlValue = getTLValue();
+    if( tlValue != SubLSymbol.UNBOUND || isKeyword() )
       return true;
     return false;
   }
 
   public boolean boundp_at_all()
   {
-    final SubLObject tlValue = this.symbolValueNoThrow();
-    if( tlValue != SubLSymbol.UNBOUND || this.isKeyword() )
+    final SubLObject tlValue = symbolValueNoThrow();
+    if( tlValue != SubLSymbol.UNBOUND || isKeyword() )
       return true;
     return false;
   }
@@ -642,33 +642,33 @@ public class Symbol
   @Override
   public boolean isKeyword()
   {
-    return this.pkg == PACKAGE_KEYWORD.toPackage();
+    return pkg == PACKAGE_KEYWORD.toPackage();
   }
 
   @Override
   public int hashCode(int currentDepth)
   {
-    final SubLPackage thePackage = this.getPackage();
-    if( this.identityHashCode < 0 )
-      this.identityHashCode = ( thePackage == null ? 0 : thePackage.hashCode() ) ^ this.name.hashCode();
-    return this.identityHashCode;
+    final SubLPackage thePackage = getPackage();
+    if( identityHashCode < 0 )
+      identityHashCode = ( thePackage == null ? 0 : thePackage.hashCode() ) ^ name.hashCode();
+    return identityHashCode;
   }
 
   @Override
   public void setPackage(SubLPackage thePackage)
   {
-    this.pkg = thePackage;
+    pkg = thePackage;
   }
 
   public void setDisownedby(Package package2)
   {
-    this.disownedby = package2;
+    disownedby = package2;
   }
 
   @Override
   public SubLString getSubLName()
   {
-    return this.name;
+    return name;
   }
 
   @Override
@@ -701,64 +701,64 @@ public class Symbol
   // Construct an uninterned symbol.
   public Symbol( String s )
   {
-    this.name = new SimpleString( s );
-    this.checkSymbol();
+    name = new SimpleString( s );
+    checkSymbol();
   }
 
   public Symbol( AbstractString string )
   {
-    this.name = string;
-    this.checkSymbol();
+    name = string;
+    checkSymbol();
   }
 
   public Symbol( SubLString string )
   {
-    this.name = string.toLispObject();
-    this.checkSymbol();
+    name = string.toLispObject();
+    checkSymbol();
   }
 
   public Symbol( String s, Package pkg )
   {
-    this.name = new SimpleString( s );
+    name = new SimpleString( s );
     this.pkg = pkg;
-    this.checkSymbol();
+    checkSymbol();
   }
 
   public Symbol( AbstractString string, Package pkg )
   {
-    this.name = string;
+    name = string;
     this.pkg = pkg;
-    this.checkSymbol();
+    checkSymbol();
   }
 
   public Symbol( SubLString string, Package pkg )
   {
-    this.name = string.toLispObject();
+    name = string.toLispObject();
     this.pkg = pkg;
-    this.checkSymbol();
+    checkSymbol();
   }
 
   public Symbol( AbstractString string, int hash, Package pkg )
   {
-    this.name = string;
-    this.simularHashCode = hash;
+    name = string;
+    simularHashCode = hash;
     this.pkg = pkg;
-    this.checkSymbol();
+    checkSymbol();
   }
 
   private void checkSymbol()
   {
-    if( this.pkg == null )
+    if( pkg == null )
       return;
-    if( this.pkg == Lisp.PACKAGE_KEYWORD )
+    if( pkg == Lisp.PACKAGE_KEYWORD )
       return;
-    if( this.pkg != Lisp.PACKAGE_CYC && this.pkg != Lisp.PACKAGE_SUBLISP )
+    if( pkg != Lisp.PACKAGE_CYC && pkg != Lisp.PACKAGE_SUBLISP )
       return;
-    final String name = this.getName();
-    final String qn = this.pkg.getName() + ":" + name;
+    final String name = getName();
+    final String qn = pkg.getName() + ":" + name;
     if( "NIL".equals( name ) | "T".equals( name ) )
     {
-      if( this.pkg != Lisp.PACKAGE_CL )
+      if( pkg != Lisp.PACKAGE_CL )
       {
         System.err.println( "bad symbol " + qn );
         Thread.dumpStack();
@@ -766,7 +766,7 @@ public class Symbol
       }
     }
     if( false )
-      if( this.pkg == Lisp.PACKAGE_CYC )
+      if( pkg == Lisp.PACKAGE_CYC )
       {
         for( final String bad : SubLPackage.reserveSubLisp )
         {
@@ -801,7 +801,7 @@ public class Symbol
   @Override
   public LispObject typeOf()
   {
-    if( this.isKeyword() )
+    if( isKeyword() )
       return Symbol.KEYWORD;
     if( this == T )
       return Symbol.BOOLEAN;
@@ -823,16 +823,16 @@ public class Symbol
     try
     {
       final StringBuilder sb = new StringBuilder( "The symbol " );
-      sb.append( this.name.princToString() );
+      sb.append( name.princToString() );
       sb.append( " at #x" );
       sb.append( Integer.toHexString( System.identityHashCode( this ) ).toUpperCase() );
-      if( this.pkg instanceof Package )
+      if( pkg instanceof Package )
       {
         sb.append( ", an " );
-        final Symbol sym = ( (Package) this.pkg ).findExternalSymbol( this.name );
+        final Symbol sym = ( (Package) pkg ).findExternalSymbol( name );
         sb.append( sym == this ? "external" : "internal" );
         sb.append( " symbol in the " );
-        sb.append( ( (Package) this.pkg ).getName() );
+        sb.append( ( (Package) pkg ).getName() );
         sb.append( " package" );
       }
       return new SimpleString( sb );
@@ -847,15 +847,15 @@ public class Symbol
   public LispObject getParts()
   {
     LispObject parts = NIL;
-    parts = parts.push( new Cons( "name", this.name ) );
-    parts = parts.push( new Cons( "package", this.pkg ) );
-    parts = parts.push( new Cons( "value", this.getTLValue() ) );
-    parts = parts.push( new Cons( "function", this.function ) );
-    parts = parts.push( new Cons( "operator", this.function ) );
-    parts = parts.push( new Cons( "plist", this.propertyList ) );
-    parts = parts.push( new Cons( "flags", Fixnum.getInstance( this.flags ) ) );
-    parts = parts.push( new Cons( "simularHashCode", Fixnum.getInstance( this.simularHashCode ) ) );
-    parts = parts.push( new Cons( "identityHashCode", Fixnum.getInstance( this.identityHashCode ) ) );
+    parts = parts.push( new Cons( "name", name ) );
+    parts = parts.push( new Cons( "package", pkg ) );
+    parts = parts.push( new Cons( "value", getTLValue() ) );
+    parts = parts.push( new Cons( "function", function ) );
+    parts = parts.push( new Cons( "operator", function ) );
+    parts = parts.push( new Cons( "plist", propertyList ) );
+    parts = parts.push( new Cons( "flags", Fixnum.getInstance( flags ) ) );
+    parts = parts.push( new Cons( "simularHashCode", Fixnum.getInstance( simularHashCode ) ) );
+    parts = parts.push( new Cons( "identityHashCode", Fixnum.getInstance( identityHashCode ) ) );
     return parts.nreverse();
   }
 
@@ -867,7 +867,7 @@ public class Symbol
     if( type == BuiltInClass.SYMBOL )
       return T;
     if( type == Symbol.KEYWORD )
-      return this.isKeyword() ? T : NIL;
+      return isKeyword() ? T : NIL;
     if( type == Symbol.BOOLEAN )
       return this == T ? T : NIL;
     return super.typep( type );
@@ -876,27 +876,27 @@ public class Symbol
   @Override
   public boolean constantp()
   {
-    return this.isConstantSymbol();
+    return isConstantSymbol();
   }
 
   @Override
   public final LispObject STRING()
   {
-    return this.name;
+    return name;
   }
 
   @Override
   public SubLPackage getPackage()
   {
-    if( this.pkg instanceof SubLPackage )
-      return this.pkg.toPackage();
+    if( pkg instanceof SubLPackage )
+      return pkg.toPackage();
     return null;
   }
 
   public LispObject getPackageOrNil()
   {
-    if( this.pkg instanceof SubLPackage )
-      return this.pkg.toPackage();
+    if( pkg instanceof SubLPackage )
+      return pkg.toPackage();
     return NIL;
   }
 
@@ -904,89 +904,91 @@ public class Symbol
   {
     if( obj == NIL )
     {
-      this.pkg = null;
+      pkg = null;
     }
     else
     {
-      this.pkg = obj.toPackage();
-      this.checkSymbol();
+      pkg = obj.toPackage();
+      checkSymbol();
     }
   }
 
   @Override
   public final boolean isSpecialOperator()
   {
-    final LispObject function = this.getSymbolFunction();
-    return ( function instanceof SpecialOperator );
+		final LispObject function = getSymbolFunction();
+		if (function == null)
+			return false;
+		return isSpecialOperatorF(function);
   }
 
   @Override
   public final boolean isSpecialVariable()
   {
-    return ( this.flags & FLAG_SPECIAL ) != 0;
+    return ( flags & FLAG_SPECIAL ) != 0;
   }
 
   public void initializeGlobal(LispObject zero)
   {
     // setAccessMode(accessModeVar.GLOBAL_TOP_LEVEL);
-    this.setAccessMode( this.accessModeVar.DYNAMIC );
-    this.setTLValue( zero );
+    setAccessMode( accessModeVar.DYNAMIC );
+    setTLValue( zero );
   }
 
   public final void setSpecial(boolean b)
   {
     if( b )
     {
-      this.flags |= FLAG_SPECIAL;
+      flags |= FLAG_SPECIAL;
     }
     else
-      this.flags &= ~FLAG_SPECIAL;
+      flags &= ~FLAG_SPECIAL;
   }
 
   public final void initializeSpecial(LispObject value)
   {
-    this.flags |= FLAG_SPECIAL;
-    this.setTLValue( value );
+    flags |= FLAG_SPECIAL;
+    setTLValue( value );
   }
 
   @Override
   public boolean isConstantSymbol()
   {
-    return ( this.flags & FLAG_CONSTANT ) != 0 && this.accessModeVar == VariableAccessMode.CONSTANT;
+    return ( flags & FLAG_CONSTANT ) != 0 && accessModeVar == VariableAccessMode.CONSTANT;
   }
 
-  public final void initializeConstant(LispObject value)
+  public final void initializeConstant(LispObject v)
   {
-    this.setAccessMode( VariableAccessMode.CONSTANT );
-    this.value = value;
+    setAccessMode( VariableAccessMode.CONSTANT );
+    value = v;
   }
 
   public final boolean isBuiltInFunction()
   {
-    return ( this.flags & FLAG_BUILT_IN_FUNCTION ) != 0;
+    return ( flags & FLAG_BUILT_IN_FUNCTION ) != 0;
   }
 
   public final void setBuiltInFunction(boolean b)
   {
     if( b )
-      this.flags |= FLAG_BUILT_IN_FUNCTION;
+      flags |= FLAG_BUILT_IN_FUNCTION;
     else
-      this.flags &= ~FLAG_BUILT_IN_FUNCTION;
+      flags &= ~FLAG_BUILT_IN_FUNCTION;
   }
 
   @Override
   public String getName()
   {
-    return this.name.getStringValue();
+    return name.getStringValue();
   }
 
   public final String getQualifiedName()
   {
-    final String n = this.name.getStringValue();
-    final LispObject pkg = this.getPackageOrNil();
+    final String n = name.getStringValue();
+    final LispObject pkg = getPackageOrNil();
     if( pkg == NIL || pkg == null )
       return ( "#:".concat( n ) );
-    if( this.isKeyword() )
+    if( isKeyword() )
       return ":".concat( n );
     final String s = ( (Package) pkg ).getName();
     final StringBuilder sb = new StringBuilder( "" );
@@ -1010,7 +1012,7 @@ public class Symbol
   @Override
   public LispObject getSymbolValue()
   {
-    return (LispObject) this.getTLValue();
+    return (LispObject) getTLValue();
   }
 
   /**
@@ -1022,14 +1024,14 @@ public class Symbol
    */
   public final void setSymbolValue(SubLObject argVal)
   {
-    this.setValueCL( (LispObject) argVal );
+    setValueCL( (LispObject) argVal );
     // setValueSL(argVal);
   }
 
   @Override
   public void setValue(SubLObject argVal)
   {
-    this.setValueCL( (LispObject) argVal );
+    setValueCL( (LispObject) argVal );
     // setValueSL(argVal);
   }
 
@@ -1046,14 +1048,14 @@ public class Symbol
     {
       if( declaredSpecialInEnv )
       {
-        this.notifyChange( argVal );
+        notifyChange( argVal );
       }
       SpecialBinding binding = null;
       // if( thread != null )
       binding = thread.getSpecialBinding( symbol );
       if( binding != null )
       {
-        this.checkChange( argVal );
+        checkChange( argVal );
         binding.value = argVal;
         saved = true;
       }
@@ -1084,17 +1086,17 @@ public class Symbol
           if( !saved )
           {
             {
-              final SubLObject tlValue = this.getTLValue();
-              if( this.isConstantSymbol() )
+              final SubLObject tlValue = getTLValue();
+              if( isConstantSymbol() )
               {
                 if( tlValue != null )
                 {
                   if( !tlValue.equal( argVal ) )
                   {
-                    program_error( this.princToString() + " is a constant and thus cannot be reset." );
+                    program_error( princToString() + " is a constant and thus cannot be reset." );
                   }
                 }
-                this.setTLValue( argVal );
+                setTLValue( argVal );
                 return;
               }
               if( true )
@@ -1113,14 +1115,14 @@ public class Symbol
                       thread.bindSpecial( symbol, argVal );
                       return;
                     }
-                    program_error( this.princToString() + " is a special and thus cannot be reset." );
+                    program_error( princToString() + " is a special and thus cannot be reset." );
                   }
                 }
-                this.setTLValue( argVal );
+                setTLValue( argVal );
                 return;
               }
               thread.bindSpecial( symbol, argVal );
-              if( this.accessModeVar == VariableAccessMode.UNDECLARED )
+              if( accessModeVar == VariableAccessMode.UNDECLARED )
                 return;
               symbol.setValueSL( argVal );
             }
@@ -1168,8 +1170,8 @@ public class Symbol
 
   public void symbolSetQ(LispObject argVal, Environment envI, LispThread threadI)
   {
-    this.resetCache();
-    boolean myFirstBlock = this.isSpecialVariable();
+    resetCache();
+    boolean myFirstBlock = isSpecialVariable();
     if( !myFirstBlock )
     {
       Environment env = envI != null ? envI : Environment.currentLispEnvironment();
@@ -1186,56 +1188,56 @@ public class Symbol
       final SpecialBinding binding = thread.getSpecialBinding( this );
       if( binding != null )
       {
-        this.checkChange( argVal );
-        this.callerValue = argVal;
-        this.lastCaller = thread;
+        checkChange( argVal );
+        callerValue = argVal;
+        lastCaller = thread;
         binding.value = argVal;
       }
       else
       {
-        if( this.accessModeVar == VariableAccessMode.DYNAMIC )
+        if( accessModeVar == VariableAccessMode.DYNAMIC )
         {
           final SubLThread slthread = SubLProcess.currentSubLThread();
-          final int subLID = this.checkSubLId();
+          final int subLID = checkSubLId();
           if( slthread != null )
           {
             final SubLObject[] bindings = slthread.bindingsList;
             if( bindings[ subLID ] != SubLSymbol.UNBOUND )
             {
-              this.checkChange( argVal );
+              checkChange( argVal );
               bindings[ subLID ] = argVal;
-              this.lastCaller = slthread;
-              this.callerValue = argVal;
+              lastCaller = slthread;
+              callerValue = argVal;
             }
             else
             {
-              this.setTLValue( argVal );
-              this.lastCaller = slthread;
-              this.callerValue = argVal;
+              setTLValue( argVal );
+              lastCaller = slthread;
+              callerValue = argVal;
             }
           }
           else
           {
-            this.lastCaller = null;
-            this.setTLValue( argVal );
+            lastCaller = null;
+            setTLValue( argVal );
           }
           return;
         }
-        else if( this.accessModeVar == VariableAccessMode.LEXICAL )
-          this.setTLValue( argVal ); // was setGlobalValue()
-        else if( this.accessModeVar == VariableAccessMode.CONSTANT )
+        else if( accessModeVar == VariableAccessMode.LEXICAL )
+          setTLValue( argVal ); // was setGlobalValue()
+        else if( accessModeVar == VariableAccessMode.CONSTANT )
           Errors.error( "Can't set the value of constant symbol: " + this );
-        else if( this.accessModeVar == VariableAccessMode.UNDECLARED )
+        else if( accessModeVar == VariableAccessMode.UNDECLARED )
         {
           final SubLEnvironment env1 = SubLEnvironment.currentEnvironment();
           env1.setBinding( this, argVal );
-          this.setTLValue( argVal );
+          setTLValue( argVal );
         }
         else
-          Errors.error( "Don't know about access mode: " + this.accessModeVar );
-        if( this.accessModeVar == VariableAccessMode.CONSTANT && this.isConstantSymbol() )
+          Errors.error( "Don't know about access mode: " + accessModeVar );
+        if( accessModeVar == VariableAccessMode.CONSTANT && isConstantSymbol() )
         {
-          program_error( this.princToString() + " is a constant and thus cannot be set." );
+          program_error( princToString() + " is a constant and thus cannot be set." );
         }
       }
     }
@@ -1248,7 +1250,7 @@ public class Symbol
       {
         if( binding.value instanceof SymbolMacro )
         {
-          this.checkChange( argVal );
+          checkChange( argVal );
           final LispObject expansion = ( (SymbolMacro) binding.value ).getExpansion();
           final LispObject form = list( Symbol.SETF, expansion, argVal );
           final LispThread thread = threadI == null ? LispThread.currentThread() : threadI;
@@ -1256,16 +1258,16 @@ public class Symbol
         }
         else
         {
-          this.checkChange( argVal );
+          checkChange( argVal );
           binding.value = argVal;
         }
       }
       else
       {
-        final SymbolMacro sm = this.getSymbolMacro();
+        final SymbolMacro sm = getSymbolMacro();
         if( sm != null )
         {
-          this.checkChange( argVal );
+          checkChange( argVal );
           final LispObject expansion = sm.getExpansion();
           final LispObject form = list( Symbol.SETF, expansion, argVal );
           final LispThread thread = threadI == null ? LispThread.currentThread() : threadI;
@@ -1273,35 +1275,35 @@ public class Symbol
         }
         else
         {
-          if( this.accessModeVar == VariableAccessMode.DYNAMIC )
+          if( accessModeVar == VariableAccessMode.DYNAMIC )
           {
-            final int subLID = this.checkSubLId();
+            final int subLID = checkSubLId();
             final SubLObject[] bindings = SubLProcess.currentSubLThread().bindingsList;
             if( bindings[ subLID ] != SubLSymbol.UNBOUND )
             {
-              this.checkChange( argVal );
+              checkChange( argVal );
               bindings[ subLID ] = argVal;
             }
             else
-              this.setTLValue( argVal );
+              setTLValue( argVal );
           }
-          else if( this.accessModeVar == VariableAccessMode.LEXICAL )
-            this.setTLValue( argVal ); // was setGlobalValue()
-          else if( this.accessModeVar == VariableAccessMode.CONSTANT )
+          else if( accessModeVar == VariableAccessMode.LEXICAL )
+            setTLValue( argVal ); // was setGlobalValue()
+          else if( accessModeVar == VariableAccessMode.CONSTANT )
           {
-            this.checkChange( argVal );
+            checkChange( argVal );
             Errors.error( "Can't set the value of constant symbol: " + this );
           }
-          else if( this.accessModeVar == VariableAccessMode.UNDECLARED )
+          else if( accessModeVar == VariableAccessMode.UNDECLARED )
           {
             final SubLEnvironment env1 = SubLEnvironment.currentEnvironment();
             env1.setBinding( this, argVal );
-            this.setTLValue( argVal );
+            setTLValue( argVal );
           }
           else
           {
-            this.checkChange( argVal );
-            Errors.error( "Don't know about access mode: " + this.accessModeVar );
+            checkChange( argVal );
+            Errors.error( "Don't know about access mode: " + accessModeVar );
           }
         }
       }
@@ -1313,19 +1315,19 @@ public class Symbol
    */
   private void resetCache()
   {
-    this.lastCaller = null;
-    this.callerValue = null;
+    lastCaller = null;
+    callerValue = null;
   }
 
   @Override
   public int hashCode()
   {
-    return this.hashCode( 0 );
+    return hashCode( 0 );
   }
 
   public SymbolMacro getSymbolMacro()
   {
-    if( this.propertyList == null || this.propertyList == NIL )
+    if( propertyList == null || propertyList == NIL )
       return null;
     final LispObject symbolMacro = get( this, SYMBOL_MACRO, null );
     if( symbolMacro instanceof SymbolMacro )
@@ -1341,9 +1343,9 @@ public class Symbol
 
   public void setSymbolMacro(SymbolMacro symbolMacro)
   {
-    if( this.isSpecialVariable() )
+    if( isSpecialVariable() )
     {
-      program_error( "Symbol " + this.princToString() + " names a special variable; can't install symbol macro." );
+      program_error( "Symbol " + princToString() + " names a special variable; can't install symbol macro." );
     }
     Lisp.put( this, SYMBOL_MACRO, symbolMacro );
   }
@@ -1362,7 +1364,7 @@ public class Symbol
    */
   public final LispObject symbolValue()
   {
-    return this.symbolValue( LispThread.currentThread() );
+    return symbolValue( LispThread.currentThread() );
   }
 
   /**
@@ -1379,16 +1381,16 @@ public class Symbol
    */
   public final LispObject symbolValue(LispThread thread)
   {
-    final LispObject result = this.symbolValueNoThrowInternal( thread );
+    final LispObject result = symbolValueNoThrowInternal( thread );
     if( result != null )
       return result;
-    return this.unboundError();
+    return unboundError();
   }
 
   public final LispObject symbolValueNoThrowInternal(LispThread thread)
   {
     SubLObject slresult = null;
-    if( this.accessModeVar == this.accessModeVar.DYNAMIC )
+    if( accessModeVar == accessModeVar.DYNAMIC )
     {
       final SubLThread sublThread = thread.currentSubLThread();
       if( sublThread != null )
@@ -1396,7 +1398,7 @@ public class Symbol
         final SubLObject[] bindingsList = sublThread.getBindingsList();
         if( bindingsList != null )
         {
-          final int subLID = this.checkSubLId();
+          final int subLID = checkSubLId();
           if( subLID >= 0 )
           {
             final SubLObject slresult0 = bindingsList[ subLID ];
@@ -1418,8 +1420,8 @@ public class Symbol
     LispObject result;
     if( symbol.isSpecialVariable() )
     {
-      if( ( this.flags & FLAG_CONSTANT ) != 0 )
-        return (LispObject) this.getTLValue();
+      if( ( flags & FLAG_CONSTANT ) != 0 )
+        return (LispObject) getTLValue();
       else
         result = thread.lookupSpecial( symbol );
     }
@@ -1436,11 +1438,11 @@ public class Symbol
       result = symbol.getSymbolMacro();
       if( result == null )
       {
-        result = (LispObject) this.getTLValue();
+        result = (LispObject) getTLValue();
       }
       if( result == null )
       {
-        return (LispObject) this.getValueSL( false );
+        return (LispObject) getValueSL( false );
       }
     }
     if( result instanceof SymbolMacro )
@@ -1451,7 +1453,7 @@ public class Symbol
     }
     if( result != null )
       return result;
-    return (LispObject) this.getValueSL( false );
+    return (LispObject) getValueSL( false );
   }
 
   /*
@@ -1460,19 +1462,19 @@ public class Symbol
    */
   public final LispObject symbolValueNoThrowInternal(LispThread thread, Environment env)
   {
-    if( this.accessModeVar == VariableAccessMode.CONSTANT )
-      return (LispObject) this.getTLValue();
-    if( this.accessModeVar == VariableAccessMode.GLOBAL_TOP_LEVEL )
-      return (LispObject) this.getTLValue();
+    if( accessModeVar == VariableAccessMode.CONSTANT )
+      return (LispObject) getTLValue();
+    if( accessModeVar == VariableAccessMode.GLOBAL_TOP_LEVEL )
+      return (LispObject) getTLValue();
     Object newCaller = null;
     SubLObject result = null;
-    if( this.isSpecialVariable() )
+    if( isSpecialVariable() )
     {
       if( thread == null )
         thread = LispThread.currentThread();
-      if( this.lastCaller == thread )
+      if( lastCaller == thread )
       {
-        return (LispObject) this.callerValue;
+        return (LispObject) callerValue;
       }
       result = thread.lookupSpecial( this );
       if( result != null )
@@ -1486,9 +1488,9 @@ public class Symbol
       // Environment.newEnvironment();//Environment.currentLispEnvironment();
       if( env != null )
       {
-        if( this.lastCaller == env )
+        if( lastCaller == env )
         {
-          return (LispObject) this.callerValue;
+          return (LispObject) callerValue;
         }
         if( env.isDeclaredSpecial( this ) )
         {
@@ -1512,7 +1514,7 @@ public class Symbol
     }
     if( result == null )
     {
-      result = this.getSymbolMacro();
+      result = getSymbolMacro();
     }
     if( result instanceof SymbolMacro )
     {
@@ -1527,22 +1529,22 @@ public class Symbol
     {
       if( newCaller != null )
       {
-        this.lastCaller = newCaller;
-        this.callerValue = result;
+        lastCaller = newCaller;
+        callerValue = result;
       }
       return (LispObject) result;
     }
-    if( this.accessModeVar == VariableAccessMode.DYNAMIC )
+    if( accessModeVar == VariableAccessMode.DYNAMIC )
     {
       final SubLThread slthread = SubLProcess.currentSubLThread();
       if( slthread != null )
       {
-        final int subLID = this.checkSubLId();
+        final int subLID = checkSubLId();
         result = slthread.bindingsList[ subLID ];
         if( result != null )
         {
-          this.lastCaller = slthread;
-          this.callerValue = result;
+          lastCaller = slthread;
+          callerValue = result;
           return (LispObject) result;
         }
       }
@@ -1550,18 +1552,18 @@ public class Symbol
     else
     {
       final SubLEnvironment slenv = SubLEnvironment.currentEnvironment();
-      if( slenv != null && this.isUndeclared() )
+      if( slenv != null && isUndeclared() )
       {
         result = slenv.lookupBinding( this );
         if( result != null )
         {
-          this.lastCaller = slenv;
-          this.callerValue = result;
+          lastCaller = slenv;
+          callerValue = result;
           return (LispObject) result;
         } // SubLObject result = isConstantSymbol() ? value : value;
       }
     }
-    result = this.getTLValue();
+    result = getTLValue();
     if( result != SubLSymbol.UNBOUND )
       return (LispObject) result;
     return null;
@@ -1580,7 +1582,7 @@ public class Symbol
    */
   public final LispObject symbolValueNoThrow()
   {
-    return this.symbolValueNoThrow( LispThread.currentThread() );
+    return symbolValueNoThrow( LispThread.currentThread() );
   }
 
   /**
@@ -1596,12 +1598,12 @@ public class Symbol
    */
   public final LispObject symbolValueNoThrow(LispThread thread)
   {
-    return this.symbolValueNoThrowInternal( thread );
+    return symbolValueNoThrowInternal( thread );
   }
 
   public LispObject getSymbolFunctionOrNull()
   {
-    return this.function;
+    return function;
   }
 
   @Override
@@ -1614,7 +1616,7 @@ public class Symbol
   @Override
   public final LispObject getSymbolFunctionOrDie()
   {
-    final LispObject function = this.getSymbolFunction();
+    final LispObject function = getSymbolFunction();
     if( function == null )
       return error( new UndefinedFunction( this ) );
     if( function instanceof Autoload )
@@ -1642,27 +1644,27 @@ public class Symbol
 
   public final void setSymbolFunction(LispObject obj)
   {
-    this.function = obj;
+    function = obj;
   }
 
   /** See LispObject.getStringValue() */
   @Override
   public String getStringValue()
   {
-    final LispObject value = this.symbolValueNoThrow();
+    final LispObject value = symbolValueNoThrow();
     if( value == null )
-      return this.name.getStringValue().toLowerCase();
+      return name.getStringValue().toLowerCase();
     if( value == this )
-      return this.getName().toLowerCase();
+      return getName().toLowerCase();
     return value.getStringValue();
   }
 
   @Override
   public final LispObject getPropertyList()
   {
-    if( this.propertyList == null )
-      this.propertyList = NIL;
-    return this.propertyList;
+    if( propertyList == null )
+      propertyList = NIL;
+    return propertyList;
   }
 
   @Override
@@ -1670,16 +1672,16 @@ public class Symbol
   {
     if( obj == null )
       throw new NullPointerException();
-    this.propertyList = obj;
+    propertyList = obj;
   }
 
   @Override
-  final public String printObject()
+  final public String printObjectImpl()
   {
     final LispThread thread = LispThread.currentThread();
     final boolean printEscape = ( PRINT_ESCAPE.symbolValue( thread ) != NIL );
     final boolean printReadably = ( PRINT_READABLY.symbolValue( thread ) != NIL );
-    final String unquoted = this.printObject( printReadably, printEscape );
+    final String unquoted = printObject( printReadably, printEscape );
     // if(printReadably) return "'"+ unquoted;
     return unquoted;
   }
@@ -1687,21 +1689,21 @@ public class Symbol
   @Override
   public java.lang.String princToString()
   {
-    return this.name.getStringValue();
+    return name.getStringValue();
   }
 
   String printObject(boolean printReadably, boolean printEscape)
   {
     if( Lisp.printingObject == this )
     {
-      return this.toDebugString();
+      return toDebugString();
     }
     if( Lisp.insideToString > 1 )
     {
-      return this.getQualifiedName();
+      return getQualifiedName();
     }
-    final String n = this.name.getStringValue();
-    final LispObject pkg = this.getPackageOrNil();
+    final String n = name.getStringValue();
+    final LispObject pkg = getPackageOrNil();
     final LispThread thread = LispThread.currentThread();
     final LispObject printCase = PRINT_CASE.symbolValue( thread );
     final LispObject readtableCase = ( (Readtable) CURRENT_READTABLE.symbolValue( thread ) ).getReadtableCase();
@@ -1710,7 +1712,7 @@ public class Symbol
       if( readtableCase != Keyword.UPCASE || printCase != Keyword.UPCASE )
       {
         final StringBuilder sb = new StringBuilder();
-        if( this.isKeyword() )
+        if( isKeyword() )
         {
           sb.append( ':' );
         }
@@ -1733,7 +1735,7 @@ public class Symbol
     }
     if( !printEscape )
     {
-      if( this.isKeyword() )
+      if( isKeyword() )
       {
         if( printCase == Keyword.DOWNCASE )
           return n.toLowerCase();
@@ -1807,7 +1809,7 @@ public class Symbol
         return symbolName;
       }
     }
-    if( this.isKeyword() )
+    if( isKeyword() )
     {
       return ":".concat( symbolName );
     }
@@ -1822,15 +1824,15 @@ public class Symbol
     if( currentPackage != null && currentPackage.uses( pkg ) )
     {
       // Check for name conflict in current package.
-      if( currentPackage.findExternalSymbol( this.name ) == null )
-        if( currentPackage.findInternalSymbol( this.name ) == null )
-          if( ( (Package) pkg ).findExternalSymbol( this.name ) != null )
+      if( currentPackage.findExternalSymbol( name ) == null )
+        if( currentPackage.findInternalSymbol( name ) == null )
+          if( ( (Package) pkg ).findExternalSymbol( name ) != null )
             return symbolName;
     }
     // Has this symbol been imported into the current package?
-    if( currentPackage.findExternalSymbol( this.name ) == this )
+    if( currentPackage.findExternalSymbol( name ) == this )
       return symbolName;
-    if( currentPackage.findInternalSymbol( this.name ) == this )
+    if( currentPackage.findInternalSymbol( name ) == this )
       return symbolName;
     // Package prefix is necessary.
     String packageName = ( (Package) pkg ).getName();
@@ -1877,7 +1879,7 @@ public class Symbol
       }
     }
     final StringBuilder sb = new StringBuilder( packageName );
-    if( ( (Package) pkg ).findExternalSymbol( this.name ) != null && DOUBLE_COLON_PACKAGE_SEPARATORS.symbolValue( thread ) == NIL )
+    if( ( (Package) pkg ).findExternalSymbol( name ) != null && DOUBLE_COLON_PACKAGE_SEPARATORS.symbolValue( thread ) == NIL )
       sb.append( ':' );
     else
       sb.append( "::" );
@@ -2046,11 +2048,11 @@ public class Symbol
   @Override
   public final int sxhash()
   {
-    int h = this.simularHashCode;
+    int h = simularHashCode;
     if( h < 0 )
     {
-      h = this.name.sxhash();
-      this.simularHashCode = h;
+      h = name.sxhash();
+      simularHashCode = h;
     }
     return h;
   }
@@ -2058,13 +2060,13 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject first, Environment env)
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
-      return this.undefinedFunction( list( first, env ) );
-    if( fun instanceof SpecialOperator )
+      return undefinedFunction( list( first, env ) );
+    if( isSpecialOperatorF(fun))
     {
       // Don't eval args!
-      if( !( (SpecialOperator) fun ).isSpecialRestOnly() )
+      if( !( (Operator) fun ).isSpecialRestOnly() )
       {
         return fun.execute( new Cons( this, first ), env );
       }
@@ -2075,19 +2077,19 @@ public class Symbol
   @Override
   final public LispObject execute()
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
-      return this.undefinedFunction( NIL );
+      return undefinedFunction( NIL );
     return fun.execute();
   }
 
   @Override
   final public LispObject execute(LispObject arg)
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
     {
-      return this.undefinedFunction( list( arg ) );
+      return undefinedFunction( list( arg ) );
     }
     return fun.execute( arg );
   }
@@ -2095,76 +2097,76 @@ public class Symbol
   @Override
   final public LispObject execute(LispObject first, LispObject second)
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
-      return this.undefinedFunction( list( first, second ) );
+      return undefinedFunction( list( first, second ) );
     return fun.execute( first, second );
   }
 
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third)
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
-      return this.undefinedFunction( list( first, second, third ) );
+      return undefinedFunction( list( first, second, third ) );
     return fun.execute( first, second, third );
   }
 
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth)
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
-      return this.undefinedFunction( list( first, second, third, fourth ) );
+      return undefinedFunction( list( first, second, third, fourth ) );
     return fun.execute( first, second, third, fourth );
   }
 
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth)
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
-      return this.undefinedFunction( list( first, second, third, fourth, fifth ) );
+      return undefinedFunction( list( first, second, third, fourth, fifth ) );
     return fun.execute( first, second, third, fourth, fifth );
   }
 
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth)
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
-      return this.undefinedFunction( list( first, second, third, fourth, fifth, sixth ) );
+      return undefinedFunction( list( first, second, third, fourth, fifth, sixth ) );
     return fun.execute( first, second, third, fourth, fifth, sixth );
   }
 
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh)
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
-      return this.undefinedFunction( list( first, second, third, fourth, fifth, sixth, seventh ) );
+      return undefinedFunction( list( first, second, third, fourth, fifth, sixth, seventh ) );
     return fun.execute( first, second, third, fourth, fifth, sixth, seventh );
   }
 
   @Override
   final public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh, LispObject eighth)
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
-      return this.undefinedFunction( list( first, second, third, fourth, fifth, sixth, seventh, eighth ) );
+      return undefinedFunction( list( first, second, third, fourth, fifth, sixth, seventh, eighth ) );
     return fun.execute( first, second, third, fourth, fifth, sixth, seventh, eighth );
   }
 
   @Override
   final public LispObject execute(LispObject[] args)
   {
-    final LispObject fun = this.getSymbolFunction();
+    final LispObject fun = getSymbolFunction();
     if( fun == null )
     {
       LispObject list = NIL;
       for( int i = args.length; i-- > 0; )
         list = new Cons( args[ i ], list );
-      return this.undefinedFunction( list );
+      return undefinedFunction( list );
     }
     return fun.execute( args );
   }
@@ -2177,22 +2179,22 @@ public class Symbol
   @Override
   public void incrementCallCount()
   {
-    if( this.function != null )
-      this.function.incrementCallCount();
+    if( function != null )
+      function.incrementCallCount();
   }
 
   @Override
   public void incrementHotCount()
   {
-    if( this.function != null )
-      this.function.incrementHotCount();
+    if( function != null )
+      function.incrementHotCount();
   }
 
   public Object readResolve() throws java.io.ObjectStreamException
   {
-    if( this.pkg instanceof Package )
+    if( pkg instanceof Package )
     {
-      final Symbol s = ( (Package) this.pkg ).intern( this.name.getStringValue() );
+      final Symbol s = ( (Package) pkg ).intern( name.getStringValue() );
       return s;
     }
     else
@@ -2204,34 +2206,34 @@ public class Symbol
   public int attributeSize()
   {
     int neatsies = 0;
-    if( this.accessModeVar != VariableAccessMode.UNDECLARED )
+    if( accessModeVar != VariableAccessMode.UNDECLARED )
     {
       neatsies++;
     }
-    if( !this.isKeyword() || this.flags != 3 )
+    if( !isKeyword() || flags != 3 )
     {
-      if( ( FLAG_SPECIAL & this.flags ) != 0 )
+      if( ( FLAG_SPECIAL & flags ) != 0 )
       {
         neatsies++;
       }
-      if( ( FLAG_CONSTANT & this.flags ) != 0 )
+      if( ( FLAG_CONSTANT & flags ) != 0 )
       {
         neatsies++;
       }
-      if( ( FLAG_BUILT_IN_FUNCTION & this.flags ) != 0 )
+      if( ( FLAG_BUILT_IN_FUNCTION & flags ) != 0 )
       {
         neatsies++;
       }
     }
-    if( this.function != null )
-    {
-      neatsies++;
-    }
-    if( this.getTLValue() != this && this.getTLValue() != null )
+    if( function != null )
     {
       neatsies++;
     }
-    if( this.propertyList != NIL && this.propertyList != null )
+    if( getTLValue() != this && getTLValue() != null )
+    {
+      neatsies++;
+    }
+    if( propertyList != NIL && propertyList != null )
     {
       neatsies++;
     }
@@ -2242,40 +2244,40 @@ public class Symbol
   {
     String s = "";
     int neatsies = 0;
-    if( !this.isKeyword() || this.flags != 3 )
+    if( !isKeyword() || flags != 3 )
     {
-      if( ( FLAG_SPECIAL & this.flags ) != 0 )
+      if( ( FLAG_SPECIAL & flags ) != 0 )
       {
         neatsies++;
         s += "SPECIAL ";
       }
-      if( ( FLAG_CONSTANT & this.flags ) != 0 )
+      if( ( FLAG_CONSTANT & flags ) != 0 )
       {
         neatsies++;
         s += "CONST ";
       }
-      if( ( FLAG_BUILT_IN_FUNCTION & this.flags ) != 0 )
+      if( ( FLAG_BUILT_IN_FUNCTION & flags ) != 0 )
       {
         neatsies++;
         s += "BUILT-IN-FUNCTION ";
       }
     }
     s = s.toLowerCase();
-    s += this.getQualifiedName();
-    if( this.function != null )
+    s += getQualifiedName();
+    if( function != null )
     {
       neatsies++;
-      s += " -" + Lisp.getSimpleName( this.function.getClass() ) + "-";
+      s += " -" + Lisp.getSimpleName( function.getClass() ) + "-";
     }
-    if( !this.isKeyword() )
+    if( !isKeyword() )
     {
       LispObject value = null;
       // if (boundp())
       {
-        value = this.symbolValueNoThrow();
+        value = symbolValueNoThrow();
         if( value == null )
         {
-          s += " ====> javaNULL ";
+          s += " (unbound) ";
         }
         else if( value != this && value != null )
         {
@@ -2294,13 +2296,13 @@ public class Symbol
           }
         }
       }
-      if( !this.isKeyword() || this.accessModeVar != VariableAccessMode.CONSTANT )
+      if( !isKeyword() || accessModeVar != VariableAccessMode.CONSTANT )
       {
         // SubLSymbol accessModeVar = getBindingType();
-        if( this.accessModeVar != VariableAccessMode.UNDECLARED )
+        if( accessModeVar != VariableAccessMode.UNDECLARED )
         {
           neatsies++;
-          s = ( "" + this.accessModeVar ).toLowerCase() + " " + s;
+          s = ( "" + accessModeVar ).toLowerCase() + " " + s;
         }
       }
     }

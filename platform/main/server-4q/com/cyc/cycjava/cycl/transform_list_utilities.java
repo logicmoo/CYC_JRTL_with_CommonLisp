@@ -397,7 +397,7 @@ public final class transform_list_utilities
         queue = list_utilities.recons( make_ntransform_info( new_value, Symbols.symbol_function( $sym10$RPLACA ), new_value.first() ), ConsesLow.cons( reuse_ntransform_info( current, new_value, Symbols.symbol_function(
             $sym14$RPLACD ), new_value.rest() ), queue ), old_cons );
       }
-      queue = queue;
+     // queue = queue;
       current = queue.first();
     }
     return new_root;
@@ -455,7 +455,7 @@ public final class transform_list_utilities
         queue = list_utilities.recons( make_ntransform_info( new_value, Symbols.symbol_function( $sym10$RPLACA ), new_value.first() ), ConsesLow.cons( reuse_ntransform_info( current, new_value, Symbols.symbol_function(
             $sym14$RPLACD ), new_value.rest() ), queue ), old_cons );
       }
-      queue = queue;
+     // queue = queue;
       current = queue.first();
     }
     return new_root;
@@ -602,7 +602,7 @@ public final class transform_list_utilities
         queue = list_utilities.recons( make_ntransform_info( new_value, Symbols.symbol_function( $sym10$RPLACA ), new_value.first() ), ConsesLow.cons( reuse_ntransform_info( current, new_value, Symbols.symbol_function(
             $sym14$RPLACD ), new_value.rest() ), queue ), old_cons );
       }
-      queue = queue;
+      //queue = queue;
       current = queue.first();
     }
     return new_root;
@@ -665,7 +665,7 @@ public final class transform_list_utilities
         queue = list_utilities.recons( make_ntransform_info( new_value, Symbols.symbol_function( $sym10$RPLACA ), new_value.first() ), ConsesLow.cons( reuse_ntransform_info( current, new_value, Symbols.symbol_function(
             $sym14$RPLACD ), new_value.rest() ), queue ), old_cons );
       }
-      queue = queue;
+     // queue = queue;
       current = queue.first();
     }
     return new_root;

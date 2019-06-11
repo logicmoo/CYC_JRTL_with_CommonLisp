@@ -41,7 +41,7 @@ public class PrintNotReadable extends LispError
         super(StandardClass.PRINT_NOT_READABLE);
         super.initialize(initArgs);
         LispObject lo = initArgs.cdr().car();
-        String s= lo.printReadableObject(true);
+        //String s= lo.printReadableObject(true);
         
         LispObject object = null;
         while (initArgs != NIL) {

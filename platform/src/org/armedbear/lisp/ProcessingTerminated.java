@@ -39,7 +39,7 @@ package org.armedbear.lisp;
  *
  * In the embedding case, it's up to the embedder what to do with it.
  */
-public class ProcessingTerminated extends Error
+public class ProcessingTerminated extends ConditionThrowable
 {
     private int status;
 

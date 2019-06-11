@@ -136,13 +136,13 @@ public final class ZeroRankArray extends AbstractArray
     }
 
     @Override
-	public String printObject()
+	public String printObjectImpl()
     {
         final LispThread thread = LispThread.currentThread();
         boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
         if (printReadably) {
             if (elementType != T) {
-                error(new PrintNotReadable(list(Keyword.OBJECT, this)));
+                checkReadable();
                 // Not reached.
                 return null;
             }

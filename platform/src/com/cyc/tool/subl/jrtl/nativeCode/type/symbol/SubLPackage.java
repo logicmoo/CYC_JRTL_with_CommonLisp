@@ -803,7 +803,8 @@ abstract public class SubLPackage extends LispObject implements SubLObject {
     }
 
     @Override
-    public String printObject() {
+    public String printObjectImpl() {
+    	checkReadable();
         return "#<The " + getName() + " package" + (isLocked() ? "!>" : ">");
     }
 

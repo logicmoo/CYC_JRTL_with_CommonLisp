@@ -53,7 +53,7 @@ final public class WeakReference extends SLispObject {
     }
 
     @Override
-	public String printObject() {
+	public String printObjectImpl() {
         return unreadableString("WEAK-REFERENCE "
                 + this.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(this)));
     }

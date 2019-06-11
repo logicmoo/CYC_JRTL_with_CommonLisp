@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/abcl/src/org/armedbear/lisp/Main.java"/>
+<listEntry value="/platform/src/org/armedbear/lisp/Main.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -15,6 +15,6 @@
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.armedbear.lisp.Main"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--compile-system"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="abcl"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-d64 -XX:+UseG1GC -XshowSettings:vm -Xmx8g -Xss4g -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g"/>
 </launchConfiguration>

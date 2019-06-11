@@ -299,7 +299,7 @@ public final class module0036 extends SubLTranslatedFile
             if (!var9.isAtom()) {
                 var11 = module0035.f2071(f2539(var9, Symbols.symbol_function((SubLObject)$ic10$), var9.first()), (SubLObject)ConsesLow.cons(f2540(var12, var9, Symbols.symbol_function((SubLObject)$ic14$), var9.rest()), var11), var10);
             }
-            var11 = var11;
+           // var11 = var11;
             var12 = var11.first();
         }
         return var5;
@@ -348,7 +348,7 @@ public final class module0036 extends SubLTranslatedFile
             if (!var20.isAtom()) {
                 var22 = module0035.f2071(f2539(var20, Symbols.symbol_function((SubLObject)$ic10$), var20.first()), (SubLObject)ConsesLow.cons(f2540(var23, var20, Symbols.symbol_function((SubLObject)$ic14$), var20.rest()), var22), var21);
             }
-            var22 = var22;
+            //var22 = var22;
             var23 = var22.first();
         }
         return var15;
@@ -463,7 +463,7 @@ public final class module0036 extends SubLTranslatedFile
             if (!var10.isAtom()) {
                 var12 = module0035.f2071(f2539(var10, Symbols.symbol_function((SubLObject)$ic10$), var10.first()), (SubLObject)ConsesLow.cons(f2540(var13, var10, Symbols.symbol_function((SubLObject)$ic14$), var10.rest()), var12), var11);
             }
-            var12 = var12;
+           // var12 = var12;
             var13 = var12.first();
         }
         return var6;
@@ -515,7 +515,7 @@ public final class module0036 extends SubLTranslatedFile
             if (!var20.isAtom()) {
                 var22 = module0035.f2071(f2539(var20, Symbols.symbol_function((SubLObject)$ic10$), var20.first()), (SubLObject)ConsesLow.cons(f2540(var23, var20, Symbols.symbol_function((SubLObject)$ic14$), var20.rest()), var22), var21);
             }
-            var22 = var22;
+            //var22 = var22;
             var23 = var22.first();
         }
         return var15;

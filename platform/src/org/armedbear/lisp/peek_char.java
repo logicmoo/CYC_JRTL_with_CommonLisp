@@ -41,7 +41,7 @@ public final class peek_char extends Primitive
     private static LispObject internalEOF = new SLispObject() {
 
     	@Override
-        public String printObject()
+        public String printObjectImpl()
     	{
         	return unreadableString("internalEOF", false);
     	}

@@ -2,6 +2,9 @@ package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
+import org.armedbear.lisp.Package;
+
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -1212,51 +1215,52 @@ public final class eval_in_api_registrations
 
   private static SubLObject _constant_64_initializer()
   {
-    return ConsesLow.list( new SubLObject[] { makeSymbol( "*" ), makeSymbol( "+" ), makeSymbol( "-" ), makeSymbol( "/" ), makeSymbol( "/=" ), makeSymbol( "<" ), makeSymbol( "<=" ), makeSymbol( "=" ), makeSymbol( ">" ),
-      makeSymbol( ">" ), makeSymbol( ">=" ), makeSymbol( "ABS" ), makeSymbol( "ACONS" ), makeSymbol( "ACOS" ), makeSymbol( "ADJOIN" ), makeSymbol( "ALPHA-CHAR-P" ), makeSymbol( "ALPHANUMERICP" ), makeSymbol( "APPEND" ),
-      makeSymbol( "AREF" ), makeSymbol( "ASH" ), makeSymbol( "ASIN" ), makeSymbol( "ASSOC" ), makeSymbol( "ASSOC-IF" ), makeSymbol( "ATAN" ), makeSymbol( "ATOM" ), makeSymbol( "BOOLE" ), makeSymbol( "BOOLEAN" ),
-      makeSymbol( "BOTH-CASE-P" ), makeSymbol( "BQ-CONS" ), makeSymbol( "BQ-VECTOR" ), makeSymbol( "BUTLAST" ), makeSymbol( "BYTE" ), makeSymbol( "CAAR" ), makeSymbol( "CADR" ), makeSymbol( "CAR" ), makeSymbol(
-          "CCONCATENATE" ), makeSymbol( "CDAR" ), makeSymbol( "CDDR" ), makeSymbol( "CDR" ), makeSymbol( "CEILING" ), makeSymbol( "CERROR" ), makeSymbol( "CHAR" ), makeSymbol( "CHAR-CODE" ), makeSymbol(
-              "CHAR-DOWNCASE" ), makeSymbol( "CHAR-EQUAL" ), makeSymbol( "CHAR-GREATERP" ), makeSymbol( "CHAR-LESSP" ), makeSymbol( "CHAR-NOT-EQUAL" ), makeSymbol( "CHAR-NOT-GREATERP" ), makeSymbol( "CHAR-NOT-LESSP" ),
-      makeSymbol( "CHAR-UPCASE" ), makeSymbol( "CHAR/=" ), makeSymbol( "CHAR<" ), makeSymbol( "CHAR<=" ), makeSymbol( "CHAR=" ), makeSymbol( "CHAR>" ), makeSymbol( "CHAR>=" ), makeSymbol( "CHARACTERP" ), makeSymbol(
-          "CLRHASH" ), makeSymbol( "CMERGE" ), makeSymbol( "CODE-CHAR" ), makeSymbol( "CONS" ), makeSymbol( "CONSP" ), makeSymbol( "CONSTANTP" ), makeSymbol( "CONSTRUCT-FILENAME" ), makeSymbol( "COPY-ALIST" ),
-      makeSymbol( "COPY-LIST" ), makeSymbol( "COPY-SEQ" ), makeSymbol( "COPY-TREE" ), makeSymbol( "COS" ), makeSymbol( "COUNT" ), makeSymbol( "COUNT-IF" ), makeSymbol( "CREDUCE" ), makeSymbol( "CURRENT-PROCESS" ),
-      makeSymbol( "DATE-RELATIVE-GUID-P" ), makeSymbol( "DECODE-FLOAT" ), makeSymbol( "DECODE-UNIVERSAL-TIME" ), makeSymbol( "DELETE" ), makeSymbol( "DELETE-DUPLICATES" ), makeSymbol( "DELETE-IF" ), makeSymbol(
-          "DIGIT-CHAR" ), makeSymbol( "DIGIT-CHAR-P" ), makeSymbol( "DISASSEMBLE-INTEGER-TO-FIXNUMS" ), makeSymbol( "DPB" ), makeSymbol( "EIGHTH" ), makeSymbol( "ELT" ), makeSymbol( "ENCODE-UNIVERSAL-TIME" ), makeSymbol(
-              "ENDP" ), EQ, EQL, EQUAL, EQUALP, makeSymbol( "EVENP" ), makeSymbol( "EXIT" ), makeSymbol( "EXP" ), makeSymbol( "EXPT" ), makeSymbol( "FALSE" ), makeSymbol( "FIFTH" ), makeSymbol( "FILL" ), makeSymbol(
-                  "FIND" ), makeSymbol( "FIND-IF" ), makeSymbol( "FIND-PACKAGE" ), makeSymbol( "FIND-SYMBOL" ), makeSymbol( "FIRST" ), makeSymbol( "FIXNUMP" ), makeSymbol( "FLOAT" ), makeSymbol( "FLOAT-DIGITS" ),
-      makeSymbol( "FLOAT-RADIX" ), makeSymbol( "FLOAT-SIGN" ), makeSymbol( "FLOATP" ), makeSymbol( "FLOOR" ), makeSymbol( "FORCE-OUTPUT" ), makeSymbol( "FORMAT" ), makeSymbol( "FOURTH" ), makeSymbol( "FRESH-LINE" ),
-      makeSymbol( "FUNCTION-SPEC-P" ), makeSymbol( "FUNCTIONP" ), makeSymbol( "GC" ), makeSymbol( "GC-DYNAMIC" ), makeSymbol( "GC-EPHEMERAL" ), makeSymbol( "GC-FULL" ), makeSymbol( "GENSYM" ), makeSymbol( "GENTEMP" ),
-      makeSymbol( "GET" ), makeSymbol( "GET-DECODED-TIME" ), makeSymbol( "GET-INTERNAL-REAL-TIME" ), makeSymbol( "GET-INTERNAL-REAL-TIME" ), makeSymbol( "GET-INTERNAL-RUN-TIME" ), makeSymbol( "GET-UNIVERSAL-TIME" ),
-      makeSymbol( "GET-UNIVERSAL-TIME" ), makeSymbol( "GETF" ), makeSymbol( "GETHASH" ), makeSymbol( "GETHASH-WITHOUT-VALUES" ), makeSymbol( "GUID-P" ), makeSymbol( "GUID-STRING-P" ), makeSymbol( "GUID-TO-STRING" ),
-      makeSymbol( "GUID/=" ), makeSymbol( "GUID<" ), makeSymbol( "GUID<=" ), makeSymbol( "GUID=" ), makeSymbol( "GUID>" ), makeSymbol( "GUID>=" ), makeSymbol( "HASH-TABLE-COUNT" ), makeSymbol( "HASH-TABLE-P" ),
-      makeSymbol( "HASH-TABLE-SIZE" ), makeSymbol( "HASH-TABLE-TEST" ), IDENTITY, makeSymbol( "IGNORE" ), makeSymbol( "INFINITY-P" ), makeSymbol( "INT/" ), makeSymbol( "INTEGER-DECODE-FLOAT" ), makeSymbol(
-          "INTEGER-LENGTH" ), makeSymbol( "INTEGERP" ), makeSymbol( "INTERN" ), makeSymbol( "INTERRUPT-PROCESS" ), makeSymbol( "INTERSECTION" ), makeSymbol( "ISQRT" ), makeSymbol( "KEYWORDP" ), makeSymbol(
-              "KILL-PROCESS" ), makeSymbol( "LAST" ), makeSymbol( "LDB" ), makeSymbol( "LDIFF" ), makeSymbol( "LENGTH" ), makeSymbol( "LISP-IMPLEMENTATION-TYPE" ), makeSymbol( "LISP-IMPLEMENTATION-VERSION" ), makeSymbol(
-                  "LIST" ), makeSymbol( "LIST*" ), makeSymbol( "LIST-ALL-PACKAGES" ), makeSymbol( "LIST-LENGTH" ), makeSymbol( "LISTP" ), makeSymbol( "LISTP" ), makeSymbol( "LOCK-IDLE-P" ), makeSymbol( "LOCK-P" ),
-      makeSymbol( "LOG" ), makeSymbol( "LOGAND" ), makeSymbol( "LOGANDC1" ), makeSymbol( "LOGANDC2" ), makeSymbol( "LOGBITP" ), makeSymbol( "LOGCOUNT" ), makeSymbol( "LOGEQV" ), makeSymbol( "LOGIOR" ), makeSymbol(
-          "LOGNAND" ), makeSymbol( "LOGNOR" ), makeSymbol( "LOGNOT" ), makeSymbol( "LOGORC1" ), makeSymbol( "LOGORC2" ), makeSymbol( "LOGTEST" ), makeSymbol( "LOGXOR" ), makeSymbol( "LOWER-CASE-P" ), makeSymbol(
-              "MAKE-HASH-TABLE" ), makeSymbol( "MAKE-LOCK" ), makeSymbol( "MAKE-LOCK" ), makeSymbol( "MAKE-STRING" ), makeSymbol( "MAKUNBOUND" ), makeSymbol( "MAX" ), makeSymbol( "MEMBER" ), makeSymbol( "MEMBER-IF" ),
-      makeSymbol( "MIN" ), makeSymbol( "MINUSP" ), makeSymbol( "MISMATCH" ), makeSymbol( "MOD" ), makeSymbol( "NBUTLAST" ), makeSymbol( "NCONC" ), makeSymbol( "NEW-GUID" ), makeSymbol( "NINTERSECTION" ), makeSymbol(
-          "NINTH" ), makeSymbol( "NOT-A-NUMBER-P" ), makeSymbol( "NOTE-PERCENT-PROGRESS" ), makeSymbol( "NOTIFY" ), makeSymbol( "NRECONC" ), makeSymbol( "NREVERSE" ), makeSymbol( "NSET-DIFFERENCE" ), makeSymbol(
-              "NSET-EXCLUSIVE-OR" ), makeSymbol( "NSTRING-CAPITALIZE" ), makeSymbol( "NSTRING-DOWNCASE" ), makeSymbol( "NSTRING-UPCASE" ), makeSymbol( "NSUBLIS" ), makeSymbol( "NSUBST" ), makeSymbol( "NSUBST-IF" ),
-      makeSymbol( "NSUBSTITUTE" ), makeSymbol( "NSUBSTITUTE-IF" ), makeSymbol( "NTH" ), makeSymbol( "NTHCDR" ), makeSymbol( "NULL" ), makeSymbol( "NUMBERP" ), makeSymbol( "NUMBERP" ), makeSymbol( "NUNION" ), makeSymbol(
-          "ODDP" ), makeSymbol( "PAIRLIS" ), makeSymbol( "PEEK-CHAR" ), makeSymbol( "PLUSP" ), makeSymbol( "POSITION" ), makeSymbol( "POSITION-IF" ), makeSymbol( "PRIN1" ), makeSymbol( "PRIN1-TO-STRING" ), makeSymbol(
-              "PRINC" ), makeSymbol( "PRINC-TO-STRING" ), makeSymbol( "PRINT" ), makeSymbol( "PROCESS-ACTIVE-P" ), makeSymbol( "PROCESS-BLOCK" ), makeSymbol( "PROCESS-NAME" ), makeSymbol( "PROCESS-STATE" ), makeSymbol(
-                  "PROCESS-UNBLOCK" ), makeSymbol( "PROCESS-WAIT" ), makeSymbol( "PROCESS-WAIT-WITH-TIMEOUT" ), makeSymbol( "PROCESS-WHOSTATE" ), makeSymbol( "PROCESSP" ), makeSymbol( "RANDOM" ), makeSymbol( "RASSOC" ),
-      makeSymbol( "RASSOC-IF" ), makeSymbol( "READ-FROM-STRING" ), makeSymbol( "READ-FROM-STRING-IGNORING-ERRORS" ), makeSymbol( "REM" ), makeSymbol( "REMF" ), makeSymbol( "REMHASH" ), makeSymbol( "REMOVE" ), makeSymbol(
-          "REMOVE-DUPLICATES" ), makeSymbol( "REMOVE-IF" ), makeSymbol( "REPLACE" ), makeSymbol( "REST" ), makeSymbol( "REVAPPEND" ), makeSymbol( "REVERSE" ), makeSymbol( "REVERSE" ), makeSymbol( "ROOM" ), makeSymbol(
-              "ROUND" ), makeSymbol( "RPLACA" ), makeSymbol( "RPLACD" ), makeSymbol( "SCALE-FLOAT" ), makeSymbol( "SEARCH" ), makeSymbol( "SECOND" ), makeSymbol( "SEED-RANDOM" ), makeSymbol( "SEQUENCEP" ), makeSymbol(
-                  "SET-AREF" ), makeSymbol( "SET-CONSING-STATE" ), makeSymbol( "SET-DIFFERENCE" ), makeSymbol( "SET-NTH" ), makeSymbol( "SEVENTH" ), makeSymbol( "SHOW-PROCESSES" ), makeSymbol( "SIN" ), makeSymbol(
-                      "SIXTH" ), makeSymbol( "SLEEP" ), makeSymbol( "SORT" ), makeSymbol( "SQRT" ), makeSymbol( "STABLE-SORT" ), makeSymbol( "STRING" ), makeSymbol( "STRING-CAPITALIZE" ), makeSymbol( "STRING-DOWNCASE" ),
-      makeSymbol( "STRING-EQUAL" ), makeSymbol( "STRING-GREATERP" ), makeSymbol( "STRING-LEFT-TRIM" ), makeSymbol( "STRING-LESSP" ), makeSymbol( "STRING-NOT-EQUAL" ), makeSymbol( "STRING-NOT-GREATERP" ), makeSymbol(
-          "STRING-NOT-LESSP" ), makeSymbol( "STRING-RIGHT-TRIM" ), makeSymbol( "STRING-TO-GUID" ), makeSymbol( "STRING-TRIM" ), makeSymbol( "STRING-UPCASE" ), makeSymbol( "STRING/=" ), makeSymbol( "STRING<" ),
-      makeSymbol( "STRING<=" ), makeSymbol( "STRING=" ), makeSymbol( "STRING>" ), makeSymbol( "STRING>=" ), makeSymbol( "STRINGP" ), makeSymbol( "SUBLIS" ), makeSymbol( "SUBSEQ" ), makeSymbol( "SUBSETP" ), makeSymbol(
-          "SUBST" ), makeSymbol( "SUBST-IF" ), makeSymbol( "SUBSTITUTE" ), makeSymbol( "SUBSTITUTE-IF" ), makeSymbol( "SXHASH" ), makeSymbol( "SYMBOL-FUNCTION" ), makeSymbol( "SYMBOL-NAME" ), makeSymbol( "SYMBOLP" ),
-      makeSymbol( "SYMBOLP" ), makeSymbol( "TAILP" ), makeSymbol( "TAN" ), makeSymbol( "TENTH" ), makeSymbol( "TERPRI" ), makeSymbol( "THIRD" ), makeSymbol( "TREE-EQUAL" ), makeSymbol( "TRUE" ), makeSymbol( "TRUNCATE" ),
-      makeSymbol( "TYPE-OF" ), makeSymbol( "UNINTERN" ), makeSymbol( "UNION" ), makeSymbol( "UPPER-CASE-P" ), makeSymbol( "VALID-PROCESS-P" ), makeSymbol( "VALUES" ), makeSymbol( "VECTOR" ), makeSymbol( "VECTORP" ),
-      makeSymbol( "WARN" ), makeSymbol( "WRITE-IMAGE" ), makeSymbol( "Y-OR-N-P" ), makeSymbol( "YES-OR-NO-P" ), makeSymbol( "ZEROP" ), makeSymbol( "PROPERTY-LIST-MEMBER", "SUBLISP" ), makeSymbol(
-          "CDESTRUCTURING-BIND-ERROR", "SUBLISP" ), makeSymbol( "DESTRUCTURING-BIND-MUST-CONSP", "SUBLISP" ), makeSymbol( "DESTRUCTURING-BIND-MUST-LISTP", "SUBLISP" )
+	  
+    return ConsesLow.list( new SubLObject[] { maybeMake( "*" ), maybeMake( "+" ), maybeMake( "-" ), maybeMake( "/" ), maybeMake( "/=" ), maybeMake( "<" ), maybeMake( "<=" ), maybeMake( "=" ), maybeMake( ">" ),
+      maybeMake( ">" ), maybeMake( ">=" ), maybeMake( "ABS" ), maybeMake( "ACONS" ), maybeMake( "ACOS" ), maybeMake( "ADJOIN" ), maybeMake( "ALPHA-CHAR-P" ), maybeMake( "ALPHANUMERICP" ), maybeMake( "APPEND" ),
+      maybeMake( "AREF" ), maybeMake( "ASH" ), maybeMake( "ASIN" ), maybeMake( "ASSOC" ), maybeMake( "ASSOC-IF" ), maybeMake( "ATAN" ), maybeMake( "ATOM" ), maybeMake( "BOOLE" ), maybeMake( "BOOLEAN" ),
+      maybeMake( "BOTH-CASE-P" ), maybeMake( "BQ-CONS" ), maybeMake( "BQ-VECTOR" ), maybeMake( "BUTLAST" ), maybeMake( "BYTE" ), maybeMake( "CAAR" ), maybeMake( "CADR" ), maybeMake( "CAR" ), maybeMake(
+          "CCONCATENATE" ), maybeMake( "CDAR" ), maybeMake( "CDDR" ), maybeMake( "CDR" ), maybeMake( "CEILING" ), maybeMake( "CERROR" ), maybeMake( "CHAR" ), maybeMake( "CHAR-CODE" ), maybeMake(
+              "CHAR-DOWNCASE" ), maybeMake( "CHAR-EQUAL" ), maybeMake( "CHAR-GREATERP" ), maybeMake( "CHAR-LESSP" ), maybeMake( "CHAR-NOT-EQUAL" ), maybeMake( "CHAR-NOT-GREATERP" ), maybeMake( "CHAR-NOT-LESSP" ),
+      maybeMake( "CHAR-UPCASE" ), maybeMake( "CHAR/=" ), maybeMake( "CHAR<" ), maybeMake( "CHAR<=" ), maybeMake( "CHAR=" ), maybeMake( "CHAR>" ), maybeMake( "CHAR>=" ), maybeMake( "CHARACTERP" ), maybeMake(
+          "CLRHASH" ), maybeMake( "CMERGE" ), maybeMake( "CODE-CHAR" ), maybeMake( "CONS" ), maybeMake( "CONSP" ), maybeMake( "CONSTANTP" ), maybeMake( "CONSTRUCT-FILENAME" ), maybeMake( "COPY-ALIST" ),
+      maybeMake( "COPY-LIST" ), maybeMake( "COPY-SEQ" ), maybeMake( "COPY-TREE" ), maybeMake( "COS" ), maybeMake( "COUNT" ), maybeMake( "COUNT-IF" ), maybeMake( "CREDUCE" ), maybeMake( "CURRENT-PROCESS" ),
+      maybeMake( "DATE-RELATIVE-GUID-P" ), maybeMake( "DECODE-FLOAT" ), maybeMake( "DECODE-UNIVERSAL-TIME" ), maybeMake( "DELETE" ), maybeMake( "DELETE-DUPLICATES" ), maybeMake( "DELETE-IF" ), maybeMake(
+          "DIGIT-CHAR" ), maybeMake( "DIGIT-CHAR-P" ), maybeMake( "DISASSEMBLE-INTEGER-TO-FIXNUMS" ), maybeMake( "DPB" ), maybeMake( "EIGHTH" ), maybeMake( "ELT" ), maybeMake( "ENCODE-UNIVERSAL-TIME" ), maybeMake(
+              "ENDP" ), EQ, EQL, EQUAL, EQUALP, maybeMake( "EVENP" ), maybeMake( "EXIT" ), maybeMake( "EXP" ), maybeMake( "EXPT" ), maybeMake( "FALSE" ), maybeMake( "FIFTH" ), maybeMake( "FILL" ), maybeMake(
+                  "FIND" ), maybeMake( "FIND-IF" ), maybeMake( "FIND-PACKAGE" ), maybeMake( "FIND-SYMBOL" ), maybeMake( "FIRST" ), maybeMake( "FIXNUMP" ), maybeMake( "FLOAT" ), maybeMake( "FLOAT-DIGITS" ),
+      maybeMake( "FLOAT-RADIX" ), maybeMake( "FLOAT-SIGN" ), maybeMake( "FLOATP" ), maybeMake( "FLOOR" ), maybeMake( "FORCE-OUTPUT" ), maybeMake( "FORMAT" ), maybeMake( "FOURTH" ), maybeMake( "FRESH-LINE" ),
+      maybeMake( "FUNCTION-SPEC-P" ), maybeMake( "FUNCTIONP" ), maybeMake( "GC" ), maybeMake( "GC-DYNAMIC" ), maybeMake( "GC-EPHEMERAL" ), maybeMake( "GC-FULL" ), maybeMake( "GENSYM" ), maybeMake( "GENTEMP" ),
+      maybeMake( "GET" ), maybeMake( "GET-DECODED-TIME" ), maybeMake( "GET-INTERNAL-REAL-TIME" ), maybeMake( "GET-INTERNAL-REAL-TIME" ), maybeMake( "GET-INTERNAL-RUN-TIME" ), maybeMake( "GET-UNIVERSAL-TIME" ),
+      maybeMake( "GET-UNIVERSAL-TIME" ), maybeMake( "GETF" ), maybeMake( "GETHASH" ), maybeMake( "GETHASH-WITHOUT-VALUES" ), maybeMake( "GUID-P" ), maybeMake( "GUID-STRING-P" ), maybeMake( "GUID-TO-STRING" ),
+      maybeMake( "GUID/=" ), maybeMake( "GUID<" ), maybeMake( "GUID<=" ), maybeMake( "GUID=" ), maybeMake( "GUID>" ), maybeMake( "GUID>=" ), maybeMake( "HASH-TABLE-COUNT" ), maybeMake( "HASH-TABLE-P" ),
+      maybeMake( "HASH-TABLE-SIZE" ), maybeMake( "HASH-TABLE-TEST" ), IDENTITY, maybeMake( "IGNORE" ), maybeMake( "INFINITY-P" ), maybeMake( "INT/" ), maybeMake( "INTEGER-DECODE-FLOAT" ), maybeMake(
+          "INTEGER-LENGTH" ), maybeMake( "INTEGERP" ), maybeMake( "INTERN" ), maybeMake( "INTERRUPT-PROCESS" ), maybeMake( "INTERSECTION" ), maybeMake( "ISQRT" ), maybeMake( "KEYWORDP" ), maybeMake(
+              "KILL-PROCESS" ), maybeMake( "LAST" ), maybeMake( "LDB" ), maybeMake( "LDIFF" ), maybeMake( "LENGTH" ), maybeMake( "LISP-IMPLEMENTATION-TYPE" ), maybeMake( "LISP-IMPLEMENTATION-VERSION" ), maybeMake(
+                  "LIST" ), maybeMake( "LIST*" ), maybeMake( "LIST-ALL-PACKAGES" ), maybeMake( "LIST-LENGTH" ), maybeMake( "LISTP" ), maybeMake( "LISTP" ), maybeMake( "LOCK-IDLE-P" ), maybeMake( "LOCK-P" ),
+      maybeMake( "LOG" ), maybeMake( "LOGAND" ), maybeMake( "LOGANDC1" ), maybeMake( "LOGANDC2" ), maybeMake( "LOGBITP" ), maybeMake( "LOGCOUNT" ), maybeMake( "LOGEQV" ), maybeMake( "LOGIOR" ), maybeMake(
+          "LOGNAND" ), maybeMake( "LOGNOR" ), maybeMake( "LOGNOT" ), maybeMake( "LOGORC1" ), maybeMake( "LOGORC2" ), maybeMake( "LOGTEST" ), maybeMake( "LOGXOR" ), maybeMake( "LOWER-CASE-P" ), maybeMake(
+              "MAKE-HASH-TABLE" ), maybeMake( "MAKE-LOCK" ), maybeMake( "MAKE-LOCK" ), maybeMake( "MAKE-STRING" ), maybeMake( "MAKUNBOUND" ), maybeMake( "MAX" ), maybeMake( "MEMBER" ), maybeMake( "MEMBER-IF" ),
+      maybeMake( "MIN" ), maybeMake( "MINUSP" ), maybeMake( "MISMATCH" ), maybeMake( "MOD" ), maybeMake( "NBUTLAST" ), maybeMake( "NCONC" ), maybeMake( "NEW-GUID" ), maybeMake( "NINTERSECTION" ), maybeMake(
+          "NINTH" ), maybeMake( "NOT-A-NUMBER-P" ), maybeMake( "NOTE-PERCENT-PROGRESS" ), maybeMake( "NOTIFY" ), maybeMake( "NRECONC" ), maybeMake( "NREVERSE" ), maybeMake( "NSET-DIFFERENCE" ), maybeMake(
+              "NSET-EXCLUSIVE-OR" ), maybeMake( "NSTRING-CAPITALIZE" ), maybeMake( "NSTRING-DOWNCASE" ), maybeMake( "NSTRING-UPCASE" ), maybeMake( "NSUBLIS" ), maybeMake( "NSUBST" ), maybeMake( "NSUBST-IF" ),
+      maybeMake( "NSUBSTITUTE" ), maybeMake( "NSUBSTITUTE-IF" ), maybeMake( "NTH" ), maybeMake( "NTHCDR" ), maybeMake( "NULL" ), maybeMake( "NUMBERP" ), maybeMake( "NUMBERP" ), maybeMake( "NUNION" ), maybeMake(
+          "ODDP" ), maybeMake( "PAIRLIS" ), maybeMake( "PEEK-CHAR" ), maybeMake( "PLUSP" ), maybeMake( "POSITION" ), maybeMake( "POSITION-IF" ), maybeMake( "PRIN1" ), maybeMake( "PRIN1-TO-STRING" ), maybeMake(
+              "PRINC" ), maybeMake( "PRINC-TO-STRING" ), maybeMake( "PRINT" ), maybeMake( "PROCESS-ACTIVE-P" ), maybeMake( "PROCESS-BLOCK" ), maybeMake( "PROCESS-NAME" ), maybeMake( "PROCESS-STATE" ), maybeMake(
+                  "PROCESS-UNBLOCK" ), maybeMake( "PROCESS-WAIT" ), maybeMake( "PROCESS-WAIT-WITH-TIMEOUT" ), maybeMake( "PROCESS-WHOSTATE" ), maybeMake( "PROCESSP" ), maybeMake( "RANDOM" ), maybeMake( "RASSOC" ),
+      maybeMake( "RASSOC-IF" ), maybeMake( "READ-FROM-STRING" ), maybeMake( "READ-FROM-STRING-IGNORING-ERRORS" ), maybeMake( "REM" ), maybeMake( "REMF" ), maybeMake( "REMHASH" ), maybeMake( "REMOVE" ), maybeMake(
+          "REMOVE-DUPLICATES" ), maybeMake( "REMOVE-IF" ), maybeMake( "REPLACE" ), maybeMake( "REST" ), maybeMake( "REVAPPEND" ), maybeMake( "REVERSE" ), maybeMake( "REVERSE" ), maybeMake( "ROOM" ), maybeMake(
+              "ROUND" ), maybeMake( "RPLACA" ), maybeMake( "RPLACD" ), maybeMake( "SCALE-FLOAT" ), maybeMake( "SEARCH" ), maybeMake( "SECOND" ), maybeMake( "SEED-RANDOM" ), maybeMake( "SEQUENCEP" ), maybeMake(
+                  "SET-AREF" ), maybeMake( "SET-CONSING-STATE" ), maybeMake( "SET-DIFFERENCE" ), maybeMake( "SET-NTH" ), maybeMake( "SEVENTH" ), maybeMake( "SHOW-PROCESSES" ), maybeMake( "SIN" ), maybeMake(
+                      "SIXTH" ), maybeMake( "SLEEP" ), maybeMake( "SORT" ), maybeMake( "SQRT" ), maybeMake( "STABLE-SORT" ), maybeMake( "STRING" ), maybeMake( "STRING-CAPITALIZE" ), maybeMake( "STRING-DOWNCASE" ),
+      maybeMake( "STRING-EQUAL" ), maybeMake( "STRING-GREATERP" ), maybeMake( "STRING-LEFT-TRIM" ), maybeMake( "STRING-LESSP" ), maybeMake( "STRING-NOT-EQUAL" ), maybeMake( "STRING-NOT-GREATERP" ), maybeMake(
+          "STRING-NOT-LESSP" ), maybeMake( "STRING-RIGHT-TRIM" ), maybeMake( "STRING-TO-GUID" ), maybeMake( "STRING-TRIM" ), maybeMake( "STRING-UPCASE" ), maybeMake( "STRING/=" ), maybeMake( "STRING<" ),
+      maybeMake( "STRING<=" ), maybeMake( "STRING=" ), maybeMake( "STRING>" ), maybeMake( "STRING>=" ), maybeMake( "STRINGP" ), maybeMake( "SUBLIS" ), maybeMake( "SUBSEQ" ), maybeMake( "SUBSETP" ), maybeMake(
+          "SUBST" ), maybeMake( "SUBST-IF" ), maybeMake( "SUBSTITUTE" ), maybeMake( "SUBSTITUTE-IF" ), maybeMake( "SXHASH" ), maybeMake( "SYMBOL-FUNCTION" ), maybeMake( "SYMBOL-NAME" ), maybeMake( "SYMBOLP" ),
+      maybeMake( "SYMBOLP" ), maybeMake( "TAILP" ), maybeMake( "TAN" ), maybeMake( "TENTH" ), maybeMake( "TERPRI" ), maybeMake( "THIRD" ), maybeMake( "TREE-EQUAL" ), maybeMake( "TRUE" ), maybeMake( "TRUNCATE" ),
+      maybeMake( "TYPE-OF" ), maybeMake( "UNINTERN" ), maybeMake( "UNION" ), maybeMake( "UPPER-CASE-P" ), maybeMake( "VALID-PROCESS-P" ), maybeMake( "VALUES" ), maybeMake( "VECTOR" ), maybeMake( "VECTORP" ),
+      maybeMake( "WARN" ), maybeMake( "WRITE-IMAGE" ), maybeMake( "Y-OR-N-P" ), maybeMake( "YES-OR-NO-P" ), maybeMake( "ZEROP" ), maybeMake( "PROPERTY-LIST-MEMBER", "SUBLISP" ), maybeMake(
+          "CDESTRUCTURING-BIND-ERROR", "SUBLISP" ), maybeMake( "DESTRUCTURING-BIND-MUST-CONSP", "SUBLISP" ), maybeMake( "DESTRUCTURING-BIND-MUST-LISTP", "SUBLISP" )
     } );
   }
 
