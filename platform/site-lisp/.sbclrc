@@ -1,0 +1,7 @@
+
+;;; The following lines added by ql:add-to-init-file:
+#-quicklisp
+(let ((quicklisp-init #P"/mnt/gggg/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/quicklisp/setup.lisp"))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
