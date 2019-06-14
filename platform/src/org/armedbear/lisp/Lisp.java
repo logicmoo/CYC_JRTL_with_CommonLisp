@@ -54,9 +54,11 @@ import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
@@ -2803,6 +2805,19 @@ public static String stringValueOf(LispObject arg) {
 		sSTANDARD_OUTPUT = Symbol.ERROR_OUTPUT;
 		if(sSTANDARD_OUTPUT instanceof Symbol) sSTANDARD_OUTPUT = ((Symbol) sSTANDARD_OUTPUT).getSymbolValue();
 		if(sSTANDARD_OUTPUT instanceof Stream)  ((Stream) sSTANDARD_OUTPUT)._finishOutput();
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @return 
+	 */
+	public static SubLThread pushRebinds() {
+		return (SubLThread)SubLProcess.currentSubLThread();
+		
+	}
+	public static void popRebinds(SubLThread thread) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

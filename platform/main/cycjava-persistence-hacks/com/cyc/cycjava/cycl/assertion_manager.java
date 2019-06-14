@@ -4,6 +4,10 @@ package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static org.armedbear.lisp.Lisp.*;
+
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -128,10 +132,29 @@ public final class assertion_manager
   }
 
   @SubLTranslatedFile.SubL(source = "cycl/assertion-manager.lisp", position = 4431L)
+  public static SubLObject lookup_assertion_contentEx(final SubLObject id)
+  {
+    //final SubLThread thread = SubLProcess.currentSubLThread();
+    SubLThread thread = Lisp.pushRebinds();
+    arete.arete_note_assertion_touched( assertion_handles.find_assertion_by_id( id ) );
+    //final SubLObject _prev_bind_0 = kb_storage_logging.$kb_storage_client$.currentBinding( thread );
+    try
+    {
+      kb_storage_logging.$kb_storage_client$.bind( kb_storage_logging.add_kb_storage_logging_add_tag( $kw5$AM ), thread );
+      return kb_object_manager.lookup_kb_object_content( $assertion_content_manager$.getGlobalValue(), id );
+    }
+    finally
+    {
+    	Lisp.popRebinds(thread);
+      //kb_storage_logging.$kb_storage_client$.rebind( _prev_bind_0, thread );
+    }
+  }
+  
   public static SubLObject lookup_assertion_content(final SubLObject id)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
     arete.arete_note_assertion_touched( assertion_handles.find_assertion_by_id( id ) );
+    
     final SubLObject _prev_bind_0 = kb_storage_logging.$kb_storage_client$.currentBinding( thread );
     try
     {
@@ -143,6 +166,7 @@ public final class assertion_manager
       kb_storage_logging.$kb_storage_client$.rebind( _prev_bind_0, thread );
     }
   }
+
 
   @SubLTranslatedFile.SubL(source = "cycl/assertion-manager.lisp", position = 4641L)
   public static SubLObject get_file_backed_assertion_id_threshold()
@@ -196,8 +220,7 @@ public final class assertion_manager
   public static SubLObject with_assertion_manager_fully_loaded(final SubLObject macroform, final SubLObject environment)
   {
     final SubLObject datum = macroform.rest();
-    final SubLObject body;
-    final SubLObject current = body = datum;
+    final SubLObject body = datum;
     return ConsesLow.listS( $sym7$WITH_KBOM_FULLY_LOADED, $list8, ConsesLow.append( body, NIL ) );
   }
 

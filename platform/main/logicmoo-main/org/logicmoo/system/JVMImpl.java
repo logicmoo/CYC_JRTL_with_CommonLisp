@@ -180,9 +180,15 @@ public /*abstract*/ class JVMImpl {
     //        return (RuntimeException)doThrowObject(throwable, nullOrOneDeclaredThowableOrArrayOfDeclaredThrowables);
     //    }
 
+
     public static RuntimeException doThrow(Object throwable) {    	
         return doThrow((Throwable) throwable);
     }
+
+	@SuppressWarnings("unchecked")
+	static <T extends Exception, R> R sneakyThrow(Throwable t) throws T {
+	    throw (T) t; // ( ͡° ͜ʖ ͡°)
+	}
 
     public static RuntimeException doThrow(Throwable throwable) {
     	if (throwable instanceof ControlTransfer) {
@@ -195,7 +201,9 @@ public /*abstract*/ class JVMImpl {
             final RuntimeException runtimeException = (RuntimeException) throwable;
             return doThrow(runtimeException);
         }
-        return JVMImpl.getThrower().doThrow((Throwable) throwable);
+        sneakyThrow(throwable);
+        final Thrower theThrower = JVMImpl.getThrower();
+		return theThrower.doThrow(throwable);
     }
 
     static Throwable lastThrowable;
@@ -210,6 +218,10 @@ public /*abstract*/ class JVMImpl {
             //throwable.printStackTrace();
         }
         JVMImpl.lastThrowable = throwable;
+        sneakyThrow(throwable);
+        if(true) {
+        	throw throwable; 
+        }
         return throwable;//JVMImpl.getThrower().doThrow((Throwable) throwable);
     }
 
@@ -341,10 +353,20 @@ public /*abstract*/ class JVMImpl {
         return null;
     }
 
+    public static Thrower getThrower() {
+    	return new Thrower() {
+			
+			@Override
+			public RuntimeException doThrow(Throwable throwable) throws Error {
+				sneakyThrow(throwable);
+				return (RuntimeException) throwable;
+			}
+		}; 
+    }
     /**
      * @return
      */
-    public static Thrower getThrower() {
+    public static Thrower getThrowerOld() {
         if (JVMImpl.thrower == null) {
             if (JVMImpl.throwerClass == null) {
                 if (JVMImpl.throwerloader == null) JVMImpl.throwerloader = new ThrowerLoader();

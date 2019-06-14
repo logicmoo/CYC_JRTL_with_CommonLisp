@@ -952,3 +952,6 @@
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (pddl-problem-tests))
+
+(princ "remember to (fiveam:run-all-tests) ~%i\n ")
+

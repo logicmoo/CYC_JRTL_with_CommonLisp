@@ -59,6 +59,7 @@ public final class Interpreter implements Runnable {
 
     private static boolean noinit = false;
     public static boolean nosystem = false;
+	public static String RC_FILE = ".abclrc";
     private static boolean noinform = false;
     public static boolean postProcess = true;
     private static boolean help = false;
@@ -305,30 +306,28 @@ public final class Interpreter implements Runnable {
     public static void processInitializationFile() {
         synchronized (Interpreter.class) {
             try {
-
-                Interpreter.noinit = true;
-                // checks local directory firsts
-                File file = new File(".abclrc");
-        	if(!file.isFile()&& file.canRead()) {
-                    String userHome = System.getProperty("user.home");
-                    file = new File(userHome, ".abclrc");
-                }
-                if (file.isFile()) {
-                    final double startLoad = System.currentTimeMillis();
-                    Load.load(file.getCanonicalPath());
-                    if (!noinform) {
-                    final double loadtime 
-                        = (System.currentTimeMillis() - startLoad) / 1000.0;
-                        getStandardOutput()
-                        ._writeString("Loading " + file + " completed in " 
-                                      + loadtime + " seconds.\n");
-                    }
-                    return;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                Interpreter.noinit = false;
-            }
+				Interpreter.noinit = true;
+				// checks local directory firsts
+				File file = new File(RC_FILE);
+				if (!file.isFile() && file.canRead()) {
+					String userHome = Pathname.guessHomeDir();
+					file = new File(userHome, RC_FILE);
+				}
+				if (file.isFile()) {
+					final double startLoad = System.currentTimeMillis();
+					final String canonicalPath = file.getCanonicalPath();
+					Load.load(canonicalPath);
+					if (!noinform) {
+						final double loadtime = (System.currentTimeMillis() - startLoad) / 1000.0;
+						getStandardOutput()
+								._writeString("Loading " + canonicalPath + " completed in " + loadtime + " seconds.\n");
+					}
+					return;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				Interpreter.noinit = false;
+			}
         }
     }
 

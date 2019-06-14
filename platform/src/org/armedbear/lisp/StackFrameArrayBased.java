@@ -100,7 +100,6 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 	private final static StackMarker STACK_MARKER_6 = new StackMarker(6);
 	private final static StackMarker STACK_MARKER_7 = new StackMarker(7);
 	private final static StackMarker STACK_MARKER_8 = new StackMarker(8);
-	private static final boolean NO_STACK_FRAMES = false;
 
 	private final int STACK_FRAME_EXTRA = 2;
 	// a LispStackFrame with n arguments occupies n + STACK_FRAME_EXTRA elements
@@ -140,7 +139,7 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 	}
 
 	private void ensureStackCapacity(int itemsToPush) {
-		if (NO_STACK_FRAMES)
+		if (skipStackFrame())
 			return;
 		if (this.stackPtr + (itemsToPush - 1) >= this.stack.length)
 			this.grow(itemsToPush);
@@ -150,7 +149,7 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 	private static final int SEGMENT_SIZE = (1 << 19) - 4; // 4 MiB page on x86_64
 
 	private void grow(int numEntries) {
-		if (NO_STACK_FRAMES) {
+		if (skipStackFrame()) {
 			return;
 		}
 		this.topStackSegment.stackPtr = this.stackPtr;
@@ -183,7 +182,7 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 
 	@Override
 	public StackFrame getStackTop() {
-		if (NO_STACK_FRAMES) {
+		if (skipStackFrame()) {
 			return null;
 		}
 		this.topStackSegment.stackPtr = this.stackPtr;
@@ -203,6 +202,11 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 					}
 					return (StackFrame) this.stack[this.stackPtr - 1];
 				}
+
+				if (!(stackObj instanceof StackMarker)) {
+					return null;
+					// continue;
+				}
 				final StackMarker marker = (StackMarker) stackObj;
 				final int numArgs = marker.getNumArgs();
 				final LispStackFrame frame = new LispStackFrame(stk, framePos - numArgs - this.STACK_FRAME_EXTRA,
@@ -220,10 +224,13 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 
 	@Override
 	public void pushStackFrame(JavaStackFrame frame) {
-		if (NO_STACK_FRAMES)
+		if (skipStackFrame())
 			return;
 
-		frame.setNext(this.getStackTop());
+		final StackFrame stackTop = this.getStackTop();
+		if (stackTop != null) {
+			frame.setNext(stackTop);
+		}
 		this.ensureStackCapacity(1);
 		this.stack[this.stackPtr] = frame;
 		this.stackPtr += 1;
@@ -237,7 +244,7 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 
 	@Override
 	public void popStackFrame(int numArgs) {
-		if (NO_STACK_FRAMES) {
+		if (skipStackFrame()) {
 			return;
 		}
 		// Pop off intervening JavaFrames until we get back to a LispFrame
@@ -265,7 +272,7 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 	}
 
 	private void popStackSegment() {
-		if (NO_STACK_FRAMES)
+		if (skipStackFrame())
 			return;
 
 		this.topStackSegment.stackPtr = 0;
@@ -284,7 +291,7 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 
 	@Override
 	public void resetStack() {
-		if (NO_STACK_FRAMES)
+		if (skipStackFrame())
 			return;
 		this.topStackSegment = new StackSegment(INITIAL_SEGMENT_SIZE, null);
 		this.stack = this.topStackSegment.stack;
@@ -431,6 +438,8 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 
 	@Override
 	public void printBacktrace(int limit) {
+		if (skipStackFrame())
+			return;
 		final StackFrame stackTop = this.getStackTop();
 		if (stackTop != null) {
 			int count = 0;
@@ -464,7 +473,7 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 	protected abstract void pprintCall(LispObject lispList, int charPos, Stream out);
 
 	private LispObject backtrace(int limit) {
-		if (NO_STACK_FRAMES)
+		if (skipStackFrame())
 			return NIL;
 		final StackFrame stackTop = this.getStackTop();
 		LispObject result = NIL;
@@ -483,7 +492,7 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 
 	@Override
 	public void incrementCallCounts() {
-		if (NO_STACK_FRAMES)
+		if (skipStackFrame())
 			return;
 		this.topStackSegment.stackPtr = this.stackPtr;
 		int depth = 0;
@@ -546,4 +555,11 @@ public abstract class StackFrameArrayBased extends LispObject implements StackFr
 	 * @return
 	 */
 	abstract boolean trace_calls();
+
+	/**
+	 * Getter. Retrieves the noStackFrames.
+	 * 
+	 * @return the noStackFrames
+	 */
+	abstract public boolean skipStackFrame();
 }

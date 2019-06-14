@@ -98,6 +98,27 @@ public final class kb_storage_logging
   @SubLTranslatedFile.SubL(source = "cycl/kb-storage-logging.lisp", position = 1247L)
   public static SubLObject add_kb_storage_logging_add_tag(final SubLObject tag)
   {
+    final SubLObject dynamicValue = $kb_storage_client$.getValue();//( SubLProcess.currentSubLThread() );
+	if( NIL == dynamicValue )
+    {
+      return tag;
+    }
+    if( tag.eql( dynamicValue ) )
+    {
+      return tag;
+    }
+    if( !dynamicValue.isCons() )
+    {
+      return ConsesLow.list( tag, dynamicValue );
+    }
+    if( NIL != subl_promotions.memberP( tag, dynamicValue, UNPROVIDED, UNPROVIDED ) )
+    {
+      return dynamicValue;
+    }
+    return ConsesLow.cons( tag, dynamicValue );
+  }
+  public static SubLObject add_kb_storage_logging_add_tagOLD(final SubLObject tag)
+  {
     final SubLThread thread = SubLProcess.currentSubLThread();
     if( NIL == $kb_storage_client$.getDynamicValue( thread ) )
     {
@@ -117,7 +138,6 @@ public final class kb_storage_logging
     }
     return ConsesLow.cons( tag, $kb_storage_client$.getDynamicValue( thread ) );
   }
-
   @SubLTranslatedFile.SubL(source = "cycl/kb-storage-logging.lisp", position = 1691L)
   public static SubLObject has_kb_storage_clientP()
   {

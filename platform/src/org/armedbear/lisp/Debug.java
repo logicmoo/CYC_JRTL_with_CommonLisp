@@ -97,6 +97,7 @@ public final class Debug
 		final Interpreter globalInterpreter = Interpreter.globalInterpreter;
 		if (globalInterpreter != null) {
 			final LispThread thread = LispThread.currentThread();
+			thread.NO_STACK_FRAMES = true;
 			globalInterpreter.run2(true);
 		}
 	}

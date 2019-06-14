@@ -1,43 +1,14 @@
-
 (in-package :CL-USER)
 
-(print (DIRECTORY-NAMESTRING *load-truename*))
-;; Dmiles added #'jvm:set-system-property 6/6/2019
-(jvm:set-system-property "user.home" (concatenate 'string (DIRECTORY-NAMESTRING *load-truename*) "site-lisp/"))
-(print (user-homedir-pathname))
-(force-output)
-
-;;; The following lines added by ql:add-to-init-file:
-#-quicklisp
-(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
-  (when (probe-file quicklisp-init)
-    (load quicklisp-init)))
-
-#+quicklisp
-(pushnew (DIRECTORY-NAMESTRING *load-truename*) ql:*local-project-directories*)
-
-#+asdf
-(asdf:initialize-source-registry
-     '(:source-registry (:tree "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/fiveam-asdf/") 
-      :inherit-configuration))
-       
-#+asdf
-(asdf:initialize-source-registry
-     '(:source-registry (:tree "/opt/CYC_JRTL_with_CommonLisp/platform/site-lisp/shop3/") 
-      :inherit-configuration))
-
-#+quicklisp
-(ql:quickload "shop3")
+;; Changes larkc's homedir to ~/site-lisp/
+;; so this only loads once as it changed the homedir
+(when (probe-file "~/site-lisp/larkc-home.lisp")
+   (load "~/site-lisp/larkc-home.lisp"))
 
 
 (defpackage "COMMON-LISP-USER" (:nicknames "USER" "CL-USER"))
 (let ((*PACKAGE* *PACKAGE*))
   (cl:load "site-lisp/e2c/hash-dollar.lisp"))
-
-;; (let ((*print-readably* t)) (prin1-to-string (find-class 'symbol)))
-(defmethod print-object ((obj class) stream)
-  (prin1 "#." stream)
-    (write `(find-class ',(class-name obj)) :stream stream :readably t))
 
 
 ;; (pushnew :larkc *features*)

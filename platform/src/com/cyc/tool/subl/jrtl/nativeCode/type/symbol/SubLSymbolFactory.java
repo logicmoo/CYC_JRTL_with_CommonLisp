@@ -34,7 +34,7 @@ public class SubLSymbolFactory {
 			p.addNickname(usedPackagesList.first().toStr().getStringValue());
 			nickNames = (SubLList) nickNames.rest();
 		}
-		return (SubLPackage) (Object) p;
+		return p;
 
 	}
 

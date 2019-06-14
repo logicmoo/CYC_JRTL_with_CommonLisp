@@ -1,0 +1,7 @@
+#!/bin/sh
+exec /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java \
+  -cp  /mnt/gggg/opt/CYC_JRTL_with_CommonLisp/abcl/build/classes:"$CLASSPATH" \
+  -d64 -XX:+UseG1GC -XshowSettings:vm -Xmx8g -Xss4g -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g \
+  org.armedbear.lisp.Main \
+  "$@"
+

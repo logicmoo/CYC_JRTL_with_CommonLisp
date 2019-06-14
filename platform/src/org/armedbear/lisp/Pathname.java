@@ -477,10 +477,11 @@ public class Pathname extends LispObject {
 
         // Expand user home directories
         if (Utilities.isPlatformUnix) {
-            if (s.equals("~")) {
-                s = System.getProperty("user.home").concat("/");
+            final String guessHomeDir = guessHomeDir();
+			if (s.equals("~")) {
+                s = guessHomeDir;
             } else if (s.startsWith("~/")) {
-                s = System.getProperty("user.home").concat(s.substring(1));
+                s = guessHomeDir.concat(s.substring(2));
             }
         }
         namestring = s;
@@ -2764,8 +2765,8 @@ public class Pathname extends LispObject {
 	 * TODO Describe the purpose of this method.
 	 * @return
 	 */
-	private static String guessHomeDir() {
-		String s = System.getenv("LARKC_HOME");
+	public static String guessHomeDir() {
+		String s = null; //System.getenv("LARKC_HOME");
 		if (s != null) {
 			File f = new File(s);
 			File f2;
@@ -2774,24 +2775,25 @@ public class Pathname extends LispObject {
 				if (f2.isDirectory() && f2.canRead()) {
 					s = f2.getAbsolutePath();
 				}
-				f2 = new File(f, "site-lisp/");
-				if (f2.isDirectory() && f2.canRead()) {
-					f = new File(f2, ".abclrc");
-					if (f.isFile() && f.canRead()) {
-						s = f2.getAbsolutePath();
-					}
-				}
+//				f2 = new File(f, "site-lisp/");
+//				if (f2.isDirectory() && f2.canRead()) {
+//   				s = f2.getAbsolutePath();
+//				}
 			}
 		} else {
 
 		}
 		if (s == null) {
 			s = System.getProperty("user.home", null);
+			if ((s.startsWith("\"") && s.endsWith("\"")) || (s.startsWith("'") && s.endsWith("'")) || (s.startsWith("`") && s.endsWith("'"))) {
+				s = s.substring(1, s.length() - 2);
+				System.setProperty("user.home", s);
+			}
 		}
 		if (s == null)
-			s = System.getenv("USERPROFILE");
-		if (s == null)
 			s = System.getenv("HOME");
+		if (s == null)
+			s = System.getenv("USERPROFILE");
 		if (!s.endsWith(File.separator) && !s.endsWith(uriSeparator)) {
 			s = s.concat(File.separator);
 		}

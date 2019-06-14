@@ -66,7 +66,7 @@ public final class Main {
 
 	static final UncaughtExceptionHandler uncaughtExceptionHandler = new ABCLMainUncaughtExceptionHandler();
 
-	static boolean useMainThread = true;
+	static boolean useMainThread = false;
 	static int exitCode = 0;
 	static List<Throwable> unexpectedThrowable = new ArrayList<Throwable>(0);
 	public static final long startTimeMillis = System.currentTimeMillis();

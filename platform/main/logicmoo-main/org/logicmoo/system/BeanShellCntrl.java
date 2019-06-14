@@ -664,9 +664,20 @@ public class BeanShellCntrl {
 			public void write(int b) throws IOException {
 				string.append((char) b);
 			}
+			
+			/* (non-Javadoc)
+			 * @see java.lang.Object#finalize()
+			 */
+			@Override
+			protected void finalize() throws Throwable {
+				super.finalize();
+			}
 		};
 		string.append("" + t.getClass() + ": " + t);
-		t.printStackTrace(new PrintStream(outputStream));
+		PrintStream ps = new PrintStream(outputStream);
+		t.printStackTrace(ps);
+		ps.flush();
+		ps.close();
 		string.append("" + t.getClass() + ": " + t.getMessage() + " " + t);
 		return string.toString();
 	}
@@ -1955,7 +1966,7 @@ public class BeanShellCntrl {
 			if (throwable instanceof JPLException) {
 				throw (JPLException) throwable;
 			}
-			throw new JPLException(BeanShellCntrl.createStackTraceString(throwable));
+			throw new JPLException(createStackTraceString(throwable));
 		}
 		if (catcher != null && catcher != defaultCatcher) {
 			return catcher.doThrow(throwable);
@@ -1973,7 +1984,11 @@ public class BeanShellCntrl {
 			final RuntimeException runtimeException = (RuntimeException) throwable;
 			return JVMImpl.doThrow(runtimeException);
 		}
-		return JVMImpl.getThrower().doThrow((Throwable) throwable);
+		return JVMImpl.doThrow(throwable);
+	}
+	@SuppressWarnings("unchecked")
+	static <T extends Exception, R> R sneakyThrow(Throwable t) throws T {
+	    throw (T) t; // ( ͡° ͜ʖ ͡°)
 	}
 
 	static LispObject string_string(String text) {

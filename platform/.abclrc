@@ -1,0 +1,16 @@
+
+;; Changes larkc's homedir to ~/site-lisp/
+;; so this only loads once as it changed the homedir
+(when (probe-file "~/site-lisp/larkc-home.lisp")
+   (load "~/site-lisp/larkc-home.lisp"))
+
+;; (ql:quickload "swank")
+;; (ql:quickload "swank.live")
+
+
+; (trace shop:find-plans)
+
+;(time (fiveam:run-all-tests))
+
+
+

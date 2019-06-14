@@ -33,8 +33,10 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
 public abstract class StackFrame 
-  extends LispObject
+  extends SLispObject
 {
     @Override
 	public LispObject typep(LispObject typeSpecifier) 
