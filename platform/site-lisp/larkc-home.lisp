@@ -11,8 +11,8 @@
 
 ;; Dmiles added #'jvm:set-system-property 6/6/2019
 (defvar *site-lisp* (directory-namestring *load-truename*))
-(jvm:set-system-property "user.home" (namestring *site-lisp*))
-(sys::setenv "HOME" (namestring *site-lisp*))
+#+abcl (jvm:set-system-property "user.home" (namestring *site-lisp*))
+#+abcl (sys::setenv "HOME" (namestring *site-lisp*))
 (print `((user-homedir-pathname) => ,(user-homedir-pathname)))
 (setq  *site-lisp* (user-homedir-pathname))
 (force-output)
