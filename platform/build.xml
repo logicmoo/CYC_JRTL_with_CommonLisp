@@ -375,7 +375,8 @@ from ${abcl.home.dir}
      	
      	
         <additional.jvmarg/>
-        <arg value="--noinit"/>
+	<arg value="--noprolog"/>
+	<arg value="--noinit"/>
         <arg value="--nosystem"/>
         <arg value="--eval"/>
         <arg value="(setf *load-verbose* t)"/>
@@ -1184,7 +1185,6 @@ ${basedir}/../cl-bench
             classpathref="abcl.classpath.dist"
             classname="org.armedbear.lisp.Main">
         <!-- Run in 64bit mode-->
-        <jvmarg value="-d64"/>
 
         <!-- Enable JVM assertions -->
         <jvmarg value="-ea"/>

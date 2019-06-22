@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.JarURLConnection;
 import java.net.URI;
@@ -15,6 +16,9 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.armedbear.lisp.JavaClassLoader;
+import org.armedbear.lisp.Lisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
@@ -26,19 +30,106 @@ public class IsolatedClassLoader extends URLClassLoader {
 	}
 
 	public static void addURLToClassPath(URL u) throws IOException {
-		URL[] urls = IsolatedClassLoader.parentClassLoader.getURLs();
-		for (int i = 0; i < urls.length; ++i) {
-			if (urls[i].toString().equalsIgnoreCase(u.toString()))
-				return;
-			Class sysclass = URLClassLoader.class;
-			try {
-				Method method = sysclass.getDeclaredMethod("addURL", URL.class);
-				method.setAccessible(true);
-				method.invoke(IsolatedClassLoader.parentClassLoader, u);
-			} catch (Throwable t) {
-				throw new IOException("Error, could not add URL to system classloader");
+		final ClassLoader pcl = IsolatedClassLoader.parentClassLoader;
+		addURL(pcl, u);
+	}
+
+	public static ClassLoader asURLClassLoader(ClassLoader o, boolean traceSearch) throws IOException {
+
+		if (o instanceof URLClassLoader)
+			return o;
+
+		System.err.println("Classloader is not a URLClassLoader: " + o);
+		ClassLoader classLoader = null;
+		if (o != null) {
+			classLoader = o.getParent();
+			if (traceSearch)
+				System.err.println("Checking Parent Classloader: " + classLoader);
+			if (classLoader instanceof URLClassLoader) {
+				return classLoader;
 			}
 		}
+		classLoader = Thread.currentThread().getContextClassLoader();
+		if (traceSearch)
+			System.err.println("Checking Context Classloader: " + classLoader);
+		if (classLoader instanceof URLClassLoader) {
+			return classLoader;
+		}
+		classLoader = JavaClassLoader.getCurrentClassLoader();
+		if (traceSearch)
+			System.err.println("Checking Current Classloader: " + classLoader);
+		if (classLoader instanceof URLClassLoader) {
+			return classLoader;
+		}
+		classLoader = Lisp.class.getClassLoader();
+		if (traceSearch)
+			System.err.println("Checking Ext Classloader: " + classLoader);
+		if (classLoader instanceof URLClassLoader) {
+			return classLoader;
+		}
+		classLoader = ClassLoader.getSystemClassLoader();
+		if (traceSearch)
+			System.err.println("Checking System Classloader: " + classLoader);
+		if (classLoader instanceof URLClassLoader) {
+			return classLoader;
+		}
+		classLoader = Class.class.getClassLoader();
+		if (traceSearch)
+			System.err.println("Checking Boot Classloader: " + classLoader);
+		if (classLoader instanceof URLClassLoader) {
+			return classLoader;
+		}
+		try {
+			Method method = ClassLoader.class.getDeclaredMethod("getPlatformClassLoader");
+			ClassLoader platformClassLoader = (ClassLoader) method.invoke(null);
+			method.setAccessible(true);
+			if (platformClassLoader instanceof URLClassLoader) {
+				return asURLClassLoader(platformClassLoader, traceSearch);
+			}
+			if (traceSearch)
+				System.err.println("Platform Classloader is not a URLClassLoader: " + platformClassLoader);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException e) {
+			// TODO Auto-generated catch block
+		}
+		return null;
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * 
+	 * @param u
+	 * @throws IOException
+	 */
+	public static ClassLoader addURL(ClassLoader o, URL url) throws IOException {
+
+		if (!(o instanceof URLClassLoader)) {
+			System.err.println("Classloader is not a URLClassLoader: " + o);
+			{
+				ClassLoader extClassLoader = asURLClassLoader(o, true);
+				if (extClassLoader instanceof URLClassLoader) {
+					return addURL(extClassLoader, url);
+				}
+				System.err.println("asURLClassLoader is not a URLClassLoader: " + extClassLoader);
+			}
+		}
+		URL[] urls = Lisp.getURLs(o);
+		for (int i = 0; i < urls.length; ++i) {
+			if (urls[i].toString().equalsIgnoreCase(url.toString()))
+				return o;
+		}
+		try {
+			Class sysclass = o.getClass();
+			Method method = sysclass.getDeclaredMethod("addURL", URL.class);
+			method.setAccessible(true);
+			method.invoke(o, url);
+		} catch (NoSuchMethodException e) {
+			Errors.warn("Error, could not add URL to classloader " + o);
+		} catch (Throwable t) {
+			throw new IOException("Error, could not add URL to system classloader", t);
+		}
+		return o;
+		// TODO Auto-generated method stub
 	}
 
 	public static String slashify(String path, boolean isDirectory) {
@@ -56,9 +147,9 @@ public class IsolatedClassLoader extends URLClassLoader {
 	Map<String, Class> loadedAlready;
 	public static boolean ALLOW_DYNAMIC_LOADING_OF_CODE = true;
 	public static boolean ALLOW_LOADING_OF_DIRS_FROM_INTERPRETER = false;
-	static URLClassLoader parentClassLoader;
+	static ClassLoader parentClassLoader;
 	static {
-		parentClassLoader = (URLClassLoader) IsolatedClassLoader.class.getClassLoader();
+		parentClassLoader = IsolatedClassLoader.class.getClassLoader();
 	}
 
 	private Class loadClassFile(File jfile) throws IOException {
@@ -211,9 +302,10 @@ public class IsolatedClassLoader extends URLClassLoader {
 		Class c = findLoadedClass(className);
 		ClassNotFoundException ex = null;
 		if (c == null) {
+			final ClassLoader pcl = IsolatedClassLoader.parentClassLoader;
 			if (!isDefinedHere(className) && c == null)
 				try {
-					c = IsolatedClassLoader.parentClassLoader.loadClass(className);
+					c = pcl.loadClass(className);
 					resolveClass(c);
 					return c;
 				} catch (ClassNotFoundException e) {
@@ -229,8 +321,8 @@ public class IsolatedClassLoader extends URLClassLoader {
 				}
 			if (c == null)
 				try {
-					if (IsolatedClassLoader.parentClassLoader != null)
-						c = IsolatedClassLoader.parentClassLoader.loadClass(className);
+					if (pcl != null)
+						c = pcl.loadClass(className);
 				} catch (ClassNotFoundException e) {
 					if (ex == null)
 						ex = e;

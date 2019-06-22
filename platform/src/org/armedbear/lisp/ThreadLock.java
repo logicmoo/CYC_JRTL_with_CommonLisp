@@ -21,8 +21,11 @@
 
 package org.armedbear.lisp;
 
-public final class ThreadLock extends LispObject
+import static org.armedbear.lisp.Lisp.*; 
+
+public final class ThreadLock extends SLispObject
 {
+	
     private LispThread thread;
 
     private void lock() throws ConditionThrowable

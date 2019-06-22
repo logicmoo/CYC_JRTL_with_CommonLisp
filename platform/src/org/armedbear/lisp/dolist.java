@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 // ### dolist
 public final class dolist extends SpecialOperator
 {
@@ -57,7 +59,7 @@ public final class dolist extends SpecialOperator
     LispObject specials = parseSpecials(bodyAndDecls.NTH(1));
     bodyForm = bodyAndDecls.car();
 
-    LispObject blockId = new LispObject();
+    LispObject blockId = new BlockLispObject();
     final Environment ext = new Environment(env);
     try
       {

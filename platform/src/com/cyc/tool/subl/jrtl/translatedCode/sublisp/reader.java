@@ -1341,7 +1341,7 @@ public class reader extends SubLTranslatedFile {
 		reader.$standard_readtable$ = SubLFiles.defvar("*STANDARD-READTABLE*", SubLNil.NIL);
 		reader.$throw_reader_error_p$ = SubLFiles.defvar("*THROW-READER-ERROR-P*", SubLNil.NIL);
 		reader.$throw_end_of_file_p$ = SubLFiles.defvar("*THROW-END-OF-FILE-P*", SubLNil.NIL);
-		reader.$read_lookup_table$ = SubLFiles.defvar("*READ-LOOKUP-TABLE*", SubLNil.NIL);
+		reader.$read_lookup_table$ = SubLFiles.defvarCheckCL("*READ-LOOKUP-TABLE*", SubLNil.NIL);
 		reader.$initial_token_size$ = SubLFiles.defconstant("*INITIAL-TOKEN-SIZE*", reader.$int4$32);
 		reader.$dtp_read_token$ = SubLFiles.defconstant("*DTP-READ-TOKEN*", reader.$sym119$READ_TOKEN);
 		reader.$consing_dot$ = SubLFiles.defparameter("*CONSING-DOT*", reader.$sym149$CONSING_DOT);

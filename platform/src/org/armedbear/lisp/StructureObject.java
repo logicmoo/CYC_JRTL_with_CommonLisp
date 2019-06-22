@@ -33,18 +33,25 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.util.List;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructInterpreted;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class StructureObject extends SubLStructInterpreted implements SubLStruct
 {
-	
+	@Override
+	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
+		return this; // self-evaluating
+	}
 
 	@Override
 	public boolean equalp(SubLObject obj)
@@ -369,7 +376,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	{
 		try
 		{
-			if (insideToString > 0) { return easyToString(); }
+			if (insideToString > 2) { return easyToString(); }
 			final LispThread thread = LispThread.currentThread();
 			// FIXME
 			if (typep(Symbol.RESTART) != NIL)
@@ -411,16 +418,22 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	{
 		try
 		{
-			if (_PRINT_STRUCTURE_.symbolValue(thread) == NIL) return unreadableString(thisTypeOf().printObject());
+			if (_PRINT_STRUCTURE_.symbolValue(thread) == NIL && !isPrintReadable(thread)) return unreadableString(thisTypeOf().printObject());
 
 			int maxLevel = Integer.MAX_VALUE;
 			LispObject printLevel = Symbol.PRINT_LEVEL.symbolValue(thread);
 			if (printLevel instanceof Fixnum) maxLevel = ((Fixnum) printLevel).value;
 			LispObject currentPrintLevel = _CURRENT_PRINT_LEVEL_.symbolValue(thread);
 			int currentLevel = Fixnum.getValue(currentPrintLevel);
-			if (currentLevel >= maxLevel && slots.length > 0) return "#";
+			if (currentLevel >= maxLevel && slots.length > 0) {
+				checkUnreadableOk();
+				return "#";
+			}
 
-			if (currentLevel >= 9 && slots.length > 0) return "#";
+			if (currentLevel >= 9 && slots.length > 0) {
+				checkUnreadableOk();
+				return "#";
+			}
 
 			StringBuilder sb = new StringBuilder("#S(");
 			sb.append(thisTypeOf().printObject());
@@ -436,6 +449,11 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 				else
 					limit = slots.length;
 				if (insideToString > 0 && insideToString < 5) limit = slots.length;
+
+				if (slots.length != limit) {
+					checkUnreadableOk();
+				}
+				
 				final boolean printCircle = (Symbol.PRINT_CIRCLE.symbolValue(thread) != NIL);
 				for (int i = 0; i < limit; i++)
 				{
@@ -456,7 +474,11 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 					else
 						sb.append(slots[i].printObject());
 				}
-				if (limit < slots.length) sb.append(" ...");
+				if (limit < slots.length) {
+					checkUnreadableOk();
+
+					sb.append(" ...");
+				}
 			}
 			sb.append(')');
 			return sb.toString();

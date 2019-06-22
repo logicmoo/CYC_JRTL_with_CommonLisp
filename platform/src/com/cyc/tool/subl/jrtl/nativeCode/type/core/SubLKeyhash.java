@@ -362,7 +362,7 @@ public class SubLKeyhash extends FromSubLisp implements SubLObject {
 
 	@Override
 	public String printObjectImpl() {
-		checkReadable();
+		checkUnreadableOk();
 		return "#<" + test.getFunction().getFunctionSymbol() + " " + toTypeName() + " with " + this.size()
 				+ " entries @ " + super.easyToString() + ">";
 	}

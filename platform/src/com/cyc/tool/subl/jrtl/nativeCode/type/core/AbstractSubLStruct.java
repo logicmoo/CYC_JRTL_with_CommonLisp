@@ -5,11 +5,17 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.util.List;
 
+import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.Layout;
 import org.armedbear.lisp.LispClass;
 import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.LispThread;
+import org.armedbear.lisp.SLispObject;
 import org.armedbear.lisp.SimpleVector;
+import org.armedbear.lisp.SlotClass;
+import org.armedbear.lisp.StorageCondition;
+import org.armedbear.lisp.StringOutputStream;
 import org.armedbear.lisp.StructureClass;
 import org.armedbear.lisp.Symbol;
 import org.jpl7.Term;
@@ -27,6 +33,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractSubLStruct extends LispObject implements SubLStruct, IPrologifiable
 {
+
 	@Override
 	abstract public void setSlotValue(int index, LispObject value);
 
@@ -339,10 +346,18 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 		return getStructFieldNumForSymbol((SubLSymbol) slotName) - 2;
 	}
 
-	public abstract class LispSharedSlot extends LispObject
+	public abstract class LispSharedSlot extends SLispObject
 	{
 		@Override
 		abstract public void setCdr(LispObject rest);
+		
+		/* (non-Javadoc)
+		 * @see org.armedbear.lisp.SLispObject#printObjectImpl()
+		 */
+		@Override
+		public String printObjectImpl() {
+			return printUglyObjectImpl();
+		}
 	}
 
 	//@Override
@@ -352,6 +367,14 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 		if (iPlus2 < 0) return null;
 		return new LispSharedSlot()
 		{
+			/* (non-Javadoc)
+			 * @see org.armedbear.lisp.SLispObject#printObjectImpl()
+			 */
+			@Override
+			public String printObjectImpl() {
+				return printUglyObjectImpl();
+			}
+
 			@Override
 			public void setCdr(LispObject obj)
 			{
@@ -366,8 +389,121 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 		};
 	}
 
+	public String printObjectInner(LispThread thread)
+	{
+		try
+		{
+			final LispObject thisTypeOf = typeOf();
+
+			if (_PRINT_STRUCTURE_.symbolValue(thread) == NIL && !isPrintReadable(thread)) return unreadableString(thisTypeOf.printObject());
+
+			int maxLevel = Integer.MAX_VALUE;
+			LispObject printLevel = Symbol.PRINT_LEVEL.symbolValue(thread);
+			if (printLevel instanceof Fixnum) maxLevel = ((Fixnum) printLevel).value;
+			LispObject currentPrintLevel = _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+			int currentLevel = Fixnum.getValue(currentPrintLevel);
+			final int slotsLength = getFieldCount() - 2;
+			//LispObject[] slots = this.getSlotValue(slotsLength)
+			if (currentLevel >= maxLevel && slotsLength > 0) {
+				checkUnreadableOk();
+				return "#";
+			}
+
+			if (currentLevel >= 9 && slotsLength > 0) {
+				checkUnreadableOk();
+				return "#";
+			}
+
+			StringBuilder sb = new StringBuilder("#S(");
+			
+			sb.append(thisTypeOf.printObject());
+			if (currentLevel < maxLevel)
+			{
+				final LispObject printLength = Symbol.PRINT_LENGTH.symbolValue(thread);
+				int limit;
+				if (printLength instanceof Fixnum)
+					limit = Math.min(slotsLength, ((Fixnum) printLength).value);
+				else
+					limit = slotsLength;
+				if (insideToString > 0 && insideToString < 5) limit = slotsLength;
+
+				if (slotsLength != limit) {
+					checkUnreadableOk();
+				}
+				
+				final boolean printCircle = (Symbol.PRINT_CIRCLE.symbolValue(thread) != NIL);
+				
+				SlotClass structDecl = (SlotClass) getLispClass();
+
+				LispObject effectiveSlots = structDecl.getSlotDefinitions();
+				LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
+				Debug.assertTrue(effectiveSlotsArray.length == slotsLength);
+
+				for (int i = 0; i < limit; i++)
+				{
+					sb.append(' ');
+					SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
+					// FIXME AREF(1)
+					LispObject slotName = slotDefinition.AREF(1);
+					Debug.assertTrue(slotName instanceof Symbol);
+					sb.append(':');
+					sb.append(((Symbol) slotName).name.getStringValue());
+					sb.append(' ');
+					final LispObject lispObject = this.getSlotValue(i);
+					if (printCircle)
+					{
+						StringOutputStream stream = new StringOutputStream();
+						thread.execute(Symbol.OUTPUT_OBJECT.getSymbolFunction(), (LispObject) lispObject, stream);
+						sb.append(stream.getBufferString().getStringValue());
+					}
+					else
+						sb.append(lispObject.printObject());
+				}
+				if (limit < slotsLength) {
+					checkUnreadableOk();
+
+					sb.append(" ...");
+				}
+			}
+			sb.append(')');
+			return sb.toString();
+		} catch (StackOverflowError e)
+		{
+			if (true) return easyToString();
+			error(new StorageCondition("Stack overflow."));
+			return null; // Not reached.
+		}
+	}
+
+	
 	@Override
-	abstract public String printObjectImpl();
+	public String printObjectImpl()
+	{
+		try
+		{
+			if (insideToString > 2) { return easyToString(); }
+			final LispThread thread = LispThread.currentThread();
+			// FIXME
+			if (typep(Symbol.RESTART) != NIL)
+			{
+				Symbol PRINT_RESTART = PACKAGE_SYS.intern("PRINT-RESTART");
+				LispObject fun = PRINT_RESTART.getSymbolFunction();
+				StringOutputStream stream = new StringOutputStream();
+				thread.execute(fun, this, stream);
+				return stream.getBufferString().getStringValue();
+			}
+
+			String o = printObjectInner(thread);
+			if (o == null) { return easyToString(); }
+			return o;
+
+		} catch (Throwable e)
+		{
+			e.printStackTrace();
+			return easyToString();
+		}
+
+	}
 
 	@Override
 	public SubLStruct toStruct()

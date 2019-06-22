@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public abstract class AbstractBitVector extends AbstractVector {
 	protected static final int LONG_MASK = 0x3f;
 
@@ -202,7 +204,7 @@ public abstract class AbstractBitVector extends AbstractVector {
 	@Override
 	public String printObjectImpl() {
 		final LispThread thread = LispThread.currentThread();
-		if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL || Symbol.PRINT_ARRAY.symbolValue(thread) != NIL) {
+		if (isPrintReadable(thread) || Symbol.PRINT_ARRAY.symbolValue(thread) != NIL) {
 			return bitString();
 		} else {
 			final String str = "(%sBIT-VECTOR %d)";

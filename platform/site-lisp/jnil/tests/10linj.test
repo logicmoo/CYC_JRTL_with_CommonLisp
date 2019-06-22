@@ -1,0 +1,119 @@
+;;; -*- mode: lisp; package: jnil -*-
+;;; Copyright (c) 2004-2005 Tiago Maduro-Dias. All Rights Reserved.
+;;;
+;;; This code is free software; you can redistribute it and/or
+;;; modify it under the terms of the version 2.1 of
+;;; the GNU Lesser General Public License as published by 
+;;; the Free Software Foundation, as clarified by the preamble
+;;; found in license-llgpl.txt.
+;;;
+;;; This code is distributed in the hope that it will be useful,
+;;; but without any warranty; without even the implied warranty of
+;;; merchantability or fitness for a particular purpose. See the GNU
+;;; Lesser General Public License for more details.
+;;;
+;;; Version 2.1 of the GNU Lesser General Public License is in the file 
+;;; license-lgpl.txt that was distributed with this file.
+;;; If it is not present, you can access it from
+;;; http://www.gnu.org/copyleft/lesser.txt (until superseded by a newer
+;;; version) or write to the Free Software Foundation, Inc., 59 Temple Place, 
+;;; Suite 330, Boston, MA  02111-1307  USA
+;;;
+;;; $Id: 10linj.test,v 1.1.1.1 2006/04/23 17:11:49 tdias Exp $
+;;;
+;;; Description: Java to Linj code translation and Linj code quality test
+;;; suite. These tests consist of performing a Java->Linj->Java compilation
+;;; cycle. No semantics are tested in this suite.
+;;;
+;;; -- start of 10linj.test --
+
+(in-package :jnil)
+
+(when (not (find-package :linj))
+  (error "Couldn't find LINJ. Please make sure LINJ is loaded."))
+
+(require :tester)
+
+(definline java-compile (file directory)
+  (run-shell-command (concatenate 'string "javac -classpath '" (sys:getenv "LINJ_HOME") "' " file)
+                      :error-output *error-output*
+                      :directory directory))
+                     
+(let* ((tests-dir (make-pathname :name nil :type nil :defaults *load-truename*))
+       (out-dir (namestring (merge-pathnames "out/" tests-dir)))
+       (out-dir-lvl1 (namestring (merge-pathnames "lvl1/" out-dir)))
+       (out-dir-lvl2 (namestring (merge-pathnames "lvl2/" out-dir)))
+       (out-dir-lvl3 (namestring (merge-pathnames "lvl3/" out-dir))))
+  (when (probe-directory out-dir) (delete-directory-and-files out-dir))
+  (util.test:with-tests (:name "level 1 linj code generation")
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl1.Arrays" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "arrays" out-dir-lvl1))
+    (util.test:test 0 (java-compile "Arrays.java" out-dir-lvl1))
+
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl1.Chars" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "chars" out-dir-lvl1))
+    (util.test:test 0 (java-compile "Chars.java" out-dir-lvl1))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl1.Decls" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "decls" out-dir-lvl1))
+    (util.test:test 0 (java-compile "Decls.java" out-dir-lvl1))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl1.Assigns" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "assigns" out-dir-lvl1))
+    (util.test:test 0 (java-compile "Assigns.java" out-dir-lvl1))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl1.Control" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "control" out-dir-lvl1))
+    (util.test:test 0 (java-compile "Control.java" out-dir-lvl1))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl1.Decls" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "decls" out-dir-lvl1))
+    (util.test:test 0 (java-compile "Decls.java" out-dir-lvl1)) 
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl1.Fact" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "fact" out-dir-lvl1))
+    (util.test:test 0 (java-compile "Fact.java" out-dir-lvl1))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl1.Iter" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "iter" out-dir-lvl1))
+    (util.test:test 0 (java-compile "Iter.java" out-dir-lvl1))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl1.Misc" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "misc" out-dir-lvl1))
+    (util.test:test 0 (java-compile "Misc.java" out-dir-lvl1)))
+  
+  (util.test:with-tests (:name "level 2 linj code generation")
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl2.AbstractClass" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "abstract-class" out-dir-lvl2))
+    (util.test:test 0 (java-compile "AbstractClass.java" out-dir-lvl2))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl2.Except" out-dir :linj))
+    (util.test:test-warning (linj:linj2java "except" out-dir-lvl2))
+    (util.test:test 0 (java-compile "Except.java" out-dir-lvl2))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl2.Inner" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "inner" out-dir-lvl2))
+    (util.test:test 0 (java-compile "Inner.java" out-dir-lvl2))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl2.Interfaces" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "interfaces" out-dir-lvl2))
+    (util.test:test 0 (java-compile "Interfaces.java" out-dir-lvl2))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl2.Invok" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "invok" out-dir-lvl2))
+    (util.test:test 0 (java-compile "Invok.java" out-dir-lvl2)) 
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl2.Novelty" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "novelty" out-dir-lvl2))
+    (util.test:test 0 (java-compile "Novelty.java" out-dir-lvl2)))
+  
+  (util.test:with-tests (:name "level 3 linj code generation")
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl3.Almanac" out-dir :linj))
+    (util.test:test-warning (linj:linj2java "almanac" out-dir-lvl3))
+    (util.test:test 0 (java-compile "Almanac.java" out-dir-lvl3))
+    
+    (util.test:test-no-error (translate-java-unit "JnilTests" "lvl3.BgThread" out-dir :linj))
+    (util.test:test-no-error (linj:linj2java "bg-thread" out-dir-lvl3))
+    (util.test:test 0 (java-compile "BgThread.java" out-dir-lvl3))))
+
+;;; -- end of 10linj.test --

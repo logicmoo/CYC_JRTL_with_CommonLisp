@@ -438,6 +438,7 @@ public final class dumper_oc
   private static final SubLString $ic362$;
   private static final SubLString $ic363$;
   private static final SubLString $ic364$;
+private static final boolean IC64 = true;//  $ic64$ == $ic64$
 
   public static SubLObject f37906()
   {
@@ -3315,7 +3316,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var192 );
         }
         SubLObject var20_193 = var193;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_193 = module0075.f5283( var20_193 );
         }
@@ -3487,7 +3488,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var32 );
         }
         SubLObject var20_202 = var33;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_202 = module0075.f5283( var20_202 );
         }
@@ -3700,7 +3701,7 @@ public final class dumper_oc
             Errors.error( $ic65$, var41 );
           }
           SubLObject var20_212 = var42;
-          if( $ic64$ == $ic64$ )
+          if( IC64 )
           {
             var20_212 = module0075.f5283( var20_212 );
           }
@@ -3986,7 +3987,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var33 );
         }
         SubLObject var20_246 = var34;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_246 = module0075.f5283( var20_246 );
         }
@@ -4055,7 +4056,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_248 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_248 = module0075.f5283( var20_248 );
         }
@@ -4166,7 +4167,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var257 );
         }
         SubLObject var20_255 = var258;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_255 = module0075.f5283( var20_255 );
         }
@@ -4492,7 +4493,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_264 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_264 = module0075.f5283( var20_264 );
         }
@@ -4643,7 +4644,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_267 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_267 = module0075.f5283( var20_267 );
         }
@@ -4793,7 +4794,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_270 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_270 = module0075.f5283( var20_270 );
         }
@@ -5268,7 +5269,7 @@ public final class dumper_oc
               Errors.error( $ic65$, var44 );
             }
             SubLObject var20_313 = var45;
-            if( $ic64$ == $ic64$ )
+            if( IC64 )
             {
               var20_313 = module0075.f5283( var20_313 );
             }
@@ -5564,7 +5565,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_331 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_331 = module0075.f5283( var20_331 );
         }
@@ -6118,7 +6119,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var39 );
         }
         SubLObject var20_372 = var40;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_372 = module0075.f5283( var20_372 );
         }
@@ -6622,7 +6623,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var33 );
         }
         SubLObject var20_408 = var34;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_408 = module0075.f5283( var20_408 );
         }
@@ -6956,7 +6957,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var32 );
         }
         SubLObject var20_421 = var33;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_421 = module0075.f5283( var20_421 );
         }
@@ -7346,7 +7347,7 @@ public final class dumper_oc
             Errors.error( $ic65$, var40 );
           }
           SubLObject var20_440 = var41;
-          if( $ic64$ == $ic64$ )
+          if( IC64 )
           {
             var20_440 = module0075.f5283( var20_440 );
           }
@@ -8073,7 +8074,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var32 );
         }
         SubLObject var20_481 = var33;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_481 = module0075.f5283( var20_481 );
         }
@@ -8421,7 +8422,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var32 );
         }
         SubLObject var20_499 = var33;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_499 = module0075.f5283( var20_499 );
         }
@@ -8929,7 +8930,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var32 );
         }
         SubLObject var20_527 = var33;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_527 = module0075.f5283( var20_527 );
         }
@@ -9216,7 +9217,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_539 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_539 = module0075.f5283( var20_539 );
         }
@@ -9439,7 +9440,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_549 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_549 = module0075.f5283( var20_549 );
         }
@@ -10045,7 +10046,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var33 );
         }
         SubLObject var20_587 = var34;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_587 = module0075.f5283( var20_587 );
         }
@@ -10276,7 +10277,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_591 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_591 = module0075.f5283( var20_591 );
         }
@@ -10658,7 +10659,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var33 );
         }
         SubLObject var20_609 = var34;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_609 = module0075.f5283( var20_609 );
         }
@@ -11199,7 +11200,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_635 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_635 = module0075.f5283( var20_635 );
         }
@@ -11698,7 +11699,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_657 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_657 = module0075.f5283( var20_657 );
         }
@@ -12098,7 +12099,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_675 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_675 = module0075.f5283( var20_675 );
         }
@@ -12573,7 +12574,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_698 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_698 = module0075.f5283( var20_698 );
         }
@@ -12943,7 +12944,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_714 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_714 = module0075.f5283( var20_714 );
         }
@@ -13149,7 +13150,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_718 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_718 = module0075.f5283( var20_718 );
         }
@@ -13416,7 +13417,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var32 );
         }
         SubLObject var20_733 = var33;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_733 = module0075.f5283( var20_733 );
         }
@@ -13749,7 +13750,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var32 );
         }
         SubLObject var20_746 = var33;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_746 = module0075.f5283( var20_746 );
         }
@@ -13964,7 +13965,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_750 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_750 = module0075.f5283( var20_750 );
         }
@@ -14206,7 +14207,7 @@ public final class dumper_oc
           Errors.error( $ic65$, var31 );
         }
         SubLObject var20_758 = var32;
-        if( $ic64$ == $ic64$ )
+        if( IC64 )
         {
           var20_758 = module0075.f5283( var20_758 );
         }

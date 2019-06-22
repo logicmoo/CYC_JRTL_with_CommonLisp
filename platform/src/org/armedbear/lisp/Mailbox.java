@@ -21,10 +21,12 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
-public final class Mailbox extends LispObject
+public final class Mailbox extends SLispObject
 {
   private LinkedList box = new LinkedList();
 

@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLVector;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -229,17 +231,16 @@ public abstract class AbstractArray extends AbstractSubLVector implements java.i
     {
         StringBuilder sb = new StringBuilder();
         LispThread thread = LispThread.currentThread();
-        LispObject printReadably = Symbol.PRINT_READABLY.symbolValue(thread);
-        if (printReadably != NIL || Symbol.PRINT_ARRAY.symbolValue(thread) != NIL) {
+        boolean printReadably = isPrintReadable(thread);
+        if (printReadably || Symbol.PRINT_ARRAY.symbolValue(thread) != NIL) {
             int maxLevel = Integer.MAX_VALUE;
-            if (printReadably != NIL) {
+            if (printReadably) {
                 for (int i = 0; i < dimv.length - 1; i++) {
                     if (dimv[i] == 0) {
                         for (int j = i + 1; j < dimv.length; j++) {
                             if (dimv[j] != 0) {
-                                error(new PrintNotReadable(list(Keyword.OBJECT,
-                                                                  this)));
-                                return null; // Not reached.
+                                checkUnreadableOk();
+                                //return null; // Not reached.
                             }
                         }
                     }
@@ -287,11 +288,11 @@ public abstract class AbstractArray extends AbstractSubLVector implements java.i
             } else
                 sb.append(AREF(index).printObject());
         } else {
-            final LispObject printReadably =
-                Symbol.PRINT_READABLY.symbolValue(thread);
+            final boolean printReadably =
+                isPrintReadable(thread);
             int maxLength = Integer.MAX_VALUE;
             int maxLevel = Integer.MAX_VALUE;
-            if (printReadably == NIL) {
+            if (!printReadably) {
                 final LispObject printLength =
                     Symbol.PRINT_LENGTH.symbolValue(thread);
                 if (printLength instanceof Fixnum)

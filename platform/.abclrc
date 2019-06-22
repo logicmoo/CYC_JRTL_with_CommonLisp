@@ -4,6 +4,16 @@
 (when (probe-file "~/site-lisp/larkc-home.lisp")
    (load "~/site-lisp/larkc-home.lisp"))
 
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames "site-lisp/quicklisp/setup.lisp" (directory-namestring *load-truename*))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+    
+#+quicklisp
+(pushnew (merge-pathnames "site-lisp/" (directory-namestring *load-truename*)) ql:*local-project-directories*)
+
+
+
 ;; (ql:quickload "swank")
 ;; (ql:quickload "swank.live")
 

@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
 
 public final class FaslReader

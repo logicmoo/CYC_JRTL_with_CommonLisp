@@ -34,7 +34,9 @@
 
 package org.armedbear.lisp;
 
-public final class Mutex extends LispObject
+import static org.armedbear.lisp.Lisp.*; 
+
+public final class Mutex extends SLispObject
 {
     private boolean inUse;
 

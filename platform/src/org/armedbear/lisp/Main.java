@@ -32,6 +32,8 @@
  */
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.JVMImpl;
 import org.logicmoo.system.SystemCurrent;
@@ -111,7 +113,7 @@ public final class Main {
 		SystemCurrent.takeOwnerShip();
 		abclProcessArgs = true;
 		noProlog = true;
-		noPrologJNI = true;
+		//noPrologJNI = false;
 		noBSH = true;
 		noExit = false;
 	}
@@ -150,6 +152,9 @@ public final class Main {
 			if (useMainThread) {
 				t.run();
 			} else {
+				final Thread currentThread = Thread.currentThread();
+				currentThread.setName("Old-"+currentThread.getName());
+				t.setName("main");
 				t.start();
 				t.join();
 			}
@@ -171,8 +176,8 @@ public final class Main {
 		needIOConsole = false;
 		Lisp.initLisp();
 		passedArgs = args;
-		BeanShellCntrl.start_prolog_from_lisp();
-		Runnable r = new SubLProcess("Main Process") {
+		if(!noProlog) BeanShellCntrl.start_prolog_from_lisp();
+		Runnable r = new SubLProcess("main") {
 			@Override
 			public void safeRun() {
 				boolean wasSubLisp = isSubLisp();
@@ -319,6 +324,7 @@ public final class Main {
 			noBSHGUI = true;
 		}
 		if (argsList.remove("--prolog")) {
+			noProlog = false;
 			noPrologJNI = false;
 		}
 		if (argsList.remove("--beandesk")) {

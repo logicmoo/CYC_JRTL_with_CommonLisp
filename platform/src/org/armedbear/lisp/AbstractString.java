@@ -32,6 +32,8 @@
  */
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public abstract class AbstractString
     extends
       com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString
@@ -99,7 +101,7 @@ public abstract class AbstractString
     if( endIndex > limit )
       endIndex = limit;
     final LispThread thread = LispThread.currentThread();
-    if( Symbol.PRINT_ESCAPE.symbolValue( thread ) != NIL || Symbol.PRINT_READABLY.symbolValue( thread ) != NIL )
+    if( Symbol.PRINT_ESCAPE.symbolValue( thread ) != NIL || isPrintReadable(thread) )
     {
       StringBuilder sb = new StringBuilder( "\"" );
       for( int i = beginIndex; i < endIndex; i++ )

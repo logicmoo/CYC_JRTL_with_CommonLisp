@@ -33,12 +33,14 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.util.HashMap;
 import java.util.Map;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 
-abstract public class LispCharacter extends LispObject
+abstract public class LispCharacter extends NLispObject
 {
 	
 
@@ -231,7 +233,7 @@ public Object javaInstanceImpl(Class c)
   public final String printObjectImpl()
   {
     final LispThread thread = LispThread.currentThread();
-    boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
+    boolean printReadably = isPrintReadable(thread);
     // "Specifically, if *PRINT-READABLY* is true, printing proceeds as if
     // *PRINT-ESCAPE*, *PRINT-ARRAY*, and *PRINT-GENSYM* were also true,
     // and as if *PRINT-LENGTH*, *PRINT-LEVEL*, and *PRINT-LINES* were

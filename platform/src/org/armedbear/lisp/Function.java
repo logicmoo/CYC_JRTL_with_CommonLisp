@@ -33,10 +33,14 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 //import com.cyc.tool.subl.jrtl.nativeCode.type.operator.AbstractSubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLSpecialOperator;
@@ -46,6 +50,11 @@ public abstract class Function extends Operator implements SubLFunction {
 	@Override
 	public boolean isSpecial() {
 		return false;
+	}
+	
+	@Override
+	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
+		return this; // self-evaluating
 	}
 
 	@Override
@@ -78,7 +87,24 @@ public abstract class Function extends Operator implements SubLFunction {
 	 * used for fetching the class bytes in case of disassembly.
 	 */
 	private final LispObject loadedFrom;
-
+    @Override
+	public LispObject getParts() {
+		LispObject result = NIL;
+		result = result.push(new Cons("lambda-name", lambdaName));
+		final LispObject lambdaList = getLambdaList();
+		result = result.push(new Cons("lambda-list", lambdaList));
+		final SubLList arglist2 = getArglist();
+		if (lambdaList != arglist2)
+			result = result.push(new Cons("arg-list", arglist2));
+		LispObject v = getPropertyList();
+		if (v != NIL)
+			result = result.push(new Cons("property-list", v));
+		v = loadedFrom;
+		if (v != NIL)
+			result = result.push(new Cons("loaded-from", v));
+		return result.nreverse();
+	}
+    
 	protected Function() {
 		super(null);
 		LispObject loadTruename = Symbol.LOAD_TRUENAME.symbolValueNoThrow();

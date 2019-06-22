@@ -15,6 +15,7 @@ import java.util.function.Supplier;
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -28,6 +29,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLCompiledFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLMacro;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
@@ -188,8 +190,9 @@ public class SubLFiles {
 
 	private static SubLSymbol declareSymbol(Object variableName, SubLObject initialValue, VariableAccessMode accessMode,
 			boolean isReinitialized) {
+		final SubLPackage dynamicValue = (SubLPackage) Packages.$package$.getDynamicValue();
 		return declareSymbol(variableName, initialValue, accessMode, isReinitialized,
-				(SubLPackage) Packages.$package$.getDynamicValue());
+				dynamicValue);
 	}
 
 	private static SubLSymbol declareSymbol(Object variableName, SubLObject initialValue, VariableAccessMode accessMode,
@@ -364,11 +367,38 @@ public class SubLFiles {
 		return declareSymbol(variableName, initialValue, VariableAccessMode.DYNAMIC, true, thePackage);
 	}
 
+
 	public static SubLSymbol defvar(String variableName, SubLObject initialValue) {
 		/*
 		 * SubL defvar : mutable dynamic global, not re-initialized on re-evaluation
 		 */
 		return declareSymbol(variableName, initialValue, VariableAccessMode.DYNAMIC, false);
+	}
+	
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param string
+	 * @param nil
+	 * @return
+	 */
+	public static SubLSymbol defvarCheckCL(String string, SubLObject v) {
+		Symbol s = null;
+		SubLPackage pack = SubLPackage.getCurrentPackage();
+		s = pack.findAccessibleSymbol(string);
+		if (s == null) {
+			final Package packageCl = Lisp.PACKAGE_CL;
+			s = packageCl.findAccessibleSymbol(string);
+			if (s != null) {
+				if (packageCl != pack) {
+					pack.importSymbol(s);
+				}
+				if (!s.boundp()) {
+					defvar(s, v);
+				}
+				return s;
+			}
+		}
+		return defvar(string, v);
 	}
 
 	public static SubLSymbol defvar(Object variableName, SubLObject initialValue) {
@@ -538,4 +568,5 @@ public class SubLFiles {
 	public static void declareOverridable(String string) {
 		shouldOverride.add(string);
 	}
+
 }

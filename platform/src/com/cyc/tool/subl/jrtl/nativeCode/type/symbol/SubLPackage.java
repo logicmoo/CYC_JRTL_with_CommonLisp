@@ -17,6 +17,7 @@ import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Package;
+import org.armedbear.lisp.SLispObject;
 import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -27,6 +28,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.FromSubLisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -35,7 +37,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.util.SubLFiles;
 
-abstract public class SubLPackage extends LispObject implements SubLObject {
+abstract public class SubLPackage extends SLispObject implements SubLObject {
 
     public static final String[] reserveSubLisp = { "*BREAK-ON-ERROR?*", "*BREAK-ON-WARN?*", "*CONTINUE-CERROR?*", "*DEBUG-IO*", "*DEFAULT-PATHNAME-DEFAULTS*", "*DOUBLE-FLOAT-MINIMUM-EXPONENT*",
             "*ERROR-ABORT-HANDLER*", "*ERROR-HANDLER*", "*ERROR-MESSAGE*", "*ERROR-OUTPUT*", "*EXP1*", "*FEATURES*", "*GENSYM-COUNTER*", "*IGNORE-BREAKS?*", "*IGNORE-MUSTS?*", "*IGNORE-WARNS?*",
@@ -44,8 +46,12 @@ abstract public class SubLPackage extends LispObject implements SubLObject {
             "IS-REGEX-IMPLEMENTATION-AVAILABLE?", "SEMAPHORE", "TEST", "TIMESTRING", "PROTECTION", "REGEX-VERSION",
 
             "*PRINT-BASE*", "*PRINT-CASE*", "*PRINT-CIRCLE*", "*PRINT-ESCAPE*", "*PRINT-GENSYM*", "*PRINT-LENGTH*", "*PRINT-LEVEL*", "*PRINT-LINES*", "*PRINT-MISER-WIDTH*", "*PRINT-PPRINT-DISPATCH*",
-            "*PRINT-PRETTY*", "*PRINT-RADIX*", "*PRINT-READABLY*", "*PRINT-RIGHT-MARGIN*", "*PROCESS-MAX-PRIORITY*", "*PROCESS-CRITICAL-PRIORITY*", "*PROCESS-NORMAL-PRIORITY*",
-            "*PROCESS-BACKGROUND-PRIORITY*", "*PROCESS-MIN-PRIORITY*", "*QUERY-IO*", "*RAND-MAX*", "*READ-BASE*", "*READ-DEFAULT-FLOAT-FORMAT*", "*READ-EVAL*", "*READ-SUPPRESS*", "*READTABLE*",
+            "*PRINT-PRETTY*", "*PRINT-RADIX*", "*PRINT-READABLY*", "*PRINT-RIGHT-MARGIN*", 
+            "*PROCESS-MAX-PRIORITY*", "*PROCESS-CRITICAL-PRIORITY*", "*PROCESS-NORMAL-PRIORITY*",
+            "*PROCESS-BACKGROUND-PRIORITY*", "*PROCESS-MIN-PRIORITY*", 
+            "*QUERY-IO*",
+            "*RAND-MAX*", "*READ-BASE*", "*READ-DEFAULT-FLOAT-FORMAT*", "*READ-EVAL*", "*READ-SUPPRESS*", "*READTABLE*",
+            
             "*RETAIN-CLIENT-SOCKET?*", "*SILENT-PROGRESS?*",
 
             "*SUSPEND-TYPE-CHECKING?*", "*TCP-LOCALHOST-ONLY?*", //
@@ -283,8 +289,21 @@ abstract public class SubLPackage extends LispObject implements SubLObject {
         if (internedSubLispSymbols)
             return;
         internedSubLispSymbols = true;
+    	final SubLPackage SL_PACKAGE = SubLPackage.SUBLISP_PACKAGE;
+    	final SubLPackage CL_PACKAGE = PACKAGE_CL;
         for (String name : reserveSubLisp) {
-            SubLPackage.SUBLISP_PACKAGE.internAndExport(name);
+			Symbol s = SL_PACKAGE.findAccessibleSymbol(name);
+			if (s == null) {
+				if (name.startsWith("*") && name.length() > 3 && !name.contains("READ")) {
+					s = CL_PACKAGE.findAccessibleSymbol(name);
+					if (s != null) {
+						SL_PACKAGE.importSymbol(s);
+						SL_PACKAGE.export(s);
+						continue;
+					}
+				}
+			}
+        	SL_PACKAGE.internAndExport(name);
         }
     }
 
@@ -804,7 +823,7 @@ abstract public class SubLPackage extends LispObject implements SubLObject {
 
     @Override
     public String printObjectImpl() {
-    	checkReadable();
+    	checkUnreadableOk();
         return "#<The " + getName() + " package" + (isLocked() ? "!>" : ">");
     }
 

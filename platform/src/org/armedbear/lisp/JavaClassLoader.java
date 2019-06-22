@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import static org.armedbear.lisp.Lisp.NIL;
 import static org.armedbear.lisp.Lisp.PACKAGE_JAVA;
 import static org.armedbear.lisp.Lisp.error;
@@ -216,6 +218,9 @@ public class JavaClassLoader extends URLClassLoader {
     }
 
     public static final Symbol CLASSLOADER = PACKAGE_JAVA.intern("*CLASSLOADER*");
+    static {
+    	CLASSLOADER.isTraced = true;
+    }
 
     private static final Primitive GET_DEFAULT_CLASSLOADER = new pf_get_default_classloader();
     private static final class pf_get_default_classloader extends Primitive {
@@ -340,7 +345,7 @@ public class JavaClassLoader extends URLClassLoader {
     public static LispObject dumpClassPath(ClassLoader o) {
         if(o instanceof URLClassLoader) {
             LispObject list = NIL;
-            for(URL u : ((URLClassLoader) o).getURLs()) {
+            for(URL u : Lisp.getURLs(((URLClassLoader) o))) {
                 list = list.push(new Pathname(u));
             }
             return new Cons(new JavaObject(o), list.nreverse());

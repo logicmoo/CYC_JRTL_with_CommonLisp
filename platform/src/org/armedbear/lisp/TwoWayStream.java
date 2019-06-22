@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInOutTextStreamImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;
@@ -70,6 +72,7 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
         isInputStream = true;
         isOutputStream = true;
     }
+
 
     public TwoWayStream(Stream in, Stream out, boolean interactive)
     {
@@ -236,11 +239,14 @@ public class TwoWayStream extends SubLInOutTextStreamImpl
         return T;
     }
 
-    @Override
-	public String printObjectImpl()
-    {
-        return unreadableString("TWO-WAY-STREAM");
-    }
+	@Override
+	public String printObjectImpl() {
+		if (isPrintReadable(null)) {
+		Symbol s = Lisp.standardSymbolValue(this);
+		if(s!=null) return s.cl_symbol_name();
+		}		
+		return unreadableString("TWO-WAY-STREAM");
+	}
 
     // ### make-two-way-stream input-stream output-stream => two-way-stream
     private static final Primitive MAKE_TWO_WAY_STREAM =

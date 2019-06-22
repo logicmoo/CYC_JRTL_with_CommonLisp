@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 /** See autoloads.lisp for a general explanation of what we're
  * trying to achieve here.
  */

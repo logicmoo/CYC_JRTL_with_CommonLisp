@@ -6,6 +6,7 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import static org.armedbear.lisp.Lisp.*; 
 import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
@@ -183,11 +184,11 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
     public boolean equals(Object obj) {
         return obj == this;
     }
-
-    @Override
-    public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
-        return this;
-    }
+//
+//    @Override
+//    public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
+//        return this;
+//    }
 
     @Override
     public SubLObject fifth() {

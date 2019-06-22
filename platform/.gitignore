@@ -11,5 +11,5 @@ abcl
 /JVM.DLL
 /bin/modern/
 /lib/ALL/
-
+/site-lisp/backup
 /.apt_generated/

@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
@@ -240,7 +242,7 @@ public final class LogicalPathname extends Pathname
 	public String printObjectImpl()
     {
         final LispThread thread = LispThread.currentThread();
-        boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
+        boolean printReadably = isPrintReadable(thread);
         boolean printEscape = (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL);
         StringBuilder sb = new StringBuilder();
         if (printReadably || printEscape)

@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 // ### logand &rest integers => result-integer
 public final class logand extends Primitive
 {

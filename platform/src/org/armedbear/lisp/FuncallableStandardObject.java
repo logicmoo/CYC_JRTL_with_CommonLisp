@@ -36,6 +36,8 @@
 // exchange the functions.
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public class FuncallableStandardObject extends StandardObject
 {
   LispObject function;

@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 @DocString(name="package-error-package")
 public final class package_error_package extends Primitive
 {

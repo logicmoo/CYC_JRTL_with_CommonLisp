@@ -14,12 +14,18 @@ import org.logicmoo.system.JVMImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.FromSubLisp;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
 public abstract class SafeRunnable extends FromSubLisp implements Runnable {
 
+	@Override
+	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
+		return this; // self-evaluating
+	}
     protected boolean outerSubLisp;
     protected Package outerPackage;
 

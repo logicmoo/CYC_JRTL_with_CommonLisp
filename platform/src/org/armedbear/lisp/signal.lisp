@@ -62,6 +62,9 @@
     nil))
 
 (defun error (datum &rest arguments)
+  (when (eq datum 'cl:print-not-readable)
+     (return-from error (apply #'%raise-unreadable arguments)))
+  
   (let ((condition (coerce-to-condition datum arguments 'simple-error 'error)))
     (signal condition)
     (let ((*current-error-depth* (1+ *current-error-depth*)))

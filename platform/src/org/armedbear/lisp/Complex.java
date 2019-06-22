@@ -33,7 +33,9 @@
 
 package org.armedbear.lisp;
 
-public final class Complex extends LispObject
+import static org.armedbear.lisp.Lisp.*; 
+
+public final class Complex extends NLispObject
 {
   public final LispObject realpart;
   public final LispObject imagpart;

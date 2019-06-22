@@ -187,120 +187,66 @@ public class complex_special_forms extends SubLTranslatedFile {
 	}
 
 	public static SubLObject declare_complex_special_forms_file() {
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"intern_accessor", "INTERN-ACCESSOR", 1, 0, false);
-		SubLFiles.declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms", "defpolymorphic",
-				"DEFPOLYMORPHIC");
-		SubLFiles.declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms", "define_method",
-				"DEFINE-METHOD");
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defpolymorphic_internal", "DEFPOLYMORPHIC-INTERNAL", 3, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"define_method_internal", "DEFINE-METHOD-INTERNAL", 3, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"build_regmethod_call", "BUILD-REGMETHOD-CALL", 3, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"build_regmethod_list", "BUILD-REGMETHOD-LIST", 3, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"method_table_var", "METHOD-TABLE-VAR", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"method_function_var", "METHOD-FUNCTION-VAR", 2, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms", "dtp_var",
-				"DTP-VAR", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"full_formal_parameter_list", "FULL-FORMAL-PARAMETER-LIST", 1, 0, false);
-		SubLFiles.declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms", "defstruct",
-				"DEFSTRUCT");
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_analyze", "DEFSTRUCT-ANALYZE", 3, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_conc_name", "DEFSTRUCT-CONC-NAME", 2, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_predicate", "DEFSTRUCT-PREDICATE", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_constructor", "DEFSTRUCT-CONSTRUCTOR", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_host_fn_name", "DEFSTRUCT-HOST-FN-NAME", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_type_var", "DEFSTRUCT-TYPE-VAR", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_slot_keywords", "DEFSTRUCT-SLOT-KEYWORDS", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_getters", "DEFSTRUCT-GETTERS", 2, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_getter", "DEFSTRUCT-GETTER", 2, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_setters", "DEFSTRUCT-SETTERS", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_setter", "DEFSTRUCT-SETTER", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"getter_package", "GETTER-PACKAGE", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"accessor_package", "ACCESSOR-PACKAGE", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"setter_from_accessor", "SETTER-FROM-ACCESSOR", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_lisp_constructor", "DEFSTRUCT-LISP-CONSTRUCTOR", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_expand", "DEFSTRUCT-EXPAND", 1, 0, false);
-		SubLFiles.declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"_defstruct_object_p", "_DEFSTRUCT-OBJECT-P");
-		SubLFiles.declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"_defstruct_get_slot", "_DEFSTRUCT-GET-SLOT");
-		SubLFiles.declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"_defstruct_set_slot", "_DEFSTRUCT-SET-SLOT");
-		SubLFiles.declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"_defstruct_construct", "_DEFSTRUCT-CONSTRUCT");
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_type_var_form", "DEFSTRUCT-TYPE-VAR-FORM", 3, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_print_method", "DEFSTRUCT-PRINT-METHOD", 2, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_print_forms", "DEFSTRUCT-PRINT-FORMS", 4, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_register_form", "DEFSTRUCT-REGISTER-FORM", 4, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_predicate_form", "DEFSTRUCT-PREDICATE-FORM", 4, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_predicate_arglist", "DEFSTRUCT-PREDICATE-ARGLIST", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_predicate_variable", "DEFSTRUCT-PREDICATE-VARIABLE", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_first_function_variable", "DEFSTRUCT-FIRST-FUNCTION-VARIABLE", 2, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_getter_forms", "DEFSTRUCT-GETTER-FORMS", 5, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_getter_form", "DEFSTRUCT-GETTER-FORM", 5, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_getter_arglist", "DEFSTRUCT-GETTER-ARGLIST", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_getter_variable", "DEFSTRUCT-GETTER-VARIABLE", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_setter_forms", "DEFSTRUCT-SETTER-FORMS", 5, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_setter_form", "DEFSTRUCT-SETTER-FORM", 5, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_setter_arglist", "DEFSTRUCT-SETTER-ARGLIST", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_def_csetf_forms", "DEFSTRUCT-DEF-CSETF-FORMS", 2, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_constructor_form", "DEFSTRUCT-CONSTRUCTOR-FORM", 6, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_constructor_arglist", "DEFSTRUCT-CONSTRUCTOR-ARGLIST", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_constructor_arglist_handler", "DEFSTRUCT-CONSTRUCTOR-ARGLIST-HANDLER", 4, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_host_function", "DEFSTRUCT-HOST-FUNCTION", 5, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"defstruct_host_arglist", "DEFSTRUCT-HOST-ARGLIST", 0, 0, false);
-		SubLFiles.declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"with_call_profiling", "WITH-CALL-PROFILING");
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"possibly_note_function_entry", "POSSIBLY-NOTE-FUNCTION-ENTRY", 1, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"initialize_call_profiling_table", "INITIALIZE-CALL-PROFILING-TABLE", 0, 0, false);
-		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms",
-				"finalize_call_profiling_table", "FINALIZE-CALL-PROFILING-TABLE", 1, 0, false);
+		SubLFiles.declareFunction(me, "intern_accessor", "INTERN-ACCESSOR", 1, 0, false);
+		SubLFiles.declareMacro(me, "defpolymorphic", "DEFPOLYMORPHIC");
+		SubLFiles.declareMacro(me, "define_method", "DEFINE-METHOD");
+		SubLFiles.declareFunction(me, "defpolymorphic_internal", "DEFPOLYMORPHIC-INTERNAL", 3, 0, false);
+		SubLFiles.declareFunction(me, "define_method_internal", "DEFINE-METHOD-INTERNAL", 3, 0, false);
+		SubLFiles.declareFunction(me, "build_regmethod_call", "BUILD-REGMETHOD-CALL", 3, 0, false);
+		SubLFiles.declareFunction(me, "build_regmethod_list", "BUILD-REGMETHOD-LIST", 3, 0, false);
+		SubLFiles.declareFunction(me, "method_table_var", "METHOD-TABLE-VAR", 1, 0, false);
+		SubLFiles.declareFunction(me, "method_function_var", "METHOD-FUNCTION-VAR", 2, 0, false);
+		SubLFiles.declareFunction(me, "dtp_var", "DTP-VAR", 1, 0, false);
+		SubLFiles.declareFunction(me, "full_formal_parameter_list", "FULL-FORMAL-PARAMETER-LIST", 1, 0, false);
+		SubLFiles.declareMacro(me, "defstruct", "DEFSTRUCT");
+		SubLFiles.declareFunction(me, "defstruct_analyze", "DEFSTRUCT-ANALYZE", 3, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_conc_name", "DEFSTRUCT-CONC-NAME", 2, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_predicate", "DEFSTRUCT-PREDICATE", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_constructor", "DEFSTRUCT-CONSTRUCTOR", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_host_fn_name", "DEFSTRUCT-HOST-FN-NAME", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_type_var", "DEFSTRUCT-TYPE-VAR", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_slot_keywords", "DEFSTRUCT-SLOT-KEYWORDS", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_getters", "DEFSTRUCT-GETTERS", 2, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_getter", "DEFSTRUCT-GETTER", 2, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_setters", "DEFSTRUCT-SETTERS", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_setter", "DEFSTRUCT-SETTER", 1, 0, false);
+		SubLFiles.declareFunction(me, "getter_package", "GETTER-PACKAGE", 1, 0, false);
+		SubLFiles.declareFunction(me, "accessor_package", "ACCESSOR-PACKAGE", 1, 0, false);
+		SubLFiles.declareFunction(me, "setter_from_accessor", "SETTER-FROM-ACCESSOR", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_lisp_constructor", "DEFSTRUCT-LISP-CONSTRUCTOR", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_expand", "DEFSTRUCT-EXPAND", 1, 0, false);
+		SubLFiles.declareMacro(me, "_defstruct_object_p", "_DEFSTRUCT-OBJECT-P");
+		SubLFiles.declareMacro(me, "_defstruct_get_slot", "_DEFSTRUCT-GET-SLOT");
+		SubLFiles.declareMacro(me, "_defstruct_set_slot", "_DEFSTRUCT-SET-SLOT");
+		SubLFiles.declareMacro(me, "_defstruct_construct", "_DEFSTRUCT-CONSTRUCT");
+		SubLFiles.declareFunction(me, "defstruct_type_var_form", "DEFSTRUCT-TYPE-VAR-FORM", 3, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_print_method", "DEFSTRUCT-PRINT-METHOD", 2, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_print_forms", "DEFSTRUCT-PRINT-FORMS", 4, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_register_form", "DEFSTRUCT-REGISTER-FORM", 4, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_predicate_form", "DEFSTRUCT-PREDICATE-FORM", 4, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_predicate_arglist", "DEFSTRUCT-PREDICATE-ARGLIST", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_predicate_variable", "DEFSTRUCT-PREDICATE-VARIABLE", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_first_function_variable", "DEFSTRUCT-FIRST-FUNCTION-VARIABLE", 2, 0,
+				false);
+		SubLFiles.declareFunction(me, "defstruct_getter_forms", "DEFSTRUCT-GETTER-FORMS", 5, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_getter_form", "DEFSTRUCT-GETTER-FORM", 5, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_getter_arglist", "DEFSTRUCT-GETTER-ARGLIST", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_getter_variable", "DEFSTRUCT-GETTER-VARIABLE", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_setter_forms", "DEFSTRUCT-SETTER-FORMS", 5, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_setter_form", "DEFSTRUCT-SETTER-FORM", 5, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_setter_arglist", "DEFSTRUCT-SETTER-ARGLIST", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_def_csetf_forms", "DEFSTRUCT-DEF-CSETF-FORMS", 2, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_constructor_form", "DEFSTRUCT-CONSTRUCTOR-FORM", 6, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_constructor_arglist", "DEFSTRUCT-CONSTRUCTOR-ARGLIST", 1, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_constructor_arglist_handler", "DEFSTRUCT-CONSTRUCTOR-ARGLIST-HANDLER",
+				4, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_host_function", "DEFSTRUCT-HOST-FUNCTION", 5, 0, false);
+		SubLFiles.declareFunction(me, "defstruct_host_arglist", "DEFSTRUCT-HOST-ARGLIST", 0, 0, false);
+		SubLFiles.declareMacro(me, "with_call_profiling", "WITH-CALL-PROFILING");
+		SubLFiles.declareFunction(me, "possibly_note_function_entry", "POSSIBLY-NOTE-FUNCTION-ENTRY", 1, 0, false);
+		SubLFiles.declareFunction(me, "initialize_call_profiling_table", "INITIALIZE-CALL-PROFILING-TABLE", 0, 0,
+				false);
+		SubLFiles.declareFunction(me, "finalize_call_profiling_table", "FINALIZE-CALL-PROFILING-TABLE", 1, 0, false);
 		return SubLNil.NIL;
 	}
 
@@ -323,14 +269,13 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 5718L)
 	public static SubLObject define_method_internal(SubLObject name, SubLObject arglist, SubLObject body) {
 		SubLObject type = conses_high.second(arglist.first());
-		SubLObject plain_args = reader.bq_cons(arglist.first().first(),
-				ConsesLow.append(arglist.rest(), SubLNil.NIL));
+		SubLObject plain_args = reader.bq_cons(arglist.first().first(), ConsesLow.append(arglist.rest(), SubLNil.NIL));
 		SubLObject method_table_var = method_table_var(name);
 		SubLObject method_function = method_function_var(name, type);
 		SubLObject regmethod_list = build_regmethod_list(type, method_table_var, method_function);
-		return ConsesLow.listS(complex_special_forms.$sym2$PROGN,
-				ConsesLow.listS(complex_special_forms.$sym5$DEFINE, method_function, plain_args,
-						ConsesLow.append(body, SubLNil.NIL)),
+		return ConsesLow.listS(
+				complex_special_forms.$sym2$PROGN, ConsesLow.listS(complex_special_forms.$sym5$DEFINE, method_function,
+						plain_args, ConsesLow.append(body, SubLNil.NIL)),
 				ConsesLow.append(regmethod_list, SubLNil.NIL));
 	}
 
@@ -417,27 +362,26 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLObject getters = defstruct_getters(conc_name, slots);
 		SubLObject setters = defstruct_setters(getters);
 		SubLObject host_fn_name = defstruct_host_fn_name(name);
-		return ConsesLow
-				.listS(complex_special_forms.$kw28$NAME, name,
-						ConsesLow.append(new SubLObject[] { SubLNil.NIL != conc_name
-								? ConsesLow.list(complex_special_forms.$kw24$CONC_NAME, conc_name) : SubLNil.NIL,
-								SubLNil.NIL != print_function
-										? ConsesLow.list(complex_special_forms.$kw25$PRINT_FUNCTION, print_function)
-										: SubLNil.NIL,
-								SubLNil.NIL != c_structure_tag
-										? ConsesLow.list(complex_special_forms.$kw26$C_STRUCTURE_TAG, c_structure_tag)
-										: SubLNil.NIL,
-								SubLNil.NIL != make_visit_fnP
-										? ConsesLow.list(complex_special_forms.$kw27$GENERATE_VISIT_FUNCTION_,
-												make_visit_fnP, complex_special_forms.$kw29$HOST_FN_NAME, host_fn_name)
-										: SubLNil.NIL,
-								ConsesLow.list(new SubLObject[] { complex_special_forms.$kw30$PREDICATE, predicate,
-										complex_special_forms.$kw31$CONSTRUCTOR, constructor,
-										complex_special_forms.$kw32$TYPE_VAR, type_var,
-										complex_special_forms.$kw33$SLOTS, slots,
-										complex_special_forms.$kw34$SLOT_KEYWORDS, slot_keywords,
-										complex_special_forms.$kw35$GETTERS, getters,
-										complex_special_forms.$kw36$SETTERS, setters }) }));
+		return ConsesLow.listS(complex_special_forms.$kw28$NAME, name,
+				ConsesLow.append(new SubLObject[] {
+						SubLNil.NIL != conc_name ? ConsesLow.list(complex_special_forms.$kw24$CONC_NAME, conc_name)
+								: SubLNil.NIL,
+						SubLNil.NIL != print_function
+								? ConsesLow.list(complex_special_forms.$kw25$PRINT_FUNCTION, print_function)
+								: SubLNil.NIL,
+						SubLNil.NIL != c_structure_tag
+								? ConsesLow.list(complex_special_forms.$kw26$C_STRUCTURE_TAG, c_structure_tag)
+								: SubLNil.NIL,
+						SubLNil.NIL != make_visit_fnP
+								? ConsesLow.list(complex_special_forms.$kw27$GENERATE_VISIT_FUNCTION_, make_visit_fnP,
+										complex_special_forms.$kw29$HOST_FN_NAME, host_fn_name)
+								: SubLNil.NIL,
+						ConsesLow.list(new SubLObject[] { complex_special_forms.$kw30$PREDICATE, predicate,
+								complex_special_forms.$kw31$CONSTRUCTOR, constructor,
+								complex_special_forms.$kw32$TYPE_VAR, type_var, complex_special_forms.$kw33$SLOTS,
+								slots, complex_special_forms.$kw34$SLOT_KEYWORDS, slot_keywords,
+								complex_special_forms.$kw35$GETTERS, getters, complex_special_forms.$kw36$SETTERS,
+								setters }) }));
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 11393L)
@@ -468,9 +412,8 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLObject n;
 		SubLObject slot_keyword;
 		SubLObject setter;
-		for (cdotimes_end_var = Sequences
-				.length(slot_keywords), n = SubLNil.NIL, n = CommonSymbols.ZERO_INTEGER; n
-						.numL(cdotimes_end_var); n = Numbers.add(n, CommonSymbols.ONE_INTEGER)) {
+		for (cdotimes_end_var = Sequences.length(slot_keywords), n = SubLNil.NIL, n = CommonSymbols.ZERO_INTEGER; n
+				.numL(cdotimes_end_var); n = Numbers.add(n, CommonSymbols.ONE_INTEGER)) {
 			slot_keyword = ConsesLow.nth(n, slot_keywords);
 			setter = ConsesLow.nth(n, setters);
 			gencaseslots = ConsesLow.cons(ConsesLow.list(slot_keyword, ConsesLow.list(setter, new_var, current_value)),
@@ -545,8 +488,8 @@ public class complex_special_forms extends SubLTranslatedFile {
 			current_$1 = rest.first();
 			rest = rest.rest();
 			cdestructuring_bind.destructuring_bind_must_consp(rest, analysis, complex_special_forms.$list44);
-			if (SubLNil.NIL == conses_high.member(current_$1, complex_special_forms.$list45,
-					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED))
+			if (SubLNil.NIL == conses_high.member(current_$1, complex_special_forms.$list45, CommonSymbols.UNPROVIDED,
+					CommonSymbols.UNPROVIDED))
 				bad = CommonSymbols.T;
 			if (current_$1 == complex_special_forms.$kw46$ALLOW_OTHER_KEYS)
 				allow_other_keys_p = rest.first();
@@ -558,8 +501,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLObject name = SubLNil.NIL != name_tail ? conses_high.cadr(name_tail) : SubLNil.NIL;
 		SubLObject conc_name_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw24$CONC_NAME,
 				analysis);
-		SubLObject conc_name = SubLNil.NIL != conc_name_tail ? conses_high.cadr(conc_name_tail)
-				: SubLNil.NIL;
+		SubLObject conc_name = SubLNil.NIL != conc_name_tail ? conses_high.cadr(conc_name_tail) : SubLNil.NIL;
 		SubLObject print_function_tail = cdestructuring_bind
 				.property_list_member(complex_special_forms.$kw25$PRINT_FUNCTION, analysis);
 		SubLObject print_function = SubLNil.NIL != print_function_tail ? conses_high.cadr(print_function_tail)
@@ -571,19 +513,17 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLObject generate_visit_functionP_tail = cdestructuring_bind
 				.property_list_member(complex_special_forms.$kw27$GENERATE_VISIT_FUNCTION_, analysis);
 		SubLObject generate_visit_functionP = SubLNil.NIL != generate_visit_functionP_tail
-				? conses_high.cadr(generate_visit_functionP_tail) : SubLNil.NIL;
+				? conses_high.cadr(generate_visit_functionP_tail)
+				: SubLNil.NIL;
 		SubLObject predicate_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw30$PREDICATE,
 				analysis);
-		SubLObject predicate = SubLNil.NIL != predicate_tail ? conses_high.cadr(predicate_tail)
-				: SubLNil.NIL;
+		SubLObject predicate = SubLNil.NIL != predicate_tail ? conses_high.cadr(predicate_tail) : SubLNil.NIL;
 		SubLObject constructor_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw31$CONSTRUCTOR,
 				analysis);
-		SubLObject constructor = SubLNil.NIL != constructor_tail ? conses_high.cadr(constructor_tail)
-				: SubLNil.NIL;
+		SubLObject constructor = SubLNil.NIL != constructor_tail ? conses_high.cadr(constructor_tail) : SubLNil.NIL;
 		SubLObject host_fn_name_tail = cdestructuring_bind
 				.property_list_member(complex_special_forms.$kw29$HOST_FN_NAME, analysis);
-		SubLObject host_fn_name = SubLNil.NIL != host_fn_name_tail ? conses_high.cadr(host_fn_name_tail)
-				: SubLNil.NIL;
+		SubLObject host_fn_name = SubLNil.NIL != host_fn_name_tail ? conses_high.cadr(host_fn_name_tail) : SubLNil.NIL;
 		SubLObject type_var_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw32$TYPE_VAR,
 				analysis);
 		SubLObject type_var = SubLNil.NIL != type_var_tail ? conses_high.cadr(type_var_tail) : SubLNil.NIL;
@@ -612,26 +552,23 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLObject setter_forms = defstruct_setter_forms(name, c_structure_tag, predicate, slots, setters);
 		SubLObject def_csetf_forms = defstruct_def_csetf_forms(getters, setters);
 		SubLObject host_fn_form = SubLNil.NIL != generate_visit_functionP
-				? defstruct_host_function(name, host_fn_name, constructor, slot_keywords, getters) : SubLNil.NIL;
+				? defstruct_host_function(name, host_fn_name, constructor, slot_keywords, getters)
+				: SubLNil.NIL;
 		SubLObject constructor_form = defstruct_constructor_form(name, constructor, c_structure_tag, type_var,
 				slot_keywords, setters);
-		return ConsesLow
-				.listS(complex_special_forms.$sym2$PROGN, type_var_form,
-						ConsesLow.append(print_forms,
-								SubLNil.NIL != register_form ? ConsesLow.list(register_form) : SubLNil.NIL,
-								ConsesLow.listS(
-										ConsesLow
-												.list(complex_special_forms.$sym48$DECLAIM,
-														ConsesLow.list(complex_special_forms.$sym49$OPTIMIZE_FUNCALL,
-																predicate)),
-										predicate_form,
-										ConsesLow.append(getter_forms, setter_forms, def_csetf_forms,
-												ConsesLow.list(constructor_form,
-														ConsesLow.list(CommonSymbols.IDENTITY,
-																ConsesLow.list(complex_special_forms.$sym50$QUOTE,
-																		name)),
-														SubLNil.NIL != generate_visit_functionP ? host_fn_form
-																: complex_special_forms.$list51)))));
+		return ConsesLow.listS(complex_special_forms.$sym2$PROGN, type_var_form,
+				ConsesLow.append(print_forms,
+						SubLNil.NIL != register_form ? ConsesLow.list(register_form) : SubLNil.NIL,
+						ConsesLow.listS(
+								ConsesLow.list(complex_special_forms.$sym48$DECLAIM,
+										ConsesLow.list(complex_special_forms.$sym49$OPTIMIZE_FUNCALL, predicate)),
+								predicate_form,
+								ConsesLow.append(getter_forms, setter_forms, def_csetf_forms,
+										ConsesLow.list(constructor_form,
+												ConsesLow.list(CommonSymbols.IDENTITY,
+														ConsesLow.list(complex_special_forms.$sym50$QUOTE, name)),
+												SubLNil.NIL != generate_visit_functionP ? host_fn_form
+														: complex_special_forms.$list51)))));
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 20489L)
@@ -741,8 +678,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 		statements = Sequences.nreverse(statements);
 		return ConsesLow.list(complex_special_forms.$sym2$PROGN,
 				ConsesLow.list(complex_special_forms.$sym5$DEFINE, host_fn, arglist,
-						reader.bq_cons(complex_special_forms.$sym2$PROGN,
-								ConsesLow.append(statements, SubLNil.NIL)),
+						reader.bq_cons(complex_special_forms.$sym2$PROGN, ConsesLow.append(statements, SubLNil.NIL)),
 						ConsesLow.list(complex_special_forms.$sym9$RET, object_arg)),
 				ConsesLow.list(complex_special_forms.$sym100$DEFINE_METHOD,
 						complex_special_forms.$sym101$VISIT_DEFSTRUCT_OBJECT,
@@ -789,17 +725,18 @@ public class complex_special_forms extends SubLTranslatedFile {
 			SubLObject print_function, SubLObject print_method) {
 		if (SubLNil.NIL == print_function)
 			print_function = complex_special_forms.$sym68$DEFAULT_STRUCT_PRINT_FUNCTION;
-		return ConsesLow
-				.listS(ConsesLow.list(complex_special_forms.$sym48$DECLAIM, ConsesLow.list(
-						complex_special_forms.$sym69$FACCESS, complex_special_forms.$sym70$PRIVATE, print_method)),
-						ConsesLow.list(complex_special_forms.$sym5$DEFINE, print_method, complex_special_forms.$list71,
-								reader.bq_cons(print_function, complex_special_forms.$list72)),
-						ConsesLow.append(
-								SubLNil.NIL != c_structure_tag ? SubLNil.NIL
-										: ConsesLow.list(ConsesLow.list(complex_special_forms.$sym12$_REGISTER_METHOD,
-												complex_special_forms.$sym73$_PRINT_OBJECT_METHOD_TABLE_, tag_var,
-												ConsesLow.list(complex_special_forms.$sym13$FUNCTION, print_method))),
-								SubLNil.NIL));
+		return ConsesLow.listS(
+				ConsesLow.list(complex_special_forms.$sym48$DECLAIM,
+						ConsesLow.list(complex_special_forms.$sym69$FACCESS, complex_special_forms.$sym70$PRIVATE,
+								print_method)),
+				ConsesLow.list(complex_special_forms.$sym5$DEFINE, print_method, complex_special_forms.$list71,
+						reader.bq_cons(print_function, complex_special_forms.$list72)),
+				ConsesLow.append(
+						SubLNil.NIL != c_structure_tag ? SubLNil.NIL
+								: ConsesLow.list(ConsesLow.list(complex_special_forms.$sym12$_REGISTER_METHOD,
+										complex_special_forms.$sym73$_PRINT_OBJECT_METHOD_TABLE_, tag_var,
+										ConsesLow.list(complex_special_forms.$sym13$FUNCTION, print_method))),
+						SubLNil.NIL));
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 19062L)
@@ -902,8 +839,9 @@ public class complex_special_forms extends SubLTranslatedFile {
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 18642L)
 	public static SubLObject defstruct_type_var_form(SubLObject type_var, SubLObject name, SubLObject c_structure_tag) {
-		return ConsesLow.list(complex_special_forms.$sym66$DEFCONSTANT, type_var, SubLNil.NIL != c_structure_tag
-				? c_structure_tag : ConsesLow.list(complex_special_forms.$sym50$QUOTE, name));
+		return ConsesLow.list(complex_special_forms.$sym66$DEFCONSTANT, type_var,
+				SubLNil.NIL != c_structure_tag ? c_structure_tag
+						: ConsesLow.list(complex_special_forms.$sym50$QUOTE, name));
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 7690L)
@@ -965,8 +903,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 				complex_special_forms.$list11);
 		complex_special_forms.$default_generate_visit_functionP$ = SubLFiles
 				.defparameter("*DEFAULT-GENERATE-VISIT-FUNCTION?*", CommonSymbols.T);
-		complex_special_forms.$call_profiling_enabledP$ = SubLFiles.defvar("*CALL-PROFILING-ENABLED?*",
-				SubLNil.NIL);
+		complex_special_forms.$call_profiling_enabledP$ = SubLFiles.defvar("*CALL-PROFILING-ENABLED?*", SubLNil.NIL);
 		complex_special_forms.$call_profiling_table$ = SubLFiles.defvar("*CALL-PROFILING-TABLE*", SubLNil.NIL);
 		return SubLNil.NIL;
 	}
@@ -1008,13 +945,10 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLThread thread = SubLProcess.currentSubLThread();
 		if (SubLNil.NIL != complex_special_forms.$call_profiling_enabledP$.getDynamicValue(thread)
 				&& SubLNil.NIL != complex_special_forms.$call_profiling_table$.getDynamicValue(thread))
-			Hashtables
-					.sethash(name,
-							complex_special_forms.$call_profiling_table$
-									.getDynamicValue(thread),
-							Numbers.add(Hashtables.gethash_without_values(name,
-									complex_special_forms.$call_profiling_table$.getDynamicValue(thread),
-									CommonSymbols.ZERO_INTEGER), CommonSymbols.ONE_INTEGER));
+			Hashtables.sethash(name, complex_special_forms.$call_profiling_table$.getDynamicValue(thread),
+					Numbers.add(Hashtables.gethash_without_values(name,
+							complex_special_forms.$call_profiling_table$.getDynamicValue(thread),
+							CommonSymbols.ZERO_INTEGER), CommonSymbols.ONE_INTEGER));
 		return SubLNil.NIL;
 	}
 

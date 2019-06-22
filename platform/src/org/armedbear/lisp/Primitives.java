@@ -34,6 +34,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import static org.armedbear.lisp.Lisp.NIL;
 import static org.armedbear.lisp.Lisp.PACKAGE_CL;
 import static org.armedbear.lisp.Lisp._SOURCE_;
@@ -3972,7 +3974,7 @@ public final class Primitives {
             tag = checkSymbol(args.car());
             LispObject body = ((Cons) args).cdr();
             Environment ext = new Environment(env);
-            final LispObject block = new LispObject();
+            final LispObject block = new BlockLispObject();
             ext.addBlock(tag, block);
             LispObject result = NIL;
             final LispThread thread = LispThread.currentThread();

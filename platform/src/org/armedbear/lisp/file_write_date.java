@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 // ### file-write-date
 public final class file_write_date extends Primitive
 {

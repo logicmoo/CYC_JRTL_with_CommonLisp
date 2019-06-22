@@ -1,7 +1,13 @@
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
+
 abstract class UnsupportedObjectImpl extends FromSubLisp {
 
+	@Override
+	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
+		return this; // are self-evaluating
+	}
 
 	@Override
 	public boolean isAlien() {

@@ -163,19 +163,19 @@ public class Eval implements SubLFile {
     public static SubLObject initialize_subl_interface_file(SubLObject className) {
         String stringTyped = className.getStringValue();
         Class fileClass = null;
-        try {
-            fileClass = Class.forName(stringTyped, false, Eval.isolatedClassLoader);
-            if (!SubLFile.class.isAssignableFrom(fileClass))
-                Errors.error(stringTyped + " is not a SubLFile.");
-        } catch (ClassNotFoundException e) {
-            Errors.error("Not found: " + stringTyped, e);
-        }
-        try {
-            fileClass = Class.forName(stringTyped, true, Eval.isolatedClassLoader);
-        } catch (Exception e2) {
-            Errors.error("Error loading " + stringTyped, e2);
-            return SubLNil.NIL;
-        }
+		try {
+			try {
+				fileClass = Class.forName(stringTyped, false, Eval.isolatedClassLoader);
+				if (!SubLFile.class.isAssignableFrom(fileClass))
+					Errors.error(stringTyped + " is not a SubLFile.");
+			} catch (ClassNotFoundException e) {
+				Errors.error("Not found: " + stringTyped, new RuntimeException(e));
+			}
+			fileClass = Class.forName(stringTyped, true, Eval.isolatedClassLoader);
+		} catch (Exception e2) {
+			Errors.error("Error loading " + stringTyped, new RuntimeException(e2));
+			return SubLNil.NIL;
+		}
         Object file = null;
         try {
             Field field = fileClass.getDeclaredField("me");

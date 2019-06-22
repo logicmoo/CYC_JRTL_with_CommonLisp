@@ -56,7 +56,7 @@ public final class gc extends Primitive
                 runtime.gc();
                 Thread.sleep(100);
             }
-            catch (InterruptedException e) {}
+            catch (Throwable e) {}
             free = runtime.freeMemory();
             if (free > maxFree)
                 maxFree = free;

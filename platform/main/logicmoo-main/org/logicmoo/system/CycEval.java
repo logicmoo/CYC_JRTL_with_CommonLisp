@@ -56,6 +56,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.ui.SubLReaderPanel;
+import static org.armedbear.lisp.Lisp.*; 
 
 public final class CycEval
 {

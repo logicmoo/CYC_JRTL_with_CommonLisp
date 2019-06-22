@@ -7,7 +7,7 @@ SET HOME=W:\opt\CYC_JRTL_with_CommonLisp\platform
 SET MAIN_CLASS=com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain
 
 
-SET JVM_OPTS="-server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC"
+SET JVM_OPTS="-server -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC"
 
 cls
 

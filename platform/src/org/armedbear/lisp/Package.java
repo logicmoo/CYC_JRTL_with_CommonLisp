@@ -32,6 +32,8 @@
  */
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -884,9 +886,9 @@ public class Package
    */
   private void sanityCheckSymbol(String symbolName, Symbol symbol)
   {
-    if( this == SubLPackage.PACKAGE_SUBLISP )
+    if( this == PACKAGE_SUBLISP )
     {
-      final Package packageCyc = SubLPackage.PACKAGE_CYC;
+      final Package packageCyc = PACKAGE_CYC;
       if( packageCyc != null )
       {
         Cons found = packageCyc.findSymbolOrigin( symbolName );

@@ -126,7 +126,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 	//@Override
 	public void setSlots(LispObject[] tempSlots)
 	{
-		slots = tempSlots;
+		slots = tempSlots.clone();
 	}
 
 	@Override
@@ -289,10 +289,11 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		{
 			try
 			{
-				return print_high.princ_to_string(this).getStringValue();
+				final SubLObject princ_to_string = print_high.princ_to_string(this);
+				return princ_to_string.getStringValue();
 			} catch (Exception e)
 			{
-				checkReadable();
+				checkUnreadableOk();
 				return "#<" + toTypeName() + " " + getName() + " @ " + System.identityHashCode(this) + ">";
 			}
 		}

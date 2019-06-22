@@ -33,10 +33,21 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.util.Iterator;
 
-public class Readtable extends LispObject
+public class Readtable extends SLispObject
 {
+
+  /* (non-Javadoc)
+	 * @see org.armedbear.lisp.SLispObject#printObjectImpl()
+	 */
+	@Override
+	public String printObjectImpl() {
+		return printUglyObjectImpl();
+	}
+	
   public static final byte SYNTAX_TYPE_CONSTITUENT           = 0;
   public static final byte SYNTAX_TYPE_WHITESPACE            = 1;
   public static final byte SYNTAX_TYPE_TERMINATING_MACRO     = 2;

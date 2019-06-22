@@ -33,8 +33,15 @@
 
 package org.armedbear.lisp;
 
-public final class SymbolMacro extends LispObject
+public final class SymbolMacro extends SLispObject
 {
+	/* (non-Javadoc)
+	 * @see org.armedbear.lisp.SLispObject#printObjectImpl()
+	 */
+	@Override
+	public String printObjectImpl() {
+		return printUglyObjectImpl();
+	}
     private LispObject expansion;
 
     public SymbolMacro(LispObject expansion)

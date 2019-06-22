@@ -41,7 +41,7 @@ public final class WebLoader implements WebConstants
     private Table currentTable;
     private int sourceOffset;
     private int offset;
-    private final int maxChars = 80;
+    private final short maxChars = 80;
     private LineSegmentList segments;
     private LineSequence lines;
     private final Hashtable refs = new Hashtable();

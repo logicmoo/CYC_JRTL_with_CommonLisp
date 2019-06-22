@@ -16,6 +16,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.FileChannel;
 
 import org.armedbear.lisp.Keyword;
+import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -740,13 +741,17 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		return n;
 	}
 
-	@Override
-	public String printObjectImpl() {
-		return toString();
-	}
+//	@Override
+//	public String printObjectImpl() {
+//		return toString();
+//	}
 
 	@Override
-	final public String toString() {
+	public String printObjectImpl() {
+		if (isPrintReadable(null)) {
+		Symbol s = Lisp.standardSymbolValue(this);
+		if(s!=null) return s.cl_symbol_name();
+		}		
 		String sb;
 		SubLObject eletype = typeOf();
 		if (eletype != null && eletype != Symbol.SYSTEM_STREAM) {

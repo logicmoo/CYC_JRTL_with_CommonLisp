@@ -33,6 +33,9 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.get;
+import static org.armedbear.lisp.Lisp.*; 
+
 import static org.armedbear.lisp.Lisp.PACKAGE_EXT;
 import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
 import static org.armedbear.lisp.Lisp.exportSpecial;
@@ -173,7 +176,7 @@ public final class Extensions
     @Override
     public LispObject execute(LispObject arg)
     {
-      LispObject obj = get(arg, Symbol._SOURCE, NIL);
+      LispObject obj = Lisp.get(arg, Symbol._SOURCE, NIL);
       if (obj instanceof Cons)
         return obj.cdr();
       return NIL;

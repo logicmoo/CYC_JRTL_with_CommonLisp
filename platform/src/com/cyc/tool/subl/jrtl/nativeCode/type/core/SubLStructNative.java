@@ -17,6 +17,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
@@ -27,7 +28,14 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 public abstract class SubLStructNative extends AbstractSubLStruct implements SubLStruct
 {
 
-	
+    /* (non-Javadoc)
+     * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject#eval(com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment)
+     */
+    @Override
+    final public SubLObject eval(SubLEnvironment p0) throws InvalidSubLExpressionException {
+    	// TODO Auto-generated method stub
+    	return this;
+    }
 	
 	
 	abstract public SubLStructDecl getStructDecl();
@@ -229,7 +237,7 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 			return print_high.princ_to_string(this).getStringValue();
 		} catch (Exception e)
 		{
-			checkReadable();
+			checkUnreadableOk();
 			return "#<" + toTypeName() + " " + getName() + " @ " + System.identityHashCode(this) + ">";
 		}
 	}

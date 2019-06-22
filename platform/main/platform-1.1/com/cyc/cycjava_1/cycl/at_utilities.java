@@ -592,7 +592,8 @@ public  final class at_utilities extends SubLTranslatedFile {
             {
               SubLObject module = sbhl_module_vars.get_sbhl_module($const63$genlPreds);
               SubLObject node_var = reln;
-              SubLObject deck_type = (($kw64$DEPTH == $kw64$DEPTH) ? ((SubLObject) $kw65$STACK) : $kw66$QUEUE);
+              final boolean b = true; // $kw64$DEPTH == $kw64$DEPTH;
+			SubLObject deck_type = (b ? ((SubLObject) $kw65$STACK) : $kw66$QUEUE);
               SubLObject recur_deck = deck.create_deck(deck_type);
               SubLObject node_and_predicate_mode = NIL;
               {
@@ -1004,7 +1005,8 @@ public  final class at_utilities extends SubLTranslatedFile {
             {
               SubLObject module = sbhl_module_vars.get_sbhl_module($const63$genlPreds);
               SubLObject node_var = reln;
-              SubLObject deck_type = (($kw64$DEPTH == $kw64$DEPTH) ? ((SubLObject) $kw65$STACK) : $kw66$QUEUE);
+              boolean b = true;// $kw64$DEPTH == $kw64$DEPTH;
+			SubLObject deck_type = (b ? ((SubLObject) $kw65$STACK) : $kw66$QUEUE);
               SubLObject recur_deck = deck.create_deck(deck_type);
               SubLObject node_and_predicate_mode = NIL;
               {

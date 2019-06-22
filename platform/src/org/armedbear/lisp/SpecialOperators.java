@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import static org.armedbear.lisp.Lisp.FUNCTION_NAME;
 import static org.armedbear.lisp.Lisp.NIL;
 import static org.armedbear.lisp.Lisp.bindArg;

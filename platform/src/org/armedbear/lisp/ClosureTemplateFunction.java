@@ -21,6 +21,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public abstract class ClosureTemplateFunction extends Closure
 {
   public ClosureTemplateFunction(LispObject lambdaList)

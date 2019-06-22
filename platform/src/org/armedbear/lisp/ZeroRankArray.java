@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public final class ZeroRankArray extends AbstractArray
 {
     private final LispObject elementType;
@@ -139,13 +141,9 @@ public final class ZeroRankArray extends AbstractArray
 	public String printObjectImpl()
     {
         final LispThread thread = LispThread.currentThread();
-        boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
+        boolean printReadably = isPrintReadable(thread);
         if (printReadably) {
-            if (elementType != T) {
-                checkReadable();
-                // Not reached.
-                return null;
-            }
+        	checkUnreadableOk();
         }
         if (printReadably || Symbol.PRINT_ARRAY.symbolValue(thread) != NIL) {
             StringBuffer sb = new StringBuffer("#0A");

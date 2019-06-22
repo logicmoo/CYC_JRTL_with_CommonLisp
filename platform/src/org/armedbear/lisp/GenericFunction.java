@@ -21,6 +21,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public abstract class GenericFunction extends StandardObject
 {
     protected GenericFunction(LispClass cls, int length)

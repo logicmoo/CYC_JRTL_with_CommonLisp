@@ -2190,7 +2190,8 @@ public  final class at_routines extends SubLTranslatedFile {
             {
               SubLObject module = sbhl_module_vars.get_sbhl_module($const48$genlPreds);
               SubLObject node_var = reln;
-              SubLObject deck_type = (($kw49$DEPTH == $kw49$DEPTH) ? ((SubLObject) $kw50$STACK) : $kw51$QUEUE);
+              final boolean byDepth = true;// $kw49$DEPTH == $kw49$DEPTH;
+			SubLObject deck_type = (byDepth ? ((SubLObject) $kw50$STACK) : $kw51$QUEUE);
               SubLObject recur_deck = deck.create_deck(deck_type);
               SubLObject node_and_predicate_mode = NIL;
               {

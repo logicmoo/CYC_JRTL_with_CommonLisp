@@ -52,7 +52,8 @@ import java.util.zip.ZipInputStream;
 
 import org.gridlab.gat.URI.URIEncoder;
 
-public class Pathname extends LispObject {
+public class Pathname extends NLispObject {
+	
 	
 	static {
 		Lisp.initLisp();
@@ -928,7 +929,7 @@ public class Pathname extends LispObject {
     @Override
 	public String printObjectImpl() {
         final LispThread thread = LispThread.currentThread();
-        final boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
+        final boolean printReadably = isPrintReadable(thread);
         final boolean printEscape = (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL);
         boolean useNamestring;
         String s = null;

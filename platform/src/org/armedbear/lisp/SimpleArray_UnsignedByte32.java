@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public final class SimpleArray_UnsignedByte32 extends AbstractArray
 {
     private final int[] dimv;
@@ -281,11 +283,7 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
     @Override
 	public String printObjectImpl()
     {
-        if (Symbol.PRINT_READABLY.symbolValue() != NIL) {
-            checkReadable();
-            // Not reached.
-            return null;
-        }
+    	checkUnreadableOk();
         return printObject(dimv);
     }
 

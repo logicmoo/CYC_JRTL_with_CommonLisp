@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -47,11 +49,19 @@ import java.util.Map;
 import java.util.Set;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLAlienObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 
 public final class JavaObject extends SubLAlienObject {
     final Object obj;
     private final Class<?> intendedClass;
+
+	@Override
+	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
+		return this; // self-evaluating
+	}
 
     public JavaObject(Object obj) {
         this.obj = obj;
@@ -371,7 +381,7 @@ public final class JavaObject extends SubLAlienObject {
             StringBuilder sb = new StringBuilder(c.isArray() ? "jarray" : c.getName());
             sb.append(' ');
             try {
-                String ts = obj.toString();
+                String ts = String.valueOf(obj);  
                 int length = -1;
                 LispObject stringLength = _JAVA_OBJECT_TO_STRING_LENGTH.symbolValueNoThrow();
                 if (stringLength instanceof Fixnum) {
@@ -385,7 +395,12 @@ public final class JavaObject extends SubLAlienObject {
                 } else {
                     sb.append(ts);
                 }
-                s = sb.toString();
+                Class tsClass = c.getMethod("toString").getDeclaringClass();
+                if(tsClass==Object.class) {
+                	sb.append(" at #x");
+            		sb.append(Integer.toHexString(System.identityHashCode(obj)).toUpperCase());
+                }
+                s = sb.toString();                
             } catch (Exception e) {
                 error(new JavaException(e));
                 // never reached

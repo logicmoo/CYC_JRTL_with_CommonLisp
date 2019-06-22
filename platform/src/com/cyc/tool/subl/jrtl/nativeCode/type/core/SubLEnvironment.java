@@ -77,7 +77,7 @@ abstract public class SubLEnvironment extends FromSubLisp {
 		defaultEnvironment = new Environment(null) {
 			@Override
 			public String printObjectImpl() {
-				checkReadable();
+				checkUnreadableOk();
 				return "#<Environment defaultEnvironment>";
 			}
 		};
@@ -163,7 +163,8 @@ abstract public class SubLEnvironment extends FromSubLisp {
 			}
 		}
 		if (outerEnvironment == null) {
-			if (var.isConstantSymbol())
+			final boolean constantSymbol = var.isConstantSymbol();
+			if (constantSymbol)
 				Errors.error("Can't set the value of constant symbol: " + this);
 			var.forceGlobalValue(value);
 		} else

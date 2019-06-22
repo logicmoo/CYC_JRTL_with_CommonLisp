@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.math.BigInteger;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLDoubleFloat;
@@ -583,7 +585,7 @@ public final class DoubleFloat extends SubLDoubleFloat
         LispThread thread = LispThread.currentThread();
         boolean printReadably = Lisp.isPrintReadable(thread);
 
-        if (value != value) {
+        if (value != doubleValue() || value==Double.NaN) {
             if (printReadably)
                 return "#.(CL:PROGN \"Comment: create a NaN.\" (CL:/ 0.0d0 0.0d0))";
             else

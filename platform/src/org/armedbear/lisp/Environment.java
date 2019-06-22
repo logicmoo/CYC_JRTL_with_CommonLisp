@@ -32,6 +32,8 @@
  */
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 
 public class Environment
@@ -183,7 +185,7 @@ public class Environment
         binding = binding.next;
       }
       // Not found in environment.
-      return ( (Symbol) name ).getSymbolFunctionOrNull();
+      return ( (Symbol) name ).getSymbolFunctionOrNullPrivate();
     }
     if( name instanceof Cons )
     {

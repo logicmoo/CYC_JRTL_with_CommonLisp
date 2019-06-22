@@ -2,7 +2,14 @@ package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import org.armedbear.lisp.LispObject;
 
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
+
 abstract public class FromSubLisp extends LispObject {
+	
+	@Override
+	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
+		return this; // self-evaluating
+	}
 	
 	@Override
 //	abstract public LispObject toLispObject();

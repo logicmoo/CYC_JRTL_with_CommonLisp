@@ -237,13 +237,16 @@ will consult the user even in these cases.")
   (:documentation "A MIXIN indicating that a domain should not use
 IF-THEN-ELSE semantics in methods."))
 
+
 (defmethod print-object ((obj domain) str)
-  (print-unreadable-object (obj str :type t)
+  (if *print-readably*
+      (sys::%print-readable-object obj str :type t)
+    (print-unreadable-object (obj str :type t)
     (handler-case
         (when (domain-name obj)
           (format str "~a" (domain-name obj)))
       ;; don't have the print-method cough an error if the domain has no name. [2009/03/26:rpg]
-      (unbound-slot () nil))))
+      (unbound-slot () nil)))))
 
 ;;;---------------------------------------------------------------------------
 ;;; PROBLEMS

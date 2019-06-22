@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import org.jpl7.Compound;
 import org.jpl7.JPL;
 import org.jpl7.Term;

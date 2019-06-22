@@ -33,13 +33,15 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public class LispStackFrame
   extends StackFrame
 {
   public final LispObject operator;
   private final LispObject[] args;
 
-  private final static class UnavailableArgument extends LispObject
+  private final static class UnavailableArgument extends SLispObject
   {
     public UnavailableArgument () { }
     @Override

@@ -35,6 +35,8 @@
  */
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
@@ -57,7 +59,7 @@ import org.armedbear.lisp.HashTable.HTComparator;
 // to simplify/beautify things here, but I couldn't get the
 // WeakHashTable type to be parameterized on an enclosed type.
 public class WeakHashTable
-    extends LispObject
+    extends SLispObject
     implements org.armedbear.lisp.protocol.Hashtable, LispHashTable
 {
     protected static final float loadFactor = 0.75f;
@@ -355,11 +357,8 @@ public class WeakHashTable
 
     @Override
 	public String printObjectImpl() {
-        if (Symbol.PRINT_READABLY.symbolValue(LispThread.currentThread()) != NIL) {
-            checkReadable();
-            return null; // Not reached.
-        }
-        StringBuilder sb = new StringBuilder(getTestSymbol().princToString());
+    	checkUnreadableOk();
+    	StringBuilder sb = new StringBuilder(getTestSymbol().princToString());
         sb.append(' ');
         sb.append(Symbol.HASH_TABLE.princToString());
         sb.append(' ');

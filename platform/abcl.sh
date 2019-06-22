@@ -24,7 +24,7 @@
 
 java \
   -cp "$CLASSPATH" \
-  -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -XshowSettings:vm \
+  -server -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -XshowSettings:vm \
   org.armedbear.lisp.Main \
   "$@"
 

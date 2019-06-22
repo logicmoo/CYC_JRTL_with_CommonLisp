@@ -32,6 +32,11 @@
  */
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -58,12 +63,13 @@ public class Symbol
     extends
       AbstractSubLSymbol implements java.io.Serializable, SubLSymbol
 {
+
   // Bit flags.
   private static final int FLAG_SPECIAL = 0x0001;
   private static final int FLAG_CONSTANT = 0x0002;
   private static final int FLAG_BUILT_IN_FUNCTION = 0x0004;
   private static final int FLAG_DYNAMIC = 0x0008;
-  private boolean isTraced;
+  boolean isTraced;
   Object lastCaller;
   SubLObject callerValue;
 
@@ -75,7 +81,7 @@ public class Symbol
 
   public void traceSymbol(boolean b)
   {
-    isTraced = b;
+   // isTraced = b;
   }
   final public static String SYMBOL_TYPE_NAME = "SYMBOL";
   public static boolean USE_THREAD_LOCALS = true;
@@ -175,14 +181,14 @@ public class Symbol
 
   private void checkChange(SubLObject value)
   {
-    if( !isTraced )
+    if( !isTraced || this == PRINT_READABLY)
     {
       return;
     }
     final SubLObject waz = symbolValueNoThrow();
     if( waz != value )
     {
-      notifyChange( value );
+      notifyChange( value, waz );
       return;
     }
   }
@@ -233,10 +239,11 @@ public class Symbol
     }
   }
 
-  private void notifyChange(SubLObject value)
+  private void notifyChange(SubLObject value, SubLObject oldValue)
   {
-    final String symbol2 = String.valueOf( this );
-    String msg = "changing value of " + symbol2 + " to " + value;
+    final String symbol2 = String.valueOf( toDebugString() );
+    String newValue = valueOfString((LispObject) value, false, Lisp.insideToString, value);
+    String msg = "changing value of " + symbol2 + " to " + newValue;// + "(from " + soldValue + ")";
     SystemCurrent.originalSystemErr.println( msg );
     // ( new Exception( msg ) ).printStackTrace( SystemCurrent.originalSystemErr
     // );
@@ -511,8 +518,11 @@ public class Symbol
   {
     resetCache();
     final int subLID = checkSubLId();
-    if( bindings[ subLID ] != SubLSymbol.UNBOUND )
+    if( bindings[ subLID ] != SubLSymbol.UNBOUND ) {
+        checkChange(newValue);
+
       bindings[ subLID ] = newValue;
+    }
     else
       setTLValue( newValue );
   }
@@ -848,11 +858,11 @@ public class Symbol
   {
     LispObject parts = NIL;
     parts = parts.push( new Cons( "name", name ) );
-    parts = parts.push( new Cons( "package", pkg ) );
     parts = parts.push( new Cons( "value", getTLValue() ) );
-    parts = parts.push( new Cons( "function", function ) );
-    parts = parts.push( new Cons( "operator", function ) );
     parts = parts.push( new Cons( "plist", propertyList ) );
+    parts = parts.push( new Cons( "package", pkg ) );
+    parts = parts.push( new Cons( "function", function ) );
+    parts = parts.push( new Cons( "operator", function ) );    
     parts = parts.push( new Cons( "flags", Fixnum.getInstance( flags ) ) );
     parts = parts.push( new Cons( "simularHashCode", Fixnum.getInstance( simularHashCode ) ) );
     parts = parts.push( new Cons( "identityHashCode", Fixnum.getInstance( identityHashCode ) ) );
@@ -947,8 +957,8 @@ public class Symbol
 
   public final void initializeSpecial(LispObject value)
   {
-    flags |= FLAG_SPECIAL;
-    setTLValue( value );
+	flags |= FLAG_SPECIAL;
+    setValue( value );
   }
 
   @Override
@@ -960,6 +970,7 @@ public class Symbol
   public final void initializeConstant(LispObject v)
   {
     setAccessMode( VariableAccessMode.CONSTANT );
+    checkChange(v);
     value = v;
   }
 
@@ -994,7 +1005,8 @@ public class Symbol
     final StringBuilder sb = new StringBuilder( "" );
     if( s != null )
       sb.append( s );
-    if( ( (Package) pkg ).findExternalSymbol( n ) != null )
+    final boolean isExternal = ( (Package) pkg ).findExternalSymbol( n ) != null;
+	if( isExternal )
       sb.append( ':' );
     else
       sb.append( "::" );
@@ -1048,7 +1060,7 @@ public class Symbol
     {
       if( declaredSpecialInEnv )
       {
-        notifyChange( argVal );
+        notifyChange( argVal, symbolValueNoThrow() );
       }
       SpecialBinding binding = null;
       // if( thread != null )
@@ -1601,11 +1613,14 @@ public class Symbol
     return symbolValueNoThrowInternal( thread );
   }
 
-  public LispObject getSymbolFunctionOrNull()
+  LispObject getSymbolFunctionOrNullPrivate()
   {
     return function;
   }
-
+  public LispObject getSymbolFunctionOrNull()
+  {
+    return getSymbolFunction();
+  }
   @Override
   public LispObject getSymbolFunction()
   {
@@ -1680,7 +1695,7 @@ public class Symbol
   {
     final LispThread thread = LispThread.currentThread();
     final boolean printEscape = ( PRINT_ESCAPE.symbolValue( thread ) != NIL );
-    final boolean printReadably = ( PRINT_READABLY.symbolValue( thread ) != NIL );
+    final boolean printReadably =  isPrintReadable(thread);
     final String unquoted = printObject( printReadably, printEscape );
     // if(printReadably) return "'"+ unquoted;
     return unquoted;
@@ -2287,7 +2302,11 @@ public class Symbol
             try
             {
               neatsies++;
-              s += " ====> " + value.printObject() + " ";
+              if(standardSymbolValue(value)==this) {
+                  s += " ====> " + valueOfString(value, false, Lisp.insideToString, value) + " ";            	  
+              }  else {
+                  s += " ====> " + valueOfString(value) + " "; 
+              }
             }
             finally
             {
@@ -3482,6 +3501,12 @@ public class Symbol
   // THREADS
   public static final Symbol THREAD = PACKAGE_THREADS.addExternalSymbol( "THREAD" );
 
+  static {
+  syms = Arrays.asList( new Symbol[] {
+			Symbol.TERMINAL_IO, Symbol.QUERY_IO, Symbol.DEBUG_IO, //
+			Symbol.STANDARD_OUTPUT, Symbol.STANDARD_INPUT, Symbol.ERROR_OUTPUT, Symbol.TRACE_OUTPUT //		
+  });
+  }
 /**
  * TODO Describe the purpose of this method.
  * @param value2

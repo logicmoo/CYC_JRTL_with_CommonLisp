@@ -33,17 +33,24 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructInterpreted;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class StandardObject extends SubLStructInterpreted implements SubLStruct
 {
-
+	@Override
+	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
+		return this; // self-evaluating
+	}
 	public static LispObject allocateInstance(LispObject arg)
 	{
 		if (arg == StandardClass.FUNCALLABLE_STANDARD_CLASS)
@@ -259,6 +266,9 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 		LispObject currentPrintLevel = _CURRENT_PRINT_LEVEL_.symbolValue(thread);
 		int currentLevel = Fixnum.getValue(currentPrintLevel);
 		if (currentLevel >= maxLevel) return "#";
+		if(insideToString!=0) {
+			return super.printObjectImpl();
+		}
 		return unreadableString(typeOf().printObject());
 	}
 

@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
@@ -102,11 +104,22 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
         lambdaList = obj;
     }
 
+    /* (non-Javadoc)
+     * @see org.armedbear.lisp.LispObject#debugInfo()
+     */ 
+    @Override
+    public String debugInfo() {
+    	return printObjectImpl();
+    }
+    
     @Override
     public LispObject getParts() {
         LispObject result = NIL;
         result = result.push(new Cons("lambda-name", lambdaName));
         result = result.push(new Cons("lambda-list", lambdaList));
+        final SubLList arglist2 = getArglist();
+		if(lambdaList!=arglist2)
+        result = result.push(new Cons("arg-list", arglist2));
         return result.nreverse();
     }
 
@@ -134,7 +147,8 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
         return super.toString();
     }
 
-    @Override
+    @SuppressWarnings("hiding")
+	@Override
     public String printObjectImpl() {
         final LispThread thread = LispThread.currentThread();
         final SpecialBindingsMark mark = thread.markSpecialBindings();

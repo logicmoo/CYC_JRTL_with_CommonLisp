@@ -21,6 +21,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 // ### stream-external-format
 public final class stream_external_format extends Primitive
 {

@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,11 +42,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -61,6 +69,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
+import com.cyc.tool.subl.util.IsolatedClassLoader;
 
 abstract public class Lisp extends ABCLStatic
 {
@@ -72,7 +81,9 @@ abstract public class Lisp extends ABCLStatic
 
 	public static boolean abclStrict = System.getProperty("lisp.abcl", "false").equals("true");
 
-    public static boolean cold = true;
+	public static boolean cold = true;
+	
+	public static boolean blazing = false;
 
     public static boolean initialized;
 
@@ -176,7 +187,7 @@ abstract public class Lisp extends ABCLStatic
     }
 
     // End-of-file marker.
-    public static final LispObject EOF = new LispObject() {
+    public static final LispObject EOF = new SLispObject() {
         @Override
         public String printObjectImpl() {
             return readableString(Symbol.JCALL, JavaObject.getInstance(Lisp.class), JavaObject.getInstance("EOF"));
@@ -2044,13 +2055,13 @@ abstract public class Lisp extends ABCLStatic
         Stream stdout = out;
         Symbol.STANDARD_INPUT.setSymbolValue(stdin);
         Symbol.STANDARD_OUTPUT.setSymbolValue(stdout);
+        checkOutput(Symbol.STANDARD_OUTPUT, stdout);
         Symbol.ERROR_OUTPUT.setSymbolValue(stdout);
         Symbol.TRACE_OUTPUT.setSymbolValue(stdout);
         Symbol.TERMINAL_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
         Symbol.QUERY_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
         Symbol.DEBUG_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
 
-        checkOutput(Symbol.STANDARD_OUTPUT, out);
     }
 
     /**
@@ -2284,7 +2295,8 @@ abstract public class Lisp extends ABCLStatic
         Symbol.PRINT_PPRINT_DISPATCH.initializeSpecial(NIL);
         Symbol.PRINT_PRETTY.initializeSpecial(NIL);
         Symbol.PRINT_RADIX.initializeSpecial(NIL);
-        Symbol.PRINT_READABLY.initializeSpecial(NIL);
+        Symbol.PRINT_READABLY.isTraced = true;
+        Symbol.PRINT_READABLY.initializeSpecial(NIL);        
         Symbol.PRINT_RIGHT_MARGIN.initializeSpecial(NIL);
     }
 
@@ -2447,7 +2459,7 @@ abstract public class Lisp extends ABCLStatic
 
     public static final LispObject UNBOUND_VALUE = new unboundValue();
 
-    private static class unboundValue extends LispObject {
+    private static class unboundValue extends SLispObject {
         @Override
         public String printObjectImpl() {
             return unreadableString("UNBOUND", false);
@@ -2465,7 +2477,7 @@ abstract public class Lisp extends ABCLStatic
 
     public static final LispObject NULL_VALUE = new nullValue();
 
-    private static class nullValue extends LispObject {
+    private static class nullValue extends SLispObject {
         {
             termRef = JPL.JNULL;
         }
@@ -2584,6 +2596,7 @@ abstract public class Lisp extends ABCLStatic
         Symbol.TERMINAL_IO.initializeSpecial(new TwoWayStream(stdin, stdout, true));
         Symbol.QUERY_IO.initializeSpecial(new TwoWayStream(stdin, stdout, true));
         Symbol.DEBUG_IO.initializeSpecial(new TwoWayStream(stdin, stdout, true));
+        
         stdout.flush();
         System.out.flush();
         SystemCurrent.out.flush();
@@ -2618,26 +2631,75 @@ public static boolean NULL(LispObject lispObject) {
  */
 public static String stringValueOf(LispObject arg) {
 	if(arg==null) return "#<JNULL-STRING-VALUE-OF>";
-	return arg.printObject();
+	int wasnsideToString = LispObject.insideToString; 
+	try {
+		LispObject.insideToString = 0; 
+		return arg.printObject();		
+	} finally {
+		LispObject.insideToString = wasnsideToString;
+		// TODO: handle finally clause
+	}
 }
 
     public static String valueOfString(Object obj) {
         if (obj == null)
             return "null";
-        //if(obj instanceof AbstractString) return ((SubLString) obj).getStringValue();
-        if (obj instanceof LispObject) {
-            return ((LispObject) obj).printObject();
+        //if(obj instanceof AbstractString)
+        //   return ((SubLString) obj).getStringValue();        
+        if (obj instanceof LispObject) {        	        	
+			final LispObject lispObject = (LispObject) obj;
+			Symbol sym = standardSymbolValue(lispObject);
+			if (sym != null) {
+				if (isPrintReadable(null))
+				{
+					return "#." + valueOfString(sym, false, 0, null);
+				}
+			}
+			return lispObject.printObject();
         }
         try {
-            insideToString++;
-            if (obj.getClass().isArray()) {
-                return Arrays.deepToString(new Object[] { obj });
-            }
+			insideToString++;
+			if (obj.getClass().isArray()) {
+				return Arrays.deepToString(new Object[] { obj });
+			}
             return String.valueOf(obj);
         } finally {
             insideToString--;
         }
     }
+	static public String valueOfString(LispObject lo, boolean readably, int newInside, Object po) {
+		if (Lisp.insideToString > 3) {
+			Thread.dumpStack();
+		}
+		if (Lisp.insideToString > 2) {
+			return lo.easyToString();
+		}
+		final Object wasO = Lisp.printingObject;
+		// if (o == this) return "OVERFLOW: " + easyToString();
+		final LispThread thread = LispThread.currentThread();
+		final SpecialBindingsMark mark = thread.markSpecialBindings();
+		final int wasInside = Lisp.insideToString;
+		boolean wasPRTraced = Symbol.PRINT_READABLY.isTraced;
+		try {
+			Lisp.printingObject = po;
+			Lisp.insideToString = newInside;
+			//Symbol.PRINT_CIRCLE.setSymbolValue(T);
+			if(readably!=isPrintReadable(thread)) {
+				final SubLObject argVal = readably ? T : NIL;
+				Symbol.PRINT_READABLY.setSymbolValue(argVal);
+			}
+			return lo.printObject();
+		} catch (Throwable t) {
+			t.printStackTrace();
+			return lo.easyToString();
+		} finally {
+			thread.resetSpecialBindings(mark);
+			Lisp.insideToString = wasInside;
+			Lisp.printingObject = wasO;
+			Symbol.PRINT_READABLY.isTraced = wasPRTraced;
+		}
+	}
+
 
     public static void lisp_type_error(SubLObject subLProcess, String type) {
         if (Main.isSubLisp()) {
@@ -2749,14 +2811,20 @@ public static String stringValueOf(LispObject arg) {
     }
 
     public static void initLisp() {
-        _AUTOLOAD_VERBOSE_.toString();
+    	// pro.hashCode();
 
     }
 
     public static boolean isPrintReadable(LispThread thread) {
-//		if (thread == null)
-//			thread = LispThread.currentThread();
-        return Symbol.PRINT_READABLY.symbolValue() != NIL;
+		final Symbol printReadably = Symbol.PRINT_READABLY;
+		if (printReadably == null)
+			return false;
+		if (thread == null)
+			thread = LispThread.currentThread();
+		final LispObject symbolValue = printReadably.symbolValueNoThrow(thread);
+		if (symbolValue == null)
+			return false;
+		return symbolValue != NIL;
     }
 	/**
 	 * TODO Describe the purpose of this method.
@@ -2799,12 +2867,12 @@ public static String stringValueOf(LispObject arg) {
 	 * TODO Describe the purpose of this method.
 	 */
 	static public void flushOutputStreams() {
-		LispObject sSTANDARD_OUTPUT = Symbol.STANDARD_OUTPUT;
-		if(sSTANDARD_OUTPUT instanceof Symbol) sSTANDARD_OUTPUT = ((Symbol) sSTANDARD_OUTPUT).getSymbolValue();
-		if(sSTANDARD_OUTPUT instanceof Stream)  ((Stream) sSTANDARD_OUTPUT)._finishOutput();
-		sSTANDARD_OUTPUT = Symbol.ERROR_OUTPUT;
-		if(sSTANDARD_OUTPUT instanceof Symbol) sSTANDARD_OUTPUT = ((Symbol) sSTANDARD_OUTPUT).getSymbolValue();
-		if(sSTANDARD_OUTPUT instanceof Stream)  ((Stream) sSTANDARD_OUTPUT)._finishOutput();
+		LispObject o = Symbol.STANDARD_OUTPUT;
+		if(o instanceof Symbol) o = ((Symbol) o).getSymbolValue();
+		if(o instanceof Stream)  ((Stream) o)._finishOutput();
+		o = Symbol.ERROR_OUTPUT;
+		if(o instanceof Symbol) o = ((Symbol) o).getSymbolValue();
+		if(o instanceof Stream)  ((Stream) o)._finishOutput();
 	}
 
 	/**
@@ -2820,4 +2888,107 @@ public static String stringValueOf(LispObject arg) {
 		
 	}
 
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param twoWayStream
+	 * @return
+	 */
+	public static Collection<Symbol> syms;
+
+	static {
+		initSyms();
+	}
+	public static Symbol standardSymbolValue(LispObject o) {
+		if (o == null || syms == null)
+			return null;
+		for (Symbol symbol : syms) {
+			if (symbol.symbolValueNoThrow() == o)
+				return symbol;
+		}
+		return null;
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	private static void initSyms() {
+		List lst = new LinkedList();		
+		for (Symbol symbol : syms) {
+			lst.add(symbol);
+		}
+		syms = lst;
+		final Field[] declaredFields = Symbol.class.getDeclaredFields();
+		for (Field f : declaredFields) {
+
+				if (Modifier.isStatic(f.getModifiers()) && !Modifier.isPrivate(f.getModifiers()) && f.getType()==Symbol.class) {
+					final boolean accessible = f.isAccessible();
+					Symbol sym;
+					try {
+						if(!accessible) {
+							f.setAccessible(true);
+						}
+						sym = (Symbol)f.get(null);
+						if(sym.isConstantSymbol()) {
+							if (sym.boundp()) {
+								String name = sym.getName();
+								if (name.length() > 4) {
+									lst.add(sym);
+								}
+							}
+						}
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} finally {
+					if(!accessible) f.setAccessible(false);					
+					}
+				}
+			
+		}		
+		syms.remove(T);
+		syms.remove(NIL);
+		
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	public static void raiseUnreadable(LispObject o) {
+		if(insideToString == 0 && Lisp.initialized && Lisp.printingObject == null)
+		error(new PrintNotReadable(list(Keyword.OBJECT, o)));
+	}
+	
+	public static Primitive pro = new print_readable_object();
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	public static LispObject addUrl(ClassLoader o, URL url) {
+		try {
+			IsolatedClassLoader.addURL(o, url);
+			return T;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return NIL;
+		}
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 */
+	public static URL[] getURLs(ClassLoader o) {
+		if (o instanceof URLClassLoader) {
+			return ((URLClassLoader) o).getURLs();
+		} 
+		ClassLoader extClassLoader;
+		try {
+			extClassLoader = IsolatedClassLoader.asURLClassLoader(o, true);
+			if (extClassLoader instanceof URLClassLoader) {
+				return getURLs(extClassLoader);
+			}
+			System.err.println("asURLClassLoader is not a URLClassLoader: " + extClassLoader);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return new URL[0];
+	}
 }

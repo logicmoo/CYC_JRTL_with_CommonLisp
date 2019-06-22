@@ -158,6 +158,7 @@ import bsh.util.JConsole;
 import eu.larkc.core.orchestrator.LarkcInit;
 import eu.larkc.core.orchestrator.servers.LarKCHttpServer;
 import sun.misc.Unsafe;
+import static org.armedbear.lisp.Lisp.*; 
 
 //import static org.slf4j.spi.LocationAwareLogger.log;
 public class BeanShellCntrl {
@@ -1691,7 +1692,7 @@ public class BeanShellCntrl {
 	@LispMethod
 	static void init_swipl() {
 		synchronized (StartupLock) {
-			if (noPrologJNI)
+			if (noProlog)
 				return;
 			if (called_init_swipl)
 				return;

@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public final class cxr {
     // ### set-car
     private static final Primitive SET_CAR = new pf_set_car();

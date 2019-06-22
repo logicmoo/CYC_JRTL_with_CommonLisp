@@ -32,6 +32,8 @@
  */
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public abstract class ReaderMacroFunction extends Function
 {
   /*

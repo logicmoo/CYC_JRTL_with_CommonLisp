@@ -53,7 +53,7 @@
 
 
 (defun add-url-to-classpath (url &optional (classloader *classloader*))
-  (jcall "addUrl" classloader url))
+  (jstatic "addUrl" +lisp-class+ classloader url))
 
 (defun add-urls-to-classpath (&rest urls)
   (dolist (url urls)

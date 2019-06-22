@@ -33,10 +33,12 @@
  */
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.util.concurrent.locks.ReentrantLock;
 
 public class HashTable
-    extends LispObject
+    extends SLispObject
     implements org.armedbear.lisp.protocol.Hashtable, LispHashTable
 {
 
@@ -269,13 +271,40 @@ public class HashTable
         // A value in a Lisp hash table can never be null, so...
         return remove(key) != null ? T : NIL;
     }
+    
 
-    @Override
-	public String printObjectImpl() {
-        if (Symbol.PRINT_READABLY.symbolValue(LispThread.currentThread()) != NIL) {
-            checkReadable();
-            return null; // Not reached.
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @return
+	 */
+	public LispObject getCopyForm() {
+        StringBuilder sb = new StringBuilder(getTestSymbol().princToString());
+        sb.append(' ');
+        sb.append(Symbol.HASH_TABLE.princToString());
+        sb.append(' ');
+        sb.append(count);
+        if (count == 1) {
+            sb.append(" entry");
+        } else {
+            sb.append(" entries");
         }
+        sb.append(", ");
+        sb.append(buckets.length);
+        sb.append(" buckets");
+		LispObject s = list(Symbol.MAKE_HASH_TABLE, Keyword.TEST, getTestSymbol(), //
+				internKeyword("SIZE"), LispInteger.makeInteger(buckets.length), //
+				internKeyword("REHASH-THRESHOLD"), rehashThreshold, //
+				internKeyword("REHASH-SIZE"), rehashSize, //
+				internKeyword("ENTRIES"), (LispObject) quote(ENTRIES()));		
+		return list(Symbol.PROGN, makeStringOrJNull(sb.toString()), s);
+	}
+    
+    @Override
+    public String printObjectImpl() {
+    	if(isPrintReadable(null))  {
+    		return printReadableObject(false);
+    	}
+        checkUnreadableOk();
         StringBuilder sb = new StringBuilder(getTestSymbol().princToString());
         sb.append(' ');
         sb.append(Symbol.HASH_TABLE.princToString());

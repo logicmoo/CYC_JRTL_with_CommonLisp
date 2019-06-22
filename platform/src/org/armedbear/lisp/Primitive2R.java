@@ -21,6 +21,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public class Primitive2R extends Function
 {
     public Primitive2R(LispObject name)

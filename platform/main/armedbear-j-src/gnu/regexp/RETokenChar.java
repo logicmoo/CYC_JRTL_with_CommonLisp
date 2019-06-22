@@ -26,7 +26,8 @@ final class RETokenChar extends REToken {
   RETokenChar(int subIndex, char c, boolean ins) {
     super(subIndex);
     ch = new char [1];
-    ch[0] = (insens = ins) ? Character.toLowerCase(c) : c;
+    insens = ins;
+    ch[0] = ins ? Character.toLowerCase(c) : c;
   }
 
   @Override

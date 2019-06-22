@@ -11,12 +11,14 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.util.InitializingSubLFile;
+import com.cyc.tool.subl.util.IsolatedClassLoader;
 
 public class rcycl
     extends
       InitializingSubLFile
 {
   public static final rcycl me;
+  IsolatedClassLoader icl;
 
   @Override
   public void declareFunctions()

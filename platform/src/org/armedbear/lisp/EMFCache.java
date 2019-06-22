@@ -32,9 +32,13 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class EMFCache extends LispObject
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+
+public final class EMFCache extends SLispObject
 {
   ConcurrentHashMap<CacheEntry,LispObject> cache
     = new ConcurrentHashMap<CacheEntry,LispObject>();;
@@ -59,10 +63,19 @@ public String printObjectImpl()
       type_error(obj, Symbol.STANDARD_GENERIC_FUNCTION);
   }
 
-  private static class EqlSpecialization extends LispObject
+  private static class EqlSpecialization extends SLispObject
   {
     public LispObject eqlTo;
 
+    /* (non-Javadoc)
+     * @see org.armedbear.lisp.SLispObject#printObjectImpl()
+     */
+    @Override
+    public String printObjectImpl() {
+		SubLSymbol sym = getType();
+		return unreadableString(sym.getName() + " " + Lisp.stringValueOf(eqlTo), true);
+    }
+    
     public EqlSpecialization(LispObject eqlTo)
     {
         this.eqlTo = eqlTo;

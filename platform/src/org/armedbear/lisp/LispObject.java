@@ -32,6 +32,8 @@
  */
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.io.IOException;
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -43,7 +45,48 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class LispObject extends AbstractSubLObject {
+abstract public class LispObject extends AbstractSubLObject {
+	
+	final Object $_DEBUG$INFO_$ = new Object() {
+		@Override
+		public String toString() {
+			final Object wasO = Lisp.printingObject;
+			Lisp.printingObject = this;
+			try {
+				return debugInfo();
+			} finally {
+				Lisp.printingObject = wasO;
+			}
+		}
+	};
+
+	public String debugInfo() {
+		
+		LispObject parts = getParts();
+		if (parts == NIL || parts == null) {
+			parts = LispObject.this;
+		}
+		final Symbol pprint = Symbol.PPRINT;
+		if (!initialized || pprint == null || pprint.getSymbolFunction() == null) {
+			return parts.printObject();
+		}
+		try {
+			final StringOutputStream souts = new StringOutputStream();
+			pprint.execute(parts, souts);
+			souts.flush();
+			final String stringValue = souts.getBufferString().getStringValue();
+			return stringValue;
+		} catch (Throwable e) {
+			return parts.printObject();
+		}
+
+	}
+    
+//    public static Package getCurrentPackage() {
+//    	return Lisp.getCurrentPackage();
+//    }
+
+	
 	@Override
 	public SubLObject first() {
 		return car();
@@ -791,8 +834,15 @@ public class LispObject extends AbstractSubLObject {
 		};
 	};
 
-	@Override
 	final public String printObject() {
+		String s = printObjectChecked();
+		if (!blazing && (s.equals("#") || s.startsWith("#<"))) {
+			checkUnreadableOk();
+		}
+		return s;
+	}
+
+	private String printObjectChecked() {
 		if (insideToString == 0)
 			return printObjectImpl();
 		
@@ -826,6 +876,11 @@ public class LispObject extends AbstractSubLObject {
 
 	public String printObjectImpl() // throws IOException
 	{
+		return printUglyObjectImpl();
+	}
+	
+	public String printUglyObjectImpl() // throws IOException
+	{
 //		try {
 			SubLSymbol sym = getType();
 			return unreadableString(sym.getName(), true);
@@ -835,33 +890,19 @@ public class LispObject extends AbstractSubLObject {
 //		}
 	}
 
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		if (Lisp.insideToString > 3) {
-			Thread.dumpStack();
-		}
-		if (Lisp.insideToString > 2) {
-			return easyToString();
-		}
-		final Object o = Lisp.printingObject;
-		// if (o == this) return "OVERFLOW: " + easyToString();
-		final LispThread thread = LispThread.currentThread();
-		final SpecialBindingsMark mark = thread.markSpecialBindings();
-		try {
-			Lisp.printingObject = this;
-			Lisp.insideToString++;
-			// Symbol.PRINT_CIRCLE.setSymbolValue(T);
-			return printObject();
-		} catch (Throwable t) {
-			t.printStackTrace();
-			return easyToString();
-		} finally {
-			thread.resetSpecialBindings(mark);
-			Lisp.insideToString--;
-			Lisp.printingObject = o;
-		}
+		return valueOfString(this, true, insideToString + 1, this);
 	}
-
+	
+	public LispObject getCopyForm() {
+		return this;
+	}
+	
 	public String printReadableObject(boolean quoted) {
 		/*
 		 * if *print-readably* is true, printing proceeds as if *print-escape*,
@@ -874,11 +915,17 @@ public class LispObject extends AbstractSubLObject {
 			thread.bindSpecial(Symbol.PRINT_READABLY, T);
 			thread.bindSpecial(Symbol.PRINT_ESCAPE, T);
 			thread.bindSpecial(Symbol.PRINT_ARRAY, T);
-			thread.bindSpecial(Symbol._PACKAGE_, Lisp._KEYWORD_PACKAGE_);
-			thread.bindSpecial(Symbol.PRINT_LENGTH, NIL);
+			if (insideToString == 0) {
+				thread.bindSpecial(Symbol._PACKAGE_, Lisp._KEYWORD_PACKAGE_);
+				thread.bindSpecial(Symbol.PRINT_LENGTH, NIL);
+			}
 			thread.bindSpecial(Symbol.PRINT_LEVEL, NIL);
 			thread.bindSpecial(Symbol.PRINT_LINES, NIL);
-			String s = printObject();
+			LispObject cf = getCopyForm();
+			if (cf == null) {
+				cf = this;
+			}
+			String s = cf.printObject();
 			if (quoted) {
 				return "'" + s;
 			} else {
@@ -927,7 +974,7 @@ public class LispObject extends AbstractSubLObject {
 			sb.append("<");
 			func = this.typeOf();
 			sb.append(func.princToString());
-			checkReadable();
+			checkUnreadableOk();
 		} else {
 			sb.append(".(");
 			sb.append(func.printReadableObject(false));
@@ -981,7 +1028,7 @@ public class LispObject extends AbstractSubLObject {
 	 * @return a non reabable string (i.e. one enclosed in the #< > markers)
 	 */
 	public final String unreadableString(String s, boolean identity) {
-		checkReadable();
+		checkUnreadableOk();
 		StringBuilder sb = new StringBuilder("#<");
 		sb.append(s);
 		if (identity) {
@@ -996,9 +1043,9 @@ public class LispObject extends AbstractSubLObject {
 	/**
 	 * TODO Describe the purpose of this method.
 	 */
-	protected void checkReadable() {
-		if (insideToString == 0 && Lisp.initialized && Symbol.PRINT_READABLY.symbolValue() != NIL) {
-			error(new PrintNotReadable(list(Keyword.OBJECT, this)));
+	protected void checkUnreadableOk() {
+		if (isPrintReadable(null)) {
+			raiseUnreadable(this);
 			// return null; // not reached
 		}
 	}

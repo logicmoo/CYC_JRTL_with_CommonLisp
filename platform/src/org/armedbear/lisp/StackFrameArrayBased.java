@@ -58,8 +58,16 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.util.SafeRunnable;
 import com.cyc.tool.subl.util.SubLFiles;
 
-public abstract class StackFrameArrayBased extends LispObject implements StackFrameHolder {
+public abstract class StackFrameArrayBased extends SLispObject implements StackFrameHolder {
 
+	/* (non-Javadoc)
+	 * @see org.armedbear.lisp.SLispObject#printObjectImpl()
+	 */
+	public String printObjectImpl() // throws IOException
+	{
+		return printUglyObjectImpl();
+	}
+	
 	private static class StackMarker {
 
 		final int numArgs;

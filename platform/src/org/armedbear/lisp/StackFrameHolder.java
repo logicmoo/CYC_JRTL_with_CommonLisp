@@ -18,6 +18,8 @@
  */
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 /**
  * TODO Describe this type briefly. If necessary include a longer description
  * and/or an example.

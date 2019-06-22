@@ -94,7 +94,7 @@ public class SubLSocketStream extends SocketStream implements SubLOutputBinarySt
 
 	@Override
 	public String printObjectImpl() {
-		checkReadable();
+		checkUnreadableOk();
 		return "#<SOCKET-STREAM " + host + ":" + (socket == null ? "INVALID SOCKET" : "" + socket.getPort())
 				+ (isClosed() ? " CLOSED" : " OPEN") + " @ " + superHash() + ">";
 	}

@@ -45,7 +45,7 @@ Used to determine relative pathname to find 'abcl-contrib.jar'."
         (probe-file (make-pathname
                      :defaults (java:jcall "toString" u)
                      :name "abcl")))
-      (java:jcall "getURLs" (boot-classloader))))
+      (java:jstatic "getURLs" (java::jclass "org.armedbear.lisp.Lisp")  (system::boot-classloader))))
    (ignore-errors
      #p"http://abcl.org/releases/current/abcl.jar")))
 
@@ -164,7 +164,7 @@ returns the pathname of the contrib if it can be found."
          (probe-file (make-pathname
                       :defaults (java:jcall "toString" u)
                       :name "abcl-contrib")))
-       (java:jcall "getURLs" (boot-classloader)))))
+       (java:jstatic "getURLs" (java::jclass "org.armedbear.lisp.Lisp") (boot-classloader)))))
 
 (export '(find-system
           find-contrib

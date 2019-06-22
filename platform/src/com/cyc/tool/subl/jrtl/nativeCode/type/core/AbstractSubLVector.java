@@ -14,6 +14,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.ComparatorGenericKey;
@@ -21,6 +22,10 @@ import com.cyc.tool.subl.util.ComparatorIdentityKey;
 
 abstract public class AbstractSubLVector extends AbstractSubLArraySequence implements SubLSequence {
 
+	@Override
+	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
+		return this; // vectors are self-evaluating
+	}
 
 	protected AbstractSubLVector() {
 

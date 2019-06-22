@@ -132,7 +132,7 @@ public final class Do {
         }
         // Look for tags.
         LispObject localTags = preprocessTagBody(body, ext);
-        LispObject blockId = new LispObject();
+        LispObject blockId = new BlockLispObject();
         try {
             // Implicit block.
             ext.addBlock(NIL, blockId);

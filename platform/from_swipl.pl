@@ -1,6 +1,5 @@
 #!/usr/bin/env swipl
 
-
 :- multifile user:file_search_path/2.
 :- dynamic   user:file_search_path/2.
 
@@ -13,6 +12,9 @@ prolog_stack:stack_guard(none).
 :-  getenv('LARKC_HOME',_) -> true ; 
    (prolog_load_context(directory,PLC),
    setenv('LARKC_HOME',PLC)).
+
+:- use_module(library(prolog_pack)).
+:- set_setting(prolog_pack:server, 'https://www.swi-prolog.org/pack/').
    
 :- current_module(larkc_client) -> true;
   (prolog_load_context(file,PLC),
@@ -364,7 +366,7 @@ path_sep(':').
 
 guess_claspath(CP):-
   maplist(expand_file_name,['c:/program files/Java/jd*8.*/lib/tools.jar','c:/program files (x86)/Java/jd*8.*/lib/tools.jar',
-  '/usr/lib/jvm/java*8*/lib/tools.jar'],LL1),
+  '/usr/lib/jvm/java*8/lib/tools.jar','/usr/lib/jvm/java*/lib/tools.jar','/usr/lib/jvm/*/lib/jrt-fs.jar'],LL1),
   append(LL1,[ToolsJar|_]),
   maplist(expand_file_name,['jpl.jar','lib/*.jar','dist/*-contrib.jar'],LL2),append(LL2,L22),
   exclude(hidden_jars,L22,L2),

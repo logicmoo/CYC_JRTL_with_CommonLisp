@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -43,7 +45,7 @@ import java.math.BigInteger;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
-public final class RandomState extends LispObject {
+public final class RandomState extends SLispObject {
 	private static final boolean INCLUDE_GAUSSIAN = false;
 
 	private Random random;

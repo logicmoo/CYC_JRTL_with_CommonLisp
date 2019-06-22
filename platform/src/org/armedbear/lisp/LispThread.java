@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 import static org.armedbear.lisp.Lisp.*;
 
 import java.io.PrintStream;
@@ -57,7 +59,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.util.SafeRunnable;
 import com.cyc.tool.subl.util.SubLFiles;
 
-public abstract class LispThread extends LispObject {
+public abstract class LispThread extends SLispObject {
 	public LispObject initialBindings = NIL;
 
 	// use a concurrent hashmap: we may want to add threads

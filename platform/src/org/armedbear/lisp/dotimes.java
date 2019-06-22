@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public final class dotimes extends SpecialOperator
 {
   private dotimes()
@@ -56,7 +58,7 @@ public final class dotimes extends SpecialOperator
     LispObject specials = parseSpecials(bodyAndDecls.NTH(1));
     bodyForm = bodyAndDecls.car();
 
-    LispObject blockId = new LispObject();
+    LispObject blockId = new BlockLispObject();
     final Environment ext = new Environment(env);
     try
       {

@@ -33,8 +33,28 @@
 
 package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*; 
+
 public final class make_condition extends Primitive
 {
+	static Object raise_unreadable = new raise_unreadable();
+	static public  class raise_unreadable extends Primitive
+	{
+	    private raise_unreadable()
+	    {
+	    	super("%raise-unreadable", PACKAGE_SYS, true);
+	    }
+	    
+	    /* (non-Javadoc)
+	     * @see org.armedbear.lisp.Primitive#execute()
+	     */
+	    @Override
+	    public LispObject execute(LispObject obj) {
+	    	raiseUnreadable(obj);
+	    	return NIL;
+	    }
+	}
+	
     private make_condition()
     {
         super("%make-condition", PACKAGE_SYS, true);
@@ -116,8 +136,9 @@ Form: (LET* ((TP (QUOTE (AND SIMPLE-ERROR TYPE-ERROR))) (C (MAKE-CONDITION TP)))
             return new PackageError(initArgs);
         if (symbol == Symbol.PARSE_ERROR)
             return new ParseError(initArgs);
-        if (symbol == Symbol.PRINT_NOT_READABLE)
+        if (symbol == Symbol.PRINT_NOT_READABLE) {
             return new PrintNotReadable(initArgs);
+        }
         if (symbol == Symbol.PROGRAM_ERROR)
             return new ProgramError(initArgs);
         if (symbol == Symbol.READER_ERROR)

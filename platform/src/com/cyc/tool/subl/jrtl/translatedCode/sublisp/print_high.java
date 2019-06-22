@@ -128,23 +128,23 @@ public class print_high extends SubLTranslatedFile {
 	}
 
 	public static SubLObject init_print_high_file() {
-		print_high.$print_array$ = SubLFiles.defvar("*PRINT-ARRAY*", CommonSymbols.T);
-		print_high.$print_base$ = SubLFiles.defvar("*PRINT-BASE*", CommonSymbols.TEN_INTEGER);
-		print_high.$print_case$ = SubLFiles.defvar("*PRINT-CASE*", print_high.$kw0$UPCASE);
-		print_high.$print_circle$ = SubLFiles.defvar("*PRINT-CIRCLE*", SubLNil.NIL);
-		print_high.$print_escape$ = SubLFiles.defvar("*PRINT-ESCAPE*", CommonSymbols.T);
-		print_high.$print_gensym$ = SubLFiles.defvar("*PRINT-GENSYM*", CommonSymbols.T);
-		print_high.$print_length$ = SubLFiles.defvar("*PRINT-LENGTH*", SubLNil.NIL);
-		print_high.$print_level$ = SubLFiles.defvar("*PRINT-LEVEL*", SubLNil.NIL);
-		print_high.$print_lines$ = SubLFiles.defvar("*PRINT-LINES*", SubLNil.NIL);
-		print_high.$print_miser_width$ = SubLFiles.defvar("*PRINT-MISER-WIDTH*", SubLNil.NIL);
-		print_high.$print_pprint_dispatch$ = SubLFiles.defvar("*PRINT-PPRINT-DISPATCH*", SubLNil.NIL);
-		print_high.$print_pretty$ = SubLFiles.defvar("*PRINT-PRETTY*", CommonSymbols.T);
-		print_high.$print_radix$ = SubLFiles.defvar("*PRINT-RADIX*", SubLNil.NIL);
-		print_high.$print_readably$ = SubLFiles.defvar("*PRINT-READABLY*", SubLNil.NIL);
-		print_high.$print_right_margin$ = SubLFiles.defvar("*PRINT-RIGHT-MARGIN*", SubLNil.NIL);
-		print_high.$print_error$ = SubLFiles.defvar("*PRINT-ERROR*", SubLNil.NIL);
-		print_high.$print_circularities$ = SubLFiles.defvar("*PRINT-CIRCULARITIES*", SubLNil.NIL);
+		print_high.$print_array$ = SubLFiles.defvarCheckCL("*PRINT-ARRAY*", CommonSymbols.T);
+		print_high.$print_base$ = SubLFiles.defvarCheckCL("*PRINT-BASE*", CommonSymbols.TEN_INTEGER);
+		print_high.$print_case$ = SubLFiles.defvarCheckCL("*PRINT-CASE*", print_high.$kw0$UPCASE);
+		print_high.$print_circle$ = SubLFiles.defvarCheckCL("*PRINT-CIRCLE*", SubLNil.NIL);
+		print_high.$print_escape$ = SubLFiles.defvarCheckCL("*PRINT-ESCAPE*", CommonSymbols.T);
+		print_high.$print_gensym$ = SubLFiles.defvarCheckCL("*PRINT-GENSYM*", CommonSymbols.T);
+		print_high.$print_length$ = SubLFiles.defvarCheckCL("*PRINT-LENGTH*", SubLNil.NIL);
+		print_high.$print_level$ = SubLFiles.defvarCheckCL("*PRINT-LEVEL*", SubLNil.NIL);
+		print_high.$print_lines$ = SubLFiles.defvarCheckCL("*PRINT-LINES*", SubLNil.NIL);
+		print_high.$print_miser_width$ = SubLFiles.defvarCheckCL("*PRINT-MISER-WIDTH*", SubLNil.NIL);
+		print_high.$print_pprint_dispatch$ = SubLFiles.defvarCheckCL("*PRINT-PPRINT-DISPATCH*", SubLNil.NIL);
+		print_high.$print_pretty$ = SubLFiles.defvarCheckCL("*PRINT-PRETTY*", CommonSymbols.T);
+		print_high.$print_radix$ = SubLFiles.defvarCheckCL("*PRINT-RADIX*", SubLNil.NIL);
+		print_high.$print_readably$ = SubLFiles.defvarCheckCL("*PRINT-READABLY*", SubLNil.NIL);
+		print_high.$print_right_margin$ = SubLFiles.defvarCheckCL("*PRINT-RIGHT-MARGIN*", SubLNil.NIL);
+		print_high.$print_error$ = SubLFiles.defvarCheckCL("*PRINT-ERROR*", SubLNil.NIL);
+		print_high.$print_circularities$ = SubLFiles.defvarCheckCL("*PRINT-CIRCULARITIES*", SubLNil.NIL);
 		print_high.$print_circle_table_size$ = SubLFiles.defparameter("*PRINT-CIRCLE-TABLE-SIZE*", print_high.$int1$64);
 		print_high.$print_object_method_table$ = SubLFiles.deflexical("*PRINT-OBJECT-METHOD-TABLE*",
 				Vectors.make_vector(print_high.$int35$256, SubLNil.NIL));
