@@ -9,6 +9,7 @@ import static org.armedbear.lisp.Lisp.PACKAGE_EXT;
 import static org.armedbear.lisp.Lisp.PACKAGE_JAVA;
 import static org.armedbear.lisp.Lisp.PACKAGE_SUBLISP;
 
+import org.slf4j.spi.LocationAwareLogger;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Frame;
@@ -16,6 +17,8 @@ import java.awt.Panel;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,7 +29,9 @@ import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
@@ -39,6 +44,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 
 import javax.swing.JDesktopPane;
@@ -64,6 +70,7 @@ import org.armedbear.lisp.ControlTransfer;
 import org.armedbear.lisp.Debug;
 //import org.armedbear.lisp.CycEval;
 import org.armedbear.lisp.Environment;
+import org.armedbear.lisp.Function;
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.Interpreter.UnhandledCondition;
 import org.armedbear.lisp.Java;
@@ -83,13 +90,16 @@ import org.armedbear.lisp.Packages;
 import org.armedbear.lisp.Pathname;
 import org.armedbear.lisp.ProcessingTerminated;
 import org.armedbear.lisp.SimpleString;
+import org.armedbear.lisp.SpecialBindingsMark;
 import org.armedbear.lisp.SpecialOperator;
 import org.armedbear.lisp.SpecialOperators;
 import org.armedbear.lisp.StandardClass;
 import org.armedbear.lisp.StandardObject;
+import org.armedbear.lisp.Stream;
 import org.armedbear.lisp.StructureClass;
 import org.armedbear.lisp.StructureObject;
 import org.armedbear.lisp.Symbol;
+import org.armedbear.lisp.TwoWayStream;
 import org.armedbear.lisp.Version;
 
 import org.jpl7.Atom;
@@ -158,7 +168,7 @@ import bsh.util.JConsole;
 import eu.larkc.core.orchestrator.LarkcInit;
 import eu.larkc.core.orchestrator.servers.LarKCHttpServer;
 import sun.misc.Unsafe;
-import static org.armedbear.lisp.Lisp.*; 
+import static org.armedbear.lisp.Lisp.*;
 
 //import static org.slf4j.spi.LocationAwareLogger.log;
 public class BeanShellCntrl {
@@ -665,8 +675,10 @@ public class BeanShellCntrl {
 			public void write(int b) throws IOException {
 				string.append((char) b);
 			}
-			
-			/* (non-Javadoc)
+
+			/*
+			 * (non-Javadoc)
+			 * 
 			 * @see java.lang.Object#finalize()
 			 */
 			@Override
@@ -1341,21 +1353,74 @@ public class BeanShellCntrl {
 		return org.armedbear.lisp.Interpreter.evaluate(statements);
 	}
 
+	final static Writer swipl_writer = new Writer() {
+		@Override
+		public void write(char[] chars, int start, int length) throws IOException {
+			Term s = new Atom(new String(chars, start, length));
+			Query.oneSolution(new Compound("write", s));
+		}
+
+		@Override
+		public void flush() throws IOException {
+			oneSolution("flush_output");
+		}
+
+		@Override
+		public void close() throws IOException {
+			oneSolution("flush_output");
+		}
+	};
+
 	@LispMethod
 	static public LispObject lisp_eval(Term term) {
+		try {
+			LispObject args = term_to_lobject(term);
+			Reader reader = new StringReader(":bt\n");
+			return with_lisp_io(new SCallable<LispObject>() {
+				@Override
+				public LispObject call() {
+					Environment env = Environment.currentLispEnvironment();
+					return lisp_progn(args, env);
+				}
+			}, reader, swipl_writer);
+		} catch (Throwable e) {
+			throw getCatcher().doThrow(e);
+		}
+	}
+
+	static public LispObject with_lisp_io(SCallable<LispObject> fun, Reader reader, Writer writer) {
 		boolean wasNoDebug = Main.isNoDebug();
 		if (!wasNoDebug) {
 			Main.setNoDebug(true);
 		}
-		try {
-			LispObject args;
-			try {
-				args = term_to_lobject(term);
-			} catch (Throwable e) {
-				throw getCatcher().doThrow(e);
+		final LispObject debuggerHook = new Function() {
+			@Override
+			public LispObject execute(LispObject condition, LispObject debuggerHook) {
+				if (false) {
+					return PACKAGE_SYS.findSymbol("%DEBUGGER-HOOK-FUNCTION").execute(condition, debuggerHook);
+				} else {
+					return NIL;
+				}
 			}
-			Environment env = Environment.currentLispEnvironment();
-			return lisp_progn(args, env);
+		};
+		try {
+			LispThread thread = LispThread.currentThread();
+			final SpecialBindingsMark mark = thread.markSpecialBindings();
+			try {
+				final Stream in = new Stream(Symbol.SYSTEM_STREAM, new BufferedReader(reader));
+				final Stream out = new Stream(Symbol.SYSTEM_STREAM, writer);
+				final TwoWayStream ioStream = TwoWayStream.createTwoWayStream(in, out, true);
+				thread.bindSpecial(Symbol.DEBUGGER_HOOK, debuggerHook);
+				thread.bindSpecial(Symbol.STANDARD_INPUT, in);
+				thread.bindSpecial(Symbol.STANDARD_OUTPUT, out);
+				thread.bindSpecial(Symbol.ERROR_OUTPUT, out);
+				thread.bindSpecial(Symbol.TERMINAL_IO, ioStream);
+				thread.bindSpecial(Symbol.DEBUG_IO, ioStream);
+				thread.bindSpecial(Symbol.QUERY_IO, ioStream);
+				return fun.call();
+			} finally {
+				thread.resetSpecialBindings(mark);
+			}
 		} finally {
 			if (!wasNoDebug) {
 				Main.setNoDebug(false);
@@ -1987,9 +2052,10 @@ public class BeanShellCntrl {
 		}
 		return JVMImpl.doThrow(throwable);
 	}
+
 	@SuppressWarnings("unchecked")
 	static <T extends Exception, R> R sneakyThrow(Throwable t) throws T {
-	    throw (T) t; // ( ͡° ͜ʖ ͡°)
+		throw (T) t; // ( ͡° ͜ʖ ͡°)
 	}
 
 	static LispObject string_string(String text) {
@@ -2383,16 +2449,26 @@ public class BeanShellCntrl {
 	@Retention(RetentionPolicy.RUNTIME)
 	static public @interface LispMethod {
 		// Guess based on method name
-		String prologName() default "";
+		String prologName()
 
-		String symbolName() default "";
+		default "";
 
-		String packageName() default "";
+		String symbolName()
 
-		boolean exported() default true;
+		default "";
+
+		String packageName()
+
+		default "";
+
+		boolean exported()
+
+		default true;
 
 		// use false is symbol macro
-		boolean evalArgs() default true;
+		boolean evalArgs()
+
+		default true;
 
 		// Arg has method name
 		boolean popFront() default false;

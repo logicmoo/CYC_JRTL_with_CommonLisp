@@ -167,7 +167,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/jetty-security-8.0.4.v20111024.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-server-8.0.4.v20111024.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-servlet-8.0.4.v20111024.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jetty-util-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jetty-util-8.0.4.v20111024.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1561097504017/source/jetty-util-8.0.4.v20111024-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-webapp-8.0.4.v20111024.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-xml-8.0.4.v20111024.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/JFlex.jar"/>
@@ -240,7 +240,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/SftpGanymedAdaptor.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/SftpTrileadAdaptor.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/SgeAdaptor.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/slf4j-api-1.7.5.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1561097504017/source/slf4j-api-1.7.5-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/slf4j-log4j12-1.7.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/smartsockets-1.51.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/srm.jar"/>

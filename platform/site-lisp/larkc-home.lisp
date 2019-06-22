@@ -74,9 +74,9 @@
  )
 
 (asdf:operate 'asdf:load-op :prove)
-(require 'jna)
-(require 'jfli)
-(require 'cffi)
+;; (require 'jna)
+;; (require 'jfli)
+;; (require 'cffi)
 
 #+Ignore (load "ytools/ytload/ytload")
 #+Ignore (setq ytools::config-directory* "ytconfig/abcl/")

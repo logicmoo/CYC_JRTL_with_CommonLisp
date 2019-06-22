@@ -91,9 +91,11 @@ quicklisp/dists/quicklisp/software/nibbles-20180831-git/nibbles.asd
 quicklisp/dists/quicklisp/software/protest-20190521-git/protest.asd
 quicklisp/dists/quicklisp/software/verbose-20180831-git/verbose.asd
 quicklisp/dists/quicklisp/software/postmodern-20190521-git/s-sql.asd
+quicklisp/dists/quicklisp/software/anaphora-20180228-git/anaphora.asd
 quicklisp/dists/quicklisp/software/babel-20171227-git/babel-tests.asd
 quicklisp/dists/quicklisp/software/cl-ppcre-20190521-git/cl-ppcre.asd
 quicklisp/dists/quicklisp/software/cl-yesql-20190521-git/cl-yesql.asd
+quicklisp/dists/quicklisp/software/let-plus-20171130-git/let-plus.asd
 quicklisp/dists/quicklisp/software/overlord-20190521-git/overlord.asd
 quicklisp/dists/quicklisp/software/parse-number-v1.7/parse-number.asd
 quicklisp/dists/quicklisp/software/s-base64-20130128-git/s-base64.asd
@@ -108,6 +110,7 @@ shop3/shop3/examples/satellite/strips/translate-satellite-problems.asd
 quicklisp/dists/quicklisp/software/babel-20171227-git/babel-streams.asd
 quicklisp/dists/quicklisp/software/cl-base58-20150113-git/cl-base58.asd
 quicklisp/dists/quicklisp/software/cl-base64-20150923-git/cl-base64.asd
+quicklisp/dists/quicklisp/software/cl-colors-20180328-git/cl-colors.asd
 quicklisp/dists/quicklisp/software/optima-20150709-git/optima.ppcre.asd
 quicklisp/dists/quicklisp/software/parachute-20190521-git/parachute.asd
 quicklisp/dists/quicklisp/software/trivia-20190521-git/trivia.ppcre.asd
@@ -136,6 +139,7 @@ quicklisp/dists/quicklisp/software/trivia-20190521-git/trivia.benchmark.asd
 quicklisp/dists/quicklisp/software/cl-base58-20150113-git/cl-base58-test.asd
 quicklisp/dists/quicklisp/software/trivia-20190521-git/trivia.quasiquote.asd
 3t/tools/utilities/lisp-utilities/cl-json_0.4.1/t/_darcs/pristine/cl-json.asd
+quicklisp/dists/quicklisp/software/cl-ansi-text-20150804-git/cl-ansi-text.asd
 quicklisp/dists/quicklisp/software/cl-ppcre-20190521-git/cl-ppcre-unicode.asd
 quicklisp/dists/quicklisp/software/trivia-20190521-git/trivia.balland2006.asd
 quicklisp/dists/quicklisp/software/alexandria-20181210-git/alexandria-tests.asd
@@ -147,6 +151,7 @@ quicklisp/dists/quicklisp/software/global-vars-20141106-git/global-vars-test.asd
 quicklisp/dists/quicklisp/software/moptilities-20170403-git/moptilities-test.asd
 quicklisp/dists/quicklisp/software/lisp-namespace-20171130-git/lisp-namespace.asd
 quicklisp/dists/quicklisp/software/trivial-indent-20181018-git/trivial-indent.asd
+quicklisp/dists/quicklisp/software/cl-ansi-text-20150804-git/cl-ansi-text-test.asd
 quicklisp/dists/quicklisp/software/fare-quasiquote-20190521-git/fare-quasiquote.asd
 quicklisp/dists/quicklisp/software/fare-utils-20170124-git/test/fare-utils-test.asd
 quicklisp/dists/quicklisp/software/misc-extensions-20150608-git/misc-extensions.asd

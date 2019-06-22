@@ -174,7 +174,9 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
         this(SubLObjectFactory.makeString(name));
     }
 
+    SubLProcess parent;
     public SubLProcess(SubLString name) {
+    	parent = SubLProcess.currentProcess();
         isPossiblyStillborn = false;
         runThread = null;
         priority = SubLProcess.DEFAULT_PRIORITY;

@@ -23,7 +23,7 @@ fi
 if [ ! -z "${BASH_ALIASES[alisp]}" ]; then
  echo ""
  echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH
- return 0;
+# return 0;
 fi
 
 export CODE_ROOT=$LARKC_HOME/site-lisp/3t

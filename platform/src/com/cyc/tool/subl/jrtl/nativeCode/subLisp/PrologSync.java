@@ -588,6 +588,9 @@ public class PrologSync extends SubLTrampolineFile
 			}
 			addSyncedType("ASSERTION");
 			addSyncedType("CX");
+			addSyncedType("SHOP-BASIC-PROBLEM");
+			addSyncedType("SHOP-BASIC-DOMAIN");
+			addSyncedType("SHOP-BASIC-PLAN-STATE");
 			addSyncedType("EPISODE");
 			addSyncedType("EPISODIC-RULE");
 			addSyncedType("OB");

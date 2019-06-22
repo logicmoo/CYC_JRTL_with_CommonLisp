@@ -649,7 +649,7 @@ public class SubLObjectFactory
     {
       SubLThreadPool.getDefaultPool().execute( process );
     }
-    catch( Exception e )
+    catch( Throwable e )
     {
       SubLThread.currentThread().interrupt();
     }
