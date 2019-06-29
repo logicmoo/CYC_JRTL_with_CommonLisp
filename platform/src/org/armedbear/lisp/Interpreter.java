@@ -168,6 +168,7 @@ public final class Interpreter implements Runnable {
             if (Main.passedArgs == passedArgs)
                 Main.passedArgs = null;
         }
+		BeanShellCntrl.scanForExports(BeanShellCntrl.class);
         if (passedArgs != null) {
             if (postProcess) {
                 postProcess = false;
@@ -263,7 +264,7 @@ public final class Interpreter implements Runnable {
     public static void initializeJLisp() {
         synchronized (Interpreter.class) {
             if (!initialized) {
-                Symbol.FEATURES.setSymbolValue(new Cons(Keyword.J, Symbol.FEATURES.getSymbolValue()));
+            	addFeature("J");
                 Load.loadSystemFile("boot.lisp", false, false, false);
                 try {
 
@@ -285,7 +286,7 @@ public final class Interpreter implements Runnable {
         }
     }
 
-    private static boolean topLevelInitialized;
+    public static boolean topLevelInitialized;
 
     private static void initializeTopLevel() {
         synchronized (Interpreter.class) {

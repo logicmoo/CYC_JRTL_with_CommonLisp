@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin
+   id="org.eclisp"
+   name="Eclisp Plug-in"
+   version="0.1"
+   provider-name="Moritz Post"
+   class="org.eclisp.EclispPlugin">
+
+   <runtime>
+      <library name="eclisp.jar">
+         <export name="*"/>
+      </library>
+   </runtime>
+   <requires>
+      <import plugin="org.eclipse.ui"/>      
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.editors"/>
+      <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.core.runtime" />
+   </requires>
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="Eclisp Action Set"
+            visible="true"
+            id="eclisp.actionSet">
+         <menu
+               id="eclispMenu"
+               label="E&amp;clisp">
+            <separator
+                  name="eclispGroup">
+            </separator>
+         </menu>
+         <action
+               class="eclisp.actions.EclispAction"
+               icon="icons/sample.gif"
+               id="eclisp.actions.EclispAction"
+               label="&amp;Start Server"
+               menubarPath="eclispMenu/eclispGroup"
+               toolbarPath="eclispGroup"
+               tooltip="Start the Eclisp server">
+         </action>
+      </actionSet>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            name="Lisp"
+            icon="icons/sample.gif"
+            class="org.eclisp.ui.perspectives.LispPerspective"
+            id="org.eclisp.ui.perspectives.lispPerspective">
+      </perspective>
+   </extension>
+<!-- Wizards -->
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Lisp"
+            id="org.eclisp.wizards">
+      </category>
+      <wizard
+            name="Lisp Project"
+            icon="icons/sample.gif"
+            category="org.eclisp.wizards"
+            class="org.eclisp.ui.wizards.NewLispProjectWizard"
+            preferredPerspectives="org.eclisp.ui.perspectives.lispPerspective"
+            finalPerspective="org.eclisp.ui.perspectives.lispPerspective"
+            project="true"
+            id="org.eclisp.ui.wizards.newLispProjectWizard">
+         <description>
+            Create a Lisp project
+         </description>
+      </wizard>
+      <wizard
+            name="Lisp File"
+            icon="icons/sample.gif"
+            category="org.eclisp.wizards"
+            class="org.eclisp.ui.wizards.NewLispFileWizard"
+            id="org.eclisp.ui.wizards.newLispFileWizard">
+         <description>
+            Create a Lisp file
+         </description>
+      </wizard>
+   </extension>
+<!-- Preferences -->
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="Editor"
+            category="org.eclisp.ui.preferences.lispPreferencePage"
+            class="org.eclisp.ui.preferences.LispEditorPreferencePage"
+            id="org.eclisp.ui.preferences.lispEditorPreferencePage">
+      </page>
+      <page
+            name="Lisp"
+            class="org.eclisp.ui.preferences.LispPreferencePage"
+            id="org.eclisp.ui.preferences.lispPreferencePage">
+      </page>
+   </extension>
+<!-- Views -->
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Lisp Category"
+            id="org.eclisp.ui.eclisp">
+      </category>
+      <view
+            name="Lisp Console"
+            icon="icons/sample.gif"
+            category="org.eclisp.ui.eclisp"
+            class="org.eclisp.ui.views.LispView"
+            id="org.eclisp.ui.views.lispView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            default="true"
+            name="Lisp Editor"
+            icon="icons/sample.gif"
+            extensions="lisp, lsp"
+            class="org.eclisp.ui.editor.LispEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            id="org.eclisp.ui.editor.lispEditor">
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.documentProviders">
+      <provider
+            extensions="lisp, lsp"
+            class="org.eclisp.ui.editor.LispDocumentProvider"
+            id="org.eclisp.ui.editor.lispDocumentProvider">
+      </provider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors.markerAnnotationSpecification">
+      <specification
+            annotationType="eclisp.specification1">
+      </specification>
+   </extension>
+
+</plugin>

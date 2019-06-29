@@ -10,6 +10,7 @@ import org.armedbear.lisp.Layout;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Symbol;
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -141,7 +142,7 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		layout = getStructDecl();
 		if (isTracked())
 		{
-			PrologSync.addThis(this);
+			BeanShellCntrl.addThis(this);
 		}
 	}
 
@@ -177,6 +178,39 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 
 	
 	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct#isReady()
+	 */
+	@Override
+	public boolean isInitialized() {
+
+		int fieldCount = getFieldCount();
+		if (fieldCount < 0)
+			return false;
+		if(fieldCount == 0) {
+			return true;
+		}
+		if(fieldCount == 1) {
+			SubLObject slot = getField(2);
+			if (slot == null)
+				return false;
+			return slot != NIL;
+		}
+		int hasNonNilSlot = 0;
+		int fcp2 = fieldCount + 2;
+		for (int i = 0; i < fcp2; i++) {
+			SubLObject slot = getField(i);
+			if (slot == null)
+				return false;
+			if (slot != NIL)
+				hasNonNilSlot++;
+		}
+		if (hasNonNilSlot > 0 && (fieldCount - 2 < hasNonNilSlot))
+			return true;
+		return false;
+	}
 	
 	public SubLObject getField(int fieldNum)
 	{

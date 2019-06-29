@@ -67,7 +67,8 @@ abstract public class LispObject extends AbstractSubLObject {
 			parts = LispObject.this;
 		}
 		final Symbol pprint = Symbol.PPRINT;
-		if (!initialized || pprint == null || pprint.getSymbolFunction() == null) {
+		
+		if (pprint == null || isTooSoon() || pprint.getSymbolFunction() == null) {
 			return parts.printObject();
 		}
 		try {

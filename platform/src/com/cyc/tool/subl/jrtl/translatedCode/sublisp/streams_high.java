@@ -2,6 +2,15 @@
 // For LarKC
 //
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.RET_T;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp.UNPROVIDED;
+import static org.armedbear.lisp.Symbol.STREAMP;
+import static org.armedbear.lisp.Keyword.BINARY_KEYWORD;
+import static org.armedbear.lisp.Keyword.START;
+import static org.armedbear.lisp.Keyword.END;
+import static org.armedbear.lisp.Fixnum.ZERO;
 
 import java.math.BigInteger;
 
@@ -213,8 +222,8 @@ public class streams_high
       return SubLObjectFactory.makeInteger( result );
     }
     long positionTyped = 0L;
-    if( position_spec != START_KEYWORD )
-      if( position_spec == END_KEYWORD )
+    if( position_spec != START )
+      if( position_spec == END )
         positionTyped = streamTyped.file_length();
       else
         positionTyped = position_spec.longValue();
@@ -727,7 +736,7 @@ public class streams_high
   {
     if( stream == UNPROVIDED )
       stream = StreamsLow.$standard_output$.getDynamicValue();
-    stream.toOutputTextStream().writeChar( character.charValue() );
+    if(character!=NIL)stream.toOutputTextStream().writeChar( character.charValue() );
     return character;
   }
 
@@ -758,7 +767,7 @@ public class streams_high
 
   public static SubLObject write_string(SubLObject string, SubLObject stream)
   {
-    writeString( string, stream, ZERO_INTEGER, SubLNumberFactory.makeInteger( string.toStr().length() ), false );
+    writeString( string, stream, ZERO, SubLNumberFactory.makeInteger( string.toStr().length() ), false );
     return string;
   }
 

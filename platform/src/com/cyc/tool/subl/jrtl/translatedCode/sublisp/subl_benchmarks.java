@@ -6,6 +6,8 @@ package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -282,6 +284,6 @@ public class subl_benchmarks implements SubLFile {
 	}
 
 	public subl_benchmarks() {
-		PrologSync.addSingleton(this);
+		BeanShellCntrl.addSubLFile(this);
 	}
 }

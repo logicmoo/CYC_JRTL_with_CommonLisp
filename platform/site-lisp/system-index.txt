@@ -30,6 +30,7 @@ lparallel/lparallel-bench.asd
 phoe-toolbox/phoe-toolbox.asd
 3t/planner/user/debug/debug.asd
 Gateway/src/sql/gateway.sql.asd
+cl-prevalence/cl-prevalence.asd
 cl-plumbing/cl-plumbing-test.asd
 pddl-tools/external-planners.asd
 Gateway/src/base/gateway.base.asd

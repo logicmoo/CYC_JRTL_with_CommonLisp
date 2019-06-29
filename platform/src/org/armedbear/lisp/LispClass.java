@@ -43,6 +43,10 @@ import org.jpl7.Term;
 public abstract class LispClass extends StandardObject
 {
 
+	public boolean isDontTrack() {
+		return true;
+	}
+	
 	@Override
 	final public Term toProlog(List s)
 	{

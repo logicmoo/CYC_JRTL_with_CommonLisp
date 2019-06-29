@@ -18,6 +18,7 @@
  */
 package eu.larkc.core.orchestrator;
 
+import static org.armedbear.lisp.Lisp.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
@@ -49,39 +50,44 @@ import eu.larkc.core.data.iterator.RDFHandlerIterator;
 import eu.larkc.core.metadata.PluginRegistry;
 
 public class CycUtil {
-	//private static Logger log = LoggerFactory.getLogger(CycUtil.class);
+	// private static Logger log = LoggerFactory.getLogger(CycUtil.class);
 	private static Logger logger = Logger.getLogger(CycUtil.class.getCanonicalName());
 
 	private static final OwlToCycMapping owlToCycMapping = new OwlToCycMapping();
 	public static String mtStr = "BaseKB";
-	//private static String uriFnStr = "LarkcURIFn";
+	// private static String uriFnStr = "LarkcURIFn";
 
-	public static final void loadRdfTurtle(InputStream inputStream) throws RDFParseException, RDFHandlerException, IOException {
+	public static final void loadRdfTurtle(InputStream inputStream)
+			throws RDFParseException, RDFHandlerException, IOException {
 		// prepare infrastructure for storing URIs
-		/*addConst(uriFnStr);
-		addAssertion(CycUtil.toAssertion("isa", uriFnStr, "UnaryFunction"), mtStr);
-		addAssertion(CycUtil.toAssertion("isa", uriFnStr, "ReifiableFunction"), mtStr);
-		addAssertion(CycUtil.toAssertion("isa", uriFnStr, "IndividualDenotingFunction"), mtStr);
-		addAssertion(CycUtil.toAssertion("arg1Isa", uriFnStr, "CharacterString"), mtStr);*/
+		/*
+		 * addConst(uriFnStr); addAssertion(CycUtil.toAssertion("isa", uriFnStr,
+		 * "UnaryFunction"), mtStr); addAssertion(CycUtil.toAssertion("isa", uriFnStr,
+		 * "ReifiableFunction"), mtStr); addAssertion(CycUtil.toAssertion("isa",
+		 * uriFnStr, "IndividualDenotingFunction"), mtStr);
+		 * addAssertion(CycUtil.toAssertion("arg1Isa", uriFnStr, "CharacterString"),
+		 * mtStr);
+		 */
 
 		/*
-		addConst("wsl-NonFunctionalParameter");
-		addAssertion(CycUtil.toAssertion("isa", "wsl-NonFunctionalParameter", "Collection"), "UniversalVocabularyMt");
-		addConst("larkc-Scalability");
-		addAssertion(CycUtil.toAssertion("isa", "larkc-Scalability", "Collection"), "UniversalVocabularyMt");
-		addConst("larkc-Scalability");
-		addConst("wsl-NonFunctionalProperty");
-		addAssertion(CycUtil.toAssertion("genls", "larkc-Scalability", "wsl-NonFunctionalProperty"), "UniversalVocabularyMt");
-		*/
+		 * addConst("wsl-NonFunctionalParameter");
+		 * addAssertion(CycUtil.toAssertion("isa", "wsl-NonFunctionalParameter",
+		 * "Collection"), "UniversalVocabularyMt"); addConst("larkc-Scalability");
+		 * addAssertion(CycUtil.toAssertion("isa", "larkc-Scalability", "Collection"),
+		 * "UniversalVocabularyMt"); addConst("larkc-Scalability");
+		 * addConst("wsl-NonFunctionalProperty");
+		 * addAssertion(CycUtil.toAssertion("genls", "larkc-Scalability",
+		 * "wsl-NonFunctionalProperty"), "UniversalVocabularyMt");
+		 */
 
 		// prepare turtle RDF format parser
-		RDFParser parser =  new TurtleParserFactory().getParser();
+		RDFParser parser = new TurtleParserFactory().getParser();
 		RDFHandlerIterator iter = new RDFHandlerIterator(new URIImpl("http://larkc.cyc/")) {
 
 			@Override
 			public void handleStatement(Statement st) throws RDFHandlerException {
 				// make it into cyc assertion
-				if (!addRdfTriple(st)){
+				if (!addRdfTriple(st)) {
 					throw new RDFHandlerException("Error adding this statement to Plug-in registry KB: " + st);
 				}
 			}
@@ -107,23 +113,24 @@ public class CycUtil {
 		if (owlToCycMapping.isCycEquivalent(rdfTerm)) {
 			// there is corresponding cyc term, we replace it
 			return toConst(owlToCycMapping.getCycEquivalent(rdfTerm));
-		} //else {
+		} // else {
 			// no corresponding cyc term, we add it to the KB using uriFn function
-			//SubLObject nart = list(toConst(uriFnStr), makeString(rdfTerm));
-			//System.out.println(nart);
-			//addAssertion(nart, mtStr);
-			//return nart;
+			// SubLObject nart = list(toConst(uriFnStr), makeString(rdfTerm));
+			// System.out.println(nart);
+			// addAssertion(nart, mtStr);
+			// return nart;
 
 		String cycConst = owlToCycMapping.toCycConst(rdfTerm);
 		addConst(cycConst);
 		return toConst(cycConst);
-		//}
+		// }
 	}
 
-
 	/**
-	 * Adds the new constant to the kb. The constant name have to be the correct Cycl string
-	 * TODO: Change to proper call, which checks if constant already there.
+	 * Adds the new constant to the kb. The constant name have to be the correct
+	 * Cycl string TODO: Change to proper call, which checks if constant already
+	 * there.
+	 * 
 	 * @param constStr
 	 */
 	public static final void addConst(String constStr) {
@@ -132,10 +139,10 @@ public class CycUtil {
 
 		SubLObject constSubL = toConst(constStr);
 		if (constSubL instanceof constant_handles.$constant_native) {
-			constant_handles.$constant_native constant = (constant_handles.$constant_native)constSubL;
+			constant_handles.$constant_native constant = (constant_handles.$constant_native) constSubL;
 			if (constant.$suid == SubLNil.NIL) {
-				logger.fine("adding constant: "+ constStr);
-				ke.ke_create_now(makeString(constStr), CommonSymbols.UNPROVIDED);
+				logger.fine("adding constant: " + constStr);
+				ke.ke_create_now(makeString(constStr), UNPROVIDED);
 			}
 		}
 	}
@@ -155,9 +162,9 @@ public class CycUtil {
 	}
 
 	public static final boolean addAssertion(SubLObject assertion, SubLObject mt) {
-		logger.fine("adding assertion: "+ assertion + " MT: " +mt);
-		SubLObject res = ke.ke_assert_now(assertion, mt, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
-		if (res.isNil()){
+		logger.fine("adding assertion: " + assertion + " MT: " + mt);
+		SubLObject res = ke.ke_assert_now(assertion, mt, UNPROVIDED, UNPROVIDED);
+		if (res.isNil()) {
 			logger.warning("The assertion was not asserted. It violates the KB consistency!");
 			return false;
 		}
@@ -171,8 +178,7 @@ public class CycUtil {
 
 	public static final void addForwardRule(String forwardRuleStr, SubLObject mt) {
 		// TODO: this rule only works if added after plug-ins' info already in the KB!
-		ke.ke_assert_now(CycUtil.toAssertion(forwardRuleStr), mt,
-		    CommonSymbols.UNPROVIDED, makeKeyword("FORWARD"));
+		ke.ke_assert_now(CycUtil.toAssertion(forwardRuleStr), mt, UNPROVIDED, makeKeyword("FORWARD"));
 	}
 
 	public static final SubLObject askQuery(String queryStr) {
@@ -182,18 +188,14 @@ public class CycUtil {
 	public static final SubLObject askQuery(String queryStr, boolean browsable) {
 		SubLObject parameters = SubLNil.NIL;
 		if (browsable) {
-			parameters = SubLObjectFactory.makeList(new SubLObject[] {
-					makeKeyword("BROWSABLE?"), CommonSymbols.T });
+			parameters = SubLObjectFactory.makeList(new SubLObject[] { makeKeyword("BROWSABLE?"), T });
 		}
 		// prepare the query
-		SubLObject cycQuery = reader.read_from_string(makeString(queryStr),
-				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
-				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
-				CommonSymbols.UNPROVIDED);
+		SubLObject cycQuery = reader.read_from_string(makeString(queryStr), UNPROVIDED, UNPROVIDED, UNPROVIDED,
+				UNPROVIDED, UNPROVIDED);
 		// execute the query
-		return inference_kernel.new_cyc_query(cycQuery, constant_handles
-				.reader_make_constant_shell(makeString("InferencePSC")),
-				parameters);
+		return inference_kernel.new_cyc_query(cycQuery,
+				constant_handles.reader_make_constant_shell(makeString("InferencePSC")), parameters);
 	}
 
 	// Platform code beautifier
@@ -208,16 +210,13 @@ public class CycUtil {
 
 	// platform code beautifier
 	public static final SubLObject toAssertion(String s1, String s2, int i3, String s4) {
-		return list(toConst(s1), toConst(s2),
-				SubLNumberFactory.makeInteger(i3), toConst(s4));
+		return list(toConst(s1), toConst(s2), SubLNumberFactory.makeInteger(i3), toConst(s4));
 	}
 
 	// platform code beautifier
 	public static final SubLObject toAssertion(String sentence) {
-		return reader.read_from_string(makeString(sentence),
-				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
-				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
-				CommonSymbols.UNPROVIDED);
+		return reader.read_from_string(makeString(sentence), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED,
+				UNPROVIDED);
 	}
 
 }

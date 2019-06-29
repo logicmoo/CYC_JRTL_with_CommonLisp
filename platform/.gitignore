@@ -3,6 +3,8 @@ dist
 abcl
 /bin-eclipse/
 /Debug/
+/CVS/
+/.svn/
 /.compiled/
 /lib/*.dll
 /IKVM*

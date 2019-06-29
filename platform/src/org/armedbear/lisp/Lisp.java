@@ -60,6 +60,7 @@ import org.jpl7.JPL;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -68,6 +69,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 import com.cyc.tool.subl.util.IsolatedClassLoader;
 
@@ -117,6 +119,9 @@ abstract public class Lisp extends ABCLStatic
 
     // ### t
     public static final Symbol T = SubLT.T;
+    public static final SubLObject RET_T = T;
+	public static final SubLSymbol UNPROVIDED = PACKAGE_SUBLISP.internAndExport("&UNPROVIDED-SUBLISP-ARGUMENT&");
+
 
     @DocString(name = "nil")
     public static final Symbol NIL = Nil.NIL;
@@ -2471,7 +2476,7 @@ abstract public class Lisp extends ABCLStatic
         }
 
         {
-            termRef = new org.jpl7.Variable("_");
+            setTermRef(new org.jpl7.Variable("_"));
         }
     }
 
@@ -2479,7 +2484,7 @@ abstract public class Lisp extends ABCLStatic
 
     private static class nullValue extends SLispObject {
         {
-            termRef = JPL.JNULL;
+            setTermRef(JPL.JNULL);
         }
 
         @Override
@@ -2679,6 +2684,7 @@ public static String stringValueOf(LispObject arg) {
 		final LispThread thread = LispThread.currentThread();
 		final SpecialBindingsMark mark = thread.markSpecialBindings();
 		final int wasInside = Lisp.insideToString;
+		boolean tooSoon = isTooSoon();  
 		boolean wasPRTraced = Symbol.PRINT_READABLY.isTraced;
 		try {
 			Lisp.printingObject = po;
@@ -2805,8 +2811,7 @@ public static String stringValueOf(LispObject arg) {
     }
 
     static {
-		Symbol.FEATURES.setSymbolValue(new Cons(internKeyword("UABCL"), Symbol.FEATURES.getSymbolValue()));
-
+    	addFeature("UABCL");
         loadClass("org.logicmoo.system.BeanShellCntrl");
     }
 
@@ -2859,7 +2864,7 @@ public static String stringValueOf(LispObject arg) {
 	 * @param cname
 	 * @return
 	 */
-	public static SubLObject quote(LispObject cname) {
+	public static Cons quote(LispObject cname) {
 		return list(Symbol.QUOTE, cname);
 	}
 	
@@ -2991,4 +2996,20 @@ public static String stringValueOf(LispObject arg) {
 		}
 		return new URL[0];
 	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @return
+	 */
+	public static boolean isTooSoon() {
+		return Lisp.cold || !Lisp.initialized || !org.armedbear.lisp.Interpreter.topLevelInitialized;
+	}
+	
+	  /**
+	   * @param string
+	   */
+	  public static void addFeature(String fstring)
+	  {
+	    Symbol.FEATURES.setSymbolValue( new Cons( (LispObject) internKeyword( fstring ), Symbol.FEATURES.getSymbolValue() ) );
+	  }
 }

@@ -451,6 +451,8 @@ public class Package
   @Override
   public synchronized Symbol intern(String symbolName)
   {
+	if (symbolName.startsWith(":"))
+		symbolName = symbolName.substring(1);
     // Look in external and internal symbols of this package.
     Symbol symbol = externalSymbols.get( symbolName );
     if( symbol != null )

@@ -58,6 +58,9 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
@@ -987,7 +990,7 @@ public final class hl_supports
       mt_relevance_macros.$mt$.rebind( _prev_bind_2, thread );
       mt_relevance_macros.$relevant_mt_function$.rebind( _prev_bind_0, thread );
     }
-    PrologSync.bp();
+    BeanShellCntrl.bp();
     return result;
   }
 

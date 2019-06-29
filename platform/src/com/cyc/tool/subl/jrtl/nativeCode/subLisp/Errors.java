@@ -2,6 +2,9 @@
 // For LarKC
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.RET_T;
+import static org.armedbear.lisp.Lisp.UNPROVIDED;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -287,6 +290,9 @@ public class Errors
 
   public static SubLObject error(String str)
   {
+	  if(!SubLMain.commonSymbolsOK) {
+		  return Lisp.program_error(str);
+	  }
     if( CommonSymbols.FORCE_ERROR_MESSAGE_OUTPUT.boundp() )
       error( str, null );
     throw SubLObjectFactory.makeException( "Unexpected situation: " + str );
@@ -598,7 +604,7 @@ public class Errors
         return SubLNil.NIL;
       if( SubLNil.NIL != Errors.$ignore_breaksP$.getDynamicValue() )
         return SubLNil.NIL;
-      String breakString = format_string != CommonSymbols.UNPROVIDED ? PrintLow.format( SubLNil.NIL, format_string, arguments ).getStringValue() : "";
+      String breakString = format_string != UNPROVIDED ? PrintLow.format( SubLNil.NIL, format_string, arguments ).getStringValue() : "";
       SubLReader reader = SubLMain.getMainReader();
       SubLOutputTextStream stream1 = StreamsLow.$error_output$.getDynamicValue().toOutputTextStream();
       SubLOutputTextStream stream2 = StreamsLow.originalErrorStream;

@@ -37,6 +37,11 @@ import static org.armedbear.lisp.Lisp.*;
 
 public final class SlotDefinition extends StandardObject
 {
+
+	public boolean isDontTrack() {
+		return true;
+	}
+		
   private SlotDefinition()
   {
     super(StandardClass.STANDARD_SLOT_DEFINITION,

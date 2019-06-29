@@ -3,6 +3,8 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -158,6 +160,6 @@ public class Structures implements SubLFile
 
 	public Structures()
 	{
-		PrologSync.addSingleton(this);
+		BeanShellCntrl.addSubLFile(this);
 	}
 }

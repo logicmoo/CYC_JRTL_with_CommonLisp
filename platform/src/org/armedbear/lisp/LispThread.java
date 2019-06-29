@@ -1321,7 +1321,6 @@ public abstract class LispThread extends SLispObject {
 					args = new LispObject[] { T };
 			}
 			final LispObject arg0 = args[0];
-			Symbol sym = Symbol.PRINT_PPRINT_DISPATCH;
 			PrintStream ps = thread.ps;
 			_TRACE_LISP_.setSymbolValue(arg0);
 			final boolean traceOn = !arg0.isNil();
@@ -1338,6 +1337,7 @@ public abstract class LispThread extends SLispObject {
 			LispThread olt = map.get(mainThread);
 
 			if (Packages.findPackage("SWANK") != null) {
+				Symbol sym = Symbol.PRINT_PPRINT_DISPATCH;
 				Symbol symb = (Symbol) Lisp
 						.readObjectFromString("swank::*backtrace-pprint-dispatch-table*".toUpperCase());
 				ps.println(olt + " " + symb + "=" + symb.symbolValue(olt));

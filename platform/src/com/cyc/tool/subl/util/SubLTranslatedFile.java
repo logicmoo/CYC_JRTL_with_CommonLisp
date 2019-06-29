@@ -14,15 +14,17 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 
-public abstract class SubLTranslatedFile extends SubLTrampolineFile implements CommonSymbols {
+public abstract class SubLTranslatedFile extends SubLTrampolineFile implements CommonSymbols
+//
+{
 	public @interface SubL {
 		long position();
 
 		String source();
 	}
-	
+
 	public static boolean areAssertionsDisabledFor(SubLFile me) {
-	  return true;
+		return true;
 	}
 
 	public static SubLFunction extractFunctionNamed(String name) {
@@ -30,9 +32,9 @@ public abstract class SubLTranslatedFile extends SubLTrampolineFile implements C
 	}
 
 	public static SubLObject[] EMPTY_SUBL_OBJECT_ARRAY;
-	
+
 	public static Deque<SubLObject> getThrowStack() {
-	  return SubLProcess.currentSubLThread().throwStack;
+		return SubLProcess.currentSubLThread().throwStack;
 	}
 
 	static {

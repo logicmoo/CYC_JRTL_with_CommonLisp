@@ -625,10 +625,10 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 	@Override
 	public Term toProlog(java.util.List skip)
 	{
-		if (this.termRef != null) return termRef;
+		if (this.termRef != null) return (Term)termRef;
 		LispObject obj = this;
 		Term[] args = new Term[] { unboundPLTerm(), JPL.LIST_NIL };
-		obj.termRef = new Compound(JPL.LIST_PAIR, args);
+		obj.setTermRef(new Compound(JPL.LIST_PAIR, args));
 		int length = 0;
 		while (true)
 		{
@@ -639,11 +639,11 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 				length++;
 				if (length > 100)
 				{
-					args[1] = next.termRef = JPL.newJRef(next);
-					return termRef;
+					args[1] = (Term)next.setTermRef(JPL.newJRef(next));
+					return (Term)termRef;
 				}
 				Term[] nargs = new Term[] { unboundPLTerm(), JPL.LIST_NIL };
-				args[1] = next.termRef = new Compound(JPL.LIST_PAIR, nargs);
+				args[1] = (Term)next.setTermRef(new Compound(JPL.LIST_PAIR, nargs));
 				args = nargs;
 				obj = next;
 				continue;
@@ -651,7 +651,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 			else
 			{
 				args[1] = PrologSync.toProlog(next, skip);
-				return termRef;
+				return (Term)termRef;
 			}
 		}
 	}

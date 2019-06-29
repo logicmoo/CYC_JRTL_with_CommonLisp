@@ -1,0 +1,125 @@
+<html><head><title>CL-PREVALENCE</title></head><body><h3>API for package CL-PREVALENCE</h3>
+<blockquote>An implementation of Object Prevalence for Common Lisp</blockquote>
+<p><b>*blob-root*</b>&nbsp;&nbsp;&nbsp;<i>variable</i></p>
+<blockquote>The directory in which to store the blob files</blockquote>
+<blockquote>Initial value: <tt>NIL</tt></blockquote>
+<p>(<b>all-preferences-keys</b> system)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Return a list of all persistent preference keys of system</blockquote>
+<p>(<b>backup</b> system &key directory)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Make backup copies of the current snapshot and transaction-log files</blockquote>
+<p><b>blob</b>&nbsp;&nbsp;&nbsp;<i>class</i></p>
+<blockquote>A blob is a file-like collection of bytes with related metadata</blockquote>
+<blockquote>Class precedence list: <tt> blob object-with-id standard-object t</tt></blockquote>
+<blockquote>Class init args: <tt> :id :keywords :mime-type :size :name</tt></blockquote>
+<p>(<b>copy-to-stream</b> blob binary-output-stream)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Copy the bytes from blob to binary-output-stream</blockquote>
+<p>(<b>destroy</b> blob)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Completely destroy blob (removing its byte data file as well)</blockquote>
+<p>(<b>drop-index-on</b> system class &optional slots)&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Drop indexes on each of the slots provided</blockquote>
+<p>(<b>execute</b> system object)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Ask for a transaction object to be executed on system with ACID properties</blockquote>
+<p>(<b>execute-transaction</b> transaction-call)&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Create a transaction object from transaction-call and execute it</blockquote>
+<p>(<b>fill-from-file</b> blob pathname)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Fill the blob's contents with the bytes read from the binary file at pathname</blockquote>
+<p>(<b>fill-from-stream</b> blob binary-input-stream)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Fill the blob's contents with the bytes from binary-input-stream</blockquote>
+<p>(<b>find-all-objects</b> system class)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Return an unordered collection of all objects in system that are instances of class</blockquote>
+<p>(<b>find-object-with-id</b> system class id)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Find and return the object in system of class with id, null if not found</blockquote>
+<p>(<b>find-object-with-slot</b> system class slot value &optional test)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Find and return the object in system of class with slot equal to value, null if not found</blockquote>
+<p>(<b>get-file</b> blob)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Return the pathname to the bytes of blob</blockquote>
+<p>(<b>get-guard</b> guarded-prevalence-system)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Access the guard function of a sytem</blockquote>
+<p>(setf (<b>get-guard</b> guarded-prevalence-system) value)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Set the guard function of a system</blockquote>
+<p>(<b>get-id</b> object)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Return an external, unique, immutable identifier for object (typically an integer)</blockquote>
+<p>(<b>get-keywords</b> blob)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Return the list of keywords associated with blob</blockquote>
+<p>(setf (<b>get-keywords</b> blob) keywords)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Set the keywords list of blob</blockquote>
+<p>(<b>get-mime-type</b> blob)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Return the mime-type of blob as a string</blockquote>
+<p>(setf (<b>get-mime-type</b> blob) mime-type)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Set the mime-type string of blob</blockquote>
+<p>(<b>get-name</b> blob)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Return the descriptive name of blob</blockquote>
+<p>(setf (<b>get-name</b> blob) name)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Set the descriptive name of blob</blockquote>
+<p>(<b>get-option</b> system name)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Retrieve a named option from system</blockquote>
+<p>(setf (<b>get-option</b> system name) value)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Set a named option of system to value</blockquote>
+<p>(<b>get-preference</b> system key)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Retrieve the value of the persistent preference stored under key in system</blockquote>
+<p>(<b>get-root-object</b> system name)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Retrieve a root object by symbol name from system</blockquote>
+<p>(setf (<b>get-root-object</b> system name) value)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Set a symbol named root object of system to value</blockquote>
+<p>(<b>get-size</b> blob)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Return the size of blob in bytes</blockquote>
+<p><b>guarded-prevalence-system</b>&nbsp;&nbsp;&nbsp;<i>class</i></p>
+<blockquote>A Prevalence system with a guard thunk</blockquote>
+<blockquote>Class precedence list: <tt> guarded-prevalence-system prevalence-system standard-object t</tt></blockquote>
+<blockquote>Class init args: <tt> :directory :serializer :deserializer :file-extension :transaction-hook</tt></blockquote>
+<p>(<b>index-on</b> system class &optional slots (test (quote equalp)))&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Create indexes on each of the slots provided.</blockquote>
+<p>(<b>initiates-rollback</b> condition)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Return true when a condition initiates a rollback when thrown from a transaction</blockquote>
+<p>(<b>make-prevalence-system</b> directory &key (prevalence-system-class (quote prevalence-system)) init-args)&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Create and return a new prevalence system on directory. When the
+  directory contains a valid snapshot and/or transaction log file, the
+  system will be restored. Optionally specify the prevalence system's
+  class.</blockquote>
+<p>(<b>make-transaction</b> function &rest args)&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Create and return a new transaction specifying a function name and
+  an argument list. The function should accept the system instance
+  prepended to the argument list as arguments and implement the actual
+  transaction in a re-entrant way.</blockquote>
+<p><b>no-rollback-error</b>&nbsp;&nbsp;&nbsp;<i>condition</i></p>
+<blockquote>Thrown by code inside a transaction to indicate that no rollback is needed</blockquote>
+<blockquote>Class precedence list: <tt> no-rollback-error error serious-condition condition standard-object t</tt></blockquote>
+<p><b>object-with-id</b>&nbsp;&nbsp;&nbsp;<i>class</i></p>
+<blockquote>Superclass for objects with an id</blockquote>
+<blockquote>Class precedence list: <tt> object-with-id standard-object t</tt></blockquote>
+<blockquote>Class init args: <tt> :id</tt></blockquote>
+<p><b>prevalence-system</b>&nbsp;&nbsp;&nbsp;<i>class</i></p>
+<blockquote>Base Prevalence system implementation object</blockquote>
+<blockquote>Class precedence list: <tt> prevalence-system standard-object t</tt></blockquote>
+<blockquote>Class init args: <tt> :transaction-hook :file-extension :deserializer :serializer :directory</tt></blockquote>
+<p>(<b>query</b> system function &rest args)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Ask for a query function to be executed on system with args</blockquote>
+<p>(<b>remove-root-object</b> system name)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Remove the root object by symbol name from system</blockquote>
+<p>(<b>restore</b> system)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Restore a system from permanent storage</blockquote>
+<p>(<b>snapshot</b> system)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Take a snapshot of a system</blockquote>
+<p>(<b>start-master-client</b> prevalence-system &key (host localhost) (port 7651))&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Start a connection to host:port to deliver transactions from prevalence-system</blockquote>
+<p>(<b>start-slave-server</b> prevalence-system &key (port 7651))&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Start a server on port accepting transactions to be executed on prevalence-system</blockquote>
+<p>(<b>stop-master-client</b> prevalence-sytem)&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Stop a connection from prevalence-system</blockquote>
+<p>(<b>totally-destroy</b> system &key abort)&nbsp;&nbsp;&nbsp;<i>generic-function</i></p>
+<blockquote>Totally destroy system from permanent storage by deleting any files that we find</blockquote>
+<p><b>transaction</b>&nbsp;&nbsp;&nbsp;<i>class</i></p>
+<blockquote>A simple Transaction object joining a function and its arguments</blockquote>
+<blockquote>Class precedence list: <tt> transaction standard-object t</tt></blockquote>
+<blockquote>Class init args: <tt> :function :args</tt></blockquote>
+<p>(<b>tx-change-object-slots</b> system class id slots-and-values)&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Change some slots of the object of class with id in system using slots and values</blockquote>
+<p>(<b>tx-create-id-counter</b> system)&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Initialize the id counter to 0</blockquote>
+<p>(<b>tx-create-object</b> system class &optional slots-and-values)&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Create a new object of class in system, assigning it a unique id, optionally setting some slots and values</blockquote>
+<p>(<b>tx-delete-object</b> system class id)&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Delete the object of class with id from the system</blockquote>
+<p>(<b>tx-set-preference</b> system key value)&nbsp;&nbsp;&nbsp;<i>function</i></p>
+<blockquote>Set the value of the persistent preference key in system</blockquote>
+<font size=-1><p>Documentation generated by <a href="http://homepage.mac.com/svc/lispdoc/">lispdoc</a> running on LispWorks</p></font></body></html>

@@ -1,0 +1,4 @@
+lisp-implementation-type: CLISP
+lisp-implementation-version: 2.49.60+ (2017-06-25) (built on lgw01-amd64-012.buildd [127.0.1.1])
+machine-type: X86_64
+machine-version: X86_64

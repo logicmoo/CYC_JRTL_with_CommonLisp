@@ -3,13 +3,24 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
-            <name>abcl</name>
-            <minimum-ant-version>1.6.5</minimum-ant-version>
+            <name>platform</name>
             <source-roots>
                 <root id="src.dir"/>
+                <root id="logicmoo-main.dir"/>
+                <root id="opencyc-server-jsrc-in-progress.dir"/>
+                <root id="objectweb-asm-src.dir"/>
+                <root id="armedbear-j-src.dir"/>
+                <root id="server-4q.dir"/>
+                <root id="java.dir"/>
+                <root id="src2.dir"/>
+                <root id="platform-1.1.dir"/>
+                <root id="beanshell.dir"/>
+                <root id=".apt_generated.dir"/>
             </source-roots>
             <test-roots>
-                <root id="test.src.dir" name="test/src"/>
+                <root id="test.src.dir"/>
+                <root id="test.test.dir"/>
+                <root id="test.jpl7-hacked.dir"/>
             </test-roots>
         </data>
     </configuration>

@@ -40,12 +40,6 @@ public class SubLStructDeclNative extends SubLStructDecl
 	}
 
 	
-	
-	
-	public LispObject getLispClass()
-	{
-		return lispClass;
-	}
 
 	public static final class is_instance_of_foriegn_class extends Primitive
 	{
@@ -57,11 +51,7 @@ public class SubLStructDeclNative extends SubLStructDecl
 			named.setFunction(this);
 			this.clazz = clazz;
 
-		}
-
-		
-		
-		
+		}		
 		
 		public LispObject execute(LispObject arg)
 		{

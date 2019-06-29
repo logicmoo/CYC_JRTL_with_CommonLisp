@@ -4,6 +4,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.LispSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
@@ -19,6 +20,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
@@ -298,7 +302,7 @@ public final class kb_indexing_datastructures
   @SubLTranslatedFile.SubL(source = "cycl/kb-indexing-datastructures.lisp", position = 4269L)
   public static SubLObject assertion_indexing_store_remove(final SubLObject assertion)
   {
-    PrologSync.removeThis( (AbstractSubLStruct) assertion );
+	  BeanShellCntrl.removeThis((AbstractSubLStruct) assertion);
     return Hashtables.remhash( assertion, $assertion_indexing_store$.getGlobalValue() );
   }
 
@@ -318,7 +322,7 @@ public final class kb_indexing_datastructures
     }
     finally
     {
-      PrologSync.addThis( (AbstractSubLStruct) assertion );
+    	BeanShellCntrl.addThis( (AbstractSubLStruct) assertion );
     }
   }
 

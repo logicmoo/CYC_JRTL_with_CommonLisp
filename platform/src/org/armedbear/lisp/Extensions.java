@@ -239,6 +239,7 @@ public final class Extensions
     @Override
     public LispObject execute()
     {
+    	if (Main.isNoDebug()) return T;
       ((Stream)Symbol.STANDARD_OUTPUT.getSymbolValue())._finishOutput();
       ((Stream)Symbol.ERROR_OUTPUT.getSymbolValue())._finishOutput();
       throw new ProcessingTerminated();

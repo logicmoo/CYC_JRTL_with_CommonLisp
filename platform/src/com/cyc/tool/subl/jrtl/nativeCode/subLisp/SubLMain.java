@@ -598,6 +598,7 @@ public class SubLMain
     org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
     SubLFiles.initialize( "com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages" );
     SubLFiles.initialize( "com.cyc.tool.subl.jrtl.nativeCode.subLisp.DiskDumper" );
+    SubLFiles.initialize( "com.cyc.tool.subl.jrtl.nativeCode.subLisp.LispSync" );
     SubLFiles.initialize( "com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync" );
     SubLPackage.setCurrentPackage( SubLPackage.SUBLISP_PACKAGE.toPackage() );
     SubLFiles.initialize( "com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality" );
@@ -678,14 +679,14 @@ public class SubLMain
     Errors.isReady = true;
     ZeroArityFunction.initialize(); // this must come after ConsesLow -APB
     UnaryFunction.initialize(); // this must come after ConsesLow -APB
-    addFeature( "CYC-LARKC" );
+    Lisp.addFeature( "CYC-LARKC" );
     if( OPENCYC )
     {
-      addFeature( "MAIN-OPENCYC" );
+    	Lisp.addFeature( "MAIN-OPENCYC" );
     }
     else
     {
-      addFeature( "MAIN-RCYC" );
+    	Lisp.addFeature( "MAIN-RCYC" );
     }
     AbstractSubLSequence.init();
     if( !shouldRunInBackground() )
@@ -694,14 +695,6 @@ public class SubLMain
       getMainReader().setThread( SubLProcess.currentSubLThread() );
     }
     isSubLInitialized_part0 = true;
-  }
-
-  /**
-   * @param string
-   */
-  private static void addFeature(String fstring)
-  {
-    Symbol.FEATURES.setSymbolValue( new Cons( (LispObject) SubLSymbolFactory.makeKeyword( fstring ), Symbol.FEATURES.getSymbolValue() ) );
   }
 
   public synchronized static void initializeTranslatedSystems()

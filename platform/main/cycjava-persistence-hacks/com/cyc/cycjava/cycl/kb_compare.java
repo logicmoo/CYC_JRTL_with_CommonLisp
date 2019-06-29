@@ -4377,11 +4377,11 @@ public final class kb_compare
 
     public $kb_intersection_native()
     {
-      this.$remote_image = CommonSymbols.NIL;
-      this.$constant_index = CommonSymbols.NIL;
-      this.$nart_index = CommonSymbols.NIL;
-      this.$assertion_index = CommonSymbols.NIL;
-      this.$deduction_index = CommonSymbols.NIL;
+      this.$remote_image = NIL;
+      this.$constant_index = NIL;
+      this.$nart_index = NIL;
+      this.$assertion_index = NIL;
+      this.$deduction_index = NIL;
     }
 
     @Override
@@ -4487,12 +4487,12 @@ public final class kb_compare
 
     public $kb_difference_native()
     {
-      this.$common_intersection = CommonSymbols.NIL;
-      this.$renamed_constants = CommonSymbols.NIL;
-      this.$constants = CommonSymbols.NIL;
-      this.$narts = CommonSymbols.NIL;
-      this.$assertions = CommonSymbols.NIL;
-      this.$deductions = CommonSymbols.NIL;
+      this.$common_intersection = NIL;
+      this.$renamed_constants = NIL;
+      this.$constants = NIL;
+      this.$narts = NIL;
+      this.$assertions = NIL;
+      this.$deductions = NIL;
     }
 
     @Override

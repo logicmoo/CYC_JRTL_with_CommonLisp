@@ -3,6 +3,8 @@
 //
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -82,6 +84,6 @@ public class hashtables_high implements SubLFile {
 	}
 
 	public hashtables_high() {
-		PrologSync.addSingleton(this);
+		BeanShellCntrl.addSubLFile(this);
 	}
 }

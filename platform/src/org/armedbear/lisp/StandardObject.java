@@ -35,6 +35,8 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*; 
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -265,8 +267,11 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 		if (printLevel instanceof Fixnum) maxLevel = ((Fixnum) printLevel).value;
 		LispObject currentPrintLevel = _CURRENT_PRINT_LEVEL_.symbolValue(thread);
 		int currentLevel = Fixnum.getValue(currentPrintLevel);
-		if (currentLevel >= maxLevel) return "#";
-		if(insideToString!=0) {
+		if (currentLevel >= maxLevel) {
+			checkUnreadableOk();
+			return "#";
+		}
+		if (insideToString != 0) {
 			return super.printObjectImpl();
 		}
 		return unreadableString(typeOf().printObject());
@@ -297,7 +302,7 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 			updateLayoutSync();
 		}
 		if(isTracked()) {
-			PrologSync.addThis(this);
+			BeanShellCntrl.addThis(this);
 		}
 	}
 
@@ -746,4 +751,16 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 		return superHash();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct#isReady()
+	 */
+	@Override
+	public boolean isInitialized() {
+		// TODO Auto-generated method stub
+		if( layout ==null) {
+			return false;			
+		}
+		
+		return false;
+	}
 }

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.armedbear.lisp.LispObject;
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -172,7 +173,7 @@ public class Hashtables implements SubLFile {
 	}
 
 	public Hashtables() {
-		PrologSync.addSingleton(this);
+		BeanShellCntrl.addSubLFile(this);
 
 	}
 }

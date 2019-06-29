@@ -41,59 +41,47 @@ import org.logicmoo.system.BeanShellCntrl;
 
 import bsh.EvalError;
 
-public final class Debug
-{
-    
-    public static final void assertTrue(boolean b)
-    {
-        if (!b) {
-            String msg = "ABCL Debug.assertTrue() assertion failed!";
-            System.err.println(msg);
-            Error e = new Error(msg);
-            e.printStackTrace(System.err);
-	    
-	    StringBuffer buffer = new StringBuffer();
-	    final String CR = "\n";
-	    buffer.append(msg).append(CR);
-	    StackTraceElement[] stack = e.getStackTrace();
-	    for (int i = 0; i < stack.length; i++) {
-		buffer.append(stack[i].toString()).append(CR);
-	    }
-            throw new Error(buffer.toString());
-        }
-    }
-    public static final void assertViolation(String msg) {
-	final String m = "Assert violation: " + msg;
-	Error e = new Error(m);
+public final class Debug {
 
-	System.err.println(m);
-	e.printStackTrace(System.err);
-
-	StringBuffer buffer = new StringBuffer();
-	final String CR = "\n";
-	buffer.append(msg).append(CR);
-	StackTraceElement[] stack = e.getStackTrace();
-	for (int i = 0; i < stack.length; i++) {
-	    buffer.append(stack[i].toString()).append(CR);
+	public static final void assertTrue(boolean b) {
+		if (!b) {
+			String msg = "ABCL Debug.assertTrue(false) assertion failed!";
+			assertViolation(msg);
+		}
 	}
-	throw new Error(buffer.toString());
-    }
 
-    // Does not throw an exception.
-    public static void bug()
-    {
-        trace(new Exception("BUG!"));
-//        try {
-//			BeanShellCntrl.bsh_repl();
-//		} catch (EvalError e) {
-//			Debug.trace(e);
-//		}
+	public static final void assertViolation(String msg) {
+		final String m = "Assert violation: " + msg;
+		Error e = new Error(m);
+
+		System.err.println(m);
+		e.printStackTrace(System.err);
+
+		StringBuffer buffer = new StringBuffer();
+		final String CR = "\n";
+		buffer.append(msg).append(CR);
+		StackTraceElement[] stack = e.getStackTrace();
+		for (int i = 0; i < stack.length; i++) {
+			buffer.append(stack[i].toString()).append(CR);
+		}
+		throw new Error(buffer.toString());
+	}
+
+	// Does not throw an exception.
+	public static void bug() {
+		trace(new Exception("BUG!"));
 		forkInterpreter();
-    }
+	}
+
 	/**
 	 * TODO Describe the purpose of this method.
 	 */
 	public static void forkInterpreter() {
+//      try {
+//			BeanShellCntrl.bsh_repl();
+//		} catch (EvalError e) {
+//			Debug.trace(e);
+//		}
 		final Interpreter globalInterpreter = Interpreter.globalInterpreter;
 		if (globalInterpreter != null) {
 			final LispThread thread = LispThread.currentThread();
@@ -102,39 +90,36 @@ public final class Debug
 		}
 	}
 
-    public static final void trace(String s)
-    {
-        System.err.println(s);
-    }
+	public static final void trace(String s) {
+		System.err.println(s);
+	}
 
-    @SuppressWarnings("CallToThreadDumpStack")
-    public static final void trace(Throwable t)
-    {
-        t.printStackTrace();
+	@SuppressWarnings("CallToThreadDumpStack")
+	public static final void trace(Throwable t) {
+		t.printStackTrace();
 		Throwable c = t.getCause();
 		if (c != null && c != t)
 			trace(c);
-    }
+	}
 
-    public static final void trace(String message, Throwable t)
-    {
-       trace(message);
-       trace(t);
-    }
-    public static final Symbol _DEBUG_WARN_
-        = exportSpecial("*DEBUG-WARN*", PACKAGE_SYS, NIL);
+	public static final void trace(String message, Throwable t) {
+		trace(message);
+		trace(t);
+	}
 
-    public static void setDebugWarnings(boolean flag) {
-        if (flag) {
-            _DEBUG_WARN_.setSymbolValue(T);
-        } else {
-            _DEBUG_WARN_.setSymbolValue(NIL);
-        }
-    }
-    
-    public static final void warn(String s) {
-        if (_DEBUG_WARN_.getSymbolValue() != null) {
-            trace(s);
-        }
-    }
+	public static final Symbol _DEBUG_WARN_ = exportSpecial("*DEBUG-WARN*", PACKAGE_SYS, NIL);
+
+	public static void setDebugWarnings(boolean flag) {
+		if (flag) {
+			_DEBUG_WARN_.setSymbolValue(T);
+		} else {
+			_DEBUG_WARN_.setSymbolValue(NIL);
+		}
+	}
+
+	public static final void warn(String s) {
+		if (_DEBUG_WARN_.getSymbolValue() != null) {
+			trace(s);
+		}
+	}
 }

@@ -164,7 +164,7 @@ public abstract class FixedArityFunctor implements CommonSymbols {
         System.out
                 .println("" + (FixedArityFunctor.directCallCount - FixedArityFunctor.funcallCount) + " dirrect apply w/o funcall out of " + FixedArityFunctor.funcallCount + " non-bytecoded funcalls");
         System.out.println("*********************************************************************|#");
-        return CommonSymbols.NIL;
+        return NIL;
     }
 
     public static Class getArityBaseClass(int i) {

@@ -3,6 +3,8 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
@@ -65,6 +67,6 @@ public class Locks implements SubLFile {
 	}
 
 	public Locks() {
-		PrologSync.addSingleton(this);
+		BeanShellCntrl.addSubLFile(this);
 	}
 }

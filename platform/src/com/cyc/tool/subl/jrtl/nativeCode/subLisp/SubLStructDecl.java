@@ -35,22 +35,25 @@ public class SubLStructDecl extends Layout
 	public SubLStructDecl(LispObject lispClass, LispObject instanceSlots, LispObject sharedSlots)
 	{
 		super(lispClass, instanceSlots, sharedSlots);
+		initStructDeclFromLayout();
 	}
 
 	public SubLStructDecl(SlotClass slotClass, LispObject[] instanceSlotNames, Symbol sharedSlots)
 	{
 		super(slotClass, instanceSlotNames, sharedSlots);
+		initStructDeclFromLayout();
 	}
 
 	public SubLStructDecl(Layout oldLayout)
 	{
 		super(oldLayout);
+		initStructDeclFromLayout();
 	}
 
 	public static SubLStructDecl getStructDecl(SubLSymbol structName)
 	{
 		final Symbol symbol = structName.toLispObject();
-		SubLStructDecl structDecl = SubLStructDecl.structNameToStructDeclMap.get(structName);
+		SubLStructDecl structDecl = structNameToStructDeclMap.get(structName);
 		if (structDecl == null)
 		{
 			LispClass lispClass = LispClass.findClass(symbol);
@@ -68,12 +71,6 @@ public class SubLStructDecl extends Layout
 	{
 	}
 
-	static
-	{
-		structNameToStructDeclMap = new HashMap<SubLSymbol, SubLStructDecl>();
-		structNameToIDMap = new HashMap<SubLSymbol, Integer>();
-		SubLStructDecl.idCounter = 0;
-	}
 
 	public static SubLStructDecl makeStructDeclInterpreted(String[] actualFieldNames, SubLSymbol typeName, String getterPrefix, String setterPre_Prefix)
 	{

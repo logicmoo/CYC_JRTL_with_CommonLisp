@@ -109,7 +109,9 @@ public class Characters extends SubLTrampolineFile {
 	}
 
 	public static SubLObject digit_char(SubLObject digit) {
-		char val = Character.toUpperCase(Character.forDigit(digit.intValue(), 36));
+		final int intValue = digit.intValue();
+		final char forDigit = Character.forDigit(intValue, 36);
+		char val = Character.toUpperCase(forDigit);
 		if (val == '\0')
 			return SubLNil.NIL;
 		return SubLObjectFactory.makeChar(val);

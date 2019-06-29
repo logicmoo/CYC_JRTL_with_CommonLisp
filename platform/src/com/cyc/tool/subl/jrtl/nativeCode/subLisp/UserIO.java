@@ -3,6 +3,8 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
@@ -37,7 +39,7 @@ public class UserIO implements SubLFile {
 		me = new UserIO();
 	}
 	public UserIO() {
-		PrologSync.addSingleton(this);
+		BeanShellCntrl.addSubLFile(this);
 	}
 
 	@Override

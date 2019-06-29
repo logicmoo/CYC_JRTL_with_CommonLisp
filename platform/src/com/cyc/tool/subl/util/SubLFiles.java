@@ -520,7 +520,7 @@ public class SubLFiles {
 	 * @param integer
 	 */
 	public static void createFunction(String string, Integer integer) {
-		com.cyc.cycjava.cycl.module0004.$f106$UnaryFunction.class.toString();
+		//com.cyc.cycjava.cycl.module0004.$f106$UnaryFunction.class.toString();
 		String classname = string;
 		switch (integer) {
 		case 1:

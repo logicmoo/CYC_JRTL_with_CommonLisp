@@ -13,6 +13,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
+import static org.armedbear.lisp.Lisp.*;
 
 public class ServletContainer extends SubLTrampolineFile {
 	public static class WarSpec {
@@ -34,13 +35,13 @@ public class ServletContainer extends SubLTrampolineFile {
 	}
 
 	public static SubLObject startServletContainerInt(int portNum, List<WarSpec> warSpecs, SubLObject tmpDirString) {
-		String tmpDir = tmpDirString == CommonSymbols.UNPROVIDED ? null : tmpDirString.getStringValue();
+		String tmpDir = tmpDirString == UNPROVIDED ? null : tmpDirString.getStringValue();
 		Jetty.startJettyServer(portNum, warSpecs, tmpDir);
-		return SubLNil.NIL;
+		return NIL;
 	}
 
 	public static SubLObject startServletContainerInt(SubLObject port, SubLObject fileSpecs, SubLObject tmpDirString) {
-		String tmpDir = tmpDirString == CommonSymbols.UNPROVIDED ? null : tmpDirString.getStringValue();
+		String tmpDir = tmpDirString == UNPROVIDED ? null : tmpDirString.getStringValue();
 		int portNum = port.toInteger().intValue();
 		List<WarSpec> warSpecs = new ArrayList<WarSpec>();
 		for (SubLObject fileSpec : fileSpecs.asConsList().toSubLObjectArray()) {
@@ -48,13 +49,13 @@ public class ServletContainer extends SubLTrampolineFile {
 			warSpecs.add(new WarSpec(alistEntry.first().getStringValue(), alistEntry.rest().getStringValue()));
 		}
 		Jetty.startJettyServer(portNum, warSpecs, tmpDir);
-		return SubLNil.NIL;
+		return NIL;
 	}
 
 	public static SubLObject stopServletContainerInt(SubLObject tmpDirString) {
-		String tmpDir = tmpDirString == CommonSymbols.UNPROVIDED ? null : tmpDirString.getStringValue();
+		String tmpDir = tmpDirString == UNPROVIDED ? null : tmpDirString.getStringValue();
 		Jetty.stopJettyServer(tmpDir);
-		return SubLNil.NIL;
+		return NIL;
 	}
 
 	public static SubLFile me;

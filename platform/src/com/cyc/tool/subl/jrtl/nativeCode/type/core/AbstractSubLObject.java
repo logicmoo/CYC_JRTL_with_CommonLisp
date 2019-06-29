@@ -39,29 +39,25 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractSubLObject extends Lisp implements SubLObject {
 
-    public Term termRef;
+    public Object termRef;
 
-    /**
-     * @param incomingArgs
-     * @return
-     */
-    static public LispObject[] asLispObjectArray(SubLObject[] incomingArgs) {
-        int len = incomingArgs.length;
-        LispObject[] execArgs = new LispObject[len];
-        System.arraycopy(incomingArgs, 0, execArgs, 0, len);
-        return execArgs;
-    }
+	/**
+	 * Getter. Retrieves the termRef.
+	 * @return the termRef
+	 */
+	public Object getTermRef() {
+		return termRef;
+	}
 
-    /**
-     * @param incomingArgs
-     * @return
-     */
-    static public SubLObject[] asSubLObjectArray(LispObject[] incomingArgs) {
-        int len = incomingArgs.length;
-        SubLObject[] execArgs = new SubLObject[len];
-        System.arraycopy(incomingArgs, 0, execArgs, 0, len);
-        return execArgs;
-    }
+	/**
+	 * Setter. Sets or updates the termRef to the passed value.
+	 * @param termRef the termRef to set
+	 */
+	public Object setTermRef(Object termRef) {
+		this.termRef = termRef;
+		return termRef;
+	}
+
 
     @Override
     public BigDecimal bigDecimalValue() {
@@ -939,4 +935,5 @@ public abstract class AbstractSubLObject extends Lisp implements SubLObject {
         type_error_str(this, "VECTOR");
         return null;
     }
+
 }

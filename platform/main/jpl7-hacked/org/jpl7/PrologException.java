@@ -47,11 +47,11 @@ package org.jpl7;
  * @author Fred Dushin fadushin@syr.edu
  * @version $Revision$
  */
-public final class PrologException extends JPLException {
+public class PrologException extends JPLException {
 	private static final long serialVersionUID = 1L;
 	private Term term_ = null;
 
-	protected PrologException(Term term) {
+	public PrologException(Term term) {
 		super("PrologException: " + term.toString());
 		this.term_ = term;
 	}

@@ -44,6 +44,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
 public class Condition extends StandardObject
 {
+    public boolean isDontTrack() {
+	   return true;
+    }
 	@Override
 	public Term toProlog(List s)
 	{

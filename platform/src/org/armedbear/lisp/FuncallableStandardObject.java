@@ -36,12 +36,22 @@
 // exchange the functions.
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
+import static org.armedbear.lisp.Lisp.*;
+
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction; 
 
 public class FuncallableStandardObject extends StandardObject
 {
   LispObject function;
-
+  /* (non-Javadoc)
+ 	 * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject#getFunc()
+ 	 */
+ 	@Override
+ 	public SubLFunction getFunc() {
+ 		// TODO Auto-generated method stub
+ 		return function.getFunc();
+ 	}
+   
   // KLUDGE: this is only needed for generic functions, but doesn't hurt
   // to have it here.
   EMFCache cache = new EMFCache();

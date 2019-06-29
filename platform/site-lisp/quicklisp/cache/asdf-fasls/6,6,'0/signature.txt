@@ -1,0 +1,4 @@
+lisp-implementation-type: Armed Bear Common Lisp
+                 lisp-implementation-version: 1.6.0-uabcl
+                 machine-type: X86-64
+                 machine-version: NIL

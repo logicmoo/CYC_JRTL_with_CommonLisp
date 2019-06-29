@@ -3,6 +3,8 @@
 //
 package com.cyc.tool.subl.util;
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 
 public abstract class InitializingSubLFile implements SubLFile
@@ -12,7 +14,7 @@ public abstract class InitializingSubLFile implements SubLFile
     initSpot = 0;
     lastPercentile = 0;
     sysdclSize = 0;
-    PrologSync.addSingleton( this );
+    BeanShellCntrl.addSubLFile(this);
   }
   protected int initSpot;
   protected int lastPercentile;
@@ -33,10 +35,19 @@ public abstract class InitializingSubLFile implements SubLFile
     System.out.println( " Done." );
     System.out.flush();
   }
+  
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * @param string
+	 */
+  protected void initializeClassP2(String className) {
+	  SubLFiles.initialize( className );
+	}
 
   protected void initializeClass(String className)
   {
-    SubLFiles.initialize( className );
+	  SubLFiles.initialize( className );
     ++initSpot;
     int percentile = computePercentile();
     if( percentile != lastPercentile )

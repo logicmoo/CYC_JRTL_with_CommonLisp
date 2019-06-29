@@ -66,7 +66,7 @@ public class StandardClass extends SlotClass
 
 
   static Layout layoutStandardClass =
-      new SubLStructDecl(null,
+      new SubLStructDecl(NIL,
                  list(symName,
                       symLayout,
                       symDirectSuperclasses,
@@ -84,12 +84,13 @@ public class StandardClass extends SlotClass
         @Override
 		public LispClass getLispClass()
         {
+        	if(lispClass instanceof LispClass) return (LispClass) lispClass;
           return STANDARD_CLASS;
         }
       };
 
   static Layout layoutFuncallableStandardClass =
-      new SubLStructDecl(null,
+      new SubLStructDecl(NIL,
                  list(symName,
                       symLayout,
                       symDirectSuperclasses,
@@ -107,6 +108,7 @@ public class StandardClass extends SlotClass
         @Override
 		public LispClass getLispClass()
         {
+        	if(lispClass instanceof LispClass) return (LispClass) lispClass;
           return FUNCALLABLE_STANDARD_CLASS;
         }
       };

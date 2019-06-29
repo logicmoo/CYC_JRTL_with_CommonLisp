@@ -90,6 +90,7 @@ import org.armedbear.lisp.Packages;
 import org.armedbear.lisp.Pathname;
 import org.armedbear.lisp.ProcessingTerminated;
 import org.armedbear.lisp.SimpleString;
+import org.armedbear.lisp.SlotDefinition;
 import org.armedbear.lisp.SpecialBindingsMark;
 import org.armedbear.lisp.SpecialOperator;
 import org.armedbear.lisp.SpecialOperators;
@@ -107,6 +108,7 @@ import org.jpl7.Compound;
 import org.jpl7.JPL;
 import org.jpl7.JPLException;
 import org.jpl7.JRef;
+import org.jpl7.PrologException;
 import org.jpl7.Query;
 import org.jpl7.Term;
 import org.jpl7.Variable;
@@ -119,12 +121,12 @@ import com.cyc.cycjava.cycl.constant_completion_high;
 import com.cyc.cycjava.cycl.constant_completion_low;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.constant_reader;
-import com.cyc.cycjava.cycl.module0000;
-import com.cyc.cycjava.cycl.constants_high_oc;
+//import com.cyc.cycjava.cycl.module0000;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.JavaLink;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.LispSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLListListIterator;
@@ -134,6 +136,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -147,6 +150,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.ui.SubLReaderPanel;
+import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 import com.netbreeze.bbowl.gui.BeanBowlGUI;
@@ -820,6 +824,7 @@ public class BeanShellCntrl {
 
 	static boolean repl_in_bg = false;
 	private static NameSpace bshMasterNamespace;
+	private static Unsafe theUnsafe;
 
 	@LispMethod
 	static public LispObject bg_repl() throws InterruptedException {
@@ -1107,13 +1112,16 @@ public class BeanShellCntrl {
 	}
 
 	static public Unsafe getUnsafe() {
+		if (theUnsafe == null) {
 		try {
 			Field field = Unsafe.class.getDeclaredField("theUnsafe");
 			field.setAccessible(true);
-			return (Unsafe) field.get(null);
+				theUnsafe = (Unsafe) field.get(null);
 		} catch (Throwable e) {
 			throw doThrow(e);
 		}
+	}
+		return theUnsafe;
 	}
 
 	@LispMethod
@@ -1124,6 +1132,7 @@ public class BeanShellCntrl {
 			inited_cyc = true;
 		}
 		synchronized (StartupInitLock) {
+			init_subl();
 			boolean wasSubLisp = Main.isSubLisp();
 			Main.setSubLisp(true);
 			try {
@@ -1204,6 +1213,7 @@ public class BeanShellCntrl {
 					LarKCHttpServer.start_sparql_server();
 					inited_cyc_server = true;
 					PrologSync.setPrologReady(true);
+					LispSync.setLispReady(true);
 				} catch (Throwable e) {
 					throw doThrow(e);
 				} finally {
@@ -1353,7 +1363,7 @@ public class BeanShellCntrl {
 		return org.armedbear.lisp.Interpreter.evaluate(statements);
 	}
 
-	final static Writer swipl_writer = new Writer() {
+	final static PrintWriter swipl_writer = new PrintWriter(new Writer() {
 		@Override
 		public void write(char[] chars, int start, int length) throws IOException {
 			Term s = new Atom(new String(chars, start, length));
@@ -1369,7 +1379,7 @@ public class BeanShellCntrl {
 		public void close() throws IOException {
 			oneSolution("flush_output");
 		}
-	};
+	});
 
 	@LispMethod
 	static public LispObject lisp_eval(Term term) {
@@ -1384,7 +1394,7 @@ public class BeanShellCntrl {
 				}
 			}, reader, swipl_writer);
 		} catch (Throwable e) {
-			throw getCatcher().doThrow(e);
+			throw doThrow(e);
 		}
 	}
 
@@ -1425,6 +1435,35 @@ public class BeanShellCntrl {
 			if (!wasNoDebug) {
 				Main.setNoDebug(false);
 			}
+		}
+	}
+
+	/**
+	 * TODO Describe this type briefly. If necessary include a longer description
+	 * and/or an example.
+	 * 
+	 * @author Administrator
+	 *
+	 */
+	public static final class JPLExceptionFromJava extends PrologException {
+		/**
+		 * TODO Describe this constructor.
+		 * 
+		 * @param term
+		 */
+		public JPLExceptionFromJava(Term term, Throwable cause) {
+			super(term);
+			initCause(cause);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Throwable#toString()
+		 */
+		@Override
+		public String toString() {
+			return super.toString();
 		}
 	}
 
@@ -1882,7 +1921,7 @@ public class BeanShellCntrl {
 				if (tag instanceof LispObject) {
 					LispObject lo;
 					lo = (LispObject) tag;
-					lo.termRef = term;
+					lo.setTermRef(term);
 					return lo;
 				}
 				return tag;
@@ -1926,7 +1965,7 @@ public class BeanShellCntrl {
 		return Lisp.readObjectFromString(s);
 	}
 
-	private static LispObject atom_to_lisp_object(String s) throws Exception {
+	public static LispObject atom_to_lisp_object(String s) throws Exception {
 		SubLObject found;
 		// String s = a.name();
 		if (s.startsWith("#$")) {
@@ -2032,7 +2071,11 @@ public class BeanShellCntrl {
 			if (throwable instanceof JPLException) {
 				throw (JPLException) throwable;
 			}
-			throw new JPLException(createStackTraceString(throwable));
+			final String createStackTraceString = createStackTraceString(throwable);
+			swipl_writer.println(createStackTraceString);
+			final Atom stackTrace = new Atom(createStackTraceString);
+			Query.oneSolution(new Compound("write", stackTrace));
+			throw new JPLExceptionFromJava(stackTrace, throwable);
 		}
 		if (catcher != null && catcher != defaultCatcher) {
 			return catcher.doThrow(throwable);
@@ -2065,11 +2108,12 @@ public class BeanShellCntrl {
 	public static SubLObject read_sublisp(String name) {
 		SubLObject form = com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader. //
 				read_from_string(SubLObjectFactory.makeString(name), //
-						CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
-						CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
+						UNPROVIDED, UNPROVIDED, UNPROVIDED,
+						UNPROVIDED, UNPROVIDED);
 		return form;
 	}
 
+	static Method installedCR;
 	@SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 3066L)
 	public static SubLObject find_constant_by_name(final SubLObject name) {
 		final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2078,15 +2122,28 @@ public class BeanShellCntrl {
 		if (!inited_cyc_complete)
 			return constant;
 		if (SubLMain.OPENCYC) {
-			return constants_high_oc.f10737(name);
+			if(installedCR==null) {
+				try {
+					installedCR = Class.forName("com.cyc.cycjava.cycl.constants_high_oc").getDeclaredMethod("f10737",SubLObject.class);
+				} catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				return (SubLObject) installedCR.invoke(constant);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		if (constant_completion_low.$require_valid_constants$ == null)
 			return constant;
 		final SubLObject _prev_bind_0 = constant_completion_low.$require_valid_constants$.currentBinding(thread);
 		try {
 			constant_completion_low.$require_valid_constants$.bind(localNil, thread);
-			constant = constant_completion_high.constant_complete_exact(name, CommonSymbols.UNPROVIDED,
-					CommonSymbols.UNPROVIDED);
+			constant = constant_completion_high.constant_complete_exact(name, UNPROVIDED,
+					UNPROVIDED);
 		} finally {
 			constant_completion_low.$require_valid_constants$.rebind(_prev_bind_0, thread);
 		}
@@ -2121,7 +2178,7 @@ public class BeanShellCntrl {
 		if (term.isListPair()) {
 			Cons cons = new Cons(Lisp.NIL, Lisp.NIL);
 			try {
-				cons.termRef = term;
+				cons.setTermRef(term);
 			} catch (Error e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -2883,5 +2940,55 @@ public class BeanShellCntrl {
 		StringWriter sw = new StringWriter();
 		t.printStackTrace(new PrintWriter(sw));
 		return sw.toString();
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * 
+	 * @param structureObject
+	 * @param slotNum
+	 * @param pingAt
+	 * @param was
+	 * @param value
+	 */
+	public static void wasSetField(AbstractSubLStruct structureObject, int slotNum, int pingAt, Object was,
+			Object value) {
+		LispSync.wasSetField(structureObject, slotNum, pingAt, was, value);
+		PrologSync.wasSetField(structureObject, slotNum, pingAt, was, value);
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * 
+	 * @param file
+	 */
+	public static void addSubLFile(SubLFile file) {
+		LispSync.addSingleton(file);
+		PrologSync.addSubLFile(file);
+		// TODO SLOW
+		addSingleton(file);
+
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * 
+	 * @param struct
+	 */
+	public static void addThis(AbstractSubLStruct struct) {
+		if (struct instanceof SlotDefinition)
+			return;
+		LispSync.addThis(struct);
+		PrologSync.addThis(struct);
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * 
+	 * @param assertion
+	 */
+	public static void removeThis(AbstractSubLStruct struct) {
+		LispSync.removeThis(struct);
+		PrologSync.removeThis(struct);
 	}
 }

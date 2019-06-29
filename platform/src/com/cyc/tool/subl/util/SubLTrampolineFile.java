@@ -6,7 +6,11 @@ package com.cyc.tool.subl.util;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static org.armedbear.lisp.Lisp.*;
 import javax.el.FunctionMapper;
+
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.cycjava.cycl.mt_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
@@ -22,14 +26,17 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class SubLTrampolineFile implements SubLFile, CommonSymbols,  Singleton
+public abstract class SubLTrampolineFile 
+//
+//
+implements SubLFile,  Singleton
 {
   /**
    * @return
    */
   public static SubLObject maybeDefault(SubLObject initVar, SubLSymbol gv, SubLObject otherwise)
   {
-    return ( ( NIL != Symbols.boundp( initVar ) && gv != null ) ? gv.getGlobalValue() : otherwise );
+    return ( ( Lisp.NIL != Symbols.boundp( initVar ) && gv != null ) ? gv.getGlobalValue() : otherwise );
   }
 
   /**
@@ -37,7 +44,7 @@ public abstract class SubLTrampolineFile implements SubLFile, CommonSymbols,  Si
    */
   public static SubLObject maybeDefault(SubLObject initVar, SubLSymbol gv, Supplier<SubLObject> otherwise)
   {
-    return ( ( NIL != Symbols.boundp( initVar ) && gv != null ) ? gv.getGlobalValue() : otherwise.get() );
+    return ( ( Lisp.NIL != Symbols.boundp( initVar ) && gv != null ) ? gv.getGlobalValue() : otherwise.get() );
   }
 
   // public static ThrowStack throwStack = new ThrowStack();
@@ -88,7 +95,7 @@ public abstract class SubLTrampolineFile implements SubLFile, CommonSymbols,  Si
 
   public SubLTrampolineFile()
   {
-    PrologSync.addSingleton( this );
+    BeanShellCntrl.addSubLFile(this);
   }
 
   public static void checkType(SubLObject obj, SubLObject typeSymbol)
@@ -102,7 +109,7 @@ public abstract class SubLTrampolineFile implements SubLFile, CommonSymbols,  Si
 
   public static BinaryFunction extractBinaryFunc(SubLObject func)
   {
-    if( func == CommonSymbols.UNPROVIDED || func == SubLNil.NIL || func == CommonSymbols.EQL )
+    if( func == UNPROVIDED || func == SubLNil.NIL || func == CommonSymbols.EQL )
       return BinaryFunction.EQL_TEST;
     if( func == CommonSymbols.EQ )
       return BinaryFunction.EQ_TEST;
@@ -115,32 +122,32 @@ public abstract class SubLTrampolineFile implements SubLFile, CommonSymbols,  Si
 
   public static int extractCount(SubLObject count)
   {
-    return count == CommonSymbols.UNPROVIDED || count == SubLNil.NIL ? Integer.MAX_VALUE : count.intValue();
+    return count == UNPROVIDED || count == SubLNil.NIL ? Integer.MAX_VALUE : count.intValue();
   }
 
   public static int extractEnd(SubLObject end)
   {
-    return end == CommonSymbols.UNPROVIDED || end == SubLNil.NIL ? Integer.MAX_VALUE : end.intValue();
+    return end == UNPROVIDED || end == SubLNil.NIL ? Integer.MAX_VALUE : end.intValue();
   }
 
   public static int extractEndUsingSize(SubLObject end, SubLObject seq)
   {
-    return end == CommonSymbols.UNPROVIDED || end == SubLNil.NIL ? seq.size() : end.intValue();
+    return end == UNPROVIDED || end == SubLNil.NIL ? seq.size() : end.intValue();
   }
 
   public static SubLPackage extractPackage(SubLObject thePackage)
   {
-    return thePackage == CommonSymbols.UNPROVIDED ? SubLPackage.getCurrentPackage() : thePackage.toPackage();
+    return thePackage == UNPROVIDED ? SubLPackage.getCurrentPackage() : thePackage.toPackage();
   }
 
   public static int extractStart(SubLObject start)
   {
-    return start == CommonSymbols.UNPROVIDED ? 0 : start.intValue();
+    return start == UNPROVIDED ? 0 : start.intValue();
   }
 
   public static UnaryFunction extractUnaryFunc(SubLObject func)
   {
-    return func == CommonSymbols.UNPROVIDED || func == SubLNil.NIL || func == CommonSymbols.IDENTITY ? UnaryFunction.IDENTITY_UNARY_FUNC : UnaryFunction.makeInstance( func.getFunc() );
+    return func == UNPROVIDED || func == SubLNil.NIL || func == CommonSymbols.IDENTITY ? UnaryFunction.IDENTITY_UNARY_FUNC : UnaryFunction.makeInstance( func.getFunc() );
   }
 
   public static void main(String[] args)

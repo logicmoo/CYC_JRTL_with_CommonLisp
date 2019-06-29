@@ -21,6 +21,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
+import static org.armedbear.lisp.Lisp.*;
 
 public class DiskDumper extends SubLTrampolineFile
 {

@@ -3,10 +3,14 @@
 //
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
 
+import static org.armedbear.lisp.Lisp.UNPROVIDED;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+
 import java.util.Iterator;
 import java.util.Map;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
@@ -27,17 +31,18 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile.SubL;
 
-public class complex_special_forms extends SubLTranslatedFile {
+public class complex_special_forms extends SubLTrampolineFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 18321L)
 	public static SubLObject _defstruct_construct(SubLObject macroform, SubLObject environment) {
 		SubLObject current;
 		SubLObject datum = current = macroform.rest();
-		SubLObject c_structure_tag = SubLNil.NIL;
-		SubLObject size = SubLNil.NIL;
-		SubLObject type_var = SubLNil.NIL;
-		SubLObject type = SubLNil.NIL;
+		SubLObject c_structure_tag = NIL;
+		SubLObject size = NIL;
+		SubLObject type_var = NIL;
+		SubLObject type = NIL;
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list61);
 		c_structure_tag = current.first();
 		current = current.rest();
@@ -50,11 +55,11 @@ public class complex_special_forms extends SubLTranslatedFile {
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list61);
 		type = current.first();
 		current = current.rest();
-		if (SubLNil.NIL != current) {
+		if (NIL != current) {
 			cdestructuring_bind.cdestructuring_bind_error(datum, complex_special_forms.$list61);
-			return SubLNil.NIL;
+			return NIL;
 		}
-		if (SubLNil.NIL != c_structure_tag)
+		if (NIL != c_structure_tag)
 			return ConsesLow.list(complex_special_forms.$sym62$_CLEAR_STRUCTURE,
 					ConsesLow.list(complex_special_forms.$sym63$_NEW_STRUCTURE, c_structure_tag, size), size);
 		return ConsesLow.list(complex_special_forms.$sym64$_CLEAR_SUB_STRUCTURE,
@@ -67,10 +72,10 @@ public class complex_special_forms extends SubLTranslatedFile {
 	public static SubLObject _defstruct_get_slot(SubLObject macroform, SubLObject environment) {
 		SubLObject current;
 		SubLObject datum = current = macroform.rest();
-		SubLObject object = SubLNil.NIL;
-		SubLObject index = SubLNil.NIL;
-		SubLObject type = SubLNil.NIL;
-		SubLObject slot = SubLNil.NIL;
+		SubLObject object = NIL;
+		SubLObject index = NIL;
+		SubLObject type = NIL;
+		SubLObject slot = NIL;
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list58);
 		object = current.first();
 		current = current.rest();
@@ -83,20 +88,20 @@ public class complex_special_forms extends SubLTranslatedFile {
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list58);
 		slot = current.first();
 		current = current.rest();
-		if (SubLNil.NIL == current)
+		if (NIL == current)
 			return ConsesLow.list(complex_special_forms.$sym56$_STRUCTURE_SLOT, object, index);
 		cdestructuring_bind.cdestructuring_bind_error(datum, complex_special_forms.$list58);
-		return SubLNil.NIL;
+		return NIL;
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 17700L)
 	public static SubLObject _defstruct_object_p(SubLObject macroform, SubLObject environment) {
 		SubLObject current;
 		SubLObject datum = current = macroform.rest();
-		SubLObject object = SubLNil.NIL;
-		SubLObject c_structure_tag = SubLNil.NIL;
-		SubLObject type_var = SubLNil.NIL;
-		SubLObject type = SubLNil.NIL;
+		SubLObject object = NIL;
+		SubLObject c_structure_tag = NIL;
+		SubLObject type_var = NIL;
+		SubLObject type = NIL;
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list52);
 		object = current.first();
 		current = current.rest();
@@ -109,15 +114,15 @@ public class complex_special_forms extends SubLTranslatedFile {
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list52);
 		type = current.first();
 		current = current.rest();
-		if (SubLNil.NIL != current) {
+		if (NIL != current) {
 			cdestructuring_bind.cdestructuring_bind_error(datum, complex_special_forms.$list52);
-			return SubLNil.NIL;
+			return NIL;
 		}
-		if (SubLNil.NIL != c_structure_tag)
+		if (NIL != c_structure_tag)
 			return ConsesLow.list(complex_special_forms.$sym53$_STRUCTURE_TYPE, object, c_structure_tag);
 		return ConsesLow.list(complex_special_forms.$sym54$CAND,
 				ConsesLow.list(complex_special_forms.$sym55$_STRUCTURES_BAG_P, object),
-				ConsesLow.list(CommonSymbols.EQ, ConsesLow.listS(complex_special_forms.$sym56$_STRUCTURE_SLOT, object,
+				ConsesLow.list(EQ, ConsesLow.listS(complex_special_forms.$sym56$_STRUCTURE_SLOT, object,
 						complex_special_forms.$list57), type_var));
 	}
 
@@ -125,11 +130,11 @@ public class complex_special_forms extends SubLTranslatedFile {
 	public static SubLObject _defstruct_set_slot(SubLObject macroform, SubLObject environment) {
 		SubLObject current;
 		SubLObject datum = current = macroform.rest();
-		SubLObject object = SubLNil.NIL;
-		SubLObject index = SubLNil.NIL;
-		SubLObject value = SubLNil.NIL;
-		SubLObject type = SubLNil.NIL;
-		SubLObject slot = SubLNil.NIL;
+		SubLObject object = NIL;
+		SubLObject index = NIL;
+		SubLObject value = NIL;
+		SubLObject type = NIL;
+		SubLObject slot = NIL;
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list59);
 		object = current.first();
 		current = current.rest();
@@ -145,10 +150,10 @@ public class complex_special_forms extends SubLTranslatedFile {
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list59);
 		slot = current.first();
 		current = current.rest();
-		if (SubLNil.NIL == current)
+		if (NIL == current)
 			return ConsesLow.list(complex_special_forms.$sym60$_SET_STRUCTURE_SLOT, object, index, value);
 		cdestructuring_bind.cdestructuring_bind_error(datum, complex_special_forms.$list59);
-		return SubLNil.NIL;
+		return NIL;
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 13226L)
@@ -168,15 +173,15 @@ public class complex_special_forms extends SubLTranslatedFile {
 	public static SubLObject build_regmethod_list(SubLObject type, SubLObject method_table,
 			SubLObject method_function) {
 		SubLThread thread = SubLProcess.currentSubLThread();
-		SubLObject reglist = SubLNil.NIL;
+		SubLObject reglist = NIL;
 		SubLObject alias_list = conses_high.second(conses_high.assoc(Symbols.symbol_name(type),
 				complex_special_forms.$polymorphic_type_hierarchy$.getDynamicValue(thread),
-				Symbols.symbol_function(complex_special_forms.$sym14$STRING_), CommonSymbols.UNPROVIDED));
-		if (SubLNil.NIL != alias_list) {
+				Symbols.symbol_function(complex_special_forms.$sym14$STRING_), UNPROVIDED));
+		if (NIL != alias_list) {
 			SubLObject cdolist_list_var = alias_list;
-			SubLObject curr = SubLNil.NIL;
+			SubLObject curr = NIL;
 			curr = cdolist_list_var.first();
-			while (SubLNil.NIL != cdolist_list_var) {
+			while (NIL != cdolist_list_var) {
 				reglist = ConsesLow.cons(build_regmethod_call(curr, method_table, method_function), reglist);
 				cdolist_list_var = cdolist_list_var.rest();
 				curr = cdolist_list_var.first();
@@ -247,15 +252,15 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLFiles.declareFunction(me, "initialize_call_profiling_table", "INITIALIZE-CALL-PROFILING-TABLE", 0, 0,
 				false);
 		SubLFiles.declareFunction(me, "finalize_call_profiling_table", "FINALIZE-CALL-PROFILING-TABLE", 1, 0, false);
-		return SubLNil.NIL;
+		return NIL;
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 2882L)
 	public static SubLObject define_method(SubLObject macroform, SubLObject environment) {
 		SubLObject current;
 		SubLObject datum = current = macroform.rest();
-		SubLObject name = SubLNil.NIL;
-		SubLObject lambda_list = SubLNil.NIL;
+		SubLObject name = NIL;
+		SubLObject lambda_list = NIL;
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list0);
 		name = current.first();
 		current = current.rest();
@@ -269,22 +274,22 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 5718L)
 	public static SubLObject define_method_internal(SubLObject name, SubLObject arglist, SubLObject body) {
 		SubLObject type = conses_high.second(arglist.first());
-		SubLObject plain_args = reader.bq_cons(arglist.first().first(), ConsesLow.append(arglist.rest(), SubLNil.NIL));
+		SubLObject plain_args = reader.bq_cons(arglist.first().first(), ConsesLow.append(arglist.rest(), NIL));
 		SubLObject method_table_var = method_table_var(name);
 		SubLObject method_function = method_function_var(name, type);
 		SubLObject regmethod_list = build_regmethod_list(type, method_table_var, method_function);
 		return ConsesLow.listS(
 				complex_special_forms.$sym2$PROGN, ConsesLow.listS(complex_special_forms.$sym5$DEFINE, method_function,
-						plain_args, ConsesLow.append(body, SubLNil.NIL)),
-				ConsesLow.append(regmethod_list, SubLNil.NIL));
+						plain_args, ConsesLow.append(body, NIL)),
+				ConsesLow.append(regmethod_list, NIL));
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 1228L)
 	public static SubLObject defpolymorphic(SubLObject macroform, SubLObject environment) {
 		SubLObject current;
 		SubLObject datum = current = macroform.rest();
-		SubLObject name = SubLNil.NIL;
-		SubLObject lambda_list = SubLNil.NIL;
+		SubLObject name = NIL;
+		SubLObject lambda_list = NIL;
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list0);
 		name = current.first();
 		current = current.rest();
@@ -299,7 +304,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 	public static SubLObject defpolymorphic_internal(SubLObject name, SubLObject arglist, SubLObject body) {
 		SubLObject method_table_var = method_table_var(name);
 		SubLObject method_function_var = Symbols.make_symbol(complex_special_forms.$str1$METHOD_FUNCTION);
-		SubLObject doc_string = SubLNil.NIL;
+		SubLObject doc_string = NIL;
 		if (body.first().isString()) {
 			doc_string = ConsesLow.list(body.first());
 			body = body.rest();
@@ -317,8 +322,8 @@ public class complex_special_forms extends SubLTranslatedFile {
 														ConsesLow.listS(complex_special_forms.$sym10$FUNCALL,
 																method_function_var,
 																ConsesLow.append(full_formal_parameter_list(arglist),
-																		SubLNil.NIL)))),
-										ConsesLow.append(body, SubLNil.NIL))))));
+																		NIL)))),
+										ConsesLow.append(body, NIL))))));
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 8214L)
@@ -328,7 +333,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list22);
 		SubLObject temp = current.rest();
 		current = current.first();
-		SubLObject name = SubLNil.NIL;
+		SubLObject name = NIL;
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list22);
 		name = current.first();
 		SubLObject options;
@@ -342,16 +347,16 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 9867L)
 	public static SubLObject defstruct_analyze(SubLObject name, SubLObject options, SubLObject slots) {
 		SubLThread thread = SubLProcess.currentSubLThread();
-		assert SubLNil.NIL != Types.symbolp(name) : name;
+		assert NIL != Types.symbolp(name) : name;
 		SubLObject conc_name = conses_high.second(conses_high.assoc(complex_special_forms.$kw24$CONC_NAME, options,
-				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED));
+				UNPROVIDED, UNPROVIDED));
 		SubLObject print_function = conses_high.second(conses_high.assoc(complex_special_forms.$kw25$PRINT_FUNCTION,
-				options, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED));
+				options, UNPROVIDED, UNPROVIDED));
 		SubLObject c_structure_tag = conses_high.second(conses_high.assoc(complex_special_forms.$kw26$C_STRUCTURE_TAG,
-				options, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED));
+				options, UNPROVIDED, UNPROVIDED));
 		SubLObject raw_make_visit_fnP = conses_high.assoc(complex_special_forms.$kw27$GENERATE_VISIT_FUNCTION_, options,
-				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
-		SubLObject make_visit_fnP = SubLNil.NIL == raw_make_visit_fnP
+				UNPROVIDED, UNPROVIDED);
+		SubLObject make_visit_fnP = NIL == raw_make_visit_fnP
 				? complex_special_forms.$default_generate_visit_functionP$.getDynamicValue(thread)
 				: conses_high.second(raw_make_visit_fnP);
 		conc_name = defstruct_conc_name(name, conc_name);
@@ -364,18 +369,18 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLObject host_fn_name = defstruct_host_fn_name(name);
 		return ConsesLow.listS(complex_special_forms.$kw28$NAME, name,
 				ConsesLow.append(new SubLObject[] {
-						SubLNil.NIL != conc_name ? ConsesLow.list(complex_special_forms.$kw24$CONC_NAME, conc_name)
-								: SubLNil.NIL,
-						SubLNil.NIL != print_function
+						NIL != conc_name ? ConsesLow.list(complex_special_forms.$kw24$CONC_NAME, conc_name)
+								: NIL,
+						NIL != print_function
 								? ConsesLow.list(complex_special_forms.$kw25$PRINT_FUNCTION, print_function)
-								: SubLNil.NIL,
-						SubLNil.NIL != c_structure_tag
+								: NIL,
+						NIL != c_structure_tag
 								? ConsesLow.list(complex_special_forms.$kw26$C_STRUCTURE_TAG, c_structure_tag)
-								: SubLNil.NIL,
-						SubLNil.NIL != make_visit_fnP
+								: NIL,
+						NIL != make_visit_fnP
 								? ConsesLow.list(complex_special_forms.$kw27$GENERATE_VISIT_FUNCTION_, make_visit_fnP,
 										complex_special_forms.$kw29$HOST_FN_NAME, host_fn_name)
-								: SubLNil.NIL,
+								: NIL,
 						ConsesLow.list(new SubLObject[] { complex_special_forms.$kw30$PREDICATE, predicate,
 								complex_special_forms.$kw31$CONSTRUCTOR, constructor,
 								complex_special_forms.$kw32$TYPE_VAR, type_var, complex_special_forms.$kw33$SLOTS,
@@ -386,7 +391,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 11393L)
 	public static SubLObject defstruct_conc_name(SubLObject name, SubLObject conc_name) {
-		if (SubLNil.NIL != conc_name)
+		if (NIL != conc_name)
 			return conc_name;
 		return intern_accessor(Sequences.cconcatenate(Symbols.symbol_name(name), complex_special_forms.$str17$_));
 	}
@@ -407,13 +412,13 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLObject current_value = Symbols.make_symbol(complex_special_forms.$str85$CURRENT_VALUE);
 		SubLObject current_arg = Symbols.make_symbol(complex_special_forms.$str86$CURRENT_ARG);
 		SubLObject next = Symbols.make_symbol(complex_special_forms.$str87$NEXT);
-		SubLObject gencaseslots = SubLNil.NIL;
+		SubLObject gencaseslots = NIL;
 		SubLObject cdotimes_end_var;
 		SubLObject n;
 		SubLObject slot_keyword;
 		SubLObject setter;
-		for (cdotimes_end_var = Sequences.length(slot_keywords), n = SubLNil.NIL, n = CommonSymbols.ZERO_INTEGER; n
-				.numL(cdotimes_end_var); n = Numbers.add(n, CommonSymbols.ONE_INTEGER)) {
+		for (cdotimes_end_var = Sequences.length(slot_keywords), n = NIL, n = ZERO_INTEGER; n
+				.numL(cdotimes_end_var); n = Numbers.add(n, ONE_INTEGER)) {
 			slot_keyword = ConsesLow.nth(n, slot_keywords);
 			setter = ConsesLow.nth(n, setters);
 			gencaseslots = ConsesLow.cons(ConsesLow.list(slot_keyword, ConsesLow.list(setter, new_var, current_value)),
@@ -433,7 +438,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 								ConsesLow.list(current_arg, ConsesLow.list(complex_special_forms.$sym94$CAR, next)),
 								ConsesLow.list(current_value, ConsesLow.list(complex_special_forms.$sym95$CADR, next))),
 						ConsesLow.listS(complex_special_forms.$sym96$PCASE, current_arg,
-								ConsesLow.append(Sequences.nreverse(gencaseslots), SubLNil.NIL))));
+								ConsesLow.append(Sequences.nreverse(gencaseslots), NIL))));
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 22933L)
@@ -455,16 +460,16 @@ public class complex_special_forms extends SubLTranslatedFile {
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 22547L)
 	public static SubLObject defstruct_def_csetf_forms(SubLObject getters, SubLObject setters) {
-		SubLObject forms = SubLNil.NIL;
-		SubLObject rest_getters = SubLNil.NIL;
-		SubLObject rest_setters = SubLNil.NIL;
-		SubLObject getter = SubLNil.NIL;
-		SubLObject setter = SubLNil.NIL;
+		SubLObject forms = NIL;
+		SubLObject rest_getters = NIL;
+		SubLObject rest_setters = NIL;
+		SubLObject getter = NIL;
+		SubLObject setter = NIL;
 		rest_getters = getters;
 		rest_setters = setters;
 		getter = rest_getters.first();
 		setter = rest_setters.first();
-		while (SubLNil.NIL != rest_getters) {
+		while (NIL != rest_getters) {
 			forms = ConsesLow.cons(ConsesLow.list(complex_special_forms.$sym81$_DEF_CSETF,
 					ConsesLow.list(complex_special_forms.$sym50$QUOTE, getter),
 					ConsesLow.list(complex_special_forms.$sym50$QUOTE, setter)), forms);
@@ -479,70 +484,70 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 15527L)
 	public static SubLObject defstruct_expand(SubLObject analysis) {
 		SubLThread thread = SubLProcess.currentSubLThread();
-		SubLObject allow_other_keys_p = SubLNil.NIL;
+		SubLObject allow_other_keys_p = NIL;
 		SubLObject rest = analysis;
-		SubLObject bad = SubLNil.NIL;
-		SubLObject current_$1 = SubLNil.NIL;
-		while (SubLNil.NIL != rest) {
+		SubLObject bad = NIL;
+		SubLObject current_$1 = NIL;
+		while (NIL != rest) {
 			cdestructuring_bind.destructuring_bind_must_consp(rest, analysis, complex_special_forms.$list44);
 			current_$1 = rest.first();
 			rest = rest.rest();
 			cdestructuring_bind.destructuring_bind_must_consp(rest, analysis, complex_special_forms.$list44);
-			if (SubLNil.NIL == conses_high.member(current_$1, complex_special_forms.$list45, CommonSymbols.UNPROVIDED,
-					CommonSymbols.UNPROVIDED))
-				bad = CommonSymbols.T;
+			if (NIL == conses_high.member(current_$1, complex_special_forms.$list45, UNPROVIDED,
+					UNPROVIDED))
+				bad = T;
 			if (current_$1 == complex_special_forms.$kw46$ALLOW_OTHER_KEYS)
 				allow_other_keys_p = rest.first();
 			rest = rest.rest();
 		}
-		if (SubLNil.NIL != bad && SubLNil.NIL == allow_other_keys_p)
+		if (NIL != bad && NIL == allow_other_keys_p)
 			cdestructuring_bind.cdestructuring_bind_error(analysis, complex_special_forms.$list44);
 		SubLObject name_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw28$NAME, analysis);
-		SubLObject name = SubLNil.NIL != name_tail ? conses_high.cadr(name_tail) : SubLNil.NIL;
+		SubLObject name = NIL != name_tail ? conses_high.cadr(name_tail) : NIL;
 		SubLObject conc_name_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw24$CONC_NAME,
 				analysis);
-		SubLObject conc_name = SubLNil.NIL != conc_name_tail ? conses_high.cadr(conc_name_tail) : SubLNil.NIL;
+		SubLObject conc_name = NIL != conc_name_tail ? conses_high.cadr(conc_name_tail) : NIL;
 		SubLObject print_function_tail = cdestructuring_bind
 				.property_list_member(complex_special_forms.$kw25$PRINT_FUNCTION, analysis);
-		SubLObject print_function = SubLNil.NIL != print_function_tail ? conses_high.cadr(print_function_tail)
-				: SubLNil.NIL;
+		SubLObject print_function = NIL != print_function_tail ? conses_high.cadr(print_function_tail)
+				: NIL;
 		SubLObject c_structure_tag_tail = cdestructuring_bind
 				.property_list_member(complex_special_forms.$kw26$C_STRUCTURE_TAG, analysis);
-		SubLObject c_structure_tag = SubLNil.NIL != c_structure_tag_tail ? conses_high.cadr(c_structure_tag_tail)
-				: SubLNil.NIL;
+		SubLObject c_structure_tag = NIL != c_structure_tag_tail ? conses_high.cadr(c_structure_tag_tail)
+				: NIL;
 		SubLObject generate_visit_functionP_tail = cdestructuring_bind
 				.property_list_member(complex_special_forms.$kw27$GENERATE_VISIT_FUNCTION_, analysis);
-		SubLObject generate_visit_functionP = SubLNil.NIL != generate_visit_functionP_tail
+		SubLObject generate_visit_functionP = NIL != generate_visit_functionP_tail
 				? conses_high.cadr(generate_visit_functionP_tail)
-				: SubLNil.NIL;
+				: NIL;
 		SubLObject predicate_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw30$PREDICATE,
 				analysis);
-		SubLObject predicate = SubLNil.NIL != predicate_tail ? conses_high.cadr(predicate_tail) : SubLNil.NIL;
+		SubLObject predicate = NIL != predicate_tail ? conses_high.cadr(predicate_tail) : NIL;
 		SubLObject constructor_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw31$CONSTRUCTOR,
 				analysis);
-		SubLObject constructor = SubLNil.NIL != constructor_tail ? conses_high.cadr(constructor_tail) : SubLNil.NIL;
+		SubLObject constructor = NIL != constructor_tail ? conses_high.cadr(constructor_tail) : NIL;
 		SubLObject host_fn_name_tail = cdestructuring_bind
 				.property_list_member(complex_special_forms.$kw29$HOST_FN_NAME, analysis);
-		SubLObject host_fn_name = SubLNil.NIL != host_fn_name_tail ? conses_high.cadr(host_fn_name_tail) : SubLNil.NIL;
+		SubLObject host_fn_name = NIL != host_fn_name_tail ? conses_high.cadr(host_fn_name_tail) : NIL;
 		SubLObject type_var_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw32$TYPE_VAR,
 				analysis);
-		SubLObject type_var = SubLNil.NIL != type_var_tail ? conses_high.cadr(type_var_tail) : SubLNil.NIL;
+		SubLObject type_var = NIL != type_var_tail ? conses_high.cadr(type_var_tail) : NIL;
 		SubLObject slots_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw33$SLOTS, analysis);
-		SubLObject slots = SubLNil.NIL != slots_tail ? conses_high.cadr(slots_tail) : SubLNil.NIL;
+		SubLObject slots = NIL != slots_tail ? conses_high.cadr(slots_tail) : NIL;
 		SubLObject slot_keywords_tail = cdestructuring_bind
 				.property_list_member(complex_special_forms.$kw34$SLOT_KEYWORDS, analysis);
-		SubLObject slot_keywords = SubLNil.NIL != slot_keywords_tail ? conses_high.cadr(slot_keywords_tail)
-				: SubLNil.NIL;
+		SubLObject slot_keywords = NIL != slot_keywords_tail ? conses_high.cadr(slot_keywords_tail)
+				: NIL;
 		SubLObject getters_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw35$GETTERS,
 				analysis);
-		SubLObject getters = SubLNil.NIL != getters_tail ? conses_high.cadr(getters_tail) : SubLNil.NIL;
+		SubLObject getters = NIL != getters_tail ? conses_high.cadr(getters_tail) : NIL;
 		SubLObject setters_tail = cdestructuring_bind.property_list_member(complex_special_forms.$kw36$SETTERS,
 				analysis);
-		SubLObject setters = SubLNil.NIL != setters_tail ? conses_high.cadr(setters_tail) : SubLNil.NIL;
-		if (SubLNil.NIL != Sequences.find(complex_special_forms.$kw47$SL2JAVA,
-				reader.$features$.getDynamicValue(thread), CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
-				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED))
-			c_structure_tag = SubLNil.NIL;
+		SubLObject setters = NIL != setters_tail ? conses_high.cadr(setters_tail) : NIL;
+		if (NIL != Sequences.find(complex_special_forms.$kw47$SL2JAVA,
+				reader.$features$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED,
+				UNPROVIDED, UNPROVIDED))
+			c_structure_tag = NIL;
 		SubLObject type_var_form = defstruct_type_var_form(type_var, name, c_structure_tag);
 		SubLObject print_method = defstruct_print_method(name, print_function);
 		SubLObject print_forms = defstruct_print_forms(c_structure_tag, type_var, print_function, print_method);
@@ -551,23 +556,23 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLObject getter_forms = defstruct_getter_forms(name, c_structure_tag, predicate, slots, getters);
 		SubLObject setter_forms = defstruct_setter_forms(name, c_structure_tag, predicate, slots, setters);
 		SubLObject def_csetf_forms = defstruct_def_csetf_forms(getters, setters);
-		SubLObject host_fn_form = SubLNil.NIL != generate_visit_functionP
+		SubLObject host_fn_form = NIL != generate_visit_functionP
 				? defstruct_host_function(name, host_fn_name, constructor, slot_keywords, getters)
-				: SubLNil.NIL;
+				: NIL;
 		SubLObject constructor_form = defstruct_constructor_form(name, constructor, c_structure_tag, type_var,
 				slot_keywords, setters);
 		return ConsesLow.listS(complex_special_forms.$sym2$PROGN, type_var_form,
 				ConsesLow.append(print_forms,
-						SubLNil.NIL != register_form ? ConsesLow.list(register_form) : SubLNil.NIL,
+						NIL != register_form ? ConsesLow.list(register_form) : NIL,
 						ConsesLow.listS(
 								ConsesLow.list(complex_special_forms.$sym48$DECLAIM,
 										ConsesLow.list(complex_special_forms.$sym49$OPTIMIZE_FUNCALL, predicate)),
 								predicate_form,
 								ConsesLow.append(getter_forms, setter_forms, def_csetf_forms,
 										ConsesLow.list(constructor_form,
-												ConsesLow.list(CommonSymbols.IDENTITY,
+												ConsesLow.list(IDENTITY,
 														ConsesLow.list(complex_special_forms.$sym50$QUOTE, name)),
-												SubLNil.NIL != generate_visit_functionP ? host_fn_form
+												NIL != generate_visit_functionP ? host_fn_form
 														: complex_special_forms.$list51)))));
 	}
 
@@ -580,7 +585,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 	public static SubLObject defstruct_getter(SubLObject conc_name, SubLObject slot) {
 		return intern_accessor(
 				Strings.string_upcase(Sequences.cconcatenate(Symbols.symbol_name(conc_name), Symbols.symbol_name(slot)),
-						CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED));
+						UNPROVIDED, UNPROVIDED));
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 21512L)
@@ -602,17 +607,17 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 20801L)
 	public static SubLObject defstruct_getter_forms(SubLObject type, SubLObject c_structure_tag, SubLObject predicate,
 			SubLObject slots, SubLObject getters) {
-		SubLObject forms = SubLNil.NIL;
+		SubLObject forms = NIL;
 		SubLObject cdotimes_end_var;
 		SubLObject i;
 		SubLObject slot;
 		SubLObject getter;
 		SubLObject index;
-		for (cdotimes_end_var = Sequences.length(getters), i = SubLNil.NIL, i = CommonSymbols.ZERO_INTEGER; i
-				.numL(cdotimes_end_var); i = Numbers.add(i, CommonSymbols.ONE_INTEGER)) {
+		for (cdotimes_end_var = Sequences.length(getters), i = NIL, i = ZERO_INTEGER; i
+				.numL(cdotimes_end_var); i = Numbers.add(i, ONE_INTEGER)) {
 			slot = ConsesLow.nth(i, slots);
 			getter = ConsesLow.nth(i, getters);
-			index = SubLNil.NIL != c_structure_tag ? i : Numbers.add(i, CommonSymbols.TWO_INTEGER);
+			index = NIL != c_structure_tag ? i : Numbers.add(i, TWO_INTEGER);
 			forms = ConsesLow.cons(defstruct_getter_form(getter, index, predicate, type, slot), forms);
 		}
 		return Sequences.nreverse(forms);
@@ -625,11 +630,11 @@ public class complex_special_forms extends SubLTranslatedFile {
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 12210L)
 	public static SubLObject defstruct_getters(SubLObject conc_name, SubLObject slots) {
-		SubLObject getters = SubLNil.NIL;
+		SubLObject getters = NIL;
 		SubLObject cdolist_list_var = slots;
-		SubLObject slot = SubLNil.NIL;
+		SubLObject slot = NIL;
 		slot = cdolist_list_var.first();
-		while (SubLNil.NIL != cdolist_list_var) {
+		while (NIL != cdolist_list_var) {
 			SubLObject getter = defstruct_getter(conc_name, slot);
 			getters = ConsesLow.cons(getter, getters);
 			cdolist_list_var = cdolist_list_var.rest();
@@ -656,15 +661,15 @@ public class complex_special_forms extends SubLTranslatedFile {
 		SubLObject object_arg = arglist.first();
 		SubLObject visitor_fn_arg = conses_high.second(arglist);
 		SubLObject size = Sequences.length(slot_keywords);
-		SubLObject statements = SubLNil.NIL;
+		SubLObject statements = NIL;
 		statements = ConsesLow.cons(ConsesLow.list(complex_special_forms.$sym10$FUNCALL, visitor_fn_arg, object_arg,
 				complex_special_forms.$kw97$BEGIN, ConsesLow.list(complex_special_forms.$sym50$QUOTE, constructor_fn),
 				size), statements);
 		SubLObject index;
 		SubLObject slot_keyword;
 		SubLObject slot_getter;
-		for (index = SubLNil.NIL, index = CommonSymbols.ZERO_INTEGER; index
-				.numL(size); index = Numbers.add(index, CommonSymbols.ONE_INTEGER)) {
+		for (index = NIL, index = ZERO_INTEGER; index
+				.numL(size); index = Numbers.add(index, ONE_INTEGER)) {
 			slot_keyword = ConsesLow.nth(index, slot_keywords);
 			slot_getter = ConsesLow.nth(index, getters);
 			statements = ConsesLow.cons(
@@ -678,7 +683,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 		statements = Sequences.nreverse(statements);
 		return ConsesLow.list(complex_special_forms.$sym2$PROGN,
 				ConsesLow.list(complex_special_forms.$sym5$DEFINE, host_fn, arglist,
-						reader.bq_cons(complex_special_forms.$sym2$PROGN, ConsesLow.append(statements, SubLNil.NIL)),
+						reader.bq_cons(complex_special_forms.$sym2$PROGN, ConsesLow.append(statements, NIL)),
 						ConsesLow.list(complex_special_forms.$sym9$RET, object_arg)),
 				ConsesLow.list(complex_special_forms.$sym100$DEFINE_METHOD,
 						complex_special_forms.$sym101$VISIT_DEFSTRUCT_OBJECT,
@@ -723,7 +728,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 19232L)
 	public static SubLObject defstruct_print_forms(SubLObject c_structure_tag, SubLObject tag_var,
 			SubLObject print_function, SubLObject print_method) {
-		if (SubLNil.NIL == print_function)
+		if (NIL == print_function)
 			print_function = complex_special_forms.$sym68$DEFAULT_STRUCT_PRINT_FUNCTION;
 		return ConsesLow.listS(
 				ConsesLow.list(complex_special_forms.$sym48$DECLAIM,
@@ -732,11 +737,11 @@ public class complex_special_forms extends SubLTranslatedFile {
 				ConsesLow.list(complex_special_forms.$sym5$DEFINE, print_method, complex_special_forms.$list71,
 						reader.bq_cons(print_function, complex_special_forms.$list72)),
 				ConsesLow.append(
-						SubLNil.NIL != c_structure_tag ? SubLNil.NIL
+						NIL != c_structure_tag ? NIL
 								: ConsesLow.list(ConsesLow.list(complex_special_forms.$sym12$_REGISTER_METHOD,
 										complex_special_forms.$sym73$_PRINT_OBJECT_METHOD_TABLE_, tag_var,
 										ConsesLow.list(complex_special_forms.$sym13$FUNCTION, print_method))),
-						SubLNil.NIL));
+						NIL));
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 19062L)
@@ -748,12 +753,12 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 19715L)
 	public static SubLObject defstruct_register_form(SubLObject name, SubLObject c_structure_tag, SubLObject slots,
 			SubLObject print_method) {
-		if (SubLNil.NIL != c_structure_tag)
+		if (NIL != c_structure_tag)
 			return ConsesLow.list(complex_special_forms.$sym74$_REGISTER_DEFSTRUCT, Symbols.symbol_name(name),
 					c_structure_tag, Sequences.length(slots),
 					ConsesLow.list(complex_special_forms.$sym50$QUOTE, print_method),
 					ConsesLow.list(complex_special_forms.$sym50$QUOTE, slots));
-		return SubLNil.NIL;
+		return NIL;
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 12764L)
@@ -785,17 +790,17 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 21707L)
 	public static SubLObject defstruct_setter_forms(SubLObject type, SubLObject c_structure_tag, SubLObject predicate,
 			SubLObject slots, SubLObject setters) {
-		SubLObject forms = SubLNil.NIL;
+		SubLObject forms = NIL;
 		SubLObject cdotimes_end_var;
 		SubLObject i;
 		SubLObject slot;
 		SubLObject setter;
 		SubLObject index;
-		for (cdotimes_end_var = Sequences.length(setters), i = SubLNil.NIL, i = CommonSymbols.ZERO_INTEGER; i
-				.numL(cdotimes_end_var); i = Numbers.add(i, CommonSymbols.ONE_INTEGER)) {
+		for (cdotimes_end_var = Sequences.length(setters), i = NIL, i = ZERO_INTEGER; i
+				.numL(cdotimes_end_var); i = Numbers.add(i, ONE_INTEGER)) {
 			slot = ConsesLow.nth(i, slots);
 			setter = ConsesLow.nth(i, setters);
-			index = SubLNil.NIL != c_structure_tag ? i : Numbers.add(i, CommonSymbols.TWO_INTEGER);
+			index = NIL != c_structure_tag ? i : Numbers.add(i, TWO_INTEGER);
 			forms = ConsesLow.cons(defstruct_setter_form(setter, index, predicate, type, slot), forms);
 		}
 		return Sequences.nreverse(forms);
@@ -803,11 +808,11 @@ public class complex_special_forms extends SubLTranslatedFile {
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 12565L)
 	public static SubLObject defstruct_setters(SubLObject getters) {
-		SubLObject setters = SubLNil.NIL;
+		SubLObject setters = NIL;
 		SubLObject cdolist_list_var = getters;
-		SubLObject getter = SubLNil.NIL;
+		SubLObject getter = NIL;
 		getter = cdolist_list_var.first();
-		while (SubLNil.NIL != cdolist_list_var) {
+		while (NIL != cdolist_list_var) {
 			SubLObject setter = defstruct_setter(getter);
 			setters = ConsesLow.cons(setter, setters);
 			cdolist_list_var = cdolist_list_var.rest();
@@ -818,11 +823,11 @@ public class complex_special_forms extends SubLTranslatedFile {
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 11976L)
 	public static SubLObject defstruct_slot_keywords(SubLObject slots) {
-		SubLObject slot_keywords = SubLNil.NIL;
+		SubLObject slot_keywords = NIL;
 		SubLObject cdolist_list_var = slots;
-		SubLObject slot = SubLNil.NIL;
+		SubLObject slot = NIL;
 		slot = cdolist_list_var.first();
-		while (SubLNil.NIL != cdolist_list_var) {
+		while (NIL != cdolist_list_var) {
 			SubLObject slot_keyword = Symbols.make_keyword(Symbols.symbol_name(slot));
 			slot_keywords = ConsesLow.cons(slot_keyword, slot_keywords);
 			cdolist_list_var = cdolist_list_var.rest();
@@ -840,7 +845,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 18642L)
 	public static SubLObject defstruct_type_var_form(SubLObject type_var, SubLObject name, SubLObject c_structure_tag) {
 		return ConsesLow.list(complex_special_forms.$sym66$DEFCONSTANT, type_var,
-				SubLNil.NIL != c_structure_tag ? c_structure_tag
+				NIL != c_structure_tag ? c_structure_tag
 						: ConsesLow.list(complex_special_forms.$sym50$QUOTE, name));
 	}
 
@@ -853,9 +858,9 @@ public class complex_special_forms extends SubLTranslatedFile {
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 26660L)
 	public static SubLObject finalize_call_profiling_table(SubLObject table) {
-		SubLObject pairs = SubLNil.NIL;
-		SubLObject function = SubLNil.NIL;
-		SubLObject count = SubLNil.NIL;
+		SubLObject pairs = NIL;
+		SubLObject function = NIL;
+		SubLObject count = NIL;
 		Iterator cdohash_iterator = Hashtables.getEntrySetIterator(table);
 		try {
 			while (Hashtables.iteratorHasNext(cdohash_iterator)) {
@@ -874,11 +879,11 @@ public class complex_special_forms extends SubLTranslatedFile {
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 7883L)
 	public static SubLObject full_formal_parameter_list(SubLObject arglist) {
-		SubLObject answer = SubLNil.NIL;
+		SubLObject answer = NIL;
 		SubLObject cdolist_list_var = arglist;
-		SubLObject arg = SubLNil.NIL;
+		SubLObject arg = NIL;
 		arg = cdolist_list_var.first();
-		while (SubLNil.NIL != cdolist_list_var) {
+		while (NIL != cdolist_list_var) {
 			if (arg.isCons())
 				answer = ConsesLow.cons(arg.first(), answer);
 			else if (arg != complex_special_forms.$sym20$_OPTIONAL)
@@ -902,21 +907,21 @@ public class complex_special_forms extends SubLTranslatedFile {
 		complex_special_forms.$polymorphic_type_hierarchy$ = SubLFiles.defparameter("*POLYMORPHIC-TYPE-HIERARCHY*",
 				complex_special_forms.$list11);
 		complex_special_forms.$default_generate_visit_functionP$ = SubLFiles
-				.defparameter("*DEFAULT-GENERATE-VISIT-FUNCTION?*", CommonSymbols.T);
-		complex_special_forms.$call_profiling_enabledP$ = SubLFiles.defvar("*CALL-PROFILING-ENABLED?*", SubLNil.NIL);
-		complex_special_forms.$call_profiling_table$ = SubLFiles.defvar("*CALL-PROFILING-TABLE*", SubLNil.NIL);
-		return SubLNil.NIL;
+				.defparameter("*DEFAULT-GENERATE-VISIT-FUNCTION?*", T);
+		complex_special_forms.$call_profiling_enabledP$ = SubLFiles.defvar("*CALL-PROFILING-ENABLED?*", NIL);
+		complex_special_forms.$call_profiling_table$ = SubLFiles.defvar("*CALL-PROFILING-TABLE*", NIL);
+		return NIL;
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 26565L)
 	public static SubLObject initialize_call_profiling_table() {
-		return Hashtables.make_hash_table(complex_special_forms.$int110$1000, Symbols.symbol_function(CommonSymbols.EQ),
-				CommonSymbols.UNPROVIDED);
+		return Hashtables.make_hash_table(complex_special_forms.$int110$1000, Symbols.symbol_function(EQ),
+				UNPROVIDED);
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 1032L)
 	public static SubLObject intern_accessor(SubLObject string) {
-		return Packages.intern(string, CommonSymbols.UNPROVIDED);
+		return Packages.intern(string, UNPROVIDED);
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 7553L)
@@ -928,7 +933,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 7293L)
 	public static SubLObject method_table_var(SubLObject name) {
 		SubLThread thread = SubLProcess.currentSubLThread();
-		SubLObject symbol = SubLNil.NIL;
+		SubLObject symbol = NIL;
 		SubLObject _prev_bind_0 = Packages.$package$.currentBinding(thread);
 		try {
 			Packages.$package$.bind(accessor_package(name), thread);
@@ -943,13 +948,13 @@ public class complex_special_forms extends SubLTranslatedFile {
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 26367L)
 	public static SubLObject possibly_note_function_entry(SubLObject name) {
 		SubLThread thread = SubLProcess.currentSubLThread();
-		if (SubLNil.NIL != complex_special_forms.$call_profiling_enabledP$.getDynamicValue(thread)
-				&& SubLNil.NIL != complex_special_forms.$call_profiling_table$.getDynamicValue(thread))
+		if (NIL != complex_special_forms.$call_profiling_enabledP$.getDynamicValue(thread)
+				&& NIL != complex_special_forms.$call_profiling_table$.getDynamicValue(thread))
 			Hashtables.sethash(name, complex_special_forms.$call_profiling_table$.getDynamicValue(thread),
 					Numbers.add(Hashtables.gethash_without_values(name,
 							complex_special_forms.$call_profiling_table$.getDynamicValue(thread),
-							CommonSymbols.ZERO_INTEGER), CommonSymbols.ONE_INTEGER));
-		return SubLNil.NIL;
+							ZERO_INTEGER), ONE_INTEGER));
+		return NIL;
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 13331L)
@@ -958,21 +963,21 @@ public class complex_special_forms extends SubLTranslatedFile {
 	}
 
 	public static SubLObject setup_complex_special_forms_file() {
-		return SubLNil.NIL;
+		return NIL;
 	}
 
 	@SubL(source = "sublisp/complex-special-forms.lisp", position = 25962L)
 	public static SubLObject with_call_profiling(SubLObject macroform, SubLObject environment) {
 		SubLObject current;
 		SubLObject datum = current = macroform.rest();
-		SubLObject place = SubLNil.NIL;
+		SubLObject place = NIL;
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, complex_special_forms.$list105);
 		place = current.first();
 		SubLObject body;
 		current = body = current.rest();
 		return ConsesLow.list(complex_special_forms.$sym6$CLET, complex_special_forms.$list106,
 				ConsesLow.list(complex_special_forms.$sym107$CUNWIND_PROTECT,
-						reader.bq_cons(complex_special_forms.$sym2$PROGN, ConsesLow.append(body, SubLNil.NIL)),
+						reader.bq_cons(complex_special_forms.$sym2$PROGN, ConsesLow.append(body, NIL)),
 						ConsesLow.listS(complex_special_forms.$sym108$CSETF, place, complex_special_forms.$list109)));
 	}
 
@@ -1111,7 +1116,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 		$sym2$PROGN = SubLObjectFactory.makeSymbol("PROGN");
 		$sym3$DEFLEXICAL = SubLObjectFactory.makeSymbol("DEFLEXICAL");
 		$list4 = ConsesLow.list(ConsesLow.list(SubLObjectFactory.makeSymbol("MAKE-VECTOR"),
-				SubLObjectFactory.makeInteger(256), SubLNil.NIL));
+				SubLObjectFactory.makeInteger(256), NIL));
 		$sym5$DEFINE = SubLObjectFactory.makeSymbol("DEFINE");
 		$sym6$CLET = SubLObjectFactory.makeSymbol("CLET");
 		$sym7$_METHOD = SubLObjectFactory.makeSymbol("_METHOD");
@@ -1191,7 +1196,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 		$sym54$CAND = SubLObjectFactory.makeSymbol("CAND");
 		$sym55$_STRUCTURES_BAG_P = SubLObjectFactory.makeSymbol("_STRUCTURES-BAG-P");
 		$sym56$_STRUCTURE_SLOT = SubLObjectFactory.makeSymbol("_STRUCTURE-SLOT");
-		$list57 = ConsesLow.list(CommonSymbols.ONE_INTEGER);
+		$list57 = ConsesLow.list(ONE_INTEGER);
 		$list58 = ConsesLow.list(SubLObjectFactory.makeSymbol("OBJECT"), SubLObjectFactory.makeSymbol("INDEX"),
 				SubLObjectFactory.makeSymbol("TYPE"), SubLObjectFactory.makeSymbol("SLOT"));
 		$list59 = ConsesLow.list(SubLObjectFactory.makeSymbol("OBJECT"), SubLObjectFactory.makeSymbol("INDEX"),
@@ -1211,7 +1216,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 		$sym70$PRIVATE = SubLObjectFactory.makeSymbol("PRIVATE");
 		$list71 = ConsesLow.list(SubLObjectFactory.makeSymbol("OBJECT"), SubLObjectFactory.makeSymbol("STREAM"));
 		$list72 = ConsesLow.list(SubLObjectFactory.makeSymbol("OBJECT"), SubLObjectFactory.makeSymbol("STREAM"),
-				CommonSymbols.ZERO_INTEGER);
+				ZERO_INTEGER);
 		$sym73$_PRINT_OBJECT_METHOD_TABLE_ = SubLObjectFactory.makeSymbol("*PRINT-OBJECT-METHOD-TABLE*");
 		$sym74$_REGISTER_DEFSTRUCT = SubLObjectFactory.makeSymbol("_REGISTER-DEFSTRUCT");
 		$sym75$_DEFSTRUCT_OBJECT_P = SubLObjectFactory.makeSymbol("_DEFSTRUCT-OBJECT-P");
@@ -1250,7 +1255,7 @@ public class complex_special_forms extends SubLTranslatedFile {
 		$list106 = ConsesLow.list(
 				ConsesLow.list(SubLObjectFactory.makeSymbol("*CALL-PROFILING-TABLE*"),
 						ConsesLow.list(SubLObjectFactory.makeSymbol("INITIALIZE-CALL-PROFILING-TABLE"))),
-				ConsesLow.list(SubLObjectFactory.makeSymbol("*CALL-PROFILING-ENABLED?*"), CommonSymbols.T));
+				ConsesLow.list(SubLObjectFactory.makeSymbol("*CALL-PROFILING-ENABLED?*"), T));
 		$sym107$CUNWIND_PROTECT = SubLObjectFactory.makeSymbol("CUNWIND-PROTECT");
 		$sym108$CSETF = SubLObjectFactory.makeSymbol("CSETF");
 		$list109 = ConsesLow.list(ConsesLow.list(SubLObjectFactory.makeSymbol("FINALIZE-CALL-PROFILING-TABLE"),

@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>CL-PREVALENCE</title>
+  <link rel="stylesheet" type="text/css" href="style.css"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+</head>
+
+<body>
+  <div class="header">
+    <h1>CL-PREVALENCE</h1>
+  </div>
+
+  <p>
+    CL-PREVALENCE is an implementation of <a href="http://www.prevayler.org">Object Prevalence</a> for Common Lisp.
+    It was written by and is being maintained by <a href="http://homepage.mac.com/svc">Sven Van Caekenberghe</a>.
+    CL-PREVALENCE is using <a href="http://common-lisp.net/project/s-xml">S-XML</a> for the XML serialization 
+    protocol (there is also a more Lisp-like s-expression-based serialization protocol).
+  </p>
+
+<p>
+  Object Prevalence is a simple but interesting concept first proposed by Klaus Wuestefeld in 2001. 
+  IBM developerWorks has a reasonable 
+  <a href="http://www-106.ibm.com/developerworks/library/wa-objprev/">Introduction to Object Prevalence</a> article. 
+  The main Java implementation is called <a href="http://www.prevayler.org">Prevayler</a>, 
+  with a (chaotic) wiki site with lots of information and discussions. 
+  The following academic paper seems to describe the most essential features of Object Prevalence, without naming it as such:
+  <a href="http://birrell.org/andrew/papers/024-DatabasesPaper.pdf">A Simple and Efficient Implementation for Small Databases</a>
+  by Birrell, Jones, and Wobber [1987].  
+  Basically, the idea is this:
+</p>
+<ul>
+  <li>Most databases are only a couple of hundreds of megabytes big, often even less.</li>
+  <li>Most computers can easily take a couple of hundreds of megabytes of data in RAM, big servers can hold many gigabytes.</li>
+  <li>Mapping objects to databases is at least tedious and time consuming, but often also complex and error prone.</li>
+  <li>Let's throw away the database and just consider the domain model objects as the database.</li>
+  <li>Let's make sure we can serialize and deserialize our objects to and from a some presistent medium such as a file system.</li>
+  <li>If we store our complete set of domain model objects to a persistent medium we create a <em>snapshot</em>.</li>
+  <li>We query by using the data structure manipulation functionality of our programming language, running from RAM, queries will be extremely fast.</li>
+  <li>Let's agree to only change our object model using transaction objects that combine the data and the functionality to execute the transaction.</li>
+  <li>In order to preserve the ACID properties of our system, we log each transaction to some persistent medium by serializing it after we execute it. The is called the <em>transaction log</em>.</li>
+  <li>When the system goes down (intentionally or unintentionally) we restore its latest state by first reading in the latest snapshot and by re-executing each transaction from the transaction log.</li>
+  <li>Transactions must be deterministic and re-entrant (so they also need to record the current time if necessary).</li>
+  <li>In a multi-threaded system, transactions are globally serialized.</li>
+</ul>
+<p>
+That is all there is to the concept of object prevalence. Here are some more details as well as some advantages and limitations:
+</p>
+<ul>
+  <li>A good implementation on a modern machine can achieve thousands of transactions per second, and recover them at about the same speed.</li>
+  <li>Transactions must be short because they block the system - since everything is in RAM this is not a problem.</li>
+  <li>Queries that need to see a completely consistent system state must also block on the system - other less critical queries could run in parallel.</li>
+  <li>It is practical for a transaction to first check its preconditions, throw an error if necessary, and to only modify the system when everything is consistent. During a transaction you are the sole active thread. Queries are as fast as they can get. In this implementation transactions are logged after succesful execution.</li>
+  <li>In this implementation there is an option to do a rollback (by doing a system restore) when an unexpected error occurs during transaction execution. You can specifiy that a condition doesn't need a rollback when it occurs inside a transaction by implementing the <tt>initiates-rollback</tt> to return false (or by using the <tt>no-rollback-error</tt> condition or inheriting from it).</li>
+  <li>Long running transactions are an open question.</li>
+  <li>Application server techniques are used to offer multiple clients access to the same prevalence system.</li>
+  <li>We can easily do replication (and query load balancing) by distributing the master transaction log stream to replica's that can host queries, execute backups (snapshots) or serve as hot fail-over. This implementation does not yet contain replication.</li>
+</ul>
+<p>
+  This code was written by Sven Van Caekenberghe.
+</p>
+
+<h3>Download</h3>
+
+<p>
+  You can download the LLGPL source code and documentation as <a href="cl-prevalence.tgz">cl-prevalence.tgz</a> 
+  (signature: <a href="cl-prevalence.tgz.asc">cl-prevalence.tgz.asc</a> for which the public key can be found 
+  in the <a href="http://common-lisp.net/keyring.asc">common-lisp.net keyring</a>) 
+  (build and/or install with ASDF). 
+  There is also <a href="http://common-lisp.net/cgi-bin/viewcvs.cgi/?cvsroot=cl-prevalence">CVS</a> access.
+</p>
+
+<h3>API</h3>
+
+ <p>
+   You can consult the LispDoc generated API is the files <a href="CL-PREVALENCE.html">CL-PREVALENCE.html</a>
+   and <a href="S-SERIALIZATION.html">S-SERIALIZATION.html</a>.
+ </p>
+
+<h3>Release History</h3>
+
+<ul>
+  <li>release 3, today: move to common-lisp.net, added s-expression based serialization</li>
+  <li>release 2, Januari 13, 2004: added managed-prevalence layer, generic persistent preferences and a blob feature, as well as several useful functions to support development and deployment</li>
+  <li>release 1, June 10, 2003: first public release</li>
+</ul>
+
+<h3>Mailing Lists</h3>
+
+<ul>
+  <li><a href="http://common-lisp.net/mailman/listinfo/cl-prevalence-cvs">CL-PREVALENCE-CVS mailing list info</a></li>
+  <li><a href="http://common-lisp.net/mailman/listinfo/cl-prevalence-devel">CL-PREVALENCE-DEVEL mailing list info</a></li>
+  <li><a href="http://common-lisp.net/mailman/listinfo/cl-prevalence-announce">CL-PREVALENCE-ANNOUNCE mailing list info</a></li>
+</ul>
+
+  <p>CVS version $Id: index.html,v 1.6 2004/07/08 19:59:14 scaekenberghe Exp $</p>
+
+  <div class="footer">
+    <p>Back to <a href="http://common-lisp.net/">Common-lisp.net</a>.</p>  
+  </div>
+  
+  <div class="check">
+    <a href="http://validator.w3.org/check/referer">Valid XHTML 1.0 Strict</a>
+    <a href="http://jigsaw.w3.org/css-validator/check/referer">Valid CSS</a>
+  </div>
+</body>
+</html>

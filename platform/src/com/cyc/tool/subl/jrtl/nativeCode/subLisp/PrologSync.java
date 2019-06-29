@@ -58,28 +58,31 @@ public class PrologSync extends SubLTrampolineFile
 
 	private static boolean prologReady = false;
 
+	final private static boolean disableTotally = true;
+
 	public static void addLater(final AbstractSubLStruct struct)
 	{
-		if (struct.termRef == null)
+		if(disableTotally ) return;
+		if (struct.getTermRef() == null)
 		{
-			struct.termRef = UNSYNCED;
+			struct.setTermRef(UNSYNCED);
 		}
-		synchronized (PrologSync.laterList)
+		synchronized (laterList)
 		{
 
-			PrologSync.laterList.add(new SyncSoon(struct));
+			laterList.add(new SyncSoon(struct));
 		}
 	}
 
-	public static void addSingleton(SubLFile file)
+	public static void addSubLFile(SubLFile file)
 	{
+		if(disableTotally ) return;
 		addTypeThing("SUBLFILE", file);
-		// TODO SLOW 
-		BeanShellCntrl.addSingleton(file);
 	}
 
 	private static void addStaticFields(String prefix, Class class1)
 	{
+		if(disableTotally ) return;
 		if (prefix == null)
 		{
 			prefix = Lisp.getDotName(class1) + ".";
@@ -130,15 +133,16 @@ public class PrologSync extends SubLTrampolineFile
 
 	synchronized public static void addThis(AbstractSubLStruct struct)
 	{
+		if(disableTotally ) return;
 		if (struct instanceof SubLStream) { return; }
 
 		if (!Main.trackStructs) { return; }
 		if (Lisp.cold || !Lisp.initialized) return;
-		if (PrologSync.lastStruct == struct) return;
+		if (lastStruct == struct) return;
 
-		//		if (PrologSync.lastStruct == null)
+		//		if (lastStruct == null)
 		//		{
-		//			PrologSync.lastStruct = struct;
+		//			lastStruct = struct;
 		//			return;
 		//		}
 
@@ -147,7 +151,7 @@ public class PrologSync extends SubLTrampolineFile
 			addThis0(struct);
 		} finally
 		{
-			PrologSync.lastStruct = struct;
+			lastStruct = struct;
 		}
 	}
 
@@ -161,30 +165,30 @@ public class PrologSync extends SubLTrampolineFile
 
 		if (Lisp.cold || !Lisp.initialized)
 		{
-			struct.termRef = UNKNOWN;
+			struct.setTermRef(UNKNOWN);
 			addLater(struct);
 			return;
 		}
-		if (struct.termRef == IGNORED) return;
+		if (struct.getTermRef() == IGNORED) return;
 		final String typeOf = getClassName(struct);
 		if (typeOf == null)
 		{
-			struct.termRef = UNKNOWN;
+			struct.setTermRef(UNKNOWN);
 			addLater(struct);
 			return;
 		}
 		if (!isTracked(typeOf))
 		{
-			struct.termRef = IGNORED;
+			struct.setTermRef(IGNORED);
 			return;
 		}
 		if (!prologReady)
 		{
-			struct.termRef = UNSYNCED;
+			struct.setTermRef(UNSYNCED);
 			addLater(struct);
 			return;
 		}
-		struct.termRef = UNSYNCED;
+		struct.setTermRef(UNSYNCED);
 		doSyncStruct(struct);
 	}
 
@@ -195,14 +199,14 @@ public class PrologSync extends SubLTrampolineFile
 	private static void addTypeThing(String typeOf, Object struct)
 	{
 		LinkedList<WeakItem> objStack;
-		synchronized (PrologSync.mapClass2Refs)
+		synchronized (mapClass2Refs)
 		{
-			objStack = PrologSync.mapClass2Refs.get(typeOf);
+			objStack = mapClass2Refs.get(typeOf);
 			if (objStack == null)
 			{
 				objStack = new LinkedList<WeakItem>();
 				System.err.println("DEBUG: First " + typeOf);
-				PrologSync.mapClass2Refs.put(typeOf, objStack);
+				mapClass2Refs.put(typeOf, objStack);
 			}
 		}
 		synchronized (objStack)
@@ -213,11 +217,6 @@ public class PrologSync extends SubLTrampolineFile
 				// cleanRefs();
 			}
 		}
-	}
-
-	public static void bp()
-	{
-		BeanShellCntrl.bp();
 	}
 
 	private static Term checkReady(AbstractSubLStruct struct)
@@ -271,16 +270,16 @@ public class PrologSync extends SubLTrampolineFile
 	private static Term extractedProlog(AbstractSubLStruct struct, final String className, long serial)
 
 	{
-		Term was = struct.termRef;
 		if (!Main.disablePrologSync)
 		{
 			try
 			{
+				Term was = (Term) struct.getTermRef();
 				final Term shouldBe = toProlog(null, struct, new LinkedList());
 				//String s = shouldBe.toString();
 				if (was != shouldBe)
 				{
-					struct.termRef = shouldBe;
+					struct.setTermRef(shouldBe);
 				}
 				//return NEEDSYNCED;
 				try
@@ -368,6 +367,8 @@ public class PrologSync extends SubLTrampolineFile
 
 	public static void initializeTypes()
 	{
+		if(disableTotally ) return;
+
 		addStaticFields(null, PrologSync.class);
 		// assert BeanShellCntrl.gui!=null;
 		addStaticFields(null, BeanShellCntrl.class);
@@ -375,7 +376,7 @@ public class PrologSync extends SubLTrampolineFile
 
 	private static boolean isTracked(String class1)
 	{
-		if (!PrologSync.syncedTypes.contains(class1)) return false;
+		if (!syncedTypes.contains(class1)) return false;
 		return true;
 	}
 
@@ -422,14 +423,16 @@ public class PrologSync extends SubLTrampolineFile
 
 	public static void structsToProlog() throws IllegalArgumentException, IllegalAccessException
 	{
+		if(disableTotally ) return;
+
 		Object[] keys = null;
 
-		synchronized (PrologSync.mapClass2Refs)
+		synchronized (mapClass2Refs)
 		{
-			keys = PrologSync.mapClass2Refs.keySet().toArray();
+			keys = mapClass2Refs.keySet().toArray();
 			for (final Object k : keys)
 			{
-				final LinkedList<WeakItem> objStack = PrologSync.mapClass2Refs.get((Object) k);
+				final LinkedList<WeakItem> objStack = mapClass2Refs.get((Object) k);
 				final LinkedList bowl = new LinkedList();
 				final ListIterator<WeakItem> iter = objStack.listIterator();
 				while (iter.hasNext())
@@ -463,12 +466,14 @@ public class PrologSync extends SubLTrampolineFile
 
 	public PrologSync()
 	{
+		if(disableTotally ) return;
+
 		if (!Main.noBSH)
 		{
-			addSingleton(this);
+			BeanShellCntrl.addSubLFile(this);
 		}
 		// CycEval.class.getName();
-		BeanShellCntrl.addObject("mapClass2Refs", PrologSync.mapClass2Refs);
+		BeanShellCntrl.addObject("mapClass2Refs", mapClass2Refs);
 		addStaticFields(null, PrologSync.class);
 	}
 
@@ -501,7 +506,7 @@ public class PrologSync extends SubLTrampolineFile
 			prologReady = b;
 			return;
 		}
-		PrologSync.prologReady = b;
+		prologReady = b;
 
 		doReadyList();
 
@@ -519,7 +524,7 @@ public class PrologSync extends SubLTrampolineFile
 		needsDone = 0;
 		List doNow;
 		int start;
-		synchronized (PrologSync.laterList)
+		synchronized (laterList)
 		{
 			start = laterList.size();
 			if (start == 0) return;
@@ -548,13 +553,13 @@ public class PrologSync extends SubLTrampolineFile
 			addLater(struct);
 			return false;
 		}
-		Term was = struct.termRef;
+		Term was = (Term) struct.getTermRef();
 		Term checkReady = checkReady(struct);
 		if (checkReady == UNREADY)
 		{
 			if (was != null && !(was instanceof SyncState))
 			{
-				struct.termRef = NEEDSDELETE;
+				struct.setTermRef(NEEDSDELETE);
 				long serial = -1L;
 				final SubLObject fvs = struct.getSlotArrayElement(0);
 				if (fvs != null)
@@ -563,7 +568,7 @@ public class PrologSync extends SubLTrampolineFile
 					{
 						final String className = getClassName(struct);
 						prologRetract(className, serial, was);
-						struct.termRef = null;
+						struct.setTermRef(null);
 						return true;
 					}
 				}
@@ -576,7 +581,9 @@ public class PrologSync extends SubLTrampolineFile
 
 	static
 	{
-		synchronized (PrologSync.syncedTypes)
+		if(!disableTotally )
+
+		synchronized (syncedTypes)
 		{
 			if (false)
 			{
@@ -641,7 +648,7 @@ public class PrologSync extends SubLTrampolineFile
 			// TODO Auto-generated method stub
 			if (true)
 			{
-				Errors.unimplementedMethod("Auto-generated method stub:  PrologSync.$local$.setValue");
+				Errors.unimplementedMethod("Auto-generated method stub:  $local$.setValue");
 			}
 			return null;
 		}
@@ -749,13 +756,14 @@ public class PrologSync extends SubLTrampolineFile
 
 	private static Thread neddsDoneThread = new Thread()
 	{
+		
 		{
-			setName("doReadyList");
+			setName("PrologSync.doReadyList");
 		}
 
 		@Override
 		public void run()
-		{
+		{			
 			SystemCurrent.attachConsole();
 			while (true)
 			{
@@ -777,12 +785,13 @@ public class PrologSync extends SubLTrampolineFile
 	};
 	static
 	{
-		neddsDoneThread.start();
+		if(!disableTotally ) neddsDoneThread.start();
 	}
 	public static SubLFile me = new PrologSync();
 
 	public static void wasSetField(AbstractSubLStruct structureObject, int slotNum, int pingAt, Object was, Object value)
 	{
+		if(disableTotally ) return;
 		if (!structureObject.isTracked()) return;
 
 		if (was == null)
@@ -806,13 +815,13 @@ public class PrologSync extends SubLTrampolineFile
 
 	private static void addSyncedType(String string)
 	{
-		PrologSync.syncedTypes.add(string);
+		syncedTypes.add(string);
 	}
 
 	static
 	{
 		addStaticFields(null, PrologSync.class);
-		BeanShellCntrl.addObject("mapClass2Refs", PrologSync.mapClass2Refs);
+		if(!disableTotally ) BeanShellCntrl.addObject("mapClass2Refs", PrologSync.mapClass2Refs);
 	}
 
 	public static Term toProlog(String name, AbstractSubLStruct s, java.util.List l)
@@ -837,7 +846,7 @@ public class PrologSync extends SubLTrampolineFile
 			Term t = toProlog(o, l);
 			if (t == null)
 			{
-				bp();
+				BeanShellCntrl.bp();
 			}
 			args[argN] = t;
 			argN++;
@@ -854,13 +863,14 @@ public class PrologSync extends SubLTrampolineFile
 		if (o instanceof AbstractSubLObject)
 		{
 			ass = (AbstractSubLObject) o;
-			if (ass.termRef != null && !(ass.termRef instanceof SyncState) //
-					&& !(ass.termRef instanceof JRef)//
-					&& !(ass.termRef instanceof Compound)//
-					&& !(ass.termRef instanceof Atom)//
-					&& !(ass.termRef instanceof Variable)
+			final Object termRef = ass.getTermRef();
+			if (termRef != null && !(termRef instanceof SyncState) //
+					&& !(termRef instanceof JRef)//
+					&& !(termRef instanceof Compound)//
+					&& !(termRef instanceof Atom)//
+					&& !(termRef instanceof Variable)
 			//
-			) { return ass.termRef; }
+			) { return (Term) termRef; }
 			do
 			{
 				//				if (ass.termRef == null)
@@ -945,7 +955,7 @@ public class PrologSync extends SubLTrampolineFile
 		{
 			if (ass != null && term != null)
 			{
-				ass.termRef = term;
+				ass.setTermRef(term);
 
 			}
 			// skipped.remove(o);

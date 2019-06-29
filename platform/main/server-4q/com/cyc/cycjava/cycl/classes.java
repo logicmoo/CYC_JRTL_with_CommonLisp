@@ -25,7 +25,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.LispSync;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
@@ -40,29 +42,29 @@ public final class classes
   public static final SubLFile me;
   public static final String myName = "com.cyc.cycjava.cycl.classes";
   public static final String myFingerPrint = "ed0cf9dedb8f9588b9f318ace7157d360a2018d60e56c4b8061021ba3608f5c3";
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 933L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 933L)
   public static SubLSymbol $classes_class_slot_access_violation$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1042L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 1042L)
   private static SubLSymbol $classes_initial_hashtable_size$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1102L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 1102L)
   private static SubLSymbol $classes_class_table_update_lock$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1197L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 1197L)
   private static SubLSymbol $classes_class_table$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1944L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 1944L)
   private static SubLSymbol $classes_valid_class_properties$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 2075L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 2075L)
   private static SubLSymbol $classes_valid_slot_properties$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 2831L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 2831L)
   private static SubLSymbol $classes_valid_method_interface_types$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 2938L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 2938L)
   private static SubLSymbol $classes_valid_method_properties$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 3206L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 3206L)
   private static SubLSymbol $classes_always_generate_before_listeners$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 3527L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 3527L)
   private static SubLSymbol $classes_always_generate_after_listeners$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 13588L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 13588L)
   private static SubLSymbol $classes_new_class_current$;
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 43819L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 43819L)
   public static SubLSymbol $curclass$;
   private static final SubLString $str0$Cannot_access__A_slot__S_from_cla;
   private static final SubLInteger $int1$800;
@@ -241,14 +243,14 @@ public final class classes
   private static final SubLString $str174$__;
   private static final SubLString $str175$_S_;
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1290L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 1290L)
   public static SubLObject classes_reset_class_table()
   {
     $classes_class_table$.setGlobalValue( Hashtables.make_hash_table( $classes_initial_hashtable_size$.getGlobalValue(), UNPROVIDED, UNPROVIDED ) );
     return T;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1432L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 1432L)
   public static SubLObject classes_get_all_classes()
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -285,7 +287,7 @@ public final class classes
     return v_classes;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 1680L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 1680L)
   public static SubLObject classes_get_all_class_names()
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -322,7 +324,7 @@ public final class classes
     return class_names;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 2641L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 2641L)
   public static SubLObject classes_protection_greater_than_or_equal(final SubLObject level1, final SubLObject level2)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -330,33 +332,33 @@ public final class classes
     return ( NIL != conses_high.member( level2, sublist, UNPROVIDED, UNPROVIDED ) ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 3274L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 3274L)
   public static SubLObject classes_set_always_generate_before_listeners(final SubLObject value)
   {
     $classes_always_generate_before_listeners$.setGlobalValue( value );
     return value;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 3417L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 3417L)
   public static SubLObject classes_before_listeners_by_default_p()
   {
     return $classes_always_generate_before_listeners$.getGlobalValue();
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 3594L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 3594L)
   public static SubLObject classes_set_always_generate_after_listeners(final SubLObject value)
   {
     $classes_always_generate_after_listeners$.setGlobalValue( value );
     return value;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 3735L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 3735L)
   public static SubLObject classes_after_listeners_by_default_p()
   {
     return $classes_always_generate_after_listeners$.getGlobalValue();
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 3843L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 3843L)
   public static SubLObject classes_getf(final SubLObject plist, final SubLObject target_indicator)
   {
     SubLObject remainder;
@@ -374,7 +376,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 4012L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 4012L)
   public static SubLObject classes_putf(final SubLObject plist, final SubLObject target_indicator, final SubLObject new_value)
   {
     SubLObject indicator = NIL;
@@ -391,20 +393,20 @@ public final class classes
     return ConsesLow.listS( target_indicator, new_value, plist );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 4397L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 4397L)
   public static SubLObject classes_implement_slot_listeners_p(final SubLObject class_properties)
   {
     return classes_getf( class_properties, $kw10$SLOT_LISTENERS );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 4527L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 4527L)
   public static SubLObject classes_valid_slot_property_p(final SubLObject v_object)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
     return ( NIL != conses_high.member( v_object, $classes_valid_slot_properties$.getDynamicValue( thread ), UNPROVIDED, UNPROVIDED ) ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 4652L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 4652L)
   public static SubLObject classes_list_of_valid_slot_properties_p(final SubLObject v_object)
   {
     if( NIL == v_object )
@@ -440,7 +442,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 5131L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 5131L)
   public static SubLObject classes_list_of_valid_method_properties_p(final SubLObject v_object)
   {
     if( NIL == v_object )
@@ -466,13 +468,13 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 5384L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 5384L)
   public static SubLObject classes_valid_slot_name_p(final SubLObject v_object)
   {
     return makeBoolean( NIL != v_object && v_object.isSymbol() && !v_object.isKeyword() );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 5501L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 5501L)
   public static SubLObject classes_valid_slot_decl_p(final SubLObject v_object)
   {
     if( NIL == v_object )
@@ -490,14 +492,14 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 5800L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 5800L)
   public static SubLObject classes_valid_method_property_p(final SubLObject v_object)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
     return ( NIL != conses_high.member( v_object, $classes_valid_method_properties$.getDynamicValue( thread ), UNPROVIDED, UNPROVIDED ) ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 5929L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 5929L)
   public static SubLObject classes_valid_method_properties_p(final SubLObject v_object)
   {
     if( NIL == v_object )
@@ -523,62 +525,62 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 6174L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 6174L)
   public static SubLObject classes_auto_update_p(final SubLObject method_properties)
   {
     return ( NIL != conses_high.member( $kw12$AUTO_UPDATE, method_properties, UNPROVIDED, UNPROVIDED ) ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 6296L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 6296L)
   public static SubLObject classes_no_member_variables_p(final SubLObject method_properties)
   {
     return ( NIL != conses_high.member( $kw13$NO_MEMBER_VARIABLES, method_properties, UNPROVIDED, UNPROVIDED ) ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 6434L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 6434L)
   public static SubLObject classes_read_only_p(final SubLObject method_properties)
   {
     return ( NIL != conses_high.member( $kw14$READ_ONLY, method_properties, UNPROVIDED, UNPROVIDED ) ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 6552L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 6552L)
   public static SubLObject classes_before_listeners_p(final SubLObject method_properties)
   {
     return ( NIL != classes_before_listeners_by_default_p() || NIL != conses_high.member( $kw15$BEFORE_LISTENERS, method_properties, UNPROVIDED, UNPROVIDED ) ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 6733L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 6733L)
   public static SubLObject classes_after_listeners_p(final SubLObject method_properties)
   {
     return ( NIL != classes_after_listeners_by_default_p() || NIL != conses_high.member( $kw16$AFTER_LISTENERS, method_properties, UNPROVIDED, UNPROVIDED ) ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 6911L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 6911L)
   public static SubLObject classes_valid_method_interface_type_p(final SubLObject v_object)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
     return ( NIL != conses_high.member( v_object, $classes_valid_method_interface_types$.getDynamicValue( thread ), UNPROVIDED, UNPROVIDED ) ) ? T : NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 7051L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 7051L)
   public static SubLObject classes_valid_method_name_p(final SubLObject v_object)
   {
     return makeBoolean( NIL != v_object && v_object.isSymbol() && !v_object.isKeyword() );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 7170L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 7170L)
   public static SubLObject classes_valid_parameter_name_p(final SubLObject v_object)
   {
     return makeBoolean( NIL != v_object && v_object.isSymbol() && v_object != $sym17$_OPTIONAL && !v_object.isKeyword() );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 7322L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 7322L)
   public static SubLObject classes_valid_optional_parameter_p(final SubLObject v_object)
   {
     return makeBoolean( NIL != classes_valid_parameter_name_p( v_object ) || ( v_object.isCons() && v_object.rest().isList() && NIL != classes_valid_parameter_name_p( v_object.first() ) ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 7540L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 7540L)
   public static SubLObject classes_valid_optional_parameter_list_p(final SubLObject v_object)
   {
     if( NIL == v_object )
@@ -604,7 +606,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 7796L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 7796L)
   public static SubLObject classes_valid_lambda_list_p(final SubLObject v_object)
   {
     if( NIL == v_object )
@@ -624,62 +626,62 @@ public final class classes
     return makeBoolean( NIL != classes_valid_parameter_name_p( first_element ) && NIL != classes_valid_lambda_list_p( rest_of_elements ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 8224L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 8224L)
   public static SubLObject classes_valid_method_interface_body_p(final SubLObject v_object)
   {
     return Types.sublisp_null( v_object );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 8311L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 8311L)
   public static SubLObject classes_valid_method_interface_decl_p(final SubLObject v_object)
   {
     return makeBoolean( v_object.isCons() && NIL != classes_valid_method_interface_type_p( v_object.first() ) && v_object.rest().isCons() && NIL != classes_valid_method_name_p( v_object.rest().first() ) && v_object
         .rest().rest().isCons() && NIL != classes_valid_lambda_list_p( v_object.rest().rest().first() ) && NIL != classes_list_of_valid_method_properties_p( v_object.rest().rest().rest() ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 8585L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 8585L)
   public static SubLObject classes_method_decl_type(final SubLObject method_interface_decl)
   {
     return method_interface_decl.first();
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 8688L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 8688L)
   public static SubLObject classes_class_method_decl_p(final SubLObject method_interface_decl)
   {
     return Equality.eq( classes_method_decl_type( method_interface_decl ), $sym18$DEF_CLASS_METHOD );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 8840L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 8840L)
   public static SubLObject classes_instance_method_decl_p(final SubLObject method_interface_decl)
   {
     return Equality.eq( classes_method_decl_type( method_interface_decl ), $sym19$DEF_INSTANCE_METHOD );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 8998L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 8998L)
   public static SubLObject classes_method_name_given_method_decl(final SubLObject method_interface_decl)
   {
     return conses_high.cadr( method_interface_decl );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 9115L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 9115L)
   public static SubLObject classes_lambda_list_given_method_decl(final SubLObject method_interface_decl)
   {
     return conses_high.cddr( method_interface_decl ).first();
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 9238L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 9238L)
   public static SubLObject classes_properties_given_method_decl(final SubLObject method_interface_decl)
   {
     return conses_high.cddr( method_interface_decl ).rest();
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 9360L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 9360L)
   public static SubLObject classes_valid_slot_or_method_decl_p(final SubLObject v_object)
   {
     return makeBoolean( NIL != classes_valid_slot_decl_p( v_object ) || NIL != classes_valid_method_interface_decl_p( v_object ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 9526L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 9526L)
   public static SubLObject classes_valid_slot_or_method_decls_p(final SubLObject v_object)
   {
     if( NIL == v_object )
@@ -705,7 +707,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 9780L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 9780L)
   public static SubLObject classes_must_be_valid_slot_or_method_decls(final SubLObject v_object)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -731,7 +733,7 @@ public final class classes
     return T;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 10158L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 10158L)
   public static SubLObject classes_separate_decls_into_slot_decls_and_method_decls(final SubLObject slot_and_method_decls)
   {
     if( NIL == slot_and_method_decls )
@@ -759,7 +761,7 @@ public final class classes
     return Values.values( Sequences.nreverse( slot_decls ), Sequences.nreverse( method_decls ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 10636L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 10636L)
   public static SubLObject class_separate_decls_into_class_and_instance_method_decls(final SubLObject method_decls)
   {
     if( NIL == method_decls )
@@ -787,13 +789,13 @@ public final class classes
     return Values.values( Sequences.nreverse( class_method_decls ), Sequences.nreverse( instance_method_decls ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 11145L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 11145L)
   public static SubLObject ldb_test(final SubLObject spec, final SubLObject integer)
   {
     return bytes.ldb( spec, integer ).isZero() ? NIL : T;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 11233L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 11233L)
   public static SubLObject display_class(final SubLObject class_name_or_class)
   {
     final SubLObject v_class = class_name_or_class.isSymbol() ? classes_retrieve_class( class_name_or_class ) : class_name_or_class;
@@ -821,7 +823,7 @@ public final class classes
     return v_class;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 13207L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 13207L)
   public static SubLObject with_class_definition_lock(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -834,7 +836,7 @@ public final class classes
     return reader.bq_cons( $sym44$PROGN, body );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 13458L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 13458L)
   public static SubLObject with_class_access_lock(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -847,7 +849,7 @@ public final class classes
     return ConsesLow.listS( $sym45$WITH_LOCK_HELD, ConsesLow.list( ConsesLow.list( $sym46$CLASS_ACCESS_LOCK, v_class ) ), body );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 13644L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 13644L)
   public static SubLObject classes_retrieve_class(final SubLObject class_name)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -869,7 +871,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 14464L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 14464L)
   public static SubLObject classes_intern_class(final SubLObject class_name, final SubLObject v_class)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -892,7 +894,7 @@ public final class classes
     return v_class;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 14710L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 14710L)
   public static SubLObject classes_delete_class(final SubLObject class_name)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -915,7 +917,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 14911L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 14911L)
   public static SubLObject classes_set_class(final SubLObject symbol, final SubLObject new_class)
   {
     if( symbol.isSymbol() && ( NIL == new_class || NIL != subloop_structures.class_p( new_class ) ) )
@@ -926,7 +928,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 15146L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 15146L)
   public static SubLObject classes_get_class(final SubLObject symbol)
   {
     if( symbol.isSymbol() )
@@ -940,20 +942,20 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 15378L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 15378L)
   public static SubLObject classes_valid_class_property_p(final SubLObject v_object)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
     return makeBoolean( v_object.isSymbol() && NIL != conses_high.member( v_object, $classes_valid_class_properties$.getDynamicValue( thread ), Symbols.symbol_function( EQ ), UNPROVIDED ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 15525L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 15525L)
   public static SubLObject classes_valid_instance_var_decl_p(final SubLObject instance_var_decl)
   {
     return makeBoolean( instance_var_decl.isSymbol() || ( instance_var_decl.isCons() && instance_var_decl.first().isSymbol() ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 15741L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 15741L)
   public static SubLObject classes_valid_instance_var_decls_p(final SubLObject instance_var_decls)
   {
     if( instance_var_decls.isList() )
@@ -975,13 +977,13 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 16030L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 16030L)
   public static SubLObject classes_valid_class_name_p(final SubLObject v_object)
   {
     return makeBoolean( NIL != v_object && v_object.isSymbol() && !v_object.isKeyword() );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 16150L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 16150L)
   public static SubLObject classes_must_be_valid_class_name(final SubLObject v_object)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -992,7 +994,7 @@ public final class classes
     return T;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 16310L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 16310L)
   public static SubLObject classes_unique_elements(final SubLObject list_of_elements)
   {
     SubLObject result = NIL;
@@ -1011,7 +1013,7 @@ public final class classes
     return Sequences.nreverse( result );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 16528L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 16528L)
   public static SubLObject new_class(final SubLObject class_name, final SubLObject parent_class, SubLObject parent_interfaces, final SubLObject slot_and_method_decls)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1209,16 +1211,17 @@ public final class classes
     {
       $classes_new_class_current$.rebind( _prev_bind_2, thread );
     }
+    LispSync.addClass(v_class);
     return v_class;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 23034L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 23034L)
   public static SubLObject classes_make_slot_accessor_association(final SubLObject slot_name, final SubLObject getter_name, final SubLObject setter_name)
   {
     return ConsesLow.listS( slot_name, getter_name, setter_name );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 23177L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 23177L)
   public static SubLObject classes_slot_accessor_association_slot_name(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -1235,7 +1238,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 23313L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 23313L)
   public static SubLObject classes_slot_accessor_association_getter_name(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -1252,7 +1255,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 23452L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 23452L)
   public static SubLObject classes_slot_accessor_association_setter_name(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -1269,7 +1272,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 23591L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 23591L)
   public static SubLObject classes_retrieve_slot_getter(final SubLObject v_class, final SubLObject slot_name)
   {
     final SubLObject association = conses_high.assoc( slot_name, subloop_structures.class_slot_accessor_alist( v_class ), UNPROVIDED, UNPROVIDED );
@@ -1280,7 +1283,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 23845L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 23845L)
   public static SubLObject classes_retrieve_slot_setter(final SubLObject v_class, final SubLObject slot_name)
   {
     final SubLObject association = conses_high.assoc( slot_name, subloop_structures.class_slot_accessor_alist( v_class ), UNPROVIDED, UNPROVIDED );
@@ -1291,7 +1294,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 24099L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 24099L)
   public static SubLObject classes_generate_slot_accessor_names(final SubLObject v_class)
   {
     final SubLObject compiled_instance_slot_access_alist = subloop_structures.class_compiled_instance_slot_access_alist( v_class );
@@ -1360,7 +1363,7 @@ public final class classes
     return v_class;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 26166L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 26166L)
   public static SubLObject classes_valid_class_properties_p(final SubLObject plist)
   {
     if( plist.isList() )
@@ -1382,7 +1385,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 26420L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 26420L)
   public static SubLObject class_properties_must_be_valid(final SubLObject class_properties)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1422,7 +1425,7 @@ public final class classes
     return T;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 27607L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 27607L)
   public static SubLObject expand_interface_method_instantiations(final SubLObject class_name_or_class)
   {
     final SubLObject v_class = class_name_or_class.isSymbol() ? classes_retrieve_class( class_name_or_class ) : class_name_or_class;
@@ -1509,7 +1512,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 29476L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 29476L)
   public static SubLObject expand_accessors_for_class(final SubLObject class_name_or_class, SubLObject v_slot_listeners)
   {
     if( v_slot_listeners == UNPROVIDED )
@@ -1597,7 +1600,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 30753L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 30753L)
   public static SubLObject expand_instance_any_slot_accessors(final SubLObject v_class, final SubLObject slot, SubLObject v_slot_listeners)
   {
     if( v_slot_listeners == UNPROVIDED )
@@ -1641,7 +1644,7 @@ public final class classes
     }
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 33047L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 33047L)
   public static SubLObject expand_instance_boolean_slot_accessors(final SubLObject v_class, final SubLObject slot)
   {
     final SubLObject slot_name = slots.slot_name( slot );
@@ -1670,7 +1673,7 @@ public final class classes
                 $list103, slot_byte_spec, ConsesLow.list( $sym100$INSTANCE_BOOLEAN_SLOTS, class_name ) ) ), $list89 ) ) ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 35254L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 35254L)
   public static SubLObject expand_class_any_slot_accessors(final SubLObject v_class, final SubLObject slot)
   {
     final SubLObject slot_name = slots.slot_name( slot );
@@ -1691,7 +1694,7 @@ public final class classes
                                 conses_high.copy_list( access_protection ), ConsesLow.list( ConsesLow.list( $sym92$RET, ConsesLow.listS( $sym117$SET_AREF, $list115, slot_index, $list85 ) ) ) ) ), $list116 ) ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 36641L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 36641L)
   public static SubLObject expand_class_boolean_slot_accessors(final SubLObject v_class, final SubLObject slot)
   {
     final SubLObject slot_name = slots.slot_name( slot );
@@ -1714,7 +1717,7 @@ public final class classes
                                     $list89 ) ) ), $list116 ) ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 38144L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 38144L)
   public static SubLObject expand_class_predicator(final SubLObject class_name)
   {
     final SubLObject predicate_name = Packages.intern( Sequences.cconcatenate( Symbols.symbol_name( class_name ), $str120$_P ), UNPROVIDED );
@@ -1722,7 +1725,7 @@ public final class classes
         class_name ) ) ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 38401L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 38401L)
   public static SubLObject expand_class_initializer(final SubLObject class_or_class_name)
   {
     final SubLObject v_class = ( NIL != subloop_structures.class_p( class_or_class_name ) ) ? class_or_class_name : classes_retrieve_class( class_or_class_name );
@@ -1766,7 +1769,7 @@ public final class classes
         $sym126$SUBLOOP_NOTE_CLASS_INITIALIZATION_FUNCTION, ConsesLow.list( $sym80$QUOTE, class_or_class_name ), ConsesLow.list( $sym80$QUOTE, class_initializer_name ) ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 39512L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 39512L)
   public static SubLObject expand_instance_initializer(final SubLObject class_or_class_name)
   {
     final SubLObject v_class = ( NIL != subloop_structures.class_p( class_or_class_name ) ) ? class_or_class_name : classes_retrieve_class( class_or_class_name );
@@ -1810,7 +1813,7 @@ public final class classes
         $sym127$SUBLOOP_NOTE_INSTANCE_INITIALIZATION_FUNCTION, ConsesLow.list( $sym80$QUOTE, class_or_class_name ), ConsesLow.list( $sym80$QUOTE, instance_initializer_name ) ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 40659L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 40659L)
   public static SubLObject expand_define_class(final SubLObject class_name, final SubLObject class_properties, final SubLObject slot_decls)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1864,7 +1867,7 @@ public final class classes
     return expanded_definition;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 42971L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 42971L)
   public static SubLObject define_class(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -1886,15 +1889,16 @@ public final class classes
     return expand_define_class( class_name, class_properties, slot_decls );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 43479L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 43479L)
   public static SubLObject subloop_new_class(final SubLObject class_name, final SubLObject parent_class, final SubLObject parent_interfaces, final SubLObject abstract_p, final SubLObject slot_decls)
   {
-    final SubLObject class_structure = new_class( class_name, parent_class, parent_interfaces, slot_decls );
+    final SubLObject class_structure = new_class( class_name, parent_class, parent_interfaces, slot_decls );    
     subloop_class_properties.set_subloop_class_property_abstract_p( class_structure, abstract_p );
+    LispSync.addClass(class_structure);
     return class_structure;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 43850L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 43850L)
   public static SubLObject subloop_initialize_slot(final SubLObject v_object, final SubLObject class_name, final SubLObject slot_name, final SubLObject value)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1913,7 +1917,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 44138L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 44138L)
   public static SubLObject subloop_note_class_initialization_function(final SubLObject class_name, final SubLObject class_initializer_name)
   {
     final SubLObject v_class = classes_retrieve_class( class_name );
@@ -1921,7 +1925,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 44410L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 44410L)
   public static SubLObject subloop_note_instance_initialization_function(final SubLObject class_name, final SubLObject instance_initializer_name)
   {
     final SubLObject v_class = classes_retrieve_class( class_name );
@@ -1929,7 +1933,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 44694L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 44694L)
   public static SubLObject subloop_instanceof_class(final SubLObject v_object, final SubLObject v_class)
   {
     if( NIL != subloop_structures.instance_p( v_object ) )
@@ -1951,13 +1955,13 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 44994L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 44994L)
   public static SubLObject subloop_get_instance_slot(final SubLObject v_object, final SubLObject slot_index)
   {
     return Vectors.aref( subloop_structures.instance_any_slots( v_object ), slot_index );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 45141L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 45141L)
   public static SubLObject subloop_get_access_protected_instance_slot(final SubLObject v_object, final SubLObject slot_index, final SubLObject slot_name)
   {
     final SubLObject v_class = subloop_structures.instance_class( v_object );
@@ -1966,14 +1970,14 @@ public final class classes
     return subloop_get_instance_slot( v_object, slot_index );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 45502L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 45502L)
   public static SubLObject subloop_set_instance_slot(final SubLObject v_object, final SubLObject value, final SubLObject slot_index)
   {
     Vectors.set_aref( subloop_structures.instance_any_slots( v_object ), slot_index, value );
     return value;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 45673L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 45673L)
   public static SubLObject subloop_set_access_protected_instance_slot(final SubLObject v_object, final SubLObject value, final SubLObject slot_index, final SubLObject slot_name)
   {
     final SubLObject v_class = subloop_structures.instance_class( v_object );
@@ -1982,7 +1986,7 @@ public final class classes
     return subloop_set_instance_slot( v_object, value, slot_index );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 46046L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 46046L)
   public static SubLObject classes_compile_inheritance_path(final SubLObject class_name_or_class, SubLObject recompile)
   {
     if( recompile == UNPROVIDED )
@@ -2023,32 +2027,32 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 47205L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 47205L)
   public static SubLObject classes_instance_slot_index(final SubLObject v_class, final SubLObject slot_name)
   {
     return slots.find_slot_index( slot_name, subloop_structures.class_compiled_instance_slot_access_alist( v_class ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 47355L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 47355L)
   public static SubLObject classes_boolean_slot_decl_p(final SubLObject slot_decl)
   {
     return makeBoolean( slot_decl.isCons() && NIL != conses_high.member( $kw137$BOOLEAN, slot_decl.rest(), UNPROVIDED, UNPROVIDED ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 47486L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 47486L)
   public static SubLObject classes_class_slot_decl_p(final SubLObject slot_decl)
   {
     return makeBoolean( slot_decl.isCons() && NIL != conses_high.member( $kw138$CLASS, slot_decl.rest(), UNPROVIDED, UNPROVIDED ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 47613L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 47613L)
   public static SubLObject classes_instance_slot_decl_p(final SubLObject slot_decl)
   {
     return makeBoolean( ( slot_decl.isCons() && ( NIL != conses_high.member( $kw139$INSTANCE, slot_decl.rest(), UNPROVIDED, UNPROVIDED ) || NIL == conses_high.member( $kw138$CLASS, slot_decl.rest(), UNPROVIDED,
         UNPROVIDED ) ) ) || slot_decl.isSymbol() );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 47830L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 47830L)
   public static SubLObject classes_protection_level_of_slot_decl(final SubLObject slot_decl)
   {
     if( !slot_decl.isCons() )
@@ -2075,7 +2079,7 @@ public final class classes
     return $kw75$PUBLIC;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 48245L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 48245L)
   public static SubLObject classes_essential_slot_p(final SubLObject slot_decl)
   {
     if( !slot_decl.isCons() )
@@ -2090,7 +2094,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 48529L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 48529L)
   public static SubLObject classes_value_of_slot_decl(final SubLObject slot_decl)
   {
     if( !slot_decl.isCons() )
@@ -2114,13 +2118,13 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 48904L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 48904L)
   public static SubLObject classes_slot_name_given_slot_decl(final SubLObject slot_decl)
   {
     return slot_decl.isSymbol() ? slot_decl : ( slot_decl.isCons() ? ( slot_decl.first().isSymbol() ? slot_decl.first() : NIL ) : NIL );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 49124L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 49124L)
   public static SubLObject classes_compile_instance_slot_access_list(final SubLObject class_name_or_class, SubLObject recompile)
   {
     if( recompile == UNPROVIDED )
@@ -2174,7 +2178,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 51176L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 51176L)
   public static SubLObject classes_compile_instance_boolean_slot_access_list(final SubLObject class_name_or_class, SubLObject recompile)
   {
     if( recompile == UNPROVIDED )
@@ -2228,7 +2232,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 53314L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 53314L)
   public static SubLObject classes_compile_class_slot_access_list(final SubLObject class_name_or_class, SubLObject recompile)
   {
     if( recompile == UNPROVIDED )
@@ -2275,7 +2279,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 54824L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 54824L)
   public static SubLObject classes_compile_class_boolean_slot_access_list(final SubLObject class_name_or_class, SubLObject recompile)
   {
     if( recompile == UNPROVIDED )
@@ -2322,7 +2326,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 56451L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 56451L)
   public static SubLObject classes_initialize_class_slots(final SubLObject class_name_or_class)
   {
     final SubLObject v_class = class_name_or_class.isSymbol() ? classes_retrieve_class( class_name_or_class ) : class_name_or_class;
@@ -2349,7 +2353,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 57336L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 57336L)
   public static SubLObject superclassp(final SubLObject class_name_or_class_1, final SubLObject class_name_or_class_2)
   {
     final SubLObject class1 = class_name_or_class_1.isSymbol() ? classes_retrieve_class( class_name_or_class_1 ) : class_name_or_class_1;
@@ -2373,13 +2377,13 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 57938L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 57938L)
   public static SubLObject subclassp(final SubLObject class_name_or_class_1, final SubLObject class_name_or_class_2)
   {
     return superclassp( class_name_or_class_2, class_name_or_class_1 );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 58601L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 58601L)
   public static SubLObject classes_access_check_class_slot(final SubLObject v_class, final SubLObject slot)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2399,7 +2403,7 @@ public final class classes
     return T;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 59108L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 59108L)
   public static SubLObject get_class_slot(final SubLObject v_class, final SubLObject slot_name)
   {
     SubLObject association = slots.slot_assoc( slot_name, subloop_structures.class_compiled_class_slot_access_alist( v_class ) );
@@ -2417,7 +2421,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 59703L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 59703L)
   public static SubLObject set_class_slot(final SubLObject v_class, final SubLObject slot_name, final SubLObject value)
   {
     SubLObject association = slots.slot_assoc( slot_name, subloop_structures.class_compiled_class_slot_access_alist( v_class ) );
@@ -2437,7 +2441,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 60379L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 60379L)
   public static SubLObject classes_shadowed_association(final SubLObject target_key, final SubLObject alist)
   {
     SubLObject count = ZERO_INTEGER;
@@ -2460,7 +2464,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 60620L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 60620L)
   public static SubLObject classes_all_class_slots(final SubLObject class_name_or_class, SubLObject access_level)
   {
     if( access_level == UNPROVIDED )
@@ -2511,7 +2515,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 61360L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 61360L)
   public static SubLObject classes_all_instance_slots(final SubLObject class_name_or_class, SubLObject access_level)
   {
     if( access_level == UNPROVIDED )
@@ -2562,7 +2566,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 62109L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 62109L)
   public static SubLObject classes_all_any_instance_slots(final SubLObject class_name_or_class, SubLObject access_level)
   {
     if( access_level == UNPROVIDED )
@@ -2596,7 +2600,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 62658L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 62658L)
   public static SubLObject classes_all_slots(final SubLObject class_name_or_class, SubLObject access_level)
   {
     if( access_level == UNPROVIDED )
@@ -2611,7 +2615,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 63042L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 63042L)
   public static SubLObject class_get_property_internal(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -2632,7 +2636,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 63166L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 63166L)
   public static SubLObject class_get_property(final SubLObject v_class, final SubLObject indicator)
   {
     if( NIL != subloop_structures.class_p( v_class ) )
@@ -2642,7 +2646,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 63314L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 63314L)
   public static SubLObject class_set_property_internal(final SubLObject v_class, final SubLObject indicator, final SubLObject value)
   {
     final SubLObject class_var = Symbols.make_symbol( $str93$class );
@@ -2650,7 +2654,7 @@ public final class classes
         ConsesLow.list( $sym147$CLASS_PLIST, class_var ), indicator, value ) ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 63572L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 63572L)
   public static SubLObject class_set_property(final SubLObject v_class, final SubLObject indicator, final SubLObject value)
   {
     if( NIL != subloop_structures.class_p( v_class ) )
@@ -2661,7 +2665,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 63742L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 63742L)
   public static SubLObject class_implements_slot_listeners_p(final SubLObject class_name_or_class)
   {
     if( NIL != subloop_structures.class_p( class_name_or_class ) )
@@ -2676,7 +2680,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 64151L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 64151L)
   public static SubLObject class_set_implements_slot_listeners(final SubLObject class_name_or_class, final SubLObject boolean_value)
   {
     final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2709,7 +2713,7 @@ public final class classes
     return result;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 64819L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 64819L)
   public static SubLObject classes_implements_p(final SubLObject target_class, final SubLObject parent_interface)
   {
     final SubLObject true_class = ( NIL != subloop_structures.class_p( target_class ) ) ? target_class : ( ( NIL != target_class && target_class.isSymbol() ) ? classes_retrieve_class( target_class ) : NIL );
@@ -2752,7 +2756,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 65703L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 65703L)
   public static SubLObject classes_get_slot(final SubLObject v_class, final SubLObject slot_name)
   {
     if( NIL != subloop_structures.class_p( v_class ) )
@@ -2782,7 +2786,7 @@ public final class classes
     return NIL;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 66394L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 66394L)
   public static SubLObject do_classes_in_order(final SubLObject macroform, final SubLObject environment)
   {
     SubLObject current;
@@ -2815,7 +2819,7 @@ public final class classes
                             ConsesLow.list( $sym171$CPUSH, $list172, stack_var ) ) ) ) ) ) );
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 67604L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 67604L)
   public static SubLObject classes_tab_to_depth(final SubLObject stream, final SubLObject depth)
   {
     PrintLow.format( stream, $str173$__ );
@@ -2827,7 +2831,7 @@ public final class classes
     return depth;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 67739L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 67739L)
   public static SubLObject classes_display_class_name_at_depth(final SubLObject stream, final SubLObject class_name, final SubLObject depth)
   {
     classes_tab_to_depth( stream, depth );
@@ -2835,7 +2839,7 @@ public final class classes
     return class_name;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 67911L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 67911L)
   public static SubLObject classes_display_hierarchy(final SubLObject base_class_symbolic_name, SubLObject stream)
   {
     if( stream == UNPROVIDED )
@@ -2877,7 +2881,7 @@ public final class classes
     return base_class_symbolic_name;
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 68187L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 68187L)
   public static SubLObject subloop_type_p(final SubLObject class_or_class_name)
   {
     if( NIL == class_or_class_name )
@@ -2904,7 +2908,7 @@ public final class classes
     }
   }
 
-  @SubLTranslatedFile.SubL(source = "cycl/lisp", position = 68595L)
+  @SubLTranslatedFile.SubL(source = "cycl/classes.lisp", position = 68595L)
   public static SubLObject classes_find_all_subclasses(final SubLObject class_or_class_name, SubLObject recursively)
   {
     if( recursively == UNPROVIDED )

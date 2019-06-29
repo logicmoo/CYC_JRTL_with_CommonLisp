@@ -445,6 +445,6 @@ public class Eval implements SubLFile {
     }
 
     public Eval() {
-        PrologSync.addSingleton(this);
+        BeanShellCntrl.addSubLFile(this);
     }
 }

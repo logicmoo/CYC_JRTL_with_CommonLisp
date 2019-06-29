@@ -5,6 +5,8 @@ package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.net.InetAddress;
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
@@ -90,6 +92,6 @@ public class SystemInfo implements SubLFile {
 	}
 
 	public SystemInfo() {
-		PrologSync.addSingleton(this);
+		BeanShellCntrl.addSubLFile(this);
 	}
 }

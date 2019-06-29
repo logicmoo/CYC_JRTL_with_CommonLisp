@@ -1,0 +1,28 @@
+Links for eclipse developement
+
+Eclipse API
+http://www.eclipse.org/documentatio
+
+Eclipse API
+http://www.eclipse.org/documentation/html/plugins/org.eclipse.platform.doc.isv/doc/reference/api/
+
+Eclipse CVS
+http://dev.eclipse.org/viewcvs/index.cgi/
+
+Eclipse JDT (java plugin) CVS
+http://dev.eclipse.org/viewcvs/index.cgi/org.eclipse.jdt.ui/ui/org/eclipse/jdt/internal/ui/
+
+SWT help and guide (including API)
+http://dev.eclipse.org/viewcvs/index.cgi/~checkout~/platform-swt-home/dev.html#snippets
+
+Eclipse Newsgroups
+http://eclipse.org/newsgroups/
+
+Videos! Introduction into eclipse (from the very beginning to plugin developement)
+http://dev.eclipse.org/viewcvs/indextech.cgi/ecesis-home/downloads/EclipseCourseVideo.html?rev=HEAD
+
+Eclipse User Interface Guidelines
+http://eclipse.org/articles/Article-UI-Guidelines/Contents.html
+
+Eclipse plugin intro in german (topics: editor and views)
+http://anleitung.tutorials.de/anleitung-hilfe-tutorial-faq/t-145241.html

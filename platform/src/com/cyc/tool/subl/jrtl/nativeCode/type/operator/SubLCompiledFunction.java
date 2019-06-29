@@ -148,7 +148,7 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 	public SubLObject apply(Object[] args) {
 		int arity = 0;
 		for (int i = 0, size = args.length; i < size; ++i) {
-			if (args[i] != CommonSymbols.UNPROVIDED) {
+			if (args[i] != UNPROVIDED) {
 				if (args[i] instanceof SubLObject[]) {
 					arity += ((SubLObject[]) args[i]).length;
 				} else {
@@ -213,7 +213,7 @@ public class SubLCompiledFunction extends Function implements SubLFunction {
 		final boolean rest = allowsRest();
 		final int size = required + (optional > 0 ? optional + 1 : 0) + (rest ? 2 : 0);
 		SubLObject current;
-		final SubLList arglist = (SubLList) (current = SubLObjectFactory.makeList(size, CommonSymbols.NIL));
+		final SubLList arglist = (SubLList) (current = SubLObjectFactory.makeList(size, NIL));
 		final SubLPackage sublispPackage = SubLPackage.findPackageNamed("SUBLISP");
 		int i;
 		for (i = 0; i < required; ++i, current = current.rest()) {

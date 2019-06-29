@@ -3,6 +3,8 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
@@ -265,7 +267,7 @@ public class Types implements SubLFile {
 	}
 
 	public Types() {
-		PrologSync.addSingleton(this);
+		BeanShellCntrl.addSubLFile(this);
 	}
 
 	@Override

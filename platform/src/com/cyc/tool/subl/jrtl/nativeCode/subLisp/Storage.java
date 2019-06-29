@@ -9,6 +9,8 @@ import java.lang.management.MemoryType;
 import java.lang.management.MemoryUsage;
 import java.util.List;
 
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
@@ -143,6 +145,6 @@ public class Storage implements SubLFile {
 	}
 
 	public Storage() {
-		PrologSync.addSingleton(this);
+		BeanShellCntrl.addSubLFile(this);
 	}
 }

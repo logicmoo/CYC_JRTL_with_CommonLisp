@@ -4,6 +4,7 @@
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import org.armedbear.lisp.Keyword;
+import static org.armedbear.lisp.Lisp.*;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;

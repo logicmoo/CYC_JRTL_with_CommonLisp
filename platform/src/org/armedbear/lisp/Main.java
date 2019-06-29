@@ -230,7 +230,9 @@ public final class Main {
 
 	public static boolean noProlog = false;
 	public static boolean noPrologJNI = false;
-	public static boolean disablePrologSync = false;
+	public static boolean disablePrologSync = true;
+	public static boolean disableLispSync = false;
+
 	public static boolean trackStructs = true;
 	public static boolean noBSH = false;
 	public static boolean noBSHGUI = true;
@@ -314,11 +316,21 @@ public final class Main {
 		}
 		if (argsList.remove("--prologsync")) {
 			disablePrologSync = false;
+			trackStructs = true;
 			noPrologJNI = false;
 		}
 		if (argsList.remove("--noprologsync")) {
 			disablePrologSync = true;
 		}
+		
+		if (argsList.remove("--lispsync")) {
+			disableLispSync = false;
+			trackStructs = true;
+		}
+		if (argsList.remove("--nolispsync")) {
+			disableLispSync = true;
+		}
+		
 		if (argsList.remove("--headless") || argsList.remove("--nogui")) {
 			noGUI = true;
 			noBSHGUI = true;

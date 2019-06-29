@@ -3078,5 +3078,19 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
 	//public void close() {
 	//	_close();
 	//}
-
+	/* (non-Javadoc)
+	 * @see org.armedbear.lisp.StructureObject#isReady()
+	 */
+	@Override
+	public boolean isInitialized() {
+		return this.elementType != null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct#isDontTrack()
+	 */
+	@Override
+	public boolean isDontTrack() {
+		return true;
+	}
 }

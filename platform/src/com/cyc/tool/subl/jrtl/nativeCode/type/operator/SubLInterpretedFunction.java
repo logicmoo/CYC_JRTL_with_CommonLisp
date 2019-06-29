@@ -52,7 +52,7 @@ public class SubLInterpretedFunction extends Function implements SubLFunction
     }
     else
     {
-      argDesc = new FunctionArgListDescription( CommonSymbols.NIL );
+      argDesc = new FunctionArgListDescription( NIL );
     }
     requiredArgCount = argDesc.getRequiredArgCount();
     optionalArgCount = argDesc.getOptionalArgCount();
@@ -68,7 +68,7 @@ public class SubLInterpretedFunction extends Function implements SubLFunction
     }
     else
     {
-      body = CommonSymbols.NIL;
+      body = NIL;
     }
     this.env = env;
     if( functionSymbol != null )
@@ -123,7 +123,7 @@ public class SubLInterpretedFunction extends Function implements SubLFunction
   {
     final SubLEnvironment oldEnv = SubLEnvironment.currentEnvironment();
     final SubLEnvironment newEnv = env.extend();
-    SubLObject result = CommonSymbols.NIL;
+    SubLObject result = NIL;
     ArrayList oldDynamicValues = null;
     final SubLThread thread = SubLProcess.currentSubLThread();
     thread.throwStack.push( CommonSymbols.RETURN_TAG );

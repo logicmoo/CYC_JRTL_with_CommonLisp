@@ -16,6 +16,8 @@
 (pushnew :use-cyc *features*)
 ;; (pushnew :use-dd *features*)
 
+     (cyc:init-cyc) ;; Loads CYC code (without a KB)
+     '(cyc::setup-kb-tables 0)
 
 ;; Starts AppdapterGUI
 ;; (UI-INSPECTOR)
@@ -358,5 +360,13 @@
 	     (subsetp list2 list1 #'equal))))
 
 
-'(fiveam:run-all-tests)
 
+#|
+ (ql:QUICKLOAD "shop3") (ql:QUICKLOAD "fiveam") 
+  (ql:QUICKLOAD "pddl-utils") (ql:QUICKLOAD "openstacks-problem-translator")
+   (ql:QUICKLOAD "shop3-thmpr-api") (ql:QUICKLOAD "shop3/test")
+
+;; (time (fiveam:run-all-tests))
+
+;; (fiveam:run-all-tests)
+|#

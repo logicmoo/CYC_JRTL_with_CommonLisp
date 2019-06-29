@@ -1,0 +1,162 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>larkc</groupId>
+	<artifactId>platform</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>LarKC Platform</name>
+	<description>LarKC Platform used in LogicMOO
+</description>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<testSourceDirectory>test/src</testSourceDirectory>
+		<resources>
+			<resource>
+				<directory>main/cycjava-persistence-hacks</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>main/logicmoo-main</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>main/objectweb-asm-src</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>main/armedbear-j-src</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>main/server-4q</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>main/jpl7-hacked</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>main/java</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>main/beanshell</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>test</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.12</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/extra</source>
+								<!-- <classpathentry excluding="bsh/" kind="src" path="main/logicmoo-main"/> 
+									<classpathentry excluding="com/cyc/cycjava/cycl/" kind="src" path="main/opencyc-server-jsrc-in-progress"/> 
+									<classpathentry excluding="org/abcl/util/StreamTaskTest.java" kind="src" 
+									path="test/src"/> <classpathentry excluding="src/" kind="src" path="test"/> 
+									<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java" 
+									including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/> <classpathentry 
+									excluding="test/" including="**/*" kind="src" path="main/beanshell"/> -->
+								<source>main/cycjava-persistence-hacks</source>
+								<source>main/logicmoo-main</source>
+								<source>main/opencyc-server-jsrc-in-progress</source>
+								<source>main/objectweb-asm-src</source>
+								<source>main/armedbear-j-src</source>
+								<source>main/server-4q</source>
+								<source>main/jpl7-hacked</source>
+								<source>main/java</source>
+								<source>main/platform-1.1"/</source>
+								<source>main/beanshell-1.1"/</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<configuration>
+							<tasks>
+
+								<!-- Place any ant task here. You can add anything you can add between 
+									<target> and </target> in a build.xml. -->
+
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<dependency>
+			<groupId>sun.jdk</groupId>
+			<artifactId>tools</artifactId>
+			<version>1.8.0</version>
+			<scope>system</scope>
+			<systemPath>${java.home}/../lib/tools.jar</systemPath>
+		</dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>jars-local</id>
+			<name>data</name>
+			<url>file://${project.basedir}/lib</url>
+		</repository>
+	</repositories>
+</project>

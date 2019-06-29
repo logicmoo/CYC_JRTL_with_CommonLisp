@@ -11,6 +11,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 public interface SubLStruct extends SubLObject {
 	void clear();
 
+	boolean isInitialized();
+	
+	boolean isDontTrack();
+	
 	@Override
 	SubLObject getField(int p0);
 

@@ -3,6 +3,15 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.RET_T;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp.UNPROVIDED;
+import static org.armedbear.lisp.Symbol.STREAMP;
+import static org.armedbear.lisp.Keyword.OUTPUT_KEYWORD;
+import static org.armedbear.lisp.Keyword.START;
+import static org.armedbear.lisp.Keyword.END;
+import static org.armedbear.lisp.Fixnum.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -247,13 +256,13 @@ public class Processes extends SubLTrampolineFile {
 	private static SubLInteger makeNewProcessId() {
 		SubLInteger val = Processes.currentFakeProcessId;
 		Processes.currentFakeProcessId = (SubLInteger) Numbers.subtract(Processes.currentFakeProcessId,
-				ONE_INTEGER);
+				ONE);
 		return val;
 	}
 
 	public static SubLObject exit(SubLObject code) {
 		if (code == UNPROVIDED)
-			code = ZERO_INTEGER;
+			code = ZERO;
 		SubLInteger codeTyped = code.toInteger();
 		int status = codeTyped.intValue();
 		if (Main.noExit)

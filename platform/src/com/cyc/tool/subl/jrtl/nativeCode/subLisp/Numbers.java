@@ -22,6 +22,15 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
+import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.RET_T;
+import static org.armedbear.lisp.Lisp.T;
+import static org.armedbear.lisp.Lisp.UNPROVIDED;
+import static org.armedbear.lisp.Symbol.STREAMP;
+import static org.armedbear.lisp.Keyword.BINARY_KEYWORD;
+import static org.armedbear.lisp.Keyword.START;
+import static org.armedbear.lisp.Keyword.END;
+import static org.armedbear.lisp.Fixnum.ZERO;
 
 public class Numbers extends SubLTrampolineFile {
 	private static class AdditionDescription implements MultiArgMathFuncDesc {
