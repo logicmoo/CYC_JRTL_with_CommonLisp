@@ -192,7 +192,7 @@ public final class Packages
     LispObject result = NIL;
     for (Package pkg : packages) {
       for (Package nicknamedPackage : pkg.getLocallyNicknamedPackages()) {
-        if (thePackage.equals(nicknamedPackage)) {
+        if (thePackage.equalsObject(nicknamedPackage)) {
           result = new Cons(pkg, result);
         }
       }

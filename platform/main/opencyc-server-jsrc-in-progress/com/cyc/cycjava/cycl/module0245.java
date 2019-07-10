@@ -1181,7 +1181,7 @@ public final class module0245 extends SubLTranslatedFile
     {
         public SubLObject $predicate_links;
         public SubLObject $inverse_links;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX18553_native() {
             this.$predicate_links = (SubLObject)CommonSymbols.NIL;
@@ -1227,7 +1227,7 @@ public final class module0245 extends SubLTranslatedFile
     public static final class $sX18555_native extends SubLStructNative
     {
         public SubLObject $links;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX18555_native() {
             this.$links = (SubLObject)CommonSymbols.NIL;

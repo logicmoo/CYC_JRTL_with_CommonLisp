@@ -3725,7 +3725,7 @@ public final class module0034 extends SubLTranslatedFile
         public SubLObject $func_symbol;
         public SubLObject $test;
         public SubLObject $args_length;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX3030_native() {
             this.$store = (SubLObject)CommonSymbols.NIL;
@@ -3820,7 +3820,7 @@ public final class module0034 extends SubLTranslatedFile
         public SubLObject $lock;
         public SubLObject $name;
         public SubLObject $should_clone;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX3043_native() {
             this.$store = (SubLObject)CommonSymbols.NIL;

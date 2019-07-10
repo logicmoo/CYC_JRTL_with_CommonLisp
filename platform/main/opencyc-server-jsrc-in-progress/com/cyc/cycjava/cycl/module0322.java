@@ -7665,7 +7665,7 @@ public final class module0322 extends SubLTranslatedFile
         public SubLObject $tva_pred_gafs;
         public SubLObject $tvai_pred_gafs;
         public SubLObject $map;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX24287_native() {
             this.$pred = (SubLObject)CommonSymbols.NIL;

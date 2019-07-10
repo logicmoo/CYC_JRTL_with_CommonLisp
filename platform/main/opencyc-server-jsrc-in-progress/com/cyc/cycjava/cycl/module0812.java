@@ -1585,7 +1585,7 @@ public final class module0812 extends SubLTranslatedFile
         public SubLObject $method_visibility_table;
         public SubLObject $global_visibility_table;
         public SubLObject $rwbc_methods;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX56737_native() {
             this.$module_name = (SubLObject)CommonSymbols.NIL;

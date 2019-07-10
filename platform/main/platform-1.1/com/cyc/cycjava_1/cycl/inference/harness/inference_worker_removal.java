@@ -18,55 +18,34 @@
 */
 
 package com.cyc.cycjava_1.cycl.inference.harness;
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.*;
+import java.util.Map.*;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.backward;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.control_vars;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.el_utilities;
+import com.cyc.cycjava.cycl.eval_in_api;
+import com.cyc.cycjava.cycl.formula_pattern_match;
+import com.cyc.cycjava.cycl.forts;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.pattern_match;
+import com.cyc.cycjava.cycl.set;
+import com.cyc.cycjava.cycl.set_contents;
+import com.cyc.cycjava.cycl.unification_utilities;
+import com.cyc.cycjava.cycl.variables;
 import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
+import com.cyc.cycjava.cycl.inference.modules.*;
 import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
-import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-
-
 //dm import com.cyc.cycjava_1.cycl.access_macros;
 //dm import com.cyc.cycjava_1.cycl.arguments;
 //dm import com.cyc.cycjava_1.cycl.backward;
@@ -124,6 +103,11 @@ import com.cyc.cycjava_1.cycl.id_index;
 //dm import com.cyc.cycjava_1.cycl.subl_macros;
 //dm import com.cyc.cycjava_1.cycl.unification_utilities;
 //dm import com.cyc.cycjava_1.cycl.variables;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
+import com.cyc.tool.subl.util.*;
 
 public  final class inference_worker_removal extends SubLTranslatedFile {
 
@@ -146,7 +130,7 @@ public  final class inference_worker_removal extends SubLTranslatedFile {
     public SubLObject $hl_module = NIL;
     public SubLObject $bindings = NIL;
     public SubLObject $supports = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($removal_link_data_native.class, $sym0$REMOVAL_LINK_DATA, $sym1$REMOVAL_LINK_DATA_P, $list2, $list3, new String[] {"$hl_module", "$bindings", "$supports"}, $list4, $list5, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 

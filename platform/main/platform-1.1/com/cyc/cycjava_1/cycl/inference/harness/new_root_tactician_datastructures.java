@@ -18,53 +18,15 @@
 */
 
 package com.cyc.cycjava_1.cycl.inference.harness;
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
 
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
 import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
 //dm import com.cyc.cycjava_1.cycl.access_macros;
@@ -88,7 +50,7 @@ public  final class new_root_tactician_datastructures extends SubLTranslatedFile
     public SubLObject getField2() { return $new_root_index; }
     public SubLObject setField2(SubLObject value) { return $new_root_index = value; }
     public SubLObject $new_root_index = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($new_root_strategy_data_native.class, $sym0$NEW_ROOT_STRATEGY_DATA, $sym1$NEW_ROOT_STRATEGY_DATA_P, $list2, $list3, new String[] {"$new_root_index"}, $list4, $list5, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 

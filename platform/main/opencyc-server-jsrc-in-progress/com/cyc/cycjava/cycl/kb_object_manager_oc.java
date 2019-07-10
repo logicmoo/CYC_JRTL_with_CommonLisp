@@ -1720,7 +1720,7 @@ public final class kb_object_manager_oc
     public SubLObject $lru_size_max;
     public SubLObject $dummy2;
     public SubLObject $dummy3;
-    private static final SubLStructDeclNative structDecl;
+    public static final SubLStructDeclNative structDecl;
 
     public $sX13152_native()
     {

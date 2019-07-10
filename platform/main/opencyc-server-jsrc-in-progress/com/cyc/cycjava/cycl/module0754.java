@@ -1862,7 +1862,7 @@ public final class module0754 extends SubLTranslatedFile
         public SubLObject $quantifier;
         public SubLObject $single_useP;
         public SubLObject $arg_position;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX51734_native() {
             this.$var = (SubLObject)CommonSymbols.NIL;

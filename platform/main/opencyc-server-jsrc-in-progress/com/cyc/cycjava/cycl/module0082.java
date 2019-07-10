@@ -1581,7 +1581,7 @@ public final class module0082 extends SubLTranslatedFile
         public SubLObject $repeat_contents;
         public SubLObject $repeat_size;
         public SubLObject $test;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7211_native() {
             this.$unique_contents = (SubLObject)CommonSymbols.NIL;

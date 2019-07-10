@@ -678,7 +678,7 @@ public final class module0077 extends SubLTranslatedFile
     {
         public SubLObject $contents;
         public SubLObject $test;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $set_native() {
             this.$contents = (SubLObject)CommonSymbols.NIL;

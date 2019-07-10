@@ -84,7 +84,7 @@ abstract public class AbstractSubLVector extends AbstractSubLArraySequence imple
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean lispEquals(Object obj) {
 		if (obj == this)
 			return true;
 		if (obj == null)
@@ -100,7 +100,7 @@ abstract public class AbstractSubLVector extends AbstractSubLArraySequence imple
 		if (size != otherVect.size())
 			return false;
 		for (int i = 0; i < size; ++i)
-			if (!AREF(i).equals(otherVect.AREF(i)))
+			if (!AREF(i).lispEquals(otherVect.AREF(i)))
 				return false;
 		return true;
 	}

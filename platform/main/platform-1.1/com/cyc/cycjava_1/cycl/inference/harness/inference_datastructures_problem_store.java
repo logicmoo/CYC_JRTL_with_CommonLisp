@@ -18,55 +18,16 @@
 */
 
 package com.cyc.cycjava_1.cycl.inference.harness;
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
+ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.*;
+import java.util.Map.*;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.cyc_testing.*;
 import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
-import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-
-
 //dm import com.cyc.cycjava_1.cycl.access_macros;
 //dm import com.cyc.cycjava_1.cycl.assertions_high;
 //dm import com.cyc.cycjava_1.cycl.inference.harness.balancing_tactician;
@@ -99,6 +60,12 @@ import com.cyc.cycjava_1.cycl.id_index;
 //dm import com.cyc.cycjava_1.cycl.subl_macros;
 //dm import com.cyc.cycjava_1.cycl.subl_promotions;
 //dm import com.cyc.cycjava_1.cycl.unification_utilities;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
+import com.cyc.tool.subl.util.*;
 
 public  final class inference_datastructures_problem_store extends SubLTranslatedFile {
 
@@ -358,7 +325,7 @@ public  final class inference_datastructures_problem_store extends SubLTranslate
     public SubLObject $complex_problem_query_czer_index = NIL;
     public SubLObject $complex_problem_query_signatures = NIL;
     public SubLObject $proof_keeping_index = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($problem_store_native.class, $sym13$PROBLEM_STORE, $sym14$PROBLEM_STORE_P, $list15, $list16, new String[] {"$guid", "$suid", "$lock", "$creation_time", "$inference_id_index", "$strategy_id_index", "$problem_id_index", "$link_id_index", "$proof_id_index", "$problem_by_query_index", "$rejected_proofs", "$processed_proofs", "$non_explanatory_subproofs_possibleP", "$non_explanatory_subproofs_index", "$most_recent_tactic_executed", "$min_proof_depth_index", "$min_transformation_depth_index", "$min_transformation_depth_signature_index", "$min_depth_index", "$equality_reasoning_method", "$equality_reasoning_domain", "$intermediate_step_validation_level", "$max_problem_count", "$crazy_max_problem_count", "$removal_allowedP", "$transformation_allowedP", "$add_restriction_layer_of_indirectionP", "$negation_by_failureP", "$completeness_minimization_allowedP", "$direction", "$evaluate_subl_allowedP", "$rewrite_allowedP", "$abduction_allowedP", "$new_terms_allowedP", "$compute_answer_justificationsP", "$memoization_state", "$sbhl_resource_space", "$preparedP", "$destruction_imminentP", "$meta_problem_store", "$static_properties", "$janitor", "$historical_root_problems", "$complex_problem_query_czer_index", "$complex_problem_query_signatures", "$proof_keeping_index"}, $list17, $list18, $sym19$PRINT_PROBLEM_STORE);
   }
 
@@ -2436,7 +2403,7 @@ without even trying to prune. */
     public SubLObject $store = NIL;
     public SubLObject $indestructible_problems = NIL;
     public SubLObject $staleP = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($problem_store_janitor_native.class, $sym299$PROBLEM_STORE_JANITOR, $sym300$PROBLEM_STORE_JANITOR_P, $list301, $list302, new String[] {"$store", "$indestructible_problems", "$staleP"}, $list303, $list304, $sym305$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 

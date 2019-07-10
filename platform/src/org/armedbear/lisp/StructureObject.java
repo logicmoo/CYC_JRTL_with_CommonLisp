@@ -63,7 +63,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean lispEquals(Object obj) {
 		return super.equalsS(obj);
 	}
 

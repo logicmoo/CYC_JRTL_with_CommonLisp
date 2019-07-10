@@ -488,7 +488,7 @@ public final class module0057 extends SubLTranslatedFile
         public SubLObject $start;
         public SubLObject $limit;
         public SubLObject $delta;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5638_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;

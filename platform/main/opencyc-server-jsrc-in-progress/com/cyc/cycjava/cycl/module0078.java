@@ -1266,7 +1266,7 @@ public final class module0078 extends SubLTranslatedFile
         public SubLObject $set_b;
         public SubLObject $window_a;
         public SubLObject $window_b;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX6958_native() {
             this.$window = (SubLObject)CommonSymbols.NIL;

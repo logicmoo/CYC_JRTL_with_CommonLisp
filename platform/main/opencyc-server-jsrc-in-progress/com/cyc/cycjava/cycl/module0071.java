@@ -804,7 +804,7 @@ public final class module0071 extends SubLTranslatedFile
         public SubLObject $index;
         public SubLObject $back_index;
         public SubLObject $owner;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX6591_native() {
             this.$test = (SubLObject)CommonSymbols.NIL;

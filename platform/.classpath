@@ -7,12 +7,14 @@
 	<classpathentry kind="src" path="main/armedbear-j-src"/>
 	<classpathentry excluding="org/abcl/util/StreamTaskTest.java" kind="src" path="test/src"/>
 	<classpathentry excluding="src/" kind="src" path="test"/>
-	<classpathentry kind="src" path="main/server-4q"/>
 	<classpathentry kind="src" path="main/jpl7-hacked"/>
 	<classpathentry kind="src" path="main/java"/>
-	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
-	<classpathentry kind="src" path="main/platform-1.1"/>
+	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java|com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLHashtable_broken.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
+	<classpathentry excluding="com/cyc/cycjava_1/cycl/" kind="src" path="main/platform-1.1"/>
 	<classpathentry excluding="test/" including="**/*" kind="src" path="main/beanshell"/>
+	<classpathentry kind="src" path="main/server-u"/>
+	<classpathentry kind="src" path="main/server-4q"/>
+	<classpathentry kind="src" path="main/server-1a"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-continuation-8.0.4.v20111024.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1559995346763/source/jetty-continuation-8.0.4.v20111024-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
@@ -215,7 +217,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/org.appdapter.lib.bind.jena-1.2.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/org.appdapter.lib.core-1.1.6-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/org.appdapter.lib.remote-1.2.4-20160803.212630-10.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/org.osgi.compendium-4.2.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/org.osgi.compendium-4.2.0.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1562068568995/source/org.osgi.compendium-4.2.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/org.osgi.core-1.4.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/org.osgi.core-4.2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/orphanNodesAlg.jar"/>

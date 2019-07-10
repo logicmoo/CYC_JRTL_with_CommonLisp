@@ -2758,7 +2758,7 @@ public final class module0679 extends SubLTranslatedFile
         public SubLObject $ontologies;
         public SubLObject $quoted_ontologies;
         public SubLObject $terms;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $cb_partition_save_native() {
             this.$specified_directory = (SubLObject)CommonSymbols.NIL;

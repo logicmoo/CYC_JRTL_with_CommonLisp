@@ -709,7 +709,7 @@ public final class module0375 extends SubLTranslatedFile
     {
         public SubLObject $bindings;
         public SubLObject $hl_module;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX29754_native() {
             this.$bindings = (SubLObject)CommonSymbols.NIL;
@@ -757,7 +757,7 @@ public final class module0375 extends SubLTranslatedFile
         public SubLObject $bindings;
         public SubLObject $hl_module;
         public SubLObject $listeners;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX29756_native() {
             this.$bindings = (SubLObject)CommonSymbols.NIL;

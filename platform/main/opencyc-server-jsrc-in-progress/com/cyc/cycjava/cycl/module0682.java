@@ -586,7 +586,7 @@ public final class module0682 extends SubLTranslatedFile
         public SubLObject $query_properties;
         public SubLObject $non_explanatory_sentence;
         public SubLObject $multiple_choice_option_specs;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX45613_native() {
             this.$query_spec = (SubLObject)CommonSymbols.NIL;

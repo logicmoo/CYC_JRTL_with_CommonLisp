@@ -1137,7 +1137,7 @@ public final class module0173 extends SubLTranslatedFile
     {
         public SubLObject $constants;
         public SubLObject $narts;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX13756_native() {
             this.$constants = (SubLObject)CommonSymbols.NIL;

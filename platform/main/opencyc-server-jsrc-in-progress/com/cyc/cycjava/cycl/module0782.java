@@ -799,7 +799,7 @@ public final class module0782 extends SubLTranslatedFile
         public SubLObject $remains;
         public SubLObject $accumulator;
         public SubLObject $state;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX54855_native() {
             this.$found = (SubLObject)CommonSymbols.NIL;

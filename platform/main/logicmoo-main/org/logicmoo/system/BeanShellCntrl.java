@@ -1113,14 +1113,14 @@ public class BeanShellCntrl {
 
 	static public Unsafe getUnsafe() {
 		if (theUnsafe == null) {
-		try {
-			Field field = Unsafe.class.getDeclaredField("theUnsafe");
-			field.setAccessible(true);
+			try {
+				Field field = Unsafe.class.getDeclaredField("theUnsafe");
+				field.setAccessible(true);
 				theUnsafe = (Unsafe) field.get(null);
-		} catch (Throwable e) {
-			throw doThrow(e);
+			} catch (Throwable e) {
+				throw doThrow(e);
+			}
 		}
-	}
 		return theUnsafe;
 	}
 
@@ -1736,24 +1736,40 @@ public class BeanShellCntrl {
 			if (isc == null)
 				isc = self.getClass();
 			String named = Lisp.getDotName(isc);
-			CreationInfo was = singletons.get(named);
-			CreationInfo wasnt = new CreationInfo(self);
-			if (was != null) {
-				if (was.value != self) {
-					if (!SubLMain.TINY_KB) {
-						String message = "Difference from " + was + " and " + wasnt + " isntance " + self;
-						MsgBox.error(message);
-						if (true)
-							throw new StartupError(message);
-					}
-					named = null;
-				}
-				// throw new StartupError("REregistering from " + isc + "
-				// isntance " + self);
-			}
-			singletons.put(named, wasnt);
-			addObject(named, self);
+			setNamed(isc, self, named);
 		}
+	}
+
+	/**
+	 * TODO Describe the purpose of this method.
+	 * 
+	 * @param isc
+	 * @param self
+	 * @param named
+	 * @throws StartupError
+	 */
+	private static void setNamed(Class isc, Object self, String named) throws StartupError {
+		CreationInfo was = singletons.get(named);
+		CreationInfo wasnt = new CreationInfo(self);
+		if (was != null) {
+			if (was.value != self) {
+				if (!named.equals(isc.getName())) {
+					setNamed(isc, self, isc.getName());
+					return;
+				}
+				if (!SubLMain.TINY_KB) {
+					String message = "Difference from " + was + " and " + wasnt + " isntance " + self;
+					MsgBox.error(message);
+					if (true)
+						throw new StartupError(message);
+				}
+				named = null;
+			}
+			// throw new StartupError("REregistering from " + isc + "
+			// isntance " + self);
+		}
+		singletons.put(named, wasnt);
+		addObject(named, self);
 	}
 
 	@LispMethod
@@ -2108,12 +2124,12 @@ public class BeanShellCntrl {
 	public static SubLObject read_sublisp(String name) {
 		SubLObject form = com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader. //
 				read_from_string(SubLObjectFactory.makeString(name), //
-						UNPROVIDED, UNPROVIDED, UNPROVIDED,
-						UNPROVIDED, UNPROVIDED);
+						UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
 		return form;
 	}
 
 	static Method installedCR;
+
 	@SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 3066L)
 	public static SubLObject find_constant_by_name(final SubLObject name) {
 		final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2122,9 +2138,10 @@ public class BeanShellCntrl {
 		if (!inited_cyc_complete)
 			return constant;
 		if (SubLMain.OPENCYC) {
-			if(installedCR==null) {
+			if (installedCR == null) {
 				try {
-					installedCR = Class.forName("com.cyc.cycjava.cycl.constants_high_oc").getDeclaredMethod("f10737",SubLObject.class);
+					installedCR = Class.forName("com.cyc.cycjava.cycl.constants_high_oc").getDeclaredMethod("f10737",
+							SubLObject.class);
 				} catch (NoSuchMethodException | SecurityException | ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -2142,8 +2159,7 @@ public class BeanShellCntrl {
 		final SubLObject _prev_bind_0 = constant_completion_low.$require_valid_constants$.currentBinding(thread);
 		try {
 			constant_completion_low.$require_valid_constants$.bind(localNil, thread);
-			constant = constant_completion_high.constant_complete_exact(name, UNPROVIDED,
-					UNPROVIDED);
+			constant = constant_completion_high.constant_complete_exact(name, UNPROVIDED, UNPROVIDED);
 		} finally {
 			constant_completion_low.$require_valid_constants$.rebind(_prev_bind_0, thread);
 		}
@@ -2843,9 +2859,9 @@ public class BeanShellCntrl {
 					LispObject sarg = Lisp.eval(arg, env);
 					arg = sarg;
 				}
-				if (false && arg.equals(NIL)) {
+				if (false && Lisp.NULL(arg)) {
 					methodArgs[i] = false;
-				} else if (false && arg.equals(T)) {
+				} else if (false && T == arg) {
 					methodArgs[i] = true;
 				} else {
 					Class type = argTypes[i];
@@ -2953,6 +2969,8 @@ public class BeanShellCntrl {
 	 */
 	public static void wasSetField(AbstractSubLStruct structureObject, int slotNum, int pingAt, Object was,
 			Object value) {
+		if (true)
+			return;
 		LispSync.wasSetField(structureObject, slotNum, pingAt, was, value);
 		PrologSync.wasSetField(structureObject, slotNum, pingAt, was, value);
 	}
@@ -2976,6 +2994,8 @@ public class BeanShellCntrl {
 	 * @param struct
 	 */
 	public static void addThis(AbstractSubLStruct struct) {
+		if (true)
+			return;
 		if (struct instanceof SlotDefinition)
 			return;
 		LispSync.addThis(struct);

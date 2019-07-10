@@ -55,6 +55,14 @@ public abstract class Operator extends AbstractSubLFunction implements SubLOpera
             functionSymbol.setFunction((SubLOperator) this);
     }
 
+    /* (non-Javadoc)
+     * @see org.armedbear.lisp.LispObject#lispEquals(java.lang.Object)
+     */
+    @Override
+    public boolean lispEquals(Object obj) {
+    	return obj == this;
+    }
+    
     @Override
     public boolean isSubLispBased() {
         return false;

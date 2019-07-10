@@ -4667,7 +4667,7 @@ public final class module0809 extends SubLTranslatedFile
         public SubLObject $top_global_binding_table;
         public SubLObject $method_formal_arglist_table;
         public SubLObject $global_binding_type_table;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX56038_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;
@@ -4880,7 +4880,7 @@ public final class module0809 extends SubLTranslatedFile
         public SubLObject $global_referenced_at_top_level_table;
         public SubLObject $global_modified_at_top_level_table;
         public SubLObject $global_rebound_at_top_level_table;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX56041_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

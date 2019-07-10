@@ -271,11 +271,11 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	}
 
 	public boolean equalsS(Object obj) {
-		return super.equals(obj);
+		return super.equal((LispObject) obj);
 	}
 
 	@Override
-	abstract public boolean equals(Object obj);
+	abstract public boolean lispEquals(Object obj);
 
 	public boolean equalsA(Object obj) {
 		if (obj == this)
@@ -296,7 +296,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 			int index = i + 2;
 			final SubLObject field1 = this.getField(index);
 			final SubLObject field2 = other.getField(index);
-			if (!field1.equals(field2))
+			if (!field1.lispEquals(field2))
 				return false;
 		}
 		return true;

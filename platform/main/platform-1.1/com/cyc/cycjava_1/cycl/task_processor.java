@@ -19,65 +19,16 @@
 
 package com.cyc.cycjava_1.cycl;
 
-import com.cyc.cycjava.cycl.*;
-import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
 
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
 import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
 //dm import com.cyc.cycjava_1.cycl.access_macros;
@@ -157,7 +108,7 @@ public  final class task_processor extends SubLTranslatedFile {
     public SubLObject $response = NIL;
     public SubLObject $error_message = NIL;
     public SubLObject $task_processor_name = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($task_info_native.class, $sym3$TASK_INFO, $sym4$TASK_INFO_P, $list5, $list6, new String[] {"$type", "$id", "$priority", "$requestor", "$giveback_info", "$bindings", "$request", "$response", "$error_message", "$task_processor_name"}, $list7, $list8, $sym9$PRINT_TASK_INFO);
   }
 
@@ -481,7 +432,7 @@ public  final class task_processor extends SubLTranslatedFile {
     public SubLObject $result = NIL;
     public SubLObject $task_info = NIL;
     public SubLObject $finished = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($task_result_set_native.class, $sym57$TASK_RESULT_SET, $sym58$TASK_RESULT_SET_P, $list59, $list60, new String[] {"$result", "$task_info", "$finished"}, $list61, $list62, $sym63$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -518,7 +469,7 @@ public  final class task_processor extends SubLTranslatedFile {
     public SubLObject $process = NIL;
     public SubLObject $busy_p = NIL;
     public SubLObject $task_info = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($task_processor_native.class, $sym75$TASK_PROCESSOR, $sym76$TASK_PROCESSOR_P, $list77, $list78, new String[] {"$name", "$process", "$busy_p", "$task_info"}, $list79, $list80, $sym81$PRINT_TASK_PROCESSOR);
   }
 
@@ -627,7 +578,7 @@ public  final class task_processor extends SubLTranslatedFile {
     public SubLObject $process_name_prefix = NIL;
     public SubLObject $min_nbr_of_task_processors = NIL;
     public SubLObject $max_nbr_of_task_processors = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($task_process_pool_native.class, $sym99$TASK_PROCESS_POOL, $sym100$TASK_PROCESS_POOL_P, $list101, $list102, new String[] {"$lock", "$request_queue", "$request_semaphore", "$processors", "$background_msgs", "$process_name_prefix", "$min_nbr_of_task_processors", "$max_nbr_of_task_processors"}, $list103, $list104, $sym105$PRINT_TASK_PROCESS_POOL);
   }
 

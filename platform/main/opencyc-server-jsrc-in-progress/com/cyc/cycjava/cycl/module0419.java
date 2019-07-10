@@ -1187,7 +1187,7 @@ public final class module0419 extends SubLTranslatedFile
         public SubLObject $sentence;
         public SubLObject $kb;
         public SubLObject $owner;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX32482_native() {
             this.$relation = (SubLObject)CommonSymbols.NIL;

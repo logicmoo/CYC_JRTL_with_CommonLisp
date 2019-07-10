@@ -224,7 +224,7 @@ public final class module0703 extends SubLTranslatedFile
     public static final class $sX46902_native extends SubLStructNative
     {
         public SubLObject $id;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX46902_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

@@ -1217,7 +1217,7 @@ public final class module0133 extends SubLTranslatedFile
         public SubLObject $unwind_fn_toggle;
         public SubLObject $result;
         public SubLObject $graph;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10762_native() {
             this.$direction = (SubLObject)CommonSymbols.NIL;

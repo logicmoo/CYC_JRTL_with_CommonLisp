@@ -552,7 +552,7 @@ public final class module0049 extends SubLTranslatedFile
     {
         public SubLObject $numerator;
         public SubLObject $denominator;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX4884_native() {
             this.$numerator = (SubLObject)CommonSymbols.NIL;

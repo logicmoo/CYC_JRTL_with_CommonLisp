@@ -8338,7 +8338,7 @@ public final class module0773 extends SubLTranslatedFile
         public SubLObject $answer;
         public SubLObject $id_index;
         public SubLObject $properties;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX53712_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;
@@ -8417,7 +8417,7 @@ public final class module0773 extends SubLTranslatedFile
         public SubLObject $object;
         public SubLObject $proof_view;
         public SubLObject $properties;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX53716_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

@@ -12,6 +12,14 @@ public abstract class AbstractSubLOperator extends LispObject implements SubLOpe
 		this(null);
 	}
 	
+    /* (non-Javadoc)
+     * @see org.armedbear.lisp.LispObject#lispEquals(java.lang.Object)
+     */
+    @Override
+    public boolean lispEquals(Object obj) {
+    	return obj == this;
+    }
+
 	AbstractSubLOperator(SubLSymbol functionSymbol) {
 		setFunctionSymbol(functionSymbol);
 		if (functionSymbol != null) {

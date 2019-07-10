@@ -2322,7 +2322,7 @@ public final class module0713 extends SubLTranslatedFile
         public SubLObject $stats;
         public SubLObject $options;
         public SubLObject $thread;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX47920_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

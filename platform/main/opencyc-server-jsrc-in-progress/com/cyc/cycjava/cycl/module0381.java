@@ -2548,7 +2548,7 @@ public final class module0381 extends SubLTranslatedFile
         public SubLObject $focal_proof_index;
         public SubLObject $non_focal_proof_index;
         public SubLObject $restricted_non_focal_link_index;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX30161_native() {
             this.$focal_proof_index = (SubLObject)CommonSymbols.NIL;

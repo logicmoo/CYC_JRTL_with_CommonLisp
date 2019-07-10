@@ -2836,7 +2836,7 @@ public final class module0391 extends SubLTranslatedFile
         public SubLObject $new_root_proofiness_map;
         public SubLObject $new_root_delay_map;
         public SubLObject $new_root_metrics_map;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX30893_native() {
             this.$new_root_substrategy = (SubLObject)CommonSymbols.NIL;
@@ -2934,7 +2934,7 @@ public final class module0391 extends SubLTranslatedFile
         public SubLObject $time_to_last_answer;
         public SubLObject $steps_to_last_answer;
         public SubLObject $answer_count;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX30895_native() {
             this.$start_inference_step_count = (SubLObject)CommonSymbols.NIL;

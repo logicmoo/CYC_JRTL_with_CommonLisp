@@ -1090,7 +1090,7 @@ public final class module0085 extends SubLTranslatedFile
     {
         public SubLObject $string;
         public SubLObject $position;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7476_native() {
             this.$string = (SubLObject)CommonSymbols.NIL;
@@ -1139,7 +1139,7 @@ public final class module0085 extends SubLTranslatedFile
         public SubLObject $buffer;
         public SubLObject $end;
         public SubLObject $position;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7478_native() {
             this.$stream = (SubLObject)CommonSymbols.NIL;

@@ -418,7 +418,7 @@ public final class module0080 extends SubLTranslatedFile
         public SubLObject $map;
         public SubLObject $put_count;
         public SubLObject $remove_count;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7130_native() {
             this.$map = (SubLObject)CommonSymbols.NIL;

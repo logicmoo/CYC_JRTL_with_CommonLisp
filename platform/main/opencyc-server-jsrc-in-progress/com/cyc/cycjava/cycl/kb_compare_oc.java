@@ -3939,7 +3939,7 @@ public final class kb_compare_oc
     public SubLObject $nart_index;
     public SubLObject $assertion_index;
     public SubLObject $deduction_index;
-    private static final SubLStructDeclNative structDecl;
+    public static final SubLStructDeclNative structDecl;
 
     public $sX40105_native()
     {
@@ -4048,7 +4048,7 @@ public final class kb_compare_oc
     public SubLObject $narts;
     public SubLObject $assertions;
     public SubLObject $deductions;
-    private static final SubLStructDeclNative structDecl;
+    public static final SubLStructDeclNative structDecl;
 
     public $sX40109_native()
     {

@@ -18,52 +18,15 @@
 */
 package com.cyc.cycjava_1.cycl.inference.harness;
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.*;
+import java.util.Map.*;
+
 import com.cyc.cycjava.cycl.*;
-import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
-import com.cyc.cycjava.cycl.inference.harness.*;
 import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
-import com.cyc.cycjava.cycl.inference.harness.*;
-import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
-import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-
 //dm import com.cyc.cycjava_1.cycl.access_macros;
 //dm import com.cyc.cycjava_1.cycl.bindings;
 //dm import com.cyc.cycjava_1.cycl.clause_utilities;
@@ -89,7 +52,6 @@ import com.cyc.cycjava_1.cycl.id_index;
 //dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician;
 //dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_strategic_uninterestingness;
 //dm import com.cyc.cycjava_1.cycl.inference.harness.inference_tactician_utilities;
-import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
 //dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker;
 //dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_join;
 //dm import com.cyc.cycjava_1.cycl.inference.harness.inference_worker_removal;
@@ -106,6 +68,12 @@ import com.cyc.cycjava_1.cycl.inference.inference_trampolines;
 //dm import com.cyc.cycjava_1.cycl.unification;
 //dm import com.cyc.cycjava_1.cycl.utilities_macros;
 //dm import com.cyc.cycjava_1.cycl.variables;
+import com.cyc.cycjava_1.cycl.inference.*;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
+import com.cyc.tool.subl.util.*;
 
 public final class inference_worker_join_ordered
     extends
@@ -166,7 +134,7 @@ public final class inference_worker_join_ordered
     public SubLObject $focal_proof_index = NIL;
     public SubLObject $non_focal_proof_index = NIL;
     public SubLObject $restricted_non_focal_link_index = NIL;
-    private static final SubLStructDeclNative structDecl = Structures.makeStructDeclNative( $join_ordered_link_data_native.class, $sym0$JOIN_ORDERED_LINK_DATA, $sym1$JOIN_ORDERED_LINK_DATA_P, $list2, $list3,
+    public static final SubLStructDeclNative structDecl = Structures.makeStructDeclNative( $join_ordered_link_data_native.class, $sym0$JOIN_ORDERED_LINK_DATA, $sym1$JOIN_ORDERED_LINK_DATA_P, $list2, $list3,
         new String[]
         { "$focal_proof_index", "$non_focal_proof_index", "$restricted_non_focal_link_index"
         }, $list4, $list5, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION );

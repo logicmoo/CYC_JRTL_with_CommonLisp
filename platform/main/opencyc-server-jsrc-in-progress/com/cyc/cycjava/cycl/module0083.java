@@ -1378,7 +1378,7 @@ public final class module0083 extends SubLTranslatedFile
         public SubLObject $size_fn;
         public SubLObject $contents_fn;
         public SubLObject $iterator_fn;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7309_native() {
             this.$state = (SubLObject)CommonSymbols.NIL;

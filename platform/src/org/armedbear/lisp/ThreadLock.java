@@ -31,7 +31,7 @@ public final class ThreadLock extends SLispObject
     private void lock() throws ConditionThrowable
     {
         LispThread currentThread = LispThread.currentThread();
-        if (!currentThread.equals(thread)) {
+        if (!currentThread.equalsObject(thread)) {
             while (thread != null) {
                 synchronized(this) {
                     try {
@@ -47,7 +47,7 @@ public final class ThreadLock extends SLispObject
 
     private void unlock() throws ConditionThrowable
     {
-        if (thread.equals(LispThread.currentThread())) {
+        if (thread.equalsObject(LispThread.currentThread())) {
             synchronized(this) {
                 thread = null;
                 notifyAll();

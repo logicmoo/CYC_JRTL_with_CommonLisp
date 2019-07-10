@@ -446,7 +446,7 @@ public final class JavaObject extends SubLAlienObject {
                     for (int i = 0; i < classes.length; i++) {
                         classesList = classesList.push(JavaObject.getInstance(classes[i], translate));
                     }
-                    if (!classesList.equals(NIL)) {
+                    if (!Lisp.NULL(classesList)) {
                         parts = parts.push(new Cons("Member classes", classesList.nreverse()));
                     }
                 } catch (SecurityException e) {
@@ -457,7 +457,7 @@ public final class JavaObject extends SubLAlienObject {
                 for (int i = 0; i < interfaces.length; i++) {
                     interfacesList = interfacesList.push(JavaObject.getInstance(interfaces[i], translate));
                 }
-                if (!interfacesList.equals(NIL)) {
+                if (!Lisp.NULL(interfacesList)) {
                     parts = parts.push(new Cons("Interfaces", interfacesList.nreverse()));
                 }
                 LispObject superclassList = NIL;
@@ -466,7 +466,7 @@ public final class JavaObject extends SubLAlienObject {
                     superclassList = superclassList.push(JavaObject.getInstance(superclass, translate));
                     superclass = superclass.getSuperclass();
                 }
-                if (!superclassList.equals(NIL)) {
+                if (!Lisp.NULL(superclassList)) {
                     parts = parts.push(new Cons("Superclasses", superclassList.nreverse()));
                 }
             }

@@ -3164,7 +3164,7 @@ public final class module0623 extends SubLTranslatedFile
         public SubLObject $response;
         public SubLObject $error_message;
         public SubLObject $task_processor_name;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX41864_native() {
             this.$type = (SubLObject)CommonSymbols.NIL;
@@ -3284,7 +3284,7 @@ public final class module0623 extends SubLTranslatedFile
         public SubLObject $result;
         public SubLObject $task_info;
         public SubLObject $finished;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX41866_native() {
             this.$result = (SubLObject)CommonSymbols.NIL;
@@ -3342,7 +3342,7 @@ public final class module0623 extends SubLTranslatedFile
         public SubLObject $process;
         public SubLObject $busy_p;
         public SubLObject $task_info;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX41868_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;
@@ -3413,7 +3413,7 @@ public final class module0623 extends SubLTranslatedFile
         public SubLObject $process_name_prefix;
         public SubLObject $min_nbr_of_task_processors;
         public SubLObject $max_nbr_of_task_processors;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX41870_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;

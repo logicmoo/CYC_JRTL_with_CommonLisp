@@ -2541,7 +2541,7 @@ public final class module0052 extends SubLTranslatedFile
         public SubLObject $done;
         public SubLObject $next;
         public SubLObject $finalize;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5090_native() {
             this.$state = (SubLObject)CommonSymbols.NIL;

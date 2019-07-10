@@ -3034,7 +3034,7 @@ public final class module0096 extends SubLTranslatedFile
     {
         public SubLObject $index;
         public SubLObject $payload;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8670_native() {
             this.$index = (SubLObject)CommonSymbols.NIL;
@@ -3082,7 +3082,7 @@ public final class module0096 extends SubLTranslatedFile
         public SubLObject $map;
         public SubLObject $fvector;
         public SubLObject $common_symbols;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8672_native() {
             this.$map = (SubLObject)CommonSymbols.NIL;

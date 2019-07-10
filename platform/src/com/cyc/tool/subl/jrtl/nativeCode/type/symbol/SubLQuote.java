@@ -82,8 +82,8 @@ public class SubLQuote extends FromSubLisp implements SubLObject, SubLSymbol {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		return symbol.equals(obj);
+	public boolean lispEquals(Object obj) {
+		return symbol.lispEquals(obj);
 	}
 
 	@Override

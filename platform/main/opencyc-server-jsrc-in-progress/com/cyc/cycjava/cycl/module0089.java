@@ -1252,7 +1252,7 @@ public final class module0089 extends SubLTranslatedFile
         public SubLObject $capacity;
         public SubLObject $map;
         public SubLObject $head_entry;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX4495_native() {
             this.$capacity = (SubLObject)CommonSymbols.NIL;
@@ -1310,7 +1310,7 @@ public final class module0089 extends SubLTranslatedFile
         public SubLObject $key;
         public SubLObject $value;
         public SubLObject $older;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7699_native() {
             this.$newer = (SubLObject)CommonSymbols.NIL;

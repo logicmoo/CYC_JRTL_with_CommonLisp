@@ -655,7 +655,7 @@ public final class module0140 extends SubLTranslatedFile
     {
         public SubLObject $num;
         public SubLObject $elements;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX11397_native() {
             this.$num = (SubLObject)CommonSymbols.NIL;
@@ -708,7 +708,7 @@ public final class module0140 extends SubLTranslatedFile
         public SubLObject $parent_node;
         public SubLObject $genl_inverse_modeP;
         public SubLObject $link_generator;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX11398_native() {
             this.$node = (SubLObject)CommonSymbols.NIL;

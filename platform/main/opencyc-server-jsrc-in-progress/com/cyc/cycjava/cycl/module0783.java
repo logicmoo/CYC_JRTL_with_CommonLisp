@@ -303,7 +303,7 @@ public final class module0783 extends SubLTranslatedFile
     {
         public SubLObject $start;
         public SubLObject $end;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX54893_native() {
             this.$start = (SubLObject)CommonSymbols.NIL;

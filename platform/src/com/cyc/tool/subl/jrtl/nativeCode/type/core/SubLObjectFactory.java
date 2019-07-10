@@ -262,7 +262,8 @@ public class SubLObjectFactory
 
   public static SubLHashtableIterator makeHashtableIterator(SubLHashtable hashTable)
   {
-    return new SubLHashtableIterator( hashTable );
+    final boolean advanceToNext = true;
+    return new SubLHashtableIterator( hashTable , advanceToNext );
   }
 
   public static SubLInOutBinaryStream makeInOutBinaryStream(String fileName, SubLSymbol ifExists, SubLSymbol ifNotExists)

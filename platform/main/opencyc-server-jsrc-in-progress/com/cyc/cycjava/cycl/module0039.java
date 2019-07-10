@@ -1667,7 +1667,7 @@ public final class module0039 extends SubLTranslatedFile
     public static final class $sX4337_native extends SubLStructNative
     {
         public SubLObject $uchar;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX4337_native() {
             this.$uchar = (SubLObject)CommonSymbols.NIL;
@@ -1704,7 +1704,7 @@ public final class module0039 extends SubLTranslatedFile
     public static final class $sX4339_native extends SubLStructNative
     {
         public SubLObject $vect;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX4339_native() {
             this.$vect = (SubLObject)CommonSymbols.NIL;

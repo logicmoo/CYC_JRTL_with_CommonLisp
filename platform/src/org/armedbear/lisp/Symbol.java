@@ -63,7 +63,40 @@ public class Symbol
     extends
       AbstractSubLSymbol implements java.io.Serializable, SubLSymbol
 {
+	
+	/* (non-Javadoc)
+	 * @see org.armedbear.lisp.LispObject#javaInstance()
+	 */
+	@Override
+	public Object javaInstance() {
+		if (T == this) return Boolean.TRUE;
+		return super.javaInstance();
+	}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.armedbear.lisp.LispObject#javaInstance(java.lang.Class)
+	 */
+	@Override
+	public Object javaInstance(Class<?> cIn) {
+		if (T == this) {
+			String cn = cIn.getName();
+			if (cn != null) {
+				if (cn.equals("java.lang.Boolean") || cn.equals("boolean")) {
+					return Boolean.TRUE;
+				}
+			}
+		}
+		return super.javaInstance(cIn);
+	}
 
+	@Override
+	final public boolean equals(Object obj) {
+		if (!(obj instanceof Symbol))
+			return super.lispEquals(obj);
+		return obj == this;
+	}
+	
   // Bit flags.
   private static final int FLAG_SPECIAL = 0x0001;
   private static final int FLAG_CONSTANT = 0x0002;
@@ -2292,7 +2325,7 @@ public class Symbol
         value = symbolValueNoThrow();
         if( value == null )
         {
-          s += " (unbound) ";
+          s += " (?) ";
         }
         else if( value != this && value != null )
         {

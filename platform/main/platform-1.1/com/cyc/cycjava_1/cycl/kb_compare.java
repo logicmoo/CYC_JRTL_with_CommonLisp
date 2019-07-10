@@ -19,65 +19,16 @@
 
 package com.cyc.cycjava_1.cycl;
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.*;
-import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
 import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
 //dm import com.cyc.cycjava_1.cycl.access_macros;
@@ -137,7 +88,7 @@ public  final class kb_compare extends SubLTranslatedFile {
     public SubLObject $nart_index = NIL;
     public SubLObject $assertion_index = NIL;
     public SubLObject $deduction_index = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($kb_intersection_native.class, $sym18$KB_INTERSECTION, $sym19$KB_INTERSECTION_P, $list20, $list21, new String[] {"$remote_image", "$constant_index", "$nart_index", "$assertion_index", "$deduction_index"}, $list22, $list23, $sym24$PRINT_KB_INTERSECTION);
   }
 
@@ -180,7 +131,7 @@ public  final class kb_compare extends SubLTranslatedFile {
     public SubLObject $narts = NIL;
     public SubLObject $assertions = NIL;
     public SubLObject $deductions = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($kb_difference_native.class, $sym64$KB_DIFFERENCE, $sym65$KB_DIFFERENCE_P, $list66, $list67, new String[] {"$common_intersection", "$renamed_constants", "$constants", "$narts", "$assertions", "$deductions"}, $list68, $list69, $sym70$PRINT_KB_DIFFERENCE);
   }
 

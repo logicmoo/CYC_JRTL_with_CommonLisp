@@ -18,55 +18,25 @@
 */
 
 package com.cyc.cycjava_1.cycl.inference.harness;
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
 
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+import java.util.*;
+import java.util.Map.*;
 
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
-import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-
-
+import com.cyc.cycjava.cycl.access_macros;
+import com.cyc.cycjava.cycl.dictionary;
+import com.cyc.cycjava.cycl.dictionary_utilities;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.number_utilities;
+import com.cyc.cycjava.cycl.set;
+import com.cyc.cycjava.cycl.set_contents;
+import com.cyc.cycjava.cycl.string_utilities;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
+import com.cyc.cycjava.cycl.vector_utilities;
+import com.cyc.cycjava.cycl.inference.modules.*;
 //dm import com.cyc.cycjava_1.cycl.access_macros;
 //dm import com.cyc.cycjava_1.cycl.inference.harness.balancing_tactician;
 //dm import com.cyc.cycjava_1.cycl.constant_handles;
@@ -96,6 +66,11 @@ import com.cyc.cycjava_1.cycl.id_index;
 //dm import com.cyc.cycjava_1.cycl.subl_macros;
 //dm import com.cyc.cycjava_1.cycl.utilities_macros;
 //dm import com.cyc.cycjava_1.cycl.vector_utilities;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
+import com.cyc.tool.subl.util.*;
 
 public  final class inference_datastructures_strategy extends SubLTranslatedFile {
 
@@ -185,7 +160,7 @@ public  final class inference_datastructures_strategy extends SubLTranslatedFile
     public SubLObject $memoization_state = NIL;
     public SubLObject $type = NIL;
     public SubLObject $data = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($strategy_native.class, $sym0$STRATEGY, $sym1$STRATEGY_P, $list2, $list3, new String[] {"$suid", "$inference", "$result_uniqueness_criterion", "$active_problems", "$motivated_problems", "$set_aside_problems", "$should_reconsider_set_asidesP", "$productivity_limit", "$removal_backtracking_productivity_limit", "$proof_spec", "$problem_proof_spec_index", "$problem_strategic_index", "$memoization_state", "$type", "$data"}, $list4, $list5, $sym6$PRINT_STRATEGY);
   }
 
@@ -1162,7 +1137,7 @@ override the one from the inference. */
     public SubLObject $tactic_strategic_property_index = NIL;
     public SubLObject $possible_tactic_count = NIL;
     public SubLObject $flags = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($problem_strategic_properties_native.class, $sym113$PROBLEM_STRATEGIC_PROPERTIES, $sym114$PROBLEM_STRATEGIC_PROPERTIES_P, $list115, $list116, new String[] {"$status", "$tactic_strategic_property_index", "$possible_tactic_count", "$flags"}, $list117, $list118, $sym119$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -1847,7 +1822,7 @@ override the one from the inference. */
     public SubLObject $preference_level_justification = NIL;
     public SubLObject $productivity = NIL;
     public SubLObject $flags = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($tactic_strategic_properties_native.class, $sym149$TACTIC_STRATEGIC_PROPERTIES, $sym150$TACTIC_STRATEGIC_PROPERTIES_P, $list151, $list152, new String[] {"$preference_level", "$preference_level_justification", "$productivity", "$flags"}, $list153, $list154, $sym119$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 

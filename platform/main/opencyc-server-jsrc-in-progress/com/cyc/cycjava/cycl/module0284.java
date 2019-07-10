@@ -1098,7 +1098,7 @@ public final class module0284 extends SubLTranslatedFile
         public SubLObject $sorted_assertion_list;
         public SubLObject $list_structure;
         public SubLObject $sorted_var_positions;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX21367_native() {
             this.$sorted_constant_list = (SubLObject)CommonSymbols.NIL;
@@ -1172,7 +1172,7 @@ public final class module0284 extends SubLTranslatedFile
     {
         public SubLObject $head;
         public SubLObject $colour;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX21369_native() {
             this.$head = (SubLObject)CommonSymbols.NIL;
@@ -1220,7 +1220,7 @@ public final class module0284 extends SubLTranslatedFile
         public SubLObject $id;
         public SubLObject $colour;
         public SubLObject $arc_set;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX21371_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;
@@ -1276,7 +1276,7 @@ public final class module0284 extends SubLTranslatedFile
     {
         public SubLObject $vertex;
         public SubLObject $search_history;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX21373_native() {
             this.$vertex = (SubLObject)CommonSymbols.NIL;

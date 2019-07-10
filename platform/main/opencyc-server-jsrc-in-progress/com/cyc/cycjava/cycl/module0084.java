@@ -1949,7 +1949,7 @@ public final class module0084 extends SubLTranslatedFile
     {
         public SubLObject $dictionary;
         public SubLObject $lock;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7401_native() {
             this.$dictionary = (SubLObject)CommonSymbols.NIL;

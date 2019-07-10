@@ -556,8 +556,8 @@ public class Numbers extends SubLTrampolineFile {
 
 	public static SubLObject divide(SubLObject numerator, SubLObject denominator) {
 		if (!numerator.isFixnum() || !denominator.isFixnum()) {
-			if (denominator.equals(CommonSymbols.ZERO_INTEGER) || denominator.equals(ZERO_FLOAT)
-					|| denominator.equals(CommonSymbols.ZERO_DOUBLE))
+			if (denominator.eql(CommonSymbols.ZERO_INTEGER) || denominator.eql(ZERO_FLOAT)
+					|| denominator.eql(CommonSymbols.ZERO_DOUBLE))
 				Errors.error("Attempt to divide " + numerator + " by 0.");
 			SubLObject[] args = SubLProcess.currentSubLThread().sublArraySize2;
 			args[0] = numerator;

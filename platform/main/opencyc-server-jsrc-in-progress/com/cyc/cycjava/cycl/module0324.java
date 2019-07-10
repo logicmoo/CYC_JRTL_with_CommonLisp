@@ -1107,7 +1107,7 @@ public final class module0324 extends SubLTranslatedFile
     public static final class $sX18656_native extends SubLStructNative
     {
         public SubLObject $interval;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX18656_native() {
             this.$interval = (SubLObject)CommonSymbols.NIL;
@@ -1155,7 +1155,7 @@ public final class module0324 extends SubLTranslatedFile
     public static final class $sX18657_native extends SubLStructNative
     {
         public SubLObject $interval;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX18657_native() {
             this.$interval = (SubLObject)CommonSymbols.NIL;

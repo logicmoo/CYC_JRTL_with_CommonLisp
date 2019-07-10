@@ -26,8 +26,9 @@
          (load-kb units-directory)
          (system-code-initializations))))
 
-#+MAIN-IGNORE
-(clet ((units-directory "units/0988/"))
+
+;; #-CYC-STORYTELLING
+'(clet ((units-directory "units/0988/"))
   (pif (fboundp 'cyc-load-kb)
        (cyc-load-kb units-directory)
        (progn
@@ -35,7 +36,8 @@
          (system-code-initializations))))
 
 ;; LarKC
-#-MAIN-OPENCYC
+;; #-MAIN-OPENCYC
+;; #+CYC-STORYTELLING
 (clet ((units-directory "units/7166/"))
   (pif (fboundp 'cyc-load-kb)
        (cyc-load-kb units-directory)

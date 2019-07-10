@@ -267,7 +267,7 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 
 		@Override
-		public boolean equals(Object obj) {
+		public boolean lispEquals(Object obj) {
 			return super.equalsA(obj);
 		}
 

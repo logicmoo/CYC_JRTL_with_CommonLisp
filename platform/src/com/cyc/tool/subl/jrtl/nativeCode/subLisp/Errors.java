@@ -108,7 +108,7 @@ public class Errors
       return false;
     SubLOutputTextStream stream1 = StreamsLow.$error_output$.getDynamicValue().toOutputTextStream();
     SubLOutputTextStream stream2 = StreamsLow.originalErrorStream;
-    return SubLMain.isInitialized() && reader != null && stream1.equals( stream2 );
+    return SubLMain.isInitialized() && reader != null && stream1.lispEquals( stream2 );
   }
 
   private static String possiblyCallErrorHandler(String errorMessage, Throwable e)
@@ -608,7 +608,7 @@ public class Errors
       SubLReader reader = SubLMain.getMainReader();
       SubLOutputTextStream stream1 = StreamsLow.$error_output$.getDynamicValue().toOutputTextStream();
       SubLOutputTextStream stream2 = StreamsLow.originalErrorStream;
-      if( reader == null || !reader.isInReaderThread() || !stream1.equals( stream2 ) )
+      if( reader == null || !reader.isInReaderThread() || !stream1.lispEquals( stream2 ) )
       {
         String breakHeaderString = "\nBreakpoint reached from background thread or from REPL with *error-output* rebound: ";
         SubLOutputTextStream stream3 = StreamsLow.$error_output$.getDynamicValue().getStream( true ).toOutputTextStream();
@@ -807,7 +807,7 @@ public class Errors
     Errors.$error_handler$ = SubLFiles.defvar( Errors.me, "*ERROR-HANDLER*", SubLNil.NIL );
     Errors.$error_message$ = SubLFiles.defvar( Errors.me, "*ERROR-MESSAGE*", SubLNil.NIL );
     Errors.$ignore_breaksP$ = SubLFiles.defvar( Errors.me, "*IGNORE-BREAKS?*", SubLNil.NIL );
-    Errors.$ignore_mustsP$ = SubLFiles.defvar( Errors.me, "*IGNORE-MUSTS?*", SubLNil.NIL );
+    Errors.$ignore_mustsP$ = SubLFiles.defvar( Errors.me, "*IGNORE-MUSTS?*", SubLNil.NIL);
     Errors.$ignore_warnsP$ = SubLFiles.defvar( Errors.me, "*IGNORE-WARNS?*", SubLNil.NIL );
     Errors.$restarts$ = SubLFiles.defvar( Errors.me, "*RESTARTS*", SubLNil.NIL );
     Errors.$append_stack_traces_to_error_messagesP$ = SubLFiles.defvar( Errors.me, CommonSymbols.APPEND_STACK_TRACES_TO_ERROR_MESSAGES.getName(), CommonSymbols.T );

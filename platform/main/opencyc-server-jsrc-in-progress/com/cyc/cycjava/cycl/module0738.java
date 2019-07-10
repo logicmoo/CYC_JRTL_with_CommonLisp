@@ -4236,7 +4236,7 @@ public final class module0738 extends SubLTranslatedFile
         public SubLObject $term;
         public SubLObject $phrase;
         public SubLObject $mt;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX50013_native() {
             this.$term = (SubLObject)CommonSymbols.NIL;

@@ -508,7 +508,7 @@ public final class module0086 extends SubLTranslatedFile
         public SubLObject $begin_visit_fn;
         public SubLObject $end_visit_fn;
         public SubLObject $param;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7546_native() {
             this.$begin_path_fn = (SubLObject)CommonSymbols.NIL;

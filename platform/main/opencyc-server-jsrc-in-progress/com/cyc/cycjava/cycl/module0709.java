@@ -9820,7 +9820,7 @@ public final class module0709 extends SubLTranslatedFile
         public SubLObject $domains;
         public SubLObject $range;
         public SubLObject $plist;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX47094_native() {
             this.$cyc_name = (SubLObject)CommonSymbols.NIL;
@@ -9904,7 +9904,7 @@ public final class module0709 extends SubLTranslatedFile
         public SubLObject $abbreviate_prefixesP;
         public SubLObject $import_term;
         public SubLObject $encoding;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX47096_native() {
             this.$ontology = (SubLObject)CommonSymbols.NIL;
@@ -10044,7 +10044,7 @@ public final class module0709 extends SubLTranslatedFile
         public SubLObject $superclasses;
         public SubLObject $disjoint_classes;
         public SubLObject $plist;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX47098_native() {
             this.$cyc_name = (SubLObject)CommonSymbols.NIL;
@@ -10121,7 +10121,7 @@ public final class module0709 extends SubLTranslatedFile
         public SubLObject $error_info;
         public SubLObject $import_parameters;
         public SubLObject $thread;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX47100_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

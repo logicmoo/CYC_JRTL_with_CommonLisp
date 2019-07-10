@@ -970,7 +970,7 @@ public final class module0422 extends SubLTranslatedFile
         public SubLObject $creation_date;
         public SubLObject $creator;
         public SubLObject $workingP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX32604_native() {
             this.$hl_module = (SubLObject)CommonSymbols.NIL;

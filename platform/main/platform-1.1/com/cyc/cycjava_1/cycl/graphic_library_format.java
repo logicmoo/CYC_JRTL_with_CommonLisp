@@ -19,65 +19,15 @@
 
 package com.cyc.cycjava_1.cycl;
 
-import com.cyc.cycjava.cycl.*;
-import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
 
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
 import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
 //dm import com.cyc.cycjava_1.cycl.access_macros;
@@ -147,7 +97,7 @@ public  final class graphic_library_format extends SubLTranslatedFile {
     public SubLObject $incoming_connector_types = NIL;
     public SubLObject $outgoing_connector_types = NIL;
     public SubLObject $rendering_info = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($glf_graph_native.class, $sym0$GLF_GRAPH, $sym1$GLF_GRAPH_P, $list2, $list3, new String[] {"$id", "$types", "$ais", "$nodes", "$node_types", "$source_node", "$arcs", "$arc_types", "$incoming_connectors", "$outgoing_connectors", "$incoming_connector_types", "$outgoing_connector_types", "$rendering_info"}, $list4, $list5, $sym6$GLFGRPH_PRINT);
   }
 
@@ -181,7 +131,7 @@ public  final class graphic_library_format extends SubLTranslatedFile {
     public SubLObject $types = NIL;
     public SubLObject $parent = NIL;
     public SubLObject $semantics = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($glf_node_native.class, $sym110$GLF_NODE, $sym111$GLF_NODE_P, $list112, $list113, new String[] {"$id", "$types", "$parent", "$semantics"}, $list114, $list115, $sym116$GLFNODE_PRINT);
   }
 
@@ -221,7 +171,7 @@ public  final class graphic_library_format extends SubLTranslatedFile {
     public SubLObject $from = NIL;
     public SubLObject $to = NIL;
     public SubLObject $semantics = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($glf_arc_native.class, $sym134$GLF_ARC, $sym135$GLF_ARC_P, $list136, $list137, new String[] {"$id", "$types", "$parent", "$from", "$to", "$semantics"}, $list138, $list139, $sym140$GLFARC_PRINT);
   }
 
@@ -246,7 +196,7 @@ public  final class graphic_library_format extends SubLTranslatedFile {
     public SubLObject getField2() { return $label; }
     public SubLObject setField2(SubLObject value) { return $label = value; }
     public SubLObject $label = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($glf_rendering_native.class, $sym167$GLF_RENDERING, $sym168$GLF_RENDERING_P, $list169, $list170, new String[] {"$label"}, $list171, $list172, $sym173$GLFRNDR_PRINT);
   }
 

@@ -497,7 +497,7 @@ public final class module0407 extends SubLTranslatedFile
     public static final class $sX31468_native extends SubLStructNative
     {
         public SubLObject $input_nodes;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX31468_native() {
             this.$input_nodes = (SubLObject)CommonSymbols.NIL;
@@ -535,7 +535,7 @@ public final class module0407 extends SubLTranslatedFile
     {
         public SubLObject $value;
         public SubLObject $weights;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX31470_native() {
             this.$value = (SubLObject)CommonSymbols.NIL;

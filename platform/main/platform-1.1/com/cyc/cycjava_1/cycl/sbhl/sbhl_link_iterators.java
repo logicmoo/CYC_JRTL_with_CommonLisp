@@ -18,53 +18,15 @@
 */
 
 package com.cyc.cycjava_1.cycl.sbhl;
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
 
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
 import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
 //dm import com.cyc.cycjava_1.cycl.access_macros;
@@ -105,7 +67,7 @@ public  final class sbhl_link_iterators extends SubLTranslatedFile {
     public SubLObject $sbhl_link_node_search_state = NIL;
     public SubLObject $remaining_modules = NIL;
     public SubLObject $module_node_search_state_iterator = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($sbhl_link_node_search_state_iterator_state_native.class, $sym0$SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_STATE, $sym1$SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_P, $list2, $list3, new String[] {"$sbhl_link_node_search_state", "$remaining_modules", "$module_node_search_state_iterator"}, $list4, $list5, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -141,7 +103,7 @@ public  final class sbhl_link_iterators extends SubLTranslatedFile {
     public SubLObject $node = NIL;
     public SubLObject $direction = NIL;
     public SubLObject $genl_inverse_modeP = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($sbhl_module_direction_link_search_state_iterator_state_native.class, $sym25$SBHL_MODULE_DIRECTION_LINK_SEARCH_STATE_ITERATOR_STATE, $sym26$SBHL_MODULE_DIRECTION_LINK_SEARCH_STATE_ITERATOR_STATE_P, $list27, $list28, new String[] {"$mt_link_iterator", "$tv_link_search_state_iterator", "$graph_link", "$module", "$node", "$direction", "$genl_inverse_modeP"}, $list29, $list30, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -180,7 +142,7 @@ public  final class sbhl_link_iterators extends SubLTranslatedFile {
     public SubLObject $direction = NIL;
     public SubLObject $mt = NIL;
     public SubLObject $genl_inverse_modeP = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($sbhl_module_tv_link_node_search_state_iterator_state_native.class, $sym57$SBHL_MODULE_TV_LINK_NODE_SEARCH_STATE_ITERATOR_STATE, $sym58$SBHL_MODULE_TV_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_P, $list59, $list60, new String[] {"$tv_link_iterator", "$current_tv", "$current_remaining_nodes", "$module", "$parent_node", "$direction", "$mt", "$genl_inverse_modeP"}, $list61, $list62, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -222,7 +184,7 @@ public  final class sbhl_link_iterators extends SubLTranslatedFile {
     public SubLObject $mt = NIL;
     public SubLObject $tv = NIL;
     public SubLObject $genl_inverse_modeP = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($sbhl_module_naut_link_node_search_state_iterator_state_native.class, $sym89$SBHL_MODULE_NAUT_LINK_NODE_SEARCH_STATE_ITERATOR_STATE, $sym90$SBHL_MODULE_NAUT_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_P, $list91, $list92, new String[] {"$generating_functions", "$current_generating_function", "$current_remaining_nodes", "$module", "$parent_node", "$direction", "$mt", "$tv", "$genl_inverse_modeP"}, $list93, $list94, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 

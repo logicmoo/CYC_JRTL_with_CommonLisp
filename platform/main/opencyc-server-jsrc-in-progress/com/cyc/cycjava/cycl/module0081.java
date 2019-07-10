@@ -562,7 +562,7 @@ public final class module0081 extends SubLTranslatedFile
     {
         public SubLObject $map;
         public SubLObject $lock;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7173_native() {
             this.$map = (SubLObject)CommonSymbols.NIL;

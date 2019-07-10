@@ -678,7 +678,7 @@ public final class module0061 extends SubLTranslatedFile
         public SubLObject $type;
         public SubLObject $port;
         public SubLObject $process;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5966_native() {
             this.$type = (SubLObject)CommonSymbols.NIL;

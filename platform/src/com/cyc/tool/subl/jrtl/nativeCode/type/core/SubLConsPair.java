@@ -237,7 +237,7 @@ abstract public class SubLConsPair extends LispObject implements SubLCons, SubLL
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean lispEquals(Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
@@ -249,9 +249,9 @@ abstract public class SubLConsPair extends LispObject implements SubLCons, SubLL
             return false;
         SubLObject cur1;
         for (cur1 = this; cur1.isCons() && sobj.isCons(); cur1 = cur1.rest(), sobj = sobj.rest())
-            if (!cur1.first().equals(sobj.first()))
+            if (!cur1.first().lispEquals(sobj.first()))
                 return false;
-        return !cur1.isCons() && !sobj.isCons() && cur1.equals(sobj);
+        return !cur1.isCons() && !sobj.isCons() && cur1.lispEquals(sobj);
     }
 
     @Override

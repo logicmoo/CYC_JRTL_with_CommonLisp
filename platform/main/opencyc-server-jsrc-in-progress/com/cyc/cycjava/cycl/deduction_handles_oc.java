@@ -940,7 +940,7 @@ public final class deduction_handles_oc
         SubLStructNative
   {
     public SubLObject $id;
-    private static final SubLStructDeclNative structDecl;
+    public static final SubLStructDeclNative structDecl;
 
     public $sX14450_native()
     {

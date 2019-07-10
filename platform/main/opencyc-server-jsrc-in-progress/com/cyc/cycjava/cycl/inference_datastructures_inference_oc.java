@@ -8712,7 +8712,7 @@ public final class inference_datastructures_inference_oc
     public SubLObject $problem_working_time_data;
     public SubLObject $type;
     public SubLObject $data;
-    private static final SubLStructDeclNative structDecl;
+    public static final SubLStructDeclNative structDecl;
 
     public $sX25426_native()
     {
@@ -9577,7 +9577,7 @@ public final class inference_datastructures_inference_oc
     public SubLObject $justifications;
     public SubLObject $elapsed_creation_time;
     public SubLObject $step_count;
-    private static final SubLStructDeclNative structDecl;
+    public static final SubLStructDeclNative structDecl;
 
     public $sX28211_native()
     {
@@ -9697,7 +9697,7 @@ public final class inference_datastructures_inference_oc
     public SubLObject $supports;
     public SubLObject $pragma_supports;
     public SubLObject $proofs;
-    private static final SubLStructDeclNative structDecl;
+    public static final SubLStructDeclNative structDecl;
 
     public $sX28214_native()
     {

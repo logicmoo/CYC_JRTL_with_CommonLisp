@@ -171,7 +171,7 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 	
 	
 	
-	public boolean equals(Object obj)
+	public boolean lispEquals(Object obj)
 	{
 		return super.equalsA(obj);
 	}

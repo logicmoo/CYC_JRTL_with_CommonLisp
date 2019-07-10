@@ -339,7 +339,7 @@ public final class module0368 extends SubLTranslatedFile
     {
         public SubLObject $old_queue;
         public SubLObject $new_queue;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX28173_native() {
             this.$old_queue = (SubLObject)CommonSymbols.NIL;

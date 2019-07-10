@@ -14222,7 +14222,7 @@ public final class module0751 extends SubLTranslatedFile
     {
         public SubLObject $num;
         public SubLObject $constraints;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX51010_native() {
             this.$num = (SubLObject)CommonSymbols.NIL;

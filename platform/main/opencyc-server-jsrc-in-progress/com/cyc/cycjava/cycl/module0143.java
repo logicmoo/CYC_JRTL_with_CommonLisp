@@ -1522,7 +1522,7 @@ public final class module0143 extends SubLTranslatedFile
         public SubLObject $sbhl_link_node_search_state;
         public SubLObject $remaining_modules;
         public SubLObject $module_node_search_state_iterator;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX11719_native() {
             this.$sbhl_link_node_search_state = (SubLObject)CommonSymbols.NIL;
@@ -1583,7 +1583,7 @@ public final class module0143 extends SubLTranslatedFile
         public SubLObject $node;
         public SubLObject $direction;
         public SubLObject $genl_inverse_modeP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX11725_native() {
             this.$mt_link_iterator = (SubLObject)CommonSymbols.NIL;
@@ -1681,7 +1681,7 @@ public final class module0143 extends SubLTranslatedFile
         public SubLObject $direction;
         public SubLObject $mt;
         public SubLObject $genl_inverse_modeP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX11728_native() {
             this.$tv_link_iterator = (SubLObject)CommonSymbols.NIL;
@@ -1789,7 +1789,7 @@ public final class module0143 extends SubLTranslatedFile
         public SubLObject $mt;
         public SubLObject $tv;
         public SubLObject $genl_inverse_modeP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX11730_native() {
             this.$generating_functions = (SubLObject)CommonSymbols.NIL;

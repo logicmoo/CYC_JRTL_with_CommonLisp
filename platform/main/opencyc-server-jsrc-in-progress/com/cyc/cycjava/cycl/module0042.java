@@ -522,7 +522,7 @@ public final class module0042 extends SubLTranslatedFile
     {
         public SubLObject $stream;
         public SubLObject $cache;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX4472_native() {
             this.$stream = (SubLObject)CommonSymbols.NIL;

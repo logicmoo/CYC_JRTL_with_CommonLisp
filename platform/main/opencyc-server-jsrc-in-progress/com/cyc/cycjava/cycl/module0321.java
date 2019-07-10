@@ -2094,7 +2094,7 @@ public final class module0321 extends SubLTranslatedFile
         public SubLObject $justifyP;
         public SubLObject $restricted_assertion;
         public SubLObject $answers;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX24186_native() {
             this.$problem = (SubLObject)CommonSymbols.NIL;

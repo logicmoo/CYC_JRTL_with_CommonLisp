@@ -3176,7 +3176,7 @@ public final class module0749 extends SubLTranslatedFile
         public SubLObject $phrase;
         public SubLObject $constraint;
         public SubLObject $assertion;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX50672_native() {
             this.$phrase = (SubLObject)CommonSymbols.NIL;
@@ -3265,7 +3265,7 @@ public final class module0749 extends SubLTranslatedFile
     {
         public SubLObject $absolute_constraint;
         public SubLObject $relative_constraint;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX39306_native() {
             this.$absolute_constraint = (SubLObject)CommonSymbols.NIL;
@@ -3327,7 +3327,7 @@ public final class module0749 extends SubLTranslatedFile
         public SubLObject $output_list;
         public SubLObject $arg_position_map;
         public SubLObject $other;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX50687_native() {
             this.$cycl = (SubLObject)CommonSymbols.NIL;
@@ -3414,7 +3414,7 @@ public final class module0749 extends SubLTranslatedFile
         public SubLObject $html_open_tag;
         public SubLObject $html_close_tag;
         public SubLObject $agr;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX50689_native() {
             this.$string = (SubLObject)CommonSymbols.NIL;
@@ -3540,7 +3540,7 @@ public final class module0749 extends SubLTranslatedFile
         public SubLObject $gen_template_sets;
         public SubLObject $gen_templates;
         public SubLObject $arg_position_map;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX50701_native() {
             this.$formula = (SubLObject)CommonSymbols.NIL;
@@ -3676,7 +3676,7 @@ public final class module0749 extends SubLTranslatedFile
     public static final class $sX50705_native extends SubLStructNative
     {
         public SubLObject $item_queue;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX50705_native() {
             this.$item_queue = (SubLObject)CommonSymbols.NIL;

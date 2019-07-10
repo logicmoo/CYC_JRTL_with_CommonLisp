@@ -1789,7 +1789,7 @@ public final class module0117 extends SubLTranslatedFile
     public static final class $sX10135_native extends SubLStructNative
     {
         public SubLObject $function;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10135_native() {
             this.$function = (SubLObject)CommonSymbols.NIL;
@@ -1828,7 +1828,7 @@ public final class module0117 extends SubLTranslatedFile
         public SubLObject $host;
         public SubLObject $port;
         public SubLObject $protocol;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10137_native() {
             this.$host = (SubLObject)CommonSymbols.NIL;
@@ -1887,7 +1887,7 @@ public final class module0117 extends SubLTranslatedFile
         public SubLObject $invocation_info;
         public SubLObject $my_params;
         public SubLObject $source_filter;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10139_native() {
             this.$event = (SubLObject)CommonSymbols.NIL;
@@ -1964,7 +1964,7 @@ public final class module0117 extends SubLTranslatedFile
         public SubLObject $lock;
         public SubLObject $postings;
         public SubLObject $protocols;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10141_native() {
             this.$hierarchy = (SubLObject)CommonSymbols.NIL;
@@ -2039,7 +2039,7 @@ public final class module0117 extends SubLTranslatedFile
         public SubLObject $protocol;
         public SubLObject $event_serialize;
         public SubLObject $my_params_serialize;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10143_native() {
             this.$protocol = (SubLObject)CommonSymbols.NIL;

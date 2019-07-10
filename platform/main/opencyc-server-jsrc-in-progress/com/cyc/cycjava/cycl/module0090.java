@@ -1987,7 +1987,7 @@ public final class module0090 extends SubLTranslatedFile
     {
         public SubLObject $hit_count;
         public SubLObject $miss_count;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7780_native() {
             this.$hit_count = (SubLObject)CommonSymbols.NIL;
@@ -2034,7 +2034,7 @@ public final class module0090 extends SubLTranslatedFile
     {
         public SubLObject $cache;
         public SubLObject $metrics;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7782_native() {
             this.$cache = (SubLObject)CommonSymbols.NIL;
@@ -2082,7 +2082,7 @@ public final class module0090 extends SubLTranslatedFile
         public SubLObject $cache_strategy;
         public SubLObject $records;
         public SubLObject $timestamper;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7784_native() {
             this.$cache_strategy = (SubLObject)CommonSymbols.NIL;

@@ -911,7 +911,7 @@ public final class module0628 extends SubLTranslatedFile
         public SubLObject $message_queue;
         public SubLObject $inference_process;
         public SubLObject $inference_death_counter;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX42217_native() {
             this.$inference = (SubLObject)CommonSymbols.NIL;

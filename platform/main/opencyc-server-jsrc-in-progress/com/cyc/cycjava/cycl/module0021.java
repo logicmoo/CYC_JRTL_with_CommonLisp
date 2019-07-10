@@ -2883,7 +2883,7 @@ public final class module0021 extends SubLTranslatedFile
     {
         public SubLObject $internal_stream;
         public SubLObject $count;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2002_native() {
             this.$internal_stream = (SubLObject)CommonSymbols.NIL;
@@ -2930,7 +2930,7 @@ public final class module0021 extends SubLTranslatedFile
     {
         public SubLObject $internal_stream;
         public SubLObject $position;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2006_native() {
             this.$internal_stream = (SubLObject)CommonSymbols.NIL;
@@ -2976,7 +2976,7 @@ public final class module0021 extends SubLTranslatedFile
     public static final class $sX2010_native extends SubLStructNative
     {
         public SubLObject $position;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2010_native() {
             this.$position = (SubLObject)CommonSymbols.NIL;

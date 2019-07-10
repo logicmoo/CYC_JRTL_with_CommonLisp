@@ -1652,7 +1652,7 @@ public final class module0026 extends SubLTranslatedFile
     public static final class $sX2396_native extends SubLStructNative
     {
         public SubLObject $cobj;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2396_native() {
             this.$cobj = (SubLObject)CommonSymbols.NIL;
@@ -1689,7 +1689,7 @@ public final class module0026 extends SubLTranslatedFile
     public static final class $sX2400_native extends SubLStructNative
     {
         public SubLObject $filename;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2400_native() {
             this.$filename = (SubLObject)CommonSymbols.NIL;
@@ -1726,7 +1726,7 @@ public final class module0026 extends SubLTranslatedFile
     public static final class $sX2412_native extends SubLStructNative
     {
         public SubLObject $type;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2412_native() {
             this.$type = (SubLObject)CommonSymbols.NIL;
@@ -1764,7 +1764,7 @@ public final class module0026 extends SubLTranslatedFile
     {
         public SubLObject $repository_list;
         public SubLObject $key_string;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2416_native() {
             this.$repository_list = (SubLObject)CommonSymbols.NIL;

@@ -87,13 +87,13 @@ public class WeakHashTable
         this.rehashThreshold = rehashThreshold;
         bucketType = null;
         this.weakness = weakness;
-        if (weakness.equals(Keyword.KEY)) {
+        if (Keyword.KEY.theSameSymbol(weakness)) {
             bucketType = this.new HashEntryWeakKey();
-        } else if (weakness.equals(Keyword.VALUE)) {
+        } else if (Keyword.VALUE.theSameSymbol(weakness)) {
             bucketType = this.new HashEntryWeakValue();
-        } else if (weakness.equals(Keyword.KEY_AND_VALUE)) {
+        } else if (Keyword.KEY_AND_VALUE.theSameSymbol(weakness)) {
             bucketType = this.new HashEntryWeakKeyAndValue();
-        } else if (weakness.equals(Keyword.KEY_OR_VALUE)) {
+        } else if (Keyword.KEY_OR_VALUE.theSameSymbol(weakness)) {
             bucketType = this.new HashEntryWeakKeyOrValue();
         } else {
             // We handle this check in the wrapping Lisp code.

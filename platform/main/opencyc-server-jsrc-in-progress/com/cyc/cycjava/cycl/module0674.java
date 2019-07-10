@@ -6667,7 +6667,7 @@ public final class module0674 extends SubLTranslatedFile
         public SubLObject $direction;
         public SubLObject $unasserts;
         public SubLObject $metas;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX45181_native() {
             this.$sentence = (SubLObject)CommonSymbols.NIL;

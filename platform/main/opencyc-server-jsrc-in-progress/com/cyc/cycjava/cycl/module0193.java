@@ -634,7 +634,7 @@ public final class module0193 extends SubLTranslatedFile
     public static final class $variable_native extends SubLStructNative
     {
         public SubLObject $id;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $variable_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

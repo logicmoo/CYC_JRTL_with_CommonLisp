@@ -9112,7 +9112,7 @@ public final class module0361 extends SubLTranslatedFile
         public SubLObject $complex_problem_query_czer_index;
         public SubLObject $complex_problem_query_signatures;
         public SubLObject $proof_keeping_index;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $problem_store_native() {
             this.$guid = (SubLObject)CommonSymbols.NIL;
@@ -9574,7 +9574,7 @@ public final class module0361 extends SubLTranslatedFile
         public SubLObject $store;
         public SubLObject $indestructible_problems;
         public SubLObject $staleP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX26820_native() {
             this.$store = (SubLObject)CommonSymbols.NIL;

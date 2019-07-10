@@ -86,7 +86,7 @@ public class SubLOutputTextStreamImpl extends AbstractSubLTextStream implements 
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean lispEquals(Object obj) {
 		if (obj == null)
 			return false;
 		if (!(obj instanceof SubLOutputTextStreamImpl))

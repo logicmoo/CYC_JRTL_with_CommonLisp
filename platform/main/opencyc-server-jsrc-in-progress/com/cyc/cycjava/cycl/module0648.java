@@ -2794,7 +2794,7 @@ public final class module0648 extends SubLTranslatedFile
         public SubLObject $incoming_connector_types;
         public SubLObject $outgoing_connector_types;
         public SubLObject $rendering_info;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43359_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;
@@ -2942,7 +2942,7 @@ public final class module0648 extends SubLTranslatedFile
         public SubLObject $types;
         public SubLObject $parent;
         public SubLObject $semantics;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43361_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;
@@ -3011,7 +3011,7 @@ public final class module0648 extends SubLTranslatedFile
         public SubLObject $from;
         public SubLObject $to;
         public SubLObject $semantics;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43363_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;
@@ -3093,7 +3093,7 @@ public final class module0648 extends SubLTranslatedFile
     public static final class $sX43365_native extends SubLStructNative
     {
         public SubLObject $label;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43365_native() {
             this.$label = (SubLObject)CommonSymbols.NIL;

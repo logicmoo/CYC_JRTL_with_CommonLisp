@@ -2630,21 +2630,22 @@ public static boolean NULL(LispObject lispObject) {
 	return lispObject.isNil();
 }
 
-/**
- * @param arg
- * @return
- */
-public static String stringValueOf(LispObject arg) {
-	if(arg==null) return "#<JNULL-STRING-VALUE-OF>";
-	int wasnsideToString = LispObject.insideToString; 
-	try {
-		LispObject.insideToString = 0; 
-		return arg.printObject();		
-	} finally {
-		LispObject.insideToString = wasnsideToString;
-		// TODO: handle finally clause
+	/**
+	 * @param arg
+	 * @return
+	 */
+	public static String stringValueOf(LispObject arg) {
+		if (arg == null)
+			return "#<JNULL-STRING-VALUE-OF>";
+		int wasnsideToString = LispObject.insideToString;
+		try {
+			LispObject.insideToString = 0;
+			return arg.printObject();
+		} finally {
+			LispObject.insideToString = wasnsideToString;
+			// TODO: handle finally clause
+		}
 	}
-}
 
     public static String valueOfString(Object obj) {
         if (obj == null)
@@ -2959,7 +2960,10 @@ public static String stringValueOf(LispObject arg) {
 	 * TODO Describe the purpose of this method.
 	 */
 	public static void raiseUnreadable(LispObject o) {
-		if(insideToString == 0 && Lisp.initialized && Lisp.printingObject == null)
+		if (insideToString != 0 || !Lisp.initialized || Lisp.printingObject != null)
+			return;
+		if (Main.isSubLisp())
+			return;
 		error(new PrintNotReadable(list(Keyword.OBJECT, o)));
 	}
 	

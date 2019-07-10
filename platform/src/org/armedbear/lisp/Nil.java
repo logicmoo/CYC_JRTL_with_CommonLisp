@@ -52,6 +52,7 @@ public final class Nil extends SubLNil
     @Override
 	public Object javaInstance()
     {
+    	Debug.warn("Nil.javaInstance()");
         return null;
     }
 
@@ -64,7 +65,7 @@ public final class Nil extends SubLNil
           return Boolean.FALSE;
         }
       }
-      return javaInstance();
+      return null;//javaInstance();
     }
 
     @Override

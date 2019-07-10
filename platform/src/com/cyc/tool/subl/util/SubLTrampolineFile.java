@@ -36,7 +36,8 @@ implements SubLFile,  Singleton
    */
   public static SubLObject maybeDefault(SubLObject initVar, SubLSymbol gv, SubLObject otherwise)
   {
-    return ( ( Lisp.NIL != Symbols.boundp( initVar ) && gv != null ) ? gv.getGlobalValue() : otherwise );
+    final boolean boundp = Lisp.NIL != Symbols.boundp( initVar );
+    return ( ( boundp && gv != null ) ? gv.getGlobalValue() : otherwise );
   }
 
   /**

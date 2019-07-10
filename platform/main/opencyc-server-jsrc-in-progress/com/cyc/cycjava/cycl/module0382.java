@@ -1023,7 +1023,7 @@ public final class module0382 extends SubLTranslatedFile
         public SubLObject $join_vars;
         public SubLObject $first_proof_index;
         public SubLObject $second_proof_index;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX30281_native() {
             this.$join_vars = (SubLObject)CommonSymbols.NIL;

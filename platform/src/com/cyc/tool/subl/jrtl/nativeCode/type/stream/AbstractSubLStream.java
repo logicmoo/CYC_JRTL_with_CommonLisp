@@ -370,7 +370,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean lispEquals(Object obj) {
 		return obj == this;
 	}
 

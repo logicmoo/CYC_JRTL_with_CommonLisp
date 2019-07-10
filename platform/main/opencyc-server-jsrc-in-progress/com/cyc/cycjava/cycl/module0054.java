@@ -709,7 +709,7 @@ public final class module0054 extends SubLTranslatedFile
     {
         public SubLObject $num;
         public SubLObject $elements;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5431_native() {
             this.$num = (SubLObject)CommonSymbols.NIL;
@@ -756,7 +756,7 @@ public final class module0054 extends SubLTranslatedFile
     {
         public SubLObject $lock;
         public SubLObject $stack;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5435_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;

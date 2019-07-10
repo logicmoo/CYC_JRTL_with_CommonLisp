@@ -478,7 +478,7 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
 
     @Override
     public boolean eql(SubLObject obj) {
-        return equals(obj);
+        return lispEquals(obj);
     }
 
     @Override
@@ -492,7 +492,7 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean lispEquals(Object obj) {
         return this == obj;
     }
 

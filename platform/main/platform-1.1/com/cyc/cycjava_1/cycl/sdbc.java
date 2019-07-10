@@ -19,65 +19,16 @@
 
 package com.cyc.cycjava_1.cycl;
 
-import com.cyc.cycjava.cycl.*;
-import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
 
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
 import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
 //dm import com.cyc.cycjava_1.cycl.access_macros;
@@ -322,7 +273,7 @@ public  final class sdbc extends SubLTranslatedFile {
     public SubLObject $error_handling = NIL;
     public SubLObject $tickets = NIL;
     public SubLObject $mailman = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($sql_connection_native.class, $sym37$SQL_CONNECTION, $sym38$SQL_CONNECTION_P, $list39, $list40, new String[] {"$db", "$user", "$dbms_server", "$port", "$channel", "$statements", "$lock", "$subprotocol", "$proxy_server", "$error_handling", "$tickets", "$mailman"}, $list41, $list42, $sym43$SQLC_PRINT);
   }
 
@@ -350,7 +301,7 @@ public  final class sdbc extends SubLTranslatedFile {
     public SubLObject setField3(SubLObject value) { return $result = value; }
     public SubLObject $semaphore = NIL;
     public SubLObject $result = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($sql_ticket_native.class, $sym100$SQL_TICKET, $sym101$SQL_TICKET_P, $list102, $list103, new String[] {"$semaphore", "$result"}, $list104, $list105, $sym106$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -380,7 +331,7 @@ public  final class sdbc extends SubLTranslatedFile {
     public SubLObject $type = NIL;
     public SubLObject $message = NIL;
     public SubLObject $code = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($sdbc_error_native.class, $sym126$SDBC_ERROR, $sym127$SDBC_ERROR_P, $list128, $list129, new String[] {"$type", "$message", "$code"}, $list130, $list131, $sym132$SDBC_ERROR_PRINT);
   }
 
@@ -426,7 +377,7 @@ public  final class sdbc extends SubLTranslatedFile {
     public SubLObject $connection = NIL;
     public SubLObject $block_size = NIL;
     public SubLObject $id = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($sql_result_set_native.class, $sym155$SQL_RESULT_SET, $sym156$SQL_RESULT_SET_P, $list157, $list158, new String[] {"$rows", "$current", "$last", "$start", "$connection", "$block_size", "$id"}, $list159, $list160, $sym161$SQLRS_PRINT);
   }
 
@@ -466,7 +417,7 @@ public  final class sdbc extends SubLTranslatedFile {
     public SubLObject $settings = NIL;
     public SubLObject $batch = NIL;
     public SubLObject $rs = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($sql_statement_native.class, $sym199$SQL_STATEMENT, $sym200$SQL_STATEMENT_P, $list201, $list202, new String[] {"$connection", "$id", "$sql", "$settings", "$batch", "$rs"}, $list203, $list204, $sym106$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 

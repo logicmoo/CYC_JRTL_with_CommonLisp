@@ -1645,7 +1645,7 @@ public final class module0341 extends SubLTranslatedFile
         public SubLObject $print_func;
         public SubLObject $limbo;
         public SubLObject $current_node;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX25695_native() {
             this.$tree = (SubLObject)CommonSymbols.NIL;
@@ -1813,7 +1813,7 @@ public final class module0341 extends SubLTranslatedFile
         public SubLObject $depth;
         public SubLObject $options;
         public SubLObject $state;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX25697_native() {
             this.$search = (SubLObject)CommonSymbols.NIL;

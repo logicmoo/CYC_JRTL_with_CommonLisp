@@ -7045,7 +7045,7 @@ public final class module0819 extends SubLTranslatedFile
     $ic244$ = makeString( "public SubLObject getField~A() { return ~A; }~%" );
     $ic245$ = makeString( "public SubLObject setField~A(SubLObject value) { return ~A = value; }~%" );
     $ic246$ = makeString( "public SubLObject ~A = NIL;~%" );
-    $ic247$ = makeString( "private static final SubLStructDeclNative structDecl =~%" );
+    $ic247$ = makeString( "public static final SubLStructDeclNative structDecl =~%" );
     $ic248$ = makeString( ";~%" );
     $ic249$ = makeSymbol( "S#57837", "CYC" );
     $ic250$ = makeString( "$" );

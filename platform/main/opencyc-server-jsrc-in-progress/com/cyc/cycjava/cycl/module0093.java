@@ -7479,7 +7479,7 @@ public final class module0093 extends SubLTranslatedFile
         public SubLObject $input_cache;
         public SubLObject $output_cache;
         public SubLObject $property_list;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8138_native() {
             this.$stream = (SubLObject)CommonSymbols.NIL;
@@ -7636,7 +7636,7 @@ public final class module0093 extends SubLTranslatedFile
         public SubLObject $header_crc;
         public SubLObject $extension_space_size;
         public SubLObject $extension_space;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8140_native() {
             this.$size = (SubLObject)CommonSymbols.NIL;
@@ -7786,7 +7786,7 @@ public final class module0093 extends SubLTranslatedFile
         public SubLObject $key;
         public SubLObject $data_size;
         public SubLObject $data;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8142_native() {
             this.$size = (SubLObject)CommonSymbols.NIL;
@@ -7869,7 +7869,7 @@ public final class module0093 extends SubLTranslatedFile
     {
         public SubLObject $key_offset;
         public SubLObject $hash_code;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8144_native() {
             this.$key_offset = (SubLObject)CommonSymbols.NIL;
@@ -7920,7 +7920,7 @@ public final class module0093 extends SubLTranslatedFile
         public SubLObject $hash_fn;
         public SubLObject $encoding_key_input_fn;
         public SubLObject $encoding_key_output_fn;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8146_native() {
             this.$encoding_input_fn = (SubLObject)CommonSymbols.NIL;
@@ -8003,7 +8003,7 @@ public final class module0093 extends SubLTranslatedFile
     {
         public SubLObject $size;
         public SubLObject $next;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8148_native() {
             this.$size = (SubLObject)CommonSymbols.NIL;
@@ -8052,7 +8052,7 @@ public final class module0093 extends SubLTranslatedFile
         public SubLObject $tempstem;
         public SubLObject $tempfile;
         public SubLObject $keystream;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8150_native() {
             this.$fht = (SubLObject)CommonSymbols.NIL;
@@ -8118,7 +8118,7 @@ public final class module0093 extends SubLTranslatedFile
         public SubLObject $tempstem;
         public SubLObject $in_files;
         public SubLObject $out_files;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8152_native() {
             this.$tempstem = (SubLObject)CommonSymbols.NIL;

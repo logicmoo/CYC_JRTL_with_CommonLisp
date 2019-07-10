@@ -869,7 +869,7 @@ public final class module0095 extends SubLTranslatedFile
     {
         public SubLObject $data_stream;
         public SubLObject $index_stream;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8624_native() {
             this.$data_stream = (SubLObject)CommonSymbols.NIL;

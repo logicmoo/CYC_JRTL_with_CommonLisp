@@ -9504,7 +9504,7 @@ public final class module0737 extends SubLTranslatedFile
     {
         public SubLObject $syntactic_supports;
         public SubLObject $semantic_supports;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX49546_native() {
             this.$syntactic_supports = (SubLObject)CommonSymbols.NIL;

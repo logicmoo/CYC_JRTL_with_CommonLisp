@@ -18,96 +18,17 @@
 */
 
 package com.cyc.cycjava_1.cycl.sbhl;
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
+ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
 
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
 import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-
-
-//dm import com.cyc.cycjava_1.cycl.access_macros;
-//dm import com.cyc.cycjava_1.cycl.assertions_high;
-//dm import com.cyc.cycjava_1.cycl.constant_handles;
-//dm import com.cyc.cycjava_1.cycl.constants_high;
-//dm import com.cyc.cycjava_1.cycl.deck;
-//dm import com.cyc.cycjava_1.cycl.dictionary;
-//dm import com.cyc.cycjava_1.cycl.dictionary_contents;
-//dm import com.cyc.cycjava_1.cycl.dictionary_utilities;
-//dm import com.cyc.cycjava_1.cycl.forts;
-//dm import com.cyc.cycjava_1.cycl.function_terms;
-//dm import com.cyc.cycjava_1.cycl.genl_predicates;
-//dm import com.cyc.cycjava_1.cycl.genls;
-import com.cyc.cycjava_1.cycl.id_index;
-//dm import com.cyc.cycjava_1.cycl.inference.harness.inference_metrics;
-//dm import com.cyc.cycjava_1.cycl.isa;
-//dm import com.cyc.cycjava_1.cycl.list_utilities;
-//dm import com.cyc.cycjava_1.cycl.meta_macros;
-//dm import com.cyc.cycjava_1.cycl.mt_relevance_macros;
-//dm import com.cyc.cycjava_1.cycl.nart_handles;
-//dm import com.cyc.cycjava_1.cycl.obsolete;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_graphs;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_methods;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_link_vars;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_links;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_macros;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_utilities;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_marking_vars;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_utilities;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_module_vars;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_paranoia;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_methods;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_vars;
-//dm import com.cyc.cycjava_1.cycl.sbhl.sbhl_search_what_mts;
-//dm import com.cyc.cycjava_1.cycl.set;
-//dm import com.cyc.cycjava_1.cycl.set_contents;
-//dm import com.cyc.cycjava_1.cycl.set_utilities;
-//dm import com.cyc.cycjava_1.cycl.subl_macro_promotions;
-//dm import com.cyc.cycjava_1.cycl.subl_macros;
-//dm import com.cyc.cycjava_1.cycl.subl_promotions;
-//dm import com.cyc.cycjava_1.cycl.system_parameters;
-//dm import com.cyc.cycjava_1.cycl.utilities_macros;
 
 public  final class sbhl_cache extends SubLTranslatedFile {
 

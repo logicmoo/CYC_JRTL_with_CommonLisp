@@ -1159,7 +1159,7 @@ public final class module0007 extends SubLTranslatedFile
         public SubLObject $test_cases;
         public SubLObject $test_suites;
         public SubLObject $provisional_p;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX205_native() {
             this.$basis = (SubLObject)CommonSymbols.NIL;
@@ -1254,7 +1254,7 @@ public final class module0007 extends SubLTranslatedFile
         public SubLObject $default_pathname;
         public SubLObject $modules;
         public SubLObject $provisional_p;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX208_native() {
             this.$basis = (SubLObject)CommonSymbols.NIL;

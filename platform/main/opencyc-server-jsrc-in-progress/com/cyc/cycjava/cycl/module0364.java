@@ -1565,7 +1565,7 @@ public final class module0364 extends SubLTranslatedFile
         public SubLObject $data;
         public SubLObject $proofs;
         public SubLObject $memoization_state;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX27585_native() {
             this.$suid = (SubLObject)CommonSymbols.NIL;
@@ -1677,7 +1677,7 @@ public final class module0364 extends SubLTranslatedFile
     {
         public SubLObject $problem;
         public SubLObject $variable_map;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX27607_native() {
             this.$problem = (SubLObject)CommonSymbols.NIL;

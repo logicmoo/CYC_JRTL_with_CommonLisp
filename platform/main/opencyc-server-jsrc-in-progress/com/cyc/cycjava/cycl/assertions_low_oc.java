@@ -2097,7 +2097,7 @@ public final class assertions_low_oc
     public SubLObject $flags;
     public SubLObject $arguments;
     public SubLObject $plist;
-    private static final SubLStructDeclNative structDecl;
+    public static final SubLStructDeclNative structDecl;
 
     public $sX13955_native()
     {

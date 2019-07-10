@@ -1064,7 +1064,7 @@ public final class module0755 extends SubLTranslatedFile
         public SubLObject $cycl;
         public SubLObject $agr;
         public SubLObject $phrases;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX51826_native() {
             this.$cycl = (SubLObject)CommonSymbols.NIL;
@@ -1132,7 +1132,7 @@ public final class module0755 extends SubLTranslatedFile
         public SubLObject $rms;
         public SubLObject $backward_looking_center;
         public SubLObject $id;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX51845_native() {
             this.$rms = (SubLObject)CommonSymbols.NIL;

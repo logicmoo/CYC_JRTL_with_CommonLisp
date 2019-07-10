@@ -567,7 +567,7 @@ public final class module0119 extends SubLTranslatedFile
     {
         public SubLObject $lock;
         public SubLObject $mailboxes;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10304_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;

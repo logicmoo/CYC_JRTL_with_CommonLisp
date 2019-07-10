@@ -4728,7 +4728,7 @@ public final class module0714 extends SubLTranslatedFile
         public SubLObject $stats;
         public SubLObject $options;
         public SubLObject $thread;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX48033_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

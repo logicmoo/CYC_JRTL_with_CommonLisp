@@ -1452,7 +1452,7 @@ public final class module0105 extends SubLTranslatedFile
         public SubLObject $nodes;
         public SubLObject $predicate;
         public SubLObject $key;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX9392_native() {
             this.$next = (SubLObject)CommonSymbols.NIL;
@@ -1517,7 +1517,7 @@ public final class module0105 extends SubLTranslatedFile
     {
         public SubLObject $priority;
         public SubLObject $value;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX9394_native() {
             this.$priority = (SubLObject)CommonSymbols.NIL;

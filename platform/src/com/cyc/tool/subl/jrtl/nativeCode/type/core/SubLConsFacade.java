@@ -194,8 +194,8 @@ public class SubLConsFacade extends AbstractSubLSequence
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		return list.equals(obj);
+	public boolean lispEquals(Object obj) {
+		return list.lispEquals(obj);
 	}
 
 	@Override

@@ -835,7 +835,7 @@ public final class module0102 extends SubLTranslatedFile
     {
         public SubLObject $rows;
         public SubLObject $columns;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX9231_native() {
             this.$rows = (SubLObject)CommonSymbols.NIL;

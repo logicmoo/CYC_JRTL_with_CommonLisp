@@ -660,7 +660,7 @@ public final class module0702 extends SubLTranslatedFile
         public SubLObject $base_uri;
         public SubLObject $connector;
         public SubLObject $local_part;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX46858_native() {
             this.$base_uri = (SubLObject)CommonSymbols.NIL;

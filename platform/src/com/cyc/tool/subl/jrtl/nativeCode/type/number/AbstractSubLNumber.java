@@ -216,9 +216,9 @@ public abstract class AbstractSubLNumber extends FromSubLisp implements SubLNumb
 		else if (this.isDouble() || obj.isDouble())
 			return this.doubleValue() == obj.doubleValue();
 		else if (this.isBigIntegerBignum())
-			return this.equals(obj);
+			return this.lispEquals(obj);
 		else if (obj.isBigIntegerBignum())
-			return ((SubLBigIntBignum) obj).equals(this);
+			return ((SubLBigIntBignum) obj).lispEquals(this);
 		else if (this.isLongBignum() || obj.isLongBignum())
 			return this.longValue() == obj.longValue();
 		return this.intValue() == obj.intValue();
@@ -281,7 +281,7 @@ public abstract class AbstractSubLNumber extends FromSubLisp implements SubLNumb
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean lispEquals(Object obj) {
 		return obj instanceof SubLObject && eql((SubLObject) obj);
 	}
 

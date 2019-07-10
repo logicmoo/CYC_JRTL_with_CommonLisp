@@ -2165,7 +2165,7 @@ public final class module0795 extends SubLTranslatedFile
         public SubLObject $queue;
         public SubLObject $most_recently_added_thought;
         public SubLObject $topical_thoughts;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX55445_native() {
             this.$user = (SubLObject)CommonSymbols.NIL;

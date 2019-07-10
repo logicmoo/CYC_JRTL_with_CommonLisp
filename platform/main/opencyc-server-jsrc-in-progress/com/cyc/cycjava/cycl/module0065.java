@@ -2693,7 +2693,7 @@ public final class module0065 extends SubLTranslatedFile
         public SubLObject $next_id;
         public SubLObject $old_objects;
         public SubLObject $new_objects;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX6282_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;

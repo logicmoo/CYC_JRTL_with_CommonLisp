@@ -2556,7 +2556,7 @@ public final class module0053 extends SubLTranslatedFile
         public SubLObject $state;
         public SubLObject $lower;
         public SubLObject $higher;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5253_native() {
             this.$tag = (SubLObject)CommonSymbols.NIL;
@@ -2622,7 +2622,7 @@ public final class module0053 extends SubLTranslatedFile
         public SubLObject $root;
         public SubLObject $test;
         public SubLObject $size;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5255_native() {
             this.$root = (SubLObject)CommonSymbols.NIL;
@@ -2680,7 +2680,7 @@ public final class module0053 extends SubLTranslatedFile
         public SubLObject $balance;
         public SubLObject $lower;
         public SubLObject $higher;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5260_native() {
             this.$data = (SubLObject)CommonSymbols.NIL;

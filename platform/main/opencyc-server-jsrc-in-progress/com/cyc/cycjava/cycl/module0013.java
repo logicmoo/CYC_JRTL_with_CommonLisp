@@ -598,7 +598,7 @@ public final class module0013 extends SubLTranslatedFile
         public SubLObject $count;
         public SubLObject $total;
         public SubLObject $max;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX555_native() {
             this.$count = (SubLObject)CommonSymbols.NIL;

@@ -2243,7 +2243,7 @@ public final class module0661 extends SubLTranslatedFile
         public SubLObject $value_update_fn;
         public SubLObject $initial_filter_value;
         public SubLObject $effective_fn_slotname;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX44265_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

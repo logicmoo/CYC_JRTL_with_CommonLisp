@@ -173,7 +173,7 @@ public class ConsesLow extends SubLTrampolineFile {
 	public static SubLList list(SubLObject[] objects) {
 		return SubLObjectFactory.makeList(objects);
 	}
-
+	
 	public static SubLObject listS(SubLObject finalCdr) {
 		return SubLObjectFactory.makeListS(finalCdr);
 	}

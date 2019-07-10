@@ -481,7 +481,7 @@ public final class Java_v1
             Class[] argTypes = m.getParameterTypes();
             for (int i = 2; i < args.length; i++) {
                 LispObject arg = args[i];
-                if (arg.equals(NIL)) {
+                if (NULL((LispObject) arg)) {
                   methodArgs[i-2] = false;
                 } else if (arg.equals(T)) {
                   methodArgs[i-2] = true;
@@ -583,7 +583,7 @@ public final class Java_v1
                 Object[] initargs = new Object[args.length-1];
                 for (int i = 1; i < args.length; i++) {
                     LispObject arg = args[i];
-                    if (arg.equals(NIL)) {
+                    if (NULL(arg)) {
                       initargs[i-1] = false ;
                     } else if (arg.equals(T)) {
                       initargs[i-1] = true;
@@ -901,11 +901,12 @@ public final class Java_v1
             methodArgs = new Object[argTypes.length];
             for (int i = 2; i < args.length; i++) {
               LispObject arg = args[i];
-              if (arg.equals(NIL)) {
-                methodArgs[i-2] = false;
-              } else if (arg.equals(T)) {
-                methodArgs[i-2] = true;
-              } else {
+//              if (NULL((LispObject) arg)) {
+//                methodArgs[i-2] = false;
+//              } else if (arg.equals(T)) {
+//                methodArgs[i-2] = true;
+//              } else
+              {
                 methodArgs[i-2] = arg.javaInstance(argTypes[i-2]);
               }
             }

@@ -3,12 +3,13 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
+import java.util.Comparator;
 import java.util.Map;
 
 public interface SubLHashtableFactory {
-	Map createMap();
+	Map createMap(Comparator c);
 
-	Map createMap(int p0);
+	Map createMap(Comparator c, int p0);
 
-	Map createMap(int p0, float p1);
+	Map createMap(Comparator c, int p0, float p1);
 }

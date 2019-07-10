@@ -1015,7 +1015,7 @@ public final class module0418 extends SubLTranslatedFile
         public SubLObject $creation_date;
         public SubLObject $creator;
         public SubLObject $workingP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX32431_native() {
             this.$hl_module = (SubLObject)CommonSymbols.NIL;

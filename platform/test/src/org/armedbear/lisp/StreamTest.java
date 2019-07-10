@@ -27,7 +27,7 @@ public class StreamTest
     Stream in = new Stream(Symbol.SYSTEM_STREAM, pathname.getInputStream(), Symbol.CHARACTER);
     LispObject o = in.read(false, Lisp.EOF, false,
                            LispThread.currentThread(), Stream.currentReadtable);
-    assertFalse(o.equals(Lisp.NIL));
+    assertFalse(o.equal(Lisp.NIL));
     in._close();
     file.delete();
   }

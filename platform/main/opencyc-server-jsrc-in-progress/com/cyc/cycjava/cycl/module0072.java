@@ -769,7 +769,7 @@ public final class module0072 extends SubLTranslatedFile
         public SubLObject $ltype;
         public SubLObject $set_from_red;
         public SubLObject $valuetype;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX6655_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

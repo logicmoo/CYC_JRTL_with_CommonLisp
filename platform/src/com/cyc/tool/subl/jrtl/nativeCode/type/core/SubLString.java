@@ -271,7 +271,7 @@ abstract public class SubLString
   }
 
   @Override
-  public final boolean equals(Object obj)
+  public final boolean lispEquals(Object obj)
   {
     if( obj == null )
       return false;

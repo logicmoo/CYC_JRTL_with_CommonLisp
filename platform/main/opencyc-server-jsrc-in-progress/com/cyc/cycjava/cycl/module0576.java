@@ -3094,7 +3094,7 @@ public final class module0576 extends SubLTranslatedFile
         public SubLObject $hash;
         public SubLObject $extra;
         public SubLObject $weak_ist_formula;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX38712_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;
@@ -3172,7 +3172,7 @@ public final class module0576 extends SubLTranslatedFile
         public SubLObject $tip_ccreate_fn;
         public SubLObject $tip_ascreate_fn;
         public SubLObject $tip_asreassert_fn;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX38714_native() {
             this.$state = (SubLObject)CommonSymbols.NIL;

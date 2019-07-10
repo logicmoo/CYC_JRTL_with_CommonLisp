@@ -11,6 +11,7 @@ import org.armedbear.lisp.LispObject;
 import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable.SubLHashtableKeyEntry;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
@@ -44,8 +45,7 @@ public class Hashtables implements SubLFile {
 	public static SubLObject gethash(SubLObject key, SubLObject table, SubLObject defaultValue) {
 		SubLObject result = table.get(key);
 		if (result == null)
-			return Values.values(defaultValue == CommonSymbols.UNPROVIDED ? SubLNil.NIL : defaultValue,
-					SubLNil.NIL);
+			return Values.values(defaultValue == CommonSymbols.UNPROVIDED ? SubLNil.NIL : defaultValue, SubLNil.NIL);
 		return Values.values(result, CommonSymbols.T);
 	}
 
@@ -65,7 +65,7 @@ public class Hashtables implements SubLFile {
 		return result == null ? SubLNil.NIL : result;
 	}
 
-	public static SubLObject gethash_without_values(SubLObject key, SubLObject table, SubLObject defaultValue) {	  
+	public static SubLObject gethash_without_values(SubLObject key, SubLObject table, SubLObject defaultValue) {
 		SubLObject result = table.get(key);
 		return result != null ? result : defaultValue == CommonSymbols.UNPROVIDED ? SubLNil.NIL : defaultValue;
 	}

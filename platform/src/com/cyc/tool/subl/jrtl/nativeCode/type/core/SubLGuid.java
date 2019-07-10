@@ -111,7 +111,7 @@ public class SubLGuid extends NLispObject implements SubLObject, Comparable<SubL
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean lispEquals(Object obj) {
 		return obj != null && (obj == this || obj instanceof SubLGuid && compareTo((SubLGuid) obj) == 0);
 	}
 

@@ -1077,7 +1077,7 @@ public final class module0366 extends SubLTranslatedFile
         public SubLObject $subproofs;
         public SubLObject $dependents;
         public SubLObject $processedP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX27811_native() {
             this.$suid = (SubLObject)CommonSymbols.NIL;

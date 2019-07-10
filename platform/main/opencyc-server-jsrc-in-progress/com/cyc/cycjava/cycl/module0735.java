@@ -3173,7 +3173,7 @@ public final class module0735 extends SubLTranslatedFile
         public SubLObject $arg2;
         public SubLObject $trie_iterator;
         public SubLObject $entry_iterator;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX49438_native() {
             this.$speech_part_predicate = (SubLObject)CommonSymbols.NIL;

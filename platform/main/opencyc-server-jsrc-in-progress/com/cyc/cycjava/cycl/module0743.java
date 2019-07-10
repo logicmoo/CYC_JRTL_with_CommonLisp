@@ -3928,7 +3928,7 @@ public final class module0743 extends SubLTranslatedFile
         public SubLObject $constituents;
         public SubLObject $offset;
         public SubLObject $mother;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX106_native() {
             this.$string = (SubLObject)CommonSymbols.NIL;
@@ -4025,7 +4025,7 @@ public final class module0743 extends SubLTranslatedFile
         public SubLObject $leading_tags;
         public SubLObject $following_tags;
         public SubLObject $current_offset;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX50247_native() {
             this.$state = (SubLObject)CommonSymbols.NIL;
@@ -4117,7 +4117,7 @@ public final class module0743 extends SubLTranslatedFile
     {
         public SubLObject $sentences;
         public SubLObject $mother;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX50250_native() {
             this.$sentences = (SubLObject)CommonSymbols.NIL;
@@ -4163,7 +4163,7 @@ public final class module0743 extends SubLTranslatedFile
     public static final class $sX50252_native extends SubLStructNative
     {
         public SubLObject $paragraphs;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX50252_native() {
             this.$paragraphs = (SubLObject)CommonSymbols.NIL;

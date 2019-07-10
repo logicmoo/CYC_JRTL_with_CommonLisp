@@ -2223,7 +2223,7 @@ public final class module0295 extends SubLTranslatedFile
         public SubLObject $shared_var_bindings;
         public SubLObject $mt;
         public SubLObject $forts;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX22425_native() {
             this.$expression = (SubLObject)CommonSymbols.NIL;
@@ -2295,7 +2295,7 @@ public final class module0295 extends SubLTranslatedFile
         public SubLObject $rule_pred;
         public SubLObject $preconditions;
         public SubLObject $properties;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX22427_native() {
             this.$first_rt = (SubLObject)CommonSymbols.NIL;

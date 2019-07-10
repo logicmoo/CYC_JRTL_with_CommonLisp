@@ -7384,7 +7384,7 @@ public final class module0686 extends SubLTranslatedFile
         public SubLObject $cyclists;
         public SubLObject $notes;
         public SubLObject $answer_cardinality;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX46003_native() {
             this.$test_spec = (SubLObject)CommonSymbols.NIL;
@@ -7531,7 +7531,7 @@ public final class module0686 extends SubLTranslatedFile
         public SubLObject $binding_set;
         public SubLObject $status;
         public SubLObject $id;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX46004_native() {
             this.$binding_set = (SubLObject)CommonSymbols.NIL;

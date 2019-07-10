@@ -119,9 +119,12 @@ public class FaslClassLoader extends JavaClassLoader {
       } else if (truename instanceof Pathname) {
           return Pathname.mergePathnames(name, (Pathname) truename, Keyword.NEWEST)
                   .getInputStream();
-      } else if (!Pathname.truename(name).equals(NIL)) {
-              return name.getInputStream();
-      }
+      } else {
+		LispObject r = Pathname.truename(name);
+		if (!LispObject.NULL(r)) {
+		          return name.getInputStream();
+		  }
+	}
 
       return null;
     }

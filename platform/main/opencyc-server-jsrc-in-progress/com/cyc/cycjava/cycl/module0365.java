@@ -1412,7 +1412,7 @@ public final class module0365 extends SubLTranslatedFile
         public SubLObject $status;
         public SubLObject $progress_iterator;
         public SubLObject $data;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX24101_native() {
             this.$suid = (SubLObject)CommonSymbols.NIL;

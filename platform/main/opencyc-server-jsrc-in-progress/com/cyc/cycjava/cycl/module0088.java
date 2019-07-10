@@ -677,7 +677,7 @@ public final class module0088 extends SubLTranslatedFile
         public SubLObject $current_state;
         public SubLObject $memory;
         public SubLObject $indexed_output;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX7641_native() {
             this.$initial_state = (SubLObject)CommonSymbols.NIL;

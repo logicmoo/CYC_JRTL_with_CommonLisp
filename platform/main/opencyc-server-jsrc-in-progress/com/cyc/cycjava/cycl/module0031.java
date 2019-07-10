@@ -1196,7 +1196,7 @@ public final class module0031 extends SubLTranslatedFile
         public SubLObject $test;
         public SubLObject $count;
         public SubLObject $hash_stash;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2880_native() {
             this.$nodes = (SubLObject)CommonSymbols.NIL;

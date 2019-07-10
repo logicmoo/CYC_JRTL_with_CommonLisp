@@ -19,65 +19,17 @@
 
 package com.cyc.cycjava_1.cycl;
 
-import com.cyc.cycjava.cycl.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
 import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
 
 
 //dm import com.cyc.cycjava_1.cycl.access_macros;
@@ -152,7 +104,7 @@ public  final class file_hash_table extends SubLTranslatedFile {
     public SubLObject $input_cache = NIL;
     public SubLObject $output_cache = NIL;
     public SubLObject $property_list = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($file_hash_table_native.class, $sym0$FILE_HASH_TABLE, $sym1$FILE_HASH_TABLE_P, $list2, $list3, new String[] {"$stream", "$header", "$lock", "$encoding_input_fn", "$encoding_output_fn", "$encoding_size_fn", "$encoding_key_input_fn", "$encoding_key_output_fn", "$testfn", "$hash_fn", "$input_cache", "$output_cache", "$property_list"}, $list4, $list5, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -212,7 +164,7 @@ public  final class file_hash_table extends SubLTranslatedFile {
     public SubLObject $header_crc = NIL;
     public SubLObject $extension_space_size = NIL;
     public SubLObject $extension_space = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($htfile_header_native.class, $sym55$HTFILE_HEADER, $sym56$HTFILE_HEADER_P, $list57, $list58, new String[] {"$size", "$version_major", "$version_minor", "$object_space_offset", "$key_space_offset", "$current_heap_top", "$item_count", "$capacity", "$free_list_head", "$deletion_count", "$header_crc", "$extension_space_size", "$extension_space"}, $list59, $list60, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -251,7 +203,7 @@ public  final class file_hash_table extends SubLTranslatedFile {
     public SubLObject $key = NIL;
     public SubLObject $data_size = NIL;
     public SubLObject $data = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($htfile_object_entry_native.class, $sym112$HTFILE_OBJECT_ENTRY, $sym113$HTFILE_OBJECT_ENTRY_P, $list114, $list115, new String[] {"$size", "$type", "$key_size", "$key", "$data_size", "$data"}, $list116, $list117, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -278,7 +230,7 @@ public  final class file_hash_table extends SubLTranslatedFile {
     public SubLObject setField3(SubLObject value) { return $hash_code = value; }
     public SubLObject $key_offset = NIL;
     public SubLObject $hash_code = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($htfile_key_entry_native.class, $sym136$HTFILE_KEY_ENTRY, $sym137$HTFILE_KEY_ENTRY_P, $list138, $list139, new String[] {"$key_offset", "$hash_code"}, $list140, $list141, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -422,7 +374,7 @@ public  final class file_hash_table extends SubLTranslatedFile {
     public SubLObject $hash_fn = NIL;
     public SubLObject $encoding_key_input_fn = NIL;
     public SubLObject $encoding_key_output_fn = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($fht_serialization_entry_native.class, $sym155$FHT_SERIALIZATION_ENTRY, $sym156$FHT_SERIALIZATION_ENTRY_P, $list157, $list158, new String[] {"$encoding_input_fn", "$encoding_output_fn", "$encoding_size_fn", "$hash_fn", "$encoding_key_input_fn", "$encoding_key_output_fn"}, $list159, $list160, $sym161$PRINT_FHT_SERIALIZATION_ENTRY);
   }
 
@@ -566,7 +518,7 @@ public  final class file_hash_table extends SubLTranslatedFile {
     public SubLObject setField3(SubLObject value) { return $next = value; }
     public SubLObject $size = NIL;
     public SubLObject $next = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($htfile_file_block_entry_native.class, $sym285$HTFILE_FILE_BLOCK_ENTRY, $sym286$HTFILE_FILE_BLOCK_ENTRY_P, $list287, $list288, new String[] {"$size", "$next"}, $list289, $list290, $sym291$PRINT_HTFILE_FILE_BLOCK_ENTRY);
   }
 
@@ -646,7 +598,7 @@ public  final class file_hash_table extends SubLTranslatedFile {
     public SubLObject $tempstem = NIL;
     public SubLObject $tempfile = NIL;
     public SubLObject $keystream = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($fast_create_fht_native.class, $sym335$FAST_CREATE_FHT, $sym336$FAST_CREATE_FHT_P, $list337, $list338, new String[] {"$fht", "$tempstem", "$tempfile", "$keystream"}, $list339, $list340, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 
@@ -679,7 +631,7 @@ public  final class file_hash_table extends SubLTranslatedFile {
     public SubLObject $tempstem = NIL;
     public SubLObject $in_files = NIL;
     public SubLObject $out_files = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($fast_fht_keystream_sorter_native.class, $sym369$FAST_FHT_KEYSTREAM_SORTER, $sym370$FAST_FHT_KEYSTREAM_SORTER_P, $list371, $list372, new String[] {"$tempstem", "$in_files", "$out_files"}, $list373, $list374, $sym6$DEFAULT_STRUCT_PRINT_FUNCTION);
   }
 

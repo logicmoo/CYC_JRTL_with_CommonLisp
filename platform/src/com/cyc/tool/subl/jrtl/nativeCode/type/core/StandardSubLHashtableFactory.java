@@ -4,6 +4,7 @@
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.lang.reflect.Constructor;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -31,17 +32,17 @@ public class StandardSubLHashtableFactory implements SubLHashtableFactory {
 	}
 
 	@Override
-	public Map createMap() {
+	public Map createMap(Comparator c) {
 		return new HashMap();
 	}
 
 	@Override
-	public Map createMap(int size) {
+	public Map createMap(Comparator c, int size) {
 		return new HashMap(size);
 	}
 
 	@Override
-	public Map createMap(int size, float loadFactor) {
+	public Map createMap(Comparator c, int size, float loadFactor) {
 		return new HashMap(size, loadFactor);
 	}
 }

@@ -75,7 +75,7 @@ abstract public class SubLAlienObject extends FromSubLisp implements SubLObject 
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean lispEquals(Object obj) {
 		if (obj == null)
 			return false;
 		if (obj == this)

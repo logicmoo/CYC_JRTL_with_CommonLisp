@@ -2602,7 +2602,7 @@ public final class module0605 extends SubLTranslatedFile
     {
         public SubLObject $id;
         public SubLObject $pattern;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX40768_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;
@@ -2648,7 +2648,7 @@ public final class module0605 extends SubLTranslatedFile
     public static final class $sX40772_native extends SubLStructNative
     {
         public SubLObject $address;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX40772_native() {
             this.$address = (SubLObject)CommonSymbols.NIL;

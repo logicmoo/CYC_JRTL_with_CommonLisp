@@ -32,7 +32,7 @@
  */
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
+import static org.armedbear.lisp.Lisp.*;
 
 import java.io.IOException;
 import java.util.AbstractList;
@@ -43,10 +43,11 @@ import java.util.List;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 abstract public class LispObject extends AbstractSubLObject {
-	
+
 	final Object $_DEBUG$INFO_$ = new Object() {
 		@Override
 		public String toString() {
@@ -61,13 +62,13 @@ abstract public class LispObject extends AbstractSubLObject {
 	};
 
 	public String debugInfo() {
-		
+
 		LispObject parts = getParts();
 		if (parts == NIL || parts == null) {
 			parts = LispObject.this;
 		}
 		final Symbol pprint = Symbol.PPRINT;
-		
+
 		if (pprint == null || isTooSoon() || pprint.getSymbolFunction() == null) {
 			return parts.printObject();
 		}
@@ -82,12 +83,11 @@ abstract public class LispObject extends AbstractSubLObject {
 		}
 
 	}
-    
+
 //    public static Package getCurrentPackage() {
 //    	return Lisp.getCurrentPackage();
 //    }
 
-	
 	@Override
 	public SubLObject first() {
 		return car();
@@ -363,7 +363,7 @@ abstract public class LispObject extends AbstractSubLObject {
 	}
 
 	public boolean eql(LispObject obj) {
-		return this == obj;
+		return super.eql(obj);
 	}
 
 	public final LispObject EQL(LispObject obj) {
@@ -379,15 +379,89 @@ abstract public class LispObject extends AbstractSubLObject {
 	}
 
 	public boolean equal(LispObject obj) {
-		return this == obj;
+		return super.equal(obj);
+		// return this == obj;
 	}
 
 	public boolean equalp(int n) {
-		return false;
+		return isInteger() && longValue() == n;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject#equalp(com.cyc
+	 * .tool.subl.jrtl.nativeCode.type.core.SubLObject)
+	 */
+	@Override
+	public boolean equalp(SubLObject obj) {
+		return equalp((LispObject) obj);
+	}
+
+	public boolean equalsObject(LispObject obj) {
+		return obj == this;
+	}
+
+	public boolean theSameSymbol(LispObject obj) {
+		return obj == this;
+	}
+
+//    
+	public boolean lispEquals(Object obj) {
+		return equal((LispObject) obj);
+	}
+
+	public boolean equals(Symbol obj) {
+		if (obj.getClass() == getClass()) {
+			return equal((LispObject) obj);
+		}
+		if (obj == T)
+			return this == T;
+		if (false)
+			Debug.bug();
+		return obj == this;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == T)
+			return this == T;
+		if (obj.getClass() == getClass()) {
+			return equal((LispObject) obj);
+		}
+		if (false)
+			Debug.bug();
+		return obj == this;
+	}
+
+//    
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject#equalp(com.cyc
+	 * .tool.subl.jrtl.nativeCode.type.core.SubLObject)
+	 */
+	@Override
+	public boolean equal(SubLObject obj) {
+		return equal((LispObject) obj);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject#equalp(com.cyc
+	 * .tool.subl.jrtl.nativeCode.type.core.SubLObject)
+	 */
+	@Override
+	public boolean eql(SubLObject obj) {
+		return eql((LispObject) obj);
 	}
 
 	public boolean equalp(LispObject obj) {
-		return this == obj;
+		return super.equalp(obj);
 	}
 
 	public LispObject ABS() {
@@ -846,7 +920,7 @@ abstract public class LispObject extends AbstractSubLObject {
 	private String printObjectChecked() {
 		if (insideToString == 0)
 			return printObjectImpl();
-		
+
 		final LispThread thread = LispThread.currentThread();
 		final boolean printCircle = (Symbol.PRINT_CIRCLE.symbolValue(thread) != NIL);
 		if (printCircle)
@@ -854,8 +928,8 @@ abstract public class LispObject extends AbstractSubLObject {
 
 		final SpecialBindingsMark mark = thread.markSpecialBindings();
 		final ThreadLocal<List> printingobjectr2 = printingObjectR;
-		if(printingobjectr2==null) {
-			return "#=( " +  easyToString() + ")=#";
+		if (printingobjectr2 == null) {
+			return "#=( " + easyToString() + ")=#";
 		}
 		List set = printingobjectr2.get();
 		int index = set.indexOf(this);
@@ -879,31 +953,32 @@ abstract public class LispObject extends AbstractSubLObject {
 	{
 		return printUglyObjectImpl();
 	}
-	
+
 	public String printUglyObjectImpl() // throws IOException
 	{
 //		try {
-			SubLSymbol sym = getType();
-			return unreadableString(sym.getName(), true);
+		SubLSymbol sym = getType();
+		return unreadableString(sym.getName(), true);
 //		} catch (Throwable t) {
 //			t.printStackTrace();
 //			return unreadableString(easyToString(), true);
 //		}
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return valueOfString(this, true, insideToString + 1, this);
 	}
-	
+
 	public LispObject getCopyForm() {
 		return this;
 	}
-	
+
 	public String printReadableObject(boolean quoted) {
 		/*
 		 * if *print-readably* is true, printing proceeds as if *print-escape*,

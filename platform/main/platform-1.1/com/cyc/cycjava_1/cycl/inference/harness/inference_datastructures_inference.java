@@ -18,55 +18,27 @@
 */
 
 package com.cyc.cycjava_1.cycl.inference.harness;
- import com.cyc.cycjava.cycl.*;
- import com.cyc.cycjava.cycl.cyc_testing.*;
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
+ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.*;
+import java.util.Map.*;
+
+import com.cyc.cycjava.cycl.access_macros;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.dictionary;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.misc_utilities;
+import com.cyc.cycjava.cycl.number_utilities;
+import com.cyc.cycjava.cycl.numeric_date_utilities;
+import com.cyc.cycjava.cycl.queues;
+import com.cyc.cycjava.cycl.set;
+import com.cyc.cycjava.cycl.set_contents;
+import com.cyc.cycjava.cycl.set_utilities;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
+import com.cyc.cycjava.cycl.subl_promotions;
 import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.*;
-import com.cyc.cycjava.cycl.inference.*;
- import com.cyc.cycjava.cycl.inference.harness.*;
- import com.cyc.cycjava.cycl.inference.modules.*;
-import com.cyc.cycjava.cycl.inference.modules.removal.*;
-import com.cyc.cycjava.cycl.sbhl.*;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.*;
-
-
-
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
-import com.cyc.tool.subl.util.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeChar;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeString;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeKeyword;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeUninternedSymbol;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeGuid;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.cons;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.list;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.listS;
-import static com.cyc.tool.subl.util.SubLFiles.defconstant;
-import static com.cyc.tool.subl.util.SubLFiles.deflexical;
-import static com.cyc.tool.subl.util.SubLFiles.defparameter;
-import static com.cyc.tool.subl.util.SubLFiles.defvar;
-import static com.cyc.tool.subl.util.SubLFiles.declareFunction;
-import static com.cyc.tool.subl.util.SubLFiles.declareMacro;
-
-
 //dm import com.cyc.cycjava_1.cycl.access_macros;
 //dm import com.cyc.cycjava_1.cycl.accumulation;
 //dm import com.cyc.cycjava_1.cycl.inference.harness.argumentation;
@@ -118,6 +90,12 @@ import com.cyc.cycjava_1.cycl.id_index;
 //dm import com.cyc.cycjava_1.cycl.subl_macros;
 //dm import com.cyc.cycjava_1.cycl.subl_promotions;
 //dm import com.cyc.cycjava_1.cycl.utilities_macros;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
+import com.cyc.tool.subl.util.*;
 
 public  final class inference_datastructures_inference extends SubLTranslatedFile {
 
@@ -377,7 +355,7 @@ public  final class inference_datastructures_inference extends SubLTranslatedFil
     public SubLObject $problem_working_time_data = NIL;
     public SubLObject $type = NIL;
     public SubLObject $data = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($inference_native.class, $sym1$INFERENCE, $sym2$INFERENCE_P, $list3, $list4, new String[] {"$suid", "$problem_store", "$forward_propagate", "$input_mt", "$input_el_query", "$input_non_explanatory_el_query", "$input_query_properties", "$mt", "$el_query", "$el_bindings", "$hl_query", "$explanatory_subquery", "$non_explanatory_subquery", "$free_hl_vars", "$hypothetical_bindings", "$answer_id_index", "$answer_bindings_index", "$new_answer_id_start", "$new_answer_justifications", "$status", "$suspend_status", "$root_link", "$relevant_problems", "$strategy_set", "$control_process", "$interrupting_processes", "$max_transformation_depth_reached", "$disjunction_free_el_vars_policy", "$result_uniqueness_criterion", "$allow_hl_predicate_transformationP", "$allow_unbound_predicate_transformationP", "$allow_evaluatable_predicate_transformationP", "$allow_indeterminate_resultsP", "$allowed_rules", "$forbidden_rules", "$allowed_modules", "$allow_abnormality_checkingP", "$transitive_closure_mode", "$problem_store_privateP", "$continuableP", "$browsableP", "$return_type", "$answer_language", "$cache_resultsP", "$blockingP", "$max_number", "$max_time", "$max_step", "$mode", "$forward_max_time", "$max_proof_depth", "$max_transformation_depth", "$probably_approximately_done", "$metrics_template", "$start_universal_time", "$start_internal_real_time", "$end_internal_real_time", "$pad_internal_real_time", "$cumulative_time", "$step_count", "$cumulative_step_count", "$events", "$halt_conditions", "$accumulators", "$proof_watermark", "$problem_working_time_data", "$type", "$data"}, $list5, $list6, $sym7$PRINT_INFERENCE);
   }
 
@@ -3130,7 +3108,7 @@ if you want to include the time spent so far in the current continuation. */
     public SubLObject $justifications = NIL;
     public SubLObject $elapsed_creation_time = NIL;
     public SubLObject $step_count = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($inference_answer_native.class, $sym419$INFERENCE_ANSWER, $sym411$INFERENCE_ANSWER_P, $list420, $list421, new String[] {"$suid", "$inference", "$bindings", "$justifications", "$elapsed_creation_time", "$step_count"}, $list422, $list423, $sym424$PRINT_INFERENCE_ANSWER);
   }
 
@@ -3384,7 +3362,7 @@ if you want to include the time spent so far in the current continuation. */
     public SubLObject $answer = NIL;
     public SubLObject $supports = NIL;
     public SubLObject $proofs = NIL;
-    private static final SubLStructDeclNative structDecl =
+    public static final SubLStructDeclNative structDecl =
     Structures.makeStructDeclNative($inference_answer_justification_native.class, $sym456$INFERENCE_ANSWER_JUSTIFICATION, $sym412$INFERENCE_ANSWER_JUSTIFICATION_P, $list457, $list458, new String[] {"$answer", "$supports", "$proofs"}, $list459, $list460, $sym461$PRINT_INFERENCE_ANSWER_JUSTIFICATION);
   }
 

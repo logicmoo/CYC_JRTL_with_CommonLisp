@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Main;
 import org.armedbear.lisp.Nil;
 import org.armedbear.lisp.Symbol;
 import org.jpl7.JPL;
@@ -32,6 +33,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync.IPrologifiable;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -43,6 +45,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSequence;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
@@ -152,7 +155,7 @@ abstract public class SubLNil extends Symbol implements SubLList, SubLSymbol, Su
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean lispEquals(Object obj) {
         return obj == this;
     }
 
@@ -822,6 +825,19 @@ abstract public class SubLNil extends Symbol implements SubLList, SubLSymbol, Su
         return this;
     }
 
+    protected SubLObject type_error_str(AbstractSubLObject datum, String expectedType) {
+        if (Main.isNoDebug()) {
+            throw new SubLException("" + datum + " not a type " + expectedType);
+        }
+        if (Main.isSubLisp()) {
+            if (datum == NIL)
+                Errors.error("" + datum + " not a type " + expectedType);
+            Errors.error("" + datum + " not a type " + expectedType);
+        }
+        return Lisp.type_error(toLispObject(), SubLObjectFactory.makeSublispSymbol(expectedType).toLispObject());
+
+    }
+    
     @Override
     public String toTypeName() {
         return NIL_TYPE_NAME;

@@ -494,7 +494,7 @@ public final class module0187 extends SubLTranslatedFile
         public SubLObject $tv;
         public SubLObject $supported_object;
         public SubLObject $supports;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX14537_native() {
             this.$tv = (SubLObject)CommonSymbols.NIL;

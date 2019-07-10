@@ -68,7 +68,7 @@ public final class Main {
 
 	static final UncaughtExceptionHandler uncaughtExceptionHandler = new ABCLMainUncaughtExceptionHandler();
 
-	static boolean useMainThread = false;
+	static boolean useMainThread = true;
 	static int exitCode = 0;
 	static List<Throwable> unexpectedThrowable = new ArrayList<Throwable>(0);
 	public static final long startTimeMillis = System.currentTimeMillis();
@@ -272,6 +272,24 @@ public final class Main {
 		ArrayList<String> argsList = new ArrayList<String>(Arrays.asList(args));
 		if (argsList.remove("--main-thread")) {
 			Main.useMainThread = true;
+		}
+		if (argsList.remove("--norc")) {
+			Interpreter.noinit = true;
+		}
+		if (argsList.remove("--noinit")) {
+			Interpreter.noinit = true;
+		}
+		if (argsList.remove("--j")) {
+			Interpreter.jlisp = true;
+		}
+		if (argsList.remove("--noj")) {
+			Interpreter.jlisp = false;
+		}
+		if (argsList.remove("--noinform")) {
+			Interpreter.noinform = true;
+		}
+		if (argsList.remove("--nosystem")) {
+			Interpreter.nosystem = true;
 		}
 		if (argsList.remove("--abcl")) {
 			argsList.add(0, "--lisp");

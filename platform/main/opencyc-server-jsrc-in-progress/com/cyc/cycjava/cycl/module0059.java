@@ -2447,7 +2447,7 @@ public final class module0059 extends SubLTranslatedFile
     {
         public SubLObject $process;
         public SubLObject $completed;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5671_native() {
             this.$process = (SubLObject)CommonSymbols.NIL;
@@ -2504,7 +2504,7 @@ public final class module0059 extends SubLTranslatedFile
         public SubLObject $result;
         public SubLObject $error_message;
         public SubLObject $properties;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5673_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;
@@ -2642,7 +2642,7 @@ public final class module0059 extends SubLTranslatedFile
         public SubLObject $lock;
         public SubLObject $semaphore;
         public SubLObject $data_queue;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5675_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;
@@ -2700,7 +2700,7 @@ public final class module0059 extends SubLTranslatedFile
         public SubLObject $producer_isg;
         public SubLObject $consumer_isg;
         public SubLObject $payload;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5677_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;
@@ -2768,7 +2768,7 @@ public final class module0059 extends SubLTranslatedFile
         public SubLObject $state;
         public SubLObject $lock;
         public SubLObject $plist;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5679_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

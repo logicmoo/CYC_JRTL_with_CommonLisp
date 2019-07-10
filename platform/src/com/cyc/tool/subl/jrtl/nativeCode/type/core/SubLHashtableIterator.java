@@ -1,3 +1,4 @@
+
 //
 // For LarKC
 //
@@ -7,14 +8,31 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class SubLHashtableIterator extends FromSubLisp {
-	SubLHashtableIterator(SubLHashtable hashTable) {
-		iter = hashTable.getEntrySetIterator();
-		next();
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable.SubLHashtableKeyEntry;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+
+public class SubLHashtableIterator extends FromSubLisp implements Iterator<Map.Entry<SubLObject, SubLObject>> {
+	final boolean advancedToNext;
+
+	SubLHashtableIterator(SubLHashtable hashTable, boolean advanceToNext) {
+		iter = hashTable.getKeyEntrySetIterator();
+		advancedToNext = advanceToNext;
+		if (advanceToNext)
+			next();
 	}
 
-	private Iterator iter;
-	private Map.Entry entry;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject#getType()
+	 */
+	@Override
+	public SubLSymbol getType() {
+		return PACKAGE_SUBLISP.intern(toTypeName());
+	}
+
+	private Iterator<Map.Entry<SubLHashtableKeyEntry, SubLObject>> iter;
+	private Map.Entry<SubLHashtableKeyEntry, SubLObject> entry;
 	public static String HASHTABLE_ITERATOR_TYPE_NAME = "HASHTABLE-ITERATOR";
 
 	@Override
@@ -28,10 +46,14 @@ public class SubLHashtableIterator extends FromSubLisp {
 	}
 
 	public SubLObject getCurrentKey() {
-		return (SubLObject) entry.getKey();
+		if (entry == null && !advancedToNext)
+			next();
+		return SubLHashtable.unwrap(entry.getKey());
 	}
 
 	public SubLObject getCurrentValue() {
+		if (entry == null && !advancedToNext)
+			next();
 		return (SubLObject) entry.getValue();
 	}
 
@@ -43,6 +65,8 @@ public class SubLHashtableIterator extends FromSubLisp {
 	}
 
 	public boolean hasNext() {
+		if (!advancedToNext)
+			return iter.hasNext();
 		return entry != null;
 	}
 
@@ -241,12 +265,30 @@ public class SubLHashtableIterator extends FromSubLisp {
 		return false;
 	}
 
-	public Object next() {
-		if (iter.hasNext())
-			entry = (Entry) iter.next();
-		else
+	public Entry<SubLObject, SubLObject> next() {
+		if (iter.hasNext()) {
+			final Entry preventry = entry = iter.next();
+			return new Entry<SubLObject, SubLObject>() {
+				@Override
+				public SubLObject setValue(SubLObject p0) {
+					return (SubLObject) preventry.setValue(p0);
+				}
+
+				@Override
+				public SubLObject getValue() {
+					return (SubLObject) preventry.getValue();
+				}
+
+				@Override
+				public SubLObject getKey() {
+					return SubLHashtable.unwrap(preventry.getKey());
+				}
+			};
+		} else {
 			entry = null;
-		return entry;
+			return null;
+		}
+
 	}
 
 	@Override

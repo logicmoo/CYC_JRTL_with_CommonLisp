@@ -442,7 +442,7 @@ public final class module0725 extends SubLTranslatedFile
         public SubLObject $comment;
         public SubLObject $mt;
         public SubLObject $queries;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX48530_native() {
             this.$cycl_id = (SubLObject)CommonSymbols.NIL;

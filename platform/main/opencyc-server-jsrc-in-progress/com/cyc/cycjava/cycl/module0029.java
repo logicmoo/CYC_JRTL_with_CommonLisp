@@ -2149,7 +2149,7 @@ public final class module0029 extends SubLTranslatedFile
     {
         public SubLObject $file;
         public SubLObject $guts;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2620_native() {
             this.$file = (SubLObject)CommonSymbols.NIL;
@@ -2196,7 +2196,7 @@ public final class module0029 extends SubLTranslatedFile
     {
         public SubLObject $filename;
         public SubLObject $kb;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2678_native() {
             this.$filename = (SubLObject)CommonSymbols.NIL;

@@ -311,7 +311,7 @@ public final class Load
         final String COMPILE_FILE_TYPE
           = Lisp._COMPILE_FILE_TYPE_.symbolValue().getStringValue();
 
-        if (truename == null || truename.equals(NIL) || bootPath.equals(NIL)) {
+        if (truename == null || Lisp.NULL(truename) || Lisp.NULL(bootPath)) {
             // Make an attempt to use the boot classpath
             String path = pathname.asEntryPath();
             url = Lisp.class.getResource(path);
@@ -326,7 +326,7 @@ public final class Load
                                            + "'" + path + "'"
                                            + " in boot classpath."));
             }
-            if (!bootPath.equals(NIL)) {
+            if (!Lisp.NULL(bootPath)) {
                 Pathname urlPathname = new Pathname(url);
 							  loadableFile = findLoadableFile(urlPathname);
 								truename = (Pathname)Pathname.truename(loadableFile);
@@ -532,7 +532,7 @@ public final class Load
             // value.  Currently the only code that uses this value is
             // Lisp.readFunctionBytes().
             Pathname truePathname = null;
-            if (!truename.equals(NIL)) {
+            if (!Lisp.NULL(truename)) {
                 if (truename instanceof Pathname) {
                     truePathname = new Pathname((Pathname)truename);
                 } else if (truename instanceof AbstractString) {
@@ -556,7 +556,7 @@ public final class Load
                         truePathname.device = new Cons(truePathname.device.car(), NIL);
                         truePathname.host = NIL;
                         truePathname.directory = enclosingJar.directory;
-                        if (truePathname.directory.car().equals(Keyword.RELATIVE)) {
+                        if (Keyword.RELATIVE.theSameSymbol(truePathname.directory.car())) {
                             truePathname.directory.setCar(Keyword.ABSOLUTE);
                         }
                         truePathname.name = enclosingJar.name;

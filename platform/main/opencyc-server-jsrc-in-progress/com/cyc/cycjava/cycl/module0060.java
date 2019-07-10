@@ -1339,7 +1339,7 @@ public final class module0060 extends SubLTranslatedFile
         public SubLObject $finished;
         public SubLObject $exit_code;
         public SubLObject $properties;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5860_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

@@ -1208,7 +1208,7 @@ public final class module0116 extends SubLTranslatedFile
         public SubLObject $self;
         public SubLObject $pattern;
         public SubLObject $properties;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10054_native() {
             this.$parent = (SubLObject)CommonSymbols.NIL;
@@ -1274,7 +1274,7 @@ public final class module0116 extends SubLTranslatedFile
         public SubLObject $lock;
         public SubLObject $graph;
         public SubLObject $properties;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10056_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;
@@ -1332,7 +1332,7 @@ public final class module0116 extends SubLTranslatedFile
         public SubLObject $timestamp;
         public SubLObject $source;
         public SubLObject $message;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10058_native() {
             this.$class = (SubLObject)CommonSymbols.NIL;

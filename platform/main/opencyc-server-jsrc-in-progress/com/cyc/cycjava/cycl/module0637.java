@@ -1160,7 +1160,7 @@ public final class module0637 extends SubLTranslatedFile
         public SubLObject $properties;
         public SubLObject $indexicals;
         public SubLObject $edited;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX42591_native() {
             this.$cycl_id = (SubLObject)CommonSymbols.NIL;

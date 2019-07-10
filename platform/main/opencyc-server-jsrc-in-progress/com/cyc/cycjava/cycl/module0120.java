@@ -744,7 +744,7 @@ public final class module0120 extends SubLTranslatedFile
         public SubLObject $notification_fn;
         public SubLObject $interrupt_p;
         public SubLObject $process;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10338_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

@@ -2693,7 +2693,7 @@ public final class module0376 extends SubLTranslatedFile
         public SubLObject $hl_module;
         public SubLObject $bindings;
         public SubLObject $supports;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX29802_native() {
             this.$hl_module = (SubLObject)CommonSymbols.NIL;

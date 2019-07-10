@@ -3552,7 +3552,7 @@ public final class module0701 extends SubLTranslatedFile
         public SubLObject $file_location;
         public SubLObject $topic;
         public SubLObject $focal_nodes;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX46651_native() {
             this.$triples = (SubLObject)CommonSymbols.NIL;
@@ -3663,7 +3663,7 @@ public final class module0701 extends SubLTranslatedFile
         public SubLObject $subject_index;
         public SubLObject $predicate_index;
         public SubLObject $object_index;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX46654_native() {
             this.$subject_index = (SubLObject)CommonSymbols.NIL;

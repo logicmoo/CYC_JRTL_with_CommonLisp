@@ -579,7 +579,7 @@ public final class module0803 extends SubLTranslatedFile
         public SubLObject $session_type;
         public SubLObject $index;
         public SubLObject $overwrite;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX55793_native() {
             this.$host = (SubLObject)CommonSymbols.NIL;

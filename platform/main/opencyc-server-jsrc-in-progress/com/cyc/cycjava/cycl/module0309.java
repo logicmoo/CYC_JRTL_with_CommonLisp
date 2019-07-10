@@ -4669,7 +4669,7 @@ public final class module0309 extends SubLTranslatedFile
         public SubLObject $test_args;
         public SubLObject $closedP;
         public SubLObject $atomicP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX23552_native() {
             this.$sentence = (SubLObject)CommonSymbols.NIL;

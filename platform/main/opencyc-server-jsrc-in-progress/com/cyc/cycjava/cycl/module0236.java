@@ -962,7 +962,7 @@ public final class module0236 extends SubLTranslatedFile
         public SubLObject $test;
         public SubLObject $mode;
         public SubLObject $is_busy;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX18283_native() {
             this.$file_hash_table_cache = (SubLObject)CommonSymbols.NIL;

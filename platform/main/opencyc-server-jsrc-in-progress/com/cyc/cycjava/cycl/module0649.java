@@ -2379,7 +2379,7 @@ public final class module0649 extends SubLTranslatedFile
         public SubLObject $query;
         public SubLObject $label;
         public SubLObject $values;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43479_native() {
             this.$query = (SubLObject)CommonSymbols.NIL;
@@ -2438,7 +2438,7 @@ public final class module0649 extends SubLTranslatedFile
         public SubLObject $input_columns;
         public SubLObject $output_column;
         public SubLObject $assignments;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43481_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;
@@ -2517,7 +2517,7 @@ public final class module0649 extends SubLTranslatedFile
         public SubLObject $target_variables;
         public SubLObject $incompatibles;
         public SubLObject $assignments;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43483_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

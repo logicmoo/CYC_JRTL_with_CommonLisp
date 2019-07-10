@@ -425,7 +425,7 @@ public final class Java {
             final Class[] argTypes = m.getParameterTypes();
             for (int i = 2; i < args.length; i++) {
                 final LispObject arg = args[i];
-                if (arg.equals(NIL)) {
+                if (NULL((LispObject) arg)) {
                     methodArgs[i - 2] = false;
                 } else if (arg.equals(T)) {
                     methodArgs[i - 2] = true;
@@ -512,7 +512,7 @@ public final class Java {
                 final Object[] initargs = new Object[args.length - 1];
                 for (int i = 1; i < args.length; i++) {
                     final LispObject arg = args[i];
-                    if (arg.equals(NIL)) {
+                    if (NULL((LispObject) arg)) {
                         initargs[i - 1] = false;
                     } else if (arg.equals(T)) {
                         initargs[i - 1] = true;
@@ -799,7 +799,7 @@ public final class Java {
             methodArgs = new Object[argTypes.length];
             for (int i = 2; i < args.length; i++) {
                 final LispObject arg = args[i];
-                if (arg.equals(NIL)) {
+                if (NULL((LispObject) arg)) {
                     methodArgs[i - 2] = false;
                 } else if (arg.equals(T)) {
                     methodArgs[i - 2] = true;

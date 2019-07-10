@@ -1200,7 +1200,7 @@ public final class module0182 extends SubLTranslatedFile
     {
         public SubLObject $argument;
         public SubLObject $dependents;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX14190_native() {
             this.$argument = (SubLObject)CommonSymbols.NIL;

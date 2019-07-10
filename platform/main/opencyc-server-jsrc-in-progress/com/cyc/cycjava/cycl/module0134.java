@@ -1002,7 +1002,7 @@ public final class module0134 extends SubLTranslatedFile
         public SubLObject $graphl_search;
         public SubLObject $predicates;
         public SubLObject $tv;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX10889_native() {
             this.$graphl_search = (SubLObject)CommonSymbols.NIL;

@@ -877,7 +877,7 @@ public final class module0067 extends SubLTranslatedFile
     {
         public SubLObject $database;
         public SubLObject $test;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX6423_native() {
             this.$database = (SubLObject)CommonSymbols.NIL;

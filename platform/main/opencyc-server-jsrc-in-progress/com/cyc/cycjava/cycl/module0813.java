@@ -2278,7 +2278,7 @@ public final class module0813 extends SubLTranslatedFile
         public SubLObject $xref_database;
         public SubLObject $secure_id_database;
         public SubLObject $last_translation_time;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX56856_native() {
             this.$system = (SubLObject)CommonSymbols.NIL;

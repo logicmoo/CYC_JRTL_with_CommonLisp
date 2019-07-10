@@ -780,7 +780,7 @@ public final class module0379 extends SubLTranslatedFile
         public SubLObject $hl_module;
         public SubLObject $bindings;
         public SubLObject $supports;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX30079_native() {
             this.$hl_module = (SubLObject)CommonSymbols.NIL;

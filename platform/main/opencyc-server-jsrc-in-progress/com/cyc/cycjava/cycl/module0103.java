@@ -607,7 +607,7 @@ public final class module0103 extends SubLTranslatedFile
         public SubLObject $machine;
         public SubLObject $port;
         public SubLObject $protocol;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX9280_native() {
             this.$machine = (SubLObject)CommonSymbols.NIL;
@@ -663,7 +663,7 @@ public final class module0103 extends SubLTranslatedFile
     {
         public SubLObject $image;
         public SubLObject $channel;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX9282_native() {
             this.$image = (SubLObject)CommonSymbols.NIL;

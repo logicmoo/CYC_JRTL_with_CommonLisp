@@ -527,7 +527,7 @@ public final class module0398 extends SubLTranslatedFile
         public SubLObject $problem_total_strategems_active;
         public SubLObject $problem_strategems_set_aside;
         public SubLObject $problem_strategems_thrown_away;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX31261_native() {
             this.$link_heads_motivated = (SubLObject)CommonSymbols.NIL;

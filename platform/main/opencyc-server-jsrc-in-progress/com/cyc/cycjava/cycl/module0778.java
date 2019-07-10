@@ -1580,7 +1580,7 @@ public final class module0778 extends SubLTranslatedFile
         public SubLObject $lexical_mt;
         public SubLObject $syntactic_mt;
         public SubLObject $generation_mt;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX54689_native() {
             this.$term = (SubLObject)CommonSymbols.NIL;

@@ -57,12 +57,12 @@ public final class Interpreter implements Runnable {
     private final InputStream inputStream;
     private final OutputStream outputStream;
 
-    private static boolean noinit = false;
+    public static boolean noinit = false;
     public static boolean nosystem = false;
 	public static String RC_FILE = ".abclrc";
-    private static boolean noinform = false;
+	public static boolean noinform = false;
     public static boolean postProcess = true;
-    private static boolean help = false;
+    public static boolean help = false;
     public static boolean doubledash = false;
 
     public static Interpreter getInstance() {
@@ -376,9 +376,8 @@ public final class Interpreter implements Runnable {
                             System.err.println("No argument supplied to --eval");
                             exit(1); // FIXME
                         }
-                    } else if (arg.equals("--load") || 
-arg.equals("--load-system-file")) {
-                        if (i + 1 < args.length) {
+					} else if (arg.equals("--load") || arg.equals("--load-system-file")) {
+						if (i + 1 < args.length) {
                             ++i;
                         } else {
                             System.err.println("No argument supplied to --load");

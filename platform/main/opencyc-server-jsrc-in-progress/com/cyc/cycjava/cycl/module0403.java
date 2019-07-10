@@ -221,7 +221,7 @@ public final class module0403 extends SubLTranslatedFile
     public static final class $sX31423_native extends SubLStructNative
     {
         public SubLObject $new_root_index;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX31423_native() {
             this.$new_root_index = (SubLObject)CommonSymbols.NIL;

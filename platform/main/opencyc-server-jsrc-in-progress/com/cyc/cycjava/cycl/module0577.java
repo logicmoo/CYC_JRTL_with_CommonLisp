@@ -656,7 +656,7 @@ public final class module0577 extends SubLTranslatedFile
         public SubLObject $summary_fn;
         public SubLObject $display_fn;
         public SubLObject $handler_fn;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX18498_native() {
             this.$key = (SubLObject)CommonSymbols.NIL;
@@ -724,7 +724,7 @@ public final class module0577 extends SubLTranslatedFile
         public SubLObject $cyclist;
         public SubLObject $creation_time;
         public SubLObject $data;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX38848_native() {
             this.$id_string = (SubLObject)CommonSymbols.NIL;

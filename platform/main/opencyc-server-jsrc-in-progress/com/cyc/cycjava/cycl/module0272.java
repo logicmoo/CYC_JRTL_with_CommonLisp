@@ -444,7 +444,7 @@ public final class module0272 extends SubLTranslatedFile
     {
         public SubLObject $name;
         public SubLObject $plist;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX20462_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

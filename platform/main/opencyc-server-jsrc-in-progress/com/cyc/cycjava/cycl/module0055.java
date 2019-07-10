@@ -1979,7 +1979,7 @@ public final class module0055 extends SubLTranslatedFile
         public SubLObject $num;
         public SubLObject $elements;
         public SubLObject $last;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5243_native() {
             this.$num = (SubLObject)CommonSymbols.NIL;
@@ -2038,7 +2038,7 @@ public final class module0055 extends SubLTranslatedFile
         public SubLObject $rank_func;
         public SubLObject $comp_func;
         public SubLObject $tree;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5479_native() {
             this.$num = (SubLObject)CommonSymbols.NIL;
@@ -2145,7 +2145,7 @@ public final class module0055 extends SubLTranslatedFile
     {
         public SubLObject $ordered_items;
         public SubLObject $new_items;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5484_native() {
             this.$ordered_items = (SubLObject)CommonSymbols.NIL;
@@ -2192,7 +2192,7 @@ public final class module0055 extends SubLTranslatedFile
     {
         public SubLObject $lock;
         public SubLObject $queue;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5486_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;
@@ -2239,7 +2239,7 @@ public final class module0055 extends SubLTranslatedFile
     {
         public SubLObject $lock;
         public SubLObject $priority_queue;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX5488_native() {
             this.$lock = (SubLObject)CommonSymbols.NIL;

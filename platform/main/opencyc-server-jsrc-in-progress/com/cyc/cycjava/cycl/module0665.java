@@ -2355,7 +2355,7 @@ public final class module0665 extends SubLTranslatedFile
         public SubLObject $object_detector;
         public SubLObject $object_to_string_fn;
         public SubLObject $priority;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX44455_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

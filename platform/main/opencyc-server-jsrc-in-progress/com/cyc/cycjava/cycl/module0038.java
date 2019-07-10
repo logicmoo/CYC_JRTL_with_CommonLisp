@@ -6342,7 +6342,7 @@ public final class module0038 extends SubLTranslatedFile
         public SubLObject $inside_expand_subl_fn_arg2P;
         public SubLObject $immediately_following_parenP;
         public SubLObject $paren_count;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX3956_native() {
             this.$out_string_list = (SubLObject)CommonSymbols.NIL;

@@ -2715,7 +2715,7 @@ public final class module0413 extends SubLTranslatedFile
         public SubLObject $evaluation_func;
         public SubLObject $evaluation_arg1;
         public SubLObject $cross_productP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX31866_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

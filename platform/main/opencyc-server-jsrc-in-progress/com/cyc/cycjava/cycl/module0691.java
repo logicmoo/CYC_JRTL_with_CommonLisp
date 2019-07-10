@@ -3280,7 +3280,7 @@ public final class module0691 extends SubLTranslatedFile
         public SubLObject $node_definitions;
         public SubLObject $edge_definitions;
         public SubLObject $options;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX46272_native() {
             this.$isg = (SubLObject)CommonSymbols.NIL;

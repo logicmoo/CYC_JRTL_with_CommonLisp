@@ -3063,7 +3063,7 @@ public final class module0063 extends SubLTranslatedFile
         public SubLObject $multi;
         public SubLObject $multi_keys;
         public SubLObject $multi_key_func;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX6063_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

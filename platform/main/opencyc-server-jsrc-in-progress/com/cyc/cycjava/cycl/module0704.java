@@ -423,7 +423,7 @@ public final class module0704 extends SubLTranslatedFile
         public SubLObject $utf8_lexical_form;
         public SubLObject $language_tag;
         public SubLObject $datatype;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX46916_native() {
             this.$utf8_lexical_form = (SubLObject)CommonSymbols.NIL;

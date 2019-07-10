@@ -1296,7 +1296,7 @@ public final class module0390 extends SubLTranslatedFile
         public SubLObject $new_root_substrategy;
         public SubLObject $transformation_substrategy;
         public SubLObject $removal_substrategies;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX30810_native() {
             this.$new_root_substrategy = (SubLObject)CommonSymbols.NIL;

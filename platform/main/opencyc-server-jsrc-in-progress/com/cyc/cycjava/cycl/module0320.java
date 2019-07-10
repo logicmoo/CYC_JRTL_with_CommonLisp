@@ -1846,7 +1846,7 @@ public final class module0320 extends SubLTranslatedFile
         public SubLObject $argnums_remaining;
         public SubLObject $tactics;
         public SubLObject $tactics_considered;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX24106_native() {
             this.$inverse_mode_p = (SubLObject)CommonSymbols.NIL;

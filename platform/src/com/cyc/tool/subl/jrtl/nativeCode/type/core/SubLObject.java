@@ -37,7 +37,9 @@ public interface SubLObject extends Cloneable {
 	SubLObject add(SubLObject p0);
 
 	void addKey(SubLObject p0);
-
+	
+	public boolean lispEquals(Object obj);	
+	
 	SubLList asArrayList();
 
 	SubLList asConsList();

@@ -1310,7 +1310,7 @@ public final class module0137 extends SubLTranslatedFile
         public SubLObject $unmarking_fn;
         public SubLObject $var_bindings;
         public SubLObject $misc_properties;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX11098_native() {
             this.$link_pred = (SubLObject)CommonSymbols.NIL;

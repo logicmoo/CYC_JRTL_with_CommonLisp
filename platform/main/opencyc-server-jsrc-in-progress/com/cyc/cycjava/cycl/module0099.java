@@ -4350,7 +4350,7 @@ public final class module0099 extends SubLTranslatedFile
         public SubLObject $error_handling;
         public SubLObject $tickets;
         public SubLObject $mailman;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8837_native() {
             this.$db = (SubLObject)CommonSymbols.NIL;
@@ -4487,7 +4487,7 @@ public final class module0099 extends SubLTranslatedFile
     {
         public SubLObject $semaphore;
         public SubLObject $result;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8839_native() {
             this.$semaphore = (SubLObject)CommonSymbols.NIL;
@@ -4535,7 +4535,7 @@ public final class module0099 extends SubLTranslatedFile
         public SubLObject $type;
         public SubLObject $message;
         public SubLObject $code;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8841_native() {
             this.$type = (SubLObject)CommonSymbols.NIL;
@@ -4596,7 +4596,7 @@ public final class module0099 extends SubLTranslatedFile
         public SubLObject $connection;
         public SubLObject $block_size;
         public SubLObject $id;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8843_native() {
             this.$rows = (SubLObject)CommonSymbols.NIL;
@@ -4692,7 +4692,7 @@ public final class module0099 extends SubLTranslatedFile
         public SubLObject $settings;
         public SubLObject $batch;
         public SubLObject $rs;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8844_native() {
             this.$connection = (SubLObject)CommonSymbols.NIL;

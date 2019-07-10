@@ -1330,7 +1330,7 @@ public final class module0092 extends SubLTranslatedFile
         public SubLObject $tail;
         public SubLObject $freelist_head;
         public SubLObject $metrics;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8029_native() {
             this.$capacity = (SubLObject)CommonSymbols.NIL;

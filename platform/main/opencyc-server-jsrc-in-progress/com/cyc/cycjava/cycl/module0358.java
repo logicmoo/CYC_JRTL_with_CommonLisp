@@ -1867,7 +1867,7 @@ public final class module0358 extends SubLTranslatedFile
         public SubLObject $preference_func;
         public SubLObject $required_mt;
         public SubLObject $any_predicates;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX26334_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

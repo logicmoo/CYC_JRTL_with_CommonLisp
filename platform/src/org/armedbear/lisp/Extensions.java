@@ -290,7 +290,7 @@ public final class Extensions
 
       for (int i = 0; i < args.length; i++ ) {
         if (args[i].SYMBOLP() != NIL) {
-          if (args[i].equals(Keyword.PREFIX)) {
+          if (Keyword.PREFIX.theSameSymbol(args[i])) {
             String specifiedPrefix = args[i + 1].getStringValue();
             if (specifiedPrefix != null) {
               if (specifiedPrefix.equals(NIL.getStringValue())) {
@@ -299,7 +299,7 @@ public final class Extensions
               prefix = specifiedPrefix;
               i += 1;
             }
-          } else if (args[i].equals(Keyword.SUFFIX)) {
+          } else if (Keyword.SUFFIX.theSameSymbol(args[i])) {
             String specifiedSuffix = args[i + 1].getStringValue();
             if (specifiedSuffix != null) {
               if (specifiedSuffix.equals(NIL.getStringValue())) {

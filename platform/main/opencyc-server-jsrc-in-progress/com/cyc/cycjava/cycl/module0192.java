@@ -1290,7 +1290,7 @@ public final class module0192 extends SubLTranslatedFile
         public SubLObject $id;
         public SubLObject $cnf;
         public SubLObject $assertions;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX14782_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

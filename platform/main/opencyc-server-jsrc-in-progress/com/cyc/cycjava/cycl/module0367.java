@@ -3114,7 +3114,7 @@ public final class module0367 extends SubLTranslatedFile
         public SubLObject $step_count;
         public SubLObject $type;
         public SubLObject $data;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX8816_native() {
             this.$suid = (SubLObject)CommonSymbols.NIL;
@@ -3300,7 +3300,7 @@ public final class module0367 extends SubLTranslatedFile
         public SubLObject $tactic_strategic_property_index;
         public SubLObject $possible_tactic_count;
         public SubLObject $uninterestingness;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX27910_native() {
             this.$status = (SubLObject)CommonSymbols.NIL;
@@ -3367,7 +3367,7 @@ public final class module0367 extends SubLTranslatedFile
         public SubLObject $preference_level_justification;
         public SubLObject $productivity;
         public SubLObject $uninterestingness;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX27912_native() {
             this.$preference_level = (SubLObject)CommonSymbols.NIL;

@@ -3400,7 +3400,7 @@ public final class cycml_generator_oc
     public SubLObject $knowledge_package_id;
     public SubLObject $knowledge_package_dependencies;
     public SubLObject $operations;
-    private static final SubLStructDeclNative structDecl;
+    public static final SubLStructDeclNative structDecl;
 
     public $sX55592_native()
     {

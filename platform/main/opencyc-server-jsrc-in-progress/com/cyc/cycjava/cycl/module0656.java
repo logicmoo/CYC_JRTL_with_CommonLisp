@@ -5324,7 +5324,7 @@ public final class module0656 extends SubLTranslatedFile
         public SubLObject $keyword;
         public SubLObject $applicability_test_fn;
         public SubLObject $html_output_fn;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43764_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

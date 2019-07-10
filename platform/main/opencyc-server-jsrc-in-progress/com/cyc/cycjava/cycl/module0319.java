@@ -1452,7 +1452,7 @@ public final class module0319 extends SubLTranslatedFile
         public SubLObject $precomputation;
         public SubLObject $parent_pred;
         public SubLObject $parent_pred_inverseP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX24003_native() {
             this.$type = (SubLObject)CommonSymbols.NIL;

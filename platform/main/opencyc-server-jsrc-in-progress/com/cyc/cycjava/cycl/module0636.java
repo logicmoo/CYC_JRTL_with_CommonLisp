@@ -1061,7 +1061,7 @@ public final class module0636 extends SubLTranslatedFile
         public SubLObject $enable_unbound_predicate_backchaining;
         public SubLObject $enable_semantic_pruning;
         public SubLObject $enable_consideration_of_disjunctive_temporal_relations;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX42513_native() {
             this.$cycl_id = (SubLObject)CommonSymbols.NIL;

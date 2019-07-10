@@ -1378,7 +1378,7 @@ public final class module0810 extends SubLTranslatedFile
         public SubLObject $symbol_exceptions;
         public SubLObject $id_symbol_table;
         public SubLObject $symbol_id_table;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX56414_native() {
             this.$security_level = (SubLObject)CommonSymbols.NIL;

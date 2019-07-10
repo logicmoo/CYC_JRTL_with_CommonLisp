@@ -7986,7 +7986,7 @@ public final class module0424 extends SubLTranslatedFile
         public SubLObject $result;
         public SubLObject $test_runstate;
         public SubLObject $run_status;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX32779_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;
@@ -8085,7 +8085,7 @@ public final class module0424 extends SubLTranslatedFile
         public SubLObject $run_status;
         public SubLObject $start;
         public SubLObject $end;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX32781_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;
@@ -8201,7 +8201,7 @@ public final class module0424 extends SubLTranslatedFile
         public SubLObject $run_status;
         public SubLObject $start;
         public SubLObject $end;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX32783_native() {
             this.$id = (SubLObject)CommonSymbols.NIL;

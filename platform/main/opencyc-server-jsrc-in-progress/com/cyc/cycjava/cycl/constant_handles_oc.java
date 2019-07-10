@@ -1564,7 +1564,7 @@ public final class constant_handles_oc
   {
     public SubLObject $suid;
     public SubLObject $name;
-    private static final SubLStructDeclNative structDecl;
+    public static final SubLStructDeclNative structDecl;
 
     public $constant_native()
     {

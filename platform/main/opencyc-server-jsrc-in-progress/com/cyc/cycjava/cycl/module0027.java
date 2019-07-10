@@ -1158,7 +1158,7 @@ public final class module0027 extends SubLTranslatedFile
         public SubLObject $classes;
         public SubLObject $kb;
         public SubLObject $workingP;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX2524_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

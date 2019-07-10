@@ -1997,7 +1997,7 @@ public final class module0590 extends SubLTranslatedFile
         public SubLObject $resolve_entity_referencesP;
         public SubLObject $resolve_namespacesP;
         public SubLObject $on_deck_queue;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX39763_native() {
             this.$in_stream = (SubLObject)CommonSymbols.NIL;

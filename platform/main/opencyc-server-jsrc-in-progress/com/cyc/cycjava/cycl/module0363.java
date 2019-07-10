@@ -3675,7 +3675,7 @@ public final class module0363 extends SubLTranslatedFile
         public SubLObject $argument_link_bindings_index;
         public SubLObject $backchain_required;
         public SubLObject $memoization_state;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX24274_native() {
             this.$suid = (SubLObject)CommonSymbols.NIL;

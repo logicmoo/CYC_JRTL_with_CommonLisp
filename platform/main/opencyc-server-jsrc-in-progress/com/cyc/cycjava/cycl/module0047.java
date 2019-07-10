@@ -1146,7 +1146,7 @@ public final class module0047 extends SubLTranslatedFile
         public SubLObject $host;
         public SubLObject $port;
         public SubLObject $parts;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX295_native() {
             this.$from = (SubLObject)CommonSymbols.NIL;
@@ -1261,7 +1261,7 @@ public final class module0047 extends SubLTranslatedFile
         public SubLObject $encoding;
         public SubLObject $data;
         public SubLObject $data_type;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX4570_native() {
             this.$content_type = (SubLObject)CommonSymbols.NIL;

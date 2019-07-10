@@ -7062,7 +7062,7 @@ public final class module0647 extends SubLTranslatedFile
         public SubLObject $source_mt;
         public SubLObject $query_mt;
         public SubLObject $definitional_mt;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43015_native() {
             this.$supertopic = (SubLObject)CommonSymbols.NIL;
@@ -7207,7 +7207,7 @@ public final class module0647 extends SubLTranslatedFile
         public SubLObject $explanation;
         public SubLObject $requires_validation;
         public SubLObject $unknown_replacement;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43017_native() {
             this.$argument_position = (SubLObject)CommonSymbols.NIL;
@@ -7337,7 +7337,7 @@ public final class module0647 extends SubLTranslatedFile
         public SubLObject $follow_ups;
         public SubLObject $gloss;
         public SubLObject $refspec;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX43019_native() {
             this.$topic = (SubLObject)CommonSymbols.NIL;

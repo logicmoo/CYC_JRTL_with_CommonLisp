@@ -836,7 +836,7 @@ public final class module0070 extends SubLTranslatedFile
         public SubLObject $database;
         public SubLObject $inverse_database;
         public SubLObject $test;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX6535_native() {
             this.$size = (SubLObject)CommonSymbols.NIL;

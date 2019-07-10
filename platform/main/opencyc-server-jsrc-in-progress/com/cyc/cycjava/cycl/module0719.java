@@ -4668,7 +4668,7 @@ public final class module0719 extends SubLTranslatedFile
         public SubLObject $displayP_fn;
         public SubLObject $display_fn;
         public SubLObject $display_string;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX48204_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;
@@ -4748,7 +4748,7 @@ public final class module0719 extends SubLTranslatedFile
         public SubLObject $display_fn;
         public SubLObject $handlerP_fn;
         public SubLObject $handler_fn;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX48206_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

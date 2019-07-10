@@ -2849,7 +2849,7 @@ public final class module0340 extends SubLTranslatedFile
         public SubLObject $exclusive_func;
         public SubLObject $required_func;
         public SubLObject $completeness;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX14781_native() {
             this.$name = (SubLObject)CommonSymbols.NIL;

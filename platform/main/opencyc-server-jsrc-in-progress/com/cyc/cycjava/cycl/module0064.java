@@ -1243,7 +1243,7 @@ public final class module0064 extends SubLTranslatedFile
         public SubLObject $compare;
         public SubLObject $minor_limit;
         public SubLObject $major_limit;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX6219_native() {
             this.$key = (SubLObject)CommonSymbols.NIL;
@@ -1318,7 +1318,7 @@ public final class module0064 extends SubLTranslatedFile
         public SubLObject $info;
         public SubLObject $payload;
         public SubLObject $size;
-        private static final SubLStructDeclNative structDecl;
+        public static final SubLStructDeclNative structDecl;
         
         public $sX6221_native() {
             this.$info = (SubLObject)CommonSymbols.NIL;

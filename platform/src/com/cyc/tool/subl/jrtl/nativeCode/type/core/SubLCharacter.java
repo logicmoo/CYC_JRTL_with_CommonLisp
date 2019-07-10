@@ -3,7 +3,9 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
+import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.LispCharacter;
+import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -13,17 +15,28 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 final public class SubLCharacter extends LispCharacter implements SubLObject, Comparable {
 
+	@Override
+	final public boolean equals(Object obj) {
+		if (obj == this)
+			return true;
+		if (!(obj instanceof SubLCharacter))
+			return super.equals(obj);
+		assert charValue() != ((SubLCharacter) obj).charValue();
+		return false;
+	}
 
 	private static boolean charArrayInited;
+
 	public SubLCharacter(int charNum, String... namez) {
-		super((char)charNum);
+		super((char) charNum);
 		if (charNum < 256) {
-			//Errors.error("Got invalid character code: " + charNum);
-		//value = (char) charNum;
-		   SubLCharacter.constants[charNum] = this;
+			// Errors.error("Got invalid character code: " + charNum);
+			// value = (char) charNum;
+			SubLCharacter.constants[charNum] = this;
 		}
 		charNames = namez;
-		if(namez.length>0) mainName = namez[0];
+		if (namez.length > 0)
+			mainName = namez[0];
 		hashCode = Character.toLowerCase(value);
 	}
 
@@ -31,19 +44,20 @@ final public class SubLCharacter extends LispCharacter implements SubLObject, Co
 		return Character.toUpperCase(theChar);
 	}
 
-	public static SubLCharacter getCharFromName(SubLString name)
-	{
+	public static SubLCharacter getCharFromName(SubLString name) {
 		Object myChar = null;
 		myChar = LarKCCharacter.charNameToSubLCharacterMap_CaseSensitive.get(name);
-		if (myChar != null) return (SubLCharacter) myChar;
+		if (myChar != null)
+			return (SubLCharacter) myChar;
 		myChar = LarKCCharacter.charNameToSubLCharacterMap_CaseInsensitive.get(name.toLowerCase());
-		if (myChar != null) return (SubLCharacter) myChar;
+		if (myChar != null)
+			return (SubLCharacter) myChar;
 		int n = nameToChar(name.getStringValue());
-		if (n >= 0)
-		{
+		if (n >= 0) {
 			myChar = LispCharacter.getInstance((char) n);
 		}
-		if (myChar == null) Errors.error("Invalid character " + name);
+		if (myChar == null)
+			Errors.error("Invalid character " + name);
 		return (SubLCharacter) myChar;
 	}
 
@@ -55,13 +69,14 @@ final public class SubLCharacter extends LispCharacter implements SubLObject, Co
 	}
 
 	private static void initCharArray() {
-	//	constants = (SubLCharacter[])LispCharacter.constants;
+		// constants = (SubLCharacter[])LispCharacter.constants;
 	}
 
-	//private char value;
+	// private char value;
 	String[] charNames;
 	private int hashCode;
 	private String mainName;
+
 //	static SubLCharacter[] constants;// = new SubLCharacter[256];
 	@Override
 	public boolean canFastHash() {
@@ -89,7 +104,7 @@ final public class SubLCharacter extends LispCharacter implements SubLObject, Co
 
 	@Override
 	public int compareTo(Object o) {
-		if (equals(o))
+		if (lispEquals(o))
 			return 0;
 		return lessThan((SubLCharacter) o) ? -1 : 1;
 	}
@@ -100,7 +115,7 @@ final public class SubLCharacter extends LispCharacter implements SubLObject, Co
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean lispEquals(Object obj) {
 		return obj == this;
 	}
 
@@ -400,10 +415,11 @@ final public class SubLCharacter extends LispCharacter implements SubLObject, Co
 		return makeChar(Character.toLowerCase(value));
 	}
 
-	//@Override
-	public String toStringSubL()
-	{
-		if (mainName == null) { return charToName(value); }
+	// @Override
+	public String toStringSubL() {
+		if (mainName == null) {
+			return charToName(value);
+		}
 		return "#\\" + mainName;
 	}
 
