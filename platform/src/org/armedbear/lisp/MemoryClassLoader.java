@@ -34,9 +34,7 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
-import static org.armedbear.lisp.Lisp.error;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.util.HashMap;
 

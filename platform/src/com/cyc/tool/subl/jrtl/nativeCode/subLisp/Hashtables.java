@@ -1,6 +1,4 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.util.Iterator;
@@ -11,7 +9,6 @@ import org.armedbear.lisp.LispObject;
 import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable.SubLHashtableKeyEntry;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;

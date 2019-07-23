@@ -58,19 +58,19 @@ public class math_utilities extends SubLTranslatedFile {
 	private static SubLSymbol $bell_delta_exponent$ = null;
 	@SubLTranslatedFile.SubL(source = "sublisp/math-utilities.lisp", position = 5273L)
 	private static SubLSymbol $bell_approximation_float$ = null;
-	private static SubLInteger $int0$53 = SubLObjectFactory.makeInteger(53);
-	private static SubLInteger $int1$64 = SubLObjectFactory.makeInteger(64);
-	private static SubLInteger $int2$18446744073709551616 = SubLObjectFactory.makeInteger("18446744073709551616");
-	private static SubLInteger $int3$9223372036854775808 = SubLObjectFactory.makeInteger("9223372036854775808");
-	private static SubLInteger $int4$2048 = SubLObjectFactory.makeInteger(2048);
-	private static SubLInteger $int5$1024 = SubLObjectFactory.makeInteger(1024);
-	private static SubLInteger $int6$9007199254740992 = SubLObjectFactory.makeInteger("9007199254740992");
-	private static SubLInteger $int7$4503599627370496 = SubLObjectFactory.makeInteger("4503599627370496");
-	private static SubLInteger $int8$23 = SubLObjectFactory.makeInteger(23);
-	private static SubLInteger $int9$17976931348623157 = SubLObjectFactory.makeInteger("17976931348623157");
-	private static SubLInteger $int10$292 = SubLObjectFactory.makeInteger(292);
-	private static SubLInteger $int11$30 = SubLObjectFactory.makeInteger(30);
-	private static SubLInteger $int12$_300 = SubLObjectFactory.makeInteger(-300);
+	private static SubLInteger $int$53 = SubLObjectFactory.makeInteger(53);
+	private static SubLInteger $int$64 = SubLObjectFactory.makeInteger(64);
+	private static SubLInteger $int$18446744073709551616 = SubLObjectFactory.makeInteger("18446744073709551616");
+	private static SubLInteger $int$9223372036854775808 = SubLObjectFactory.makeInteger("9223372036854775808");
+	private static SubLInteger $int$2048 = SubLObjectFactory.makeInteger(2048);
+	private static SubLInteger $int$1024 = SubLObjectFactory.makeInteger(1024);
+	private static SubLInteger $int$9007199254740992 = SubLObjectFactory.makeInteger("9007199254740992");
+	private static SubLInteger $int$4503599627370496 = SubLObjectFactory.makeInteger("4503599627370496");
+	private static SubLInteger $int$23 = SubLObjectFactory.makeInteger(23);
+	private static SubLInteger $int$17976931348623157 = SubLObjectFactory.makeInteger("17976931348623157");
+	private static SubLInteger $int$292 = SubLObjectFactory.makeInteger(292);
+	private static SubLInteger $int$30 = SubLObjectFactory.makeInteger(30);
+	private static SubLInteger $int$_300 = SubLObjectFactory.makeInteger(-300);
 	private static SubLSymbol $sym13$__ = SubLObjectFactory.makeSymbol("<=");
 	private static SubLSymbol $sym14$_ = SubLObjectFactory.makeSymbol("<");
 	private static SubLSymbol $sym15$__ = SubLObjectFactory.makeSymbol(">=");
@@ -168,16 +168,16 @@ public class math_utilities extends SubLTranslatedFile {
 		SubLObject y;
 		SubLObject z;
 		SubLObject result1;
-		if (f.numG(Numbers.multiply($int9$17976931348623157, Numbers.expt(TEN_INTEGER, $int10$292)))) {
+		if (f.numG(Numbers.multiply($int$17976931348623157, Numbers.expt(TEN_INTEGER, $int$292)))) {
 			x = Numbers.ceiling(Numbers.log(f, TEN_INTEGER), UNPROVIDED);
-			y = Numbers.round(Numbers.divide(f, Numbers.expt(TEN_INTEGER, Numbers.subtract(x, $int11$30))), UNPROVIDED);
-			SubLObject y2 = Numbers.add(e, Numbers.subtract(x, $int11$30));
+			y = Numbers.round(Numbers.divide(f, Numbers.expt(TEN_INTEGER, Numbers.subtract(x, $int$30))), UNPROVIDED);
+			SubLObject y2 = Numbers.add(e, Numbers.subtract(x, $int$30));
 			z = Numbers.multiply(y, bell_ten_to_e(y2));
 			result1 = bell_fail(f, e, z);
 		} else {
 			x = Numbers.sublisp_float(f, UNPROVIDED);
-			y = e.numL($int12$_300) ? bell_ten_to_e(Numbers.ceiling(e, TWO_INTEGER)) : bell_ten_to_e(e);
-			Object y21 = e.numL($int12$_300) ? bell_ten_to_e(Numbers.floor(e, TWO_INTEGER)) : ONE_INTEGER;
+			y = e.numL($int$_300) ? bell_ten_to_e(Numbers.ceiling(e, TWO_INTEGER)) : bell_ten_to_e(e);
+			Object y21 = e.numL($int$_300) ? bell_ten_to_e(Numbers.floor(e, TWO_INTEGER)) : ONE_INTEGER;
 			z = Numbers.multiply(Numbers.multiply(x, y), (SubLObject) y21);
 			result1 = bell_fail(f, e, z);
 		}
@@ -455,19 +455,19 @@ public class math_utilities extends SubLTranslatedFile {
 	}
 
 	public static SubLObject init_math_utilities_file() {
-		$bell_double_precision_bits$ = SubLFiles.defconstant("BELL_DOUBLE-PRECISION-BITS", $int0$53);
-		$bell_extended_precision_bits$ = SubLFiles.defconstant("BELL_EXTENDED-PRECISION-BITS", $int1$64);
-		$bell_2_expt_p$ = SubLFiles.defconstant("BELL_2_EXPT_P", $int2$18446744073709551616);
-		$bell_2_expt_p_1$ = SubLFiles.defconstant("BELL_2_EXPT_P-1", $int3$9223372036854775808);
-		$bell_2_expt_p_n$ = SubLFiles.defconstant("BELL_2_EXPT_P-N", $int4$2048);
-		$bell_2_expt_p_n_1$ = SubLFiles.defconstant("BELL_2_EXPT_P-N-1", $int5$1024);
-		$bell_2_expt_n$ = SubLFiles.defconstant("BELL_2_EXPT_N", $int6$9007199254740992);
-		$bell_2_expt_n_1$ = SubLFiles.defconstant("BELL_2_EXPT_N-1", $int7$4503599627370496);
-		$bell_log5_of_2_expt_n$ = SubLFiles.defconstant("BELL_LOG5_OF_2_EXPT_N", $int8$23);
-		$bell_exp_table_lookup_limit$ = SubLFiles.defconstant("BELL_EXP-TABLE-LOOKUP-LIMIT", $int8$23);
+		$bell_double_precision_bits$ = SubLFiles.defconstant("BELL_DOUBLE-PRECISION-BITS", $int$53);
+		$bell_extended_precision_bits$ = SubLFiles.defconstant("BELL_EXTENDED-PRECISION-BITS", $int$64);
+		$bell_2_expt_p$ = SubLFiles.defconstant("BELL_2_EXPT_P", $int$18446744073709551616);
+		$bell_2_expt_p_1$ = SubLFiles.defconstant("BELL_2_EXPT_P-1", $int$9223372036854775808);
+		$bell_2_expt_p_n$ = SubLFiles.defconstant("BELL_2_EXPT_P-N", $int$2048);
+		$bell_2_expt_p_n_1$ = SubLFiles.defconstant("BELL_2_EXPT_P-N-1", $int$1024);
+		$bell_2_expt_n$ = SubLFiles.defconstant("BELL_2_EXPT_N", $int$9007199254740992);
+		$bell_2_expt_n_1$ = SubLFiles.defconstant("BELL_2_EXPT_N-1", $int$4503599627370496);
+		$bell_log5_of_2_expt_n$ = SubLFiles.defconstant("BELL_LOG5_OF_2_EXPT_N", $int$23);
+		$bell_exp_table_lookup_limit$ = SubLFiles.defconstant("BELL_EXP-TABLE-LOOKUP-LIMIT", $int$23);
 		$bell_delta$ = SubLFiles.defconstant("BELL_DELTA", TEN_INTEGER);
 		$bell_beta$ = SubLFiles.defconstant("BELL_BETA", TWO_INTEGER);
-		$bell_beta_expt_n_1$ = SubLFiles.defconstant("BELL_BETA_EXPT_N-1", $int7$4503599627370496);
+		$bell_beta_expt_n_1$ = SubLFiles.defconstant("BELL_BETA_EXPT_N-1", $int$4503599627370496);
 		$bell_beta_significand$ = SubLFiles.defvar("BELL_BETA-SIGNIFICAND", NIL);
 		$bell_beta_exponent$ = SubLFiles.defvar("BELL_BETA-EXPONENT", NIL);
 		$bell_delta_significand$ = SubLFiles.defvar("BELL_DELTA-SIGNIFICAND", NIL);

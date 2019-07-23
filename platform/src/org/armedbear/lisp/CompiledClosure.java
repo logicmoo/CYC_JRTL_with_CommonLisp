@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 abstract public class CompiledClosure extends Closure
         implements Cloneable
 {

@@ -35,8 +35,6 @@
  */
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;

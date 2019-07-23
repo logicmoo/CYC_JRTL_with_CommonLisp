@@ -1,6 +1,4 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.lang.reflect.Method;
@@ -11,10 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.armedbear.lisp.Cons;
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.Lisp;
-import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Main;
 import org.armedbear.lisp.Package;
 import org.armedbear.lisp.Symbol;
@@ -36,7 +32,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLInterpretedFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLMacro;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLSpecialOperatorImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.util.SubLFiles;

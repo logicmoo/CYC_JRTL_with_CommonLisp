@@ -1,9 +1,5 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
-
-import java.util.HashMap;
 
 import org.armedbear.lisp.Layout;
 import org.armedbear.lisp.LispClass;

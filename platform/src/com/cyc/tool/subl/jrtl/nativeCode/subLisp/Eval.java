@@ -1,6 +1,4 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.io.File;
@@ -97,8 +95,7 @@ public class Eval implements SubLFile {
                                 else
                                     resultException.add(SubLObjectFactory.makeException(ex.getMessage(), ex));
                             } else
-                                resultException.add(SubLObjectFactory
-                                        .makeException("Internal error: unable to find expected exception."));
+                                resultException.add(SubLObjectFactory.makeException("Internal error: unable to find expected exception."));
                         }
                     cdl.countDown();
                 }
@@ -162,45 +159,12 @@ public class Eval implements SubLFile {
 
     public static SubLObject initialize_subl_interface_file(SubLObject className) {
         String stringTyped = className.getStringValue();
-        Class fileClass = null;
-		try {
-			try {
-				fileClass = Class.forName(stringTyped, false, Eval.isolatedClassLoader);
-				if (!SubLFile.class.isAssignableFrom(fileClass))
-					Errors.error(stringTyped + " is not a SubLFile.");
-			} catch (ClassNotFoundException e) {
-				Errors.error("Not found: " + stringTyped, new RuntimeException(e));
-			}
-			fileClass = Class.forName(stringTyped, true, Eval.isolatedClassLoader);
-		} catch (Exception e2) {
-			Errors.error("Error loading " + stringTyped, new RuntimeException(e2));
-			return SubLNil.NIL;
-		}
-        Object file = null;
         try {
-            Field field = fileClass.getDeclaredField("me");
-            field.setAccessible(true);
-            if (Modifier.isStatic(field.getModifiers()))
-                file = field.get(null);
-        } catch (IllegalArgumentException e5) {
-        } catch (IllegalAccessException e4) {
-        } catch (SecurityException e6) {
-        } catch (NoSuchFieldException ex) {
+            SubLFiles.initialize(stringTyped);
+            return CommonSymbols.RET_NIL;
+        } catch (Exception e) {
+            return SubLNil.NIL;
         }
-        if (file == null)
-            try {
-                file = fileClass.newInstance();
-            } catch (InstantiationException e3) {
-                Errors.error("Error creating " + stringTyped, e3);
-            } catch (IllegalAccessException e4) {
-                Errors.error("Error accessing " + stringTyped, e4);
-            }
-        if (file instanceof SubLFile) {
-            SubLFiles.initialize((SubLFile) file);
-            return CommonSymbols.T;
-        }
-        Errors.error(stringTyped + " is not a SubLFile.");
-        return SubLNil.NIL;
     }
 
     public static SubLObject load(final SubLObject filename) {
@@ -218,14 +182,11 @@ public class Eval implements SubLFile {
         SubLObject form;
         try {
             String theFilename = filename.getStringValue();
-            SubLInputTextStream fileStream = (SubLInputTextStream) (stream = SubLStreamFactory
-                    .makeFileStream(theFilename, CommonSymbols.INPUT_KEYWORD, Keyword.TEXT_KEYWORD_CHARACTER, SubLNil.NIL, CommonSymbols.ERROR_KEYWORD, SubLNil.NIL)
-                    .toInputTextStream());
+            SubLInputTextStream fileStream = (SubLInputTextStream) (stream = SubLStreamFactory.makeFileStream(theFilename, CommonSymbols.INPUT_KEYWORD, Keyword.TEXT_KEYWORD_CHARACTER, SubLNil.NIL, CommonSymbols.ERROR_KEYWORD, SubLNil.NIL).toInputTextStream());
             SubLDigestInputTextStream digestStream = null;
             int verbose = 1;
             try {
-                digestStream = (SubLDigestInputTextStream) (stream = new SubLDigestInputTextStream(fileStream,
-                        MessageDigest.getInstance("SHA-1")));
+                digestStream = (SubLDigestInputTextStream) (stream = new SubLDigestInputTextStream(fileStream, MessageDigest.getInstance("SHA-1")));
             } catch (NoSuchAlgorithmException ex) {
                 //verbose++;
             }
@@ -260,8 +221,7 @@ public class Eval implements SubLFile {
                                 System.err.println(";; lastRetVal=" + lastRetVal);
                                 System.err.println(";; currentForm=" + currentForm);
                             }
-                            Errors.error(Eval.LOAD_ERROR_STRING_1, streams_high
-                                    .file_position(stream, CommonSymbols.UNPROVIDED), //
+                            Errors.error(Eval.LOAD_ERROR_STRING_1, streams_high.file_position(stream, CommonSymbols.UNPROVIDED), //
                                     filename);
                         }
 
@@ -425,8 +385,7 @@ public class Eval implements SubLFile {
         SubLFiles.declareFunction(Eval.me, "set_initial_continuation", "%SET-INITIAL-CONTINUATION", 1, 0, false);
         SubLFiles.declareFunction(Eval.me, "get_initial_continuation", "GET-INITIAL-CONTINUATION", 0, 0, false);
         SubLFiles.declareFunction(Eval.me, "set_initial_continuation", "SET-INITIAL-CONTINUATION", 1, 0, false);
-        SubLFiles
-                .declareFunction(Eval.me, "initialize_subl_interface_file", "INITIALIZE-SUBL-INTERFACE-FILE", 1, 0, false);
+        SubLFiles.declareFunction(Eval.me, "initialize_subl_interface_file", "INITIALIZE-SUBL-INTERFACE-FILE", 1, 0, false);
         SubLFiles.declareFunction(Eval.me, "load_external_code", "LOAD-EXTERNAL-CODE", 1, 0, false);
         SubLFiles.declareFunction(Eval.me, "patchSubLFile", "PATCH-SUBL-FILE", 1, 0, false);
         SubLFiles.declareFunction(Eval.me, "loadSubLPatch", "LOAD-SUBL-PATCH", 1, 1, false);

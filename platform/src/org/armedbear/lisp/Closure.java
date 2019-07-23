@@ -34,8 +34,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 abstract public class Closure extends Function
 {
     // Parameter types.
@@ -158,7 +156,7 @@ abstract public class Closure extends Function
         StringBuilder sb = new StringBuilder(getDotName(getClass()) + " ");
         final LispThread thread = LispThread.currentThread();
         final SpecialBindingsMark mark = thread.markSpecialBindings();
-        thread.bindSpecial(Symbol.PRINT_LENGTH, Fixnum.THIRTY_TWO);// Fixnum.THREE);
+        if(false)thread.bindSpecial(Symbol.PRINT_LENGTH, Fixnum.THIRTY_TWO);// Fixnum.THREE);
         try {
 
             if (name != null && name != NIL) {

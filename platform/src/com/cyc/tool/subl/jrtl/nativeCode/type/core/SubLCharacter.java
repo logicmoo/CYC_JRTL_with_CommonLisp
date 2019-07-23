@@ -1,11 +1,7 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
-import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.LispCharacter;
-import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

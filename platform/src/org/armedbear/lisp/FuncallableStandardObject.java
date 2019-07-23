@@ -36,8 +36,6 @@
 // exchange the functions.
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction; 
 
 public class FuncallableStandardObject extends StandardObject

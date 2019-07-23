@@ -1,6 +1,4 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.util;
 
 import java.util.logging.Level;
@@ -9,10 +7,8 @@ import org.armedbear.lisp.ControlTransfer;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Main;
 import org.armedbear.lisp.Package;
-import org.logicmoo.system.JVMImpl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.FromSubLisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;

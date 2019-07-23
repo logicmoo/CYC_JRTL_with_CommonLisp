@@ -33,59 +33,59 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class MacroObject extends Function {
-    //protected LispObject lambdaName;
-    //protected LispObject expander;
-    protected LispObject macroExpander;
+  //protected LispObject lambdaName;
+  //protected LispObject expander;
+  protected LispObject macroExpander;
 
-    public LispObject getExpander() {
-        return (LispObject) macroExpander;
-    }
+  public LispObject getExpander() {
+    return (LispObject) macroExpander;
+  }
 
-    @Override
-    public SubLSymbol getFunctionSymbol() {
-        return (SubLSymbol) lambdaName;
-    }
+  @Override
+  public SubLSymbol getFunctionSymbol() {
+    return (SubLSymbol) lambdaName;
+  }
 
-    protected MacroObject() {
-    }
+  protected MacroObject() {
+  }
 
-    public MacroObject(LispObject name, LispObject expander) {
-        this.lambdaName = name;
-        this.macroExpander = expander;
-        if (name instanceof Symbol && name != NIL && expander instanceof Function)
-            ((Function) expander).setLambdaName(list(Symbol.MACRO_FUNCTION, name));
-    }
+  public MacroObject(LispObject name, LispObject expander) {
+    this.lambdaName = name;
+    this.macroExpander = expander;
+    if (name instanceof Symbol && name != NIL && expander instanceof Function)
+      ((Function) expander).setLambdaName(list(Symbol.MACRO_FUNCTION, name));
+  }
 
-    @Override
-    public LispObject execute(LispObject[] args) {
-        if (args.length < 10)
-            return dispatch(args);
-        LispObject lo = getExpander().execute(args);
-        return lo;
+  @Override
+  public LispObject execute(LispObject[] args) {
+    if (args.length < 10)
+      return dispatch(args);
+    LispObject lo = getExpander().execute(args);
+    return lo;
 
-        //    return error(new UndefinedFunction(name));
-    }
+    //    return error(new UndefinedFunction(name));
+  }
 
-    @Override
-    public LispObject arrayify(LispObject... args) {
-        if (true)
-            return error(new UndefinedFunction(lambdaName));
-        LispObject fun = getExpander();
-        LispObject toEval = fun.execute(args);
-        //.execute(args);
-        return Lisp.eval(toEval);
+  @Override
+  public LispObject arrayify(LispObject... args) {
+    if (true)
+      return error(new UndefinedFunction(lambdaName));
+    LispObject fun = getExpander();
+    LispObject toEval = fun.execute(args);
+    //.execute(args);
+    return Lisp.eval(toEval);
 
-        //return execute(args);
-    }
+    //return execute(args);
+  }
 
-    @Override
-    protected void extraInfo(StringBuilder sb) {
-        sb.append(" " + macroExpander);
-    }
+  @Override
+  protected void extraInfo(StringBuilder sb) {    
+    sb.append(" MacroExpander: ");
+    final String str = macroExpander == null ? "missing !" : Lisp.stringValueOf(macroExpander);
+    sb.append(str);
+  }
 
 }

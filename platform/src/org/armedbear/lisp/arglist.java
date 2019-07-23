@@ -33,11 +33,7 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
-import static org.armedbear.lisp.Lisp.PACKAGE_EXT;
-import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
-import static org.armedbear.lisp.Lisp.get;
+import static org.armedbear.lisp.Lisp.*;
 
 public final class arglist
 {

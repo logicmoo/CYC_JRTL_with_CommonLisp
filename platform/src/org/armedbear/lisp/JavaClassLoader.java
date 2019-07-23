@@ -33,12 +33,7 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.PACKAGE_JAVA;
-import static org.armedbear.lisp.Lisp.error;
-import static org.armedbear.lisp.Lisp.readFunctionBytes;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.io.DataInputStream;
 import java.io.IOException;

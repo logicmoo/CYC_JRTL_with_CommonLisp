@@ -410,11 +410,11 @@ public class compatibility extends SubLTranslatedFile {
 		setup_compatibility_file();
 	}
 
-	public static SubLObject open_text(SubLObject filename, SubLObject direction, SubLSymbol unprovided) {
+	public static SubLObject open_text(SubLObject filename, SubLObject direction, SubLObject unprovided) {
 		return open_text(filename, direction);
 	}
 
-	public static SubLObject open_binary(SubLObject filename, SubLObject direction, SubLSymbol unprovided) {
+	public static SubLObject open_binary(SubLObject filename, SubLObject direction, SubLObject unprovided) {
 		return open_binary(filename, direction);
 	}
 }

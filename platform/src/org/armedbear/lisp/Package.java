@@ -32,8 +32,6 @@
  */
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

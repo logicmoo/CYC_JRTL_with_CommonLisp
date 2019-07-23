@@ -32,8 +32,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;

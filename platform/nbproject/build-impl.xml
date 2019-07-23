@@ -20,6 +20,8 @@ is divided into following sections:
 
         -->
 <project xmlns:if="ant:if" xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3" xmlns:jaxrpc="http://www.netbeans.org/ns/j2se-project/jax-rpc" xmlns:unless="ant:unless" basedir=".." default="default" name="platform-impl">
+    <import file="build-native.xml"/>
+    <import file="jnlp-impl.xml"/>
     <fail message="Please build using Ant 1.8.0 or higher.">
         <condition>
             <not>
@@ -42,14 +44,39 @@ is divided into following sections:
         <property file="nbproject/private/configs/${config}.properties"/>
         <property file="nbproject/private/private.properties"/>
     </target>
-    <target depends="-pre-init,-init-private" name="-init-user">
+    <target name="-pre-init-libraries">
+        <property location=".\lib\nblibraries.properties" name="libraries.path"/>
+        <dirname file="${libraries.path}" property="libraries.dir.nativedirsep"/>
+        <pathconvert dirsep="/" property="libraries.dir">
+            <path path="${libraries.dir.nativedirsep}"/>
+        </pathconvert>
+        <basename file="${libraries.path}" property="libraries.basename" suffix=".properties"/>
+        <available file="${libraries.dir}/${libraries.basename}-private.properties" property="private.properties.available"/>
+    </target>
+    <target depends="-pre-init-libraries" if="private.properties.available" name="-init-private-libraries">
+        <loadproperties encoding="ISO-8859-1" srcfile="${libraries.dir}/${libraries.basename}-private.properties">
+            <filterchain>
+                <replacestring from="$${base}" to="${libraries.dir}"/>
+                <escapeunicode/>
+            </filterchain>
+        </loadproperties>
+    </target>
+    <target depends="-pre-init,-init-private,-init-private-libraries" name="-init-libraries">
+        <loadproperties encoding="ISO-8859-1" srcfile="${libraries.path}">
+            <filterchain>
+                <replacestring from="$${base}" to="${libraries.dir}"/>
+                <escapeunicode/>
+            </filterchain>
+        </loadproperties>
+    </target>
+    <target depends="-pre-init,-init-private,-init-libraries" name="-init-user">
         <property file="${user.properties.file}"/>
         <!-- The two properties below are usually overridden -->
         <!-- by the active platform. Just a fallback. -->
         <property name="default.javac.source" value="1.6"/>
         <property name="default.javac.target" value="1.6"/>
     </target>
-    <target depends="-pre-init,-init-private,-init-user" name="-init-project">
+    <target depends="-pre-init,-init-private,-init-libraries,-init-user" name="-init-project">
         <property file="nbproject/configs/${config}.properties"/>
         <property file="nbproject/project.properties"/>
     </target>
@@ -90,7 +117,7 @@ is divided into following sections:
                 </not>
             </condition>
         </fail>
-        <j2seproject3:modulename property="module.name" sourcepath="${src.dir}:${logicmoo-main.dir}:${opencyc-server-jsrc-in-progress.dir}:${objectweb-asm-src.dir}:${armedbear-j-src.dir}:${server-4q.dir}:${java.dir}:${src2.dir}:${platform-1.1.dir}:${beanshell.dir}:${.apt_generated.dir}"/>
+        <j2seproject3:modulename property="module.name" sourcepath="${src.dir}:${armedbear-j-src.dir}:${beanshell.dir}:${src.cycjava-persistence-hacks2.dir}:${java.dir}:${src.jpl7-hacked.dir}:${logicmoo-main.dir}:${objectweb-asm-src.dir}:${server-4q.dir}:${server-4u.dir}:${server-4v.dir}"/>
         <condition property="named.module.internal">
             <and>
                 <isset property="module.name"/>
@@ -118,8 +145,44 @@ is divided into following sections:
         <property name="dist.jlink.output" value="${dist.jlink.dir}/${application.title}"/>
         <property name="module.name" value=""/>
     </target>
-    <target depends="-pre-init,-init-private,-init-user,-init-project,-init-macrodef-property,-init-modules-supported" name="-do-init">
-        <property name="platform.java" value="${java.home}/bin/java"/>
+    <target depends="-pre-init,-init-private,-init-libraries,-init-user,-init-project,-init-macrodef-property,-init-modules-supported" name="-do-init">
+        <j2seproject1:property name="platform.home" value="platforms.${platform.active}.home"/>
+        <j2seproject1:property name="platform.bootcp" value="platforms.${platform.active}.bootclasspath"/>
+        <j2seproject1:property name="platform.compiler" value="platforms.${platform.active}.compile"/>
+        <j2seproject1:property name="platform.javac.tmp" value="platforms.${platform.active}.javac"/>
+        <condition property="platform.javac" value="${platform.home}/bin/javac">
+            <equals arg1="${platform.javac.tmp}" arg2="$${platforms.${platform.active}.javac}"/>
+        </condition>
+        <property name="platform.javac" value="${platform.javac.tmp}"/>
+        <j2seproject1:property name="platform.java.tmp" value="platforms.${platform.active}.java"/>
+        <condition property="platform.java" value="${platform.home}/bin/java">
+            <equals arg1="${platform.java.tmp}" arg2="$${platforms.${platform.active}.java}"/>
+        </condition>
+        <property name="platform.java" value="${platform.java.tmp}"/>
+        <j2seproject1:property name="platform.javadoc.tmp" value="platforms.${platform.active}.javadoc"/>
+        <condition property="platform.javadoc" value="${platform.home}/bin/javadoc">
+            <equals arg1="${platform.javadoc.tmp}" arg2="$${platforms.${platform.active}.javadoc}"/>
+        </condition>
+        <property name="platform.javadoc" value="${platform.javadoc.tmp}"/>
+        <condition property="platform.invalid" value="true">
+            <or>
+                <contains string="${platform.javac}" substring="$${platforms."/>
+                <contains string="${platform.java}" substring="$${platforms."/>
+                <contains string="${platform.javadoc}" substring="$${platforms."/>
+            </or>
+        </condition>
+        <fail unless="platform.home">Must set platform.home</fail>
+        <fail unless="platform.bootcp">Must set platform.bootcp</fail>
+        <fail unless="platform.java">Must set platform.java</fail>
+        <fail unless="platform.javac">Must set platform.javac</fail>
+        <fail if="platform.invalid">
+ The J2SE Platform is not correctly set up.
+ Your active platform is: ${platform.active}, but the corresponding property "platforms.${platform.active}.home" is not found in the project's properties files. 
+ Either open the project in the IDE and setup the Platform with the same name or add it manually.
+ For example like this:
+     ant -Duser.properties.file=&lt;path_to_property_file&gt; jar (where you put the property "platforms.${platform.active}.home" in a .properties file)
+  or ant -Dplatforms.${platform.active}.home=&lt;path_to_JDK_home&gt; jar (where no properties file is used) 
+  </fail>
         <available file="${manifest.file}" property="manifest.available"/>
         <condition property="splashscreen.available">
             <and>
@@ -194,22 +257,21 @@ is divided into following sections:
             <or>
                 <available file="${test.src.dir}"/>
                 <available file="${test.test.dir}"/>
-                <available file="${test.jpl7-hacked.dir}"/>
             </or>
         </condition>
         <condition property="have.sources">
             <or>
                 <available file="${src.dir}"/>
-                <available file="${logicmoo-main.dir}"/>
-                <available file="${opencyc-server-jsrc-in-progress.dir}"/>
-                <available file="${objectweb-asm-src.dir}"/>
                 <available file="${armedbear-j-src.dir}"/>
-                <available file="${server-4q.dir}"/>
-                <available file="${java.dir}"/>
-                <available file="${src2.dir}"/>
-                <available file="${platform-1.1.dir}"/>
                 <available file="${beanshell.dir}"/>
-                <available file="${.apt_generated.dir}"/>
+                <available file="${src.cycjava-persistence-hacks2.dir}"/>
+                <available file="${java.dir}"/>
+                <available file="${src.jpl7-hacked.dir}"/>
+                <available file="${logicmoo-main.dir}"/>
+                <available file="${objectweb-asm-src.dir}"/>
+                <available file="${server-4q.dir}"/>
+                <available file="${server-4u.dir}"/>
+                <available file="${server-4v.dir}"/>
             </or>
         </condition>
         <condition property="netbeans.home+have.tests">
@@ -266,20 +328,6 @@ is divided into following sections:
         <condition else="" property="javac.profile.cmd.line.arg" value="-profile ${javac.profile}">
             <isset property="profile.available"/>
         </condition>
-        <condition else="false" property="jdkBug6558476">
-            <and>
-                <matches pattern="1\.[56]" string="${java.specification.version}"/>
-                <not>
-                    <os family="unix"/>
-                </not>
-            </and>
-        </condition>
-        <condition else="false" property="javac.fork">
-            <or>
-                <istrue value="${jdkBug6558476}"/>
-                <istrue value="${javac.external.vm}"/>
-            </or>
-        </condition>
         <property name="jar.index" value="false"/>
         <property name="jar.index.metainf" value="${jar.index}"/>
         <property name="copylibs.rebase" value="true"/>
@@ -311,21 +359,20 @@ is divided into following sections:
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
-    <target depends="-pre-init,-init-private,-init-user,-init-project,-do-init" name="-init-check">
+    <target depends="-pre-init,-init-private,-init-libraries,-init-user,-init-project,-do-init" name="-init-check">
         <fail unless="src.dir">Must set src.dir</fail>
-        <fail unless="logicmoo-main.dir">Must set logicmoo-main.dir</fail>
-        <fail unless="opencyc-server-jsrc-in-progress.dir">Must set opencyc-server-jsrc-in-progress.dir</fail>
-        <fail unless="objectweb-asm-src.dir">Must set objectweb-asm-src.dir</fail>
         <fail unless="armedbear-j-src.dir">Must set armedbear-j-src.dir</fail>
-        <fail unless="server-4q.dir">Must set server-4q.dir</fail>
-        <fail unless="java.dir">Must set java.dir</fail>
-        <fail unless="src2.dir">Must set src2.dir</fail>
-        <fail unless="platform-1.1.dir">Must set platform-1.1.dir</fail>
         <fail unless="beanshell.dir">Must set beanshell.dir</fail>
-        <fail unless=".apt_generated.dir">Must set .apt_generated.dir</fail>
+        <fail unless="src.cycjava-persistence-hacks2.dir">Must set src.cycjava-persistence-hacks2.dir</fail>
+        <fail unless="java.dir">Must set java.dir</fail>
+        <fail unless="src.jpl7-hacked.dir">Must set src.jpl7-hacked.dir</fail>
+        <fail unless="logicmoo-main.dir">Must set logicmoo-main.dir</fail>
+        <fail unless="objectweb-asm-src.dir">Must set objectweb-asm-src.dir</fail>
+        <fail unless="server-4q.dir">Must set server-4q.dir</fail>
+        <fail unless="server-4u.dir">Must set server-4u.dir</fail>
+        <fail unless="server-4v.dir">Must set server-4v.dir</fail>
         <fail unless="test.src.dir">Must set test.src.dir</fail>
         <fail unless="test.test.dir">Must set test.test.dir</fail>
-        <fail unless="test.jpl7-hacked.dir">Must set test.jpl7-hacked.dir</fail>
         <fail unless="build.dir">Must set build.dir</fail>
         <fail unless="dist.dir">Must set dist.dir</fail>
         <fail unless="build.classes.dir">Must set build.classes.dir</fail>
@@ -346,7 +393,7 @@ is divided into following sections:
     </target>
     <target depends="-init-ap-cmdline-properties,-init-source-module-properties" if="modules.supported.internal" name="-init-macrodef-javac-with-module">
         <macrodef name="javac" uri="http://www.netbeans.org/ns/j2se-project/3">
-            <attribute default="${src.dir}:${logicmoo-main.dir}:${opencyc-server-jsrc-in-progress.dir}:${objectweb-asm-src.dir}:${armedbear-j-src.dir}:${server-4q.dir}:${java.dir}:${src2.dir}:${platform-1.1.dir}:${beanshell.dir}:${.apt_generated.dir}" name="srcdir"/>
+            <attribute default="${src.dir}:${armedbear-j-src.dir}:${beanshell.dir}:${src.cycjava-persistence-hacks2.dir}:${java.dir}:${src.jpl7-hacked.dir}:${logicmoo-main.dir}:${objectweb-asm-src.dir}:${server-4q.dir}:${server-4u.dir}:${server-4v.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
             <attribute default="${javac.modulepath}" name="modulepath"/>
@@ -358,7 +405,7 @@ is divided into following sections:
             <attribute default="${excludes}" name="excludes"/>
             <attribute default="${javac.debug}" name="debug"/>
             <attribute default="${empty.dir}" name="sourcepath" unless:set="named.module.internal"/>
-            <attribute default="${src.dir}:${logicmoo-main.dir}:${opencyc-server-jsrc-in-progress.dir}:${objectweb-asm-src.dir}:${armedbear-j-src.dir}:${server-4q.dir}:${java.dir}:${src2.dir}:${platform-1.1.dir}:${beanshell.dir}:${.apt_generated.dir}" if:set="named.module.internal" name="sourcepath"/>
+            <attribute default="${src.dir}:${armedbear-j-src.dir}:${beanshell.dir}:${src.cycjava-persistence-hacks2.dir}:${java.dir}:${src.jpl7-hacked.dir}:${logicmoo-main.dir}:${objectweb-asm-src.dir}:${server-4q.dir}:${server-4u.dir}:${server-4v.dir}" if:set="named.module.internal" name="sourcepath"/>
             <attribute default="${empty.dir}" name="gensrcdir"/>
             <element name="customize" optional="true"/>
             <sequential>
@@ -379,7 +426,7 @@ is divided into following sections:
                         </path>
                     </resourcecount>
                 </condition>
-                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" fork="${javac.fork}" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
+                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" executable="${platform.javac}" fork="yes" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
                     <src>
                         <dirset dir="@{gensrcdir}" erroronmissingdir="false">
                             <include name="*"/>
@@ -413,7 +460,7 @@ is divided into following sections:
     </target>
     <target depends="-init-ap-cmdline-properties,-init-source-module-properties" if="ap.supported.internal" name="-init-macrodef-javac-with-processors" unless="modules.supported.internal">
         <macrodef name="javac" uri="http://www.netbeans.org/ns/j2se-project/3">
-            <attribute default="${src.dir}:${logicmoo-main.dir}:${opencyc-server-jsrc-in-progress.dir}:${objectweb-asm-src.dir}:${armedbear-j-src.dir}:${server-4q.dir}:${java.dir}:${src2.dir}:${platform-1.1.dir}:${beanshell.dir}:${.apt_generated.dir}" name="srcdir"/>
+            <attribute default="${src.dir}:${armedbear-j-src.dir}:${beanshell.dir}:${src.cycjava-persistence-hacks2.dir}:${java.dir}:${src.jpl7-hacked.dir}:${logicmoo-main.dir}:${objectweb-asm-src.dir}:${server-4q.dir}:${server-4u.dir}:${server-4v.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
             <attribute default="${javac.modulepath}" name="modulepath"/>
@@ -430,7 +477,7 @@ is divided into following sections:
                 <property location="${build.dir}/empty" name="empty.dir"/>
                 <mkdir dir="${empty.dir}"/>
                 <mkdir dir="@{apgeneratedsrcdir}"/>
-                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" fork="${javac.fork}" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
+                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" executable="${platform.javac}" fork="yes" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
                     <src>
                         <dirset dir="@{gensrcdir}" erroronmissingdir="false">
                             <include name="*"/>
@@ -456,7 +503,7 @@ is divided into following sections:
     </target>
     <target depends="-init-ap-cmdline-properties,-init-source-module-properties" name="-init-macrodef-javac-without-processors" unless="ap.supported.internal">
         <macrodef name="javac" uri="http://www.netbeans.org/ns/j2se-project/3">
-            <attribute default="${src.dir}:${logicmoo-main.dir}:${opencyc-server-jsrc-in-progress.dir}:${objectweb-asm-src.dir}:${armedbear-j-src.dir}:${server-4q.dir}:${java.dir}:${src2.dir}:${platform-1.1.dir}:${beanshell.dir}:${.apt_generated.dir}" name="srcdir"/>
+            <attribute default="${src.dir}:${armedbear-j-src.dir}:${beanshell.dir}:${src.cycjava-persistence-hacks2.dir}:${java.dir}:${src.jpl7-hacked.dir}:${logicmoo-main.dir}:${objectweb-asm-src.dir}:${server-4q.dir}:${server-4u.dir}:${server-4v.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
             <attribute default="${javac.modulepath}" name="modulepath"/>
@@ -472,7 +519,7 @@ is divided into following sections:
             <sequential>
                 <property location="${build.dir}/empty" name="empty.dir"/>
                 <mkdir dir="${empty.dir}"/>
-                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" fork="${javac.fork}" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
+                <javac debug="@{debug}" deprecation="${javac.deprecation}" destdir="@{destdir}" encoding="${source.encoding}" excludes="@{excludes}" executable="${platform.javac}" fork="yes" includeantruntime="false" includes="@{includes}" source="${javac.source}" sourcepath="@{sourcepath}" srcdir="@{srcdir}" target="${javac.target}" tempdir="${java.io.tmpdir}">
                     <src>
                         <dirset dir="@{gensrcdir}" erroronmissingdir="false">
                             <include name="*"/>
@@ -491,7 +538,7 @@ is divided into following sections:
     </target>
     <target depends="-init-macrodef-javac-with-module,-init-macrodef-javac-with-processors,-init-macrodef-javac-without-processors" name="-init-macrodef-javac">
         <macrodef name="depend" uri="http://www.netbeans.org/ns/j2se-project/3">
-            <attribute default="${src.dir}:${logicmoo-main.dir}:${opencyc-server-jsrc-in-progress.dir}:${objectweb-asm-src.dir}:${armedbear-j-src.dir}:${server-4q.dir}:${java.dir}:${src2.dir}:${platform-1.1.dir}:${beanshell.dir}:${.apt_generated.dir}" name="srcdir"/>
+            <attribute default="${src.dir}:${armedbear-j-src.dir}:${beanshell.dir}:${src.cycjava-persistence-hacks2.dir}:${java.dir}:${src.jpl7-hacked.dir}:${logicmoo-main.dir}:${objectweb-asm-src.dir}:${server-4q.dir}:${server-4u.dir}:${server-4v.dir}" name="srcdir"/>
             <attribute default="${build.classes.dir}" name="destdir"/>
             <attribute default="${javac.classpath}" name="classpath"/>
             <sequential>
@@ -551,7 +598,7 @@ is divided into following sections:
             <element name="customizePrototype" optional="true"/>
             <sequential>
                 <property name="junit.forkmode" value="perTest"/>
-                <junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" forkmode="${junit.forkmode}" showoutput="true" tempdir="${build.dir}">
+                <junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" forkmode="${junit.forkmode}" jvm="${platform.java}" showoutput="true" tempdir="${build.dir}">
                     <syspropertyset>
                         <propertyref prefix="test-sys-prop."/>
                         <mapper from="test-sys-prop.*" to="*" type="glob"/>
@@ -579,7 +626,7 @@ is divided into following sections:
             <element name="customizePrototype" optional="true"/>
             <sequential>
                 <property name="junit.forkmode" value="perTest"/>
-                <junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" forkmode="${junit.forkmode}" showoutput="true" tempdir="${build.dir}">
+                <junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true" forkmode="${junit.forkmode}" jvm="${platform.java}" showoutput="true" tempdir="${build.dir}">
                     <syspropertyset>
                         <propertyref prefix="test-sys-prop."/>
                         <mapper from="test-sys-prop.*" to="*" type="glob"/>
@@ -630,9 +677,6 @@ is divided into following sections:
                             <fileset dir="${test.test.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
                                 <filename name="@{testincludes}"/>
                             </fileset>
-                            <fileset dir="${test.jpl7-hacked.dir}" excludes="@{excludes},${excludes}" includes="@{includes}">
-                                <filename name="@{testincludes}"/>
-                            </fileset>
                             <fileset dir="${build.test.classes.dir}" excludes="@{excludes},${excludes},${test.binaryexcludes}" includes="${test.binaryincludes}">
                                 <filename name="${test.binarytestincludes}"/>
                             </fileset>
@@ -662,12 +706,9 @@ is divided into following sections:
                     <fileset dir="${test.test.dir}" excludes="@{excludes},**/*.xml,${excludes}" includes="@{includes}">
                         <filename name="@{testincludes}"/>
                     </fileset>
-                    <fileset dir="${test.jpl7-hacked.dir}" excludes="@{excludes},**/*.xml,${excludes}" includes="@{includes}">
-                        <filename name="@{testincludes}"/>
-                    </fileset>
                 </union>
                 <taskdef classname="org.testng.TestNGAntTask" classpath="${run.test.classpath}" name="testng"/>
-                <testng classfilesetref="test.set" failureProperty="tests.failed" listeners="org.testng.reporters.VerboseReporter" methods="${testng.methods.arg}" mode="${testng.mode}" outputdir="${build.test.results.dir}" suitename="platform" testname="TestNG tests" workingDir="${work.dir}">
+                <testng classfilesetref="test.set" failureProperty="tests.failed" jvm="${platform.java}" listeners="org.testng.reporters.VerboseReporter" methods="${testng.methods.arg}" mode="${testng.mode}" outputdir="${build.test.results.dir}" suitename="platform" testname="TestNG tests" workingDir="${work.dir}">
                     <xmlfileset dir="${build.test.classes.dir}" includes="@{testincludes}"/>
                     <propertyset>
                         <propertyref prefix="test-sys-prop."/>
@@ -898,6 +939,9 @@ is divided into following sections:
                     <classpath>
                         <path path="@{classpath}"/>
                     </classpath>
+                    <bootclasspath>
+                        <path path="${platform.bootcp}"/>
+                    </bootclasspath>
                 </nbjpdastart>
             </sequential>
         </macrodef>
@@ -947,7 +991,7 @@ is divided into following sections:
             <attribute default="jvm" name="jvm"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <java classname="@{classname}" dir="${work.dir}" failonerror="${java.failonerror}" fork="true" module="@{modulename}">
+                <java classname="@{classname}" dir="${work.dir}" failonerror="${java.failonerror}" fork="true" jvm="${platform.java}" module="@{modulename}">
                     <classpath>
                         <path path="@{classpath}"/>
                     </classpath>
@@ -981,7 +1025,7 @@ is divided into following sections:
             <attribute default="jvm" name="jvm"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <java classname="@{classname}" dir="${work.dir}" failonerror="${java.failonerror}" fork="true">
+                <java classname="@{classname}" dir="${work.dir}" failonerror="${java.failonerror}" fork="true" jvm="${platform.java}">
                     <classpath>
                         <path path="@{classpath}"/>
                     </classpath>
@@ -1013,7 +1057,7 @@ is divided into following sections:
             <attribute default="jvm" name="jvm"/>
             <element name="customize" optional="true"/>
             <sequential>
-                <java classname="@{classname}" dir="${work.dir}" failonerror="${java.failonerror}" fork="true">
+                <java classname="@{classname}" dir="${work.dir}" failonerror="${java.failonerror}" fork="true" jvm="${platform.java}">
                     <jvmarg line="${endorsed.classpath.cmd.line.arg}"/>
                     <jvmarg value="-Dfile.encoding=${runtime.encoding}"/>
                     <redirector errorencoding="${runtime.encoding}" inputencoding="${runtime.encoding}" outputencoding="${runtime.encoding}"/>
@@ -1094,7 +1138,7 @@ is divided into following sections:
     <target depends="-init-ap-cmdline-properties,-init-ap-cmdline-supported" name="-init-ap-cmdline">
         <property name="ap.cmd.line.internal" value=""/>
     </target>
-    <target depends="-pre-init,-init-private,-init-user,-init-project,-do-init,-post-init,-init-check,-init-macrodef-property,-init-macrodef-javac,-init-macrodef-test,-init-macrodef-test-debug,-init-macrodef-nbjpda,-init-macrodef-debug,-init-macrodef-java,-init-presetdef-jar,-init-ap-cmdline" name="init"/>
+    <target depends="-pre-init,-init-private,-init-libraries,-init-user,-init-project,-do-init,-post-init,-init-check,-init-macrodef-property,-init-macrodef-javac,-init-macrodef-test,-init-macrodef-test-debug,-init-macrodef-nbjpda,-init-macrodef-debug,-init-macrodef-java,-init-presetdef-jar,-init-ap-cmdline" name="init"/>
     <!--
                 ===================
                 COMPILATION SECTION
@@ -1138,22 +1182,22 @@ is divided into following sections:
                 <include name="*"/>
             </dirset>
         </pathconvert>
-        <j2seproject3:depend srcdir="${src.dir}:${logicmoo-main.dir}:${opencyc-server-jsrc-in-progress.dir}:${objectweb-asm-src.dir}:${armedbear-j-src.dir}:${server-4q.dir}:${java.dir}:${src2.dir}:${platform-1.1.dir}:${beanshell.dir}:${.apt_generated.dir}:${build.generated.subdirs}"/>
+        <j2seproject3:depend srcdir="${src.dir}:${armedbear-j-src.dir}:${beanshell.dir}:${src.cycjava-persistence-hacks2.dir}:${java.dir}:${src.jpl7-hacked.dir}:${logicmoo-main.dir}:${objectweb-asm-src.dir}:${server-4q.dir}:${server-4u.dir}:${server-4v.dir}:${build.generated.subdirs}"/>
     </target>
     <target depends="init,deps-jar,-pre-pre-compile,-pre-compile, -copy-persistence-xml,-compile-depend" if="have.sources" name="-do-compile">
         <j2seproject3:javac gensrcdir="${build.generated.sources.dir}"/>
         <copy todir="${build.classes.dir}">
             <fileset dir="${src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${logicmoo-main.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${opencyc-server-jsrc-in-progress.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${objectweb-asm-src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
             <fileset dir="${armedbear-j-src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${server-4q.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${java.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${src2.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${platform-1.1.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
             <fileset dir="${beanshell.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${.apt_generated.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${src.cycjava-persistence-hacks2.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${java.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${src.jpl7-hacked.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${logicmoo-main.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${objectweb-asm-src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${server-4q.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${server-4u.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
+            <fileset dir="${server-4v.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
     </target>
     <target if="has.persistence.xml" name="-copy-persistence-xml">
@@ -1174,7 +1218,7 @@ is divided into following sections:
     <target depends="init,deps-jar,-pre-pre-compile" name="-do-compile-single">
         <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
         <j2seproject3:force-recompile/>
-        <j2seproject3:javac excludes="" gensrcdir="${build.generated.sources.dir}" includes="${javac.includes}, module-info.java" sourcepath="${src.dir}:${logicmoo-main.dir}:${opencyc-server-jsrc-in-progress.dir}:${objectweb-asm-src.dir}:${armedbear-j-src.dir}:${server-4q.dir}:${java.dir}:${src2.dir}:${platform-1.1.dir}:${beanshell.dir}:${.apt_generated.dir}"/>
+        <j2seproject3:javac excludes="" gensrcdir="${build.generated.sources.dir}" includes="${javac.includes}, module-info.java" sourcepath="${src.dir}:${armedbear-j-src.dir}:${beanshell.dir}:${src.cycjava-persistence-hacks2.dir}:${java.dir}:${src.jpl7-hacked.dir}:${logicmoo-main.dir}:${objectweb-asm-src.dir}:${server-4q.dir}:${server-4u.dir}:${server-4v.dir}"/>
     </target>
     <target name="-post-compile-single">
         <!-- Empty placeholder for easier customization. -->
@@ -1243,7 +1287,7 @@ is divided into following sections:
         <j2seproject3:copylibs manifest="${tmp.manifest.file}"/>
         <echo level="info">To run this application from the command line without Ant, try:</echo>
         <property location="${dist.jar}" name="dist.jar.resolved"/>
-        <echo level="info">java -jar "${dist.jar.resolved}"</echo>
+        <echo level="info">${platform.java} -jar "${dist.jar.resolved}"</echo>
     </target>
     <target depends="init,compile,-pre-pre-jar,-pre-jar,-do-jar-create-manifest,-do-jar-copy-manifest,-do-jar-set-mainclass,-do-jar-set-profile,-do-jar-set-splashscreen" if="do.archive" name="-do-jar-jar" unless="do.mkdist">
         <j2seproject1:jar manifest="${tmp.manifest.file}"/>
@@ -1294,12 +1338,12 @@ is divided into following sections:
     </target>
     <target depends="init,compile,-pre-pre-jar,-pre-jar,-do-jar-create-manifest,-do-jar-copy-manifest,-do-jar-set-mainclass,-do-jar-set-profile,-do-jar-set-splashscreen,-do-jar-jar,-do-jar-delete-manifest" name="-do-jar-without-libraries"/>
     <target depends="init,compile,-pre-pre-jar,-pre-jar,-do-jar-create-manifest,-do-jar-copy-manifest,-do-jar-set-mainclass,-do-jar-set-profile,-do-jar-set-splashscreen,-do-jar-copylibs,-do-jar-delete-manifest" name="-do-jar-with-libraries"/>
-    <target name="-post-jar">
+    <target depends="jnlp" name="-post-jar">
         <!-- Empty placeholder for easier customization. -->
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="init,compile,-pre-jar,-set-module-main-class,-do-jar-without-libraries,-do-jar-with-libraries,-post-jar" name="-do-jar"/>
-    <target depends="init,compile,-pre-jar,-do-jar,-post-jar,deploy" description="Build JAR." name="jar"/>
+    <target depends="init,compile,-pre-jar,-do-jar,-post-jar,deploy,jnlp" description="Build JAR." name="jar"/>
     <!--
                 =================
                 DEPLOY SECTION
@@ -1345,8 +1389,8 @@ is divided into following sections:
                 <isset property="main.class.available"/>
             </and>
         </condition>
-        <property name="platform.jlink" value="${jdk.home}/bin/jlink"/>
-        <property name="jlink.systemmodules.internal" value="${jdk.home}/jmods"/>
+        <property name="platform.jlink" value="${platform.home}/bin/jlink"/>
+        <property name="jlink.systemmodules.internal" value="${platform.home}/jmods"/>
         <exec executable="${platform.jlink}">
             <arg value="--module-path"/>
             <arg path="${jlink.systemmodules.internal}:${run.modulepath}:${dist.jar}"/>
@@ -1539,50 +1583,53 @@ is divided into following sections:
                 </not>
             </and>
         </condition>
+        <exec executable="${platform.java}" failonerror="false" outputproperty="platform.version.output">
+            <arg value="-version"/>
+        </exec>
         <condition else="" property="bug5101868workaround" value="*.java">
-            <matches pattern="1\.[56](\..*)?" string="${java.version}"/>
+            <matches multiline="true" pattern="1\.[56](\..*)?" string="${platform.version.output}"/>
         </condition>
         <condition else="" property="javadoc.html5.cmd.line.arg" value="-html5">
             <and>
                 <isset property="javadoc.html5"/>
-                <available file="${jdk.home}${file.separator}lib${file.separator}jrt-fs.jar"/>
+                <available file="${platform.home}${file.separator}lib${file.separator}jrt-fs.jar"/>
             </and>
         </condition>
-        <javadoc additionalparam="-J-Dfile.encoding=${file.encoding} ${javadoc.additionalparam}" author="${javadoc.author}" charset="UTF-8" destdir="${dist.javadoc.dir}" docencoding="UTF-8" encoding="${javadoc.encoding.used}" failonerror="true" noindex="${javadoc.noindex}" nonavbar="${javadoc.nonavbar}" notree="${javadoc.notree}" private="${javadoc.private}" source="${javac.source}" splitindex="${javadoc.splitindex}" use="${javadoc.use}" useexternalfile="true" version="${javadoc.version}" windowtitle="${javadoc.windowtitle}">
+        <javadoc additionalparam="-J-Dfile.encoding=${file.encoding} ${javadoc.additionalparam}" author="${javadoc.author}" charset="UTF-8" destdir="${dist.javadoc.dir}" docencoding="UTF-8" encoding="${javadoc.encoding.used}" executable="${platform.javadoc}" failonerror="true" noindex="${javadoc.noindex}" nonavbar="${javadoc.nonavbar}" notree="${javadoc.notree}" private="${javadoc.private}" source="${javac.source}" splitindex="${javadoc.splitindex}" use="${javadoc.use}" useexternalfile="true" version="${javadoc.version}" windowtitle="${javadoc.windowtitle}">
             <classpath>
                 <path path="${javac.classpath}"/>
             </classpath>
             <fileset dir="${src.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
                 <filename name="**/*.java"/>
             </fileset>
-            <fileset dir="${logicmoo-main.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
-                <filename name="**/*.java"/>
-            </fileset>
-            <fileset dir="${opencyc-server-jsrc-in-progress.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
-                <filename name="**/*.java"/>
-            </fileset>
-            <fileset dir="${objectweb-asm-src.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
-                <filename name="**/*.java"/>
-            </fileset>
             <fileset dir="${armedbear-j-src.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
-                <filename name="**/*.java"/>
-            </fileset>
-            <fileset dir="${server-4q.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
-                <filename name="**/*.java"/>
-            </fileset>
-            <fileset dir="${java.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
-                <filename name="**/*.java"/>
-            </fileset>
-            <fileset dir="${src2.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
-                <filename name="**/*.java"/>
-            </fileset>
-            <fileset dir="${platform-1.1.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
                 <filename name="**/*.java"/>
             </fileset>
             <fileset dir="${beanshell.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
                 <filename name="**/*.java"/>
             </fileset>
-            <fileset dir="${.apt_generated.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+            <fileset dir="${src.cycjava-persistence-hacks2.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
+            <fileset dir="${java.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
+            <fileset dir="${src.jpl7-hacked.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
+            <fileset dir="${logicmoo-main.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
+            <fileset dir="${objectweb-asm-src.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
+            <fileset dir="${server-4q.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
+            <fileset dir="${server-4u.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
+                <filename name="**/*.java"/>
+            </fileset>
+            <fileset dir="${server-4v.dir}" excludes="${bug5101868workaround},${excludes}" includes="${includes}">
                 <filename name="**/*.java"/>
             </fileset>
             <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">
@@ -1596,34 +1643,34 @@ is divided into following sections:
             <fileset dir="${src.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/doc-files/**"/>
             </fileset>
-            <fileset dir="${logicmoo-main.dir}" excludes="${excludes}" includes="${includes}">
-                <filename name="**/doc-files/**"/>
-            </fileset>
-            <fileset dir="${opencyc-server-jsrc-in-progress.dir}" excludes="${excludes}" includes="${includes}">
-                <filename name="**/doc-files/**"/>
-            </fileset>
-            <fileset dir="${objectweb-asm-src.dir}" excludes="${excludes}" includes="${includes}">
-                <filename name="**/doc-files/**"/>
-            </fileset>
             <fileset dir="${armedbear-j-src.dir}" excludes="${excludes}" includes="${includes}">
-                <filename name="**/doc-files/**"/>
-            </fileset>
-            <fileset dir="${server-4q.dir}" excludes="${excludes}" includes="${includes}">
-                <filename name="**/doc-files/**"/>
-            </fileset>
-            <fileset dir="${java.dir}" excludes="${excludes}" includes="${includes}">
-                <filename name="**/doc-files/**"/>
-            </fileset>
-            <fileset dir="${src2.dir}" excludes="${excludes}" includes="${includes}">
-                <filename name="**/doc-files/**"/>
-            </fileset>
-            <fileset dir="${platform-1.1.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/doc-files/**"/>
             </fileset>
             <fileset dir="${beanshell.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/doc-files/**"/>
             </fileset>
-            <fileset dir="${.apt_generated.dir}" excludes="${excludes}" includes="${includes}">
+            <fileset dir="${src.cycjava-persistence-hacks2.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/doc-files/**"/>
+            </fileset>
+            <fileset dir="${java.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/doc-files/**"/>
+            </fileset>
+            <fileset dir="${src.jpl7-hacked.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/doc-files/**"/>
+            </fileset>
+            <fileset dir="${logicmoo-main.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/doc-files/**"/>
+            </fileset>
+            <fileset dir="${objectweb-asm-src.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/doc-files/**"/>
+            </fileset>
+            <fileset dir="${server-4q.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/doc-files/**"/>
+            </fileset>
+            <fileset dir="${server-4u.dir}" excludes="${excludes}" includes="${includes}">
+                <filename name="**/doc-files/**"/>
+            </fileset>
+            <fileset dir="${server-4v.dir}" excludes="${excludes}" includes="${includes}">
                 <filename name="**/doc-files/**"/>
             </fileset>
             <fileset dir="${build.generated.sources.dir}" erroronmissingdir="false">
@@ -1648,14 +1695,14 @@ is divided into following sections:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="-init-source-module-properties" if="named.module.internal" name="-init-test-javac-module-properties-with-module">
-        <j2seproject3:modulename property="test.module.name" sourcepath="${test.src.dir}:${test.test.dir}:${test.jpl7-hacked.dir}"/>
-        <condition else="${empty.dir}" property="javac.test.sourcepath" value="${test.src.dir}:${test.test.dir}:${test.jpl7-hacked.dir}">
+        <j2seproject3:modulename property="test.module.name" sourcepath="${test.src.dir}:${test.test.dir}"/>
+        <condition else="${empty.dir}" property="javac.test.sourcepath" value="${test.src.dir}:${test.test.dir}">
             <and>
                 <isset property="test.module.name"/>
                 <length length="0" string="${test.module.name}" when="greater"/>
             </and>
         </condition>
-        <condition else="--patch-module ${module.name}=${test.src.dir}:${test.test.dir}:${test.jpl7-hacked.dir} --add-reads ${module.name}=ALL-UNNAMED" property="javac.test.compilerargs" value="--add-reads ${test.module.name}=ALL-UNNAMED">
+        <condition else="--patch-module ${module.name}=${test.src.dir}:${test.test.dir} --add-reads ${module.name}=ALL-UNNAMED" property="javac.test.compilerargs" value="--add-reads ${test.module.name}=ALL-UNNAMED">
             <and>
                 <isset property="test.module.name"/>
                 <length length="0" string="${test.module.name}" when="greater"/>
@@ -1696,10 +1743,10 @@ is divided into following sections:
     </target>
     <target depends="-init-test-javac-module-properties-with-module,-init-test-module-properties-without-module" name="-init-test-module-properties"/>
     <target if="do.depend.true" name="-compile-test-depend">
-        <j2seproject3:depend classpath="${javac.test.classpath}" destdir="${build.test.classes.dir}" srcdir="${test.src.dir}:${test.test.dir}:${test.jpl7-hacked.dir}"/>
+        <j2seproject3:depend classpath="${javac.test.classpath}" destdir="${build.test.classes.dir}" srcdir="${test.src.dir}:${test.test.dir}"/>
     </target>
     <target depends="init,deps-jar,compile,-init-test-module-properties,-pre-pre-compile-test,-pre-compile-test,-compile-test-depend" if="have.tests" name="-do-compile-test">
-        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" modulepath="${javac.test.modulepath}" processorpath="${javac.test.processorpath}" sourcepath="${javac.test.sourcepath}" srcdir="${test.src.dir}:${test.test.dir}:${test.jpl7-hacked.dir}">
+        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" modulepath="${javac.test.modulepath}" processorpath="${javac.test.processorpath}" sourcepath="${javac.test.sourcepath}" srcdir="${test.src.dir}:${test.test.dir}">
             <customize>
                 <compilerarg line="${javac.test.compilerargs}"/>
             </customize>
@@ -1707,7 +1754,6 @@ is divided into following sections:
         <copy todir="${build.test.classes.dir}">
             <fileset dir="${test.src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
             <fileset dir="${test.test.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${test.jpl7-hacked.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
     </target>
     <target name="-post-compile-test">
@@ -1722,7 +1768,7 @@ is divided into following sections:
     <target depends="init,deps-jar,compile,-init-test-module-properties,-pre-pre-compile-test,-pre-compile-test-single" if="have.tests" name="-do-compile-test-single">
         <fail unless="javac.includes">Must select some files in the IDE or set javac.includes</fail>
         <j2seproject3:force-recompile destdir="${build.test.classes.dir}"/>
-        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" excludes="" includes="${javac.includes}, module-info.java" modulepath="${javac.test.modulepath}" processorpath="${javac.test.processorpath}" sourcepath="${test.src.dir}:${test.test.dir}:${test.jpl7-hacked.dir}" srcdir="${test.src.dir}:${test.test.dir}:${test.jpl7-hacked.dir}">
+        <j2seproject3:javac apgeneratedsrcdir="${build.test.classes.dir}" classpath="${javac.test.classpath}" debug="true" destdir="${build.test.classes.dir}" excludes="" includes="${javac.includes}, module-info.java" modulepath="${javac.test.modulepath}" processorpath="${javac.test.processorpath}" sourcepath="${test.src.dir}:${test.test.dir}" srcdir="${test.src.dir}:${test.test.dir}">
             <customize>
                 <compilerarg line="${javac.test.compilerargs}"/>
             </customize>
@@ -1730,7 +1776,6 @@ is divided into following sections:
         <copy todir="${build.test.classes.dir}">
             <fileset dir="${test.src.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
             <fileset dir="${test.test.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
-            <fileset dir="${test.jpl7-hacked.dir}" excludes="${build.classes.excludes},${excludes}" includes="${includes}"/>
         </copy>
     </target>
     <target name="-post-compile-test-single">

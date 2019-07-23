@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 

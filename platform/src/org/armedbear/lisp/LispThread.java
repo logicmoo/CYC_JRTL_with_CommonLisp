@@ -33,21 +33,14 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
-import static org.armedbear.lisp.Lisp.*;
-
 import java.io.PrintStream;
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.armedbear.lisp.ArgumentListProcessor.KeywordParam;
-import org.armedbear.lisp.ArgumentListProcessor.OptionalParam;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 

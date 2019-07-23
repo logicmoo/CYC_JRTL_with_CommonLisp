@@ -47,8 +47,6 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CodingErrorAction;
 
-import org.armedbear.lisp.Debug;
-
 /** Class to support mid-stream change of character encoding
  * to support setExternalFormat operation in Stream.java
  *

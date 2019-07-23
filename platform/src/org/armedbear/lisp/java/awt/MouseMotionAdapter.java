@@ -20,9 +20,10 @@
 
 package org.armedbear.lisp.java.awt;
 
-import org.armedbear.lisp.JHandler;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
+
+import org.armedbear.lisp.JHandler;
 
 public class MouseMotionAdapter extends java.awt.event.MouseMotionAdapter 
 {

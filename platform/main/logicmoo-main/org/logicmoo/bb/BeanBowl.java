@@ -21,9 +21,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.SwingUtilities;
-import javax.swing.text.Utilities;
-
 import org.armedbear.lisp.Lisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

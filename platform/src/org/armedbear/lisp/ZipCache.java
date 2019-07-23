@@ -32,7 +32,6 @@
  */
 package org.armedbear.lisp;
 
-import org.armedbear.lisp.util.HttpHead;
 import static org.armedbear.lisp.Lisp.*;
 
 import java.io.File;
@@ -48,6 +47,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
+
+import org.armedbear.lisp.util.HttpHead;
 
 
 /**
@@ -288,7 +289,7 @@ public class ZipCache {
             try {
                 entry.file.close();
             } catch (IOException e) {}
-            zipCache.remove(entry);
+            zipCache.remove(url);
             return true;
         }
         return false;

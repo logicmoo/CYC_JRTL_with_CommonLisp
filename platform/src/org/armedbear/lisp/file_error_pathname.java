@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 // ### file-error-pathname
 public final class file_error_pathname extends Primitive
 {

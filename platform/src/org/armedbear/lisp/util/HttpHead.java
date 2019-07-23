@@ -32,18 +32,16 @@
  */
 package org.armedbear.lisp.util;
 
-import org.armedbear.lisp.Debug;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
-import java.net.Proxy;
 import java.net.Socket;
 import java.net.URL;
+
+import org.armedbear.lisp.Debug;
 
 /** 
  * Use HTTP/1.1 HEAD to retrieve the specified header field.

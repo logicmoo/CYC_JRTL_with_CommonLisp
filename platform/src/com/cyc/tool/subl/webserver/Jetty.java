@@ -1,7 +1,7 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.webserver;
+
+import static org.armedbear.lisp.Lisp.*;
 
 import java.io.File;
 import java.util.List;
@@ -11,11 +11,9 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
-import static org.armedbear.lisp.Lisp.*;
 
 public class Jetty {
 	public static class JettyStartFailureException extends RuntimeException {

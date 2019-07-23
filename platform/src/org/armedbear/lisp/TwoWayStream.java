@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInOutTextStreamImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;

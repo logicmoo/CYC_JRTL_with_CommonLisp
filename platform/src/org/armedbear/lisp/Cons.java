@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import org.jpl7.Compound;
 import org.jpl7.JPL;
 import org.jpl7.Term;
@@ -45,619 +43,535 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync.IPrologifiable;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLConsPair;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class Cons extends SubLConsPair implements java.io.Serializable, IPrologifiable
-{
-	public LispObject car;
-	public LispObject cdr;
+public final class Cons extends SubLConsPair implements java.io.Serializable, IPrologifiable {
+    public LispObject car;
+    public LispObject cdr;
 
-	@Override
-	public LispObject car()
-	{
-		return car;
-	}
+    @Override
+    public LispObject car() {
+        return car;
+    }
 
-	@Override
-	public LispObject cdr()
-	{
-		return cdr;
-	}
+    @Override
+    public LispObject cdr() {
+        return cdr;
+    }
 
-	public Cons(SubLObject first, SubLObject rest)
-	{
-		this((LispObject) first, (LispObject) rest); 
-	}
+    public Cons(SubLObject first, SubLObject rest) {
+        this((LispObject) first, (LispObject) rest);
+    }
 
-	public Cons(LispObject car, LispObject cdr)
-	{
-		if (car == null || cdr == null)
-		{
-			Errors.error("Bad null cons");
-		}
-		this.car = car;
-		this.cdr = cdr;
-		++count;
-	}
+    public Cons(LispObject car, LispObject cdr) {
+        if (car == null || cdr == null) {
+            Errors.error("Bad null cons");
+        }
+        this.car = car;
+        this.cdr = cdr;
+        ++count;
+    }
 
-	public Cons(LispObject car)
-	{
-		if (car == null)
-		{
-			Errors.error("Bad null cons");
-		}
-		this.car = car;
-		this.cdr = NIL;
-		++count;
-	}
+    public Cons(LispObject car) {
+        if (car == null) {
+            Errors.error("Bad null cons");
+        }
+        this.car = car;
+        this.cdr = NIL;
+        ++count;
+    }
 
-	@Override
-	public SubLObject first()
-	{
-		return car;
-	}
+    @Override
+    public SubLObject first() {
+        return car;
+    }
 
-	@Override
-	public SubLObject rest()
-	{
-		return cdr;
-	}
+    @Override
+    public SubLObject rest() {
+        return cdr;
+    }
 
-	@Override
-	public LispObject cddr()
-	{
-		return cdr.cdr();
-	}
+    @Override
+    public LispObject cddr() {
+        return cdr.cdr();
+    }
 
-	public Cons(String name, Object value)
-	{
-		this(new SimpleString(name), value != null ? JavaObject.getInstance(value) : NULL_VALUE);
-	}
+    public Cons(String name, Object value) {
+        this(new SimpleString(name), value != null ? JavaObject.getInstance(value) : NULL_VALUE);
+    }
 
-	static Cons pnCons(Cons original)
-	{
-		Cons rest = original;
-		LispObject result = NIL;
-		while (rest.car() != NIL)
-		{
-			result = result.push(rest.car());
-			if (rest.cdr() == NIL)
-			{
-				break;
-			}
-			rest = (Cons) rest.cdr();
-		}
-		result = result.nreverse();
-		return new Cons(result.car(), result.cdr());
-	}
+    static Cons pnCons(Cons original) {
+        Cons rest = original;
+        LispObject result = NIL;
+        while (rest.car() != NIL) {
+            result = result.push(rest.car());
+            if (rest.cdr() == NIL) {
+                break;
+            }
+            rest = (Cons) rest.cdr();
+        }
+        result = result.nreverse();
+        return new Cons(result.car(), result.cdr());
+    }
 
-	@Override
-	public int hashCode()
-	{
-		return superHash();
-	}
+    @Override
+    public int hashCode() {
+        return superHash();
+    }
 
-	@Override
-	public LispObject typeOf()
-	{
-		return Symbol.CONS;
-	}
+    @Override
+    public LispObject typeOf() {
+        return Symbol.CONS;
+    }
 
-	@Override
-	public LispObject classOf()
-	{
-		return BuiltInClass.CONS;
-	}
+    @Override
+    public LispObject classOf() {
+        return BuiltInClass.CONS;
+    }
 
-	@Override
-	public LispObject typep(LispObject typeSpecifier)
-	{
-		if (typeSpecifier instanceof Symbol)
-		{
-			if (typeSpecifier == Symbol.LIST) return T;
-			if (typeSpecifier == Symbol.CONS) return T;
-			if (typeSpecifier == Symbol.SEQUENCE) return T;
-			if (typeSpecifier == T) return T;
-		}
-		else if (typeSpecifier instanceof LispClass)
-		{
-			if (typeSpecifier == BuiltInClass.LIST) return T;
-			if (typeSpecifier == BuiltInClass.CONS) return T;
-			if (typeSpecifier == BuiltInClass.SEQUENCE) return T;
-			if (typeSpecifier == BuiltInClass.CLASS_T) return T;
-		}
-		return NIL;
-	}
+    @Override
+    public LispObject typep(LispObject typeSpecifier) {
+        if (typeSpecifier instanceof Symbol) {
+            if (typeSpecifier == Symbol.LIST)
+                return T;
+            if (typeSpecifier == Symbol.CONS)
+                return T;
+            if (typeSpecifier == Symbol.SEQUENCE)
+                return T;
+            if (typeSpecifier == T)
+                return T;
+        } else if (typeSpecifier instanceof LispClass) {
+            if (typeSpecifier == BuiltInClass.LIST)
+                return T;
+            if (typeSpecifier == BuiltInClass.CONS)
+                return T;
+            if (typeSpecifier == BuiltInClass.SEQUENCE)
+                return T;
+            if (typeSpecifier == BuiltInClass.CLASS_T)
+                return T;
+        }
+        return NIL;
+    }
 
-	@Override
-	public final boolean constantp()
-	{
-		if (car == Symbol.QUOTE)
-		{
-			if (cdr instanceof Cons) if (((Cons) cdr).cdr == NIL) return true;
-		}
-		return false;
-	}
+    @Override
+    public final boolean constantp() {
+        if (car == Symbol.QUOTE) {
+            if (cdr instanceof Cons)
+                if (((Cons) cdr).cdr == NIL)
+                    return true;
+        }
+        return false;
+    }
 
-	@Override
-	public boolean atom()
-	{
-		return false;
-	}
+    @Override
+    public boolean atom() {
+        return false;
+    }
 
-	@Override
-	public LispObject RPLACA(LispObject obj)
-	{
-		car = obj;
-		return this;
-	}
+    @Override
+    public LispObject RPLACA(LispObject obj) {
+        car = obj;
+        return this;
+    }
 
-	@Override
-	public LispObject RPLACD(LispObject obj)
-	{
-		cdr = obj;
-		return this;
-	}
+    @Override
+    public LispObject RPLACD(LispObject obj) {
+        cdr = obj;
+        return this;
+    }
 
-	@Override
-	public final int sxhash()
-	{
-		return computeHash(this, 4);
-	}
+    @Override
+    public final int sxhash() {
+        return computeHash(this, 4);
+    }
 
-	private static final int computeHash(LispObject obj, int depth)
-	{
-		if (obj instanceof Cons)
-		{
-			if (depth > 0)
-			{
-				int n1 = computeHash(((Cons) obj).car, depth - 1);
-				int n2 = computeHash(((Cons) obj).cdr, depth - 1);
-				return n1 ^ n2;
-			}
-			else
-			{
-				// This number comes from SBCL, but since we're not really
-				// using SBCL's SXHASH algorithm, it's probably not optimal.
-				// But who knows?
-				return 261835505;
-			}
-		}
-		else
-			return obj.sxhash();
-	}
+    private static final int computeHash(LispObject obj, int depth) {
+        if (obj instanceof Cons) {
+            if (depth > 0) {
+                int n1 = computeHash(((Cons) obj).car, depth - 1);
+                int n2 = computeHash(((Cons) obj).cdr, depth - 1);
+                return n1 ^ n2;
+            } else {
+                // This number comes from SBCL, but since we're not really
+                // using SBCL's SXHASH algorithm, it's probably not optimal.
+                // But who knows?
+                return 261835505;
+            }
+        } else
+            return obj.sxhash();
+    }
 
-	@Override
-	public final int psxhash()
-	{
-		return computeEqualpHash(this, 4);
-	}
+    @Override
+    public final int psxhash() {
+        return computeEqualpHash(this, 4);
+    }
 
-	private static final int computeEqualpHash(LispObject obj, int depth)
-	{
-		if (obj instanceof Cons)
-		{
-			if (depth > 0)
-			{
-				int n1 = computeEqualpHash(((Cons) obj).car, depth - 1);
-				int n2 = computeEqualpHash(((Cons) obj).cdr, depth - 1);
-				return n1 ^ n2;
-			}
-			else
-				return 261835505; // See above.
-		}
-		else
-			return obj.psxhash();
-	}
+    private static final int computeEqualpHash(LispObject obj, int depth) {
+        if (obj instanceof Cons) {
+            if (depth > 0) {
+                int n1 = computeEqualpHash(((Cons) obj).car, depth - 1);
+                int n2 = computeEqualpHash(((Cons) obj).cdr, depth - 1);
+                return n1 ^ n2;
+            } else
+                return 261835505; // See above.
+        } else
+            return obj.psxhash();
+    }
 
-	@Override
-	public final boolean equal(LispObject obj)
-	{
-		if (this == obj) return true;
-		if (obj instanceof Cons)
-		{
-			if (car.equal(((Cons) obj).car) && cdr.equal(((Cons) obj).cdr)) return true;
-		}
-		return false;
-	}
+    @Override
+    public final boolean equal(LispObject obj) {
+        if (this == obj)
+            return true;
+        if (obj instanceof Cons) {
+            if (car.equal(((Cons) obj).car) && cdr.equal(((Cons) obj).cdr))
+                return true;
+        }
+        return false;
+    }
 
-	@Override
-	public final boolean equalp(LispObject obj)
-	{
-		if (this == obj) return true;
-		if (obj instanceof Cons)
-		{
-			if (car.equalp(((Cons) obj).car) && cdr.equalp(((Cons) obj).cdr)) return true;
-		}
-		return false;
-	}
+    @Override
+    public final boolean equalp(LispObject obj) {
+        if (this == obj)
+            return true;
+        if (obj instanceof Cons) {
+            if (car.equalp(((Cons) obj).car) && cdr.equalp(((Cons) obj).cdr))
+                return true;
+        }
+        return false;
+    }
 
-	@Override
-	public final int length()
-	{
-		int length = 1;
-		LispObject obj = cdr;
-		while (obj != NIL)
-		{
-			++length;
-			if (obj instanceof Cons)
-			{
-				obj = ((Cons) obj).cdr;
-			}
-			else
-				type_error(obj, Symbol.LIST);
-		}
-		return length;
-	}
+    @Override
+    public final int length() {
+        int length = 1;
+        LispObject obj = cdr;
+        while (obj != NIL) {
+            ++length;
+            if (obj instanceof Cons) {
+                obj = ((Cons) obj).cdr;
+            } else
+                type_error(obj, Symbol.LIST);
+        }
+        return length;
+    }
 
-	@Override
-	public LispObject NTH(int index)
-	{
-		if (index < 0) type_error(Fixnum.getInstance(index), Symbol.UNSIGNED_BYTE);
-		int i = 0;
-		LispObject obj = this;
-		while (true)
-		{
-			if (i == index) return obj.car();
-			obj = obj.cdr();
-			if (obj == NIL) return NIL;
-			++i;
-		}
-	}
+    @Override
+    public LispObject NTH(int index) {
+        if (index < 0)
+            type_error(Fixnum.getInstance(index), Symbol.UNSIGNED_BYTE);
+        int i = 0;
+        LispObject obj = this;
+        while (true) {
+            if (i == index)
+                return obj.car();
+            obj = obj.cdr();
+            if (obj == NIL)
+                return NIL;
+            ++i;
+        }
+    }
 
-	@Override
-	public LispObject elt(int index)
-	{
-		if (index < 0) type_error(Fixnum.getInstance(index), Symbol.UNSIGNED_BYTE);
-		int i = 0;
-		Cons cons = this;
-		while (true)
-		{
-			if (i == index) return cons.car;
-			LispObject conscdr = cons.cdr;
-			if (conscdr instanceof Cons)
-			{
-				cons = (Cons) conscdr;
-			}
-			else
-			{
-				if (conscdr == NIL)
-				{
-					// Index too large.
-					type_error(Fixnum.getInstance(index), list(Symbol.INTEGER, Fixnum.ZERO, Fixnum.getInstance(length() - 1)));
-				}
-				else
-				{
-					// Dotted list.
-					type_error(conscdr, Symbol.LIST);
-				}
-				// Not reached.
-				return NIL;
-			}
-			++i;
-		}
-	}
+    @Override
+    public LispObject elt(int index) {
+        if (index < 0)
+            type_error(Fixnum.getInstance(index), Symbol.UNSIGNED_BYTE);
+        int i = 0;
+        Cons cons = this;
+        while (true) {
+            if (i == index)
+                return cons.car;
+            LispObject conscdr = cons.cdr;
+            if (conscdr instanceof Cons) {
+                cons = (Cons) conscdr;
+            } else {
+                if (conscdr == NIL) {
+                    // Index too large.
+                    type_error(Fixnum.getInstance(index), list(Symbol.INTEGER, Fixnum.ZERO, Fixnum.getInstance(length() - 1)));
+                } else {
+                    // Dotted list.
+                    type_error(conscdr, Symbol.LIST);
+                }
+                // Not reached.
+                return NIL;
+            }
+            ++i;
+        }
+    }
 
-	@Override
-	public LispObject reverse()
-	{
-		Cons cons = this;
-		LispObject result = new Cons(cons.car);
-		while (cons.cdr instanceof Cons)
-		{
-			cons = (Cons) cons.cdr;
-			result = new Cons(cons.car, result);
-		}
-		if (cons.cdr != NIL) return type_error(cons.cdr, Symbol.LIST);
-		return result;
-	}
+    @Override
+    public LispObject reverse() {
+        Cons cons = this;
+        LispObject result = new Cons(cons.car);
+        while (cons.cdr instanceof Cons) {
+            cons = (Cons) cons.cdr;
+            result = new Cons(cons.car, result);
+        }
+        if (cons.cdr != NIL)
+            return type_error(cons.cdr, Symbol.LIST);
+        return result;
+    }
 
-	@Override
-	public final LispObject nreverse()
-	{
-		if (cdr instanceof Cons)
-		{
-			Cons cons = (Cons) cdr;
-			if (cons.cdr instanceof Cons)
-			{
-				Cons cons1 = cons;
-				LispObject list = NIL;
-				do
-				{
-					Cons temp = (Cons) cons.cdr;
-					cons.cdr = list;
-					list = cons;
-					cons = temp;
-				} while (cons.cdr instanceof Cons);
-				if (cons.cdr != NIL) return type_error(cons.cdr, Symbol.LIST);
-				cdr = list;
-				cons1.cdr = cons;
-			}
-			else if (cons.cdr != NIL) return type_error(cons.cdr, Symbol.LIST);
-			LispObject temp = car;
-			car = cons.car;
-			cons.car = temp;
-		}
-		else if (cdr != NIL) return type_error(cdr, Symbol.LIST);
-		return this;
-	}
+    @Override
+    public final LispObject nreverse() {
+        if (cdr instanceof Cons) {
+            Cons cons = (Cons) cdr;
+            if (cons.cdr instanceof Cons) {
+                Cons cons1 = cons;
+                LispObject list = NIL;
+                do {
+                    Cons temp = (Cons) cons.cdr;
+                    cons.cdr = list;
+                    list = cons;
+                    cons = temp;
+                } while (cons.cdr instanceof Cons);
+                if (cons.cdr != NIL)
+                    return type_error(cons.cdr, Symbol.LIST);
+                cdr = list;
+                cons1.cdr = cons;
+            } else if (cons.cdr != NIL)
+                return type_error(cons.cdr, Symbol.LIST);
+            LispObject temp = car;
+            car = cons.car;
+            cons.car = temp;
+        } else if (cdr != NIL)
+            return type_error(cdr, Symbol.LIST);
+        return this;
+    }
 
-	@Override
-	public final LispObject[] copyToArray()
-	{
-		final int length = length();
-		LispObject[] array = new LispObject[length];
-		LispObject rest = this;
-		for (int i = 0; i < length; i++)
-		{
-			array[i] = rest.car();
-			rest = rest.cdr();
-		}
-		return array;
-	}
+    @Override
+    public final LispObject[] copyToArray() {
+        final int length = length();
+        LispObject[] array = new LispObject[length];
+        LispObject rest = this;
+        for (int i = 0; i < length; i++) {
+            array[i] = rest.car();
+            rest = rest.cdr();
+        }
+        return array;
+    }
 
-	@Override
-	public LispObject execute()
-	{
-		if (car == Symbol.LAMBDA)
-		{
-			Closure closure = new LambdaClosure(this, Environment.newEnvironment());
-			return closure.execute();
-		}
-		return signalExecutionError();
-	}
+    @Override
+    public LispObject execute() {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new LambdaClosure(this, Environment.newEnvironment());
+            return closure.execute();
+        }
+        return signalExecutionError();
+    }
 
-	@Override
-	public LispObject execute(LispObject arg)
-	{
-		if (car == Symbol.LAMBDA)
-		{
-			Closure closure = new LambdaClosure(this, Environment.newEnvironment());
-			return closure.execute(arg);
-		}
-		return signalExecutionError();
-	}
+    @Override
+    public LispObject execute(LispObject arg) {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new LambdaClosure(this, Environment.newEnvironment());
+            return closure.execute(arg);
+        }
+        return signalExecutionError();
+    }
 
-	@Override
-	public LispObject execute(LispObject first, LispObject second)
+    @Override
+    public LispObject execute(LispObject first, LispObject second)
 
-	{
-		if (car == Symbol.LAMBDA)
-		{
-			Closure closure = new LambdaClosure(this, Environment.newEnvironment());
-			return closure.execute(first, second);
-		}
-		return signalExecutionError();
-	}
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new LambdaClosure(this, Environment.newEnvironment());
+            return closure.execute(first, second);
+        }
+        return signalExecutionError();
+    }
 
-	@Override
-	public LispObject execute(LispObject first, LispObject second, LispObject third)
+    @Override
+    public LispObject execute(LispObject first, LispObject second, LispObject third)
 
-	{
-		if (car == Symbol.LAMBDA)
-		{
-			Closure closure = new LambdaClosure(this, Environment.newEnvironment());
-			return closure.execute(first, second, third);
-		}
-		return signalExecutionError();
-	}
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new LambdaClosure(this, Environment.newEnvironment());
+            return closure.execute(first, second, third);
+        }
+        return signalExecutionError();
+    }
 
-	@Override
-	public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth)
+    @Override
+    public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth)
 
-	{
-		if (car == Symbol.LAMBDA)
-		{
-			Closure closure = new LambdaClosure(this, Environment.newEnvironment());
-			return closure.execute(first, second, third, fourth);
-		}
-		return signalExecutionError();
-	}
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new LambdaClosure(this, Environment.newEnvironment());
+            return closure.execute(first, second, third, fourth);
+        }
+        return signalExecutionError();
+    }
 
-	@Override
-	public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth)
+    @Override
+    public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth)
 
-	{
-		if (car == Symbol.LAMBDA)
-		{
-			Closure closure = new LambdaClosure(this, Environment.newEnvironment());
-			return closure.execute(first, second, third, fourth, fifth);
-		}
-		return signalExecutionError();
-	}
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new LambdaClosure(this, Environment.newEnvironment());
+            return closure.execute(first, second, third, fourth, fifth);
+        }
+        return signalExecutionError();
+    }
 
-	@Override
-	public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth)
+    @Override
+    public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth)
 
-	{
-		if (car == Symbol.LAMBDA)
-		{
-			Closure closure = new LambdaClosure(this, Environment.newEnvironment());
-			return closure.execute(first, second, third, fourth, fifth, sixth);
-		}
-		return signalExecutionError();
-	}
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new LambdaClosure(this, Environment.newEnvironment());
+            return closure.execute(first, second, third, fourth, fifth, sixth);
+        }
+        return signalExecutionError();
+    }
 
-	@Override
-	public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh)
+    @Override
+    public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh)
 
-	{
-		if (car == Symbol.LAMBDA)
-		{
-			Closure closure = new LambdaClosure(this, Environment.newEnvironment());
-			return closure.execute(first, second, third, fourth, fifth, sixth, seventh);
-		}
-		return signalExecutionError();
-	}
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new LambdaClosure(this, Environment.newEnvironment());
+            return closure.execute(first, second, third, fourth, fifth, sixth, seventh);
+        }
+        return signalExecutionError();
+    }
 
-	@Override
-	public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh, LispObject eighth)
+    @Override
+    public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh, LispObject eighth)
 
-	{
-		if (car == Symbol.LAMBDA)
-		{
-			Closure closure = new LambdaClosure(this, Environment.newEnvironment());
-			return closure.execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
-		}
-		return signalExecutionError();
-	}
+    {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new LambdaClosure(this, Environment.newEnvironment());
+            return closure.execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
+        }
+        return signalExecutionError();
+    }
 
-	@Override
-	public LispObject execute(LispObject[] args)
-	{
-		if (car == Symbol.LAMBDA)
-		{
-			Closure closure = new LambdaClosure(this, Environment.newEnvironment());
-			return closure.execute(args);
-		}
-		return signalExecutionError();
-	}
+    @Override
+    public LispObject execute(LispObject[] args) {
+        if (car == Symbol.LAMBDA) {
+            Closure closure = new LambdaClosure(this, Environment.newEnvironment());
+            return closure.execute(args);
+        }
+        return signalExecutionError();
+    }
 
-	private final LispObject signalExecutionError()
-	{
-		return type_error(this, list(Symbol.OR, Symbol.FUNCTION, Symbol.SYMBOL));
-	}
+    private final LispObject signalExecutionError() {
+        return type_error(this, list(Symbol.OR, Symbol.FUNCTION, Symbol.SYMBOL));
+    }
 
-	@Override
-	public String printObjectImpl()
-	{
-		final LispThread thread = LispThread.currentThread();
-		final LispObject printLength = Symbol.PRINT_LENGTH.symbolValueNoThrow(thread);
-		final int maxLength;
-		if (printLength instanceof Fixnum)
-			maxLength = ((Fixnum) printLength).value;
-		else
-			maxLength = Integer.MAX_VALUE;
-		final LispObject printLevel = Symbol.PRINT_LEVEL.symbolValueNoThrow(thread);
-		final int maxLevel;
-		if (printLevel instanceof Fixnum)
-			maxLevel = ((Fixnum) printLevel).value;
-		else
-			maxLevel = Integer.MAX_VALUE;
-		StringBuilder sb = new StringBuilder();
-		if (car == Symbol.QUOTE)
-		{
-			if (cdr instanceof Cons)
-			{
-				// Not a dotted list.
-				if (cdr.cdr() == NIL)
-				{
-					sb.append('\'');
-					sb.append(cdr.car().printObject());
-					return sb.toString();
-				}
-			}
-		}
-		if (car == Symbol.FUNCTION)
-		{
-			if (cdr instanceof Cons)
-			{
-				// Not a dotted list.
-				if (cdr.cdr() == NIL)
-				{
-					sb.append("#'");
-					sb.append(cdr.car().printObject());
-					return sb.toString();
-				}
-			}
-		}
-		LispObject currentPrintLevel = _CURRENT_PRINT_LEVEL_.symbolValue(thread);
-		int currentLevel = Fixnum.getValue(currentPrintLevel);
-		if (currentLevel < maxLevel)
-		{
-			final SpecialBindingsMark mark = thread.markSpecialBindings();
-			thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
-			try
-			{
-				int count = 0;
-				boolean truncated = false;
-				sb.append('(');
-				if (count < maxLength)
-				{
-					LispObject p = this;
-					sb.append(p.car().printObject());
-					++count;
-					while ((p = p.cdr()) instanceof Cons)
-					{
-						sb.append(' ');
-						if (count < maxLength)
-						{
-							sb.append(p.car().printObject());
-							++count;
-						}
-						else
-						{
-							truncated = true;
-							break;
-						}
-					}
-					if (!truncated && p != NIL)
-					{
-						sb.append(" . ");
-						sb.append(p.printObject());
-					}
-				}
-				else
-					truncated = true;
-				if (truncated) sb.append("...");
-				sb.append(')');
-			} finally
-			{
-				thread.resetSpecialBindings(mark);
-			}
-		}
-		else
-			sb.append('#');
-		return sb.toString();
-	}
+    @Override
+    public String printObjectImpl() {
+        final LispThread thread = LispThread.currentThread();
+        final LispObject printLength = Symbol.PRINT_LENGTH.symbolValueNoThrow(thread);
+        final int maxLength;
+        if (printLength instanceof Fixnum)
+            maxLength = ((Fixnum) printLength).value;
+        else
+            maxLength = Integer.MAX_VALUE;
+        final LispObject printLevel = Symbol.PRINT_LEVEL.symbolValueNoThrow(thread);
+        final int maxLevel;
+        if (printLevel instanceof Fixnum)
+            maxLevel = ((Fixnum) printLevel).value;
+        else
+            maxLevel = Integer.MAX_VALUE;
+        StringBuilder sb = new StringBuilder();
+        if (car == Symbol.QUOTE) {
+            if (cdr instanceof Cons) {
+                // Not a dotted list.
+                if (cdr.cdr() == NIL) {
+                    sb.append('\'');
+                    sb.append(cdr.car().printObject());
+                    return sb.toString();
+                }
+            }
+        }
+        if (car == Symbol.FUNCTION) {
+            if (cdr instanceof Cons) {
+                // Not a dotted list.
+                if (cdr.cdr() == NIL) {
+                    sb.append("#'");
+                    sb.append(cdr.car().printObject());
+                    return sb.toString();
+                }
+            }
+        }
+        LispObject currentPrintLevel = _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+        int currentLevel = Fixnum.getValue(currentPrintLevel);
+        if (currentLevel < maxLevel) {
+            final SpecialBindingsMark mark = thread.markSpecialBindings();
+            thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
+            try {
+                int count = 0;
+                boolean truncated = false;
+                sb.append('(');
+                if (count < maxLength) {
+                    LispObject p = this;
+                    sb.append(p.car().printObject());
+                    ++count;
+                    while ((p = p.cdr()) instanceof Cons) {
+                        sb.append(' ');
+                        if (count < maxLength) {
+                            sb.append(p.car().printObject());
+                            ++count;
+                        } else {
+                            truncated = true;
+                            break;
+                        }
+                    }
+                    if (!truncated && p != NIL) {
+                        sb.append(" . ");
+                        sb.append(p.printObject());
+                    }
+                } else
+                    truncated = true;
+                if (truncated)
+                    sb.append("...");
+                sb.append(')');
+            } finally {
+                thread.resetSpecialBindings(mark);
+            }
+        } else
+            sb.append('#');
+        return sb.toString();
+    }
 
-	// Statistics for TIME.
-	private static long count;
+    // Statistics for TIME.
+    private static long count;
 
-	/*package*/ static long getCount()
-	{
-		return count;
-	}
+    /*package*/ static long getCount() {
+        return count;
+    }
 
-	/*package*/ static void setCount(long n)
-	{
-		count = n;
-	}
+    /*package*/ static void setCount(long n) {
+        count = n;
+    }
 
-	@Override
-	public Term toProlog(java.util.List skip)
-	{
-		if (this.termRef != null) return (Term)termRef;
-		LispObject obj = this;
-		Term[] args = new Term[] { unboundPLTerm(), JPL.LIST_NIL };
-		obj.setTermRef(new Compound(JPL.LIST_PAIR, args));
-		int length = 0;
-		while (true)
-		{
-			args[0] = PrologSync.toProlog(obj.car(), skip);
-			LispObject next = obj.cdr();
-			if (next instanceof Cons)
-			{
-				length++;
-				if (length > 100)
-				{
-					args[1] = (Term)next.setTermRef(JPL.newJRef(next));
-					return (Term)termRef;
-				}
-				Term[] nargs = new Term[] { unboundPLTerm(), JPL.LIST_NIL };
-				args[1] = (Term)next.setTermRef(new Compound(JPL.LIST_PAIR, nargs));
-				args = nargs;
-				obj = next;
-				continue;
-			}
-			else
-			{
-				args[1] = PrologSync.toProlog(next, skip);
-				return (Term)termRef;
-			}
-		}
-	}
+    @Override
+    public Term toProlog(java.util.List skip) {
+        if (this.termRef != null)
+            return (Term) termRef;
+        LispObject obj = this;
+        Term[] args = new Term[] { unboundPLTerm(), JPL.LIST_NIL };
+        obj.setTermRef(new Compound(JPL.LIST_PAIR, args));
+        int length = 0;
+        while (true) {
+            args[0] = PrologSync.toProlog(obj.car(), skip);
+            LispObject next = obj.cdr();
+            if (next instanceof Cons) {
+                length++;
+                if (length > 100) {
+                    args[1] = (Term) next.setTermRef(JPL.newJRef(next));
+                    return (Term) termRef;
+                }
+                Term[] nargs = new Term[] { unboundPLTerm(), JPL.LIST_NIL };
+                args[1] = (Term) next.setTermRef(new Compound(JPL.LIST_PAIR, nargs));
+                args = nargs;
+                obj = next;
+                continue;
+            } else {
+                args[1] = PrologSync.toProlog(next, skip);
+                return (Term) termRef;
+            }
+        }
+    }
 
-	private Term unboundPLTerm()
-	{
-		return PrologSync.UNBOUND;
-	}
+    private Term unboundPLTerm() {
+        return PrologSync.UNBOUND;
+    }
 }

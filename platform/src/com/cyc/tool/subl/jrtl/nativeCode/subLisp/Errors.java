@@ -1,10 +1,6 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.RET_T;
-import static org.armedbear.lisp.Lisp.UNPROVIDED;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -15,7 +11,6 @@ import org.armedbear.lisp.JavaException;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.Main;
-import org.armedbear.lisp.Symbol;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 

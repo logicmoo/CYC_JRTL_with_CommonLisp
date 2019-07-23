@@ -1,26 +1,19 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
-import static org.armedbear.lisp.Lisp.*;
 
 import org.armedbear.lisp.Debug;
 import org.armedbear.lisp.Fixnum;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Main;
-import org.armedbear.lisp.Nil;
 import org.armedbear.lisp.Symbol;
-import org.jpl7.Term;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLDoubleFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;

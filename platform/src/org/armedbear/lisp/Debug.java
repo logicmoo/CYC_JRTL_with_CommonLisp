@@ -35,12 +35,6 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-import java.io.InputStreamReader;
-
-import org.logicmoo.system.BeanShellCntrl;
-
-import bsh.EvalError;
-
 public final class Debug {
 
 	public static final void assertTrue(boolean b) {

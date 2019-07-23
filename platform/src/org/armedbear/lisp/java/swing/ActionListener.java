@@ -20,14 +20,16 @@
 
 package org.armedbear.lisp.java.swing;
 
-import org.armedbear.lisp.JHandler;
-import java.awt.event.ActionEvent;
 import java.awt.Button;
 import java.awt.List;
 import java.awt.MenuItem;
 import java.awt.TextField;
+import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractButton;
 import javax.swing.JTextField;
+
+import org.armedbear.lisp.JHandler;
 
 public class ActionListener implements java.awt.event.ActionListener 
 {

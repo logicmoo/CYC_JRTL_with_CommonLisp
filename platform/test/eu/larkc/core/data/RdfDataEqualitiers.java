@@ -1,13 +1,12 @@
 package eu.larkc.core.data;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 
 import org.junit.Test;
 import org.openrdf.model.URI;
-import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
-
-import static org.junit.Assert.assertEquals;
 
 public class RdfDataEqualitiers {
 

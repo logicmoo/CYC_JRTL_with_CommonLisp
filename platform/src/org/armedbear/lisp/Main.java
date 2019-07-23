@@ -32,19 +32,6 @@
  */
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
-import org.logicmoo.system.BeanShellCntrl;
-import org.logicmoo.system.JVMImpl;
-import org.logicmoo.system.SystemCurrent;
-import org.logicmoo.system.UpdateZip;
-import org.logicmoo.system.SystemCurrent.In;
-
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess.TerminationRequest;
-
 //import static org.armedbear.lisp.Options.*;
 import java.io.PrintStream;
 import java.lang.Thread.UncaughtExceptionHandler;
@@ -52,6 +39,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.JVMImpl;
+import org.logicmoo.system.SystemCurrent;
+import org.logicmoo.system.SystemCurrent.In;
+import org.logicmoo.system.UpdateZip;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess.TerminationRequest;
 
 public final class Main {
 
@@ -96,7 +94,7 @@ public final class Main {
 		if (err == null)
 			err = System.out;
 		return err;
-	}
+	} 
 
 	public static void addUncaught(Throwable e) {
 		unexpectedThrowable.add(e);

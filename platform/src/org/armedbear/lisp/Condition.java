@@ -33,14 +33,10 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import java.util.List;
 
 import org.jpl7.Term;
 import org.logicmoo.system.SystemCurrent;
-
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
 public class Condition extends StandardObject
 {

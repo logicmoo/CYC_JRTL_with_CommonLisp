@@ -33,10 +33,7 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
 abstract public class SlotClass extends LispClass {
 	private LispObject directSlotDefinitions = NIL;

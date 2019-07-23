@@ -1,7 +1,5 @@
 package eu.larkc.core.data;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -12,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import eu.larkc.core.data.VariableBinding.Binding;
 import eu.larkc.core.query.SPARQLQuery;
 import eu.larkc.core.query.SPARQLQueryImpl;
+import junit.framework.Assert;
 
 public class SPARQLQueries extends ORDITestCase {
 

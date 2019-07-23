@@ -1,6 +1,4 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.util.List;
@@ -20,7 +18,6 @@ import org.armedbear.lisp.StringOutputStream;
 import org.armedbear.lisp.StructureClass;
 import org.armedbear.lisp.Symbol;
 import org.jpl7.Term;
-import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

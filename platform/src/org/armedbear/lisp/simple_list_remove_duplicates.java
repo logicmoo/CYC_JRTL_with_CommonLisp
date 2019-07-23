@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 // ### simple-list-remove-duplicates
 public final class simple_list_remove_duplicates extends Primitive
 {

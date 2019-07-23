@@ -123,9 +123,9 @@ public class print_functions extends SubLTranslatedFile {
 
 	public static SubLObject init_print_functions_file() {
 		print_functions.$max_fixnum_base_power$ = SubLFiles.defvar("*MAX-FIXNUM-BASE-POWER*",
-				Vectors.make_vector(print_functions.$int0$37, CommonSymbols.UNPROVIDED));
+				Vectors.make_vector(print_functions.$int$37, CommonSymbols.UNPROVIDED));
 		print_functions.$max_fixnum_power_less_one$ = SubLFiles.defvar("*MAX-FIXNUM-POWER-LESS-ONE*",
-				Vectors.make_vector(print_functions.$int0$37, CommonSymbols.UNPROVIDED));
+				Vectors.make_vector(print_functions.$int$37, CommonSymbols.UNPROVIDED));
 		return SubLNil.NIL;
 	}
 
@@ -239,7 +239,7 @@ public class print_functions extends SubLTranslatedFile {
 			SubLObject digits = math_utilities.flonum_digit_list(flonum);
 			SubLObject scale = thread.secondMultipleValue();
 			thread.resetMultipleValues();
-			if (scale.numGE(print_functions.$int6$_2) && scale.numL(CommonSymbols.EIGHT_INTEGER)) {
+			if (scale.numGE(print_functions.$int$_2) && scale.numL(CommonSymbols.EIGHT_INTEGER)) {
 				if (scale.isPositive()) {
 					SubLObject i;
 					SubLObject digit;
@@ -628,7 +628,7 @@ public class print_functions extends SubLTranslatedFile {
 		SubLObject divisor;
 		SubLObject new_divisor;
 		for (radix = SubLNil.NIL, radix = CommonSymbols.TWO_INTEGER; !radix
-				.numG(print_functions.$int1$36); radix = Numbers.add(radix, CommonSymbols.ONE_INTEGER)) {
+				.numG(print_functions.$int$36); radix = Numbers.add(radix, CommonSymbols.ONE_INTEGER)) {
 			final_power_less_one = CommonSymbols.MINUS_ONE_INTEGER;
 			final_divisor = CommonSymbols.ONE_INTEGER;
 			done = SubLNil.NIL;
@@ -701,13 +701,13 @@ public class print_functions extends SubLTranslatedFile {
 	private static SubLSymbol $max_fixnum_base_power$;
 	@SubL(source = "sublisp/print-functions.lisp", position = 1755L)
 	private static SubLSymbol $max_fixnum_power_less_one$;
-	private static SubLInteger $int0$37;
-	private static SubLInteger $int1$36;
+	private static SubLInteger $int$37;
+	private static SubLInteger $int$36;
 	private static SubLSymbol $sym2$PRINT_OBJECT_BIGNUM_METHOD;
 	private static SubLSymbol $sym3$PRINT_OBJECT_FIXNUM_METHOD;
 	private static SubLString $str4$Inf;
 	private static SubLString $str5$NaN;
-	private static SubLInteger $int6$_2;
+	private static SubLInteger $int$_2;
 	private static SubLSymbol $sym7$PRINT_OBJECT_FLOAT_METHOD;
 	private static SubLSymbol $sym8$PRINT_OBJECT_CHARACTER_METHOD;
 	private static SubLString $str9$__;
@@ -734,13 +734,13 @@ public class print_functions extends SubLTranslatedFile {
 		me = new print_functions();
 		print_functions.$max_fixnum_base_power$ = null;
 		print_functions.$max_fixnum_power_less_one$ = null;
-		$int0$37 = SubLObjectFactory.makeInteger(37);
-		$int1$36 = SubLObjectFactory.makeInteger(36);
+		$int$37 = SubLObjectFactory.makeInteger(37);
+		$int$36 = SubLObjectFactory.makeInteger(36);
 		$sym2$PRINT_OBJECT_BIGNUM_METHOD = SubLObjectFactory.makeSymbol("PRINT-OBJECT-BIGNUM-METHOD");
 		$sym3$PRINT_OBJECT_FIXNUM_METHOD = SubLObjectFactory.makeSymbol("PRINT-OBJECT-FIXNUM-METHOD");
 		$str4$Inf = SubLObjectFactory.makeString("Inf");
 		$str5$NaN = SubLObjectFactory.makeString("NaN");
-		$int6$_2 = SubLObjectFactory.makeInteger(-2);
+		$int$_2 = SubLObjectFactory.makeInteger(-2);
 		$sym7$PRINT_OBJECT_FLOAT_METHOD = SubLObjectFactory.makeSymbol("PRINT-OBJECT-FLOAT-METHOD");
 		$sym8$PRINT_OBJECT_CHARACTER_METHOD = SubLObjectFactory.makeSymbol("PRINT-OBJECT-CHARACTER-METHOD");
 		$str9$__ = SubLObjectFactory.makeString("#:");

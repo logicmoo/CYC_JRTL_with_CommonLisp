@@ -365,7 +365,7 @@ public abstract class FixedArityFunctor implements CommonSymbols {
             mv.visitVarInsn(25, j);
         }
         while (unprovideds-- > 0) {
-            mv.visitFieldInsn(178, "com/cyc/tool/subl/jrtl/nativeCode/subLisp/CommonSymbols", "UNPROVIDED", "Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;");
+            mv.visitFieldInsn(178, "com/cyc/tool/subl/jrtl/nativeCode/subLisp/CommonSymbols", "UNPROVIDED_SYM", "Lcom/cyc/tool/subl/jrtl/nativeCode/type/symbol/SubLSymbol;");
         }
         if (needsRest) {
             mv.visitFieldInsn(178, FixedArityFunctor.RESOURCER_INAME, "EMPTY_SUBL_OBJECT_ARRAY", "[" + FixedArityFunctor.SUBLOBJECT_LNAME);

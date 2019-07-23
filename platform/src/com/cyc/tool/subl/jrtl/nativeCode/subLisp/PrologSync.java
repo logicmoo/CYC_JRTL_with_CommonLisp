@@ -34,7 +34,6 @@ import org.logicmoo.bb.BeanBowl;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 
-import com.cyc.cycjava.cycl.constants_high;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -919,9 +918,9 @@ public class PrologSync extends SubLTrampolineFile
 				return term = new Atom(prefix + ":" + s.getName(), "text");
 
 			}
-			if (constants_high.installed_constant_p(o) != SubLNil.NIL)
+			if (BeanShellCntrl.installed_constant_p(o) != SubLNil.NIL)
 			{
-				String s = constants_high.constant_name(o).getStringValue();
+				String s = BeanShellCntrl.constant_name(o).getStringValue();
 				return term = new Atom(s, "text");
 			}
 			if (o instanceof IPrologifiable) { return term = ((IPrologifiable) o).toProlog(skipped); }

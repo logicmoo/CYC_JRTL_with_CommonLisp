@@ -1,25 +1,18 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.util;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import static org.armedbear.lisp.Lisp.*;
-import javax.el.FunctionMapper;
+
+import java.util.function.Supplier;
 
 import org.armedbear.lisp.Lisp;
 import org.logicmoo.system.BeanShellCntrl;
 
-import com.cyc.cycjava.cycl.mt_vars;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
@@ -98,6 +91,9 @@ implements SubLFile,  Singleton
   {
     BeanShellCntrl.addSubLFile(this);
   }
+
+  public static boolean assertCheckType(SubLObject obj, SubLObject typeSymbol)
+  {return true;}
 
   public static void checkType(SubLObject obj, SubLObject typeSymbol)
   {}

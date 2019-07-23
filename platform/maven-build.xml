@@ -1,0 +1,36 @@
+<project name="gestoreAlert" default="build" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+    <description>
+        Invoke mvn package goal.
+    </description>
+ 
+    <path id="maven-ant-tasks.classpath" path="maven-ant-tasks-2.1.3.jar" />
+    <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+        uri="antlib:org.apache.maven.artifact.ant"
+        classpathref="maven-ant-tasks.classpath" />
+ 
+   <artifact:localRepository id="local.repository" path="~/.m2/repository" layout="default" />
+ 
+   <target name="deps">
+       <artifact:pom id="jms-dep" file="deps/jms-1.1.pom"/>
+       <artifact:install file="deps/jms-1.1.jar">
+           <pom refid="jms-dep"/>
+       </artifact:install>
+ 
+       <artifact:pom id="jboss-javaee-dep" file="deps/jboss-javaee-5.1.0.GA.pom"/>
+       <artifact:install file="deps/jboss-javaee-5.1.0.GA.jar">
+          <pom refid="jboss-javaee-dep"/>
+       </artifact:install>
+ 
+       <artifact:pom id="kryo-dep" file="deps/kryo-2.0.5.pom"/>
+       <artifact:install file="deps/kryo2-2.05-all.jar">
+          <pom refid="kryo-dep"/>
+       </artifact:install>
+   </target>
+ 
+   <target name="build" depends="deps">
+       <artifact:mvn mavenVersion="3.0.3" pom="./pom.xml">
+           <arg value="package"/>
+       </artifact:mvn>
+   </target>
+</project>
+

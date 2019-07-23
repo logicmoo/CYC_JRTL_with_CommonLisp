@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 public abstract class AbstractBitVector extends AbstractVector {
 	protected static final int LONG_MASK = 0x3f;
 

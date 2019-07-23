@@ -21,8 +21,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 

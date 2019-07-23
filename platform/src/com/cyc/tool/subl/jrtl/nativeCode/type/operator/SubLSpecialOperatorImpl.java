@@ -39,7 +39,7 @@ public class SubLSpecialOperatorImpl extends SpecialOperator implements SubLOper
 		return false;
 	}
 
-	private final SubLCompiledFunction evaluationFunction;
+	private final SubLFunction evaluationFunction;
 
 	@Override
 	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {

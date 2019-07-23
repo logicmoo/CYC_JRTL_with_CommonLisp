@@ -6,8 +6,6 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import junit.framework.Assert;
-
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.openrdf.model.Statement;
@@ -17,6 +15,7 @@ import org.openrdf.model.impl.URIImpl;
 import eu.larkc.core.data.VariableBinding.Binding;
 import eu.larkc.core.query.SPARQLQuery;
 import eu.larkc.core.query.SPARQLQueryImpl;
+import junit.framework.Assert;
 
 public class SerializationTests extends ORDITestCase {
 

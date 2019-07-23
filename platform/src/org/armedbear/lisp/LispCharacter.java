@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -441,7 +439,7 @@ public Object javaInstanceImpl(Class c)
 				LispCharacter value = upcases.get(c);
 				return value != null ? value : arg;
 			}
-        return LispCharacter.getInstance(toUpperCase(c));
+        return LispCharacter.getInstance(toUpperCase((char)c));
       }
     };
 
@@ -694,8 +692,8 @@ public Object javaInstanceImpl(Class c)
 
   static int maxNamedChar = 0;
   static Map<String, LispCharacter> namedToChar = new HashMap<String, LispCharacter>();
-	private static Map<Integer, LispCharacter> downcases = new HashMap<Integer, LispCharacter>();
-	private static Map<Integer, LispCharacter> upcases = new HashMap<Integer, LispCharacter>();
+	private static Map<Character, LispCharacter> downcases = new HashMap<Character, LispCharacter>();
+	private static Map<Character, LispCharacter> upcases = new HashMap<Character, LispCharacter>();
 
   static void setCharNames(boolean forceName, int i, String[] string) {
     int settingChar = i;
@@ -2514,11 +2512,11 @@ public void addName(String string) {
 	}
 
 	private static void putDowncase(int i, int j) {
-		downcases.put((Integer) i, LispCharacter.getInstance((char) j));
+		downcases.put((char) i, LispCharacter.getInstance((char) j));
 	}
 
 	private static void putUpcase(int i, int j) {
-		upcases.put((Integer) i, LispCharacter.getInstance((char) j));
+		upcases.put((char) i, LispCharacter.getInstance((char) j));
 	}
 
 	public static boolean isUpperCase(char c) {

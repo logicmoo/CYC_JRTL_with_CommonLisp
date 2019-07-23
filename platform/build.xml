@@ -258,20 +258,22 @@ For help on the automatic tests available, use the Ant target 'help.test'.
              source="${cv}"          
       	 classpathref="abcl.classpath.build"
              includeantruntime="false"
-             failonerror="true">
-      	<src path="${src.dir}"/>
-      	 
-      	<src path="main/appdapter-src"/>
-      	
-      	<src path="main/armedbear-j-src"/>
-		<src path="main/cycjava-persistence-hacks"/>
-		<src path="main/jpl7-hacked"/>
-		<src path="main/logicmoo-main"/>
-		<src path="main/beanshell"/>
-		<src path="main/objectweb-asm-src"/>
-        <src path="main/opencyc-server-jsrc-in-progress"/>
-		<src path="main/server-4q"/>
-		<src path="main/java/"/>
+	     failonerror="true">
+
+	 <src path="${src.dir}"/>
+      	 <include name="main/armedbear-j-src"/>
+	 <include name="main/cycjava-persistence-hacks"/>
+	 <include name="main/jpl7-hacked"/>
+	 <include name="main/logicmoo-main"/>
+	 <include name="main/beanshell"/>
+	 <include name="main/platform-1.1"/>
+	 <include name="main/objectweb-asm-src"/>
+         <include name="main/opencyc-server-jsrc-in-progress"/>
+	 <include name="main/server-4q"/>
+	 <include name="main/server-4u"/>
+	 <include name="main/server-4v"/>
+	 <include name="main/java/"/>
+	 <exclude name="main/logicmoo-main/org/logicmoo/system/spoon/gen/**"/>
         <compilerarg value="-XDignore.symbol.file"/>
         <patternset refid="abcl.source.java"/>
       </javac>

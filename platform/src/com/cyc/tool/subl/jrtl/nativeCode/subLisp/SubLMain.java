@@ -27,15 +27,10 @@ import javax.management.Notification;
 import javax.management.NotificationEmitter;
 import javax.management.NotificationListener;
 
-import org.armedbear.j.RemoteShell;
-import org.armedbear.lisp.Cons;
 // import org.armedbear.lisp.CycEval;
 import org.armedbear.lisp.Interpreter;
-import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
-import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Main;
-import org.armedbear.lisp.Symbol;
 import org.jpl7.JPL;
 import org.jpl7.Query;
 import org.logicmoo.system.BeanShellCntrl;
@@ -54,11 +49,9 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
 import com.cyc.tool.subl.util.PatchFileLoader;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.hp.hpl.jena.sparql.algebra.op.OpOrder;
 
 /**
  * Typical arguments: -i "/cyc/top/init/jrtl-init.lisp" Typical Java params:
@@ -492,6 +485,7 @@ public class SubLMain {
     SubLPackage.setCurrentPackage("SUBLISP");
     org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages");
+    SubLFiles.completePass();
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.DiskDumper");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.LispSync");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync");
@@ -516,6 +510,7 @@ public class SubLMain {
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Guids");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.JavaLink");
+    SubLFiles.completePass();
     // SubLFiles.initialize("Keyhashes");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.ReadWriteLocks");
@@ -568,6 +563,7 @@ public class SubLMain {
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.condition_macros");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.thread_macros");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.subl_benchmarks");
+    SubLFiles.completePass();
     Errors.isReady = true;
     ZeroArityFunction.initialize(); // this must come after ConsesLow -APB
     UnaryFunction.initialize(); // this must come after ConsesLow -APB
@@ -591,9 +587,14 @@ public class SubLMain {
     isInitializedTranslatedSystems = true;
     if (SubLMain.OPENCYC)
       initialize1TranslatedSystem("com.cyc.cycjava.cycl.cycl");
-    if (!SubLMain.OPENCYC) {      
-      // initialize1TranslatedSystem("com.cyc.cycjava.cycl.rcycl");
-      initialize1TranslatedSystem("com.cyc.cycjava.cycl.cycl");
+    if (!SubLMain.OPENCYC) {
+
+      // initialize1TranslatedSystem("com.cyc.cycjava_1.cycl.cycl");
+      initialize1TranslatedSystem(com.cyc.cycjava.cycl.rcycl.class.getName());
+      //initialize1TranslatedSystem("com.cyc.cycjava_3.cycl.cycl");
+      SubLFiles.completePass();
+      //initialize1TranslatedSystem(com.cyc.cycjava_0.cycl.cycl.class.getName());
+      //initialize1TranslatedSystem(com.cyc.cycjava_3.cycl.cycl.class.getName());
     }
 
     if (!SubLMain.OPENCYC)

@@ -1,17 +1,10 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.RET_T;
-import static org.armedbear.lisp.Lisp.T;
-import static org.armedbear.lisp.Lisp.UNPROVIDED;
-import static org.armedbear.lisp.Symbol.STREAMP;
-import static org.armedbear.lisp.Keyword.OUTPUT_KEYWORD;
-import static org.armedbear.lisp.Keyword.START;
-import static org.armedbear.lisp.Keyword.END;
 import static org.armedbear.lisp.Fixnum.*;
+import static org.armedbear.lisp.Keyword.*;
+import static org.armedbear.lisp.Lisp.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

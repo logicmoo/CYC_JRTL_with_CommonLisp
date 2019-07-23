@@ -1,5 +1,7 @@
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,7 +23,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
-import static org.armedbear.lisp.Lisp.*;
 
 public class DiskDumper extends SubLTrampolineFile
 {

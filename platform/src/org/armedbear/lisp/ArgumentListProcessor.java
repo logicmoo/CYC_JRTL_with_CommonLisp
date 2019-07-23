@@ -34,17 +34,7 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.PACKAGE_KEYWORD;
-import static org.armedbear.lisp.Lisp.T;
-import static org.armedbear.lisp.Lisp.bindArg;
-import static org.armedbear.lisp.Lisp.checkSymbol;
-import static org.armedbear.lisp.Lisp.error;
-import static org.armedbear.lisp.Lisp.isSpecial;
-import static org.armedbear.lisp.Lisp.list;
-import static org.armedbear.lisp.Lisp.program_error;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.util.ArrayList;
 import java.util.List;

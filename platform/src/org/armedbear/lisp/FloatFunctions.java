@@ -36,7 +36,6 @@ package org.armedbear.lisp;
 import static org.armedbear.lisp.Lisp.*;
 
 import java.math.BigInteger;
-import java.util.Arrays;
 
 public final class FloatFunctions
 {

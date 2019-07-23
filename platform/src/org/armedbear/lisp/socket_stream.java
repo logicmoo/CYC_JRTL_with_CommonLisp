@@ -33,7 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
 import java.net.Socket;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLSocketStream;

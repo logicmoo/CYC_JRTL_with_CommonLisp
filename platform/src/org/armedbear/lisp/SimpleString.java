@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 import java.util.Arrays;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;

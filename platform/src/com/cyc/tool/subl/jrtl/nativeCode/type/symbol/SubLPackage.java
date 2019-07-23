@@ -1,6 +1,4 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
 
 import java.io.ObjectStreamException;
@@ -28,7 +26,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.FromSubLisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -854,7 +851,7 @@ abstract public class SubLPackage extends SLispObject implements SubLObject {
             if (symbol.getPackage() != this)
                 itSymbol.remove();
             else {
-                if (CommonSymbols.WORLD == symbol.getProperty(CommonSymbols.INITIALIZATION_TYPE))
+                if (CommonSymbols.WORLD_KEYWORD == symbol.getProperty(CommonSymbols.INITIALIZATION_TYPE_KEYWORD))
                     continue;
                 itSymbol.remove();
             }

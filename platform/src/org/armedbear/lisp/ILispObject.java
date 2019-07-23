@@ -33,9 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-import java.util.WeakHashMap;
-
 public interface ILispObject // extends Number
 {
 

@@ -1,6 +1,4 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.util;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;

@@ -1,19 +1,18 @@
 package org.armedbear.lisp;
 
-import java.io.FileNotFoundException;
 import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
-import org.junit.Test;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 import org.junit.Before;
+import org.junit.Test;
 
 public class UtilitiesTest
 {

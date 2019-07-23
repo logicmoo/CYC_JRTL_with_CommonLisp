@@ -305,5 +305,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="ansi-test" sourcepath="ansi-test"/>
 	<classpathentry exported="true" kind="lib" path="C:/pf/Java/jdk1.8.0_162/lib/tools.jar"/>
+	<classpathentry kind="lib" path="lib/spoon-core-7.5.0-SNAPSHOT-jar-with-dependencies.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -33,14 +33,7 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.get;
-import static org.armedbear.lisp.Lisp.*; 
-
-import static org.armedbear.lisp.Lisp.PACKAGE_EXT;
-import static org.armedbear.lisp.Lisp.PACKAGE_SYS;
-import static org.armedbear.lisp.Lisp.exportSpecial;
-import static org.armedbear.lisp.Lisp.intern;
-import static org.armedbear.lisp.Lisp.list;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.io.File;
 import java.io.IOException;

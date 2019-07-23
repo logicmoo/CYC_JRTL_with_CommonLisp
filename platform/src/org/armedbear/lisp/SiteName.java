@@ -33,7 +33,7 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.NIL;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

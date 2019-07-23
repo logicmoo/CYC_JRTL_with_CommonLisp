@@ -20,9 +20,10 @@
 
 package org.armedbear.lisp.java.swing;
 
-import org.armedbear.lisp.JHandler;
 import java.awt.Window;
 import java.awt.event.WindowEvent;
+
+import org.armedbear.lisp.JHandler;
 
 public class WindowAdapter extends java.awt.event.WindowAdapter 
 {

@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*;
-
 // ### logxor &rest integers => result-integer
 public final class logxor extends Primitive
 {

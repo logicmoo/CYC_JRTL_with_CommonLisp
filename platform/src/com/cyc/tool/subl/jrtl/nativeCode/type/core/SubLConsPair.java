@@ -1,10 +1,7 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence.EQL_TEST;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence.IDENTITY_UNARY_FUNC;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 public final class make_condition extends Primitive
 {
 	static Object raise_unreadable = new raise_unreadable();

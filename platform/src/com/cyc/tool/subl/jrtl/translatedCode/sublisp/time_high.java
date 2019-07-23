@@ -56,76 +56,76 @@ public class time_high extends SubLTranslatedFile {
 		SubLObject daylight_p = SubLNil.NIL;
 		SubLObject seconds_west = SubLNil.NIL;
 		if (SubLNil.NIL != time_zone)
-			seconds_west = Numbers.multiply(time_zone, time_high.$int2$3600);
+			seconds_west = Numbers.multiply(time_zone, time_high.$int$3600);
 		else {
 			thread.resetMultipleValues();
 			SubLObject offset = Time.get_timezone(universal_time);
 			SubLObject dst_p = thread.secondMultipleValue();
 			thread.resetMultipleValues();
 			seconds_west = offset;
-			time_zone = Numbers.floor(offset, time_high.$int2$3600);
+			time_zone = Numbers.floor(offset, time_high.$int$3600);
 			if (SubLNil.NIL != dst_p) {
 				time_zone = Numbers.add(time_zone, CommonSymbols.ONE_INTEGER);
 				daylight_p = CommonSymbols.T;
 			}
 		}
 		thread.resetMultipleValues();
-		SubLObject days = Numbers.floor(Numbers.subtract(universal_time, seconds_west), time_high.$int3$86400);
+		SubLObject days = Numbers.floor(Numbers.subtract(universal_time, seconds_west), time_high.$int$86400);
 		SubLObject seconds = thread.secondMultipleValue();
 		thread.resetMultipleValues();
 		day = Numbers.mod(days, CommonSymbols.SEVEN_INTEGER);
 		thread.resetMultipleValues();
 		SubLObject quadricentennials = Numbers
-				.floor(Numbers.add(days, time_high.$ut_offset_from_rata_die$.getGlobalValue()), time_high.$int4$146097);
+				.floor(Numbers.add(days, time_high.$ut_offset_from_rata_die$.getGlobalValue()), time_high.$int$146097);
 		SubLObject r1 = thread.secondMultipleValue();
 		thread.resetMultipleValues();
 		thread.resetMultipleValues();
-		SubLObject centennials = Numbers.floor(r1, time_high.$int5$36524);
+		SubLObject centennials = Numbers.floor(r1, time_high.$int$36524);
 		SubLObject r2 = thread.secondMultipleValue();
 		thread.resetMultipleValues();
 		thread.resetMultipleValues();
-		SubLObject quadrennials = Numbers.floor(r2, time_high.$int6$1461);
+		SubLObject quadrennials = Numbers.floor(r2, time_high.$int$1461);
 		SubLObject r3 = thread.secondMultipleValue();
 		thread.resetMultipleValues();
 		thread.resetMultipleValues();
-		SubLObject annuals = Numbers.floor(r3, time_high.$int7$365);
+		SubLObject annuals = Numbers.floor(r3, time_high.$int$365);
 		SubLObject r4 = thread.secondMultipleValue();
 		thread.resetMultipleValues();
 		SubLObject last_day_of_cycle_p = SubLObjectFactory
 				.makeBoolean(annuals.numE(CommonSymbols.FOUR_INTEGER) || centennials.numE(CommonSymbols.FOUR_INTEGER));
-		year = Numbers.add(new SubLObject[] { Numbers.multiply(quadricentennials, time_high.$int8$400),
-				Numbers.multiply(centennials, time_high.$int9$100),
+		year = Numbers.add(new SubLObject[] { Numbers.multiply(quadricentennials, time_high.$int$400),
+				Numbers.multiply(centennials, time_high.$int$100),
 				Numbers.multiply(quadrennials, CommonSymbols.FOUR_INTEGER), annuals,
 				SubLNil.NIL != last_day_of_cycle_p ? CommonSymbols.ZERO_INTEGER : CommonSymbols.ONE_INTEGER });
 		if (SubLNil.NIL != last_day_of_cycle_p) {
 			month = CommonSymbols.TWELVE_INTEGER;
-			date = time_high.$int10$31;
+			date = time_high.$int$31;
 		} else {
 			SubLObject leap_days = Numbers.mod(year, CommonSymbols.FOUR_INTEGER).isZero()
-					&& SubLNil.NIL == conses_high.member(Numbers.mod(year, time_high.$int8$400),
+					&& SubLNil.NIL == conses_high.member(Numbers.mod(year, time_high.$int$400),
 							time_high.$list11, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)
 									? CommonSymbols.ONE_INTEGER : CommonSymbols.ZERO_INTEGER;
 			SubLObject february_adjustment = SubLNil.NIL;
-			if (r4.numL(Numbers.add(time_high.$int12$59, leap_days)))
+			if (r4.numL(Numbers.add(time_high.$int$59, leap_days)))
 				february_adjustment = CommonSymbols.ZERO_INTEGER;
 			else
-				february_adjustment = Numbers.add(time_high.$int13$_2, leap_days);
+				february_adjustment = Numbers.add(time_high.$int$_2, leap_days);
 			month = Numbers.floor(Numbers.add(
 					Numbers.multiply(CommonSymbols.TWELVE_INTEGER, Numbers.subtract(r4, february_adjustment)),
-					time_high.$int14$373), time_high.$int15$367);
+					time_high.$int$373), time_high.$int$367);
 			date = Numbers.add(
 					Numbers.subtract(r4,
-							Numbers.add(Numbers.floor(Numbers.subtract(Numbers.multiply(time_high.$int15$367, month),
-									time_high.$int16$362), CommonSymbols.TWELVE_INTEGER), february_adjustment)),
+							Numbers.add(Numbers.floor(Numbers.subtract(Numbers.multiply(time_high.$int$367, month),
+									time_high.$int$362), CommonSymbols.TWELVE_INTEGER), february_adjustment)),
 					CommonSymbols.ONE_INTEGER);
 		}
 		thread.resetMultipleValues();
-		SubLObject hours = Numbers.floor(seconds, time_high.$int2$3600);
+		SubLObject hours = Numbers.floor(seconds, time_high.$int$3600);
 		r1 = thread.secondMultipleValue();
 		thread.resetMultipleValues();
 		hour = hours;
 		thread.resetMultipleValues();
-		SubLObject minutes = Numbers.floor(r1, time_high.$int17$60);
+		SubLObject minutes = Numbers.floor(r1, time_high.$int$60);
 		SubLObject seconds_$1 = thread.secondMultipleValue();
 		thread.resetMultipleValues();
 		minute = minutes;
@@ -149,9 +149,9 @@ public class time_high extends SubLTranslatedFile {
 			thread.resetMultipleValues();
 			guessed_time_zoneP = CommonSymbols.T;
 			guessed_daylight_p = daylight_p;
-			time_zone = Numbers.floor(offset, time_high.$int2$3600);
+			time_zone = Numbers.floor(offset, time_high.$int$3600);
 		}
-		if (year.numGE(CommonSymbols.ZERO_INTEGER) && year.numLE(time_high.$int19$99))
+		if (year.numGE(CommonSymbols.ZERO_INTEGER) && year.numLE(time_high.$int$99))
 			year = guess_year_from_two_digits(year);
 		utime = encode_universal_time_internal(second, minute, hour, date, month, year, time_zone);
 		if (SubLNil.NIL != guessed_time_zoneP) {
@@ -161,9 +161,9 @@ public class time_high extends SubLTranslatedFile {
 			thread.resetMultipleValues();
 			if (!daylight_p.eql(guessed_daylight_p))
 				if (SubLNil.NIL != daylight_p)
-					utime = Numbers.subtract(utime, time_high.$int2$3600);
+					utime = Numbers.subtract(utime, time_high.$int$3600);
 				else
-					utime = Numbers.add(utime, time_high.$int2$3600);
+					utime = Numbers.add(utime, time_high.$int$3600);
 		}
 		return utime;
 	}
@@ -177,22 +177,22 @@ public class time_high extends SubLTranslatedFile {
 		if (month.numLE(CommonSymbols.TWO_INTEGER))
 			february_adjustment = CommonSymbols.ZERO_INTEGER;
 		else if (Numbers.mod(year, CommonSymbols.FOUR_INTEGER).isZero()
-				&& SubLNil.NIL == conses_high.member(Numbers.mod(year, time_high.$int8$400), time_high.$list11,
+				&& SubLNil.NIL == conses_high.member(Numbers.mod(year, time_high.$int$400), time_high.$list11,
 						CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED))
 			february_adjustment = CommonSymbols.MINUS_ONE_INTEGER;
 		else
-			february_adjustment = time_high.$int13$_2;
+			february_adjustment = time_high.$int$_2;
 		days = Numbers.add(new SubLObject[] { CommonSymbols.MINUS_ONE_INTEGER,
-				Numbers.add(new SubLObject[] { Numbers.multiply(time_high.$int7$365, previous_year),
+				Numbers.add(new SubLObject[] { Numbers.multiply(time_high.$int$365, previous_year),
 						Numbers.floor(previous_year, CommonSymbols.FOUR_INTEGER),
-						Numbers.minus(Numbers.floor(previous_year, time_high.$int9$100)),
-						Numbers.floor(previous_year, time_high.$int8$400) }),
-				Numbers.floor(Numbers.subtract(Numbers.multiply(time_high.$int15$367, month), time_high.$int16$362),
+						Numbers.minus(Numbers.floor(previous_year, time_high.$int$100)),
+						Numbers.floor(previous_year, time_high.$int$400) }),
+				Numbers.floor(Numbers.subtract(Numbers.multiply(time_high.$int$367, month), time_high.$int$362),
 						CommonSymbols.TWELVE_INTEGER),
 				february_adjustment, date, Numbers.minus(time_high.$ut_offset_from_rata_die$.getGlobalValue()) });
-		return Numbers.add(new SubLObject[] { Numbers.multiply(days, time_high.$int3$86400),
-				Numbers.multiply(hour, time_high.$int2$3600), Numbers.multiply(minute, time_high.$int17$60), second,
-				Numbers.multiply(time_zone, time_high.$int2$3600) });
+		return Numbers.add(new SubLObject[] { Numbers.multiply(days, time_high.$int$86400),
+				Numbers.multiply(hour, time_high.$int$3600), Numbers.multiply(minute, time_high.$int$60), second,
+				Numbers.multiply(time_zone, time_high.$int$3600) });
 	}
 
 	@SubL(source = "sublisp/time-high.lisp", position = 7660L)
@@ -244,10 +244,10 @@ public class time_high extends SubLTranslatedFile {
 		thread.resetMultipleValues();
 		SubLObject guess = Numbers.add(year,
 				Numbers.multiply(
-						Numbers.truncate(Numbers.subtract(current_year, time_high.$int18$50), time_high.$int9$100),
-						time_high.$int9$100));
-		if (Numbers.subtract(current_year, guess).numG(time_high.$int18$50))
-			year = Numbers.add(guess, time_high.$int9$100);
+						Numbers.truncate(Numbers.subtract(current_year, time_high.$int$50), time_high.$int$100),
+						time_high.$int$100));
+		if (Numbers.subtract(current_year, guess).numG(time_high.$int$50))
+			year = Numbers.add(guess, time_high.$int$100);
 		else
 			year = guess;
 		return year;
@@ -255,9 +255,9 @@ public class time_high extends SubLTranslatedFile {
 
 	public static SubLObject init_time_high_file() {
 		time_high.$internal_time_units_per_second$ = SubLFiles.defconstant("*INTERNAL-TIME-UNITS-PER-SECOND*",
-				time_high.$int0$1000000);
+				time_high.$int$1000000);
 		time_high.$ut_offset_from_rata_die$ = SubLFiles.defconstant("*UT-OFFSET-FROM-RATA-DIE*",
-				time_high.$int1$693595);
+				time_high.$int$693595);
 		return SubLNil.NIL;
 	}
 
@@ -271,51 +271,51 @@ public class time_high extends SubLTranslatedFile {
 	public static SubLSymbol $internal_time_units_per_second$;
 	@SubL(source = "sublisp/time-high.lisp", position = 1092L)
 	public static SubLSymbol $ut_offset_from_rata_die$;
-	private static SubLInteger $int0$1000000;
-	private static SubLInteger $int1$693595;
-	private static SubLInteger $int2$3600;
-	private static SubLInteger $int3$86400;
-	private static SubLInteger $int4$146097;
-	private static SubLInteger $int5$36524;
-	private static SubLInteger $int6$1461;
-	private static SubLInteger $int7$365;
-	private static SubLInteger $int8$400;
-	private static SubLInteger $int9$100;
-	private static SubLInteger $int10$31;
+	private static SubLInteger $int$1000000;
+	private static SubLInteger $int$693595;
+	private static SubLInteger $int$3600;
+	private static SubLInteger $int$86400;
+	private static SubLInteger $int$146097;
+	private static SubLInteger $int$36524;
+	private static SubLInteger $int$1461;
+	private static SubLInteger $int$365;
+	private static SubLInteger $int$400;
+	private static SubLInteger $int$100;
+	private static SubLInteger $int$31;
 	private static SubLList $list11;
-	private static SubLInteger $int12$59;
-	private static SubLInteger $int13$_2;
-	private static SubLInteger $int14$373;
-	private static SubLInteger $int15$367;
-	private static SubLInteger $int16$362;
-	private static SubLInteger $int17$60;
-	private static SubLInteger $int18$50;
-	private static SubLInteger $int19$99;
+	private static SubLInteger $int$59;
+	private static SubLInteger $int$_2;
+	private static SubLInteger $int$373;
+	private static SubLInteger $int$367;
+	private static SubLInteger $int$362;
+	private static SubLInteger $int$60;
+	private static SubLInteger $int$50;
+	private static SubLInteger $int$99;
 	static {
 		me = new time_high();
 		time_high.$internal_time_units_per_second$ = null;
 		time_high.$ut_offset_from_rata_die$ = null;
-		$int0$1000000 = SubLObjectFactory.makeInteger(1000000);
-		$int1$693595 = SubLObjectFactory.makeInteger(693595);
-		$int2$3600 = SubLObjectFactory.makeInteger(3600);
-		$int3$86400 = SubLObjectFactory.makeInteger(86400);
-		$int4$146097 = SubLObjectFactory.makeInteger(146097);
-		$int5$36524 = SubLObjectFactory.makeInteger(36524);
-		$int6$1461 = SubLObjectFactory.makeInteger(1461);
-		$int7$365 = SubLObjectFactory.makeInteger(365);
-		$int8$400 = SubLObjectFactory.makeInteger(400);
-		$int9$100 = SubLObjectFactory.makeInteger(100);
-		$int10$31 = SubLObjectFactory.makeInteger(31);
+		$int$1000000 = SubLObjectFactory.makeInteger(1000000);
+		$int$693595 = SubLObjectFactory.makeInteger(693595);
+		$int$3600 = SubLObjectFactory.makeInteger(3600);
+		$int$86400 = SubLObjectFactory.makeInteger(86400);
+		$int$146097 = SubLObjectFactory.makeInteger(146097);
+		$int$36524 = SubLObjectFactory.makeInteger(36524);
+		$int$1461 = SubLObjectFactory.makeInteger(1461);
+		$int$365 = SubLObjectFactory.makeInteger(365);
+		$int$400 = SubLObjectFactory.makeInteger(400);
+		$int$100 = SubLObjectFactory.makeInteger(100);
+		$int$31 = SubLObjectFactory.makeInteger(31);
 		$list11 = ConsesLow.list(SubLObjectFactory.makeInteger(100), SubLObjectFactory.makeInteger(200),
 				SubLObjectFactory.makeInteger(300));
-		$int12$59 = SubLObjectFactory.makeInteger(59);
-		$int13$_2 = SubLObjectFactory.makeInteger(-2);
-		$int14$373 = SubLObjectFactory.makeInteger(373);
-		$int15$367 = SubLObjectFactory.makeInteger(367);
-		$int16$362 = SubLObjectFactory.makeInteger(362);
-		$int17$60 = SubLObjectFactory.makeInteger(60);
-		$int18$50 = SubLObjectFactory.makeInteger(50);
-		$int19$99 = SubLObjectFactory.makeInteger(99);
+		$int$59 = SubLObjectFactory.makeInteger(59);
+		$int$_2 = SubLObjectFactory.makeInteger(-2);
+		$int$373 = SubLObjectFactory.makeInteger(373);
+		$int$367 = SubLObjectFactory.makeInteger(367);
+		$int$362 = SubLObjectFactory.makeInteger(362);
+		$int$60 = SubLObjectFactory.makeInteger(60);
+		$int$50 = SubLObjectFactory.makeInteger(50);
+		$int$99 = SubLObjectFactory.makeInteger(99);
 	}
 
 	@Override

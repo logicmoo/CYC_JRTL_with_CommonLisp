@@ -1,6 +1,4 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.exception;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;

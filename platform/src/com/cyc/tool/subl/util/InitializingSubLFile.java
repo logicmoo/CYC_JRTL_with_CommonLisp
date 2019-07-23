@@ -1,11 +1,7 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.util;
 
 import org.logicmoo.system.BeanShellCntrl;
-
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 
 public abstract class InitializingSubLFile implements SubLFile
 {

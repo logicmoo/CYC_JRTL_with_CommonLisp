@@ -2,5 +2,20 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/Gateway" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/bordeaux-threads" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/cl-plumbing" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/cloakbuild" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/destructuring-bind-star" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/linj" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/list-named-class" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/lparallel" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/phoe-toolbox" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/protest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/prove" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/qtools" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/scmxlate" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/trivial-gray-streams" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/site-lisp/usocket" vcs="Git" />
   </component>
 </project>

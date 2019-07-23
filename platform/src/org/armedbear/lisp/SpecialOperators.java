@@ -33,22 +33,7 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
-import static org.armedbear.lisp.Lisp.FUNCTION_NAME;
-import static org.armedbear.lisp.Lisp.NIL;
-import static org.armedbear.lisp.Lisp.bindArg;
-import static org.armedbear.lisp.Lisp.checkList;
-import static org.armedbear.lisp.Lisp.checkSymbol;
-import static org.armedbear.lisp.Lisp.error;
-import static org.armedbear.lisp.Lisp.eval;
-import static org.armedbear.lisp.Lisp.isValidSetfFunctionName;
-import static org.armedbear.lisp.Lisp.list;
-import static org.armedbear.lisp.Lisp.parseBody;
-import static org.armedbear.lisp.Lisp.parseSpecials;
-import static org.armedbear.lisp.Lisp.progn;
-import static org.armedbear.lisp.Lisp.program_error;
-import static org.armedbear.lisp.Lisp.type_error;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.util.LinkedList;
 

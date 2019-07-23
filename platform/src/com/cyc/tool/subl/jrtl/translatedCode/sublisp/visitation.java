@@ -52,7 +52,7 @@ public class visitation extends SubLTranslatedFile {
 
 	public static SubLObject init_visitation_file() {
 		visitation.$visit_defstruct_object_method_table$ = SubLFiles.deflexical("*VISIT-DEFSTRUCT-OBJECT-METHOD-TABLE*",
-				Vectors.make_vector(visitation.$int0$256, SubLNil.NIL));
+				Vectors.make_vector(visitation.$int$256, SubLNil.NIL));
 		return SubLNil.NIL;
 	}
 
@@ -156,7 +156,7 @@ public class visitation extends SubLTranslatedFile {
 	public static String myName = "com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation";
 	@SubL(source = "sublisp/visitation.lisp", position = 490L)
 	public static SubLSymbol $visit_defstruct_object_method_table$;
-	private static SubLInteger $int0$256;
+	private static SubLInteger $int$256;
 	private static SubLString $str1$No_visitation_function_defined_fo;
 	private static SubLSymbol $sym2$VISIT_DEFSTRUCT_OBJECT_INTEGER_METHOD;
 	private static SubLSymbol $sym3$VISIT_DEFSTRUCT_OBJECT_FLOAT_METHOD;
@@ -170,7 +170,7 @@ public class visitation extends SubLTranslatedFile {
 	static {
 		me = new visitation();
 		visitation.$visit_defstruct_object_method_table$ = null;
-		$int0$256 = SubLObjectFactory.makeInteger(256);
+		$int$256 = SubLObjectFactory.makeInteger(256);
 		$str1$No_visitation_function_defined_fo = SubLObjectFactory
 				.makeString("No visitation function defined for ~A.");
 		$sym2$VISIT_DEFSTRUCT_OBJECT_INTEGER_METHOD = SubLObjectFactory

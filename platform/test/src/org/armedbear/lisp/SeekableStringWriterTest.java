@@ -2,7 +2,7 @@ package org.armedbear.lisp;
 
 import static org.junit.Assert.*;
 
-import org.junit.*;
+import org.junit.Test;
 
 public class SeekableStringWriterTest
 {

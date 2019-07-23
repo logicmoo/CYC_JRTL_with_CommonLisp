@@ -36,8 +36,6 @@ package org.armedbear.lisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLNumber;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 
-import java.math.BigInteger;
-
 /** This class merely serves as the super class for
  * Fixnum and Bignum
  */

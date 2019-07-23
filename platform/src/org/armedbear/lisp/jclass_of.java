@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 // ### jclass-of object &optional name
 public final class jclass_of extends Primitive
 {

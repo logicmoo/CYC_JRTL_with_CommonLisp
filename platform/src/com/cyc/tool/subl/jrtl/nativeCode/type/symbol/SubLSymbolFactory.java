@@ -1,6 +1,4 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
 
 import org.armedbear.lisp.Lisp;
@@ -100,8 +98,8 @@ public class SubLSymbolFactory {
 			findAccessibleSymbol = Lisp.PACKAGE_CYC.findAccessibleSymbol(symbolName);
 		if (findAccessibleSymbol == null)
 			findAccessibleSymbol = Lisp.PACKAGE_SUBLISP.findAccessibleSymbol(symbolName);
-		if (findAccessibleSymbol == null)
-			findAccessibleSymbol = Lisp.PACKAGE_CL_USER.findAccessibleSymbol(symbolName);
+		//if (findAccessibleSymbol == null)
+			//findAccessibleSymbol = Lisp.PACKAGE_CL_USER.findAccessibleSymbol(symbolName);
 		return findAccessibleSymbol;
 	}
 

@@ -3,6 +3,32 @@
 //
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
 
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.format.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Environment.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -1696,7 +1722,7 @@ public class conses_high extends SubLTranslatedFile
 
   public static SubLObject init_conses_high_file()
   {
-    conses_high.$sublis_watermark$ = SubLFiles.deflexical( "*SUBLIS-WATERMARK*", conses_high.$int26$68 );
+    conses_high.$sublis_watermark$ = SubLFiles.deflexical( "*SUBLIS-WATERMARK*", conses_high.$int$68 );
     return SubLNil.NIL;
   }
 
@@ -2530,7 +2556,7 @@ public class conses_high extends SubLTranslatedFile
   private static SubLList $list23;
   private static SubLList $list24;
   private static SubLList $list25;
-  private static SubLInteger $int26$68;
+  private static SubLInteger $int$68;
   private static SubLList $list27;
   private static SubLList $list28;
   private static SubLList $list29;
@@ -2601,7 +2627,7 @@ public class conses_high extends SubLTranslatedFile
     $list23 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NOTINLINE" ), SubLObjectFactory.makeSymbol( "NSUBST" ) );
     $list24 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NOTINLINE" ), SubLObjectFactory.makeSymbol( "NSUBST-IF" ) );
     $list25 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NOTINLINE" ), SubLObjectFactory.makeSymbol( "SUBLIS" ) );
-    $int26$68 = SubLObjectFactory.makeInteger( 68 );
+    $int$68 = SubLObjectFactory.makeInteger( 68 );
     $list27 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NOTINLINE" ), SubLObjectFactory.makeSymbol( "NSUBLIS" ) );
     $list28 = ConsesLow.list( SubLObjectFactory.makeSymbol( "NOTINLINE" ), SubLObjectFactory.makeSymbol( "MEMBER" ) );
     $list29 = ConsesLow.list( SubLObjectFactory.makeSymbol( "INLINE" ), SubLObjectFactory.makeSymbol( "_MEMBER-2" ), SubLObjectFactory.makeSymbol( "_MEMBER-3" ), SubLObjectFactory.makeSymbol( "_MEMBER-4" ) );

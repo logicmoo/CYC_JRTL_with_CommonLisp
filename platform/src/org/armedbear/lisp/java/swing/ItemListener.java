@@ -27,10 +27,12 @@ import java.awt.Choice;
 import java.awt.ItemSelectable;
 import java.awt.List;
 import java.awt.event.ItemEvent;
+
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultButtonModel;
 import javax.swing.JComboBox;
+
 import org.armedbear.lisp.JHandler;
 
 public class ItemListener implements java.awt.event.ItemListener

@@ -75,7 +75,31 @@
 				</excludes>
 			</testResource>
 		</testResources>
+
 		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>src/**/*.java</include>
+						<include>main/cycjava-persistence-hacks/**/*.java</include>
+						<include>main/logicmoo-main**/*.java</include>
+						<include>main/opencyc-server-jsrc-in-progress/**/*.java</include>
+						<include>main/objectweb-asm-src/**/*.java</include>
+						<include>main/armedbear-j-src/**/*.java</include>
+						<include>main/server-4q/**/*.java</include>
+						<include>main/server-4u/**/*.java</include>
+						<include>main/server-4v/**/*.java</include>
+						<include>main/jpl7-hacked/**/*.java</include>
+						<include>main/java/**/*.java</include>
+						<include>main/platform-1.1/**/*.java</include>
+						<include>main/beanshell/**/*.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -89,7 +113,7 @@
 						</goals>
 						<configuration>
 							<sources>
-								<source>src/extra</source>
+
 								<!-- <classpathentry excluding="bsh/" kind="src" path="main/logicmoo-main"/> 
 									<classpathentry excluding="com/cyc/cycjava/cycl/" kind="src" path="main/opencyc-server-jsrc-in-progress"/> 
 									<classpathentry excluding="org/abcl/util/StreamTaskTest.java" kind="src" 
@@ -103,32 +127,59 @@
 								<source>main/objectweb-asm-src</source>
 								<source>main/armedbear-j-src</source>
 								<source>main/server-4q</source>
+								<source>main/server-4u</source>
+								<source>main/server-4v</source>
 								<source>main/jpl7-hacked</source>
 								<source>main/java</source>
-								<source>main/platform-1.1"/</source>
-								<source>main/beanshell-1.1"/</source>
+								<source>main/platform-1.1</source>
+								<source>main/beanshell</source>
 							</sources>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-antrun-plugin</artifactId> 
+				<executions> <execution> <id>Compile Lisp Code</id> <phase>compile</phase> 
+				<goals> <goal>run</goal> </goals> <configuration> <target> <taskdef resource="build.xml" 
+				classpath="" /> </target> </configuration> </execution> </executions> </plugin> 
+				<plugin> <artifactId>maven-antrun-plugin</artifactId> <version>1.7</version> 
+				<executions> <execution> <phase>generate-sources</phase> <configuration> 
+				<tasks> <taskdef resource="build.xml" classpath="" /> <target>default</target> 
+				Place any ant task here. You can add anything you can add between <target> 
+				and </target> in a build.xml. </tasks> </configuration> <goals> <goal>run</goal> 
+				</goals> </execution> </executions> </plugin> -->
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
 				<executions>
 					<execution>
+						<id>Compile Lisp Code</id>
 						<phase>generate-sources</phase>
-						<configuration>
-							<tasks>
-
-								<!-- Place any ant task here. You can add anything you can add between 
-									<target> and </target> in a build.xml. -->
-
-							</tasks>
-						</configuration>
 						<goals>
 							<goal>run</goal>
 						</goals>
+						<configuration>
+							<target>
+								<ant antfile="${basedir}/build.xml">
+									<target name="abcl.wrapper" />
+								</ant>
+							</target>
+						</configuration>
+					</execution>
+					<execution>
+						<id>Test Lisp Code</id>
+						<phase>process-test-resources</phase>
+						<!-- phase>generate-sources</phase> -->
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<ant antfile="${basedir}/build.xml">
+									<target name="abcl.wrapper" />
+								</ant>
+							</target>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -142,14 +193,146 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>
+											build-helper-maven-plugin
+										</artifactId>
+										<versionRange>[1.12,)</versionRange>
+										<goals>
+											<goal>add-source</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<dependencies>
+		<!-- Thanks for using https://jar-download.com -->
 		<dependency>
-			<groupId>sun.jdk</groupId>
-			<artifactId>tools</artifactId>
-			<version>1.8.0</version>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-ant-tasks</artifactId>
+			<version>2.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-script-ant</artifactId>
+			<version>2.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.openrdf.sesame</groupId>
+			<artifactId>sesame-rio-rdfxml</artifactId>
+			<version>2.8.5</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.openrdf/openrdf-util -->
+		<dependency>
+			<groupId>org.openrdf</groupId>
+			<artifactId>openrdf-util</artifactId>
+			<version>1.2.5</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.openrdf/openrdf-model -->
+		<dependency>
+			<groupId>org.openrdf</groupId>
+			<artifactId>openrdf-model</artifactId>
+			<version>1.2.5</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/junit/junit-dep -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit-dep</artifactId>
+			<version>4.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit-dep</artifactId>
+			<version>4.8.1</version>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>3.0-alpha-1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>jdk.tools</groupId>
+			<artifactId>jdk.tools</artifactId>
+			<version>1.8</version>
 			<scope>system</scope>
-			<systemPath>${java.home}/../lib/tools.jar</systemPath>
+			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.0-alpha0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>2.0.0-alpha0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>2.0.0-alpha0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.kencochrane.raven</groupId>
+			<artifactId>raven</artifactId>
+			<version>3.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-jdk14</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 	<repositories>
@@ -157,6 +340,19 @@
 			<id>jars-local</id>
 			<name>data</name>
 			<url>file://${project.basedir}/lib</url>
+		</repository>
+		<repository>
+			<id>atlassian-public</id>
+			<url>https://packages.atlassian.com/mvn/maven-external/</url>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
 		</repository>
 	</repositories>
 </project>

@@ -33,8 +33,6 @@
 
 package org.armedbear.lisp;
 
-import static org.armedbear.lisp.Lisp.*; 
-
 public class StructureClass extends SlotClass
 {
     StructureClass(Symbol symbol)

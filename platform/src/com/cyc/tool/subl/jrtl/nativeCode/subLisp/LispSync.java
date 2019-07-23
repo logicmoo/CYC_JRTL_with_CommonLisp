@@ -1,14 +1,13 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import java.io.FileOutputStream;
+import static org.armedbear.lisp.Lisp.*;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,15 +20,10 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
-import static org.armedbear.lisp.Lisp.*;
-
 import org.armedbear.j.Debug;
-import org.armedbear.lisp.AbstractString;
 import org.armedbear.lisp.Cons;
 import org.armedbear.lisp.Go;
-import org.armedbear.lisp.Java;
 import org.armedbear.lisp.JavaObject;
-import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispClass;
 import org.armedbear.lisp.LispObject;
@@ -37,32 +31,22 @@ import org.armedbear.lisp.Main;
 import org.armedbear.lisp.SimpleString;
 import org.armedbear.lisp.Symbol;
 import org.jpl7.Atom;
-import org.jpl7.Compound;
-import org.jpl7.JPL;
-import org.jpl7.JRef;
-import org.jpl7.Query;
 import org.jpl7.Term;
-import org.jpl7.Atom;
-import org.jpl7.Variable;
 import org.jpl7.fli.term_t;
-import org.logicmoo.bb.BeanBowl;
 import org.logicmoo.system.BeanShellCntrl;
-import org.logicmoo.system.SystemCurrent;
 
-import com.cyc.cycjava.cycl.constants_high;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLBoolean;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
-
-import bsh.Interpreter;
 
 public class LispSync extends SubLTrampolineFile {
 
@@ -760,7 +744,7 @@ public class LispSync extends SubLTrampolineFile {
 			return cs;
 		SubLObject lo = BeanShellCntrl.find_constant_by_name(cs);
 		if (lo == null || lo == NIL) {
-			lo = constants_high.create_constant(cs, NIL);
+		  lo = BeanShellCntrl.create_constant(cs, (SubLBoolean) NIL);
 		}
 		return (LispObject) lo;
 	}

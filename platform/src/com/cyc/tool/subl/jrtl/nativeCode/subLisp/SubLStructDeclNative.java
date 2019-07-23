@@ -1,6 +1,4 @@
-//
-// For LarKC
-//
+/* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.lang.reflect.Field;
@@ -15,7 +13,6 @@ import org.armedbear.lisp.Primitive;
 import org.armedbear.lisp.Symbol;
 import org.logicmoo.system.BeanShellCntrl.LispSlot;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;

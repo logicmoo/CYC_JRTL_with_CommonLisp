@@ -25,13 +25,31 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import javax.script.*;
+import javax.script.AbstractScriptEngine;
+import javax.script.Bindings;
+import javax.script.Compilable;
+import javax.script.CompiledScript;
+import javax.script.Invocable;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 
-import org.armedbear.lisp.*;
+import org.armedbear.lisp.Cons;
+import org.armedbear.lisp.Function;
+import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.JavaObject;
+import org.armedbear.lisp.Keyword;
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.LispThread;
+import org.armedbear.lisp.SimpleString;
+import org.armedbear.lisp.Stream;
+import org.armedbear.lisp.Symbol;
 
 
 public class AbclScriptEngine extends AbstractScriptEngine implements Invocable, Compilable {

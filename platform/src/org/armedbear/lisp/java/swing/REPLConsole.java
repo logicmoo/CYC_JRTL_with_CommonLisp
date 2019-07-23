@@ -39,7 +39,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.lang.RuntimeException;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -53,6 +52,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.JTextComponent;
+
 import org.armedbear.lisp.Function;
 import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.LispObject;
@@ -61,8 +61,6 @@ import org.armedbear.lisp.SpecialBindingsMark;
 import org.armedbear.lisp.Stream;
 import org.armedbear.lisp.Symbol;
 import org.armedbear.lisp.TwoWayStream;
-
-import static org.armedbear.lisp.Lisp.*;
 
 public class REPLConsole extends DefaultStyledDocument {
 
