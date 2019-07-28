@@ -1,2870 +1,2440 @@
 package com.cyc.cycjava.cycl;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
+
 import com.cyc.cycjava.cycl.owl.owl_cycl_to_xml;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time;
+import com.cyc.cycjava.cycl.random_thought_generator;
+import com.cyc.cycjava.cycl.subl_macro_promotions;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
+import java.util.function.Supplier;
+import org.armedbear.lisp.Lisp;
 
-public final class random_thought_generator
-    extends
-      SubLTranslatedFile
-{
-  public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.random_thought_generator";
-  public static final String myFingerPrint = "23d9d65387a8bc7b35f48e55cebb3daa4fb4f20b115ed6abd19165de34310e7f";
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 9901L)
-  private static SubLSymbol $random_thought_server_host$;
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 10167L)
-  private static SubLSymbol $random_thought_server_port$;
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 10369L)
-  private static SubLSymbol $remote_random_thought_image$;
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 11055L)
-  private static SubLSymbol $remote_random_thought_connection_pool$;
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 11158L)
-  private static SubLSymbol $remote_random_thought_connection_pool_lock$;
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 11285L)
-  private static SubLSymbol $remote_random_thought_connection_pool_max_size$;
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 14834L)
-  private static SubLSymbol $random_thought_generators_for_users$;
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLSymbol $dtp_random_thought_generator$;
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 19102L)
-  private static SubLSymbol $print_rtg_notesP$;
-  private static final SubLList $list0;
-  private static final SubLList $list1;
-  private static final SubLObject $const2$Guest;
-  private static final SubLSymbol $sym3$POSITIVE_INTEGER_P;
-  private static final SubLSymbol $sym4$STRINGP;
-  private static final SubLSymbol $kw5$OUTPUT;
-  private static final SubLString $str6$Unable_to_open__S;
-  private static final SubLString $str7$Generating_;
-  private static final SubLString $str8$_random_thoughts___;
-  private static final SubLString $str9$random_thoughts;
-  private static final SubLSymbol $kw10$UNINITIALIZED;
-  private static final SubLList $list11;
-  private static final SubLString $str12$thoughts;
-  private static final SubLString $str13$Exporting_random_thoughts_to_;
-  private static final SubLSymbol $kw14$SKIP;
-  private static final SubLList $list15;
-  private static final SubLString $str16$Parsing_XML_stream___;
-  private static final SubLString $str17$thoughts_about;
-  private static final SubLString $str18$topic_id;
-  private static final SubLString $str19$thought;
-  private static final SubLString $str20$Expected__thought___got__S;
-  private static final SubLString $str21$assertion_id;
-  private static final SubLString $str22$paraphrase;
-  private static final SubLString $str23$string;
-  private static final SubLString $str24$_____;
-  private static final SubLString $str25$___;
-  private static final SubLString $str26$INSERT_INTO_THOUGHTS_INTERNAL_ID_;
-  private static final SubLString $str27$___D____A_____A_____A_____A_____A;
-  private static final SubLString $str28$_;
-  private static final SubLString $str29$__;
-  private static final SubLSymbol $sym30$FORT_P;
-  private static final SubLString $str31$term;
-  private static final SubLSymbol $sym32$VALID_NON_EMPTY_RANDOM_THOUGHT_P;
-  private static final SubLSymbol $kw33$TOPIC;
-  private static final SubLList $list34;
-  private static final SubLSymbol $sym35$_RANDOM_THOUGHT_SERVER_HOST_;
-  private static final SubLString $str36$random_thoughts_cyc_com;
-  private static final SubLSymbol $kw37$PARAMETER;
-  private static final SubLList $list38;
-  private static final SubLSymbol $sym39$_RANDOM_THOUGHT_SERVER_PORT_;
-  private static final SubLInteger $int40$3634;
-  private static final SubLSymbol $sym41$_REMOTE_RANDOM_THOUGHT_IMAGE_;
-  private static final SubLSymbol $kw42$CFASL;
-  private static final SubLSymbol $sym43$_REMOTE_RANDOM_THOUGHT_CONNECTION_POOL_;
-  private static final SubLString $str44$Remote_Random_Thought_Connection_;
-  private static final SubLSymbol $kw45$IGNORE_ERRORS_TARGET;
-  private static final SubLSymbol $sym46$IGNORE_ERRORS_HANDLER;
-  private static final SubLSymbol $kw47$NOT_TRIED;
-  private static final SubLSymbol $sym48$NEXT_RANDOM_THOUGHT_FOR_USER;
-  private static final SubLSymbol $sym49$QUOTE;
-  private static final SubLSymbol $sym50$PROGN;
-  private static final SubLList $list51;
-  private static final SubLSymbol $sym52$MULTIPLE_VALUE_LIST;
-  private static final SubLSymbol $sym53$CATCH_ERROR_MESSAGE_HANDLER;
-  private static final SubLString $str54$Could_not_open_a_connection_to__s;
-  private static final SubLSymbol $sym55$_RANDOM_THOUGHT_GENERATORS_FOR_USERS_;
-  private static final SubLSymbol $sym56$RANDOM_THOUGHT_GENERATOR;
-  private static final SubLSymbol $sym57$RANDOM_THOUGHT_GENERATOR_P;
-  private static final SubLList $list58;
-  private static final SubLList $list59;
-  private static final SubLList $list60;
-  private static final SubLList $list61;
-  private static final SubLSymbol $sym62$PPRINT_RANDOM_THOUGHT_GENERATOR;
-  private static final SubLSymbol $sym63$RANDOM_THOUGHT_GENERATOR_PRINT_FUNCTION_TRAMPOLINE;
-  private static final SubLList $list64;
-  private static final SubLSymbol $sym65$RTG_STRUCT_USER;
-  private static final SubLSymbol $sym66$_CSETF_RTG_STRUCT_USER;
-  private static final SubLSymbol $sym67$RTG_STRUCT_DONE_ASSERTIONS;
-  private static final SubLSymbol $sym68$_CSETF_RTG_STRUCT_DONE_ASSERTIONS;
-  private static final SubLSymbol $sym69$RTG_STRUCT_GENERATOR_THREAD;
-  private static final SubLSymbol $sym70$_CSETF_RTG_STRUCT_GENERATOR_THREAD;
-  private static final SubLSymbol $sym71$RTG_STRUCT_QUEUE;
-  private static final SubLSymbol $sym72$_CSETF_RTG_STRUCT_QUEUE;
-  private static final SubLSymbol $sym73$RTG_STRUCT_MOST_RECENTLY_ADDED_THOUGHT;
-  private static final SubLSymbol $sym74$_CSETF_RTG_STRUCT_MOST_RECENTLY_ADDED_THOUGHT;
-  private static final SubLSymbol $sym75$RTG_STRUCT_TOPICAL_THOUGHTS;
-  private static final SubLSymbol $sym76$_CSETF_RTG_STRUCT_TOPICAL_THOUGHTS;
-  private static final SubLSymbol $kw77$USER;
-  private static final SubLSymbol $kw78$DONE_ASSERTIONS;
-  private static final SubLSymbol $kw79$GENERATOR_THREAD;
-  private static final SubLSymbol $kw80$QUEUE;
-  private static final SubLSymbol $kw81$MOST_RECENTLY_ADDED_THOUGHT;
-  private static final SubLSymbol $kw82$TOPICAL_THOUGHTS;
-  private static final SubLString $str83$Invalid_slot__S_for_construction_;
-  private static final SubLSymbol $kw84$BEGIN;
-  private static final SubLSymbol $sym85$MAKE_RANDOM_THOUGHT_GENERATOR;
-  private static final SubLSymbol $kw86$SLOT;
-  private static final SubLSymbol $kw87$END;
-  private static final SubLSymbol $sym88$VISIT_DEFSTRUCT_OBJECT_RANDOM_THOUGHT_GENERATOR_METHOD;
-  private static final SubLString $str89$__RTG_for__S___S_done__A__;
-  private static final SubLString $str90$_queued;
-  private static final SubLString $str91$exhausted;
-  private static final SubLSymbol $kw92$EXHAUSTED;
-  private static final SubLSymbol $kw93$NEW_TOPIC;
-  private static final SubLList $list94;
-  private static final SubLSymbol $sym95$PWHEN;
-  private static final SubLSymbol $sym96$_PRINT_RTG_NOTES__;
-  private static final SubLSymbol $sym97$APPLY;
-  private static final SubLList $list98;
-  private static final SubLSymbol $sym99$CONS;
-  private static final SubLSymbol $sym100$LIST;
-  private static final SubLList $list101;
-  private static final SubLSymbol $sym102$FORMAT;
-  private static final SubLString $str103$__Registering_interest_of__S_in__;
-  private static final SubLList $list104;
-  private static final SubLSymbol $kw105$NOW;
-  private static final SubLSymbol $kw106$REQUIRE_TOPICAL_;
-  private static final SubLString $str107$__Waiting_for_new_thoughts_about_;
-  private static final SubLFloat $float108$0_5;
-  private static final SubLString $str109$___A_out_of_thoughts_about__S__;
-  private static final SubLString $str110$Totally;
-  private static final SubLString $str111$Temporarily;
-  private static final SubLString $str112$Random_Thought_Generator;
-  private static final SubLSymbol $sym113$KEEP_RANDOM_THOUGHT_GENERATOR_FULL;
-  private static final SubLInteger $int114$25;
-  private static final SubLFloat $float115$1_5;
-  private static final SubLInteger $int116$1000;
-  private static final SubLString $str117$__Filling__S__;
-  private static final SubLList $list118;
-  private static final SubLString $str119$___S_is_now_full__;
-  private static final SubLString $str120$_S_is_not_in_an_updatable_state;
-  private static final SubLString $str121$__New_thought_concerning__S_____S;
-  private static final SubLSymbol $sym122$OPEN_CYC_FORT;
-  private static final SubLSymbol $sym123$POTENTIALLY_PORN_RELATED_;
-  private static final SubLObject $const124$PotentiallyPornRelated;
-  private static final SubLSymbol $kw125$IGNORE;
-  private static final SubLSymbol $kw126$GAF;
-  private static final SubLSymbol $kw127$TRUE;
-  private static final SubLString $str128$__Found__S_GAF_assertions_about__;
-  private static final SubLString $str129$___Top_level_CycL___S;
-  private static final SubLList $list130;
-  private static final SubLSymbol $kw131$NEW_ARG_FROM_ASSERTION;
-  private static final SubLSymbol $kw132$REUSE_MOST_RECENTLY_ADDED_TOPIC;
-  private static final SubLSymbol $kw133$RANDOM;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.random_thought_generator.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quote;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 878L)
-  public static SubLObject random_thought_p(final SubLObject v_object)
-  {
-    return makeBoolean( NIL != empty_random_thought_p( v_object ) || NIL != non_empty_random_thought_p( v_object ) );
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 1199L)
-  public static SubLObject empty_random_thought_p(final SubLObject v_object)
-  {
-    return Equality.equal( v_object, $list0 );
-  }
+public final class random_thought_generator extends SubLTranslatedFile {
+    public static final SubLFile me = new random_thought_generator();
 
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 1289L)
-  public static SubLObject non_empty_random_thought_p(final SubLObject v_object)
-  {
-    return pattern_match.tree_matches_pattern( v_object, $list1 );
-  }
+    public static final String myName = "com.cyc.cycjava.cycl.random_thought_generator";
 
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 1559L)
-  public static SubLObject xml_output_random_thoughts(final SubLObject number_of_thoughts, final SubLObject filename, SubLObject user)
-  {
-    if( user == UNPROVIDED )
-    {
-      user = $const2$Guest;
+    public static final String myFingerPrint = "23d9d65387a8bc7b35f48e55cebb3daa4fb4f20b115ed6abd19165de34310e7f";
+
+
+
+
+
+
+
+
+
+    // deflexical
+    private static final SubLSymbol $remote_random_thought_connection_pool_lock$ = makeSymbol("*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL-LOCK*");
+
+    // deflexical
+    private static final SubLSymbol $remote_random_thought_connection_pool_max_size$ = makeSymbol("*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL-MAX-SIZE*");
+
+
+
+    // defconstant
+    public static final SubLSymbol $dtp_random_thought_generator$ = makeSymbol("*DTP-RANDOM-THOUGHT-GENERATOR*");
+
+    // defparameter
+    private static final SubLSymbol $print_rtg_notesP$ = makeSymbol("*PRINT-RTG-NOTES?*");
+
+    // Internal Constants
+    public static final SubLList $list0 = list(NIL, NIL, NIL);
+
+    public static final SubLList $list1 = list(list(makeKeyword("TEST"), makeSymbol("FORT-P")), list(makeKeyword("TEST"), makeSymbol("ASSERTION-P")), list(makeKeyword("TEST"), makeSymbol("PPH-JAVALIST-P")));
+
+    private static final SubLObject $$Guest = reader_make_constant_shell(makeString("Guest"));
+
+
+
+
+
+
+
+    public static final SubLString $str6$Unable_to_open__S = makeString("Unable to open ~S");
+
+    private static final SubLString $$$Generating_ = makeString("Generating ");
+
+    private static final SubLString $str8$_random_thoughts___ = makeString(" random thoughts...");
+
+    private static final SubLString $str9$random_thoughts = makeString("random-thoughts");
+
+
+
+    public static final SubLList $list11 = list(makeKeyword("NOW"), NIL);
+
+    public static final SubLString $$$thoughts = makeString("thoughts");
+
+    public static final SubLString $$$Exporting_random_thoughts_to_ = makeString("Exporting random thoughts to ");
+
+
+
+    private static final SubLList $list15 = list(makeUninternedSymbol("START"), makeUninternedSymbol("END"), makeUninternedSymbol("DELTA"));
+
+    private static final SubLString $str16$Parsing_XML_stream___ = makeString("Parsing XML stream...");
+
+    private static final SubLString $str17$thoughts_about = makeString("thoughts-about");
+
+    private static final SubLString $str18$topic_id = makeString("topic-id");
+
+    private static final SubLString $$$thought = makeString("thought");
+
+    private static final SubLString $str20$Expected__thought___got__S = makeString("Expected 'thought', got ~S");
+
+    private static final SubLString $str21$assertion_id = makeString("assertion-id");
+
+    private static final SubLString $$$paraphrase = makeString("paraphrase");
+
+    private static final SubLString $$$string = makeString("string");
+
+    private static final SubLString $str24$_____ = makeString(";~%~%");
+
+    private static final SubLString $str25$___ = makeString(",~%");
+
+    private static final SubLString $str26$INSERT_INTO_THOUGHTS_INTERNAL_ID_ = makeString("INSERT INTO THOUGHTS(INTERNAL_ID, TERM_EID, TERM_CYCL, ASRTN_EID, ASRTN_CYCL_SENTENCE, ASRTN_MT, ASRTN_PARAPHRASE) VALUES");
+
+    private static final SubLString $str27$___D____A_____A_____A_____A_____A = makeString(" (~D, '~A', '~A', '~A', '~A', '~A', '~A')");
+
+    private static final SubLString $str28$_ = makeString("'");
+
+    private static final SubLString $str29$__ = makeString("''");
+
+
+
+    private static final SubLString $$$term = makeString("term");
+
+    private static final SubLSymbol VALID_NON_EMPTY_RANDOM_THOUGHT_P = makeSymbol("VALID-NON-EMPTY-RANDOM-THOUGHT-P");
+
+
+
+    private static final SubLList $list34 = list(makeString("external.random-thought-server.host"));
+
+    private static final SubLSymbol $random_thought_server_host$ = makeSymbol("*RANDOM-THOUGHT-SERVER-HOST*");
+
+    private static final SubLString $str36$random_thoughts_cyc_com = makeString("random-thoughts.cyc.com");
+
+
+
+    private static final SubLList $list38 = list(makeString("external.random-thought-server.port"));
+
+    private static final SubLSymbol $random_thought_server_port$ = makeSymbol("*RANDOM-THOUGHT-SERVER-PORT*");
+
+    private static final SubLInteger $int$3634 = makeInteger(3634);
+
+    private static final SubLSymbol $remote_random_thought_image$ = makeSymbol("*REMOTE-RANDOM-THOUGHT-IMAGE*");
+
+
+
+    private static final SubLSymbol $remote_random_thought_connection_pool$ = makeSymbol("*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL*");
+
+    private static final SubLString $str44$Remote_Random_Thought_Connection_ = makeString("Remote Random Thought Connection Pool Lock");
+
+    private static final SubLSymbol $IGNORE_ERRORS_TARGET = makeKeyword("IGNORE-ERRORS-TARGET");
+
+    private static final SubLSymbol IGNORE_ERRORS_HANDLER = makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
+
+
+
+    private static final SubLSymbol NEXT_RANDOM_THOUGHT_FOR_USER = makeSymbol("NEXT-RANDOM-THOUGHT-FOR-USER");
+
+
+
+
+
+    private static final SubLList $list51 = list(makeSymbol("CSETQ"), makeSymbol("*PERFORM-CFASL-EXTERNALIZATION*"), T);
+
+
+
+
+
+    private static final SubLString $str54$Could_not_open_a_connection_to__s = makeString("Could not open a connection to ~s");
+
+    private static final SubLSymbol $random_thought_generators_for_users$ = makeSymbol("*RANDOM-THOUGHT-GENERATORS-FOR-USERS*");
+
+    private static final SubLSymbol RANDOM_THOUGHT_GENERATOR = makeSymbol("RANDOM-THOUGHT-GENERATOR");
+
+    private static final SubLSymbol RANDOM_THOUGHT_GENERATOR_P = makeSymbol("RANDOM-THOUGHT-GENERATOR-P");
+
+    public static final SubLList $list58 = list(makeSymbol("USER"), makeSymbol("DONE-ASSERTIONS"), makeSymbol("GENERATOR-THREAD"), makeSymbol("QUEUE"), makeSymbol("MOST-RECENTLY-ADDED-THOUGHT"), makeSymbol("TOPICAL-THOUGHTS"));
+
+    public static final SubLList $list59 = list(makeKeyword("USER"), makeKeyword("DONE-ASSERTIONS"), makeKeyword("GENERATOR-THREAD"), makeKeyword("QUEUE"), makeKeyword("MOST-RECENTLY-ADDED-THOUGHT"), makeKeyword("TOPICAL-THOUGHTS"));
+
+    public static final SubLList $list60 = list(makeSymbol("RTG-STRUCT-USER"), makeSymbol("RTG-STRUCT-DONE-ASSERTIONS"), makeSymbol("RTG-STRUCT-GENERATOR-THREAD"), makeSymbol("RTG-STRUCT-QUEUE"), makeSymbol("RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT"), makeSymbol("RTG-STRUCT-TOPICAL-THOUGHTS"));
+
+    private static final SubLList $list61 = list(makeSymbol("_CSETF-RTG-STRUCT-USER"), makeSymbol("_CSETF-RTG-STRUCT-DONE-ASSERTIONS"), makeSymbol("_CSETF-RTG-STRUCT-GENERATOR-THREAD"), makeSymbol("_CSETF-RTG-STRUCT-QUEUE"), makeSymbol("_CSETF-RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT"), makeSymbol("_CSETF-RTG-STRUCT-TOPICAL-THOUGHTS"));
+
+    private static final SubLSymbol PPRINT_RANDOM_THOUGHT_GENERATOR = makeSymbol("PPRINT-RANDOM-THOUGHT-GENERATOR");
+
+    private static final SubLSymbol RANDOM_THOUGHT_GENERATOR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("RANDOM-THOUGHT-GENERATOR-PRINT-FUNCTION-TRAMPOLINE");
+
+    private static final SubLList $list64 = list(makeSymbol("OPTIMIZE-FUNCALL"), makeSymbol("RANDOM-THOUGHT-GENERATOR-P"));
+
+    private static final SubLSymbol RTG_STRUCT_USER = makeSymbol("RTG-STRUCT-USER");
+
+    private static final SubLSymbol _CSETF_RTG_STRUCT_USER = makeSymbol("_CSETF-RTG-STRUCT-USER");
+
+    private static final SubLSymbol RTG_STRUCT_DONE_ASSERTIONS = makeSymbol("RTG-STRUCT-DONE-ASSERTIONS");
+
+    private static final SubLSymbol _CSETF_RTG_STRUCT_DONE_ASSERTIONS = makeSymbol("_CSETF-RTG-STRUCT-DONE-ASSERTIONS");
+
+    private static final SubLSymbol RTG_STRUCT_GENERATOR_THREAD = makeSymbol("RTG-STRUCT-GENERATOR-THREAD");
+
+    private static final SubLSymbol _CSETF_RTG_STRUCT_GENERATOR_THREAD = makeSymbol("_CSETF-RTG-STRUCT-GENERATOR-THREAD");
+
+    private static final SubLSymbol RTG_STRUCT_QUEUE = makeSymbol("RTG-STRUCT-QUEUE");
+
+    private static final SubLSymbol _CSETF_RTG_STRUCT_QUEUE = makeSymbol("_CSETF-RTG-STRUCT-QUEUE");
+
+    private static final SubLSymbol RTG_STRUCT_MOST_RECENTLY_ADDED_THOUGHT = makeSymbol("RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT");
+
+    private static final SubLSymbol _CSETF_RTG_STRUCT_MOST_RECENTLY_ADDED_THOUGHT = makeSymbol("_CSETF-RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT");
+
+    private static final SubLSymbol RTG_STRUCT_TOPICAL_THOUGHTS = makeSymbol("RTG-STRUCT-TOPICAL-THOUGHTS");
+
+    private static final SubLSymbol _CSETF_RTG_STRUCT_TOPICAL_THOUGHTS = makeSymbol("_CSETF-RTG-STRUCT-TOPICAL-THOUGHTS");
+
+
+
+
+
+
+
+
+
+    private static final SubLSymbol $MOST_RECENTLY_ADDED_THOUGHT = makeKeyword("MOST-RECENTLY-ADDED-THOUGHT");
+
+
+
+    private static final SubLString $str83$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
+
+
+
+    private static final SubLSymbol MAKE_RANDOM_THOUGHT_GENERATOR = makeSymbol("MAKE-RANDOM-THOUGHT-GENERATOR");
+
+
+
+
+
+    private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_RANDOM_THOUGHT_GENERATOR_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-RANDOM-THOUGHT-GENERATOR-METHOD");
+
+    private static final SubLString $str89$__RTG_for__S___S_done__A__ = makeString("#<RTG for ~S (~S done ~A)>");
+
+    private static final SubLString $$$_queued = makeString(" queued");
+
+    private static final SubLString $$$exhausted = makeString("exhausted");
+
+
+
+
+
+    public static final SubLList $list94 = list(makeSymbol("FORMAT-STR"), makeSymbol("&REST"), makeSymbol("ARGS"));
+
+
+
+    private static final SubLSymbol $sym96$_PRINT_RTG_NOTES__ = makeSymbol("*PRINT-RTG-NOTES?*");
+
+
+
+    private static final SubLList $list98 = list(makeSymbol("QUOTE"), makeSymbol("FORMAT"));
+
+
+
+
+
+    private static final SubLList $list101 = list(list(makeSymbol("FORCE-OUTPUT"), T));
+
+
+
+    private static final SubLString $str103$__Registering_interest_of__S_in__ = makeString("~&Registering interest of ~S in ~S~%");
+
+    private static final SubLList $list104 = list(makeKeyword("NOW"), NIL, makeKeyword("REQUIRE-TOPICAL?"), T);
+
+
+
+    private static final SubLSymbol $kw106$REQUIRE_TOPICAL_ = makeKeyword("REQUIRE-TOPICAL?");
+
+    private static final SubLString $str107$__Waiting_for_new_thoughts_about_ = makeString("~&Waiting for new thoughts about ~S~%");
+
+    private static final SubLFloat $float$0_5 = makeDouble(0.5);
+
+    private static final SubLString $str109$___A_out_of_thoughts_about__S__ = makeString("~&~A out of thoughts about ~S~%");
+
+    private static final SubLString $$$Totally = makeString("Totally");
+
+    private static final SubLString $$$Temporarily = makeString("Temporarily");
+
+    private static final SubLString $$$Random_Thought_Generator = makeString("Random Thought Generator");
+
+    private static final SubLSymbol KEEP_RANDOM_THOUGHT_GENERATOR_FULL = makeSymbol("KEEP-RANDOM-THOUGHT-GENERATOR-FULL");
+
+    private static final SubLInteger $int$25 = makeInteger(25);
+
+    private static final SubLFloat $float$1_5 = makeDouble(1.5);
+
+
+
+    private static final SubLString $str117$__Filling__S__ = makeString("~&Filling ~S~%");
+
+    private static final SubLList $list118 = cons(makeSymbol("TOPIC"), makeSymbol("NEW-DATA"));
+
+    private static final SubLString $str119$___S_is_now_full__ = makeString("~&~S is now full~%");
+
+    private static final SubLString $str120$_S_is_not_in_an_updatable_state = makeString("~S is not in an updatable state");
+
+    private static final SubLString $str121$__New_thought_concerning__S_____S = makeString("~&New thought concerning ~S:~% ~S~%");
+
+    private static final SubLSymbol OPEN_CYC_FORT = makeSymbol("OPEN-CYC-FORT");
+
+    private static final SubLSymbol $sym123$POTENTIALLY_PORN_RELATED_ = makeSymbol("POTENTIALLY-PORN-RELATED?");
+
+    private static final SubLObject $$PotentiallyPornRelated = reader_make_constant_shell(makeString("PotentiallyPornRelated"));
+
+
+
+
+
+
+
+    private static final SubLString $str128$__Found__S_GAF_assertions_about__ = makeString("~&Found ~S GAF assertions about ~S~%");
+
+    private static final SubLString $str129$___Top_level_CycL___S = makeString("~% Top-level CycL: ~S");
+
+    private static final SubLList $list130 = list(makeSymbol("TERM"), makeSymbol("ASSERTION"), makeSymbol("ASSERTION-PARAPHRASE"));
+
+    private static final SubLSymbol $NEW_ARG_FROM_ASSERTION = makeKeyword("NEW-ARG-FROM-ASSERTION");
+
+    private static final SubLSymbol $REUSE_MOST_RECENTLY_ADDED_TOPIC = makeKeyword("REUSE-MOST-RECENTLY-ADDED-TOPIC");
+
+
+
+    public static SubLObject random_thought_p(final SubLObject v_object) {
+        return makeBoolean((NIL != empty_random_thought_p(v_object)) || (NIL != non_empty_random_thought_p(v_object)));
     }
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != subl_promotions.positive_integer_p( number_of_thoughts ) : number_of_thoughts;
-    assert NIL != Types.stringp( filename ) : filename;
-    SubLObject stream = NIL;
-    try
-    {
-      SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding( thread );
-      try
-      {
-        stream_macros.$stream_requires_locking$.bind( NIL, thread );
-        stream = compatibility.open_text( filename, $kw5$OUTPUT );
-      }
-      finally
-      {
-        stream_macros.$stream_requires_locking$.rebind( _prev_bind_0, thread );
-      }
-      if( !stream.isStream() )
-      {
-        Errors.error( $str6$Unable_to_open__S, filename );
-      }
-      _prev_bind_0 = xml_vars.$xml_stream$.currentBinding( thread );
-      try
-      {
-        xml_vars.$xml_stream$.bind( stream, thread );
-        xml_utilities.xml_header( UNPROVIDED, UNPROVIDED, UNPROVIDED );
-        final SubLObject local_state;
-        final SubLObject state = local_state = memoization_state.new_memoization_state( UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-        final SubLObject _prev_bind_0_$1 = memoization_state.$memoization_state$.currentBinding( thread );
-        try
-        {
-          memoization_state.$memoization_state$.bind( local_state, thread );
-          final SubLObject original_memoization_process = memoization_state.memoization_state_original_process( local_state );
-          try
-          {
-            final SubLObject _prev_bind_0_$2 = utilities_macros.$last_percent_progress_index$.currentBinding( thread );
-            final SubLObject _prev_bind_2 = utilities_macros.$last_percent_progress_prediction$.currentBinding( thread );
-            final SubLObject _prev_bind_3 = utilities_macros.$within_noting_percent_progress$.currentBinding( thread );
-            final SubLObject _prev_bind_4 = utilities_macros.$percent_progress_start_time$.currentBinding( thread );
-            try
-            {
-              utilities_macros.$last_percent_progress_index$.bind( ZERO_INTEGER, thread );
-              utilities_macros.$last_percent_progress_prediction$.bind( NIL, thread );
-              utilities_macros.$within_noting_percent_progress$.bind( T, thread );
-              utilities_macros.$percent_progress_start_time$.bind( Time.get_universal_time(), thread );
-              try
-              {
-                utilities_macros.noting_percent_progress_preamble( Sequences.cconcatenate( $str7$Generating_, new SubLObject[] { format_nil.format_nil_d_no_copy( number_of_thoughts ), $str8$_random_thoughts___
-                } ) );
-                try
-                {
-                  final SubLObject _prev_bind_0_$3 = xml_utilities.$xml_indentation_level$.currentBinding( thread );
-                  final SubLObject _prev_bind_1_$4 = xml_utilities.$cycml_indent_level$.currentBinding( thread );
-                  try
-                  {
-                    xml_utilities.$xml_indentation_level$.bind( Numbers.add( xml_utilities.$xml_indentation_amount$.getDynamicValue( thread ), xml_utilities.$xml_indentation_level$.getDynamicValue( thread ) ), thread );
-                    xml_utilities.$cycml_indent_level$.bind( xml_utilities.$xml_indentation_level$.getDynamicValue( thread ), thread );
-                    xml_utilities.xml_start_tag_internal( $str9$random_thoughts, NIL, NIL, NIL, $kw10$UNINITIALIZED );
-                    final SubLObject _prev_bind_0_$4 = xml_vars.$xml_default_namespace$.currentBinding( thread );
-                    try
-                    {
-                      xml_vars.$xml_default_namespace$.bind( $kw10$UNINITIALIZED, thread );
-                      xml_utilities.xml_terpri();
-                      SubLObject i;
-                      for( i = NIL, i = ZERO_INTEGER; i.numL( number_of_thoughts ); i = Numbers.add( i, ONE_INTEGER ) )
-                      {
-                        xml_output_random_thought( next_random_thought_for_user( user, $list11 ) );
-                        xml_utilities.xml_terpri();
-                        streams_high.force_output( xml_vars.$xml_stream$.getDynamicValue( thread ) );
-                        utilities_macros.note_percent_progress( i, number_of_thoughts );
-                      }
-                    }
-                    finally
-                    {
-                      xml_vars.$xml_default_namespace$.rebind( _prev_bind_0_$4, thread );
-                    }
-                  }
-                  finally
-                  {
-                    xml_utilities.$cycml_indent_level$.rebind( _prev_bind_1_$4, thread );
-                    xml_utilities.$xml_indentation_level$.rebind( _prev_bind_0_$3, thread );
-                  }
-                }
-                finally
-                {
-                  final SubLObject _prev_bind_0_$5 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-                  try
-                  {
-                    Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-                    final SubLObject _values = Values.getValuesAsVector();
-                    xml_utilities.xml_terpri();
-                    xml_utilities.xml_end_tag_internal( $str9$random_thoughts );
-                    Values.restoreValuesFromVector( _values );
-                  }
-                  finally
-                  {
-                    Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$5, thread );
-                  }
-                }
-              }
-              finally
-              {
-                final SubLObject _prev_bind_0_$6 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-                try
-                {
-                  Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-                  final SubLObject _values2 = Values.getValuesAsVector();
-                  utilities_macros.noting_percent_progress_postamble();
-                  Values.restoreValuesFromVector( _values2 );
-                }
-                finally
-                {
-                  Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$6, thread );
-                }
-              }
-            }
-            finally
-            {
-              utilities_macros.$percent_progress_start_time$.rebind( _prev_bind_4, thread );
-              utilities_macros.$within_noting_percent_progress$.rebind( _prev_bind_3, thread );
-              utilities_macros.$last_percent_progress_prediction$.rebind( _prev_bind_2, thread );
-              utilities_macros.$last_percent_progress_index$.rebind( _prev_bind_0_$2, thread );
-            }
-          }
-          finally
-          {
-            final SubLObject _prev_bind_0_$7 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-            try
-            {
-              Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-              final SubLObject _values3 = Values.getValuesAsVector();
-              memoization_state.memoization_state_possibly_clear_original_process( local_state, original_memoization_process );
-              Values.restoreValuesFromVector( _values3 );
-            }
-            finally
-            {
-              Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$7, thread );
-            }
-          }
+
+    public static SubLObject empty_random_thought_p(final SubLObject v_object) {
+        return equal(v_object, $list0);
+    }
+
+    public static SubLObject non_empty_random_thought_p(final SubLObject v_object) {
+        return pattern_match.tree_matches_pattern(v_object, $list1);
+    }
+
+    public static SubLObject xml_output_random_thoughts(final SubLObject number_of_thoughts, final SubLObject filename, SubLObject user) {
+        if (user == UNPROVIDED) {
+            user = $$Guest;
         }
-        finally
-        {
-          memoization_state.$memoization_state$.rebind( _prev_bind_0_$1, thread );
-        }
-      }
-      finally
-      {
-        xml_vars.$xml_stream$.rebind( _prev_bind_0, thread );
-      }
-    }
-    finally
-    {
-      final SubLObject _prev_bind_5 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-      try
-      {
-        Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-        final SubLObject _values4 = Values.getValuesAsVector();
-        if( stream.isStream() )
-        {
-          streams_high.close( stream, UNPROVIDED );
-        }
-        Values.restoreValuesFromVector( _values4 );
-      }
-      finally
-      {
-        Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_5, thread );
-      }
-    }
-    return number_of_thoughts;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 2324L)
-  public static SubLObject xml_output_random_thoughts_for_terms(final SubLObject number_of_terms, final SubLObject filename, SubLObject start_after_fort)
-  {
-    if( start_after_fort == UNPROVIDED )
-    {
-      start_after_fort = NIL;
-    }
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( NIL != number_of_terms && !assertionsDisabledInClass && NIL == subl_promotions.positive_integer_p( number_of_terms ) )
-    {
-      throw new AssertionError( number_of_terms );
-    }
-    assert NIL != Types.stringp( filename ) : filename;
-    SubLObject stream = NIL;
-    try
-    {
-      SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding( thread );
-      try
-      {
-        stream_macros.$stream_requires_locking$.bind( NIL, thread );
-        stream = compatibility.open_text( filename, $kw5$OUTPUT );
-      }
-      finally
-      {
-        stream_macros.$stream_requires_locking$.rebind( _prev_bind_0, thread );
-      }
-      if( !stream.isStream() )
-      {
-        Errors.error( $str6$Unable_to_open__S, filename );
-      }
-      _prev_bind_0 = xml_vars.$xml_stream$.currentBinding( thread );
-      try
-      {
-        xml_vars.$xml_stream$.bind( stream, thread );
-        xml_utilities.xml_header( UNPROVIDED, UNPROVIDED, UNPROVIDED );
-        SubLObject done_count = ZERO_INTEGER;
-        SubLObject doneP = NIL;
-        SubLObject ok_to_startP = Types.sublisp_null( start_after_fort );
-        final SubLObject local_state;
-        final SubLObject state = local_state = memoization_state.new_memoization_state( UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-        final SubLObject _prev_bind_0_$9 = memoization_state.$memoization_state$.currentBinding( thread );
-        try
-        {
-          memoization_state.$memoization_state$.bind( local_state, thread );
-          final SubLObject original_memoization_process = memoization_state.memoization_state_original_process( local_state );
-          try
-          {
-            try
-            {
-              final SubLObject _prev_bind_0_$10 = xml_utilities.$xml_indentation_level$.currentBinding( thread );
-              final SubLObject _prev_bind_2 = xml_utilities.$cycml_indent_level$.currentBinding( thread );
-              try
-              {
-                xml_utilities.$xml_indentation_level$.bind( Numbers.add( xml_utilities.$xml_indentation_amount$.getDynamicValue( thread ), xml_utilities.$xml_indentation_level$.getDynamicValue( thread ) ), thread );
-                xml_utilities.$cycml_indent_level$.bind( xml_utilities.$xml_indentation_level$.getDynamicValue( thread ), thread );
-                xml_utilities.xml_start_tag_internal( $str12$thoughts, NIL, NIL, NIL, $kw10$UNINITIALIZED );
-                final SubLObject _prev_bind_0_$11 = xml_vars.$xml_default_namespace$.currentBinding( thread );
-                try
-                {
-                  xml_vars.$xml_default_namespace$.bind( $kw10$UNINITIALIZED, thread );
-                  xml_utilities.xml_terpri();
-                  final SubLObject message = Sequences.cconcatenate( $str13$Exporting_random_thoughts_to_, format_nil.format_nil_s_no_copy( filename ) );
-                  final SubLObject total = forts.fort_count();
-                  SubLObject sofar = ZERO_INTEGER;
-                  final SubLObject _prev_bind_0_$12 = utilities_macros.$last_percent_progress_index$.currentBinding( thread );
-                  final SubLObject _prev_bind_1_$13 = utilities_macros.$last_percent_progress_prediction$.currentBinding( thread );
-                  final SubLObject _prev_bind_3 = utilities_macros.$within_noting_percent_progress$.currentBinding( thread );
-                  final SubLObject _prev_bind_4 = utilities_macros.$percent_progress_start_time$.currentBinding( thread );
-                  try
-                  {
-                    utilities_macros.$last_percent_progress_index$.bind( ZERO_INTEGER, thread );
-                    utilities_macros.$last_percent_progress_prediction$.bind( NIL, thread );
-                    utilities_macros.$within_noting_percent_progress$.bind( T, thread );
-                    utilities_macros.$percent_progress_start_time$.bind( Time.get_universal_time(), thread );
-                    try
-                    {
-                      utilities_macros.noting_percent_progress_preamble( message );
-                      SubLObject rest;
-                      SubLObject idx;
-                      SubLObject table_var;
-                      SubLObject idx_$14;
-                      SubLObject vector_var;
-                      SubLObject backwardP_var;
-                      SubLObject length;
-                      SubLObject current;
-                      SubLObject datum;
-                      SubLObject start;
-                      SubLObject end;
-                      SubLObject delta;
-                      SubLObject end_var;
-                      SubLObject id;
-                      SubLObject fort;
-                      SubLObject thoughts;
-                      SubLObject idx_$15;
-                      SubLObject sparse;
-                      SubLObject id2;
-                      SubLObject end_id;
-                      SubLObject v_default;
-                      SubLObject fort2;
-                      SubLObject thoughts2;
-                      for( rest = NIL, rest = forts.do_forts_tables(); NIL == doneP && NIL != rest; rest = rest.rest() )
-                      {
-                        table_var = ( idx = rest.first() );
-                        if( NIL == id_index.id_index_objects_empty_p( idx, $kw14$SKIP ) )
-                        {
-                          idx_$14 = idx;
-                          if( NIL == id_index.id_index_dense_objects_empty_p( idx_$14, $kw14$SKIP ) )
-                          {
-                            vector_var = id_index.id_index_dense_objects( idx_$14 );
-                            backwardP_var = NIL;
-                            length = Sequences.length( vector_var );
-                            datum = ( current = ( NIL != backwardP_var ) ? ConsesLow.list( Numbers.subtract( length, ONE_INTEGER ), MINUS_ONE_INTEGER, MINUS_ONE_INTEGER )
-                                : ConsesLow.list( ZERO_INTEGER, length, ONE_INTEGER ) );
-                            start = NIL;
-                            end = NIL;
-                            delta = NIL;
-                            cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list15 );
-                            start = current.first();
-                            current = current.rest();
-                            cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list15 );
-                            end = current.first();
-                            current = current.rest();
-                            cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list15 );
-                            delta = current.first();
-                            current = current.rest();
-                            if( NIL == current )
-                            {
-                              if( NIL == doneP )
-                              {
-                                for( end_var = end, id = NIL, id = start; NIL == doneP && NIL == subl_macros.do_numbers_endtest( id, delta, end_var ); id = Numbers.add( id, delta ) )
-                                {
-                                  fort = Vectors.aref( vector_var, id );
-                                  if( NIL == id_index.id_index_tombstone_p( fort ) || NIL == id_index.id_index_skip_tombstones_p( $kw14$SKIP ) )
-                                  {
-                                    if( NIL != id_index.id_index_tombstone_p( fort ) )
-                                    {
-                                      fort = $kw14$SKIP;
-                                    }
-                                    sofar = Numbers.add( sofar, ONE_INTEGER );
-                                    utilities_macros.note_percent_progress( sofar, total );
-                                    if( NIL != ok_to_startP && NIL != open_cyc_fort( fort ) && NIL == fort_types_interface.predicate_p( fort ) )
-                                    {
-                                      thoughts = all_random_thoughts_on_topic( fort );
-                                      if( NIL != list_utilities.non_empty_list_p( thoughts ) )
-                                      {
-                                        xml_output_random_thoughts_for_term( fort, thoughts );
-                                        xml_utilities.xml_terpri();
-                                        done_count = Numbers.add( done_count, ONE_INTEGER );
-                                        if( NIL != number_of_terms )
-                                        {
-                                          doneP = Numbers.numGE( done_count, number_of_terms );
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != subl_promotions.positive_integer_p(number_of_thoughts) : "subl_promotions.positive_integer_p(number_of_thoughts) " + "CommonSymbols.NIL != subl_promotions.positive_integer_p(number_of_thoughts) " + number_of_thoughts;
+        assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
+        SubLObject stream = NIL;
+        try {
+            SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+            try {
+                stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                stream = compatibility.open_text(filename, $OUTPUT);
+            } finally {
+                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+            }
+            if (!stream.isStream()) {
+                Errors.error($str6$Unable_to_open__S, filename);
+            }
+            _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+            try {
+                xml_vars.$xml_stream$.bind(stream, thread);
+                xml_utilities.xml_header(UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                final SubLObject local_state;
+                final SubLObject state = local_state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                final SubLObject _prev_bind_0_$1 = memoization_state.$memoization_state$.currentBinding(thread);
+                try {
+                    memoization_state.$memoization_state$.bind(local_state, thread);
+                    final SubLObject original_memoization_process = memoization_state.memoization_state_original_process(local_state);
+                    try {
+                        final SubLObject _prev_bind_0_$2 = $last_percent_progress_index$.currentBinding(thread);
+                        final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
+                        final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
+                        final SubLObject _prev_bind_4 = $percent_progress_start_time$.currentBinding(thread);
+                        try {
+                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                            $last_percent_progress_prediction$.bind(NIL, thread);
+                            $within_noting_percent_progress$.bind(T, thread);
+                            $percent_progress_start_time$.bind(get_universal_time(), thread);
+                            try {
+                                noting_percent_progress_preamble(cconcatenate($$$Generating_, new SubLObject[]{ format_nil.format_nil_d_no_copy(number_of_thoughts), $str8$_random_thoughts___ }));
+                                try {
+                                    final SubLObject _prev_bind_0_$3 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    final SubLObject _prev_bind_1_$4 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($str9$random_thoughts, NIL, NIL, NIL, $UNINITIALIZED);
+                                        final SubLObject _prev_bind_0_$4 = xml_vars.$xml_default_namespace$.currentBinding(thread);
+                                        try {
+                                            xml_vars.$xml_default_namespace$.bind($UNINITIALIZED, thread);
+                                            xml_utilities.xml_terpri();
+                                            SubLObject i;
+                                            for (i = NIL, i = ZERO_INTEGER; i.numL(number_of_thoughts); i = add(i, ONE_INTEGER)) {
+                                                xml_output_random_thought(next_random_thought_for_user(user, $list11));
+                                                xml_utilities.xml_terpri();
+                                                force_output(xml_vars.$xml_stream$.getDynamicValue(thread));
+                                                note_percent_progress(i, number_of_thoughts);
+                                            }
+                                        } finally {
+                                            xml_vars.$xml_default_namespace$.rebind(_prev_bind_0_$4, thread);
                                         }
-                                      }
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_$4, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_$3, thread);
                                     }
-                                    if( fort.eql( start_after_fort ) )
-                                    {
-                                      ok_to_startP = T;
+                                } finally {
+                                    final SubLObject _prev_bind_0_$5 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        final SubLObject _values = getValuesAsVector();
+                                        xml_utilities.xml_terpri();
+                                        xml_utilities.xml_end_tag_internal($str9$random_thoughts);
+                                        restoreValuesFromVector(_values);
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$5, thread);
                                     }
-                                  }
                                 }
-                              }
-                            }
-                            else
-                            {
-                              cdestructuring_bind.cdestructuring_bind_error( datum, $list15 );
-                            }
-                          }
-                          idx_$15 = idx;
-                          if( NIL == id_index.id_index_sparse_objects_empty_p( idx_$15 ) || NIL == id_index.id_index_skip_tombstones_p( $kw14$SKIP ) )
-                          {
-                            sparse = id_index.id_index_sparse_objects( idx_$15 );
-                            id2 = id_index.id_index_sparse_id_threshold( idx_$15 );
-                            end_id = id_index.id_index_next_id( idx_$15 );
-                            v_default = ( NIL != id_index.id_index_skip_tombstones_p( $kw14$SKIP ) ) ? NIL : $kw14$SKIP;
-                            while ( id2.numL( end_id ) && NIL == doneP)
-                            {
-                              fort2 = Hashtables.gethash_without_values( id2, sparse, v_default );
-                              if( NIL == id_index.id_index_skip_tombstones_p( $kw14$SKIP ) || NIL == id_index.id_index_tombstone_p( fort2 ) )
-                              {
-                                sofar = Numbers.add( sofar, ONE_INTEGER );
-                                utilities_macros.note_percent_progress( sofar, total );
-                                if( NIL != ok_to_startP && NIL != open_cyc_fort( fort2 ) && NIL == fort_types_interface.predicate_p( fort2 ) )
-                                {
-                                  thoughts2 = all_random_thoughts_on_topic( fort2 );
-                                  if( NIL != list_utilities.non_empty_list_p( thoughts2 ) )
-                                  {
-                                    xml_output_random_thoughts_for_term( fort2, thoughts2 );
-                                    xml_utilities.xml_terpri();
-                                    done_count = Numbers.add( done_count, ONE_INTEGER );
-                                    if( NIL != number_of_terms )
-                                    {
-                                      doneP = Numbers.numGE( done_count, number_of_terms );
-                                    }
-                                  }
+                            } finally {
+                                final SubLObject _prev_bind_0_$6 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                try {
+                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                    final SubLObject _values2 = getValuesAsVector();
+                                    noting_percent_progress_postamble();
+                                    restoreValuesFromVector(_values2);
+                                } finally {
+                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$6, thread);
                                 }
-                                if( fort2.eql( start_after_fort ) )
-                                {
-                                  ok_to_startP = T;
-                                }
-                              }
-                              id2 = Numbers.add( id2, ONE_INTEGER );
                             }
-                          }
+                        } finally {
+                            $percent_progress_start_time$.rebind(_prev_bind_4, thread);
+                            $within_noting_percent_progress$.rebind(_prev_bind_3, thread);
+                            $last_percent_progress_prediction$.rebind(_prev_bind_2, thread);
+                            $last_percent_progress_index$.rebind(_prev_bind_0_$2, thread);
                         }
-                      }
+                    } finally {
+                        final SubLObject _prev_bind_0_$7 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            final SubLObject _values3 = getValuesAsVector();
+                            memoization_state.memoization_state_possibly_clear_original_process(local_state, original_memoization_process);
+                            restoreValuesFromVector(_values3);
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$7, thread);
+                        }
                     }
-                    finally
-                    {
-                      final SubLObject _prev_bind_0_$13 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-                      try
-                      {
-                        Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-                        final SubLObject _values = Values.getValuesAsVector();
-                        utilities_macros.noting_percent_progress_postamble();
-                        Values.restoreValuesFromVector( _values );
-                      }
-                      finally
-                      {
-                        Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$13, thread );
-                      }
-                    }
-                  }
-                  finally
-                  {
-                    utilities_macros.$percent_progress_start_time$.rebind( _prev_bind_4, thread );
-                    utilities_macros.$within_noting_percent_progress$.rebind( _prev_bind_3, thread );
-                    utilities_macros.$last_percent_progress_prediction$.rebind( _prev_bind_1_$13, thread );
-                    utilities_macros.$last_percent_progress_index$.rebind( _prev_bind_0_$12, thread );
-                  }
+                } finally {
+                    memoization_state.$memoization_state$.rebind(_prev_bind_0_$1, thread);
                 }
-                finally
-                {
-                  xml_vars.$xml_default_namespace$.rebind( _prev_bind_0_$11, thread );
-                }
-              }
-              finally
-              {
-                xml_utilities.$cycml_indent_level$.rebind( _prev_bind_2, thread );
-                xml_utilities.$xml_indentation_level$.rebind( _prev_bind_0_$10, thread );
-              }
+            } finally {
+                xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
             }
-            finally
-            {
-              final SubLObject _prev_bind_0_$14 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-              try
-              {
-                Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-                final SubLObject _values2 = Values.getValuesAsVector();
+        } finally {
+            final SubLObject _prev_bind_5 = $is_thread_performing_cleanupP$.currentBinding(thread);
+            try {
+                $is_thread_performing_cleanupP$.bind(T, thread);
+                final SubLObject _values4 = getValuesAsVector();
+                if (stream.isStream()) {
+                    close(stream, UNPROVIDED);
+                }
+                restoreValuesFromVector(_values4);
+            } finally {
+                $is_thread_performing_cleanupP$.rebind(_prev_bind_5, thread);
+            }
+        }
+        return number_of_thoughts;
+    }
+
+    public static SubLObject xml_output_random_thoughts_for_terms(final SubLObject number_of_terms, final SubLObject filename, SubLObject start_after_fort) {
+        if (start_after_fort == UNPROVIDED) {
+            start_after_fort = NIL;
+        }
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if (((NIL != number_of_terms) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == subl_promotions.positive_integer_p(number_of_terms))) {
+            throw new AssertionError(number_of_terms);
+        }
+        assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
+        SubLObject stream = NIL;
+        try {
+            SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+            try {
+                stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                stream = compatibility.open_text(filename, $OUTPUT);
+            } finally {
+                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+            }
+            if (!stream.isStream()) {
+                Errors.error($str6$Unable_to_open__S, filename);
+            }
+            _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+            try {
+                xml_vars.$xml_stream$.bind(stream, thread);
+                xml_utilities.xml_header(UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject done_count = ZERO_INTEGER;
+                SubLObject doneP = NIL;
+                SubLObject ok_to_startP = sublisp_null(start_after_fort);
+                final SubLObject local_state;
+                final SubLObject state = local_state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                final SubLObject _prev_bind_0_$9 = memoization_state.$memoization_state$.currentBinding(thread);
+                try {
+                    memoization_state.$memoization_state$.bind(local_state, thread);
+                    final SubLObject original_memoization_process = memoization_state.memoization_state_original_process(local_state);
+                    try {
+                        try {
+                            final SubLObject _prev_bind_0_$10 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                            final SubLObject _prev_bind_2 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                            try {
+                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                xml_utilities.xml_start_tag_internal($$$thoughts, NIL, NIL, NIL, $UNINITIALIZED);
+                                final SubLObject _prev_bind_0_$11 = xml_vars.$xml_default_namespace$.currentBinding(thread);
+                                try {
+                                    xml_vars.$xml_default_namespace$.bind($UNINITIALIZED, thread);
+                                    xml_utilities.xml_terpri();
+                                    final SubLObject message = cconcatenate($$$Exporting_random_thoughts_to_, format_nil.format_nil_s_no_copy(filename));
+                                    final SubLObject total = forts.fort_count();
+                                    SubLObject sofar = ZERO_INTEGER;
+                                    final SubLObject _prev_bind_0_$12 = $last_percent_progress_index$.currentBinding(thread);
+                                    final SubLObject _prev_bind_1_$13 = $last_percent_progress_prediction$.currentBinding(thread);
+                                    final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
+                                    final SubLObject _prev_bind_4 = $percent_progress_start_time$.currentBinding(thread);
+                                    try {
+                                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                        $last_percent_progress_prediction$.bind(NIL, thread);
+                                        $within_noting_percent_progress$.bind(T, thread);
+                                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                        try {
+                                            noting_percent_progress_preamble(message);
+                                            SubLObject rest;
+                                            SubLObject idx;
+                                            SubLObject table_var;
+                                            SubLObject idx_$14;
+                                            SubLObject vector_var;
+                                            SubLObject backwardP_var;
+                                            SubLObject length;
+                                            SubLObject current;
+                                            SubLObject datum;
+                                            SubLObject start;
+                                            SubLObject end;
+                                            SubLObject delta;
+                                            SubLObject end_var;
+                                            SubLObject id;
+                                            SubLObject fort;
+                                            SubLObject thoughts;
+                                            SubLObject idx_$15;
+                                            SubLObject sparse;
+                                            SubLObject id2;
+                                            SubLObject end_id;
+                                            SubLObject v_default;
+                                            SubLObject fort2;
+                                            SubLObject thoughts2;
+                                            for (rest = NIL, rest = forts.do_forts_tables(); (NIL == doneP) && (NIL != rest); rest = rest.rest()) {
+                                                table_var = idx = rest.first();
+                                                if (NIL == id_index_objects_empty_p(idx, $SKIP)) {
+                                                    idx_$14 = idx;
+                                                    if (NIL == id_index_dense_objects_empty_p(idx_$14, $SKIP)) {
+                                                        vector_var = id_index_dense_objects(idx_$14);
+                                                        backwardP_var = NIL;
+                                                        length = length(vector_var);
+                                                        datum = current = (NIL != backwardP_var) ? list(subtract(length, ONE_INTEGER), MINUS_ONE_INTEGER, MINUS_ONE_INTEGER) : list(ZERO_INTEGER, length, ONE_INTEGER);
+                                                        start = NIL;
+                                                        end = NIL;
+                                                        delta = NIL;
+                                                        destructuring_bind_must_consp(current, datum, $list15);
+                                                        start = current.first();
+                                                        current = current.rest();
+                                                        destructuring_bind_must_consp(current, datum, $list15);
+                                                        end = current.first();
+                                                        current = current.rest();
+                                                        destructuring_bind_must_consp(current, datum, $list15);
+                                                        delta = current.first();
+                                                        current = current.rest();
+                                                        if (NIL == current) {
+                                                            if (NIL == doneP) {
+                                                                for (end_var = end, id = NIL, id = start; (NIL == doneP) && (NIL == subl_macros.do_numbers_endtest(id, delta, end_var)); id = add(id, delta)) {
+                                                                    fort = aref(vector_var, id);
+                                                                    if ((NIL == id_index_tombstone_p(fort)) || (NIL == id_index_skip_tombstones_p($SKIP))) {
+                                                                        if (NIL != id_index_tombstone_p(fort)) {
+                                                                            fort = $SKIP;
+                                                                        }
+                                                                        sofar = add(sofar, ONE_INTEGER);
+                                                                        note_percent_progress(sofar, total);
+                                                                        if (((NIL != ok_to_startP) && (NIL != open_cyc_fort(fort))) && (NIL == fort_types_interface.predicate_p(fort))) {
+                                                                            thoughts = all_random_thoughts_on_topic(fort);
+                                                                            if (NIL != list_utilities.non_empty_list_p(thoughts)) {
+                                                                                xml_output_random_thoughts_for_term(fort, thoughts);
+                                                                                xml_utilities.xml_terpri();
+                                                                                done_count = add(done_count, ONE_INTEGER);
+                                                                                if (NIL != number_of_terms) {
+                                                                                    doneP = numGE(done_count, number_of_terms);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        if (fort.eql(start_after_fort)) {
+                                                                            ok_to_startP = T;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        } else {
+                                                            cdestructuring_bind_error(datum, $list15);
+                                                        }
+                                                    }
+                                                    idx_$15 = idx;
+                                                    if ((NIL == id_index_sparse_objects_empty_p(idx_$15)) || (NIL == id_index_skip_tombstones_p($SKIP))) {
+                                                        sparse = id_index_sparse_objects(idx_$15);
+                                                        id2 = id_index_sparse_id_threshold(idx_$15);
+                                                        end_id = id_index_next_id(idx_$15);
+                                                        v_default = (NIL != id_index_skip_tombstones_p($SKIP)) ? NIL : $SKIP;
+                                                        while (id2.numL(end_id) && (NIL == doneP)) {
+                                                            fort2 = gethash_without_values(id2, sparse, v_default);
+                                                            if ((NIL == id_index_skip_tombstones_p($SKIP)) || (NIL == id_index_tombstone_p(fort2))) {
+                                                                sofar = add(sofar, ONE_INTEGER);
+                                                                note_percent_progress(sofar, total);
+                                                                if (((NIL != ok_to_startP) && (NIL != open_cyc_fort(fort2))) && (NIL == fort_types_interface.predicate_p(fort2))) {
+                                                                    thoughts2 = all_random_thoughts_on_topic(fort2);
+                                                                    if (NIL != list_utilities.non_empty_list_p(thoughts2)) {
+                                                                        xml_output_random_thoughts_for_term(fort2, thoughts2);
+                                                                        xml_utilities.xml_terpri();
+                                                                        done_count = add(done_count, ONE_INTEGER);
+                                                                        if (NIL != number_of_terms) {
+                                                                            doneP = numGE(done_count, number_of_terms);
+                                                                        }
+                                                                    }
+                                                                }
+                                                                if (fort2.eql(start_after_fort)) {
+                                                                    ok_to_startP = T;
+                                                                }
+                                                            }
+                                                            id2 = add(id2, ONE_INTEGER);
+                                                        } 
+                                                    }
+                                                }
+                                            }
+                                        } finally {
+                                            final SubLObject _prev_bind_0_$13 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                            try {
+                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                final SubLObject _values = getValuesAsVector();
+                                                noting_percent_progress_postamble();
+                                                restoreValuesFromVector(_values);
+                                            } finally {
+                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$13, thread);
+                                            }
+                                        }
+                                    } finally {
+                                        $percent_progress_start_time$.rebind(_prev_bind_4, thread);
+                                        $within_noting_percent_progress$.rebind(_prev_bind_3, thread);
+                                        $last_percent_progress_prediction$.rebind(_prev_bind_1_$13, thread);
+                                        $last_percent_progress_index$.rebind(_prev_bind_0_$12, thread);
+                                    }
+                                } finally {
+                                    xml_vars.$xml_default_namespace$.rebind(_prev_bind_0_$11, thread);
+                                }
+                            } finally {
+                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_2, thread);
+                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_$10, thread);
+                            }
+                        } finally {
+                            final SubLObject _prev_bind_0_$14 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                            try {
+                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                final SubLObject _values2 = getValuesAsVector();
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$thoughts);
+                                restoreValuesFromVector(_values2);
+                            } finally {
+                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$14, thread);
+                            }
+                        }
+                    } finally {
+                        final SubLObject _prev_bind_0_$15 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            final SubLObject _values3 = getValuesAsVector();
+                            memoization_state.memoization_state_possibly_clear_original_process(local_state, original_memoization_process);
+                            restoreValuesFromVector(_values3);
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$15, thread);
+                        }
+                    }
+                } finally {
+                    memoization_state.$memoization_state$.rebind(_prev_bind_0_$9, thread);
+                }
+            } finally {
+                xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+            }
+        } finally {
+            final SubLObject _prev_bind_5 = $is_thread_performing_cleanupP$.currentBinding(thread);
+            try {
+                $is_thread_performing_cleanupP$.bind(T, thread);
+                final SubLObject _values4 = getValuesAsVector();
+                if (stream.isStream()) {
+                    close(stream, UNPROVIDED);
+                }
+                restoreValuesFromVector(_values4);
+            } finally {
+                $is_thread_performing_cleanupP$.rebind(_prev_bind_5, thread);
+            }
+        }
+        return NIL;
+    }
+
+    public static SubLObject sql_output_random_thoughts_from_xml(final SubLObject xml_stream, final SubLObject output_filename, SubLObject id_tracker) {
+        if (id_tracker == UNPROVIDED) {
+            id_tracker = integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        final SubLObject token_iterator = xml_parsing_utilities.new_xml_token_iterator(xml_stream, NIL, NIL, NIL);
+        SubLObject row_count = ZERO_INTEGER;
+        final SubLObject max_rows_per_insert_statement = TEN_INTEGER;
+        SubLObject written_some_rowP = NIL;
+        SubLObject stream = NIL;
+        try {
+            final SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+            try {
+                stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                stream = compatibility.open_text(output_filename, $OUTPUT);
+            } finally {
+                stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+            }
+            if (!stream.isStream()) {
+                Errors.error($str6$Unable_to_open__S, output_filename);
+            }
+            final SubLObject sql_stream = stream;
+            write_random_thought_sql_header(sql_stream);
+            final SubLObject _prev_bind_2 = $last_percent_progress_index$.currentBinding(thread);
+            final SubLObject _prev_bind_3 = $last_percent_progress_prediction$.currentBinding(thread);
+            final SubLObject _prev_bind_4 = $within_noting_percent_progress$.currentBinding(thread);
+            final SubLObject _prev_bind_5 = $percent_progress_start_time$.currentBinding(thread);
+            try {
+                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                $last_percent_progress_prediction$.bind(NIL, thread);
+                $within_noting_percent_progress$.bind(T, thread);
+                $percent_progress_start_time$.bind(get_universal_time(), thread);
+                try {
+                    noting_percent_progress_preamble($str16$Parsing_XML_stream___);
+                    xml_parsing_utilities.advance_xml_token_iterator_to_next_element(token_iterator);
+                    iteration.iteration_next(token_iterator);
+                    xml_parsing_utilities.advance_xml_token_iterator_to_next_element(token_iterator);
+                    while (NIL != xml_parsing_utilities.xml_token_element_nameP(iteration.xml_token_iterator_peek(token_iterator), $str17$thoughts_about)) {
+                        iteration.iteration_next(token_iterator);
+                        xml_parsing_utilities.advance_xml_token_iterator_to_next_element(token_iterator);
+                    } 
+                    while (NIL == xml_parsing_utilities.xml_token_element_nameP(iteration.xml_token_iterator_peek(token_iterator), $$$thoughts)) {
+                        final SubLObject sexpr = xml_parsing_utilities.xml_token_iterator_to_sexpr(token_iterator, UNPROVIDED);
+                        final SubLObject topic_id = xml_parsing_utilities.xml_sexpr_attribute_value(sexpr, $str18$topic_id);
+                        final SubLObject topic = kb_utilities.find_object_by_compact_hl_external_id_string(topic_id);
+                        final SubLObject sexpr_type = xml_parsing_utilities.xml_sexpr_type(sexpr);
+                        if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (!sexpr_type.equal($$$thought))) {
+                            Errors.error($str20$Expected__thought___got__S, sexpr_type);
+                        }
+                        final SubLObject assertion_id = xml_parsing_utilities.xml_sexpr_attribute_value(sexpr, $str21$assertion_id);
+                        final SubLObject assertion = kb_utilities.find_object_by_compact_hl_external_id_string(assertion_id);
+                        if (NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED)) {
+                            final SubLObject paraphrase_sexpr = xml_parsing_utilities.xml_sexpr_daughter(sexpr, $$$paraphrase);
+                            final SubLObject paraphrase = xml_parsing_utilities.xml_sexpr_attribute_value(paraphrase_sexpr, $$$string);
+                            if (paraphrase.isString()) {
+                                final SubLObject thought_num = next_random_thought_num_for_topic(id_tracker, topic);
+                                if (NIL != written_some_rowP) {
+                                    if (mod(row_count, max_rows_per_insert_statement).isZero()) {
+                                        format(sql_stream, $str24$_____);
+                                        write_random_thought_sql_header(sql_stream);
+                                    } else {
+                                        format(sql_stream, $str25$___);
+                                    }
+                                }
+                                write_random_thought_sql_row(thought_num, topic, assertion, paraphrase, sql_stream);
+                                written_some_rowP = T;
+                                row_count = add(row_count, ONE_INTEGER);
+                            }
+                        }
+                        xml_parsing_utilities.advance_xml_token_iterator_to_next_element(token_iterator);
+                        while (NIL != xml_parsing_utilities.xml_token_element_nameP(iteration.xml_token_iterator_peek(token_iterator), $str17$thoughts_about)) {
+                            iteration.iteration_next(token_iterator);
+                            xml_parsing_utilities.advance_xml_token_iterator_to_next_element(token_iterator);
+                        } 
+                        thread.resetMultipleValues();
+                        final SubLObject done = xml_parsing_utilities.xml_token_iterator_progress(token_iterator);
+                        final SubLObject total = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        note_percent_progress(done, total);
+                    } 
+                } finally {
+                    final SubLObject _prev_bind_0_$19 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                    try {
+                        $is_thread_performing_cleanupP$.bind(T, thread);
+                        final SubLObject _values = getValuesAsVector();
+                        noting_percent_progress_postamble();
+                        restoreValuesFromVector(_values);
+                    } finally {
+                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$19, thread);
+                    }
+                }
+            } finally {
+                $percent_progress_start_time$.rebind(_prev_bind_5, thread);
+                $within_noting_percent_progress$.rebind(_prev_bind_4, thread);
+                $last_percent_progress_prediction$.rebind(_prev_bind_3, thread);
+                $last_percent_progress_index$.rebind(_prev_bind_2, thread);
+            }
+            format(sql_stream, $str24$_____);
+        } finally {
+            final SubLObject _prev_bind_6 = $is_thread_performing_cleanupP$.currentBinding(thread);
+            try {
+                $is_thread_performing_cleanupP$.bind(T, thread);
+                final SubLObject _values2 = getValuesAsVector();
+                if (stream.isStream()) {
+                    close(stream, UNPROVIDED);
+                }
+                restoreValuesFromVector(_values2);
+            } finally {
+                $is_thread_performing_cleanupP$.rebind(_prev_bind_6, thread);
+            }
+        }
+        return values(output_filename, id_tracker);
+    }
+
+    public static SubLObject next_random_thought_num_for_topic(final SubLObject id_tracker, final SubLObject topic) {
+        return integer_sequence_generator.integer_sequence_generator_next(id_tracker);
+    }
+
+    public static SubLObject write_random_thought_sql_header(final SubLObject sql_stream) {
+        princ($str26$INSERT_INTO_THOUGHTS_INTERNAL_ID_, sql_stream);
+        terpri(sql_stream);
+        return NIL;
+    }
+
+    public static SubLObject write_random_thought_sql_row(final SubLObject thought_num, final SubLObject topic, final SubLObject assertion, final SubLObject paraphrase, final SubLObject sql_stream) {
+        assert NIL != stringp(paraphrase) : "Types.stringp(paraphrase) " + "CommonSymbols.NIL != Types.stringp(paraphrase) " + paraphrase;
+        format(sql_stream, $str27$___D____A_____A_____A_____A_____A, new SubLObject[]{ thought_num, kb_utilities.compact_hl_external_id_string(topic), topic, kb_utilities.compact_hl_external_id_string(assertion), uncanonicalizer.assertion_el_formula(assertion), uncanonicalizer.assertion_elmt(assertion), NIL != find(CHAR_quote, paraphrase, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED) ? string_utilities.replace_substring(paraphrase, $str28$_, $str29$__) : paraphrase });
+        return NIL;
+    }
+
+    public static SubLObject xml_output_random_thoughts_for_term(final SubLObject v_term, SubLObject thoughts) {
+        if (thoughts == UNPROVIDED) {
+            thoughts = all_random_thoughts_on_topic(v_term);
+        }
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
+        try {
+            final SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+            final SubLObject _prev_bind_2 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+            try {
+                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                xml_utilities.xml_start_tag_internal($str17$thoughts_about, list($$$term, kb_utilities.compact_hl_external_id_string(v_term)), NIL, NIL, $UNINITIALIZED);
+                final SubLObject _prev_bind_0_$20 = xml_vars.$xml_default_namespace$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_default_namespace$.bind($UNINITIALIZED, thread);
+                    xml_utilities.xml_terpri();
+                    SubLObject cdolist_list_var = thoughts;
+                    SubLObject thought = NIL;
+                    thought = cdolist_list_var.first();
+                    while (NIL != cdolist_list_var) {
+                        xml_output_random_thought(thought);
+                        xml_utilities.xml_terpri();
+                        force_output(xml_vars.$xml_stream$.getDynamicValue(thread));
+                        cdolist_list_var = cdolist_list_var.rest();
+                        thought = cdolist_list_var.first();
+                    } 
+                } finally {
+                    xml_vars.$xml_default_namespace$.rebind(_prev_bind_0_$20, thread);
+                }
+            } finally {
+                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_2, thread);
+                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0, thread);
+            }
+        } finally {
+            final SubLObject _prev_bind_3 = $is_thread_performing_cleanupP$.currentBinding(thread);
+            try {
+                $is_thread_performing_cleanupP$.bind(T, thread);
+                final SubLObject _values = getValuesAsVector();
                 xml_utilities.xml_terpri();
-                xml_utilities.xml_end_tag_internal( $str12$thoughts );
-                Values.restoreValuesFromVector( _values2 );
-              }
-              finally
-              {
-                Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$14, thread );
-              }
+                xml_utilities.xml_end_tag_internal($str17$thoughts_about);
+                restoreValuesFromVector(_values);
+            } finally {
+                $is_thread_performing_cleanupP$.rebind(_prev_bind_3, thread);
             }
-          }
-          finally
-          {
-            final SubLObject _prev_bind_0_$15 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-            try
-            {
-              Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-              final SubLObject _values3 = Values.getValuesAsVector();
-              memoization_state.memoization_state_possibly_clear_original_process( local_state, original_memoization_process );
-              Values.restoreValuesFromVector( _values3 );
-            }
-            finally
-            {
-              Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$15, thread );
-            }
-          }
         }
-        finally
-        {
-          memoization_state.$memoization_state$.rebind( _prev_bind_0_$9, thread );
-        }
-      }
-      finally
-      {
-        xml_vars.$xml_stream$.rebind( _prev_bind_0, thread );
-      }
+        return v_term;
     }
-    finally
-    {
-      final SubLObject _prev_bind_5 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-      try
-      {
-        Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-        final SubLObject _values4 = Values.getValuesAsVector();
-        if( stream.isStream() )
-        {
-          streams_high.close( stream, UNPROVIDED );
-        }
-        Values.restoreValuesFromVector( _values4 );
-      }
-      finally
-      {
-        Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_5, thread );
-      }
-    }
-    return NIL;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 3493L)
-  public static SubLObject sql_output_random_thoughts_from_xml(final SubLObject xml_stream, final SubLObject output_filename, SubLObject id_tracker)
-  {
-    if( id_tracker == UNPROVIDED )
-    {
-      id_tracker = integer_sequence_generator.new_integer_sequence_generator( UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    final SubLObject token_iterator = xml_parsing_utilities.new_xml_token_iterator( xml_stream, NIL, NIL, NIL );
-    SubLObject row_count = ZERO_INTEGER;
-    final SubLObject max_rows_per_insert_statement = TEN_INTEGER;
-    SubLObject written_some_rowP = NIL;
-    SubLObject stream = NIL;
-    try
-    {
-      final SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding( thread );
-      try
-      {
-        stream_macros.$stream_requires_locking$.bind( NIL, thread );
-        stream = compatibility.open_text( output_filename, $kw5$OUTPUT );
-      }
-      finally
-      {
-        stream_macros.$stream_requires_locking$.rebind( _prev_bind_0, thread );
-      }
-      if( !stream.isStream() )
-      {
-        Errors.error( $str6$Unable_to_open__S, output_filename );
-      }
-      final SubLObject sql_stream = stream;
-      write_random_thought_sql_header( sql_stream );
-      final SubLObject _prev_bind_2 = utilities_macros.$last_percent_progress_index$.currentBinding( thread );
-      final SubLObject _prev_bind_3 = utilities_macros.$last_percent_progress_prediction$.currentBinding( thread );
-      final SubLObject _prev_bind_4 = utilities_macros.$within_noting_percent_progress$.currentBinding( thread );
-      final SubLObject _prev_bind_5 = utilities_macros.$percent_progress_start_time$.currentBinding( thread );
-      try
-      {
-        utilities_macros.$last_percent_progress_index$.bind( ZERO_INTEGER, thread );
-        utilities_macros.$last_percent_progress_prediction$.bind( NIL, thread );
-        utilities_macros.$within_noting_percent_progress$.bind( T, thread );
-        utilities_macros.$percent_progress_start_time$.bind( Time.get_universal_time(), thread );
-        try
-        {
-          utilities_macros.noting_percent_progress_preamble( $str16$Parsing_XML_stream___ );
-          xml_parsing_utilities.advance_xml_token_iterator_to_next_element( token_iterator );
-          iteration.iteration_next( token_iterator );
-          xml_parsing_utilities.advance_xml_token_iterator_to_next_element( token_iterator );
-          while ( NIL != xml_parsing_utilities.xml_token_element_nameP( iteration.xml_token_iterator_peek( token_iterator ), $str17$thoughts_about ))
-          {
-            iteration.iteration_next( token_iterator );
-            xml_parsing_utilities.advance_xml_token_iterator_to_next_element( token_iterator );
-          }
-          while ( NIL == xml_parsing_utilities.xml_token_element_nameP( iteration.xml_token_iterator_peek( token_iterator ), $str12$thoughts ))
-          {
-            final SubLObject sexpr = xml_parsing_utilities.xml_token_iterator_to_sexpr( token_iterator, UNPROVIDED );
-            final SubLObject topic_id = xml_parsing_utilities.xml_sexpr_attribute_value( sexpr, $str18$topic_id );
-            final SubLObject topic = kb_utilities.find_object_by_compact_hl_external_id_string( topic_id );
-            final SubLObject sexpr_type = xml_parsing_utilities.xml_sexpr_type( sexpr );
-            if( NIL == Errors.$ignore_mustsP$.getDynamicValue( thread ) && !sexpr_type.equal( $str19$thought ) )
-            {
-              Errors.error( $str20$Expected__thought___got__S, sexpr_type );
-            }
-            final SubLObject assertion_id = xml_parsing_utilities.xml_sexpr_attribute_value( sexpr, $str21$assertion_id );
-            final SubLObject assertion = kb_utilities.find_object_by_compact_hl_external_id_string( assertion_id );
-            if( NIL != assertion_handles.valid_assertionP( assertion, UNPROVIDED ) )
-            {
-              final SubLObject paraphrase_sexpr = xml_parsing_utilities.xml_sexpr_daughter( sexpr, $str22$paraphrase );
-              final SubLObject paraphrase = xml_parsing_utilities.xml_sexpr_attribute_value( paraphrase_sexpr, $str23$string );
-              if( paraphrase.isString() )
-              {
-                final SubLObject thought_num = next_random_thought_num_for_topic( id_tracker, topic );
-                if( NIL != written_some_rowP )
-                {
-                  if( Numbers.mod( row_count, max_rows_per_insert_statement ).isZero() )
-                  {
-                    PrintLow.format( sql_stream, $str24$_____ );
-                    write_random_thought_sql_header( sql_stream );
-                  }
-                  else
-                  {
-                    PrintLow.format( sql_stream, $str25$___ );
-                  }
+    public static SubLObject xml_output_random_thought(final SubLObject random_thought) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != valid_non_empty_random_thought_p(random_thought) : "random_thought_generator.valid_non_empty_random_thought_p(random_thought) " + "CommonSymbols.NIL != random_thought_generator.valid_non_empty_random_thought_p(random_thought) " + random_thought;
+        final SubLObject attributes = list($str18$topic_id, kb_utilities.compact_hl_external_id_string(random_thought.first()), $str21$assertion_id, kb_utilities.compact_hl_external_id_string(second(random_thought)));
+        try {
+            final SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+            final SubLObject _prev_bind_2 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+            try {
+                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                xml_utilities.xml_start_tag_internal($$$thought, attributes, NIL, NIL, $UNINITIALIZED);
+                final SubLObject _prev_bind_0_$21 = xml_vars.$xml_default_namespace$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_default_namespace$.bind($UNINITIALIZED, thread);
+                    xml_utilities.xml_terpri();
+                    pph_html.xml_output_pph_javalist(third(random_thought));
+                } finally {
+                    xml_vars.$xml_default_namespace$.rebind(_prev_bind_0_$21, thread);
                 }
-                write_random_thought_sql_row( thought_num, topic, assertion, paraphrase, sql_stream );
-                written_some_rowP = T;
-                row_count = Numbers.add( row_count, ONE_INTEGER );
-              }
+            } finally {
+                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_2, thread);
+                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0, thread);
             }
-            xml_parsing_utilities.advance_xml_token_iterator_to_next_element( token_iterator );
-            while ( NIL != xml_parsing_utilities.xml_token_element_nameP( iteration.xml_token_iterator_peek( token_iterator ), $str17$thoughts_about ))
-            {
-              iteration.iteration_next( token_iterator );
-              xml_parsing_utilities.advance_xml_token_iterator_to_next_element( token_iterator );
+        } finally {
+            final SubLObject _prev_bind_3 = $is_thread_performing_cleanupP$.currentBinding(thread);
+            try {
+                $is_thread_performing_cleanupP$.bind(T, thread);
+                final SubLObject _values = getValuesAsVector();
+                xml_utilities.xml_terpri();
+                xml_utilities.xml_end_tag_internal($$$thought);
+                restoreValuesFromVector(_values);
+            } finally {
+                $is_thread_performing_cleanupP$.rebind(_prev_bind_3, thread);
             }
+        }
+        return NIL;
+    }
+
+    public static SubLObject valid_non_empty_random_thought_p(final SubLObject v_object) {
+        return makeBoolean(((NIL != non_empty_random_thought_p(v_object)) && (NIL != forts.valid_fortP(v_object.first()))) && (NIL != assertion_handles.valid_assertionP(second(v_object), UNPROVIDED)));
+    }
+
+    public static SubLObject next_random_thought_for_user(final SubLObject user, SubLObject parameters) {
+        if (parameters == UNPROVIDED) {
+            parameters = NIL;
+        }
+        assert NIL != forts.fort_p(user) : "forts.fort_p(user) " + "CommonSymbols.NIL != forts.fort_p(user) " + user;
+        final SubLObject rtg = find_or_create_random_thought_generator_for_user(user);
+        if (NIL != getf(parameters, $TOPIC, NIL)) {
+            return next_random_thought_with_suggested_topic(rtg, parameters);
+        }
+        return next_random_thought_without_suggested_topic(rtg, parameters);
+    }
+
+    public static SubLObject thcl_assertion_seen_by_cyclistP(final SubLObject assertion, final SubLObject cyclist) {
+        if (NIL == forts.fort_p(cyclist)) {
+            return NIL;
+        }
+        final SubLObject rtg = find_random_thought_generator_for_user(cyclist);
+        return makeBoolean((NIL != rtg) && (NIL != set.set_memberP(assertion, rtg_done_assertions(rtg))));
+    }
+
+    public static SubLObject number_of_queued_random_thoughts_for_user(final SubLObject user) {
+        assert NIL != forts.fort_p(user) : "forts.fort_p(user) " + "CommonSymbols.NIL != forts.fort_p(user) " + user;
+        final SubLObject rtg = find_random_thought_generator_for_user(user);
+        return NIL != rtg ? queues.queue_size(rtg_queue(rtg)) : ZERO_INTEGER;
+    }
+
+    public static SubLObject number_of_used_random_thoughts_for_user(final SubLObject user) {
+        assert NIL != forts.fort_p(user) : "forts.fort_p(user) " + "CommonSymbols.NIL != forts.fort_p(user) " + user;
+        final SubLObject rtg = find_random_thought_generator_for_user(user);
+        return NIL != rtg ? subtract(set.set_size(rtg_done_assertions(rtg)), number_of_queued_random_thoughts_for_user(user)) : ZERO_INTEGER;
+    }
+
+    public static SubLObject remote_random_thought_image() {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if (NIL == remote_image.remote_image_p($remote_random_thought_image$.getGlobalValue())) {
+            set_remote_random_thought_image($random_thought_server_host$.getDynamicValue(thread), $random_thought_server_port$.getDynamicValue(thread), $CFASL);
+        }
+        return $remote_random_thought_image$.getGlobalValue();
+    }
+
+    public static SubLObject set_remote_random_thought_image(final SubLObject machine, final SubLObject port, final SubLObject protocol) {
+        $remote_random_thought_image$.setGlobalValue(remote_image.new_remote_image(machine, port, protocol));
+        return remote_image.remote_image_p($remote_random_thought_image$.getGlobalValue());
+    }
+
+    public static SubLObject unset_remote_random_thought_image() {
+        $remote_random_thought_image$.setGlobalValue(NIL);
+        return T;
+    }
+
+    public static SubLObject clear_remote_random_thought_connection_pool() {
+        for (SubLObject q = $remote_random_thought_connection_pool$.getGlobalValue(), done_var = queues.queue_empty_p(q); NIL == done_var; done_var = queues.queue_empty_p(q)) {
+            final SubLObject connection = queues.dequeue(q);
+            remote_image.close_remote_image_connection(connection);
+        }
+        return T;
+    }
+
+    public static SubLObject random_thought_server_hostXport() {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        SubLObject host = NIL;
+        SubLObject port = NIL;
+        SubLObject ignore_errors_tag = NIL;
+        try {
+            thread.throwStack.push($IGNORE_ERRORS_TARGET);
+            final SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
+            try {
+                Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
+                try {
+                    final SubLObject connection = get_free_random_thought_connection();
+                    SubLObject success_var = NIL;
+                    try {
+                        if (NIL != open_remote_random_thought_connection_p(connection)) {
+                            final SubLObject image = remote_image.remote_image_connection_image(connection);
+                            final SubLObject cfasl_port = remote_image.remote_image_port(image);
+                            host = remote_image.remote_image_machine(image);
+                            port = subtract(cfasl_port, system_parameters.$cfasl_port_offset$.getDynamicValue(thread));
+                            release_random_thought_connection(connection);
+                        }
+                        success_var = T;
+                    } finally {
+                        final SubLObject _prev_bind_0_$22 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            final SubLObject _values = getValuesAsVector();
+                            if (NIL == success_var) {
+                                remote_image.close_remote_image_connection(connection);
+                            }
+                            restoreValuesFromVector(_values);
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$22, thread);
+                        }
+                    }
+                } catch (final Throwable catch_var) {
+                    Errors.handleThrowable(catch_var, NIL);
+                }
+            } finally {
+                Errors.$error_handler$.rebind(_prev_bind_0, thread);
+            }
+        } catch (final Throwable ccatch_env_var) {
+            ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+        } finally {
+            thread.throwStack.pop();
+        }
+        return values(host, port);
+    }
+
+    public static SubLObject next_random_thought_for_user_from_remote_server(final SubLObject user, final SubLObject parameters) {
+        SubLObject thought;
+        for (thought = $NOT_TRIED; (NIL != thought) && (NIL == valid_non_empty_random_thought_p(thought)); thought = next_random_thought_for_user_from_remote_server_int(user, parameters)) {
+        }
+        return thought;
+    }
+
+    public static SubLObject next_random_thought_for_user_from_remote_server_int(final SubLObject user, final SubLObject parameters) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        final SubLObject api_request = list(NEXT_RANDOM_THOUGHT_FOR_USER, list(QUOTE, user), list(QUOTE, parameters));
+        final SubLObject augmented_api_request = list(PROGN, $list51, list(MULTIPLE_VALUE_LIST, api_request));
+        SubLObject results_list = NIL;
+        SubLObject connection = NIL;
+        SubLObject error_message = NIL;
+        try {
+            thread.throwStack.push($catch_error_message_target$.getGlobalValue());
+            final SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
+            try {
+                Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                try {
+                    connection = get_free_random_thought_connection();
+                    SubLObject success_var = NIL;
+                    try {
+                        results_list = remote_image.remote_image_connection_eval(connection, augmented_api_request);
+                        release_random_thought_connection(connection);
+                        success_var = T;
+                    } finally {
+                        final SubLObject _prev_bind_0_$23 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            final SubLObject _values = getValuesAsVector();
+                            if (NIL == success_var) {
+                                remote_image.close_remote_image_connection(connection);
+                            }
+                            restoreValuesFromVector(_values);
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$23, thread);
+                        }
+                    }
+                } catch (final Throwable catch_var) {
+                    Errors.handleThrowable(catch_var, NIL);
+                }
+            } finally {
+                Errors.$error_handler$.rebind(_prev_bind_0, thread);
+            }
+        } catch (final Throwable ccatch_env_var) {
+            error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+        } finally {
+            thread.throwStack.pop();
+        }
+        if (NIL != error_message) {
+            Errors.warn(error_message);
+        }
+        return NIL != results_list ? subl_promotions.values_list(results_list) : NIL;
+    }
+
+    public static SubLObject create_remote_random_thought_connection() {
+        final SubLObject v_remote_image = remote_random_thought_image();
+        final SubLObject connection = remote_image.new_remote_image_connection(v_remote_image);
+        if (NIL != remote_image.remote_image_connection_p(connection)) {
+            remote_image.open_remote_image_connection(connection);
+            return connection;
+        }
+        return Errors.error($str54$Could_not_open_a_connection_to__s, v_remote_image);
+    }
+
+    public static SubLObject release_random_thought_connection(final SubLObject connection) {
+        SubLObject release = NIL;
+        try {
+            release = seize_lock($remote_random_thought_connection_pool_lock$.getGlobalValue());
+            if (queues.queue_size($remote_random_thought_connection_pool$.getGlobalValue()).numGE($remote_random_thought_connection_pool_max_size$.getGlobalValue())) {
+                remote_image.close_remote_image_connection(connection);
+            } else {
+                queues.enqueue(connection, $remote_random_thought_connection_pool$.getGlobalValue());
+            }
+        } finally {
+            if (NIL != release) {
+                release_lock($remote_random_thought_connection_pool_lock$.getGlobalValue());
+            }
+        }
+        return T;
+    }
+
+    public static SubLObject open_remote_random_thought_connection_p(final SubLObject v_object) {
+        return makeBoolean((NIL != remote_image.remote_image_connection_p(v_object)) && (NIL != open_stream_p(remote_image.remote_image_connection_channel(v_object))));
+    }
+
+    public static SubLObject get_free_random_thought_connection() {
+        SubLObject connection = NIL;
+        SubLObject release = NIL;
+        try {
+            release = seize_lock($remote_random_thought_connection_pool_lock$.getGlobalValue());
+            for (SubLObject q = $remote_random_thought_connection_pool$.getGlobalValue(), done_var = makeBoolean((NIL != connection) || (NIL != queues.queue_empty_p(q))); NIL == done_var; done_var = makeBoolean((NIL != connection) || (NIL != queues.queue_empty_p(q)))) {
+                final SubLObject candidate = queues.dequeue(q);
+                if (NIL != open_remote_random_thought_connection_p(candidate)) {
+                    connection = candidate;
+                }
+            }
+            if (NIL == connection) {
+                connection = create_remote_random_thought_connection();
+            }
+        } finally {
+            if (NIL != release) {
+                release_lock($remote_random_thought_connection_pool_lock$.getGlobalValue());
+            }
+        }
+        return connection;
+    }
+
+    public static SubLObject register_random_thought_generator(final SubLObject rtg, final SubLObject user) {
+        return dictionary.dictionary_enter($random_thought_generators_for_users$.getGlobalValue(), user, rtg);
+    }
+
+    public static SubLObject find_random_thought_generator_for_user(final SubLObject user) {
+        return dictionary.dictionary_lookup($random_thought_generators_for_users$.getGlobalValue(), user, NIL);
+    }
+
+    public static SubLObject random_thought_generator_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
+        pprint_random_thought_generator(v_object, stream, ZERO_INTEGER);
+        return NIL;
+    }
+
+    public static SubLObject random_thought_generator_p(final SubLObject v_object) {
+        return v_object.getClass() == random_thought_generator.$random_thought_generator_native.class ? T : NIL;
+    }
+
+    public static SubLObject rtg_struct_user(final SubLObject v_object) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.getField2();
+    }
+
+    public static SubLObject rtg_struct_done_assertions(final SubLObject v_object) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.getField3();
+    }
+
+    public static SubLObject rtg_struct_generator_thread(final SubLObject v_object) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.getField4();
+    }
+
+    public static SubLObject rtg_struct_queue(final SubLObject v_object) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.getField5();
+    }
+
+    public static SubLObject rtg_struct_most_recently_added_thought(final SubLObject v_object) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.getField6();
+    }
+
+    public static SubLObject rtg_struct_topical_thoughts(final SubLObject v_object) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.getField7();
+    }
+
+    public static SubLObject _csetf_rtg_struct_user(final SubLObject v_object, final SubLObject value) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static SubLObject _csetf_rtg_struct_done_assertions(final SubLObject v_object, final SubLObject value) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.setField3(value);
+    }
+
+    public static SubLObject _csetf_rtg_struct_generator_thread(final SubLObject v_object, final SubLObject value) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.setField4(value);
+    }
+
+    public static SubLObject _csetf_rtg_struct_queue(final SubLObject v_object, final SubLObject value) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.setField5(value);
+    }
+
+    public static SubLObject _csetf_rtg_struct_most_recently_added_thought(final SubLObject v_object, final SubLObject value) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.setField6(value);
+    }
+
+    public static SubLObject _csetf_rtg_struct_topical_thoughts(final SubLObject v_object, final SubLObject value) {
+        assert NIL != random_thought_generator_p(v_object) : "random_thought_generator.random_thought_generator_p(v_object) " + "CommonSymbols.NIL != random_thought_generator.random_thought_generator_p(v_object) " + v_object;
+        return v_object.setField7(value);
+    }
+
+    public static SubLObject make_random_thought_generator(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        final SubLObject v_new = new random_thought_generator.$random_thought_generator_native();
+        SubLObject next;
+        SubLObject current_arg;
+        SubLObject current_value;
+        SubLObject pcase_var;
+        for (next = NIL, next = arglist; NIL != next; next = cddr(next)) {
+            current_arg = next.first();
+            current_value = cadr(next);
+            pcase_var = current_arg;
+            if (pcase_var.eql($USER)) {
+                _csetf_rtg_struct_user(v_new, current_value);
+            } else
+                if (pcase_var.eql($DONE_ASSERTIONS)) {
+                    _csetf_rtg_struct_done_assertions(v_new, current_value);
+                } else
+                    if (pcase_var.eql($GENERATOR_THREAD)) {
+                        _csetf_rtg_struct_generator_thread(v_new, current_value);
+                    } else
+                        if (pcase_var.eql($QUEUE)) {
+                            _csetf_rtg_struct_queue(v_new, current_value);
+                        } else
+                            if (pcase_var.eql($MOST_RECENTLY_ADDED_THOUGHT)) {
+                                _csetf_rtg_struct_most_recently_added_thought(v_new, current_value);
+                            } else
+                                if (pcase_var.eql($TOPICAL_THOUGHTS)) {
+                                    _csetf_rtg_struct_topical_thoughts(v_new, current_value);
+                                } else {
+                                    Errors.error($str83$Invalid_slot__S_for_construction_, current_arg);
+                                }
+
+
+
+
+
+        }
+        return v_new;
+    }
+
+    public static SubLObject visit_defstruct_random_thought_generator(final SubLObject obj, final SubLObject visitor_fn) {
+        funcall(visitor_fn, obj, $BEGIN, MAKE_RANDOM_THOUGHT_GENERATOR, SIX_INTEGER);
+        funcall(visitor_fn, obj, $SLOT, $USER, rtg_struct_user(obj));
+        funcall(visitor_fn, obj, $SLOT, $DONE_ASSERTIONS, rtg_struct_done_assertions(obj));
+        funcall(visitor_fn, obj, $SLOT, $GENERATOR_THREAD, rtg_struct_generator_thread(obj));
+        funcall(visitor_fn, obj, $SLOT, $QUEUE, rtg_struct_queue(obj));
+        funcall(visitor_fn, obj, $SLOT, $MOST_RECENTLY_ADDED_THOUGHT, rtg_struct_most_recently_added_thought(obj));
+        funcall(visitor_fn, obj, $SLOT, $TOPICAL_THOUGHTS, rtg_struct_topical_thoughts(obj));
+        funcall(visitor_fn, obj, $END, MAKE_RANDOM_THOUGHT_GENERATOR, SIX_INTEGER);
+        return obj;
+    }
+
+    public static SubLObject visit_defstruct_object_random_thought_generator_method(final SubLObject obj, final SubLObject visitor_fn) {
+        return visit_defstruct_random_thought_generator(obj, visitor_fn);
+    }
+
+    public static SubLObject rtg_user(final SubLObject rtg) {
+        return rtg_struct_user(rtg);
+    }
+
+    public static SubLObject rtg_done_assertions(final SubLObject rtg) {
+        return rtg_struct_done_assertions(rtg);
+    }
+
+    public static SubLObject rtg_generator_thread(final SubLObject rtg) {
+        return rtg_struct_generator_thread(rtg);
+    }
+
+    public static SubLObject rtg_set_generator_thread(final SubLObject rtg, final SubLObject process) {
+        _csetf_rtg_struct_generator_thread(rtg, process);
+        return process;
+    }
+
+    public static SubLObject rtg_queue(final SubLObject rtg) {
+        return rtg_struct_queue(rtg);
+    }
+
+    public static SubLObject rtg_most_recently_added_thought(final SubLObject rtg) {
+        return rtg_struct_most_recently_added_thought(rtg);
+    }
+
+    public static SubLObject rtg_set_most_recently_added_thought(final SubLObject rtg, final SubLObject thought) {
+        _csetf_rtg_struct_most_recently_added_thought(rtg, thought);
+        return thought;
+    }
+
+    public static SubLObject rtg_topical_thoughts(final SubLObject rtg) {
+        return rtg_struct_topical_thoughts(rtg);
+    }
+
+    public static SubLObject rtg_set_topical_thoughts(final SubLObject rtg, final SubLObject thoughts) {
+        _csetf_rtg_struct_topical_thoughts(rtg, thoughts);
+        return thoughts;
+    }
+
+    public static SubLObject pprint_random_thought_generator(final SubLObject rtg, SubLObject stream, SubLObject depth) {
+        if (stream == UNPROVIDED) {
+            stream = NIL;
+        }
+        if (depth == UNPROVIDED) {
+            depth = NIL;
+        }
+        format(stream, $str89$__RTG_for__S___S_done__A__, new SubLObject[]{ rtg_struct_user(rtg), set.set_size(rtg_struct_done_assertions(rtg)), NIL != queues.queue_p(rtg_struct_queue(rtg)) ? cconcatenate(format_nil.format_nil_s_no_copy(queues.queue_size(rtg_struct_queue(rtg))), $$$_queued) : $$$exhausted });
+        return rtg;
+    }
+
+    public static SubLObject find_or_create_random_thought_generator_for_user(final SubLObject user) {
+        assert NIL != forts.fort_p(user) : "forts.fort_p(user) " + "CommonSymbols.NIL != forts.fort_p(user) " + user;
+        final SubLObject existing = find_random_thought_generator_for_user(user);
+        return NIL != existing ? existing : new_random_thought_generator_for_user(user);
+    }
+
+    public static SubLObject empty_thought() {
+        return $list0;
+    }
+
+    public static SubLObject new_random_thought_generator_for_user(final SubLObject user) {
+        final SubLObject rtg = new_random_thought_generator();
+        _csetf_rtg_struct_user(rtg, user);
+        register_random_thought_generator(rtg, user);
+        find_or_create_random_thought_generator_thread(rtg, UNPROVIDED);
+        return rtg;
+    }
+
+    public static SubLObject new_random_thought_generator() {
+        final SubLObject rtg = make_random_thought_generator(list(new SubLObject[]{ $USER, NIL, $DONE_ASSERTIONS, set.new_set(UNPROVIDED, UNPROVIDED), $QUEUE, queues.create_queue(UNPROVIDED), $MOST_RECENTLY_ADDED_THOUGHT, empty_thought(), $TOPICAL_THOUGHTS, dictionary.new_dictionary(symbol_function(EQL), UNPROVIDED) }));
+        return rtg;
+    }
+
+    public static SubLObject note_rtg_exhausted(final SubLObject rtg) {
+        rtg_set_generator_thread(rtg, $EXHAUSTED);
+        return rtg;
+    }
+
+    public static SubLObject random_thought_generator_exhausted_p(final SubLObject rtg) {
+        return eq($EXHAUSTED, rtg_generator_thread(rtg));
+    }
+
+    public static SubLObject random_thoughts_on_topic_exhausted_p(final SubLObject data) {
+        return makeBoolean((NIL == data.rest()) || $EXHAUSTED.eql(data.rest()));
+    }
+
+    public static SubLObject note_random_thoughts_on_topic_exhausted(final SubLObject data) {
+        return rplacd(data, $EXHAUSTED);
+    }
+
+    public static SubLObject random_thought_generator_full_p(final SubLObject rtg, final SubLObject target_size) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        SubLObject not_fullP;
+        SubLObject iteration_state;
+        for (not_fullP = makeBoolean(NIL == random_thought_generator_queue_full_p(rtg, target_size)), iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(rtg_topical_thoughts(rtg))); (NIL == not_fullP) && (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)); iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state)) {
             thread.resetMultipleValues();
-            final SubLObject done = xml_parsing_utilities.xml_token_iterator_progress( token_iterator );
-            final SubLObject total = thread.secondMultipleValue();
+            final SubLObject key = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+            final SubLObject data = thread.secondMultipleValue();
             thread.resetMultipleValues();
-            utilities_macros.note_percent_progress( done, total );
-          }
-        }
-        finally
-        {
-          final SubLObject _prev_bind_0_$19 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-          try
-          {
-            Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-            final SubLObject _values = Values.getValuesAsVector();
-            utilities_macros.noting_percent_progress_postamble();
-            Values.restoreValuesFromVector( _values );
-          }
-          finally
-          {
-            Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$19, thread );
-          }
-        }
-      }
-      finally
-      {
-        utilities_macros.$percent_progress_start_time$.rebind( _prev_bind_5, thread );
-        utilities_macros.$within_noting_percent_progress$.rebind( _prev_bind_4, thread );
-        utilities_macros.$last_percent_progress_prediction$.rebind( _prev_bind_3, thread );
-        utilities_macros.$last_percent_progress_index$.rebind( _prev_bind_2, thread );
-      }
-      PrintLow.format( sql_stream, $str24$_____ );
-    }
-    finally
-    {
-      final SubLObject _prev_bind_6 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-      try
-      {
-        Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-        final SubLObject _values2 = Values.getValuesAsVector();
-        if( stream.isStream() )
-        {
-          streams_high.close( stream, UNPROVIDED );
-        }
-        Values.restoreValuesFromVector( _values2 );
-      }
-      finally
-      {
-        Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_6, thread );
-      }
-    }
-    return Values.values( output_filename, id_tracker );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 6144L)
-  public static SubLObject next_random_thought_num_for_topic(final SubLObject id_tracker, final SubLObject topic)
-  {
-    return integer_sequence_generator.integer_sequence_generator_next( id_tracker );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 6285L)
-  public static SubLObject write_random_thought_sql_header(final SubLObject sql_stream)
-  {
-    print_high.princ( $str26$INSERT_INTO_THOUGHTS_INTERNAL_ID_, sql_stream );
-    streams_high.terpri( sql_stream );
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 6527L)
-  public static SubLObject write_random_thought_sql_row(final SubLObject thought_num, final SubLObject topic, final SubLObject assertion, final SubLObject paraphrase, final SubLObject sql_stream)
-  {
-    assert NIL != Types.stringp( paraphrase ) : paraphrase;
-    PrintLow.format( sql_stream, $str27$___D____A_____A_____A_____A_____A, new SubLObject[] { thought_num, kb_utilities.compact_hl_external_id_string( topic ), topic, kb_utilities.compact_hl_external_id_string(
-        assertion ), uncanonicalizer.assertion_el_formula( assertion ), uncanonicalizer.assertion_elmt( assertion ), ( NIL != Sequences.find( Characters.CHAR_quote, paraphrase, UNPROVIDED, UNPROVIDED, UNPROVIDED,
-            UNPROVIDED ) ) ? string_utilities.replace_substring( paraphrase, $str28$_, $str29$__ ) : paraphrase
-    } );
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 7035L)
-  public static SubLObject xml_output_random_thoughts_for_term(final SubLObject v_term, SubLObject thoughts)
-  {
-    if( thoughts == UNPROVIDED )
-    {
-      thoughts = all_random_thoughts_on_topic( v_term );
-    }
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != forts.fort_p( v_term ) : v_term;
-    try
-    {
-      final SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding( thread );
-      final SubLObject _prev_bind_2 = xml_utilities.$cycml_indent_level$.currentBinding( thread );
-      try
-      {
-        xml_utilities.$xml_indentation_level$.bind( Numbers.add( xml_utilities.$xml_indentation_amount$.getDynamicValue( thread ), xml_utilities.$xml_indentation_level$.getDynamicValue( thread ) ), thread );
-        xml_utilities.$cycml_indent_level$.bind( xml_utilities.$xml_indentation_level$.getDynamicValue( thread ), thread );
-        xml_utilities.xml_start_tag_internal( $str17$thoughts_about, ConsesLow.list( $str31$term, kb_utilities.compact_hl_external_id_string( v_term ) ), NIL, NIL, $kw10$UNINITIALIZED );
-        final SubLObject _prev_bind_0_$20 = xml_vars.$xml_default_namespace$.currentBinding( thread );
-        try
-        {
-          xml_vars.$xml_default_namespace$.bind( $kw10$UNINITIALIZED, thread );
-          xml_utilities.xml_terpri();
-          SubLObject cdolist_list_var = thoughts;
-          SubLObject thought = NIL;
-          thought = cdolist_list_var.first();
-          while ( NIL != cdolist_list_var)
-          {
-            xml_output_random_thought( thought );
-            xml_utilities.xml_terpri();
-            streams_high.force_output( xml_vars.$xml_stream$.getDynamicValue( thread ) );
-            cdolist_list_var = cdolist_list_var.rest();
-            thought = cdolist_list_var.first();
-          }
-        }
-        finally
-        {
-          xml_vars.$xml_default_namespace$.rebind( _prev_bind_0_$20, thread );
-        }
-      }
-      finally
-      {
-        xml_utilities.$cycml_indent_level$.rebind( _prev_bind_2, thread );
-        xml_utilities.$xml_indentation_level$.rebind( _prev_bind_0, thread );
-      }
-    }
-    finally
-    {
-      final SubLObject _prev_bind_3 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-      try
-      {
-        Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-        final SubLObject _values = Values.getValuesAsVector();
-        xml_utilities.xml_terpri();
-        xml_utilities.xml_end_tag_internal( $str17$thoughts_about );
-        Values.restoreValuesFromVector( _values );
-      }
-      finally
-      {
-        Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_3, thread );
-      }
-    }
-    return v_term;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 7427L)
-  public static SubLObject xml_output_random_thought(final SubLObject random_thought)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != valid_non_empty_random_thought_p( random_thought ) : random_thought;
-    final SubLObject attributes = ConsesLow.list( $str18$topic_id, kb_utilities.compact_hl_external_id_string( random_thought.first() ), $str21$assertion_id, kb_utilities.compact_hl_external_id_string( conses_high
-        .second( random_thought ) ) );
-    try
-    {
-      final SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding( thread );
-      final SubLObject _prev_bind_2 = xml_utilities.$cycml_indent_level$.currentBinding( thread );
-      try
-      {
-        xml_utilities.$xml_indentation_level$.bind( Numbers.add( xml_utilities.$xml_indentation_amount$.getDynamicValue( thread ), xml_utilities.$xml_indentation_level$.getDynamicValue( thread ) ), thread );
-        xml_utilities.$cycml_indent_level$.bind( xml_utilities.$xml_indentation_level$.getDynamicValue( thread ), thread );
-        xml_utilities.xml_start_tag_internal( $str19$thought, attributes, NIL, NIL, $kw10$UNINITIALIZED );
-        final SubLObject _prev_bind_0_$21 = xml_vars.$xml_default_namespace$.currentBinding( thread );
-        try
-        {
-          xml_vars.$xml_default_namespace$.bind( $kw10$UNINITIALIZED, thread );
-          xml_utilities.xml_terpri();
-          pph_html.xml_output_pph_javalist( conses_high.third( random_thought ) );
-        }
-        finally
-        {
-          xml_vars.$xml_default_namespace$.rebind( _prev_bind_0_$21, thread );
-        }
-      }
-      finally
-      {
-        xml_utilities.$cycml_indent_level$.rebind( _prev_bind_2, thread );
-        xml_utilities.$xml_indentation_level$.rebind( _prev_bind_0, thread );
-      }
-    }
-    finally
-    {
-      final SubLObject _prev_bind_3 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-      try
-      {
-        Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-        final SubLObject _values = Values.getValuesAsVector();
-        xml_utilities.xml_terpri();
-        xml_utilities.xml_end_tag_internal( $str19$thought );
-        Values.restoreValuesFromVector( _values );
-      }
-      finally
-      {
-        Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_3, thread );
-      }
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 7933L)
-  public static SubLObject valid_non_empty_random_thought_p(final SubLObject v_object)
-  {
-    return makeBoolean( NIL != non_empty_random_thought_p( v_object ) && NIL != forts.valid_fortP( v_object.first() ) && NIL != assertion_handles.valid_assertionP( conses_high.second( v_object ), UNPROVIDED ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 8122L)
-  public static SubLObject next_random_thought_for_user(final SubLObject user, SubLObject parameters)
-  {
-    if( parameters == UNPROVIDED )
-    {
-      parameters = NIL;
-    }
-    assert NIL != forts.fort_p( user ) : user;
-    final SubLObject rtg = find_or_create_random_thought_generator_for_user( user );
-    if( NIL != conses_high.getf( parameters, $kw33$TOPIC, NIL ) )
-    {
-      return next_random_thought_with_suggested_topic( rtg, parameters );
-    }
-    return next_random_thought_without_suggested_topic( rtg, parameters );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 8821L)
-  public static SubLObject thcl_assertion_seen_by_cyclistP(final SubLObject assertion, final SubLObject cyclist)
-  {
-    if( NIL == forts.fort_p( cyclist ) )
-    {
-      return NIL;
-    }
-    final SubLObject rtg = find_random_thought_generator_for_user( cyclist );
-    return makeBoolean( NIL != rtg && NIL != set.set_memberP( assertion, rtg_done_assertions( rtg ) ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 9148L)
-  public static SubLObject number_of_queued_random_thoughts_for_user(final SubLObject user)
-  {
-    assert NIL != forts.fort_p( user ) : user;
-    final SubLObject rtg = find_random_thought_generator_for_user( user );
-    return ( NIL != rtg ) ? queues.queue_size( rtg_queue( rtg ) ) : ZERO_INTEGER;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 9447L)
-  public static SubLObject number_of_used_random_thoughts_for_user(final SubLObject user)
-  {
-    assert NIL != forts.fort_p( user ) : user;
-    final SubLObject rtg = find_random_thought_generator_for_user( user );
-    return ( NIL != rtg ) ? Numbers.subtract( set.set_size( rtg_done_assertions( rtg ) ), number_of_queued_random_thoughts_for_user( user ) ) : ZERO_INTEGER;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 10478L)
-  public static SubLObject remote_random_thought_image()
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( NIL == remote_image.remote_image_p( $remote_random_thought_image$.getGlobalValue() ) )
-    {
-      set_remote_random_thought_image( $random_thought_server_host$.getDynamicValue( thread ), $random_thought_server_port$.getDynamicValue( thread ), $kw42$CFASL );
-    }
-    return $remote_random_thought_image$.getGlobalValue();
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 10736L)
-  public static SubLObject set_remote_random_thought_image(final SubLObject machine, final SubLObject port, final SubLObject protocol)
-  {
-    $remote_random_thought_image$.setGlobalValue( remote_image.new_remote_image( machine, port, protocol ) );
-    return remote_image.remote_image_p( $remote_random_thought_image$.getGlobalValue() );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 10946L)
-  public static SubLObject unset_remote_random_thought_image()
-  {
-    $remote_random_thought_image$.setGlobalValue( NIL );
-    return T;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 11357L)
-  public static SubLObject clear_remote_random_thought_connection_pool()
-  {
-    for( SubLObject q = $remote_random_thought_connection_pool$.getGlobalValue(), done_var = queues.queue_empty_p( q ); NIL == done_var; done_var = queues.queue_empty_p( q ) )
-    {
-      final SubLObject connection = queues.dequeue( q );
-      remote_image.close_remote_image_connection( connection );
-    }
-    return T;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 11553L)
-  public static SubLObject random_thought_server_hostXport()
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    SubLObject host = NIL;
-    SubLObject port = NIL;
-    SubLObject ignore_errors_tag = NIL;
-    try
-    {
-      thread.throwStack.push( $kw45$IGNORE_ERRORS_TARGET );
-      final SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding( thread );
-      try
-      {
-        Errors.$error_handler$.bind( Symbols.symbol_function( $sym46$IGNORE_ERRORS_HANDLER ), thread );
-        try
-        {
-          final SubLObject connection = get_free_random_thought_connection();
-          SubLObject success_var = NIL;
-          try
-          {
-            if( NIL != open_remote_random_thought_connection_p( connection ) )
-            {
-              final SubLObject image = remote_image.remote_image_connection_image( connection );
-              final SubLObject cfasl_port = remote_image.remote_image_port( image );
-              host = remote_image.remote_image_machine( image );
-              port = Numbers.subtract( cfasl_port, system_parameters.$cfasl_port_offset$.getDynamicValue( thread ) );
-              release_random_thought_connection( connection );
+            if ((!data.isCons()) || ((NIL == random_thoughts_on_topic_exhausted_p(data)) && (NIL == data.first()))) {
+                not_fullP = T;
             }
-            success_var = T;
-          }
-          finally
-          {
-            final SubLObject _prev_bind_0_$22 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-            try
-            {
-              Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-              final SubLObject _values = Values.getValuesAsVector();
-              if( NIL == success_var )
-              {
-                remote_image.close_remote_image_connection( connection );
-              }
-              Values.restoreValuesFromVector( _values );
+        }
+        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+        return makeBoolean(NIL == not_fullP);
+    }
+
+    public static SubLObject random_thought_generator_queue_full_p(final SubLObject rtg, final SubLObject target_size) {
+        return numGE(queues.queue_size(rtg_queue(rtg)), target_size);
+    }
+
+    public static SubLObject declare_interest_in_random_thoughts_about_topic(final SubLObject rtg, final SubLObject topic) {
+        final SubLObject topical_thoughts = rtg_topical_thoughts(rtg);
+        if (NIL == dictionary.dictionary_lookup(topical_thoughts, topic, NIL)) {
+            register_interest_in_random_thoughts_about_topic(rtg, topic);
+            dictionary.dictionary_enter(topical_thoughts, topic, $NEW_TOPIC);
+        }
+        return rtg;
+    }
+
+    public static SubLObject rtg_note(final SubLObject macroform, final SubLObject environment) {
+        SubLObject current;
+        final SubLObject datum = current = macroform.rest();
+        SubLObject format_str = NIL;
+        destructuring_bind_must_consp(current, datum, $list94);
+        format_str = current.first();
+        final SubLObject args;
+        current = args = current.rest();
+        return listS(PWHEN, $sym96$_PRINT_RTG_NOTES__, list(APPLY, $list98, list(CONS, T, listS(LIST, format_str, append(args, NIL)))), $list101);
+    }
+
+    public static SubLObject register_interest_in_random_thoughts_about_topic(final SubLObject rtg, final SubLObject topic) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != forts.fort_p(topic) : "forts.fort_p(topic) " + "CommonSymbols.NIL != forts.fort_p(topic) " + topic;
+        final SubLObject topical_thoughts = rtg_topical_thoughts(rtg);
+        if (NIL != $print_rtg_notesP$.getDynamicValue(thread)) {
+            apply(FORMAT, cons(T, list($str103$__Registering_interest_of__S_in__, rtg_user(rtg), topic)));
+            force_output(T);
+        }
+        dictionary.dictionary_enter(topical_thoughts, topic, $NEW_TOPIC);
+        return rtg;
+    }
+
+    public static SubLObject all_random_thoughts_on_topic(final SubLObject topic) {
+        assert NIL != forts.fort_p(topic) : "forts.fort_p(topic) " + "CommonSymbols.NIL != forts.fort_p(topic) " + topic;
+        final SubLObject rtg = new_random_thought_generator();
+        SubLObject thoughts = NIL;
+        SubLObject doneP = NIL;
+        while (NIL == doneP) {
+            final SubLObject thought = next_random_thought_with_suggested_topic(rtg, listS($TOPIC, topic, $list104));
+            if (NIL != empty_random_thought_p(thought)) {
+                doneP = T;
+            } else {
+                thoughts = cons(thought, thoughts);
             }
-            finally
-            {
-              Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$22, thread );
+        } 
+        kill_process(rtg_generator_thread(rtg));
+        return thoughts;
+    }
+
+    public static SubLObject next_random_thought_with_suggested_topic(final SubLObject rtg, final SubLObject parameters) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        final SubLObject topic_tail = property_list_member($TOPIC, parameters);
+        final SubLObject topic = (NIL != topic_tail) ? cadr(topic_tail) : NIL;
+        final SubLObject now_tail = property_list_member($NOW, parameters);
+        final SubLObject now = (NIL != now_tail) ? cadr(now_tail) : T;
+        final SubLObject require_topicalP_tail = property_list_member($kw106$REQUIRE_TOPICAL_, parameters);
+        final SubLObject require_topicalP = (NIL != require_topicalP_tail) ? cadr(require_topicalP_tail) : NIL;
+        register_interest_in_random_thoughts_about_topic(rtg, topic);
+        final SubLObject topical_thoughts = rtg_topical_thoughts(rtg);
+        SubLObject existing_info = dictionary.dictionary_lookup(topical_thoughts, topic, NIL);
+        SubLObject thought = NIL;
+        if ((!existing_info.isCons()) && (NIL == now)) {
+            final SubLObject generator_thread = find_or_create_random_thought_generator_thread(rtg, T);
+            SubLObject stopP = NIL;
+            if (NIL != $print_rtg_notesP$.getDynamicValue(thread)) {
+                apply(FORMAT, cons(T, list($str107$__Waiting_for_new_thoughts_about_, topic)));
+                force_output(T);
             }
-          }
+            while (NIL == stopP) {
+                existing_info = dictionary.dictionary_lookup(topical_thoughts, topic, NIL);
+                sleep($float$0_5);
+                stopP = makeBoolean(existing_info.isCons() || (NIL == valid_process_p(generator_thread)));
+            } 
         }
-        catch( final Throwable catch_var )
-        {
-          Errors.handleThrowable( catch_var, NIL );
-        }
-      }
-      finally
-      {
-        Errors.$error_handler$.rebind( _prev_bind_0, thread );
-      }
-    }
-    catch( final Throwable ccatch_env_var )
-    {
-      ignore_errors_tag = Errors.handleThrowable( ccatch_env_var, $kw45$IGNORE_ERRORS_TARGET );
-    }
-    finally
-    {
-      thread.throwStack.pop();
-    }
-    return Values.values( host, port );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 12169L)
-  public static SubLObject next_random_thought_for_user_from_remote_server(final SubLObject user, final SubLObject parameters)
-  {
-    SubLObject thought;
-    for( thought = $kw47$NOT_TRIED; NIL != thought && NIL == valid_non_empty_random_thought_p( thought ); thought = next_random_thought_for_user_from_remote_server_int( user, parameters ) )
-    {
-    }
-    return thought;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 12473L)
-  public static SubLObject next_random_thought_for_user_from_remote_server_int(final SubLObject user, final SubLObject parameters)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    final SubLObject api_request = ConsesLow.list( $sym48$NEXT_RANDOM_THOUGHT_FOR_USER, ConsesLow.list( $sym49$QUOTE, user ), ConsesLow.list( $sym49$QUOTE, parameters ) );
-    final SubLObject augmented_api_request = ConsesLow.list( $sym50$PROGN, $list51, ConsesLow.list( $sym52$MULTIPLE_VALUE_LIST, api_request ) );
-    SubLObject results_list = NIL;
-    SubLObject connection = NIL;
-    SubLObject error_message = NIL;
-    try
-    {
-      thread.throwStack.push( subl_macro_promotions.$catch_error_message_target$.getGlobalValue() );
-      final SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding( thread );
-      try
-      {
-        Errors.$error_handler$.bind( $sym53$CATCH_ERROR_MESSAGE_HANDLER, thread );
-        try
-        {
-          connection = get_free_random_thought_connection();
-          SubLObject success_var = NIL;
-          try
-          {
-            results_list = remote_image.remote_image_connection_eval( connection, augmented_api_request );
-            release_random_thought_connection( connection );
-            success_var = T;
-          }
-          finally
-          {
-            final SubLObject _prev_bind_0_$23 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-            try
-            {
-              Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-              final SubLObject _values = Values.getValuesAsVector();
-              if( NIL == success_var )
-              {
-                remote_image.close_remote_image_connection( connection );
-              }
-              Values.restoreValuesFromVector( _values );
-            }
-            finally
-            {
-              Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$23, thread );
-            }
-          }
-        }
-        catch( final Throwable catch_var )
-        {
-          Errors.handleThrowable( catch_var, NIL );
-        }
-      }
-      finally
-      {
-        Errors.$error_handler$.rebind( _prev_bind_0, thread );
-      }
-    }
-    catch( final Throwable ccatch_env_var )
-    {
-      error_message = Errors.handleThrowable( ccatch_env_var, subl_macro_promotions.$catch_error_message_target$.getGlobalValue() );
-    }
-    finally
-    {
-      thread.throwStack.pop();
-    }
-    if( NIL != error_message )
-    {
-      Errors.warn( error_message );
-    }
-    return ( NIL != results_list ) ? subl_promotions.values_list( results_list ) : NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 13249L)
-  public static SubLObject create_remote_random_thought_connection()
-  {
-    final SubLObject v_remote_image = remote_random_thought_image();
-    final SubLObject connection = remote_image.new_remote_image_connection( v_remote_image );
-    if( NIL != remote_image.remote_image_connection_p( connection ) )
-    {
-      remote_image.open_remote_image_connection( connection );
-      return connection;
-    }
-    return Errors.error( $str54$Could_not_open_a_connection_to__s, v_remote_image );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 13613L)
-  public static SubLObject release_random_thought_connection(final SubLObject connection)
-  {
-    SubLObject release = NIL;
-    try
-    {
-      release = Locks.seize_lock( $remote_random_thought_connection_pool_lock$.getGlobalValue() );
-      if( queues.queue_size( $remote_random_thought_connection_pool$.getGlobalValue() ).numGE( $remote_random_thought_connection_pool_max_size$.getGlobalValue() ) )
-      {
-        remote_image.close_remote_image_connection( connection );
-      }
-      else
-      {
-        queues.enqueue( connection, $remote_random_thought_connection_pool$.getGlobalValue() );
-      }
-    }
-    finally
-    {
-      if( NIL != release )
-      {
-        Locks.release_lock( $remote_random_thought_connection_pool_lock$.getGlobalValue() );
-      }
-    }
-    return T;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 14062L)
-  public static SubLObject open_remote_random_thought_connection_p(final SubLObject v_object)
-  {
-    return makeBoolean( NIL != remote_image.remote_image_connection_p( v_object ) && NIL != streams_high.open_stream_p( remote_image.remote_image_connection_channel( v_object ) ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 14242L)
-  public static SubLObject get_free_random_thought_connection()
-  {
-    SubLObject connection = NIL;
-    SubLObject release = NIL;
-    try
-    {
-      release = Locks.seize_lock( $remote_random_thought_connection_pool_lock$.getGlobalValue() );
-      for( SubLObject q = $remote_random_thought_connection_pool$.getGlobalValue(), done_var = makeBoolean( NIL != connection || NIL != queues.queue_empty_p( q ) ); NIL == done_var; done_var = makeBoolean(
-          NIL != connection || NIL != queues.queue_empty_p( q ) ) )
-      {
-        final SubLObject candidate = queues.dequeue( q );
-        if( NIL != open_remote_random_thought_connection_p( candidate ) )
-        {
-          connection = candidate;
-        }
-      }
-      if( NIL == connection )
-      {
-        connection = create_remote_random_thought_connection();
-      }
-    }
-    finally
-    {
-      if( NIL != release )
-      {
-        Locks.release_lock( $remote_random_thought_connection_pool_lock$.getGlobalValue() );
-      }
-    }
-    return connection;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 14945L)
-  public static SubLObject register_random_thought_generator(final SubLObject rtg, final SubLObject user)
-  {
-    return dictionary.dictionary_enter( $random_thought_generators_for_users$.getGlobalValue(), user, rtg );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15082L)
-  public static SubLObject find_random_thought_generator_for_user(final SubLObject user)
-  {
-    return dictionary.dictionary_lookup( $random_thought_generators_for_users$.getGlobalValue(), user, NIL );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject random_thought_generator_print_function_trampoline(final SubLObject v_object, final SubLObject stream)
-  {
-    pprint_random_thought_generator( v_object, stream, ZERO_INTEGER );
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject random_thought_generator_p(final SubLObject v_object)
-  {
-    return ( v_object.getClass() == $random_thought_generator_native.class ) ? T : NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject rtg_struct_user(final SubLObject v_object)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.getField2();
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject rtg_struct_done_assertions(final SubLObject v_object)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.getField3();
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject rtg_struct_generator_thread(final SubLObject v_object)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.getField4();
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject rtg_struct_queue(final SubLObject v_object)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.getField5();
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject rtg_struct_most_recently_added_thought(final SubLObject v_object)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.getField6();
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject rtg_struct_topical_thoughts(final SubLObject v_object)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.getField7();
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject _csetf_rtg_struct_user(final SubLObject v_object, final SubLObject value)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.setField2( value );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject _csetf_rtg_struct_done_assertions(final SubLObject v_object, final SubLObject value)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.setField3( value );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject _csetf_rtg_struct_generator_thread(final SubLObject v_object, final SubLObject value)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.setField4( value );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject _csetf_rtg_struct_queue(final SubLObject v_object, final SubLObject value)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.setField5( value );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject _csetf_rtg_struct_most_recently_added_thought(final SubLObject v_object, final SubLObject value)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.setField6( value );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject _csetf_rtg_struct_topical_thoughts(final SubLObject v_object, final SubLObject value)
-  {
-    assert NIL != random_thought_generator_p( v_object ) : v_object;
-    return v_object.setField7( value );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject make_random_thought_generator(SubLObject arglist)
-  {
-    if( arglist == UNPROVIDED )
-    {
-      arglist = NIL;
-    }
-    final SubLObject v_new = new $random_thought_generator_native();
-    SubLObject next;
-    SubLObject current_arg;
-    SubLObject current_value;
-    SubLObject pcase_var;
-    for( next = NIL, next = arglist; NIL != next; next = conses_high.cddr( next ) )
-    {
-      current_arg = next.first();
-      current_value = conses_high.cadr( next );
-      pcase_var = current_arg;
-      if( pcase_var.eql( $kw77$USER ) )
-      {
-        _csetf_rtg_struct_user( v_new, current_value );
-      }
-      else if( pcase_var.eql( $kw78$DONE_ASSERTIONS ) )
-      {
-        _csetf_rtg_struct_done_assertions( v_new, current_value );
-      }
-      else if( pcase_var.eql( $kw79$GENERATOR_THREAD ) )
-      {
-        _csetf_rtg_struct_generator_thread( v_new, current_value );
-      }
-      else if( pcase_var.eql( $kw80$QUEUE ) )
-      {
-        _csetf_rtg_struct_queue( v_new, current_value );
-      }
-      else if( pcase_var.eql( $kw81$MOST_RECENTLY_ADDED_THOUGHT ) )
-      {
-        _csetf_rtg_struct_most_recently_added_thought( v_new, current_value );
-      }
-      else if( pcase_var.eql( $kw82$TOPICAL_THOUGHTS ) )
-      {
-        _csetf_rtg_struct_topical_thoughts( v_new, current_value );
-      }
-      else
-      {
-        Errors.error( $str83$Invalid_slot__S_for_construction_, current_arg );
-      }
-    }
-    return v_new;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject visit_defstruct_random_thought_generator(final SubLObject obj, final SubLObject visitor_fn)
-  {
-    Functions.funcall( visitor_fn, obj, $kw84$BEGIN, $sym85$MAKE_RANDOM_THOUGHT_GENERATOR, SIX_INTEGER );
-    Functions.funcall( visitor_fn, obj, $kw86$SLOT, $kw77$USER, rtg_struct_user( obj ) );
-    Functions.funcall( visitor_fn, obj, $kw86$SLOT, $kw78$DONE_ASSERTIONS, rtg_struct_done_assertions( obj ) );
-    Functions.funcall( visitor_fn, obj, $kw86$SLOT, $kw79$GENERATOR_THREAD, rtg_struct_generator_thread( obj ) );
-    Functions.funcall( visitor_fn, obj, $kw86$SLOT, $kw80$QUEUE, rtg_struct_queue( obj ) );
-    Functions.funcall( visitor_fn, obj, $kw86$SLOT, $kw81$MOST_RECENTLY_ADDED_THOUGHT, rtg_struct_most_recently_added_thought( obj ) );
-    Functions.funcall( visitor_fn, obj, $kw86$SLOT, $kw82$TOPICAL_THOUGHTS, rtg_struct_topical_thoughts( obj ) );
-    Functions.funcall( visitor_fn, obj, $kw87$END, $sym85$MAKE_RANDOM_THOUGHT_GENERATOR, SIX_INTEGER );
-    return obj;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15221L)
-  public static SubLObject visit_defstruct_object_random_thought_generator_method(final SubLObject obj, final SubLObject visitor_fn)
-  {
-    return visit_defstruct_random_thought_generator( obj, visitor_fn );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15664L)
-  public static SubLObject rtg_user(final SubLObject rtg)
-  {
-    return rtg_struct_user( rtg );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15727L)
-  public static SubLObject rtg_done_assertions(final SubLObject rtg)
-  {
-    return rtg_struct_done_assertions( rtg );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15812L)
-  public static SubLObject rtg_generator_thread(final SubLObject rtg)
-  {
-    return rtg_struct_generator_thread( rtg );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 15899L)
-  public static SubLObject rtg_set_generator_thread(final SubLObject rtg, final SubLObject process)
-  {
-    _csetf_rtg_struct_generator_thread( rtg, process );
-    return process;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 16024L)
-  public static SubLObject rtg_queue(final SubLObject rtg)
-  {
-    return rtg_struct_queue( rtg );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 16089L)
-  public static SubLObject rtg_most_recently_added_thought(final SubLObject rtg)
-  {
-    return rtg_struct_most_recently_added_thought( rtg );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 16198L)
-  public static SubLObject rtg_set_most_recently_added_thought(final SubLObject rtg, final SubLObject thought)
-  {
-    _csetf_rtg_struct_most_recently_added_thought( rtg, thought );
-    return thought;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 16345L)
-  public static SubLObject rtg_topical_thoughts(final SubLObject rtg)
-  {
-    return rtg_struct_topical_thoughts( rtg );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 16432L)
-  public static SubLObject rtg_set_topical_thoughts(final SubLObject rtg, final SubLObject thoughts)
-  {
-    _csetf_rtg_struct_topical_thoughts( rtg, thoughts );
-    return thoughts;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 16560L)
-  public static SubLObject pprint_random_thought_generator(final SubLObject rtg, SubLObject stream, SubLObject depth)
-  {
-    if( stream == UNPROVIDED )
-    {
-      stream = NIL;
-    }
-    if( depth == UNPROVIDED )
-    {
-      depth = NIL;
-    }
-    PrintLow.format( stream, $str89$__RTG_for__S___S_done__A__, new SubLObject[] { rtg_struct_user( rtg ), set.set_size( rtg_struct_done_assertions( rtg ) ), ( NIL != queues.queue_p( rtg_struct_queue( rtg ) ) )
-        ? Sequences.cconcatenate( format_nil.format_nil_s_no_copy( queues.queue_size( rtg_struct_queue( rtg ) ) ), $str90$_queued )
-        : $str91$exhausted
-    } );
-    return rtg;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 16926L)
-  public static SubLObject find_or_create_random_thought_generator_for_user(final SubLObject user)
-  {
-    assert NIL != forts.fort_p( user ) : user;
-    final SubLObject existing = find_random_thought_generator_for_user( user );
-    return ( NIL != existing ) ? existing : new_random_thought_generator_for_user( user );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 17170L)
-  public static SubLObject empty_thought()
-  {
-    return $list0;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 17228L)
-  public static SubLObject new_random_thought_generator_for_user(final SubLObject user)
-  {
-    final SubLObject rtg = new_random_thought_generator();
-    _csetf_rtg_struct_user( rtg, user );
-    register_random_thought_generator( rtg, user );
-    find_or_create_random_thought_generator_thread( rtg, UNPROVIDED );
-    return rtg;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 17498L)
-  public static SubLObject new_random_thought_generator()
-  {
-    final SubLObject rtg = make_random_thought_generator( ConsesLow.list( new SubLObject[] { $kw77$USER, NIL, $kw78$DONE_ASSERTIONS, set.new_set( UNPROVIDED, UNPROVIDED ), $kw80$QUEUE, queues.create_queue( UNPROVIDED ),
-      $kw81$MOST_RECENTLY_ADDED_THOUGHT, empty_thought(), $kw82$TOPICAL_THOUGHTS, dictionary.new_dictionary( Symbols.symbol_function( EQL ), UNPROVIDED )
-    } ) );
-    return rtg;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 17799L)
-  public static SubLObject note_rtg_exhausted(final SubLObject rtg)
-  {
-    rtg_set_generator_thread( rtg, $kw92$EXHAUSTED );
-    return rtg;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 17898L)
-  public static SubLObject random_thought_generator_exhausted_p(final SubLObject rtg)
-  {
-    return Equality.eq( $kw92$EXHAUSTED, rtg_generator_thread( rtg ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 18010L)
-  public static SubLObject random_thoughts_on_topic_exhausted_p(final SubLObject data)
-  {
-    return makeBoolean( NIL == data.rest() || $kw92$EXHAUSTED.eql( data.rest() ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 18137L)
-  public static SubLObject note_random_thoughts_on_topic_exhausted(final SubLObject data)
-  {
-    return ConsesLow.rplacd( data, $kw92$EXHAUSTED );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 18235L)
-  public static SubLObject random_thought_generator_full_p(final SubLObject rtg, final SubLObject target_size)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    SubLObject not_fullP;
-    SubLObject iteration_state;
-    for( not_fullP = makeBoolean( NIL == random_thought_generator_queue_full_p( rtg, target_size ) ), iteration_state = dictionary_contents.do_dictionary_contents_state( dictionary.dictionary_contents(
-        rtg_topical_thoughts( rtg ) ) ); NIL == not_fullP && NIL == dictionary_contents.do_dictionary_contents_doneP( iteration_state ); iteration_state = dictionary_contents.do_dictionary_contents_next(
-            iteration_state ) )
-    {
-      thread.resetMultipleValues();
-      final SubLObject key = dictionary_contents.do_dictionary_contents_key_value( iteration_state );
-      final SubLObject data = thread.secondMultipleValue();
-      thread.resetMultipleValues();
-      if( !data.isCons() || ( NIL == random_thoughts_on_topic_exhausted_p( data ) && NIL == data.first() ) )
-      {
-        not_fullP = T;
-      }
-    }
-    dictionary_contents.do_dictionary_contents_finalize( iteration_state );
-    return makeBoolean( NIL == not_fullP );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 18638L)
-  public static SubLObject random_thought_generator_queue_full_p(final SubLObject rtg, final SubLObject target_size)
-  {
-    return Numbers.numGE( queues.queue_size( rtg_queue( rtg ) ), target_size );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 18766L)
-  public static SubLObject declare_interest_in_random_thoughts_about_topic(final SubLObject rtg, final SubLObject topic)
-  {
-    final SubLObject topical_thoughts = rtg_topical_thoughts( rtg );
-    if( NIL == dictionary.dictionary_lookup( topical_thoughts, topic, NIL ) )
-    {
-      register_interest_in_random_thoughts_about_topic( rtg, topic );
-      dictionary.dictionary_enter( topical_thoughts, topic, $kw93$NEW_TOPIC );
-    }
-    return rtg;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 19149L)
-  public static SubLObject rtg_note(final SubLObject macroform, final SubLObject environment)
-  {
-    SubLObject current;
-    final SubLObject datum = current = macroform.rest();
-    SubLObject format_str = NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list94 );
-    format_str = current.first();
-    final SubLObject args;
-    current = ( args = current.rest() );
-    return ConsesLow.listS( $sym95$PWHEN, $sym96$_PRINT_RTG_NOTES__, ConsesLow.list( $sym97$APPLY, $list98, ConsesLow.list( $sym99$CONS, T, ConsesLow.listS( $sym100$LIST, format_str, ConsesLow.append( args, NIL ) ) ) ),
-        $list101 );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 19312L)
-  public static SubLObject register_interest_in_random_thoughts_about_topic(final SubLObject rtg, final SubLObject topic)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != forts.fort_p( topic ) : topic;
-    final SubLObject topical_thoughts = rtg_topical_thoughts( rtg );
-    if( NIL != $print_rtg_notesP$.getDynamicValue( thread ) )
-    {
-      Functions.apply( $sym102$FORMAT, ConsesLow.cons( T, ConsesLow.list( $str103$__Registering_interest_of__S_in__, rtg_user( rtg ), topic ) ) );
-      streams_high.force_output( T );
-    }
-    dictionary.dictionary_enter( topical_thoughts, topic, $kw93$NEW_TOPIC );
-    return rtg;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 19622L)
-  public static SubLObject all_random_thoughts_on_topic(final SubLObject topic)
-  {
-    assert NIL != forts.fort_p( topic ) : topic;
-    final SubLObject rtg = new_random_thought_generator();
-    SubLObject thoughts = NIL;
-    SubLObject doneP = NIL;
-    while ( NIL == doneP)
-    {
-      final SubLObject thought = next_random_thought_with_suggested_topic( rtg, ConsesLow.listS( $kw33$TOPIC, topic, $list104 ) );
-      if( NIL != empty_random_thought_p( thought ) )
-      {
-        doneP = T;
-      }
-      else
-      {
-        thoughts = ConsesLow.cons( thought, thoughts );
-      }
-    }
-    Threads.kill_process( rtg_generator_thread( rtg ) );
-    return thoughts;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 20086L)
-  public static SubLObject next_random_thought_with_suggested_topic(final SubLObject rtg, final SubLObject parameters)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    final SubLObject topic_tail = cdestructuring_bind.property_list_member( $kw33$TOPIC, parameters );
-    final SubLObject topic = ( NIL != topic_tail ) ? conses_high.cadr( topic_tail ) : NIL;
-    final SubLObject now_tail = cdestructuring_bind.property_list_member( $kw105$NOW, parameters );
-    final SubLObject now = ( NIL != now_tail ) ? conses_high.cadr( now_tail ) : T;
-    final SubLObject require_topicalP_tail = cdestructuring_bind.property_list_member( $kw106$REQUIRE_TOPICAL_, parameters );
-    final SubLObject require_topicalP = ( NIL != require_topicalP_tail ) ? conses_high.cadr( require_topicalP_tail ) : NIL;
-    register_interest_in_random_thoughts_about_topic( rtg, topic );
-    final SubLObject topical_thoughts = rtg_topical_thoughts( rtg );
-    SubLObject existing_info = dictionary.dictionary_lookup( topical_thoughts, topic, NIL );
-    SubLObject thought = NIL;
-    if( !existing_info.isCons() && NIL == now )
-    {
-      final SubLObject generator_thread = find_or_create_random_thought_generator_thread( rtg, T );
-      SubLObject stopP = NIL;
-      if( NIL != $print_rtg_notesP$.getDynamicValue( thread ) )
-      {
-        Functions.apply( $sym102$FORMAT, ConsesLow.cons( T, ConsesLow.list( $str107$__Waiting_for_new_thoughts_about_, topic ) ) );
-        streams_high.force_output( T );
-      }
-      while ( NIL == stopP)
-      {
-        existing_info = dictionary.dictionary_lookup( topical_thoughts, topic, NIL );
-        Threads.sleep( $float108$0_5 );
-        stopP = makeBoolean( existing_info.isCons() || NIL == Threads.valid_process_p( generator_thread ) );
-      }
-    }
-    if( existing_info.isCons() )
-    {
-      thought = existing_info.first();
-      final SubLObject freshly_exhaustedP = Types.sublisp_null( existing_info.rest() );
-      final SubLObject known_exhaustedP = makeBoolean( NIL != freshly_exhaustedP || NIL != random_thoughts_on_topic_exhausted_p( existing_info ) );
-      if( NIL != freshly_exhaustedP )
-      {
-        note_random_thoughts_on_topic_exhausted( existing_info );
-      }
-      if( NIL == thought )
-      {
-        if( ( NIL != freshly_exhaustedP || NIL == known_exhaustedP ) && NIL != $print_rtg_notesP$.getDynamicValue( thread ) )
-        {
-          Functions.apply( $sym102$FORMAT, ConsesLow.cons( T, ConsesLow.list( $str109$___A_out_of_thoughts_about__S__, ( NIL != known_exhaustedP ) ? $str110$Totally : $str111$Temporarily, topic ) ) );
-          streams_high.force_output( T );
-        }
-        if( NIL == now && NIL == known_exhaustedP )
-        {
-          final SubLObject generator_thread2 = find_or_create_random_thought_generator_thread( rtg, UNPROVIDED );
-          SubLObject stopP2 = NIL;
-          if( NIL != $print_rtg_notesP$.getDynamicValue( thread ) )
-          {
-            Functions.apply( $sym102$FORMAT, ConsesLow.cons( T, ConsesLow.list( $str107$__Waiting_for_new_thoughts_about_, topic ) ) );
-            streams_high.force_output( T );
-          }
-          while ( NIL == stopP2)
-          {
-            Threads.sleep( $float108$0_5 );
+        if (existing_info.isCons()) {
             thought = existing_info.first();
-            stopP2 = makeBoolean( NIL != thought || NIL == existing_info.rest() || NIL == Threads.valid_process_p( generator_thread2 ) );
-          }
-        }
-      }
-      ConsesLow.rplaca( existing_info, NIL );
-    }
-    else if( NIL == dictionary.dictionary_lookup( topical_thoughts, topic, NIL ) )
-    {
-      register_interest_in_random_thoughts_about_topic( rtg, topic );
-    }
-    return ( NIL != thought ) ? thought : ( ( NIL != require_topicalP ) ? empty_thought() : next_random_thought_without_suggested_topic( rtg, parameters ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 22129L)
-  public static SubLObject next_random_thought_without_suggested_topic(SubLObject rtg, final SubLObject parameters)
-  {
-    final SubLObject queue = rtg_queue( rtg );
-    SubLObject thought = empty_thought();
-    if( NIL != queues.queue_empty_p( queue ) && NIL != random_thought_generator_exhausted_p( rtg ) )
-    {
-      set.clear_set( rtg_done_assertions( rtg ) );
-      rtg = new_random_thought_generator_for_user( rtg_user( rtg ) );
-    }
-    for( SubLObject generator_thread = find_or_create_random_thought_generator_thread( rtg, UNPROVIDED ), dont_waitP = conses_high.getf( parameters, $kw105$NOW, T ), stopP = NIL; NIL == stopP; stopP = makeBoolean(
-        NIL != dont_waitP || NIL != thought.first() || NIL == Threads.valid_process_p( generator_thread ) ) )
-    {
-      thought = queues.dequeue( queue );
-    }
-    return thought;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 22930L)
-  public static SubLObject find_or_create_random_thought_generator_thread(final SubLObject rtg, SubLObject topical_onlyP)
-  {
-    if( topical_onlyP == UNPROVIDED )
-    {
-      topical_onlyP = NIL;
-    }
-    SubLObject generator_thread = rtg_generator_thread( rtg );
-    if( NIL == Threads.valid_process_p( generator_thread ) )
-    {
-      generator_thread = process_utilities.make_cyc_server_process_with_args( $str112$Random_Thought_Generator, $sym113$KEEP_RANDOM_THOUGHT_GENERATOR_FULL, ConsesLow.list( rtg, ( NIL != topical_onlyP ) ? ZERO_INTEGER
-          : $int114$25 ) );
-      SubLObject doneP = NIL;
-      SubLObject interval_ms = ONE_INTEGER;
-      final SubLObject increase_factor = $float115$1_5;
-      final SubLObject max_ms = NIL;
-      while ( NIL == doneP)
-      {
-        doneP = Threads.valid_process_p( generator_thread );
-        if( NIL == doneP )
-        {
-          Threads.sleep( Numbers.divide( interval_ms, $int116$1000 ) );
-          if( interval_ms.numGE( max_ms ) )
-          {
-            continue;
-          }
-          final SubLObject new_interval = Numbers.multiply( interval_ms, increase_factor );
-          interval_ms = Numbers.min( new_interval, max_ms );
-        }
-      }
-      rtg_set_generator_thread( rtg, generator_thread );
-    }
-    return generator_thread;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 23767L)
-  public static SubLObject keep_random_thought_generator_full(final SubLObject rtg, SubLObject target_size, SubLObject check_interval)
-  {
-    if( target_size == UNPROVIDED )
-    {
-      target_size = $int114$25;
-    }
-    if( check_interval == UNPROVIDED )
-    {
-      check_interval = TEN_INTEGER;
-    }
-    while ( NIL == random_thought_generator_exhausted_p( rtg ))
-    {
-      if( NIL != random_thought_generator_full_p( rtg, target_size ) )
-      {
-        Threads.sleep( check_interval );
-      }
-      else
-      {
-        fill_random_thought_generator( rtg, target_size );
-      }
-    }
-    return rtg;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 24087L)
-  public static SubLObject fill_random_thought_generator(final SubLObject rtg, final SubLObject target_size)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( NIL != $print_rtg_notesP$.getDynamicValue( thread ) )
-    {
-      Functions.apply( $sym102$FORMAT, ConsesLow.cons( T, ConsesLow.list( $str117$__Filling__S__, rtg ) ) );
-      streams_high.force_output( T );
-    }
-    SubLObject new_entries = NIL;
-    SubLObject iteration_state;
-    for( iteration_state = dictionary_contents.do_dictionary_contents_state( dictionary.dictionary_contents( rtg_topical_thoughts( rtg ) ) ); NIL == dictionary_contents.do_dictionary_contents_doneP(
-        iteration_state ); iteration_state = dictionary_contents.do_dictionary_contents_next( iteration_state ) )
-    {
-      thread.resetMultipleValues();
-      final SubLObject topic = dictionary_contents.do_dictionary_contents_key_value( iteration_state );
-      final SubLObject data = thread.secondMultipleValue();
-      thread.resetMultipleValues();
-      if( $kw93$NEW_TOPIC.eql( data ) )
-      {
-        new_entries = list_utilities.alist_enter( new_entries, topic, update_random_thought_data( new_random_thought_data_for_topic( topic ), topic, rtg ), UNPROVIDED );
-      }
-      else if( NIL == data.first() && NIL == random_thoughts_on_topic_exhausted_p( data ) )
-      {
-        new_entries = list_utilities.alist_enter( new_entries, topic, update_random_thought_data( data, topic, rtg ), UNPROVIDED );
-      }
-    }
-    dictionary_contents.do_dictionary_contents_finalize( iteration_state );
-    SubLObject cdolist_list_var = new_entries;
-    SubLObject cons = NIL;
-    cons = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      SubLObject current;
-      final SubLObject datum = current = cons;
-      SubLObject topic2 = NIL;
-      SubLObject new_data = NIL;
-      cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list118 );
-      topic2 = current.first();
-      current = ( new_data = current.rest() );
-      dictionary.dictionary_enter( rtg_topical_thoughts( rtg ), topic2, new_data );
-      cdolist_list_var = cdolist_list_var.rest();
-      cons = cdolist_list_var.first();
-    }
-    if( NIL != list_utilities.empty_list_p( new_entries ) )
-    {
-      fill_random_thought_generator_queue( rtg, target_size );
-    }
-    if( NIL != $print_rtg_notesP$.getDynamicValue( thread ) )
-    {
-      Functions.apply( $sym102$FORMAT, ConsesLow.cons( T, ConsesLow.list( $str119$___S_is_now_full__, rtg ) ) );
-      streams_high.force_output( T );
-    }
-    return rtg;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 24927L)
-  public static SubLObject update_random_thought_data(final SubLObject data, final SubLObject topic, final SubLObject rtg)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( NIL == Errors.$ignore_mustsP$.getDynamicValue( thread ) && ( !data.isCons() || NIL != data.first() ) )
-    {
-      Errors.error( $str120$_S_is_not_in_an_updatable_state, data );
-    }
-    while ( NIL == data.first() && NIL != data.rest())
-    {
-      thread.resetMultipleValues();
-      final SubLObject remaining = list_utilities.random_delete( data.rest() );
-      final SubLObject candidate = thread.secondMultipleValue();
-      thread.resetMultipleValues();
-      ConsesLow.rplacd( data, remaining );
-      final SubLObject really_newP = set.set_add( candidate, rtg_done_assertions( rtg ) );
-      if( NIL != really_newP && NIL != open_cyc_formula( candidate ) && NIL != thcl.thcl_formulaP( candidate, UNPROVIDED ) && NIL == potentially_porn_relatedP( candidate ) )
-      {
-        final SubLObject paraphrase = thcl_paraphrase_for_assertion( candidate );
-        if( NIL == paraphrase )
-        {
-          continue;
-        }
-        if( NIL != $print_rtg_notesP$.getDynamicValue( thread ) )
-        {
-          Functions.apply( $sym102$FORMAT, ConsesLow.cons( T, ConsesLow.list( $str121$__New_thought_concerning__S_____S, topic, pph_utilities.pph_javalist_string( paraphrase ) ) ) );
-          streams_high.force_output( T );
-        }
-        ConsesLow.rplaca( data, ConsesLow.list( topic, candidate, paraphrase ) );
-      }
-    }
-    return data;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 25709L)
-  public static SubLObject open_cyc_formula(final SubLObject formula)
-  {
-    return makeBoolean( NIL == list_utilities.find_if_not( $sym122$OPEN_CYC_FORT, cycl_utilities.expression_gather( formula, $sym30$FORT_P, T, UNPROVIDED, UNPROVIDED, UNPROVIDED ), UNPROVIDED, UNPROVIDED, UNPROVIDED ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 25838L)
-  public static SubLObject open_cyc_fort_internal(final SubLObject fort)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    SubLObject ans = NIL;
-    SubLObject ignore_errors_tag = NIL;
-    try
-    {
-      thread.throwStack.push( $kw45$IGNORE_ERRORS_TARGET );
-      final SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding( thread );
-      try
-      {
-        Errors.$error_handler$.bind( Symbols.symbol_function( $sym46$IGNORE_ERRORS_HANDLER ), thread );
-        try
-        {
-          ans = owl_cycl_to_xml.fort_has_exported_owl_opencyc_contentP( fort );
-        }
-        catch( final Throwable catch_var )
-        {
-          Errors.handleThrowable( catch_var, NIL );
-        }
-      }
-      finally
-      {
-        Errors.$error_handler$.rebind( _prev_bind_0, thread );
-      }
-    }
-    catch( final Throwable ccatch_env_var )
-    {
-      ignore_errors_tag = Errors.handleThrowable( ccatch_env_var, $kw45$IGNORE_ERRORS_TARGET );
-    }
-    finally
-    {
-      thread.throwStack.pop();
-    }
-    return ans;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 25838L)
-  public static SubLObject open_cyc_fort(final SubLObject fort)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    final SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue( thread );
-    SubLObject caching_state = NIL;
-    if( NIL == v_memoization_state )
-    {
-      return open_cyc_fort_internal( fort );
-    }
-    caching_state = memoization_state.memoization_state_lookup( v_memoization_state, $sym122$OPEN_CYC_FORT, UNPROVIDED );
-    if( NIL == caching_state )
-    {
-      caching_state = memoization_state.create_caching_state( memoization_state.memoization_state_lock( v_memoization_state ), $sym122$OPEN_CYC_FORT, ONE_INTEGER, NIL, EQL, UNPROVIDED );
-      memoization_state.memoization_state_put( v_memoization_state, $sym122$OPEN_CYC_FORT, caching_state );
-    }
-    SubLObject results = memoization_state.caching_state_lookup( caching_state, fort, memoization_state.$memoized_item_not_found$.getGlobalValue() );
-    if( results.eql( memoization_state.$memoized_item_not_found$.getGlobalValue() ) )
-    {
-      results = Values.arg2( thread.resetMultipleValues(), Values.multiple_value_list( open_cyc_fort_internal( fort ) ) );
-      memoization_state.caching_state_put( caching_state, fort, results, UNPROVIDED );
-    }
-    return memoization_state.caching_results( results );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 26018L)
-  public static SubLObject potentially_porn_relatedP_internal(final SubLObject obj)
-  {
-    if( NIL != forts.fort_p( obj ) )
-    {
-      return isa.quoted_isa_in_any_mtP( obj, $const124$PotentiallyPornRelated );
-    }
-    if( NIL != el_utilities.el_formula_p( obj ) )
-    {
-      SubLObject result = NIL;
-      final SubLObject args = cycl_utilities.formula_args( obj, $kw125$IGNORE );
-      SubLObject rest;
-      SubLObject arg;
-      for( rest = NIL, rest = args; NIL == result && NIL != rest; rest = rest.rest() )
-      {
-        arg = rest.first();
-        if( NIL != potentially_porn_relatedP( arg ) )
-        {
-          result = T;
-        }
-      }
-      return result;
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 26018L)
-  public static SubLObject potentially_porn_relatedP(final SubLObject obj)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    final SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue( thread );
-    SubLObject caching_state = NIL;
-    if( NIL == v_memoization_state )
-    {
-      return potentially_porn_relatedP_internal( obj );
-    }
-    caching_state = memoization_state.memoization_state_lookup( v_memoization_state, $sym123$POTENTIALLY_PORN_RELATED_, UNPROVIDED );
-    if( NIL == caching_state )
-    {
-      caching_state = memoization_state.create_caching_state( memoization_state.memoization_state_lock( v_memoization_state ), $sym123$POTENTIALLY_PORN_RELATED_, ONE_INTEGER, NIL, EQL, UNPROVIDED );
-      memoization_state.memoization_state_put( v_memoization_state, $sym123$POTENTIALLY_PORN_RELATED_, caching_state );
-    }
-    SubLObject results = memoization_state.caching_state_lookup( caching_state, obj, memoization_state.$memoized_item_not_found$.getGlobalValue() );
-    if( results.eql( memoization_state.$memoized_item_not_found$.getGlobalValue() ) )
-    {
-      results = Values.arg2( thread.resetMultipleValues(), Values.multiple_value_list( potentially_porn_relatedP_internal( obj ) ) );
-      memoization_state.caching_state_put( caching_state, obj, results, UNPROVIDED );
-    }
-    return memoization_state.caching_results( results );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 26357L)
-  public static SubLObject new_random_thought_data_for_topic(final SubLObject topic)
-  {
-    return ConsesLow.cons( NIL, gafs_about_topic( topic ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 26461L)
-  public static SubLObject gafs_about_topic(final SubLObject topic)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    SubLObject gafs = NIL;
-    final SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate( thcl.random_thcl_assertion_mt() );
-    final SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding( thread );
-    final SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mt_function$.currentBinding( thread );
-    final SubLObject _prev_bind_3 = mt_relevance_macros.$relevant_mts$.currentBinding( thread );
-    try
-    {
-      mt_relevance_macros.$mt$.bind( mt_relevance_macros.update_inference_mt_relevance_mt( mt_var ), thread );
-      mt_relevance_macros.$relevant_mt_function$.bind( mt_relevance_macros.update_inference_mt_relevance_function( mt_var ), thread );
-      mt_relevance_macros.$relevant_mts$.bind( mt_relevance_macros.update_inference_mt_relevance_mt_list( mt_var ), thread );
-      final SubLObject preds_to_skip = set.new_set( Symbols.symbol_function( EQL ), UNPROVIDED );
-      final SubLObject pred_var = NIL;
-      if( NIL != kb_mapping_macros.do_gaf_arg_index_key_validator( topic, NIL, pred_var ) )
-      {
-        final SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator( topic, NIL, pred_var );
-        SubLObject done_var = NIL;
-        final SubLObject token_var = NIL;
-        while ( NIL == done_var)
-        {
-          final SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper( iterator_var, token_var );
-          final SubLObject valid = makeBoolean( !token_var.eql( final_index_spec ) );
-          if( NIL != valid )
-          {
-            SubLObject final_index_iterator = NIL;
-            try
-            {
-              final_index_iterator = kb_mapping_macros.new_final_index_iterator( final_index_spec, $kw126$GAF, $kw127$TRUE, NIL );
-              SubLObject done_var_$24 = NIL;
-              final SubLObject token_var_$25 = NIL;
-              while ( NIL == done_var_$24)
-              {
-                final SubLObject gaf = iteration.iteration_next_without_values_macro_helper( final_index_iterator, token_var_$25 );
-                final SubLObject valid_$26 = makeBoolean( !token_var_$25.eql( gaf ) );
-                if( NIL != valid_$26 )
-                {
-                  final SubLObject pred = assertions_high.gaf_arg0( gaf );
-                  if( NIL == set.set_memberP( pred, preds_to_skip ) )
-                  {
-                    if( NIL == gaf_about_topicP( gaf, topic, pred ) )
-                    {
-                      set.set_add( pred, preds_to_skip );
-                    }
-                    else
-                    {
-                      gafs = ConsesLow.cons( gaf, gafs );
-                    }
-                  }
+            final SubLObject freshly_exhaustedP = sublisp_null(existing_info.rest());
+            final SubLObject known_exhaustedP = makeBoolean((NIL != freshly_exhaustedP) || (NIL != random_thoughts_on_topic_exhausted_p(existing_info)));
+            if (NIL != freshly_exhaustedP) {
+                note_random_thoughts_on_topic_exhausted(existing_info);
+            }
+            if (NIL == thought) {
+                if (((NIL != freshly_exhaustedP) || (NIL == known_exhaustedP)) && (NIL != $print_rtg_notesP$.getDynamicValue(thread))) {
+                    apply(FORMAT, cons(T, list($str109$___A_out_of_thoughts_about__S__, NIL != known_exhaustedP ? $$$Totally : $$$Temporarily, topic)));
+                    force_output(T);
                 }
-                done_var_$24 = makeBoolean( NIL == valid_$26 );
-              }
-            }
-            finally
-            {
-              final SubLObject _prev_bind_0_$27 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-              try
-              {
-                Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-                final SubLObject _values = Values.getValuesAsVector();
-                if( NIL != final_index_iterator )
-                {
-                  kb_mapping_macros.destroy_final_index_iterator( final_index_iterator );
+                if ((NIL == now) && (NIL == known_exhaustedP)) {
+                    final SubLObject generator_thread2 = find_or_create_random_thought_generator_thread(rtg, UNPROVIDED);
+                    SubLObject stopP2 = NIL;
+                    if (NIL != $print_rtg_notesP$.getDynamicValue(thread)) {
+                        apply(FORMAT, cons(T, list($str107$__Waiting_for_new_thoughts_about_, topic)));
+                        force_output(T);
+                    }
+                    while (NIL == stopP2) {
+                        sleep($float$0_5);
+                        thought = existing_info.first();
+                        stopP2 = makeBoolean(((NIL != thought) || (NIL == existing_info.rest())) || (NIL == valid_process_p(generator_thread2)));
+                    } 
                 }
-                Values.restoreValuesFromVector( _values );
-              }
-              finally
-              {
-                Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$27, thread );
-              }
             }
-          }
-          done_var = makeBoolean( NIL == valid );
-        }
-      }
-    }
-    finally
-    {
-      mt_relevance_macros.$relevant_mts$.rebind( _prev_bind_3, thread );
-      mt_relevance_macros.$relevant_mt_function$.rebind( _prev_bind_2, thread );
-      mt_relevance_macros.$mt$.rebind( _prev_bind_0, thread );
-    }
-    if( NIL != $print_rtg_notesP$.getDynamicValue( thread ) )
-    {
-      Functions.apply( $sym102$FORMAT, ConsesLow.cons( T, ConsesLow.list( $str128$__Found__S_GAF_assertions_about__, Sequences.length( gafs ), topic ) ) );
-      streams_high.force_output( T );
-    }
-    return gafs;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 26987L)
-  public static SubLObject gaf_about_topicP(final SubLObject gaf, final SubLObject topic, SubLObject pred)
-  {
-    if( pred == UNPROVIDED )
-    {
-      pred = assertions_high.gaf_arg0( gaf );
-    }
-    SubLObject min_count = NIL;
-    SubLObject min_topic_count = NIL;
-    SubLObject argnum = ZERO_INTEGER;
-    SubLObject cdolist_list_var;
-    final SubLObject args = cdolist_list_var = cycl_utilities.formula_args( gaf, $kw125$IGNORE );
-    SubLObject arg = NIL;
-    arg = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      argnum = Numbers.add( argnum, ONE_INTEGER );
-      final SubLObject count = kb_indexing.num_gaf_arg_index( arg, argnum, pred, UNPROVIDED );
-      if( arg.eql( topic ) && ( NIL == min_topic_count || count.numL( min_topic_count ) ) )
-      {
-        min_topic_count = count;
-      }
-      else if( NIL == min_count || count.numL( min_count ) )
-      {
-        min_count = count;
-      }
-      cdolist_list_var = cdolist_list_var.rest();
-      arg = cdolist_list_var.first();
-    }
-    return makeBoolean( NIL != min_topic_count && ( NIL == min_count || min_topic_count.numLE( min_count ) ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 27512L)
-  public static SubLObject fill_random_thought_generator_queue(final SubLObject rtg, final SubLObject target_size)
-  {
-    while ( NIL == random_thought_generator_exhausted_p( rtg ) && NIL == random_thought_generator_queue_full_p( rtg, target_size ))
-    {
-      add_random_thought_to_rtg( rtg );
-    }
-    return rtg;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 27754L)
-  public static SubLObject add_random_thought_to_rtg(final SubLObject rtg)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    final SubLObject user = rtg_user( rtg );
-    final SubLObject most_recently_added_thought = rtg_most_recently_added_thought( rtg );
-    SubLObject next_thought = NIL;
-    SubLObject next_term = next_thcl_topic( most_recently_added_thought );
-    SubLObject next_assertion = NIL;
-    SubLObject next_assertion_paraphrase = NIL;
-    if( NIL == next_term )
-    {
-      thread.resetMultipleValues();
-      final SubLObject next_term_$28 = thcl.random_thcl_constant_and_assertion( user );
-      final SubLObject next_assertion_$29 = thread.secondMultipleValue();
-      thread.resetMultipleValues();
-      next_term = next_term_$28;
-      next_assertion = next_assertion_$29;
-    }
-    else if( NIL == next_assertion )
-    {
-      next_assertion = thcl.random_thcl_assertion( next_term, user );
-      if( NIL == next_assertion )
-      {
-        thread.resetMultipleValues();
-        final SubLObject next_term_$29 = thcl.random_thcl_constant_and_assertion( user );
-        final SubLObject next_assertion_$30 = thread.secondMultipleValue();
-        thread.resetMultipleValues();
-        next_term = next_term_$29;
-        next_assertion = next_assertion_$30;
-      }
-    }
-    SubLObject triedP = NIL;
-    while ( NIL == next_assertion_paraphrase)
-    {
-      if( NIL != triedP )
-      {
-        next_assertion = thcl.random_thcl_assertion( next_term, user );
-        if( NIL == next_assertion )
-        {
-          thread.resetMultipleValues();
-          final SubLObject next_term_$30 = thcl.random_thcl_constant_and_assertion( user );
-          final SubLObject next_assertion_$31 = thread.secondMultipleValue();
-          thread.resetMultipleValues();
-          next_term = next_term_$30;
-          next_assertion = next_assertion_$31;
-        }
-      }
-      if( NIL != next_assertion )
-      {
-        next_assertion_paraphrase = thcl_paraphrase_for_assertion( next_assertion );
-        triedP = T;
-        set.set_add( next_assertion, rtg_done_assertions( rtg ) );
-      }
-    }
-    if( NIL == next_assertion || NIL == next_assertion_paraphrase )
-    {
-      note_rtg_exhausted( rtg );
-    }
-    else
-    {
-      next_thought = ConsesLow.list( next_term, next_assertion, next_assertion_paraphrase );
-    }
-    if( NIL != next_thought )
-    {
-      queues.enqueue( next_thought, rtg_queue( rtg ) );
-      rtg_set_most_recently_added_thought( rtg, next_thought );
-    }
-    return next_thought;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 29231L)
-  public static SubLObject thcl_paraphrase_for_assertion(final SubLObject assertion)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    SubLObject paraphrase = NIL;
-    SubLObject error_message = NIL;
-    final SubLObject _prev_bind_0 = pph_vars.$pph_demerit_cutoff$.currentBinding( thread );
-    final SubLObject _prev_bind_2 = Errors.$continue_cerrorP$.currentBinding( thread );
-    final SubLObject _prev_bind_3 = pph_error.$pph_error_handling_onP$.currentBinding( thread );
-    try
-    {
-      pph_vars.$pph_demerit_cutoff$.bind( ONE_INTEGER, thread );
-      Errors.$continue_cerrorP$.bind( NIL, thread );
-      pph_error.$pph_error_handling_onP$.bind( T, thread );
-      if( NIL != pph_error.pph_break_on_errorP() )
-      {
-        paraphrase = pph_main.generate_phrase_for_java( assertion, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-      }
-      else
-      {
-        try
-        {
-          thread.throwStack.push( subl_macro_promotions.$catch_error_message_target$.getGlobalValue() );
-          final SubLObject _prev_bind_0_$34 = Errors.$error_handler$.currentBinding( thread );
-          try
-          {
-            Errors.$error_handler$.bind( $sym53$CATCH_ERROR_MESSAGE_HANDLER, thread );
-            try
-            {
-              paraphrase = pph_main.generate_phrase_for_java( assertion, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
+            rplaca(existing_info, NIL);
+        } else
+            if (NIL == dictionary.dictionary_lookup(topical_thoughts, topic, NIL)) {
+                register_interest_in_random_thoughts_about_topic(rtg, topic);
             }
-            catch( final Throwable catch_var )
-            {
-              Errors.handleThrowable( catch_var, NIL );
+
+        return NIL != thought ? thought : NIL != require_topicalP ? empty_thought() : next_random_thought_without_suggested_topic(rtg, parameters);
+    }
+
+    public static SubLObject next_random_thought_without_suggested_topic(SubLObject rtg, final SubLObject parameters) {
+        final SubLObject queue = rtg_queue(rtg);
+        SubLObject thought = empty_thought();
+        if ((NIL != queues.queue_empty_p(queue)) && (NIL != random_thought_generator_exhausted_p(rtg))) {
+            set.clear_set(rtg_done_assertions(rtg));
+            rtg = new_random_thought_generator_for_user(rtg_user(rtg));
+        }
+        for (SubLObject generator_thread = find_or_create_random_thought_generator_thread(rtg, UNPROVIDED), dont_waitP = getf(parameters, $NOW, T), stopP = NIL; NIL == stopP; stopP = makeBoolean(((NIL != dont_waitP) || (NIL != thought.first())) || (NIL == valid_process_p(generator_thread)))) {
+            thought = queues.dequeue(queue);
+        }
+        return thought;
+    }
+
+    public static SubLObject find_or_create_random_thought_generator_thread(final SubLObject rtg, SubLObject topical_onlyP) {
+        if (topical_onlyP == UNPROVIDED) {
+            topical_onlyP = NIL;
+        }
+        SubLObject generator_thread = rtg_generator_thread(rtg);
+        if (NIL == valid_process_p(generator_thread)) {
+            generator_thread = process_utilities.make_cyc_server_process_with_args($$$Random_Thought_Generator, KEEP_RANDOM_THOUGHT_GENERATOR_FULL, list(rtg, NIL != topical_onlyP ? ZERO_INTEGER : $int$25));
+            SubLObject doneP = NIL;
+            SubLObject interval_ms = ONE_INTEGER;
+            final SubLObject increase_factor = $float$1_5;
+            final SubLObject max_ms = NIL;
+            while (NIL == doneP) {
+                doneP = valid_process_p(generator_thread);
+                if (NIL == doneP) {
+                    sleep(divide(interval_ms, $int$1000));
+                    if (interval_ms.numGE(max_ms)) {
+                        continue;
+                    }
+                    final SubLObject new_interval = multiply(interval_ms, increase_factor);
+                    interval_ms = min(new_interval, max_ms);
+                }
+            } 
+            rtg_set_generator_thread(rtg, generator_thread);
+        }
+        return generator_thread;
+    }
+
+    public static SubLObject keep_random_thought_generator_full(final SubLObject rtg, SubLObject target_size, SubLObject check_interval) {
+        if (target_size == UNPROVIDED) {
+            target_size = $int$25;
+        }
+        if (check_interval == UNPROVIDED) {
+            check_interval = TEN_INTEGER;
+        }
+        while (NIL == random_thought_generator_exhausted_p(rtg)) {
+            if (NIL != random_thought_generator_full_p(rtg, target_size)) {
+                sleep(check_interval);
+            } else {
+                fill_random_thought_generator(rtg, target_size);
             }
-          }
-          finally
-          {
-            Errors.$error_handler$.rebind( _prev_bind_0_$34, thread );
-          }
-        }
-        catch( final Throwable ccatch_env_var )
-        {
-          error_message = Errors.handleThrowable( ccatch_env_var, subl_macro_promotions.$catch_error_message_target$.getGlobalValue() );
-        }
-        finally
-        {
-          thread.throwStack.pop();
-        }
-        if( error_message.isString() && NIL == pph_error.suppress_pph_warningsP() )
-        {
-          Errors.warn( Sequences.cconcatenate( pph_error_message_truncator.truncate_pph_error_message( error_message ), $str129$___Top_level_CycL___S ), pph_vars.pph_top_level_cycl() );
-        }
-      }
+        } 
+        return rtg;
     }
-    finally
-    {
-      pph_error.$pph_error_handling_onP$.rebind( _prev_bind_3, thread );
-      Errors.$continue_cerrorP$.rebind( _prev_bind_2, thread );
-      pph_vars.$pph_demerit_cutoff$.rebind( _prev_bind_0, thread );
-    }
-    return ( NIL == paraphrase || NIL != thcl_paraphrase_unacceptableP( pph_utilities.pph_javalist_string( paraphrase ) ) ) ? NIL : paraphrase;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 29631L)
-  public static SubLObject thcl_paraphrase_unacceptableP(final SubLObject string)
-  {
-    if( NIL == string_utilities.non_empty_stringP( string ) )
-    {
-      return T;
-    }
-    if( NIL != string_utilities.substringP( constant_reader.constant_reader_prefix(), string, UNPROVIDED, UNPROVIDED, UNPROVIDED ) )
-    {
-      return T;
-    }
-    return NIL;
-  }
+    public static SubLObject fill_random_thought_generator(final SubLObject rtg, final SubLObject target_size) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if (NIL != $print_rtg_notesP$.getDynamicValue(thread)) {
+            apply(FORMAT, cons(T, list($str117$__Filling__S__, rtg)));
+            force_output(T);
+        }
+        SubLObject new_entries = NIL;
+        SubLObject iteration_state;
+        for (iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(rtg_topical_thoughts(rtg))); NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state); iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state)) {
+            thread.resetMultipleValues();
+            final SubLObject topic = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+            final SubLObject data = thread.secondMultipleValue();
+            thread.resetMultipleValues();
+            if ($NEW_TOPIC.eql(data)) {
+                new_entries = list_utilities.alist_enter(new_entries, topic, update_random_thought_data(new_random_thought_data_for_topic(topic), topic, rtg), UNPROVIDED);
+            } else
+                if ((NIL == data.first()) && (NIL == random_thoughts_on_topic_exhausted_p(data))) {
+                    new_entries = list_utilities.alist_enter(new_entries, topic, update_random_thought_data(data, topic, rtg), UNPROVIDED);
+                }
 
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 29907L)
-  public static SubLObject next_thcl_topic(final SubLObject most_recently_added_thought)
-  {
-    SubLObject next_term = NIL;
-    final SubLObject method = choose_thcl_topic_selection_method();
-    SubLObject v_term = NIL;
-    SubLObject assertion = NIL;
-    SubLObject assertion_paraphrase = NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( most_recently_added_thought, most_recently_added_thought, $list130 );
-    v_term = most_recently_added_thought.first();
-    SubLObject current = most_recently_added_thought.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( current, most_recently_added_thought, $list130 );
-    assertion = current.first();
-    current = current.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( current, most_recently_added_thought, $list130 );
-    assertion_paraphrase = current.first();
-    current = current.rest();
-    if( NIL == current )
-    {
-      final SubLObject pcase_var = method;
-      if( pcase_var.eql( $kw131$NEW_ARG_FROM_ASSERTION ) )
-      {
-        if( NIL != assertion )
-        {
-          final SubLObject args = cycl_utilities.formula_args( uncanonicalizer.assertion_el_formula( assertion ), $kw125$IGNORE );
-          SubLObject rest;
-          SubLObject arg;
-          for( rest = NIL, rest = args; NIL == next_term && NIL != rest; rest = rest.rest() )
-          {
-            arg = rest.first();
-            if( !arg.eql( v_term ) && NIL != thcl.thcl_constantP( arg, UNPROVIDED ) )
-            {
-              next_term = arg;
+        }
+        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+        SubLObject cdolist_list_var = new_entries;
+        SubLObject cons = NIL;
+        cons = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            SubLObject current;
+            final SubLObject datum = current = cons;
+            SubLObject topic2 = NIL;
+            SubLObject new_data = NIL;
+            destructuring_bind_must_consp(current, datum, $list118);
+            topic2 = current.first();
+            current = new_data = current.rest();
+            dictionary.dictionary_enter(rtg_topical_thoughts(rtg), topic2, new_data);
+            cdolist_list_var = cdolist_list_var.rest();
+            cons = cdolist_list_var.first();
+        } 
+        if (NIL != list_utilities.empty_list_p(new_entries)) {
+            fill_random_thought_generator_queue(rtg, target_size);
+        }
+        if (NIL != $print_rtg_notesP$.getDynamicValue(thread)) {
+            apply(FORMAT, cons(T, list($str119$___S_is_now_full__, rtg)));
+            force_output(T);
+        }
+        return rtg;
+    }
+
+    public static SubLObject update_random_thought_data(final SubLObject data, final SubLObject topic, final SubLObject rtg) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && ((!data.isCons()) || (NIL != data.first()))) {
+            Errors.error($str120$_S_is_not_in_an_updatable_state, data);
+        }
+        while ((NIL == data.first()) && (NIL != data.rest())) {
+            thread.resetMultipleValues();
+            final SubLObject remaining = list_utilities.random_delete(data.rest());
+            final SubLObject candidate = thread.secondMultipleValue();
+            thread.resetMultipleValues();
+            rplacd(data, remaining);
+            final SubLObject really_newP = set.set_add(candidate, rtg_done_assertions(rtg));
+            if ((((NIL != really_newP) && (NIL != open_cyc_formula(candidate))) && (NIL != thcl.thcl_formulaP(candidate, UNPROVIDED))) && (NIL == potentially_porn_relatedP(candidate))) {
+                final SubLObject paraphrase = thcl_paraphrase_for_assertion(candidate);
+                if (NIL == paraphrase) {
+                    continue;
+                }
+                if (NIL != $print_rtg_notesP$.getDynamicValue(thread)) {
+                    apply(FORMAT, cons(T, list($str121$__New_thought_concerning__S_____S, topic, pph_utilities.pph_javalist_string(paraphrase))));
+                    force_output(T);
+                }
+                rplaca(data, list(topic, candidate, paraphrase));
             }
-          }
+        } 
+        return data;
+    }
+
+    public static SubLObject open_cyc_formula(final SubLObject formula) {
+        return makeBoolean(NIL == list_utilities.find_if_not(OPEN_CYC_FORT, cycl_utilities.expression_gather(formula, FORT_P, T, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED));
+    }
+
+    public static SubLObject open_cyc_fort_internal(final SubLObject fort) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        SubLObject ans = NIL;
+        SubLObject ignore_errors_tag = NIL;
+        try {
+            thread.throwStack.push($IGNORE_ERRORS_TARGET);
+            final SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
+            try {
+                Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
+                try {
+                    ans = owl_cycl_to_xml.fort_has_exported_owl_opencyc_contentP(fort);
+                } catch (final Throwable catch_var) {
+                    Errors.handleThrowable(catch_var, NIL);
+                }
+            } finally {
+                Errors.$error_handler$.rebind(_prev_bind_0, thread);
+            }
+        } catch (final Throwable ccatch_env_var) {
+            ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+        } finally {
+            thread.throwStack.pop();
         }
-        if( NIL == next_term )
-        {
-          next_term = v_term;
+        return ans;
+    }
+
+    public static SubLObject open_cyc_fort(final SubLObject fort) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        final SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+        SubLObject caching_state = NIL;
+        if (NIL == v_memoization_state) {
+            return open_cyc_fort_internal(fort);
         }
-      }
-      else if( pcase_var.eql( $kw132$REUSE_MOST_RECENTLY_ADDED_TOPIC ) )
-      {
-        next_term = v_term;
-      }
-      else
-      {
-        next_term = NIL;
-      }
+        caching_state = memoization_state.memoization_state_lookup(v_memoization_state, OPEN_CYC_FORT, UNPROVIDED);
+        if (NIL == caching_state) {
+            caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), OPEN_CYC_FORT, ONE_INTEGER, NIL, EQL, UNPROVIDED);
+            memoization_state.memoization_state_put(v_memoization_state, OPEN_CYC_FORT, caching_state);
+        }
+        SubLObject results = memoization_state.caching_state_lookup(caching_state, fort, memoization_state.$memoized_item_not_found$.getGlobalValue());
+        if (results.eql(memoization_state.$memoized_item_not_found$.getGlobalValue())) {
+            results = arg2(thread.resetMultipleValues(), multiple_value_list(open_cyc_fort_internal(fort)));
+            memoization_state.caching_state_put(caching_state, fort, results, UNPROVIDED);
+        }
+        return memoization_state.caching_results(results);
     }
-    else
-    {
-      cdestructuring_bind.cdestructuring_bind_error( most_recently_added_thought, $list130 );
+
+    public static SubLObject potentially_porn_relatedP_internal(final SubLObject obj) {
+        if (NIL != forts.fort_p(obj)) {
+            return isa.quoted_isa_in_any_mtP(obj, $$PotentiallyPornRelated);
+        }
+        if (NIL != el_formula_p(obj)) {
+            SubLObject result = NIL;
+            final SubLObject args = cycl_utilities.formula_args(obj, $IGNORE);
+            SubLObject rest;
+            SubLObject arg;
+            for (rest = NIL, rest = args; (NIL == result) && (NIL != rest); rest = rest.rest()) {
+                arg = rest.first();
+                if (NIL != potentially_porn_relatedP(arg)) {
+                    result = T;
+                }
+            }
+            return result;
+        }
+        return NIL;
     }
-    return next_term;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/random-thought-generator.lisp", position = 30581L)
-  public static SubLObject choose_thcl_topic_selection_method()
-  {
-    final SubLObject pcase_var;
-    final SubLObject pick_a_number = pcase_var = random.random( SIXTEEN_INTEGER );
-    if( pcase_var.eql( ZERO_INTEGER ) )
-    {
-      return $kw133$RANDOM;
+    public static SubLObject potentially_porn_relatedP(final SubLObject obj) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        final SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+        SubLObject caching_state = NIL;
+        if (NIL == v_memoization_state) {
+            return potentially_porn_relatedP_internal(obj);
+        }
+        caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym123$POTENTIALLY_PORN_RELATED_, UNPROVIDED);
+        if (NIL == caching_state) {
+            caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym123$POTENTIALLY_PORN_RELATED_, ONE_INTEGER, NIL, EQL, UNPROVIDED);
+            memoization_state.memoization_state_put(v_memoization_state, $sym123$POTENTIALLY_PORN_RELATED_, caching_state);
+        }
+        SubLObject results = memoization_state.caching_state_lookup(caching_state, obj, memoization_state.$memoized_item_not_found$.getGlobalValue());
+        if (results.eql(memoization_state.$memoized_item_not_found$.getGlobalValue())) {
+            results = arg2(thread.resetMultipleValues(), multiple_value_list(potentially_porn_relatedP_internal(obj)));
+            memoization_state.caching_state_put(caching_state, obj, results, UNPROVIDED);
+        }
+        return memoization_state.caching_results(results);
     }
-    if( pcase_var.eql( ONE_INTEGER ) || pcase_var.eql( TWO_INTEGER ) )
-    {
-      return $kw132$REUSE_MOST_RECENTLY_ADDED_TOPIC;
+
+    public static SubLObject new_random_thought_data_for_topic(final SubLObject topic) {
+        return cons(NIL, gafs_about_topic(topic));
     }
-    return $kw131$NEW_ARG_FROM_ASSERTION;
-  }
 
-  public static SubLObject declare_random_thought_generator_file()
-  {
-    SubLFiles.declareFunction( me, "random_thought_p", "RANDOM-THOUGHT-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "empty_random_thought_p", "EMPTY-RANDOM-THOUGHT-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "non_empty_random_thought_p", "NON-EMPTY-RANDOM-THOUGHT-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "xml_output_random_thoughts", "XML-OUTPUT-RANDOM-THOUGHTS", 2, 1, false );
-    SubLFiles.declareFunction( me, "xml_output_random_thoughts_for_terms", "XML-OUTPUT-RANDOM-THOUGHTS-FOR-TERMS", 2, 1, false );
-    SubLFiles.declareFunction( me, "sql_output_random_thoughts_from_xml", "SQL-OUTPUT-RANDOM-THOUGHTS-FROM-XML", 2, 1, false );
-    SubLFiles.declareFunction( me, "next_random_thought_num_for_topic", "NEXT-RANDOM-THOUGHT-NUM-FOR-TOPIC", 2, 0, false );
-    SubLFiles.declareFunction( me, "write_random_thought_sql_header", "WRITE-RANDOM-THOUGHT-SQL-HEADER", 1, 0, false );
-    SubLFiles.declareFunction( me, "write_random_thought_sql_row", "WRITE-RANDOM-THOUGHT-SQL-ROW", 5, 0, false );
-    SubLFiles.declareFunction( me, "xml_output_random_thoughts_for_term", "XML-OUTPUT-RANDOM-THOUGHTS-FOR-TERM", 1, 1, false );
-    SubLFiles.declareFunction( me, "xml_output_random_thought", "XML-OUTPUT-RANDOM-THOUGHT", 1, 0, false );
-    SubLFiles.declareFunction( me, "valid_non_empty_random_thought_p", "VALID-NON-EMPTY-RANDOM-THOUGHT-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "next_random_thought_for_user", "NEXT-RANDOM-THOUGHT-FOR-USER", 1, 1, false );
-    SubLFiles.declareFunction( me, "thcl_assertion_seen_by_cyclistP", "THCL-ASSERTION-SEEN-BY-CYCLIST?", 2, 0, false );
-    SubLFiles.declareFunction( me, "number_of_queued_random_thoughts_for_user", "NUMBER-OF-QUEUED-RANDOM-THOUGHTS-FOR-USER", 1, 0, false );
-    SubLFiles.declareFunction( me, "number_of_used_random_thoughts_for_user", "NUMBER-OF-USED-RANDOM-THOUGHTS-FOR-USER", 1, 0, false );
-    SubLFiles.declareFunction( me, "remote_random_thought_image", "REMOTE-RANDOM-THOUGHT-IMAGE", 0, 0, false );
-    SubLFiles.declareFunction( me, "set_remote_random_thought_image", "SET-REMOTE-RANDOM-THOUGHT-IMAGE", 3, 0, false );
-    SubLFiles.declareFunction( me, "unset_remote_random_thought_image", "UNSET-REMOTE-RANDOM-THOUGHT-IMAGE", 0, 0, false );
-    SubLFiles.declareFunction( me, "clear_remote_random_thought_connection_pool", "CLEAR-REMOTE-RANDOM-THOUGHT-CONNECTION-POOL", 0, 0, false );
-    SubLFiles.declareFunction( me, "random_thought_server_hostXport", "RANDOM-THOUGHT-SERVER-HOST&PORT", 0, 0, false );
-    SubLFiles.declareFunction( me, "next_random_thought_for_user_from_remote_server", "NEXT-RANDOM-THOUGHT-FOR-USER-FROM-REMOTE-SERVER", 2, 0, false );
-    SubLFiles.declareFunction( me, "next_random_thought_for_user_from_remote_server_int", "NEXT-RANDOM-THOUGHT-FOR-USER-FROM-REMOTE-SERVER-INT", 2, 0, false );
-    SubLFiles.declareFunction( me, "create_remote_random_thought_connection", "CREATE-REMOTE-RANDOM-THOUGHT-CONNECTION", 0, 0, false );
-    SubLFiles.declareFunction( me, "release_random_thought_connection", "RELEASE-RANDOM-THOUGHT-CONNECTION", 1, 0, false );
-    SubLFiles.declareFunction( me, "open_remote_random_thought_connection_p", "OPEN-REMOTE-RANDOM-THOUGHT-CONNECTION-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "get_free_random_thought_connection", "GET-FREE-RANDOM-THOUGHT-CONNECTION", 0, 0, false );
-    SubLFiles.declareFunction( me, "register_random_thought_generator", "REGISTER-RANDOM-THOUGHT-GENERATOR", 2, 0, false );
-    SubLFiles.declareFunction( me, "find_random_thought_generator_for_user", "FIND-RANDOM-THOUGHT-GENERATOR-FOR-USER", 1, 0, false );
-    SubLFiles.declareFunction( me, "random_thought_generator_print_function_trampoline", "RANDOM-THOUGHT-GENERATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false );
-    SubLFiles.declareFunction( me, "random_thought_generator_p", "RANDOM-THOUGHT-GENERATOR-P", 1, 0, false );
-    new $random_thought_generator_p$UnaryFunction();
-    SubLFiles.declareFunction( me, "rtg_struct_user", "RTG-STRUCT-USER", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_struct_done_assertions", "RTG-STRUCT-DONE-ASSERTIONS", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_struct_generator_thread", "RTG-STRUCT-GENERATOR-THREAD", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_struct_queue", "RTG-STRUCT-QUEUE", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_struct_most_recently_added_thought", "RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_struct_topical_thoughts", "RTG-STRUCT-TOPICAL-THOUGHTS", 1, 0, false );
-    SubLFiles.declareFunction( me, "_csetf_rtg_struct_user", "_CSETF-RTG-STRUCT-USER", 2, 0, false );
-    SubLFiles.declareFunction( me, "_csetf_rtg_struct_done_assertions", "_CSETF-RTG-STRUCT-DONE-ASSERTIONS", 2, 0, false );
-    SubLFiles.declareFunction( me, "_csetf_rtg_struct_generator_thread", "_CSETF-RTG-STRUCT-GENERATOR-THREAD", 2, 0, false );
-    SubLFiles.declareFunction( me, "_csetf_rtg_struct_queue", "_CSETF-RTG-STRUCT-QUEUE", 2, 0, false );
-    SubLFiles.declareFunction( me, "_csetf_rtg_struct_most_recently_added_thought", "_CSETF-RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT", 2, 0, false );
-    SubLFiles.declareFunction( me, "_csetf_rtg_struct_topical_thoughts", "_CSETF-RTG-STRUCT-TOPICAL-THOUGHTS", 2, 0, false );
-    SubLFiles.declareFunction( me, "make_random_thought_generator", "MAKE-RANDOM-THOUGHT-GENERATOR", 0, 1, false );
-    SubLFiles.declareFunction( me, "visit_defstruct_random_thought_generator", "VISIT-DEFSTRUCT-RANDOM-THOUGHT-GENERATOR", 2, 0, false );
-    SubLFiles.declareFunction( me, "visit_defstruct_object_random_thought_generator_method", "VISIT-DEFSTRUCT-OBJECT-RANDOM-THOUGHT-GENERATOR-METHOD", 2, 0, false );
-    SubLFiles.declareFunction( me, "rtg_user", "RTG-USER", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_done_assertions", "RTG-DONE-ASSERTIONS", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_generator_thread", "RTG-GENERATOR-THREAD", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_set_generator_thread", "RTG-SET-GENERATOR-THREAD", 2, 0, false );
-    SubLFiles.declareFunction( me, "rtg_queue", "RTG-QUEUE", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_most_recently_added_thought", "RTG-MOST-RECENTLY-ADDED-THOUGHT", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_set_most_recently_added_thought", "RTG-SET-MOST-RECENTLY-ADDED-THOUGHT", 2, 0, false );
-    SubLFiles.declareFunction( me, "rtg_topical_thoughts", "RTG-TOPICAL-THOUGHTS", 1, 0, false );
-    SubLFiles.declareFunction( me, "rtg_set_topical_thoughts", "RTG-SET-TOPICAL-THOUGHTS", 2, 0, false );
-    SubLFiles.declareFunction( me, "pprint_random_thought_generator", "PPRINT-RANDOM-THOUGHT-GENERATOR", 1, 2, false );
-    SubLFiles.declareFunction( me, "find_or_create_random_thought_generator_for_user", "FIND-OR-CREATE-RANDOM-THOUGHT-GENERATOR-FOR-USER", 1, 0, false );
-    SubLFiles.declareFunction( me, "empty_thought", "EMPTY-THOUGHT", 0, 0, false );
-    SubLFiles.declareFunction( me, "new_random_thought_generator_for_user", "NEW-RANDOM-THOUGHT-GENERATOR-FOR-USER", 1, 0, false );
-    SubLFiles.declareFunction( me, "new_random_thought_generator", "NEW-RANDOM-THOUGHT-GENERATOR", 0, 0, false );
-    SubLFiles.declareFunction( me, "note_rtg_exhausted", "NOTE-RTG-EXHAUSTED", 1, 0, false );
-    SubLFiles.declareFunction( me, "random_thought_generator_exhausted_p", "RANDOM-THOUGHT-GENERATOR-EXHAUSTED-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "random_thoughts_on_topic_exhausted_p", "RANDOM-THOUGHTS-ON-TOPIC-EXHAUSTED-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "note_random_thoughts_on_topic_exhausted", "NOTE-RANDOM-THOUGHTS-ON-TOPIC-EXHAUSTED", 1, 0, false );
-    SubLFiles.declareFunction( me, "random_thought_generator_full_p", "RANDOM-THOUGHT-GENERATOR-FULL-P", 2, 0, false );
-    SubLFiles.declareFunction( me, "random_thought_generator_queue_full_p", "RANDOM-THOUGHT-GENERATOR-QUEUE-FULL-P", 2, 0, false );
-    SubLFiles.declareFunction( me, "declare_interest_in_random_thoughts_about_topic", "DECLARE-INTEREST-IN-RANDOM-THOUGHTS-ABOUT-TOPIC", 2, 0, false );
-    SubLFiles.declareMacro( me, "rtg_note", "RTG-NOTE" );
-    SubLFiles.declareFunction( me, "register_interest_in_random_thoughts_about_topic", "REGISTER-INTEREST-IN-RANDOM-THOUGHTS-ABOUT-TOPIC", 2, 0, false );
-    SubLFiles.declareFunction( me, "all_random_thoughts_on_topic", "ALL-RANDOM-THOUGHTS-ON-TOPIC", 1, 0, false );
-    SubLFiles.declareFunction( me, "next_random_thought_with_suggested_topic", "NEXT-RANDOM-THOUGHT-WITH-SUGGESTED-TOPIC", 2, 0, false );
-    SubLFiles.declareFunction( me, "next_random_thought_without_suggested_topic", "NEXT-RANDOM-THOUGHT-WITHOUT-SUGGESTED-TOPIC", 2, 0, false );
-    SubLFiles.declareFunction( me, "find_or_create_random_thought_generator_thread", "FIND-OR-CREATE-RANDOM-THOUGHT-GENERATOR-THREAD", 1, 1, false );
-    SubLFiles.declareFunction( me, "keep_random_thought_generator_full", "KEEP-RANDOM-THOUGHT-GENERATOR-FULL", 1, 2, false );
-    SubLFiles.declareFunction( me, "fill_random_thought_generator", "FILL-RANDOM-THOUGHT-GENERATOR", 2, 0, false );
-    SubLFiles.declareFunction( me, "update_random_thought_data", "UPDATE-RANDOM-THOUGHT-DATA", 3, 0, false );
-    SubLFiles.declareFunction( me, "open_cyc_formula", "OPEN-CYC-FORMULA", 1, 0, false );
-    SubLFiles.declareFunction( me, "open_cyc_fort_internal", "OPEN-CYC-FORT-INTERNAL", 1, 0, false );
-    SubLFiles.declareFunction( me, "open_cyc_fort", "OPEN-CYC-FORT", 1, 0, false );
-    SubLFiles.declareFunction( me, "potentially_porn_relatedP_internal", "POTENTIALLY-PORN-RELATED?-INTERNAL", 1, 0, false );
-    SubLFiles.declareFunction( me, "potentially_porn_relatedP", "POTENTIALLY-PORN-RELATED?", 1, 0, false );
-    SubLFiles.declareFunction( me, "new_random_thought_data_for_topic", "NEW-RANDOM-THOUGHT-DATA-FOR-TOPIC", 1, 0, false );
-    SubLFiles.declareFunction( me, "gafs_about_topic", "GAFS-ABOUT-TOPIC", 1, 0, false );
-    SubLFiles.declareFunction( me, "gaf_about_topicP", "GAF-ABOUT-TOPIC?", 2, 1, false );
-    SubLFiles.declareFunction( me, "fill_random_thought_generator_queue", "FILL-RANDOM-THOUGHT-GENERATOR-QUEUE", 2, 0, false );
-    SubLFiles.declareFunction( me, "add_random_thought_to_rtg", "ADD-RANDOM-THOUGHT-TO-RTG", 1, 0, false );
-    SubLFiles.declareFunction( me, "thcl_paraphrase_for_assertion", "THCL-PARAPHRASE-FOR-ASSERTION", 1, 0, false );
-    SubLFiles.declareFunction( me, "thcl_paraphrase_unacceptableP", "THCL-PARAPHRASE-UNACCEPTABLE?", 1, 0, false );
-    SubLFiles.declareFunction( me, "next_thcl_topic", "NEXT-THCL-TOPIC", 1, 0, false );
-    SubLFiles.declareFunction( me, "choose_thcl_topic_selection_method", "CHOOSE-THCL-TOPIC-SELECTION-METHOD", 0, 0, false );
-    return NIL;
-  }
+    public static SubLObject gafs_about_topic(final SubLObject topic) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        SubLObject gafs = NIL;
+        final SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(thcl.random_thcl_assertion_mt());
+        final SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+        final SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+        final SubLObject _prev_bind_3 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+        try {
+            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+            final SubLObject preds_to_skip = set.new_set(symbol_function(EQL), UNPROVIDED);
+            final SubLObject pred_var = NIL;
+            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(topic, NIL, pred_var)) {
+                final SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(topic, NIL, pred_var);
+                SubLObject done_var = NIL;
+                final SubLObject token_var = NIL;
+                while (NIL == done_var) {
+                    final SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                    final SubLObject valid = makeBoolean(!token_var.eql(final_index_spec));
+                    if (NIL != valid) {
+                        SubLObject final_index_iterator = NIL;
+                        try {
+                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                            SubLObject done_var_$24 = NIL;
+                            final SubLObject token_var_$25 = NIL;
+                            while (NIL == done_var_$24) {
+                                final SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_$25);
+                                final SubLObject valid_$26 = makeBoolean(!token_var_$25.eql(gaf));
+                                if (NIL != valid_$26) {
+                                    final SubLObject pred = assertions_high.gaf_arg0(gaf);
+                                    if (NIL == set.set_memberP(pred, preds_to_skip)) {
+                                        if (NIL == gaf_about_topicP(gaf, topic, pred)) {
+                                            set.set_add(pred, preds_to_skip);
+                                        } else {
+                                            gafs = cons(gaf, gafs);
+                                        }
+                                    }
+                                }
+                                done_var_$24 = makeBoolean(NIL == valid_$26);
+                            } 
+                        } finally {
+                            final SubLObject _prev_bind_0_$27 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                            try {
+                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                final SubLObject _values = getValuesAsVector();
+                                if (NIL != final_index_iterator) {
+                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                }
+                                restoreValuesFromVector(_values);
+                            } finally {
+                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$27, thread);
+                            }
+                        }
+                    }
+                    done_var = makeBoolean(NIL == valid);
+                } 
+            }
+        } finally {
+            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_3, thread);
+            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_2, thread);
+            mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+        }
+        if (NIL != $print_rtg_notesP$.getDynamicValue(thread)) {
+            apply(FORMAT, cons(T, list($str128$__Found__S_GAF_assertions_about__, length(gafs), topic)));
+            force_output(T);
+        }
+        return gafs;
+    }
 
-  public static SubLObject init_random_thought_generator_file()
-  {
-    $random_thought_server_host$ = SubLFiles.defparameter( "*RANDOM-THOUGHT-SERVER-HOST*", red_infrastructure_macros.red_def_helper( $list34.isSymbol() ? Symbols.symbol_value( $list34 ) : $list34,
-        $sym35$_RANDOM_THOUGHT_SERVER_HOST_, $str36$random_thoughts_cyc_com.isSymbol() ? Symbols.symbol_value( $str36$random_thoughts_cyc_com ) : $str36$random_thoughts_cyc_com, $kw37$PARAMETER, UNPROVIDED ) );
-    $random_thought_server_port$ = SubLFiles.defparameter( "*RANDOM-THOUGHT-SERVER-PORT*", red_infrastructure_macros.red_def_helper( $list38.isSymbol() ? Symbols.symbol_value( $list38 ) : $list38,
-        $sym39$_RANDOM_THOUGHT_SERVER_PORT_, $int40$3634.isSymbol() ? Symbols.symbol_value( $int40$3634 ) : $int40$3634, $kw37$PARAMETER, UNPROVIDED ) );
-    $remote_random_thought_image$ = SubLFiles.deflexical( "*REMOTE-RANDOM-THOUGHT-IMAGE*", ( maybeDefault( $sym41$_REMOTE_RANDOM_THOUGHT_IMAGE_, $remote_random_thought_image$, NIL ) ) );
-    $remote_random_thought_connection_pool$ = SubLFiles.deflexical( "*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL*", maybeDefault( $sym43$_REMOTE_RANDOM_THOUGHT_CONNECTION_POOL_, $remote_random_thought_connection_pool$,
-        () -> ( queues.create_queue( UNPROVIDED ) ) ) );
-    $remote_random_thought_connection_pool_lock$ = SubLFiles.deflexical( "*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL-LOCK*", Locks.make_lock( $str44$Remote_Random_Thought_Connection_ ) );
-    $remote_random_thought_connection_pool_max_size$ = SubLFiles.deflexical( "*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL-MAX-SIZE*", NINE_INTEGER );
-    $random_thought_generators_for_users$ = SubLFiles.deflexical( "*RANDOM-THOUGHT-GENERATORS-FOR-USERS*", maybeDefault( $sym55$_RANDOM_THOUGHT_GENERATORS_FOR_USERS_, $random_thought_generators_for_users$,
-        () -> ( dictionary.new_dictionary( UNPROVIDED, UNPROVIDED ) ) ) );
-    $dtp_random_thought_generator$ = SubLFiles.defconstant( "*DTP-RANDOM-THOUGHT-GENERATOR*", $sym56$RANDOM_THOUGHT_GENERATOR );
-    $print_rtg_notesP$ = SubLFiles.defparameter( "*PRINT-RTG-NOTES?*", NIL );
-    return NIL;
-  }
+    public static SubLObject gaf_about_topicP(final SubLObject gaf, final SubLObject topic, SubLObject pred) {
+        if (pred == UNPROVIDED) {
+            pred = assertions_high.gaf_arg0(gaf);
+        }
+        SubLObject min_count = NIL;
+        SubLObject min_topic_count = NIL;
+        SubLObject argnum = ZERO_INTEGER;
+        SubLObject cdolist_list_var;
+        final SubLObject args = cdolist_list_var = cycl_utilities.formula_args(gaf, $IGNORE);
+        SubLObject arg = NIL;
+        arg = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            argnum = add(argnum, ONE_INTEGER);
+            final SubLObject count = kb_indexing.num_gaf_arg_index(arg, argnum, pred, UNPROVIDED);
+            if (arg.eql(topic) && ((NIL == min_topic_count) || count.numL(min_topic_count))) {
+                min_topic_count = count;
+            } else
+                if ((NIL == min_count) || count.numL(min_count)) {
+                    min_count = count;
+                }
 
-  public static SubLObject setup_random_thought_generator_file()
-  {
-    subl_macro_promotions.declare_defglobal( $sym41$_REMOTE_RANDOM_THOUGHT_IMAGE_ );
-    subl_macro_promotions.declare_defglobal( $sym43$_REMOTE_RANDOM_THOUGHT_CONNECTION_POOL_ );
-    subl_macro_promotions.declare_defglobal( $sym55$_RANDOM_THOUGHT_GENERATORS_FOR_USERS_ );
-    Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), $dtp_random_thought_generator$.getGlobalValue(), Symbols.symbol_function(
-        $sym63$RANDOM_THOUGHT_GENERATOR_PRINT_FUNCTION_TRAMPOLINE ) );
-    SubLSpecialOperatorDeclarations.proclaim( $list64 );
-    Structures.def_csetf( $sym65$RTG_STRUCT_USER, $sym66$_CSETF_RTG_STRUCT_USER );
-    Structures.def_csetf( $sym67$RTG_STRUCT_DONE_ASSERTIONS, $sym68$_CSETF_RTG_STRUCT_DONE_ASSERTIONS );
-    Structures.def_csetf( $sym69$RTG_STRUCT_GENERATOR_THREAD, $sym70$_CSETF_RTG_STRUCT_GENERATOR_THREAD );
-    Structures.def_csetf( $sym71$RTG_STRUCT_QUEUE, $sym72$_CSETF_RTG_STRUCT_QUEUE );
-    Structures.def_csetf( $sym73$RTG_STRUCT_MOST_RECENTLY_ADDED_THOUGHT, $sym74$_CSETF_RTG_STRUCT_MOST_RECENTLY_ADDED_THOUGHT );
-    Structures.def_csetf( $sym75$RTG_STRUCT_TOPICAL_THOUGHTS, $sym76$_CSETF_RTG_STRUCT_TOPICAL_THOUGHTS );
-    Equality.identity( $sym56$RANDOM_THOUGHT_GENERATOR );
-    Structures.register_method( visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $dtp_random_thought_generator$.getGlobalValue(), Symbols.symbol_function(
-        $sym88$VISIT_DEFSTRUCT_OBJECT_RANDOM_THOUGHT_GENERATOR_METHOD ) );
-    utilities_macros.note_funcall_helper_function( $sym62$PPRINT_RANDOM_THOUGHT_GENERATOR );
-    memoization_state.note_memoized_function( $sym122$OPEN_CYC_FORT );
-    memoization_state.note_memoized_function( $sym123$POTENTIALLY_PORN_RELATED_ );
-    return NIL;
-  }
+            cdolist_list_var = cdolist_list_var.rest();
+            arg = cdolist_list_var.first();
+        } 
+        return makeBoolean((NIL != min_topic_count) && ((NIL == min_count) || min_topic_count.numLE(min_count)));
+    }
 
-  @Override
-  public void declareFunctions()
-  {
-    declare_random_thought_generator_file();
-  }
+    public static SubLObject fill_random_thought_generator_queue(final SubLObject rtg, final SubLObject target_size) {
+        while ((NIL == random_thought_generator_exhausted_p(rtg)) && (NIL == random_thought_generator_queue_full_p(rtg, target_size))) {
+            add_random_thought_to_rtg(rtg);
+        } 
+        return rtg;
+    }
 
-  @Override
-  public void initializeVariables()
-  {
-    init_random_thought_generator_file();
-  }
+    public static SubLObject add_random_thought_to_rtg(final SubLObject rtg) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        final SubLObject user = rtg_user(rtg);
+        final SubLObject most_recently_added_thought = rtg_most_recently_added_thought(rtg);
+        SubLObject next_thought = NIL;
+        SubLObject next_term = next_thcl_topic(most_recently_added_thought);
+        SubLObject next_assertion = NIL;
+        SubLObject next_assertion_paraphrase = NIL;
+        if (NIL == next_term) {
+            thread.resetMultipleValues();
+            final SubLObject next_term_$28 = thcl.random_thcl_constant_and_assertion(user);
+            final SubLObject next_assertion_$29 = thread.secondMultipleValue();
+            thread.resetMultipleValues();
+            next_term = next_term_$28;
+            next_assertion = next_assertion_$29;
+        } else
+            if (NIL == next_assertion) {
+                next_assertion = thcl.random_thcl_assertion(next_term, user);
+                if (NIL == next_assertion) {
+                    thread.resetMultipleValues();
+                    final SubLObject next_term_$29 = thcl.random_thcl_constant_and_assertion(user);
+                    final SubLObject next_assertion_$30 = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    next_term = next_term_$29;
+                    next_assertion = next_assertion_$30;
+                }
+            }
 
-  @Override
-  public void runTopLevelForms()
-  {
-    setup_random_thought_generator_file();
-  }
-  static
-  {
-    me = new random_thought_generator();
-    $random_thought_server_host$ = null;
-    $random_thought_server_port$ = null;
-    $remote_random_thought_image$ = null;
-    $remote_random_thought_connection_pool$ = null;
-    $remote_random_thought_connection_pool_lock$ = null;
-    $remote_random_thought_connection_pool_max_size$ = null;
-    $random_thought_generators_for_users$ = null;
-    $dtp_random_thought_generator$ = null;
-    $print_rtg_notesP$ = null;
-    $list0 = ConsesLow.list( NIL, NIL, NIL );
-    $list1 = ConsesLow.list( ConsesLow.list( makeKeyword( "TEST" ), makeSymbol( "FORT-P" ) ), ConsesLow.list( makeKeyword( "TEST" ), makeSymbol( "ASSERTION-P" ) ), ConsesLow.list( makeKeyword( "TEST" ), makeSymbol(
-        "PPH-JAVALIST-P" ) ) );
-    $const2$Guest = constant_handles.reader_make_constant_shell( makeString( "Guest" ) );
-    $sym3$POSITIVE_INTEGER_P = makeSymbol( "POSITIVE-INTEGER-P" );
-    $sym4$STRINGP = makeSymbol( "STRINGP" );
-    $kw5$OUTPUT = makeKeyword( "OUTPUT" );
-    $str6$Unable_to_open__S = makeString( "Unable to open ~S" );
-    $str7$Generating_ = makeString( "Generating " );
-    $str8$_random_thoughts___ = makeString( " random thoughts..." );
-    $str9$random_thoughts = makeString( "random-thoughts" );
-    $kw10$UNINITIALIZED = makeKeyword( "UNINITIALIZED" );
-    $list11 = ConsesLow.list( makeKeyword( "NOW" ), NIL );
-    $str12$thoughts = makeString( "thoughts" );
-    $str13$Exporting_random_thoughts_to_ = makeString( "Exporting random thoughts to " );
-    $kw14$SKIP = makeKeyword( "SKIP" );
-    $list15 = ConsesLow.list( makeUninternedSymbol( "START" ), makeUninternedSymbol( "END" ), makeUninternedSymbol( "DELTA" ) );
-    $str16$Parsing_XML_stream___ = makeString( "Parsing XML stream..." );
-    $str17$thoughts_about = makeString( "thoughts-about" );
-    $str18$topic_id = makeString( "topic-id" );
-    $str19$thought = makeString( "thought" );
-    $str20$Expected__thought___got__S = makeString( "Expected 'thought', got ~S" );
-    $str21$assertion_id = makeString( "assertion-id" );
-    $str22$paraphrase = makeString( "paraphrase" );
-    $str23$string = makeString( "string" );
-    $str24$_____ = makeString( ";~%~%" );
-    $str25$___ = makeString( ",~%" );
-    $str26$INSERT_INTO_THOUGHTS_INTERNAL_ID_ = makeString( "INSERT INTO THOUGHTS(INTERNAL_ID, TERM_EID, TERM_CYCL, ASRTN_EID, ASRTN_CYCL_SENTENCE, ASRTN_MT, ASRTN_PARAPHRASE) VALUES" );
-    $str27$___D____A_____A_____A_____A_____A = makeString( " (~D, '~A', '~A', '~A', '~A', '~A', '~A')" );
-    $str28$_ = makeString( "'" );
-    $str29$__ = makeString( "''" );
-    $sym30$FORT_P = makeSymbol( "FORT-P" );
-    $str31$term = makeString( "term" );
-    $sym32$VALID_NON_EMPTY_RANDOM_THOUGHT_P = makeSymbol( "VALID-NON-EMPTY-RANDOM-THOUGHT-P" );
-    $kw33$TOPIC = makeKeyword( "TOPIC" );
-    $list34 = ConsesLow.list( makeString( "external.random-thought-server.host" ) );
-    $sym35$_RANDOM_THOUGHT_SERVER_HOST_ = makeSymbol( "*RANDOM-THOUGHT-SERVER-HOST*" );
-    $str36$random_thoughts_cyc_com = makeString( "random-thoughts.cyc.com" );
-    $kw37$PARAMETER = makeKeyword( "PARAMETER" );
-    $list38 = ConsesLow.list( makeString( "external.random-thought-server.port" ) );
-    $sym39$_RANDOM_THOUGHT_SERVER_PORT_ = makeSymbol( "*RANDOM-THOUGHT-SERVER-PORT*" );
-    $int40$3634 = makeInteger( 3634 );
-    $sym41$_REMOTE_RANDOM_THOUGHT_IMAGE_ = makeSymbol( "*REMOTE-RANDOM-THOUGHT-IMAGE*" );
-    $kw42$CFASL = makeKeyword( "CFASL" );
-    $sym43$_REMOTE_RANDOM_THOUGHT_CONNECTION_POOL_ = makeSymbol( "*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL*" );
-    $str44$Remote_Random_Thought_Connection_ = makeString( "Remote Random Thought Connection Pool Lock" );
-    $kw45$IGNORE_ERRORS_TARGET = makeKeyword( "IGNORE-ERRORS-TARGET" );
-    $sym46$IGNORE_ERRORS_HANDLER = makeSymbol( "IGNORE-ERRORS-HANDLER", "SUBLISP" );
-    $kw47$NOT_TRIED = makeKeyword( "NOT-TRIED" );
-    $sym48$NEXT_RANDOM_THOUGHT_FOR_USER = makeSymbol( "NEXT-RANDOM-THOUGHT-FOR-USER" );
-    $sym49$QUOTE = makeSymbol( "QUOTE" );
-    $sym50$PROGN = makeSymbol( "PROGN" );
-    $list51 = ConsesLow.list( makeSymbol( "CSETQ" ), makeSymbol( "*PERFORM-CFASL-EXTERNALIZATION*" ), T );
-    $sym52$MULTIPLE_VALUE_LIST = makeSymbol( "MULTIPLE-VALUE-LIST" );
-    $sym53$CATCH_ERROR_MESSAGE_HANDLER = makeSymbol( "CATCH-ERROR-MESSAGE-HANDLER" );
-    $str54$Could_not_open_a_connection_to__s = makeString( "Could not open a connection to ~s" );
-    $sym55$_RANDOM_THOUGHT_GENERATORS_FOR_USERS_ = makeSymbol( "*RANDOM-THOUGHT-GENERATORS-FOR-USERS*" );
-    $sym56$RANDOM_THOUGHT_GENERATOR = makeSymbol( "RANDOM-THOUGHT-GENERATOR" );
-    $sym57$RANDOM_THOUGHT_GENERATOR_P = makeSymbol( "RANDOM-THOUGHT-GENERATOR-P" );
-    $list58 = ConsesLow.list( makeSymbol( "USER" ), makeSymbol( "DONE-ASSERTIONS" ), makeSymbol( "GENERATOR-THREAD" ), makeSymbol( "QUEUE" ), makeSymbol( "MOST-RECENTLY-ADDED-THOUGHT" ), makeSymbol(
-        "TOPICAL-THOUGHTS" ) );
-    $list59 = ConsesLow.list( makeKeyword( "USER" ), makeKeyword( "DONE-ASSERTIONS" ), makeKeyword( "GENERATOR-THREAD" ), makeKeyword( "QUEUE" ), makeKeyword( "MOST-RECENTLY-ADDED-THOUGHT" ), makeKeyword(
-        "TOPICAL-THOUGHTS" ) );
-    $list60 = ConsesLow.list( makeSymbol( "RTG-STRUCT-USER" ), makeSymbol( "RTG-STRUCT-DONE-ASSERTIONS" ), makeSymbol( "RTG-STRUCT-GENERATOR-THREAD" ), makeSymbol( "RTG-STRUCT-QUEUE" ), makeSymbol(
-        "RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT" ), makeSymbol( "RTG-STRUCT-TOPICAL-THOUGHTS" ) );
-    $list61 = ConsesLow.list( makeSymbol( "_CSETF-RTG-STRUCT-USER" ), makeSymbol( "_CSETF-RTG-STRUCT-DONE-ASSERTIONS" ), makeSymbol( "_CSETF-RTG-STRUCT-GENERATOR-THREAD" ), makeSymbol( "_CSETF-RTG-STRUCT-QUEUE" ),
-        makeSymbol( "_CSETF-RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT" ), makeSymbol( "_CSETF-RTG-STRUCT-TOPICAL-THOUGHTS" ) );
-    $sym62$PPRINT_RANDOM_THOUGHT_GENERATOR = makeSymbol( "PPRINT-RANDOM-THOUGHT-GENERATOR" );
-    $sym63$RANDOM_THOUGHT_GENERATOR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol( "RANDOM-THOUGHT-GENERATOR-PRINT-FUNCTION-TRAMPOLINE" );
-    $list64 = ConsesLow.list( makeSymbol( "OPTIMIZE-FUNCALL" ), makeSymbol( "RANDOM-THOUGHT-GENERATOR-P" ) );
-    $sym65$RTG_STRUCT_USER = makeSymbol( "RTG-STRUCT-USER" );
-    $sym66$_CSETF_RTG_STRUCT_USER = makeSymbol( "_CSETF-RTG-STRUCT-USER" );
-    $sym67$RTG_STRUCT_DONE_ASSERTIONS = makeSymbol( "RTG-STRUCT-DONE-ASSERTIONS" );
-    $sym68$_CSETF_RTG_STRUCT_DONE_ASSERTIONS = makeSymbol( "_CSETF-RTG-STRUCT-DONE-ASSERTIONS" );
-    $sym69$RTG_STRUCT_GENERATOR_THREAD = makeSymbol( "RTG-STRUCT-GENERATOR-THREAD" );
-    $sym70$_CSETF_RTG_STRUCT_GENERATOR_THREAD = makeSymbol( "_CSETF-RTG-STRUCT-GENERATOR-THREAD" );
-    $sym71$RTG_STRUCT_QUEUE = makeSymbol( "RTG-STRUCT-QUEUE" );
-    $sym72$_CSETF_RTG_STRUCT_QUEUE = makeSymbol( "_CSETF-RTG-STRUCT-QUEUE" );
-    $sym73$RTG_STRUCT_MOST_RECENTLY_ADDED_THOUGHT = makeSymbol( "RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT" );
-    $sym74$_CSETF_RTG_STRUCT_MOST_RECENTLY_ADDED_THOUGHT = makeSymbol( "_CSETF-RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT" );
-    $sym75$RTG_STRUCT_TOPICAL_THOUGHTS = makeSymbol( "RTG-STRUCT-TOPICAL-THOUGHTS" );
-    $sym76$_CSETF_RTG_STRUCT_TOPICAL_THOUGHTS = makeSymbol( "_CSETF-RTG-STRUCT-TOPICAL-THOUGHTS" );
-    $kw77$USER = makeKeyword( "USER" );
-    $kw78$DONE_ASSERTIONS = makeKeyword( "DONE-ASSERTIONS" );
-    $kw79$GENERATOR_THREAD = makeKeyword( "GENERATOR-THREAD" );
-    $kw80$QUEUE = makeKeyword( "QUEUE" );
-    $kw81$MOST_RECENTLY_ADDED_THOUGHT = makeKeyword( "MOST-RECENTLY-ADDED-THOUGHT" );
-    $kw82$TOPICAL_THOUGHTS = makeKeyword( "TOPICAL-THOUGHTS" );
-    $str83$Invalid_slot__S_for_construction_ = makeString( "Invalid slot ~S for construction function" );
-    $kw84$BEGIN = makeKeyword( "BEGIN" );
-    $sym85$MAKE_RANDOM_THOUGHT_GENERATOR = makeSymbol( "MAKE-RANDOM-THOUGHT-GENERATOR" );
-    $kw86$SLOT = makeKeyword( "SLOT" );
-    $kw87$END = makeKeyword( "END" );
-    $sym88$VISIT_DEFSTRUCT_OBJECT_RANDOM_THOUGHT_GENERATOR_METHOD = makeSymbol( "VISIT-DEFSTRUCT-OBJECT-RANDOM-THOUGHT-GENERATOR-METHOD" );
-    $str89$__RTG_for__S___S_done__A__ = makeString( "#<RTG for ~S (~S done ~A)>" );
-    $str90$_queued = makeString( " queued" );
-    $str91$exhausted = makeString( "exhausted" );
-    $kw92$EXHAUSTED = makeKeyword( "EXHAUSTED" );
-    $kw93$NEW_TOPIC = makeKeyword( "NEW-TOPIC" );
-    $list94 = ConsesLow.list( makeSymbol( "FORMAT-STR" ), makeSymbol( "&REST" ), makeSymbol( "ARGS" ) );
-    $sym95$PWHEN = makeSymbol( "PWHEN" );
-    $sym96$_PRINT_RTG_NOTES__ = makeSymbol( "*PRINT-RTG-NOTES?*" );
-    $sym97$APPLY = makeSymbol( "APPLY" );
-    $list98 = ConsesLow.list( makeSymbol( "QUOTE" ), makeSymbol( "FORMAT" ) );
-    $sym99$CONS = makeSymbol( "CONS" );
-    $sym100$LIST = makeSymbol( "LIST" );
-    $list101 = ConsesLow.list( ConsesLow.list( makeSymbol( "FORCE-OUTPUT" ), T ) );
-    $sym102$FORMAT = makeSymbol( "FORMAT" );
-    $str103$__Registering_interest_of__S_in__ = makeString( "~&Registering interest of ~S in ~S~%" );
-    $list104 = ConsesLow.list( makeKeyword( "NOW" ), NIL, makeKeyword( "REQUIRE-TOPICAL?" ), T );
-    $kw105$NOW = makeKeyword( "NOW" );
-    $kw106$REQUIRE_TOPICAL_ = makeKeyword( "REQUIRE-TOPICAL?" );
-    $str107$__Waiting_for_new_thoughts_about_ = makeString( "~&Waiting for new thoughts about ~S~%" );
-    $float108$0_5 = makeDouble( 0.5 );
-    $str109$___A_out_of_thoughts_about__S__ = makeString( "~&~A out of thoughts about ~S~%" );
-    $str110$Totally = makeString( "Totally" );
-    $str111$Temporarily = makeString( "Temporarily" );
-    $str112$Random_Thought_Generator = makeString( "Random Thought Generator" );
-    $sym113$KEEP_RANDOM_THOUGHT_GENERATOR_FULL = makeSymbol( "KEEP-RANDOM-THOUGHT-GENERATOR-FULL" );
-    $int114$25 = makeInteger( 25 );
-    $float115$1_5 = makeDouble( 1.5 );
-    $int116$1000 = makeInteger( 1000 );
-    $str117$__Filling__S__ = makeString( "~&Filling ~S~%" );
-    $list118 = ConsesLow.cons( makeSymbol( "TOPIC" ), makeSymbol( "NEW-DATA" ) );
-    $str119$___S_is_now_full__ = makeString( "~&~S is now full~%" );
-    $str120$_S_is_not_in_an_updatable_state = makeString( "~S is not in an updatable state" );
-    $str121$__New_thought_concerning__S_____S = makeString( "~&New thought concerning ~S:~% ~S~%" );
-    $sym122$OPEN_CYC_FORT = makeSymbol( "OPEN-CYC-FORT" );
-    $sym123$POTENTIALLY_PORN_RELATED_ = makeSymbol( "POTENTIALLY-PORN-RELATED?" );
-    $const124$PotentiallyPornRelated = constant_handles.reader_make_constant_shell( makeString( "PotentiallyPornRelated" ) );
-    $kw125$IGNORE = makeKeyword( "IGNORE" );
-    $kw126$GAF = makeKeyword( "GAF" );
-    $kw127$TRUE = makeKeyword( "TRUE" );
-    $str128$__Found__S_GAF_assertions_about__ = makeString( "~&Found ~S GAF assertions about ~S~%" );
-    $str129$___Top_level_CycL___S = makeString( "~% Top-level CycL: ~S" );
-    $list130 = ConsesLow.list( makeSymbol( "TERM" ), makeSymbol( "ASSERTION" ), makeSymbol( "ASSERTION-PARAPHRASE" ) );
-    $kw131$NEW_ARG_FROM_ASSERTION = makeKeyword( "NEW-ARG-FROM-ASSERTION" );
-    $kw132$REUSE_MOST_RECENTLY_ADDED_TOPIC = makeKeyword( "REUSE-MOST-RECENTLY-ADDED-TOPIC" );
-    $kw133$RANDOM = makeKeyword( "RANDOM" );
-  }
+        SubLObject triedP = NIL;
+        while (NIL == next_assertion_paraphrase) {
+            if (NIL != triedP) {
+                next_assertion = thcl.random_thcl_assertion(next_term, user);
+                if (NIL == next_assertion) {
+                    thread.resetMultipleValues();
+                    final SubLObject next_term_$30 = thcl.random_thcl_constant_and_assertion(user);
+                    final SubLObject next_assertion_$31 = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    next_term = next_term_$30;
+                    next_assertion = next_assertion_$31;
+                }
+            }
+            if (NIL != next_assertion) {
+                next_assertion_paraphrase = thcl_paraphrase_for_assertion(next_assertion);
+                triedP = T;
+                set.set_add(next_assertion, rtg_done_assertions(rtg));
+            }
+        } 
+        if ((NIL == next_assertion) || (NIL == next_assertion_paraphrase)) {
+            note_rtg_exhausted(rtg);
+        } else {
+            next_thought = list(next_term, next_assertion, next_assertion_paraphrase);
+        }
+        if (NIL != next_thought) {
+            queues.enqueue(next_thought, rtg_queue(rtg));
+            rtg_set_most_recently_added_thought(rtg, next_thought);
+        }
+        return next_thought;
+    }
 
-  public static final class $random_thought_generator_native
-      extends
-        SubLStructNative
-  {
-    public SubLObject $user;
-    public SubLObject $done_assertions;
-    public SubLObject $generator_thread;
-    public SubLObject $queue;
-    public SubLObject $most_recently_added_thought;
-    public SubLObject $topical_thoughts;
-    private static final SubLStructDeclNative structDecl;
+    public static SubLObject thcl_paraphrase_for_assertion(final SubLObject assertion) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        SubLObject paraphrase = NIL;
+        SubLObject error_message = NIL;
+        final SubLObject _prev_bind_0 = pph_vars.$pph_demerit_cutoff$.currentBinding(thread);
+        final SubLObject _prev_bind_2 = Errors.$continue_cerrorP$.currentBinding(thread);
+        final SubLObject _prev_bind_3 = pph_error.$pph_error_handling_onP$.currentBinding(thread);
+        try {
+            pph_vars.$pph_demerit_cutoff$.bind(ONE_INTEGER, thread);
+            Errors.$continue_cerrorP$.bind(NIL, thread);
+            pph_error.$pph_error_handling_onP$.bind(T, thread);
+            if (NIL != pph_error.pph_break_on_errorP()) {
+                paraphrase = pph_main.generate_phrase_for_java(assertion, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            } else {
+                try {
+                    thread.throwStack.push($catch_error_message_target$.getGlobalValue());
+                    final SubLObject _prev_bind_0_$34 = Errors.$error_handler$.currentBinding(thread);
+                    try {
+                        Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                        try {
+                            paraphrase = pph_main.generate_phrase_for_java(assertion, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        } catch (final Throwable catch_var) {
+                            Errors.handleThrowable(catch_var, NIL);
+                        }
+                    } finally {
+                        Errors.$error_handler$.rebind(_prev_bind_0_$34, thread);
+                    }
+                } catch (final Throwable ccatch_env_var) {
+                    error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                } finally {
+                    thread.throwStack.pop();
+                }
+                if (error_message.isString() && (NIL == pph_error.suppress_pph_warningsP())) {
+                    Errors.warn(cconcatenate(pph_error_message_truncator.truncate_pph_error_message(error_message), $str129$___Top_level_CycL___S), pph_vars.pph_top_level_cycl());
+                }
+            }
+        } finally {
+            pph_error.$pph_error_handling_onP$.rebind(_prev_bind_3, thread);
+            Errors.$continue_cerrorP$.rebind(_prev_bind_2, thread);
+            pph_vars.$pph_demerit_cutoff$.rebind(_prev_bind_0, thread);
+        }
+        return (NIL == paraphrase) || (NIL != thcl_paraphrase_unacceptableP(pph_utilities.pph_javalist_string(paraphrase))) ? NIL : paraphrase;
+    }
 
-    public $random_thought_generator_native()
-    {
-      this.$user = CommonSymbols.NIL;
-      this.$done_assertions = CommonSymbols.NIL;
-      this.$generator_thread = CommonSymbols.NIL;
-      this.$queue = CommonSymbols.NIL;
-      this.$most_recently_added_thought = CommonSymbols.NIL;
-      this.$topical_thoughts = CommonSymbols.NIL;
+    public static SubLObject thcl_paraphrase_unacceptableP(final SubLObject string) {
+        if (NIL == string_utilities.non_empty_stringP(string)) {
+            return T;
+        }
+        if (NIL != string_utilities.substringP(constant_reader.constant_reader_prefix(), string, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+            return T;
+        }
+        return NIL;
+    }
+
+    public static SubLObject next_thcl_topic(final SubLObject most_recently_added_thought) {
+        SubLObject next_term = NIL;
+        final SubLObject method = choose_thcl_topic_selection_method();
+        SubLObject v_term = NIL;
+        SubLObject assertion = NIL;
+        SubLObject assertion_paraphrase = NIL;
+        destructuring_bind_must_consp(most_recently_added_thought, most_recently_added_thought, $list130);
+        v_term = most_recently_added_thought.first();
+        SubLObject current = most_recently_added_thought.rest();
+        destructuring_bind_must_consp(current, most_recently_added_thought, $list130);
+        assertion = current.first();
+        current = current.rest();
+        destructuring_bind_must_consp(current, most_recently_added_thought, $list130);
+        assertion_paraphrase = current.first();
+        current = current.rest();
+        if (NIL == current) {
+            final SubLObject pcase_var = method;
+            if (pcase_var.eql($NEW_ARG_FROM_ASSERTION)) {
+                if (NIL != assertion) {
+                    final SubLObject args = cycl_utilities.formula_args(uncanonicalizer.assertion_el_formula(assertion), $IGNORE);
+                    SubLObject rest;
+                    SubLObject arg;
+                    for (rest = NIL, rest = args; (NIL == next_term) && (NIL != rest); rest = rest.rest()) {
+                        arg = rest.first();
+                        if ((!arg.eql(v_term)) && (NIL != thcl.thcl_constantP(arg, UNPROVIDED))) {
+                            next_term = arg;
+                        }
+                    }
+                }
+                if (NIL == next_term) {
+                    next_term = v_term;
+                }
+            } else
+                if (pcase_var.eql($REUSE_MOST_RECENTLY_ADDED_TOPIC)) {
+                    next_term = v_term;
+                } else {
+                    next_term = NIL;
+                }
+
+        } else {
+            cdestructuring_bind_error(most_recently_added_thought, $list130);
+        }
+        return next_term;
+    }
+
+    public static SubLObject choose_thcl_topic_selection_method() {
+        final SubLObject pcase_var;
+        final SubLObject pick_a_number = pcase_var = random.random(SIXTEEN_INTEGER);
+        if (pcase_var.eql(ZERO_INTEGER)) {
+            return $RANDOM;
+        }
+        if (pcase_var.eql(ONE_INTEGER) || pcase_var.eql(TWO_INTEGER)) {
+            return $REUSE_MOST_RECENTLY_ADDED_TOPIC;
+        }
+        return $NEW_ARG_FROM_ASSERTION;
+    }
+
+    public static SubLObject declare_random_thought_generator_file() {
+        declareFunction(me, "random_thought_p", "RANDOM-THOUGHT-P", 1, 0, false);
+        declareFunction(me, "empty_random_thought_p", "EMPTY-RANDOM-THOUGHT-P", 1, 0, false);
+        declareFunction(me, "non_empty_random_thought_p", "NON-EMPTY-RANDOM-THOUGHT-P", 1, 0, false);
+        declareFunction(me, "xml_output_random_thoughts", "XML-OUTPUT-RANDOM-THOUGHTS", 2, 1, false);
+        declareFunction(me, "xml_output_random_thoughts_for_terms", "XML-OUTPUT-RANDOM-THOUGHTS-FOR-TERMS", 2, 1, false);
+        declareFunction(me, "sql_output_random_thoughts_from_xml", "SQL-OUTPUT-RANDOM-THOUGHTS-FROM-XML", 2, 1, false);
+        declareFunction(me, "next_random_thought_num_for_topic", "NEXT-RANDOM-THOUGHT-NUM-FOR-TOPIC", 2, 0, false);
+        declareFunction(me, "write_random_thought_sql_header", "WRITE-RANDOM-THOUGHT-SQL-HEADER", 1, 0, false);
+        declareFunction(me, "write_random_thought_sql_row", "WRITE-RANDOM-THOUGHT-SQL-ROW", 5, 0, false);
+        declareFunction(me, "xml_output_random_thoughts_for_term", "XML-OUTPUT-RANDOM-THOUGHTS-FOR-TERM", 1, 1, false);
+        declareFunction(me, "xml_output_random_thought", "XML-OUTPUT-RANDOM-THOUGHT", 1, 0, false);
+        declareFunction(me, "valid_non_empty_random_thought_p", "VALID-NON-EMPTY-RANDOM-THOUGHT-P", 1, 0, false);
+        declareFunction(me, "next_random_thought_for_user", "NEXT-RANDOM-THOUGHT-FOR-USER", 1, 1, false);
+        declareFunction(me, "thcl_assertion_seen_by_cyclistP", "THCL-ASSERTION-SEEN-BY-CYCLIST?", 2, 0, false);
+        declareFunction(me, "number_of_queued_random_thoughts_for_user", "NUMBER-OF-QUEUED-RANDOM-THOUGHTS-FOR-USER", 1, 0, false);
+        declareFunction(me, "number_of_used_random_thoughts_for_user", "NUMBER-OF-USED-RANDOM-THOUGHTS-FOR-USER", 1, 0, false);
+        declareFunction(me, "remote_random_thought_image", "REMOTE-RANDOM-THOUGHT-IMAGE", 0, 0, false);
+        declareFunction(me, "set_remote_random_thought_image", "SET-REMOTE-RANDOM-THOUGHT-IMAGE", 3, 0, false);
+        declareFunction(me, "unset_remote_random_thought_image", "UNSET-REMOTE-RANDOM-THOUGHT-IMAGE", 0, 0, false);
+        declareFunction(me, "clear_remote_random_thought_connection_pool", "CLEAR-REMOTE-RANDOM-THOUGHT-CONNECTION-POOL", 0, 0, false);
+        declareFunction(me, "random_thought_server_hostXport", "RANDOM-THOUGHT-SERVER-HOST&PORT", 0, 0, false);
+        declareFunction(me, "next_random_thought_for_user_from_remote_server", "NEXT-RANDOM-THOUGHT-FOR-USER-FROM-REMOTE-SERVER", 2, 0, false);
+        declareFunction(me, "next_random_thought_for_user_from_remote_server_int", "NEXT-RANDOM-THOUGHT-FOR-USER-FROM-REMOTE-SERVER-INT", 2, 0, false);
+        declareFunction(me, "create_remote_random_thought_connection", "CREATE-REMOTE-RANDOM-THOUGHT-CONNECTION", 0, 0, false);
+        declareFunction(me, "release_random_thought_connection", "RELEASE-RANDOM-THOUGHT-CONNECTION", 1, 0, false);
+        declareFunction(me, "open_remote_random_thought_connection_p", "OPEN-REMOTE-RANDOM-THOUGHT-CONNECTION-P", 1, 0, false);
+        declareFunction(me, "get_free_random_thought_connection", "GET-FREE-RANDOM-THOUGHT-CONNECTION", 0, 0, false);
+        declareFunction(me, "register_random_thought_generator", "REGISTER-RANDOM-THOUGHT-GENERATOR", 2, 0, false);
+        declareFunction(me, "find_random_thought_generator_for_user", "FIND-RANDOM-THOUGHT-GENERATOR-FOR-USER", 1, 0, false);
+        declareFunction(me, "random_thought_generator_print_function_trampoline", "RANDOM-THOUGHT-GENERATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction(me, "random_thought_generator_p", "RANDOM-THOUGHT-GENERATOR-P", 1, 0, false);
+        new random_thought_generator.$random_thought_generator_p$UnaryFunction();
+        declareFunction(me, "rtg_struct_user", "RTG-STRUCT-USER", 1, 0, false);
+        declareFunction(me, "rtg_struct_done_assertions", "RTG-STRUCT-DONE-ASSERTIONS", 1, 0, false);
+        declareFunction(me, "rtg_struct_generator_thread", "RTG-STRUCT-GENERATOR-THREAD", 1, 0, false);
+        declareFunction(me, "rtg_struct_queue", "RTG-STRUCT-QUEUE", 1, 0, false);
+        declareFunction(me, "rtg_struct_most_recently_added_thought", "RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT", 1, 0, false);
+        declareFunction(me, "rtg_struct_topical_thoughts", "RTG-STRUCT-TOPICAL-THOUGHTS", 1, 0, false);
+        declareFunction(me, "_csetf_rtg_struct_user", "_CSETF-RTG-STRUCT-USER", 2, 0, false);
+        declareFunction(me, "_csetf_rtg_struct_done_assertions", "_CSETF-RTG-STRUCT-DONE-ASSERTIONS", 2, 0, false);
+        declareFunction(me, "_csetf_rtg_struct_generator_thread", "_CSETF-RTG-STRUCT-GENERATOR-THREAD", 2, 0, false);
+        declareFunction(me, "_csetf_rtg_struct_queue", "_CSETF-RTG-STRUCT-QUEUE", 2, 0, false);
+        declareFunction(me, "_csetf_rtg_struct_most_recently_added_thought", "_CSETF-RTG-STRUCT-MOST-RECENTLY-ADDED-THOUGHT", 2, 0, false);
+        declareFunction(me, "_csetf_rtg_struct_topical_thoughts", "_CSETF-RTG-STRUCT-TOPICAL-THOUGHTS", 2, 0, false);
+        declareFunction(me, "make_random_thought_generator", "MAKE-RANDOM-THOUGHT-GENERATOR", 0, 1, false);
+        declareFunction(me, "visit_defstruct_random_thought_generator", "VISIT-DEFSTRUCT-RANDOM-THOUGHT-GENERATOR", 2, 0, false);
+        declareFunction(me, "visit_defstruct_object_random_thought_generator_method", "VISIT-DEFSTRUCT-OBJECT-RANDOM-THOUGHT-GENERATOR-METHOD", 2, 0, false);
+        declareFunction(me, "rtg_user", "RTG-USER", 1, 0, false);
+        declareFunction(me, "rtg_done_assertions", "RTG-DONE-ASSERTIONS", 1, 0, false);
+        declareFunction(me, "rtg_generator_thread", "RTG-GENERATOR-THREAD", 1, 0, false);
+        declareFunction(me, "rtg_set_generator_thread", "RTG-SET-GENERATOR-THREAD", 2, 0, false);
+        declareFunction(me, "rtg_queue", "RTG-QUEUE", 1, 0, false);
+        declareFunction(me, "rtg_most_recently_added_thought", "RTG-MOST-RECENTLY-ADDED-THOUGHT", 1, 0, false);
+        declareFunction(me, "rtg_set_most_recently_added_thought", "RTG-SET-MOST-RECENTLY-ADDED-THOUGHT", 2, 0, false);
+        declareFunction(me, "rtg_topical_thoughts", "RTG-TOPICAL-THOUGHTS", 1, 0, false);
+        declareFunction(me, "rtg_set_topical_thoughts", "RTG-SET-TOPICAL-THOUGHTS", 2, 0, false);
+        declareFunction(me, "pprint_random_thought_generator", "PPRINT-RANDOM-THOUGHT-GENERATOR", 1, 2, false);
+        declareFunction(me, "find_or_create_random_thought_generator_for_user", "FIND-OR-CREATE-RANDOM-THOUGHT-GENERATOR-FOR-USER", 1, 0, false);
+        declareFunction(me, "empty_thought", "EMPTY-THOUGHT", 0, 0, false);
+        declareFunction(me, "new_random_thought_generator_for_user", "NEW-RANDOM-THOUGHT-GENERATOR-FOR-USER", 1, 0, false);
+        declareFunction(me, "new_random_thought_generator", "NEW-RANDOM-THOUGHT-GENERATOR", 0, 0, false);
+        declareFunction(me, "note_rtg_exhausted", "NOTE-RTG-EXHAUSTED", 1, 0, false);
+        declareFunction(me, "random_thought_generator_exhausted_p", "RANDOM-THOUGHT-GENERATOR-EXHAUSTED-P", 1, 0, false);
+        declareFunction(me, "random_thoughts_on_topic_exhausted_p", "RANDOM-THOUGHTS-ON-TOPIC-EXHAUSTED-P", 1, 0, false);
+        declareFunction(me, "note_random_thoughts_on_topic_exhausted", "NOTE-RANDOM-THOUGHTS-ON-TOPIC-EXHAUSTED", 1, 0, false);
+        declareFunction(me, "random_thought_generator_full_p", "RANDOM-THOUGHT-GENERATOR-FULL-P", 2, 0, false);
+        declareFunction(me, "random_thought_generator_queue_full_p", "RANDOM-THOUGHT-GENERATOR-QUEUE-FULL-P", 2, 0, false);
+        declareFunction(me, "declare_interest_in_random_thoughts_about_topic", "DECLARE-INTEREST-IN-RANDOM-THOUGHTS-ABOUT-TOPIC", 2, 0, false);
+        declareMacro(me, "rtg_note", "RTG-NOTE");
+        declareFunction(me, "register_interest_in_random_thoughts_about_topic", "REGISTER-INTEREST-IN-RANDOM-THOUGHTS-ABOUT-TOPIC", 2, 0, false);
+        declareFunction(me, "all_random_thoughts_on_topic", "ALL-RANDOM-THOUGHTS-ON-TOPIC", 1, 0, false);
+        declareFunction(me, "next_random_thought_with_suggested_topic", "NEXT-RANDOM-THOUGHT-WITH-SUGGESTED-TOPIC", 2, 0, false);
+        declareFunction(me, "next_random_thought_without_suggested_topic", "NEXT-RANDOM-THOUGHT-WITHOUT-SUGGESTED-TOPIC", 2, 0, false);
+        declareFunction(me, "find_or_create_random_thought_generator_thread", "FIND-OR-CREATE-RANDOM-THOUGHT-GENERATOR-THREAD", 1, 1, false);
+        declareFunction(me, "keep_random_thought_generator_full", "KEEP-RANDOM-THOUGHT-GENERATOR-FULL", 1, 2, false);
+        declareFunction(me, "fill_random_thought_generator", "FILL-RANDOM-THOUGHT-GENERATOR", 2, 0, false);
+        declareFunction(me, "update_random_thought_data", "UPDATE-RANDOM-THOUGHT-DATA", 3, 0, false);
+        declareFunction(me, "open_cyc_formula", "OPEN-CYC-FORMULA", 1, 0, false);
+        declareFunction(me, "open_cyc_fort_internal", "OPEN-CYC-FORT-INTERNAL", 1, 0, false);
+        declareFunction(me, "open_cyc_fort", "OPEN-CYC-FORT", 1, 0, false);
+        declareFunction(me, "potentially_porn_relatedP_internal", "POTENTIALLY-PORN-RELATED?-INTERNAL", 1, 0, false);
+        declareFunction(me, "potentially_porn_relatedP", "POTENTIALLY-PORN-RELATED?", 1, 0, false);
+        declareFunction(me, "new_random_thought_data_for_topic", "NEW-RANDOM-THOUGHT-DATA-FOR-TOPIC", 1, 0, false);
+        declareFunction(me, "gafs_about_topic", "GAFS-ABOUT-TOPIC", 1, 0, false);
+        declareFunction(me, "gaf_about_topicP", "GAF-ABOUT-TOPIC?", 2, 1, false);
+        declareFunction(me, "fill_random_thought_generator_queue", "FILL-RANDOM-THOUGHT-GENERATOR-QUEUE", 2, 0, false);
+        declareFunction(me, "add_random_thought_to_rtg", "ADD-RANDOM-THOUGHT-TO-RTG", 1, 0, false);
+        declareFunction(me, "thcl_paraphrase_for_assertion", "THCL-PARAPHRASE-FOR-ASSERTION", 1, 0, false);
+        declareFunction(me, "thcl_paraphrase_unacceptableP", "THCL-PARAPHRASE-UNACCEPTABLE?", 1, 0, false);
+        declareFunction(me, "next_thcl_topic", "NEXT-THCL-TOPIC", 1, 0, false);
+        declareFunction(me, "choose_thcl_topic_selection_method", "CHOOSE-THCL-TOPIC-SELECTION-METHOD", 0, 0, false);
+        return NIL;
+    }
+
+    public static SubLObject init_random_thought_generator_file() {
+        defparameter("*RANDOM-THOUGHT-SERVER-HOST*", red_infrastructure_macros.red_def_helper($list34.isSymbol() ? symbol_value($list34) : $list34, $random_thought_server_host$, $str36$random_thoughts_cyc_com.isSymbol() ? symbol_value($str36$random_thoughts_cyc_com) : $str36$random_thoughts_cyc_com, $PARAMETER, UNPROVIDED));
+        defparameter("*RANDOM-THOUGHT-SERVER-PORT*", red_infrastructure_macros.red_def_helper($list38.isSymbol() ? symbol_value($list38) : $list38, $random_thought_server_port$, $int$3634.isSymbol() ? symbol_value($int$3634) : $int$3634, $PARAMETER, UNPROVIDED));
+        deflexical("*REMOTE-RANDOM-THOUGHT-IMAGE*", SubLTrampolineFile.maybeDefault($remote_random_thought_image$, $remote_random_thought_image$, NIL));
+        deflexical("*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL*", SubLTrampolineFile.maybeDefault($remote_random_thought_connection_pool$, $remote_random_thought_connection_pool$, () -> queues.create_queue(UNPROVIDED)));
+        deflexical("*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL-LOCK*", make_lock($str44$Remote_Random_Thought_Connection_));
+        deflexical("*REMOTE-RANDOM-THOUGHT-CONNECTION-POOL-MAX-SIZE*", NINE_INTEGER);
+        deflexical("*RANDOM-THOUGHT-GENERATORS-FOR-USERS*", SubLTrampolineFile.maybeDefault($random_thought_generators_for_users$, $random_thought_generators_for_users$, () -> dictionary.new_dictionary(UNPROVIDED, UNPROVIDED)));
+        defconstant("*DTP-RANDOM-THOUGHT-GENERATOR*", RANDOM_THOUGHT_GENERATOR);
+        defparameter("*PRINT-RTG-NOTES?*", NIL);
+        return NIL;
+    }
+
+    public static SubLObject setup_random_thought_generator_file() {
+        declare_defglobal($remote_random_thought_image$);
+        declare_defglobal($remote_random_thought_connection_pool$);
+        declare_defglobal($random_thought_generators_for_users$);
+        register_method($print_object_method_table$.getGlobalValue(), $dtp_random_thought_generator$.getGlobalValue(), symbol_function(RANDOM_THOUGHT_GENERATOR_PRINT_FUNCTION_TRAMPOLINE));
+        SubLSpecialOperatorDeclarations.proclaim($list64);
+        def_csetf(RTG_STRUCT_USER, _CSETF_RTG_STRUCT_USER);
+        def_csetf(RTG_STRUCT_DONE_ASSERTIONS, _CSETF_RTG_STRUCT_DONE_ASSERTIONS);
+        def_csetf(RTG_STRUCT_GENERATOR_THREAD, _CSETF_RTG_STRUCT_GENERATOR_THREAD);
+        def_csetf(RTG_STRUCT_QUEUE, _CSETF_RTG_STRUCT_QUEUE);
+        def_csetf(RTG_STRUCT_MOST_RECENTLY_ADDED_THOUGHT, _CSETF_RTG_STRUCT_MOST_RECENTLY_ADDED_THOUGHT);
+        def_csetf(RTG_STRUCT_TOPICAL_THOUGHTS, _CSETF_RTG_STRUCT_TOPICAL_THOUGHTS);
+        identity(RANDOM_THOUGHT_GENERATOR);
+        register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $dtp_random_thought_generator$.getGlobalValue(), symbol_function(VISIT_DEFSTRUCT_OBJECT_RANDOM_THOUGHT_GENERATOR_METHOD));
+        note_funcall_helper_function(PPRINT_RANDOM_THOUGHT_GENERATOR);
+        memoization_state.note_memoized_function(OPEN_CYC_FORT);
+        memoization_state.note_memoized_function($sym123$POTENTIALLY_PORN_RELATED_);
+        return NIL;
     }
 
     @Override
-    public SubLStructDecl getStructDecl()
-    {
-      return $random_thought_generator_native.structDecl;
+    public void declareFunctions() {
+        declare_random_thought_generator_file();
     }
 
     @Override
-    public SubLObject getField2()
-    {
-      return this.$user;
+    public void initializeVariables() {
+        init_random_thought_generator_file();
     }
 
     @Override
-    public SubLObject getField3()
-    {
-      return this.$done_assertions;
+    public void runTopLevelForms() {
+        setup_random_thought_generator_file();
     }
 
-    @Override
-    public SubLObject getField4()
-    {
-      return this.$generator_thread;
+    static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
-    @Override
-    public SubLObject getField5()
-    {
-      return this.$queue;
+    public static final class $random_thought_generator_native extends SubLStructNative {
+        public SubLObject $user;
+
+        public SubLObject $done_assertions;
+
+        public SubLObject $generator_thread;
+
+        public SubLObject $queue;
+
+        public SubLObject $most_recently_added_thought;
+
+        public SubLObject $topical_thoughts;
+
+        private static final SubLStructDeclNative structDecl;
+
+        public $random_thought_generator_native() {
+            this.$user = Lisp.NIL;
+            this.$done_assertions = Lisp.NIL;
+            this.$generator_thread = Lisp.NIL;
+            this.$queue = Lisp.NIL;
+            this.$most_recently_added_thought = Lisp.NIL;
+            this.$topical_thoughts = Lisp.NIL;
+        }
+
+        @Override
+        public SubLStructDecl getStructDecl() {
+            return structDecl;
+        }
+
+        @Override
+        public SubLObject getField2() {
+            return this.$user;
+        }
+
+        @Override
+        public SubLObject getField3() {
+            return this.$done_assertions;
+        }
+
+        @Override
+        public SubLObject getField4() {
+            return this.$generator_thread;
+        }
+
+        @Override
+        public SubLObject getField5() {
+            return this.$queue;
+        }
+
+        @Override
+        public SubLObject getField6() {
+            return this.$most_recently_added_thought;
+        }
+
+        @Override
+        public SubLObject getField7() {
+            return this.$topical_thoughts;
+        }
+
+        @Override
+        public SubLObject setField2(final SubLObject value) {
+            return this.$user = value;
+        }
+
+        @Override
+        public SubLObject setField3(final SubLObject value) {
+            return this.$done_assertions = value;
+        }
+
+        @Override
+        public SubLObject setField4(final SubLObject value) {
+            return this.$generator_thread = value;
+        }
+
+        @Override
+        public SubLObject setField5(final SubLObject value) {
+            return this.$queue = value;
+        }
+
+        @Override
+        public SubLObject setField6(final SubLObject value) {
+            return this.$most_recently_added_thought = value;
+        }
+
+        @Override
+        public SubLObject setField7(final SubLObject value) {
+            return this.$topical_thoughts = value;
+        }
+
+        static {
+            structDecl = makeStructDeclNative(random_thought_generator.$random_thought_generator_native.class, RANDOM_THOUGHT_GENERATOR, RANDOM_THOUGHT_GENERATOR_P, $list58, $list59, new String[]{ "$user", "$done_assertions", "$generator_thread", "$queue", "$most_recently_added_thought", "$topical_thoughts" }, $list60, $list61, PPRINT_RANDOM_THOUGHT_GENERATOR);
+        }
     }
 
-    @Override
-    public SubLObject getField6()
-    {
-      return this.$most_recently_added_thought;
-    }
+    public static final class $random_thought_generator_p$UnaryFunction extends UnaryFunction {
+        public $random_thought_generator_p$UnaryFunction() {
+            super(extractFunctionNamed("RANDOM-THOUGHT-GENERATOR-P"));
+        }
 
-    @Override
-    public SubLObject getField7()
-    {
-      return this.$topical_thoughts;
+        @Override
+        public SubLObject processItem(final SubLObject arg1) {
+            return random_thought_generator_p(arg1);
+        }
     }
-
-    @Override
-    public SubLObject setField2(final SubLObject value)
-    {
-      return this.$user = value;
-    }
-
-    @Override
-    public SubLObject setField3(final SubLObject value)
-    {
-      return this.$done_assertions = value;
-    }
-
-    @Override
-    public SubLObject setField4(final SubLObject value)
-    {
-      return this.$generator_thread = value;
-    }
-
-    @Override
-    public SubLObject setField5(final SubLObject value)
-    {
-      return this.$queue = value;
-    }
-
-    @Override
-    public SubLObject setField6(final SubLObject value)
-    {
-      return this.$most_recently_added_thought = value;
-    }
-
-    @Override
-    public SubLObject setField7(final SubLObject value)
-    {
-      return this.$topical_thoughts = value;
-    }
-    static
-    {
-      structDecl = Structures.makeStructDeclNative( $random_thought_generator_native.class, $sym56$RANDOM_THOUGHT_GENERATOR, $sym57$RANDOM_THOUGHT_GENERATOR_P, $list58, $list59, new String[] { "$user",
-        "$done_assertions", "$generator_thread", "$queue", "$most_recently_added_thought", "$topical_thoughts"
-      }, $list60, $list61, $sym62$PPRINT_RANDOM_THOUGHT_GENERATOR );
-    }
-  }
-
-  public static final class $random_thought_generator_p$UnaryFunction
-      extends
-        UnaryFunction
-  {
-    public $random_thought_generator_p$UnaryFunction()
-    {
-      super( SubLTranslatedFile.extractFunctionNamed( "RANDOM-THOUGHT-GENERATOR-P" ) );
-    }
-
-    @Override
-    public SubLObject processItem(final SubLObject arg1)
-    {
-      return random_thought_generator_p( arg1 );
-    }
-  }
 }
-/*
- * 
+
+/**
  * Total time: 837 ms synthetic
  */

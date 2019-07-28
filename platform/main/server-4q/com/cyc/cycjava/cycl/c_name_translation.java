@@ -1,1206 +1,592 @@
 package com.cyc.cycjava.cycl;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+
+import com.cyc.cycjava.cycl.c_name_translation;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class c_name_translation
-    extends
-      SubLTranslatedFile
-{
-  public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.c_name_translation";
-  public static final String myFingerPrint = "6c995291f6918fef663112a5980012678570328a91ebe0ccf6ea39bd73a01cbb";
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 1114L)
-  private static SubLSymbol $c_backend_defined_function_name_data$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 23589L)
-  private static SubLSymbol $c_backend_undefined_function_name_data$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 43809L)
-  private static SubLSymbol $c_backend_function_arity_version_table$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 44578L)
-  private static SubLSymbol $c_backend_undefined_arity_function_name_data$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 46392L)
-  private static SubLSymbol $c_backend_function_boolean_version_table$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 48923L)
-  private static SubLSymbol $c_backend_function_boolean_hash$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 49559L)
-  private static SubLSymbol $c_backend_undefined_boolean_function_name_data$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 53188L)
-  private static SubLSymbol $c_backend_function_name_table$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 54467L)
-  private static SubLSymbol $c_backend_function_arglist_table$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 55871L)
-  private static SubLSymbol $c_backend_predefined_constant_table$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 59331L)
-  private static SubLSymbol $c_backend_defined_global_name_data$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 63118L)
-  private static SubLSymbol $c_backend_undefined_global_name_data$;
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 64742L)
-  private static SubLSymbol $c_backend_global_name_table$;
-  private static final SubLObject $list0;
-  private static final SubLObject $list1;
-  private static final SubLList $list2;
-  private static final SubLList $list3;
-  private static final SubLList $list4;
-  private static final SubLSymbol $sym5$_DTB;
-  private static final SubLSymbol $sym6$_BTD;
-  private static final SubLList $list7;
-  private static final SubLSymbol $kw8$UNINITIALIZED;
-  private static final SubLList $list9;
-  private static final SubLObject $list10;
-  private static final SubLList $list11;
-  private static final SubLSymbol $kw12$UNSPECIFIED;
-  private static final SubLInteger $int13$500;
-  private static final SubLList $list14;
-  private static final SubLObject $list15;
-  private static final SubLList $list16;
-  private static final SubLList $list17;
+import static com.cyc.cycjava.cycl.c_name_translation.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_0;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_1;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_2;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_3;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_4;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_5;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_6;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_7;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_8;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_9;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_A;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_B;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_C;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_D;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_E;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_F;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_G;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_H;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_I;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_J;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_K;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_L;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_M;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_N;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_O;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_P;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_Q;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_R;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_S;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_U;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_V;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_W;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_X;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_Y;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_Z;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_a;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_ampersand;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_asterisk;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_at;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_b;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backquote;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backslash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backspace;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_c;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_caret;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_colon;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_comma;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_d;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_dollar;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_e;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_equal;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_escape;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_exclamation;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_f;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_g;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_h;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hyphen;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_i;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_j;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_k;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_l;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_lbrace;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_lbracket;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_less;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_lparen;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_m;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_n;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_newline;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_null;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_o;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_p;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_page;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_percent;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_period;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_plus;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_q;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_question;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quote;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_r;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rbrace;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rbracket;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_return;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rparen;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rubout;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_s;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_semicolon;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_slash;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_t;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_tab;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_tilde;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_u;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_underbar;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_v;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_vertical;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_w;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_x;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_y;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_z;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ELEVEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOURTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINETEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVENTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THIRTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 23407L)
-  public static SubLObject c_backend_defined_function_p(final SubLObject function)
-  {
-    SubLObject cdolist_list_var = $c_backend_defined_function_name_data$.getGlobalValue();
-    SubLObject datum = NIL;
-    datum = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      if( function.eql( datum.first() ) )
-      {
-        return T;
-      }
-      cdolist_list_var = cdolist_list_var.rest();
-      datum = cdolist_list_var.first();
+
+public final class c_name_translation extends SubLTranslatedFile {
+    public static final SubLFile me = new c_name_translation();
+
+    public static final String myName = "com.cyc.cycjava.cycl.c_name_translation";
+
+    public static final String myFingerPrint = "6c995291f6918fef663112a5980012678570328a91ebe0ccf6ea39bd73a01cbb";
+
+    // deflexical
+    private static final SubLSymbol $c_backend_defined_function_name_data$ = makeSymbol("*C-BACKEND-DEFINED-FUNCTION-NAME-DATA*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_undefined_function_name_data$ = makeSymbol("*C-BACKEND-UNDEFINED-FUNCTION-NAME-DATA*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_function_arity_version_table$ = makeSymbol("*C-BACKEND-FUNCTION-ARITY-VERSION-TABLE*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_undefined_arity_function_name_data$ = makeSymbol("*C-BACKEND-UNDEFINED-ARITY-FUNCTION-NAME-DATA*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_function_boolean_version_table$ = makeSymbol("*C-BACKEND-FUNCTION-BOOLEAN-VERSION-TABLE*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_function_boolean_hash$ = makeSymbol("*C-BACKEND-FUNCTION-BOOLEAN-HASH*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_undefined_boolean_function_name_data$ = makeSymbol("*C-BACKEND-UNDEFINED-BOOLEAN-FUNCTION-NAME-DATA*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_function_name_table$ = makeSymbol("*C-BACKEND-FUNCTION-NAME-TABLE*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_function_arglist_table$ = makeSymbol("*C-BACKEND-FUNCTION-ARGLIST-TABLE*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_predefined_constant_table$ = makeSymbol("*C-BACKEND-PREDEFINED-CONSTANT-TABLE*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_defined_global_name_data$ = makeSymbol("*C-BACKEND-DEFINED-GLOBAL-NAME-DATA*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_undefined_global_name_data$ = makeSymbol("*C-BACKEND-UNDEFINED-GLOBAL-NAME-DATA*");
+
+    // deflexical
+    private static final SubLSymbol $c_backend_global_name_table$ = makeSymbol("*C-BACKEND-GLOBAL-NAME-TABLE*");
+
+    // Internal Constants
+    public static final SubLObject $list0 = _constant_0_initializer();
+
+    public static final SubLObject $list1 = _constant_1_initializer();
+
+    public static final SubLList $list2 = list(makeSymbol("OPERATOR"), makeSymbol("&REST"), makeSymbol("ARGS"));
+
+    public static final SubLList $list3 = list(list(makeSymbol("*"), cons(TWO_INTEGER, makeSymbol("%MULT2"))), list(makeSymbol("+"), cons(TWO_INTEGER, makeSymbol("%ADD2"))), list(makeSymbol("-"), cons(ONE_INTEGER, makeSymbol("%MINUS")), cons(TWO_INTEGER, makeSymbol("%SUB2"))), list(makeSymbol("/"), cons(ONE_INTEGER, makeSymbol("%INVERT")), cons(TWO_INTEGER, makeSymbol("%DIV2"))), list(makeSymbol("FUNCALL"), cons(ONE_INTEGER, makeSymbol("%FUNCALL0")), cons(TWO_INTEGER, makeSymbol("%FUNCALL1")), cons(THREE_INTEGER, makeSymbol("%FUNCALL2")), cons(FOUR_INTEGER, makeSymbol("%FUNCALL3"))), list(makeSymbol("MAX"), cons(TWO_INTEGER, makeSymbol("%MAX2"))), list(makeSymbol("MIN"), cons(TWO_INTEGER, makeSymbol("%MIN2"))));
+
+    public static final SubLList $list4 = list(new SubLObject[]{ list(makeSymbol("%ADD2"), makeString("add2"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%DIV2"), makeString("div2"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%FUNCALL0"), makeString("funcall0"), list(makeSymbol("FUNCTION"))), list(makeSymbol("%FUNCALL1"), makeString("funcall1"), list(makeSymbol("FUNCTION"), makeSymbol("ARG1"))), list(makeSymbol("%FUNCALL2"), makeString("funcall2"), list(makeSymbol("FUNCTION"), makeSymbol("ARG1"), makeSymbol("ARG2"))), list(makeSymbol("%FUNCALL3"), makeString("funcall3"), list(makeSymbol("FUNCTION"), makeSymbol("ARG1"), makeSymbol("ARG2"), makeSymbol("ARG3"))), list(makeSymbol("%INVERT"), makeString("invert"), list(makeSymbol("NUM"))), list(makeSymbol("%MAX2"), makeString("max2"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%MIN2"), makeString("min2"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%MINUS"), makeString("minus"), list(makeSymbol("NUM"))), list(makeSymbol("%MULT2"), makeString("mult2"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%SUB2"), makeString("sub2"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))) });
+
+    public static final SubLSymbol $sym5$_DTB = makeSymbol("%DTB");
+
+    public static final SubLSymbol $sym6$_BTD = makeSymbol("%BTD");
+
+    public static final SubLList $list7 = list(new SubLObject[]{ cons(makeSymbol("%THROWN-TO"), makeSymbol("%B-THROWN-TO")), cons(makeSymbol("/="), makeSymbol("%B-/=")), cons(makeSymbol("<"), makeSymbol("%B-<")), cons(makeSymbol("<="), makeSymbol("%B-<=")), cons(makeSymbol("="), makeSymbol("%B-=")), cons(makeSymbol(">"), makeSymbol("%B->")), cons(makeSymbol(">="), makeSymbol("%B->=")), cons(makeSymbol("ALPHA-CHAR-P"), makeSymbol("%B-ALPHA-CHARP")), cons(makeSymbol("ALPHANUMERICP"), makeSymbol("%B-ALPHANUMERICP")), cons(makeSymbol("ATOM"), makeSymbol("%B-ATOM")), cons(makeSymbol("BOTH-CASE-P"), makeSymbol("%B-BOTH-CASEP")), cons(makeSymbol("BOUNDP"), makeSymbol("%B-BOUNDP")), cons(makeSymbol("CHAR-EQUAL"), makeSymbol("%B-CHAR-EQUAL")), cons(makeSymbol("CHAR-GREATERP"), makeSymbol("%B-CHAR-GREATERP")), cons(makeSymbol("CHAR-LESSP"), makeSymbol("%B-CHAR-LESSP")), cons(makeSymbol("CHAR-NOT-EQUAL"), makeSymbol("%B-CHAR-NOT-EQUAL")), cons(makeSymbol("CHAR-NOT-GREATERP"), makeSymbol("%B-CHAR-NOT-GREATERP")), cons(makeSymbol("CHAR-NOT-LESSP"), makeSymbol("%B-CHAR-NOT-LESSP")), cons(makeSymbol("CHAR/="), makeSymbol("%B-CHAR/=")), cons(makeSymbol("CHAR<"), makeSymbol("%B-CHAR<")), cons(makeSymbol("CHAR<="), makeSymbol("%B-CHAR<=")), cons(makeSymbol("CHAR="), makeSymbol("%B-CHAR=")), cons(makeSymbol("CHAR>"), makeSymbol("%B-CHAR>")), cons(makeSymbol("CHAR>="), makeSymbol("%B-CHAR>=")), cons(makeSymbol("CHARACTERP"), makeSymbol("%B-CHARACTERP")), cons(makeSymbol("CONSP"), makeSymbol("%B-CONSP")), cons(EQ, makeSymbol("%B-EQ")), cons(EQL, makeSymbol("%B-EQL")), cons(EQUAL, makeSymbol("%B-EQUAL")), cons(EQUALP, makeSymbol("%B-EQUALP")), cons(makeSymbol("EVENP"), makeSymbol("%B-EVENP")), cons(makeSymbol("FBOUNDP"), makeSymbol("%B-FBOUNDP")), cons(makeSymbol("FIXNUMP"), makeSymbol("%B-FIXNUMP")), cons(makeSymbol("FLOATP"), makeSymbol("%B-FLOATP")), cons(makeSymbol("FUNCTION-SPEC-P"), makeSymbol("%B-FUNCTION-SPEC-P")), cons(makeSymbol("FUNCTIONP"), makeSymbol("%B-FUNCTIONP")), cons(makeSymbol("GUID-P"), makeSymbol("%B-GUID-P")), cons(makeSymbol("HASH-TABLE-P"), makeSymbol("%B-HASH-TABLE-P")), cons(makeSymbol("INTEGERP"), makeSymbol("%B-INTEGERP")), cons(makeSymbol("KEYWORDP"), makeSymbol("%B-KEYWORDP")), cons(makeSymbol("LISTP"), makeSymbol("%B-LISTP")), cons(makeSymbol("LOCK-P"), makeSymbol("%B-LOCK-P")), cons(makeSymbol("LOWER-CASE-P"), makeSymbol("%B-LOWER-CASEP")), cons(makeSymbol("MACRO-OPERATOR-P"), makeSymbol("%B-MACRO-OPERATOR-P")), cons(makeSymbol("MINUSP"), makeSymbol("%B-MINUSP")), cons(makeSymbol("NULL"), makeSymbol("%B-NULL")), cons(makeSymbol("NUMBERP"), makeSymbol("%B-NUMBERP")), cons(makeSymbol("ODDP"), makeSymbol("%B-ODDP")), cons(makeSymbol("PACKAGEP"), makeSymbol("%B-PACKAGEP")), cons(makeSymbol("PLUSP"), makeSymbol("%B-PLUSP")), cons(makeSymbol("PROBE-FILE"), makeSymbol("%B-PROBE-FILE")), cons(makeSymbol("PROCESSP"), makeSymbol("%B-PROCESSP")), cons(makeSymbol("SEQUENCEP"), makeSymbol("%B-SEQUENCEP")), cons(makeSymbol("STREAMP"), makeSymbol("%B-STREAMP")), cons(makeSymbol("STRING-EQUAL"), makeSymbol("%B-STRING-EQUAL")), cons(makeSymbol("STRING-GREATERP"), makeSymbol("%B-STRING-GREATERP")), cons(makeSymbol("STRING-LESSP"), makeSymbol("%B-STRING-LESSP")), cons(makeSymbol("STRING-NOT-EQUAL"), makeSymbol("%B-STRING-NOT-EQUAL")), cons(makeSymbol("STRING-NOT-GREATERP"), makeSymbol("%B-STRING-NOT-GREATERP")), cons(makeSymbol("STRING-NOT-LESSP"), makeSymbol("%B-STRING-NOT-LESSP")), cons(makeSymbol("STRING/="), makeSymbol("%B-STRING/=")), cons(makeSymbol("STRING<"), makeSymbol("%B-STRING<")), cons(makeSymbol("STRING<="), makeSymbol("%B-STRING<=")), cons(makeSymbol("STRING="), makeSymbol("%B-STRING=")), cons(makeSymbol("STRING>"), makeSymbol("%B-STRING>")), cons(makeSymbol("STRING>="), makeSymbol("%B-STRING>=")), cons(makeSymbol("STRINGP"), makeSymbol("%B-STRINGP")), cons(makeSymbol("ALIEN-P", "SUBLISP"), makeSymbol("%B-ALIEN-P")), cons(makeSymbol("_STRUCTURES-BAG-P", "SUBLISP"), makeSymbol("%B-STRUCTURES-BAG-P")), cons(makeSymbol("SYMBOLP"), makeSymbol("%B-SYMBOLP")), cons(makeSymbol("UPPER-CASE-P"), makeSymbol("%B-UPPER-CASEP")), cons(makeSymbol("VECTORP"), makeSymbol("%B-VECTORP")), cons(makeSymbol("ZEROP"), makeSymbol("%B-ZEROP")) });
+
+
+
+    public static final SubLList $list9 = cons(makeSymbol("FUNCTION"), makeSymbol("BOOLEAN-VERSION"));
+
+    public static final SubLObject $list10 = _constant_10_initializer();
+
+    public static final SubLList $list11 = list(makeSymbol("SYMBOL"), makeSymbol("C-BACKEND-NAME"), makeSymbol("&OPTIONAL"), makeSymbol("ARGLIST"));
+
+
+
+    private static final SubLInteger $int$500 = makeInteger(500);
+
+    public static final SubLList $list14 = list(makeSymbol("SYMBOL"), makeSymbol("C-BACKEND-NAME"));
+
+    public static final SubLObject $list15 = _constant_15_initializer();
+
+    public static final SubLList $list16 = list(new SubLObject[]{ list(makeSymbol("*"), makeString("gv_S")), list(makeSymbol("**"), makeString("gv_SS")), list(makeSymbol("***"), makeString("gv_SSS")), list(makeSymbol("*BREAK-ON-ERROR?*"), makeString("gv_break_on_errorP")), list(makeSymbol("*BREAK-ON-WARN?*"), makeString("gv_break_on_warnP")), list(makeSymbol("*CONTINUE-CERROR?*"), makeString("gv_continue_cerrorP")), list(makeSymbol("*CURRENT-AREA*"), makeString("gv_current_area")), list(makeSymbol("*DEBUG-IO*"), makeString("gv_debug_io")), list(makeSymbol("*DEFAULT-PATHNAME-DEFAULTS*"), makeString("gv_default_pathname_defaults")), list(makeSymbol("*ERROR-ABORT-HANDLER*"), makeString("gv_error_abort_handler")), list(makeSymbol("*ERROR-HANDLER*"), makeString("gv_error_handler")), list(makeSymbol("*ERROR-MESSAGE*"), makeString("gv_error_message")), list(makeSymbol("*ERROR-OUTPUT*"), makeString("gv_error_output")), list(makeSymbol("*EXP1*"), makeString("gv_exp1")), list(makeSymbol("*FEATURES*"), makeString("gv_features")), list(makeSymbol("*GENSYM-COUNTER*"), makeString("gv_gensym_counter")), list(makeSymbol("*IGNORE-BREAKS?*"), makeString("gv_ignore_breaksP")), list(makeSymbol("*IGNORE-MUSTS?*"), makeString("gv_ignore_mustsP")), list(makeSymbol("*IGNORE-WARNS?*"), makeString("gv_ignore_warnsP")), list(makeSymbol("*INTERNAL-TIME-UNITS-PER-SECOND*"), makeString("gv_internal_time_units_per_second")), list(makeSymbol("*MOST-NEGATIVE-FIXNUM*"), makeString("gv_most_negative_fixnum")), list(makeSymbol("*MOST-POSITIVE-FIXNUM*"), makeString("gv_most_positive_fixnum")), list(makeSymbol("*NULL-INPUT*"), makeString("gv_null_input")), list(makeSymbol("*NULL-OUTPUT*"), makeString("gv_null_output")), list(makeSymbol("*PACKAGE*"), makeString("gv_current_package")), list(makeSymbol("*PRINT-BASE*"), makeString("gv_print_base")), list(makeSymbol("*PRINT-CASE*"), makeString("gv_print_case")), list(makeSymbol("*PRINT-ESCAPE*"), makeString("gv_print_escape")), list(makeSymbol("*PRINT-LENGTH*"), makeString("gv_print_length")), list(makeSymbol("*PRINT-LEVEL*"), makeString("gv_print_level")), list(makeSymbol("*PRINT-PRETTY*"), makeString("gv_print_pretty")), list(makeSymbol("*PRINT-READABLY*"), makeString("gv_print_readably")), list(makeSymbol("*PROCESS-BACKGROUND-PRIORITY*"), makeString("gv_process_background_priority")), list(makeSymbol("*PROCESS-MAX-PRIORITY*"), makeString("gv_process_max_priority")), list(makeSymbol("*PROCESS-MIN-PRIORITY*"), makeString("gv_process_min_priority")), list(makeSymbol("*PROCESS-NORMAL-PRIORITY*"), makeString("gv_process_normal_priority")), list(makeSymbol("*RAND-MAX*"), makeString("gv_rand_max")), list(makeSymbol("*READ-DEFAULT-FLOAT-FORMAT*"), makeString("gv_read_default_float_format")), list(makeSymbol("*READ-EVAL*"), makeString("gv_read_eval")), list(makeSymbol("*READ-SUPPRESS*"), makeString("gv_read_suppress")), list(makeSymbol("*READTABLE*"), makeString("gv_readtable")), list(makeSymbol("*RETAIN-CLIENT-SOCKET?*"), makeString("gv_retain_client_socketP")), list(makeSymbol("*STANDARD-INPUT*"), makeString("gv_standard_input")), list(makeSymbol("*STANDARD-OUTPUT*"), makeString("gv_standard_output")), list(makeSymbol("*STREAM-INITIAL-INPUT-BUFFER-SIZE*"), makeString("gv_stream_initial_input_buffer_size")), list(makeSymbol("*STREAM-INITIAL-OUTPUT-BUFFER-SIZE*"), makeString("gv_stream_initial_output_buffer_size")), list(makeSymbol("*SUSPEND-TYPE-CHECKING?*"), makeString("gv_suspend_type_checkingP")), list(makeSymbol("*TERMINAL-IO*"), makeString("gv_terminal_io")), list(makeSymbol("*TCP-LOCALHOST-ONLY?*"), makeString("gv_tcp_localhost_onlyP")), list(makeSymbol("*TRACE-OUTPUT*"), makeString("gv_trace_output")), list(makeSymbol("BOOLE-1"), makeString("gv_boole_1")), list(makeSymbol("BOOLE-2"), makeString("gv_boole_2")), list(makeSymbol("BOOLE-AND"), makeString("gv_boole_and")), list(makeSymbol("BOOLE-ANDC1"), makeString("gv_boole_andc1")), list(makeSymbol("BOOLE-ANDC2"), makeString("gv_boole_andc2")), list(makeSymbol("BOOLE-C1"), makeString("gv_boole_c1")), list(makeSymbol("BOOLE-C2"), makeString("gv_boole_c2")), list(makeSymbol("BOOLE-CLR"), makeString("gv_boole_clr")), list(makeSymbol("BOOLE-EQV"), makeString("gv_boole_eqv")), list(makeSymbol("BOOLE-IOR"), makeString("gv_boole_ior")), list(makeSymbol("BOOLE-NAND"), makeString("gv_boole_nand")), list(makeSymbol("BOOLE-NOR"), makeString("gv_boole_nor")), list(makeSymbol("BOOLE-ORC1"), makeString("gv_boole_orc1")), list(makeSymbol("BOOLE-ORC2"), makeString("gv_boole_orc2")), list(makeSymbol("BOOLE-SET"), makeString("gv_boole_set")), list(makeSymbol("BOOLE-XOR"), makeString("gv_boole_xor")), list(makeSymbol("*PRINT-OBJECT-METHOD-TABLE*", "SUBLISP"), makeString("gv_print_object_method_table")), list(makeSymbol("*RESTARTS*", "SUBLISP"), makeString("gv_restarts")), list(makeSymbol("*STREAM-REQUIRES-LOCKING*", "SUBLISP"), makeString("gv_stream_requires_locking")), list(makeSymbol("*SXHASH-METHOD-TABLE*"), makeString("gv_sxhash_method_table")), list(makeSymbol("*VISIT-DEFSTRUCT-OBJECT-METHOD-TABLE*", "SUBLISP"), makeString("gv_visit_defstruct_object_method_table")), list(makeSymbol("*CALL-PROFILING-ENABLED?*", "SUBLISP"), makeString("gv_call_profiling_enabledP")), list(makeSymbol("*CALL-PROFILING-TABLE*", "SUBLISP"), makeString("gv_call_profiling_table")) });
+
+    public static final SubLList $list17 = list(new SubLObject[]{ list(makeSymbol("*DTP-SYMBOL*"), makeString("gv_dtp_symbol"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-CONS*"), makeString("gv_dtp_cons"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-FIXNUM*"), makeString("gv_dtp_fixnum"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-FLOAT*"), makeString("gv_dtp_float"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-CHARACTER*"), makeString("gv_dtp_character"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-STRING*"), makeString("gv_dtp_string"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-VECTOR*"), makeString("gv_dtp_vector"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-FUNCTION*"), makeString("gv_dtp_function"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-HASH-TABLE*"), makeString("gv_dtp_hash_table"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-PACKAGE*"), makeString("gv_dtp_package"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-STREAM*"), makeString("gv_dtp_stream"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-BIGNUM*"), makeString("gv_dtp_bignum"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-GUID*"), makeString("gv_dtp_guid"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-LOCK*"), makeString("gv_dtp_lock"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-PROCESS*"), makeString("gv_dtp_process"), makeKeyword("CONSTANT")), list(makeSymbol("*DTP-STRUCTURES-BAG*"), makeString("gv_dtp_structures_bag"), makeKeyword("CONSTANT")), list(makeSymbol("*%EVALUATOR-METHOD*", "SUBLISP"), makeString("gv_evaluator_method"), makeKeyword("DYNAMIC")), list(makeSymbol("*REMOTE-ADDRESS*", "SUBLISP"), makeString("gv_remote_address"), makeKeyword("DYNAMIC")), list(makeSymbol("*REMOTE-HOSTNAME*", "SUBLISP"), makeString("gv_remote_hostname"), makeKeyword("DYNAMIC")) });
+
+    public static SubLObject c_backend_defined_function_p(final SubLObject function) {
+        SubLObject cdolist_list_var = $c_backend_defined_function_name_data$.getGlobalValue();
+        SubLObject datum = NIL;
+        datum = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            if (function.eql(datum.first())) {
+                return T;
+            }
+            cdolist_list_var = cdolist_list_var.rest();
+            datum = cdolist_list_var.first();
+        } 
+        return NIL;
     }
-    return NIL;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 43188L)
-  public static SubLObject c_backend_function_call_arity_transform(final SubLObject function_call_form)
-  {
-    if( function_call_form.isCons() )
-    {
-      SubLObject operator = NIL;
-      cdestructuring_bind.destructuring_bind_must_consp( function_call_form, function_call_form, $list2 );
-      operator = function_call_form.first();
-      final SubLObject args;
-      final SubLObject current = args = function_call_form.rest();
-      final SubLObject call_arity = Sequences.length( args );
-      final SubLObject call_arity_operator = c_backend_function_call_arity_lookup( operator, call_arity );
-      if( NIL != call_arity_operator )
-      {
-        return reader.bq_cons( call_arity_operator, ConsesLow.append( args, NIL ) );
-      }
-    }
-    return function_call_form;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 45384L)
-  public static SubLObject c_backend_function_call_arity_lookup(final SubLObject operator, final SubLObject call_arity)
-  {
-    final SubLObject operator_arity_versions = list_utilities.alist_lookup_without_values( $c_backend_function_arity_version_table$.getGlobalValue(), operator, Symbols.symbol_function( EQ ), UNPROVIDED );
-    if( NIL != operator_arity_versions )
-    {
-      return list_utilities.alist_lookup_without_values( operator_arity_versions, call_arity, UNPROVIDED, UNPROVIDED );
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 45718L)
-  public static SubLObject c_backend_simplify_Xdtb_transform(final SubLObject dtb_form)
-  {
-    if( dtb_form.isCons() && $sym5$_DTB == dtb_form.first() )
-    {
-      final SubLObject subform = conses_high.second( dtb_form );
-      if( subform.isCons() )
-      {
-        SubLObject current;
-        final SubLObject datum = current = subform;
-        SubLObject operator = NIL;
-        cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list2 );
-        operator = current.first();
-        final SubLObject args;
-        current = ( args = current.rest() );
-        if( operator == $sym6$_BTD )
-        {
-          return args.first();
+    public static SubLObject c_backend_function_call_arity_transform(final SubLObject function_call_form) {
+        if (function_call_form.isCons()) {
+            SubLObject operator = NIL;
+            destructuring_bind_must_consp(function_call_form, function_call_form, $list2);
+            operator = function_call_form.first();
+            final SubLObject args;
+            final SubLObject current = args = function_call_form.rest();
+            final SubLObject call_arity = length(args);
+            final SubLObject call_arity_operator = c_backend_function_call_arity_lookup(operator, call_arity);
+            if (NIL != call_arity_operator) {
+                return bq_cons(call_arity_operator, append(args, NIL));
+            }
         }
-        final SubLObject boolean_version = c_backend_boolean_function_call_lookup( operator );
-        if( NIL != boolean_version )
-        {
-          return reader.bq_cons( boolean_version, ConsesLow.append( args, NIL ) );
+        return function_call_form;
+    }
+
+    public static SubLObject c_backend_function_call_arity_lookup(final SubLObject operator, final SubLObject call_arity) {
+        final SubLObject operator_arity_versions = list_utilities.alist_lookup_without_values($c_backend_function_arity_version_table$.getGlobalValue(), operator, symbol_function(EQ), UNPROVIDED);
+        if (NIL != operator_arity_versions) {
+            return list_utilities.alist_lookup_without_values(operator_arity_versions, call_arity, UNPROVIDED, UNPROVIDED);
         }
-      }
+        return NIL;
     }
-    return dtb_form;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 49002L)
-  public static SubLObject initialize_c_backend_function_boolean_hash()
-  {
-    final SubLObject table = Hashtables.make_hash_table( Sequences.length( $c_backend_function_boolean_version_table$.getGlobalValue() ), Symbols.symbol_function( EQ ), UNPROVIDED );
-    SubLObject cdolist_list_var = $c_backend_function_boolean_version_table$.getGlobalValue();
-    SubLObject cons = NIL;
-    cons = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      SubLObject current;
-      final SubLObject datum = current = cons;
-      SubLObject function = NIL;
-      SubLObject boolean_version = NIL;
-      cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list9 );
-      function = current.first();
-      current = ( boolean_version = current.rest() );
-      Hashtables.sethash( function, table, boolean_version );
-      cdolist_list_var = cdolist_list_var.rest();
-      cons = cdolist_list_var.first();
-    }
-    $c_backend_function_boolean_hash$.setGlobalValue( table );
-    return table;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 49411L)
-  public static SubLObject c_backend_boolean_function_call_lookup(final SubLObject operator)
-  {
-    return Hashtables.gethash_without_values( operator, $c_backend_function_boolean_hash$.getGlobalValue(), NIL );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 53462L)
-  public static SubLObject c_backend_function_name_lookup(final SubLObject function)
-  {
-    return Hashtables.gethash_without_values( function, $c_backend_function_name_table$.getGlobalValue(), NIL );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 53599L)
-  public static SubLObject c_backend_predefined_function_p(final SubLObject function)
-  {
-    return list_utilities.sublisp_boolean( Hashtables.gethash_without_values( function, $c_backend_function_name_table$.getGlobalValue(), NIL ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 53816L)
-  public static SubLObject initialize_c_backend_function_name_table()
-  {
-    final SubLObject data = ConsesLow.nconc( new SubLObject[] { conses_high.copy_list( $c_backend_defined_function_name_data$.getGlobalValue() ), conses_high.copy_list( $c_backend_undefined_function_name_data$
-        .getGlobalValue() ), conses_high.copy_list( $c_backend_undefined_arity_function_name_data$.getGlobalValue() ), conses_high.copy_list( $c_backend_undefined_boolean_function_name_data$.getGlobalValue() )
-    } );
-    final SubLObject table = Hashtables.make_hash_table( Sequences.length( data ), Symbols.symbol_function( EQ ), UNPROVIDED );
-    SubLObject cdolist_list_var = data;
-    SubLObject item = NIL;
-    item = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      SubLObject current;
-      final SubLObject datum = current = item;
-      SubLObject symbol = NIL;
-      SubLObject c_backend_name = NIL;
-      cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list11 );
-      symbol = current.first();
-      current = current.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list11 );
-      c_backend_name = current.first();
-      current = current.rest();
-      final SubLObject arglist = current.isCons() ? current.first() : NIL;
-      cdestructuring_bind.destructuring_bind_must_listp( current, datum, $list11 );
-      current = current.rest();
-      if( NIL == current )
-      {
-        Hashtables.sethash( symbol, table, c_backend_name );
-      }
-      else
-      {
-        cdestructuring_bind.cdestructuring_bind_error( datum, $list11 );
-      }
-      cdolist_list_var = cdolist_list_var.rest();
-      item = cdolist_list_var.first();
-    }
-    $c_backend_function_name_table$.setGlobalValue( table );
-    return table;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 54747L)
-  public static SubLObject c_backend_function_arglist_lookup(final SubLObject function)
-  {
-    return Hashtables.gethash_without_values( function, $c_backend_function_arglist_table$.getGlobalValue(), $kw12$UNSPECIFIED );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 54899L)
-  public static SubLObject initialize_c_backend_function_arglist_table()
-  {
-    final SubLObject table = Hashtables.make_hash_table( $int13$500, Symbols.symbol_function( EQ ), UNPROVIDED );
-    SubLObject cdolist_list_var = $c_backend_defined_function_name_data$.getGlobalValue();
-    SubLObject item = NIL;
-    item = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      SubLObject current;
-      final SubLObject datum = current = item;
-      SubLObject symbol = NIL;
-      SubLObject c_backend_name = NIL;
-      cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list14 );
-      symbol = current.first();
-      current = current.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list14 );
-      c_backend_name = current.first();
-      current = current.rest();
-      if( NIL == current )
-      {
-        if( NIL != subl_promotions.function_symbol_p( symbol ) )
-        {
-          final SubLObject arglist = subl_promotions.function_symbol_arglist( symbol );
-          Hashtables.sethash( symbol, table, arglist );
+    public static SubLObject c_backend_simplify_Xdtb_transform(final SubLObject dtb_form) {
+        if (dtb_form.isCons() && ($sym5$_DTB == dtb_form.first())) {
+            final SubLObject subform = second(dtb_form);
+            if (subform.isCons()) {
+                SubLObject current;
+                final SubLObject datum = current = subform;
+                SubLObject operator = NIL;
+                destructuring_bind_must_consp(current, datum, $list2);
+                operator = current.first();
+                final SubLObject args;
+                current = args = current.rest();
+                if (operator == $sym6$_BTD) {
+                    return args.first();
+                }
+                final SubLObject boolean_version = c_backend_boolean_function_call_lookup(operator);
+                if (NIL != boolean_version) {
+                    return bq_cons(boolean_version, append(args, NIL));
+                }
+            }
         }
-      }
-      else
-      {
-        cdestructuring_bind.cdestructuring_bind_error( datum, $list14 );
-      }
-      cdolist_list_var = cdolist_list_var.rest();
-      item = cdolist_list_var.first();
+        return dtb_form;
     }
-    SubLObject cdolist_list_var2;
-    final SubLObject data = cdolist_list_var2 = ConsesLow.nconc( conses_high.copy_list( $c_backend_undefined_function_name_data$.getGlobalValue() ), conses_high.copy_list( $c_backend_undefined_arity_function_name_data$
-        .getGlobalValue() ), conses_high.copy_list( $c_backend_undefined_boolean_function_name_data$.getGlobalValue() ) );
-    SubLObject item2 = NIL;
-    item2 = cdolist_list_var2.first();
-    while ( NIL != cdolist_list_var2)
-    {
-      SubLObject current2;
-      final SubLObject datum2 = current2 = item2;
-      SubLObject symbol2 = NIL;
-      SubLObject c_backend_name2 = NIL;
-      cdestructuring_bind.destructuring_bind_must_consp( current2, datum2, $list11 );
-      symbol2 = current2.first();
-      current2 = current2.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( current2, datum2, $list11 );
-      c_backend_name2 = current2.first();
-      current2 = current2.rest();
-      final SubLObject arglist2 = current2.isCons() ? current2.first() : NIL;
-      cdestructuring_bind.destructuring_bind_must_listp( current2, datum2, $list11 );
-      current2 = current2.rest();
-      if( NIL == current2 )
-      {
-        Hashtables.sethash( symbol2, table, arglist2 );
-      }
-      else
-      {
-        cdestructuring_bind.cdestructuring_bind_error( datum2, $list11 );
-      }
-      cdolist_list_var2 = cdolist_list_var2.rest();
-      item2 = cdolist_list_var2.first();
+
+    public static SubLObject initialize_c_backend_function_boolean_hash() {
+        final SubLObject table = make_hash_table(length($c_backend_function_boolean_version_table$.getGlobalValue()), symbol_function(EQ), UNPROVIDED);
+        SubLObject cdolist_list_var = $c_backend_function_boolean_version_table$.getGlobalValue();
+        SubLObject cons = NIL;
+        cons = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            SubLObject current;
+            final SubLObject datum = current = cons;
+            SubLObject function = NIL;
+            SubLObject boolean_version = NIL;
+            destructuring_bind_must_consp(current, datum, $list9);
+            function = current.first();
+            current = boolean_version = current.rest();
+            sethash(function, table, boolean_version);
+            cdolist_list_var = cdolist_list_var.rest();
+            cons = cdolist_list_var.first();
+        } 
+        $c_backend_function_boolean_hash$.setGlobalValue(table);
+        return table;
     }
-    $c_backend_function_arglist_table$.setGlobalValue( table );
-    return table;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 59174L)
-  public static SubLObject c_backend_predefined_constant_name(final SubLObject constant)
-  {
-    return list_utilities.alist_lookup_without_values( $c_backend_predefined_constant_table$.getGlobalValue(), constant, Symbols.symbol_function( EQL ), UNPROVIDED );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 64588L)
-  public static SubLObject c_backend_undefined_variable_binding_type_lookup(final SubLObject variable)
-  {
-    return conses_high.third( conses_high.assoc( variable, $c_backend_undefined_global_name_data$.getGlobalValue(), Symbols.symbol_function( EQ ), UNPROVIDED ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 65012L)
-  public static SubLObject c_backend_global_name_lookup(final SubLObject global)
-  {
-    return Hashtables.gethash_without_values( global, $c_backend_global_name_table$.getGlobalValue(), NIL );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 65141L)
-  public static SubLObject c_backend_predefined_global_p(final SubLObject global)
-  {
-    return list_utilities.sublisp_boolean( Hashtables.gethash_without_values( global, $c_backend_global_name_table$.getGlobalValue(), NIL ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/c-name-translation.lisp", position = 65346L)
-  public static SubLObject initialize_c_backend_global_name_table()
-  {
-    final SubLObject data = ConsesLow.nconc( conses_high.copy_list( $c_backend_defined_global_name_data$.getGlobalValue() ), conses_high.copy_list( $c_backend_undefined_global_name_data$.getGlobalValue() ) );
-    final SubLObject table = Hashtables.make_hash_table( Sequences.length( data ), Symbols.symbol_function( EQ ), UNPROVIDED );
-    SubLObject cdolist_list_var = data;
-    SubLObject item = NIL;
-    item = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      SubLObject current;
-      final SubLObject datum = current = item;
-      SubLObject symbol = NIL;
-      SubLObject c_backend_name = NIL;
-      cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list11 );
-      symbol = current.first();
-      current = current.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list11 );
-      c_backend_name = current.first();
-      current = current.rest();
-      final SubLObject arglist = current.isCons() ? current.first() : NIL;
-      cdestructuring_bind.destructuring_bind_must_listp( current, datum, $list11 );
-      current = current.rest();
-      if( NIL == current )
-      {
-        Hashtables.sethash( symbol, table, c_backend_name );
-      }
-      else
-      {
-        cdestructuring_bind.cdestructuring_bind_error( datum, $list11 );
-      }
-      cdolist_list_var = cdolist_list_var.rest();
-      item = cdolist_list_var.first();
+    public static SubLObject c_backend_boolean_function_call_lookup(final SubLObject operator) {
+        return gethash_without_values(operator, $c_backend_function_boolean_hash$.getGlobalValue(), NIL);
     }
-    $c_backend_global_name_table$.setGlobalValue( table );
-    return table;
-  }
 
-  public static SubLObject declare_c_name_translation_file()
-  {
-    SubLFiles.declareFunction( me, "c_backend_defined_function_p", "C-BACKEND-DEFINED-FUNCTION-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_function_call_arity_transform", "C-BACKEND-FUNCTION-CALL-ARITY-TRANSFORM", 1, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_function_call_arity_lookup", "C-BACKEND-FUNCTION-CALL-ARITY-LOOKUP", 2, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_simplify_Xdtb_transform", "C-BACKEND-SIMPLIFY-%DTB-TRANSFORM", 1, 0, false );
-    SubLFiles.declareFunction( me, "initialize_c_backend_function_boolean_hash", "INITIALIZE-C-BACKEND-FUNCTION-BOOLEAN-HASH", 0, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_boolean_function_call_lookup", "C-BACKEND-BOOLEAN-FUNCTION-CALL-LOOKUP", 1, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_function_name_lookup", "C-BACKEND-FUNCTION-NAME-LOOKUP", 1, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_predefined_function_p", "C-BACKEND-PREDEFINED-FUNCTION-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "initialize_c_backend_function_name_table", "INITIALIZE-C-BACKEND-FUNCTION-NAME-TABLE", 0, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_function_arglist_lookup", "C-BACKEND-FUNCTION-ARGLIST-LOOKUP", 1, 0, false );
-    SubLFiles.declareFunction( me, "initialize_c_backend_function_arglist_table", "INITIALIZE-C-BACKEND-FUNCTION-ARGLIST-TABLE", 0, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_predefined_constant_name", "C-BACKEND-PREDEFINED-CONSTANT-NAME", 1, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_undefined_variable_binding_type_lookup", "C-BACKEND-UNDEFINED-VARIABLE-BINDING-TYPE-LOOKUP", 1, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_global_name_lookup", "C-BACKEND-GLOBAL-NAME-LOOKUP", 1, 0, false );
-    SubLFiles.declareFunction( me, "c_backend_predefined_global_p", "C-BACKEND-PREDEFINED-GLOBAL-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "initialize_c_backend_global_name_table", "INITIALIZE-C-BACKEND-GLOBAL-NAME-TABLE", 0, 0, false );
-    return NIL;
-  }
+    public static SubLObject c_backend_function_name_lookup(final SubLObject function) {
+        return gethash_without_values(function, $c_backend_function_name_table$.getGlobalValue(), NIL);
+    }
 
-  public static SubLObject init_c_name_translation_file()
-  {
-    $c_backend_defined_function_name_data$ = SubLFiles.deflexical( "*C-BACKEND-DEFINED-FUNCTION-NAME-DATA*", $list0 );
-    $c_backend_undefined_function_name_data$ = SubLFiles.deflexical( "*C-BACKEND-UNDEFINED-FUNCTION-NAME-DATA*", $list1 );
-    $c_backend_function_arity_version_table$ = SubLFiles.deflexical( "*C-BACKEND-FUNCTION-ARITY-VERSION-TABLE*", $list3 );
-    $c_backend_undefined_arity_function_name_data$ = SubLFiles.deflexical( "*C-BACKEND-UNDEFINED-ARITY-FUNCTION-NAME-DATA*", $list4 );
-    $c_backend_function_boolean_version_table$ = SubLFiles.deflexical( "*C-BACKEND-FUNCTION-BOOLEAN-VERSION-TABLE*", $list7 );
-    $c_backend_function_boolean_hash$ = SubLFiles.deflexical( "*C-BACKEND-FUNCTION-BOOLEAN-HASH*", $kw8$UNINITIALIZED );
-    $c_backend_undefined_boolean_function_name_data$ = SubLFiles.deflexical( "*C-BACKEND-UNDEFINED-BOOLEAN-FUNCTION-NAME-DATA*", $list10 );
-    $c_backend_function_name_table$ = SubLFiles.deflexical( "*C-BACKEND-FUNCTION-NAME-TABLE*", $kw8$UNINITIALIZED );
-    $c_backend_function_arglist_table$ = SubLFiles.deflexical( "*C-BACKEND-FUNCTION-ARGLIST-TABLE*", $kw8$UNINITIALIZED );
-    $c_backend_predefined_constant_table$ = SubLFiles.deflexical( "*C-BACKEND-PREDEFINED-CONSTANT-TABLE*", $list15 );
-    $c_backend_defined_global_name_data$ = SubLFiles.deflexical( "*C-BACKEND-DEFINED-GLOBAL-NAME-DATA*", $list16 );
-    $c_backend_undefined_global_name_data$ = SubLFiles.deflexical( "*C-BACKEND-UNDEFINED-GLOBAL-NAME-DATA*", $list17 );
-    $c_backend_global_name_table$ = SubLFiles.deflexical( "*C-BACKEND-GLOBAL-NAME-TABLE*", $kw8$UNINITIALIZED );
-    return NIL;
-  }
+    public static SubLObject c_backend_predefined_function_p(final SubLObject function) {
+        return list_utilities.sublisp_boolean(gethash_without_values(function, $c_backend_function_name_table$.getGlobalValue(), NIL));
+    }
 
-  public static SubLObject setup_c_name_translation_file()
-  {
-    initialize_c_backend_function_boolean_hash();
-    initialize_c_backend_function_name_table();
-    initialize_c_backend_function_arglist_table();
-    initialize_c_backend_global_name_table();
-    return NIL;
-  }
+    public static SubLObject initialize_c_backend_function_name_table() {
+        final SubLObject data = nconc(new SubLObject[]{ copy_list($c_backend_defined_function_name_data$.getGlobalValue()), copy_list($c_backend_undefined_function_name_data$.getGlobalValue()), copy_list($c_backend_undefined_arity_function_name_data$.getGlobalValue()), copy_list($c_backend_undefined_boolean_function_name_data$.getGlobalValue()) });
+        final SubLObject table = make_hash_table(length(data), symbol_function(EQ), UNPROVIDED);
+        SubLObject cdolist_list_var = data;
+        SubLObject item = NIL;
+        item = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            SubLObject current;
+            final SubLObject datum = current = item;
+            SubLObject symbol = NIL;
+            SubLObject c_backend_name = NIL;
+            destructuring_bind_must_consp(current, datum, $list11);
+            symbol = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list11);
+            c_backend_name = current.first();
+            current = current.rest();
+            final SubLObject arglist = (current.isCons()) ? current.first() : NIL;
+            destructuring_bind_must_listp(current, datum, $list11);
+            current = current.rest();
+            if (NIL == current) {
+                sethash(symbol, table, c_backend_name);
+            } else {
+                cdestructuring_bind_error(datum, $list11);
+            }
+            cdolist_list_var = cdolist_list_var.rest();
+            item = cdolist_list_var.first();
+        } 
+        $c_backend_function_name_table$.setGlobalValue(table);
+        return table;
+    }
 
-  private static SubLObject _constant_0_initializer()
-  {
-    return ConsesLow.list( new SubLObject[] { ConsesLow.list( makeSymbol( "*" ), makeString( "mult" ) ), ConsesLow.list( makeSymbol( "+" ), makeString( "add" ) ), ConsesLow.list( makeSymbol( "-" ), makeString( "sub" ) ),
-      ConsesLow.list( makeSymbol( "/" ), makeString( "divide" ) ), ConsesLow.list( makeSymbol( "/=" ), makeString( "dp_numNE" ) ), ConsesLow.list( makeSymbol( "<" ), makeString( "dp_numL" ) ), ConsesLow.list( makeSymbol(
-          "<=" ), makeString( "dp_numLE" ) ), ConsesLow.list( makeSymbol( "=" ), makeString( "dp_numE" ) ), ConsesLow.list( makeSymbol( ">" ), makeString( "dp_numG" ) ), ConsesLow.list( makeSymbol( ">=" ), makeString(
-              "dp_numGE" ) ), ConsesLow.list( makeSymbol( "ABS" ), makeString( "sublisp_abs" ) ), ConsesLow.list( makeSymbol( "ACONS" ), makeString( "acons" ) ), ConsesLow.list( makeSymbol( "ACOS" ), makeString(
-                  "sublisp_acos" ) ), ConsesLow.list( makeSymbol( "ADJOIN" ), makeString( "adjoin" ) ), ConsesLow.list( makeSymbol( "ALERT-USER" ), makeString( "alert_user" ) ), ConsesLow.list( makeSymbol(
-                      "ALL-PROCESSES" ), makeString( "all_processes" ) ), ConsesLow.list( makeSymbol( "ALPHA-CHAR-P" ), makeString( "dp_alpha_char_p" ) ), ConsesLow.list( makeSymbol( "ALPHANUMERICP" ), makeString(
-                          "dp_alphanumericp" ) ), ConsesLow.list( makeSymbol( "APPEND" ), makeString( "append" ) ), ConsesLow.list( makeSymbol( "APPLY" ), makeString( "apply" ) ), ConsesLow.list( makeSymbol( "APROPOS" ),
-                              makeString( "apropos" ) ), ConsesLow.list( makeSymbol( "AREF" ), makeString( "aref" ) ), ConsesLow.list( makeSymbol( "ASH" ), makeString( "ash" ) ), ConsesLow.list( makeSymbol( "ASIN" ),
-                                  makeString( "sublisp_asin" ) ), ConsesLow.list( makeSymbol( "ASSEMBLE-FIXNUMS-TO-GUID" ), makeString( "assemble_fixnums_to_guid" ) ), ConsesLow.list( makeSymbol(
-                                      "ASSEMBLE-FIXNUMS-TO-INTEGER" ), makeString( "assemble_fixnums_to_integer" ) ), ConsesLow.list( makeSymbol( "ASSOC" ), makeString( "assoc" ) ), ConsesLow.list( makeSymbol(
-                                          "ASSOC-IF" ), makeString( "assoc_if" ) ), ConsesLow.list( makeSymbol( "ATAN" ), makeString( "sublisp_atan" ) ), ConsesLow.list( makeSymbol( "ATOM" ), makeString( "dp_atom" ) ),
-      ConsesLow.list( makeSymbol( "BOOLE" ), makeString( "boole" ) ), ConsesLow.list( makeSymbol( "BOTH-CASE-P" ), makeString( "dp_both_case_p" ) ), ConsesLow.list( makeSymbol( "BOUNDP" ), makeString( "dp_boundp" ) ),
-      ConsesLow.list( makeSymbol( "BREAK" ), makeString( "sublisp_break" ) ), ConsesLow.list( makeSymbol( "BROADCAST-STREAM-STREAMS" ), makeString( "broadcast_stream_streams" ) ), ConsesLow.list( makeSymbol( "BUTLAST" ),
-          makeString( "butlast" ) ), ConsesLow.list( makeSymbol( "BYTE" ), makeString( "f_byte" ) ), ConsesLow.list( makeSymbol( "CAAR" ), makeString( "caar" ) ), ConsesLow.list( makeSymbol( "CADR" ), makeString(
-              "cadr" ) ), ConsesLow.list( makeSymbol( "CAR" ), makeString( "car" ) ), ConsesLow.list( makeSymbol( "CCONCATENATE" ), makeString( "cconcatenate" ) ), ConsesLow.list( makeSymbol( "CDAR" ), makeString(
-                  "cdar" ) ), ConsesLow.list( makeSymbol( "CDDR" ), makeString( "cddr" ) ), ConsesLow.list( makeSymbol( "CDR" ), makeString( "cdr" ) ), ConsesLow.list( makeSymbol( "CEILING" ), makeString(
-                      "sublisp_ceiling" ) ), ConsesLow.list( makeSymbol( "CERROR" ), makeString( "sublisp_cerror" ) ), ConsesLow.list( makeSymbol( "CHAR" ), makeString( "sublisp_char" ) ), ConsesLow.list( makeSymbol(
-                          "CHAR-CODE" ), makeString( "char_code" ) ), ConsesLow.list( makeSymbol( "CHAR-DOWNCASE" ), makeString( "char_downcase" ) ), ConsesLow.list( makeSymbol( "CHAR-EQUAL" ), makeString(
-                              "dp_char_equal" ) ), ConsesLow.list( makeSymbol( "CHAR-GREATERP" ), makeString( "dp_char_greaterp" ) ), ConsesLow.list( makeSymbol( "CHAR-LESSP" ), makeString( "dp_char_lessp" ) ), ConsesLow
-                                  .list( makeSymbol( "CHAR-NOT-EQUAL" ), makeString( "dp_char_not_equal" ) ), ConsesLow.list( makeSymbol( "CHAR-NOT-GREATERP" ), makeString( "dp_char_not_greaterp" ) ), ConsesLow.list(
-                                      makeSymbol( "CHAR-NOT-LESSP" ), makeString( "dp_char_not_lessp" ) ), ConsesLow.list( makeSymbol( "CHAR-UPCASE" ), makeString( "char_upcase" ) ), ConsesLow.list( makeSymbol(
-                                          "CHAR/=" ), makeString( "dp_charNE" ) ), ConsesLow.list( makeSymbol( "CHAR<" ), makeString( "dp_charL" ) ), ConsesLow.list( makeSymbol( "CHAR<=" ), makeString( "dp_charLE" ) ),
-      ConsesLow.list( makeSymbol( "CHAR=" ), makeString( "dp_charE" ) ), ConsesLow.list( makeSymbol( "CHAR>" ), makeString( "dp_charG" ) ), ConsesLow.list( makeSymbol( "CHAR>=" ), makeString( "dp_charGE" ) ), ConsesLow
-          .list( makeSymbol( "CHARACTERP" ), makeString( "dp_characterp" ) ), ConsesLow.list( makeSymbol( "CIRCULAR-LIST-P" ), makeString( "dp_circular_list_p" ) ), ConsesLow.list( makeSymbol( "CLEAR-INPUT" ),
-              makeString( "clear_input" ) ), ConsesLow.list( makeSymbol( "CLEAR-OUTPUT" ), makeString( "clear_output" ) ), ConsesLow.list( makeSymbol( "CLOSE" ), makeString( "sublisp_close" ) ), ConsesLow.list(
-                  makeSymbol( "CLRHASH" ), makeString( "clrhash" ) ), ConsesLow.list( makeSymbol( "CMERGE" ), makeString( "cmerge" ) ), ConsesLow.list( makeSymbol( "CODE-CHAR" ), makeString( "code_char" ) ), ConsesLow
-                      .list( makeSymbol( "CONCATENATED-STREAM-STREAMS" ), makeString( "concatenated_stream_streams" ) ), ConsesLow.list( makeSymbol( "CONS" ), makeString( "cons" ) ), ConsesLow.list( makeSymbol(
-                          "CONSP" ), makeString( "dp_consp" ) ), ConsesLow.list( makeSymbol( "CONSTANTP" ), makeString( "dp_constantp" ) ), ConsesLow.list( makeSymbol( "CONSTRUCT-FILENAME" ), makeString(
-                              "construct_filename" ) ), ConsesLow.list( makeSymbol( "COPY-ALIST" ), makeString( "copy_alist" ) ), ConsesLow.list( makeSymbol( "COPY-LIST" ), makeString( "copy_list" ) ), ConsesLow.list(
-                                  makeSymbol( "COPY-READTABLE" ), makeString( "copy_readtable" ) ), ConsesLow.list( makeSymbol( "COPY-SEQ" ), makeString( "copy_seq" ) ), ConsesLow.list( makeSymbol( "COPY-TREE" ),
-                                      makeString( "copy_tree" ) ), ConsesLow.list( makeSymbol( "COS" ), makeString( "sublisp_cos" ) ), ConsesLow.list( makeSymbol( "COUNT" ), makeString( "count" ) ), ConsesLow.list(
-                                          makeSymbol( "COUNT-IF" ), makeString( "count_if" ) ), ConsesLow.list( makeSymbol( "CRACK-DATE-RELATIVE-GUID" ), makeString( "crack_date_relative_guid" ) ), ConsesLow.list(
-                                              makeSymbol( "CREDUCE" ), makeString( "creduce" ) ), ConsesLow.list( makeSymbol( "CURRENT-PROCESS" ), makeString( "current_process" ) ), ConsesLow.list( makeSymbol(
-                                                  "DATE-RELATIVE-GUID-P" ), makeString( "date_relative_guid_p" ) ), ConsesLow.list( makeSymbol( "DEBUG" ), makeString( "debug" ) ), ConsesLow.list( makeSymbol(
-                                                      "DEBUG-PROCESS" ), makeString( "debug_process" ) ), ConsesLow.list( makeSymbol( "DECODE-FLOAT" ), makeString( "decode_float" ) ), ConsesLow.list( makeSymbol(
-                                                          "DECODE-UNIVERSAL-TIME" ), makeString( "decode_universal_time" ) ), ConsesLow.list( makeSymbol( "DEFAULT-STRUCT-PRINT-FUNCTION" ), makeString(
-                                                              "default_struct_print_function" ) ), ConsesLow.list( makeSymbol( "DELETE" ), makeString( "delete" ) ), ConsesLow.list( makeSymbol( "DELETE-DIRECTORY" ),
-                                                                  makeString( "delete_directory" ) ), ConsesLow.list( makeSymbol( "DELETE-DUPLICATES" ), makeString( "delete_duplicates" ) ), ConsesLow.list( makeSymbol(
-                                                                      "DELETE-FILE" ), makeString( "delete_file" ) ), ConsesLow.list( makeSymbol( "DELETE-IF" ), makeString( "delete_if" ) ), ConsesLow.list( makeSymbol(
-                                                                          "DESTROY-HASH-TABLE-ITERATOR" ), makeString( "destroy_hash_table_iterator" ) ), ConsesLow.list( makeSymbol( "DIGIT-CHAR" ), makeString(
-                                                                              "digit_char" ) ), ConsesLow.list( makeSymbol( "DIGIT-CHAR-P" ), makeString( "dp_digit_char_p" ) ), ConsesLow.list( makeSymbol( "DIRECTORY" ),
-                                                                                  makeString( "directory" ) ), ConsesLow.list( makeSymbol( "DIRECTORY-P" ), makeString( "directory_p" ) ), ConsesLow.list( makeSymbol(
-                                                                                      "DISASSEMBLE-GUID-TO-FIXNUMS" ), makeString( "disassemble_guid_to_fixnums" ) ), ConsesLow.list( makeSymbol(
-                                                                                          "DISASSEMBLE-INTEGER-TO-FIXNUMS" ), makeString( "disassemble_integer_to_fixnums" ) ), ConsesLow.list( makeSymbol( "DPB" ),
-                                                                                              makeString( "f_dpb" ) ), ConsesLow.list( makeSymbol( "ECHO-STREAM-INPUT-STREAM" ), makeString( "echo_stream_input_stream" ) ),
-      ConsesLow.list( makeSymbol( "ECHO-STREAM-OUTPUT-STREAM" ), makeString( "echo_stream_output_stream" ) ), ConsesLow.list( makeSymbol( "EIGHTH" ), makeString( "eighth" ) ), ConsesLow.list( makeSymbol( "ELT" ),
-          makeString( "elt" ) ), ConsesLow.list( makeSymbol( "ENCODE-UNIVERSAL-TIME" ), makeString( "encode_universal_time" ) ), ConsesLow.list( makeSymbol( "ENDP" ), makeString( "dp_endp" ) ), ConsesLow.list( EQ,
-              makeString( "dp_eq" ) ), ConsesLow.list( EQL, makeString( "dp_eql" ) ), ConsesLow.list( EQUAL, makeString( "dp_equal" ) ), ConsesLow.list( EQUALP, makeString( "dp_equalp" ) ), ConsesLow.list( makeSymbol(
-                  "ERROR" ), makeString( "sublisp_error" ) ), ConsesLow.list( makeSymbol( "EVAL" ), makeString( "eval" ) ), ConsesLow.list( makeSymbol( "EVENP" ), makeString( "dp_evenp" ) ), ConsesLow.list( makeSymbol(
-                      "EXIT" ), makeString( "sublisp_exit" ) ), ConsesLow.list( makeSymbol( "EXP" ), makeString( "sublisp_exp" ) ), ConsesLow.list( makeSymbol( "EXPORT" ), makeString( "export" ) ), ConsesLow.list(
-                          makeSymbol( "EXPT" ), makeString( "expt" ) ), ConsesLow.list( makeSymbol( "FALSE" ), makeString( "sublisp_false" ) ), ConsesLow.list( makeSymbol( "FBOUNDP" ), makeString( "dp_fboundp" ) ),
-      ConsesLow.list( makeSymbol( "FIFTH" ), makeString( "fifth" ) ), ConsesLow.list( makeSymbol( "FILE-AUTHOR" ), makeString( "file_author" ) ), ConsesLow.list( makeSymbol( "FILE-LENGTH" ), makeString(
-          "file_length" ) ), ConsesLow.list( makeSymbol( "FILE-LENGTH" ), makeString( "file_length" ) ), ConsesLow.list( makeSymbol( "FILE-POSITION" ), makeString( "file_position" ) ), ConsesLow.list( makeSymbol(
-              "FILE-STRING-LENGTH" ), makeString( "file_string_length" ) ), ConsesLow.list( makeSymbol( "FILE-WRITE-DATE" ), makeString( "file_write_date" ) ), ConsesLow.list( makeSymbol( "FILL" ), makeString(
-                  "fill" ) ), ConsesLow.list( makeSymbol( "FIND" ), makeString( "find" ) ), ConsesLow.list( makeSymbol( "FIND-IF" ), makeString( "find_if" ) ), ConsesLow.list( makeSymbol( "FIND-PACKAGE" ), makeString(
-                      "find_package" ) ), ConsesLow.list( makeSymbol( "FIND-SYMBOL" ), makeString( "find_symbol" ) ), ConsesLow.list( makeSymbol( "FINISH-OUTPUT" ), makeString( "finish_output" ) ), ConsesLow.list(
-                          makeSymbol( "FIRST" ), makeString( "first" ) ), ConsesLow.list( makeSymbol( "FIXNUM*" ), makeString( "fixnum_mult" ) ), ConsesLow.list( makeSymbol( "FIXNUMP" ), makeString( "dp_fixnump" ) ),
-      ConsesLow.list( makeSymbol( "FLOAT" ), makeString( "sublisp_float" ) ), ConsesLow.list( makeSymbol( "FLOAT-DIGITS" ), makeString( "float_digits" ) ), ConsesLow.list( makeSymbol( "FLOAT-RADIX" ), makeString(
-          "float_radix" ) ), ConsesLow.list( makeSymbol( "FLOAT-SIGN" ), makeString( "float_sign" ) ), ConsesLow.list( makeSymbol( "FLOATP" ), makeString( "dp_floatp" ) ), ConsesLow.list( makeSymbol( "FLOOR" ),
-              makeString( "sublisp_floor" ) ), ConsesLow.list( makeSymbol( "FMAKUNBOUND" ), makeString( "fmakunbound" ) ), ConsesLow.list( makeSymbol( "FORCE-OUTPUT" ), makeString( "force_output" ) ), ConsesLow.list(
-                  makeSymbol( "FORK-PROCESS" ), makeString( "fork_process" ) ), ConsesLow.list( makeSymbol( "FORMAT" ), makeString( "format_g" ) ), ConsesLow.list( makeSymbol( "FOURTH" ), makeString( "fourth" ) ),
-      ConsesLow.list( makeSymbol( "FRESH-LINE" ), makeString( "fresh_line" ) ), ConsesLow.list( makeSymbol( "FUNCALL" ), makeString( "funcall" ) ), ConsesLow.list( makeSymbol( "FUNCTION-INFORMATION" ), makeString(
-          "function_information" ) ), ConsesLow.list( makeSymbol( "FUNCTION-SPEC-P" ), makeString( "dp_function_spec_p" ) ), ConsesLow.list( makeSymbol( "FUNCTIONP" ), makeString( "dp_functionp" ) ), ConsesLow.list(
-              makeSymbol( "GC" ), makeString( "gc" ) ), ConsesLow.list( makeSymbol( "GC-DYNAMIC" ), makeString( "gc_dynamic" ) ), ConsesLow.list( makeSymbol( "GC-EPHEMERAL" ), makeString( "gc_ephemeral" ) ), ConsesLow
-                  .list( makeSymbol( "GC-FULL" ), makeString( "gc_full" ) ), ConsesLow.list( makeSymbol( "GENSYM" ), makeString( "gensym" ) ), ConsesLow.list( makeSymbol( "GENTEMP" ), makeString( "gentemp" ) ), ConsesLow
-                      .list( makeSymbol( "GET" ), makeString( "get" ) ), ConsesLow.list( makeSymbol( "GET-DECODED-TIME" ), makeString( "get_decoded_time" ) ), ConsesLow.list( makeSymbol( "GET-DISPATCH-MACRO-CHARACTER" ),
-                          makeString( "get_dispatch_macro_character" ) ), ConsesLow.list( makeSymbol( "GET-FILE-POSITION" ), makeString( "get_file_position" ) ), ConsesLow.list( makeSymbol( "GET-FILE-POSITION" ),
-                              makeString( "get_file_position" ) ), ConsesLow.list( makeSymbol( "GET-INTERNAL-REAL-TIME" ), makeString( "get_internal_real_time" ) ), ConsesLow.list( makeSymbol( "GET-INTERNAL-RUN-TIME" ),
-                                  makeString( "get_internal_run_time" ) ), ConsesLow.list( makeSymbol( "GET-MACHINE-NAME" ), makeString( "get_machine_name" ) ), ConsesLow.list( makeSymbol( "GET-MACRO-CHARACTER" ),
-                                      makeString( "get_macro_character" ) ), ConsesLow.list( makeSymbol( "GET-NETWORK-NAME" ), makeString( "get_network_name" ) ), ConsesLow.list( makeSymbol( "GET-OUTPUT-STREAM-STRING" ),
-                                          makeString( "get_output_stream_string" ) ), ConsesLow.list( makeSymbol( "GET-PROCESS-ID" ), makeString( "get_process_id" ) ), ConsesLow.list( makeSymbol(
-                                              "GET-STRING-FROM-USER" ), makeString( "get_string_from_user" ) ), ConsesLow.list( makeSymbol( "GET-UNIVERSAL-TIME" ), makeString( "get_universal_time" ) ), ConsesLow.list(
-                                                  makeSymbol( "GET-USER-NAME" ), makeString( "get_user_name" ) ), ConsesLow.list( makeSymbol( "GETF" ), makeString( "getf" ) ), ConsesLow.list( makeSymbol( "GETHASH" ),
-                                                      makeString( "gethash" ) ), ConsesLow.list( makeSymbol( "GETHASH-WITHOUT-VALUES" ), makeString( "gethash_without_values" ) ), ConsesLow.list( makeSymbol( "GUID-P" ),
-                                                          makeString( "dp_guid_p" ) ), ConsesLow.list( makeSymbol( "GUID-STRING-P" ), makeString( "guid_string_p" ) ), ConsesLow.list( makeSymbol( "GUID-TO-STRING" ),
-                                                              makeString( "guid_to_string" ) ), ConsesLow.list( makeSymbol( "GUID/=" ), makeString( "dp_guidNE" ) ), ConsesLow.list( makeSymbol( "GUID<" ), makeString(
-                                                                  "dp_guidL" ) ), ConsesLow.list( makeSymbol( "GUID<=" ), makeString( "dp_guidLE" ) ), ConsesLow.list( makeSymbol( "GUID=" ), makeString( "dp_guidE" ) ),
-      ConsesLow.list( makeSymbol( "GUID>" ), makeString( "dp_guidG" ) ), ConsesLow.list( makeSymbol( "GUID>=" ), makeString( "dp_guidGE" ) ), ConsesLow.list( makeSymbol( "HASH-TABLE-COUNT" ), makeString(
-          "hash_table_count" ) ), ConsesLow.list( makeSymbol( "HASH-TABLE-ITERATOR-DONE-P" ), makeString( "hash_table_iterator_done_p" ) ), ConsesLow.list( makeSymbol( "HASH-TABLE-ITERATOR-HASH-TABLE" ), makeString(
-              "hash_table_iterator_hash_table" ) ), ConsesLow.list( makeSymbol( "HASH-TABLE-ITERATOR-KEY" ), makeString( "hash_table_iterator_key" ) ), ConsesLow.list( makeSymbol( "HASH-TABLE-ITERATOR-NEXT" ),
-                  makeString( "hash_table_iterator_next" ) ), ConsesLow.list( makeSymbol( "HASH-TABLE-ITERATOR-P" ), makeString( "hash_table_iterator_p" ) ), ConsesLow.list( makeSymbol( "HASH-TABLE-ITERATOR-VALUE" ),
-                      makeString( "hash_table_iterator_value" ) ), ConsesLow.list( makeSymbol( "HASH-TABLE-P" ), makeString( "dp_hash_table_p" ) ), ConsesLow.list( makeSymbol( "HASH-TABLE-SIZE" ), makeString(
-                          "hash_table_size" ) ), ConsesLow.list( makeSymbol( "HASH-TABLE-TEST" ), makeString( "hash_table_test" ) ), ConsesLow.list( IDENTITY, makeString( "identity" ) ), ConsesLow.list( makeSymbol(
-                              "IGNORE" ), makeString( "ignore" ) ), ConsesLow.list( makeSymbol( "IMPORT" ), makeString( "import" ) ), ConsesLow.list( makeSymbol( "INFINITY-P" ), makeString( "dp_infinity_p" ) ), ConsesLow
-                                  .list( makeSymbol( "INPUT-STREAM-P" ), makeString( "input_stream_p" ) ), ConsesLow.list( makeSymbol( "INT/" ), makeString( "int_div" ) ), ConsesLow.list( makeSymbol(
-                                      "INTEGER-DECODE-FLOAT" ), makeString( "integer_decode_float" ) ), ConsesLow.list( makeSymbol( "INTEGER-LENGTH" ), makeString( "integer_length" ) ), ConsesLow.list( makeSymbol(
-                                          "INTEGERP" ), makeString( "dp_integerp" ) ), ConsesLow.list( makeSymbol( "INTERACTIVE-STREAM-P" ), makeString( "interactive_stream_p" ) ), ConsesLow.list( makeSymbol( "INTERN" ),
-                                              makeString( "intern" ) ), ConsesLow.list( makeSymbol( "INTERNAL-REAL-TIME-HAS-ARRIVED?" ), makeString( "internal_real_time_has_arrived_p" ) ), ConsesLow.list( makeSymbol(
-                                                  "INTERRUPT-PROCESS" ), makeString( "interrupt_process" ) ), ConsesLow.list( makeSymbol( "INTERSECTION" ), makeString( "intersection" ) ), ConsesLow.list( makeSymbol(
-                                                      "ISQRT" ), makeString( "isqrt" ) ), ConsesLow.list( makeSymbol( "KEYWORDP" ), makeString( "dp_keywordp" ) ), ConsesLow.list( makeSymbol( "KILL-PROCESS" ), makeString(
-                                                          "kill_process" ) ), ConsesLow.list( makeSymbol( "LAST" ), makeString( "last" ) ), ConsesLow.list( makeSymbol( "LDB" ), makeString( "f_ldb" ) ), ConsesLow.list(
-                                                              makeSymbol( "LDIFF" ), makeString( "ldiff" ) ), ConsesLow.list( makeSymbol( "LENGTH" ), makeString( "length" ) ), ConsesLow.list( makeSymbol(
-                                                                  "LISP-IMPLEMENTATION-TYPE" ), makeString( "lisp_implementation_type" ) ), ConsesLow.list( makeSymbol( "LISP-IMPLEMENTATION-VERSION" ), makeString(
-                                                                      "lisp_implementation_version" ) ), ConsesLow.list( makeSymbol( "LIST" ), makeString( "list" ) ), ConsesLow.list( makeSymbol( "LIST*" ), makeString(
-                                                                          "listS" ) ), ConsesLow.list( makeSymbol( "LIST-ALL-PACKAGES" ), makeString( "list_all_packages" ) ), ConsesLow.list( makeSymbol( "LIST-LENGTH" ),
-                                                                              makeString( "list_length" ) ), ConsesLow.list( makeSymbol( "LISTEN" ), makeString( "sublisp_listen" ) ), ConsesLow.list( makeSymbol(
-                                                                                  "LISTP" ), makeString( "dp_listp" ) ), ConsesLow.list( makeSymbol( "LOAD" ), makeString( "load" ) ), ConsesLow.list( makeSymbol(
-                                                                                      "LOCK-IDLE-P" ), makeString( "lock_idle_p" ) ), ConsesLow.list( makeSymbol( "LOCK-LOCKER" ), makeString( "lock_locker" ) ), ConsesLow
-                                                                                          .list( makeSymbol( "LOCK-NAME" ), makeString( "lock_name" ) ), ConsesLow.list( makeSymbol( "LOCK-P" ), makeString( "dp_lockp" ) ),
-      ConsesLow.list( makeSymbol( "LOCK-PACKAGE" ), makeString( "lock_package" ) ), ConsesLow.list( makeSymbol( "LOG" ), makeString( "sublisp_log" ) ), ConsesLow.list( makeSymbol( "LOG-MESSAGE" ), makeString(
-          "log_message" ) ), ConsesLow.list( makeSymbol( "LOGAND" ), makeString( "logand" ) ), ConsesLow.list( makeSymbol( "LOGANDC1" ), makeString( "logandc1" ) ), ConsesLow.list( makeSymbol( "LOGANDC2" ), makeString(
-              "logandc2" ) ), ConsesLow.list( makeSymbol( "LOGBITP" ), makeString( "logbitp" ) ), ConsesLow.list( makeSymbol( "LOGCOUNT" ), makeString( "logcount" ) ), ConsesLow.list( makeSymbol( "LOGEQV" ), makeString(
-                  "logeqv" ) ), ConsesLow.list( makeSymbol( "LOGIOR" ), makeString( "logior" ) ), ConsesLow.list( makeSymbol( "LOGNAND" ), makeString( "lognand" ) ), ConsesLow.list( makeSymbol( "LOGNOR" ), makeString(
-                      "lognor" ) ), ConsesLow.list( makeSymbol( "LOGNOT" ), makeString( "lognot" ) ), ConsesLow.list( makeSymbol( "LOGORC1" ), makeString( "logorc1" ) ), ConsesLow.list( makeSymbol( "LOGORC2" ),
-                          makeString( "logorc2" ) ), ConsesLow.list( makeSymbol( "LOGTEST" ), makeString( "logtest" ) ), ConsesLow.list( makeSymbol( "LOGXOR" ), makeString( "logxor" ) ), ConsesLow.list( makeSymbol(
-                              "LONG-SITE-NAME" ), makeString( "long_site_name" ) ), ConsesLow.list( makeSymbol( "LOWER-CASE-P" ), makeString( "dp_lower_case_p" ) ), ConsesLow.list( makeSymbol( "MACHINE-INSTANCE" ),
-                                  makeString( "machine_instance" ) ), ConsesLow.list( makeSymbol( "MACHINE-TYPE" ), makeString( "machine_type" ) ), ConsesLow.list( makeSymbol( "MACHINE-VERSION" ), makeString(
-                                      "machine_version" ) ), ConsesLow.list( makeSymbol( "MACRO-OPERATOR-P" ), makeString( "dp_macro_operator_p" ) ), ConsesLow.list( makeSymbol( "MACROEXPAND" ), makeString(
-                                          "sublisp_macroexpand" ) ), ConsesLow.list( makeSymbol( "MACROEXPAND-1" ), makeString( "sublisp_macroexpand_one" ) ), ConsesLow.list( makeSymbol( "MAKE-BROADCAST-STREAM" ),
-                                              makeString( "make_broadcast_stream" ) ), ConsesLow.list( makeSymbol( "MAKE-CONCATENATED-STREAM" ), makeString( "make_concatenated_stream" ) ), ConsesLow.list( makeSymbol(
-                                                  "MAKE-DATE-RELATIVE-GUID" ), makeString( "make_date_relative_guid" ) ), ConsesLow.list( makeSymbol( "MAKE-DIRECTORY" ), makeString( "make_directory" ) ), ConsesLow.list(
-                                                      makeSymbol( "MAKE-DISPATCH-MACRO-CHARACTER" ), makeString( "make_dispatch_macro_character" ) ), ConsesLow.list( makeSymbol( "MAKE-ECHO-STREAM" ), makeString(
-                                                          "make_echo_stream" ) ), ConsesLow.list( makeSymbol( "MAKE-HASH-TABLE" ), makeString( "make_hash_table" ) ), ConsesLow.list( makeSymbol(
-                                                              "MAKE-HASH-TABLE-ITERATOR" ), makeString( "make_hash_table_iterator" ) ), ConsesLow.list( makeSymbol( "MAKE-KEYWORD" ), makeString( "make_keyword" ) ),
-      ConsesLow.list( makeSymbol( "MAKE-LIST" ), makeString( "make_list" ) ), ConsesLow.list( makeSymbol( "MAKE-LOCK" ), makeString( "make_lock" ) ), ConsesLow.list( makeSymbol( "MAKE-PACKAGE" ), makeString(
-          "make_package" ) ), ConsesLow.list( makeSymbol( "MAKE-PRIVATE-BROADCAST-STREAM" ), makeString( "make_private_broadcast_stream" ) ), ConsesLow.list( makeSymbol( "MAKE-PRIVATE-CONCATENATED-STREAM" ), makeString(
-              "make_private_concatenated_stream" ) ), ConsesLow.list( makeSymbol( "MAKE-PRIVATE-ECHO-STREAM" ), makeString( "make_private_echo_stream" ) ), ConsesLow.list( makeSymbol(
-                  "MAKE-PRIVATE-STRING-INPUT-STREAM" ), makeString( "make_private_string_input_stream" ) ), ConsesLow.list( makeSymbol( "MAKE-PRIVATE-STRING-OUTPUT-STREAM" ), makeString(
-                      "make_private_string_output_stream" ) ), ConsesLow.list( makeSymbol( "MAKE-PRIVATE-SYNONYM-STREAM" ), makeString( "make_private_synonym_stream" ) ), ConsesLow.list( makeSymbol(
-                          "MAKE-PRIVATE-TWO-WAY-STREAM" ), makeString( "make_private_two_way_stream" ) ), ConsesLow.list( makeSymbol( "MAKE-PROCESS" ), makeString( "make_process" ) ), ConsesLow.list( makeSymbol(
-                              "MAKE-STRING" ), makeString( "make_string" ) ), ConsesLow.list( makeSymbol( "MAKE-STRING-INPUT-STREAM" ), makeString( "make_string_input_stream" ) ), ConsesLow.list( makeSymbol(
-                                  "MAKE-STRING-OUTPUT-STREAM" ), makeString( "make_string_output_stream" ) ), ConsesLow.list( makeSymbol( "MAKE-SYMBOL" ), makeString( "make_symbol" ) ), ConsesLow.list( makeSymbol(
-                                      "MAKE-SYNONYM-STREAM" ), makeString( "make_synonym_stream" ) ), ConsesLow.list( makeSymbol( "MAKE-TWO-WAY-STREAM" ), makeString( "make_two_way_stream" ) ), ConsesLow.list(
-                                          makeSymbol( "MAKE-VECTOR" ), makeString( "make_vector" ) ), ConsesLow.list( makeSymbol( "MAKUNBOUND" ), makeString( "makunbound" ) ), ConsesLow.list( makeSymbol( "MAPC" ),
-                                              makeString( "mapc" ) ), ConsesLow.list( makeSymbol( "MAPCAN" ), makeString( "mapcan" ) ), ConsesLow.list( makeSymbol( "MAPCAR" ), makeString( "mapcar" ) ), ConsesLow.list(
-                                                  makeSymbol( "MAPCON" ), makeString( "mapcon" ) ), ConsesLow.list( makeSymbol( "MAPHASH" ), makeString( "maphash" ) ), ConsesLow.list( makeSymbol( "MAPL" ), makeString(
-                                                      "mapl" ) ), ConsesLow.list( makeSymbol( "MAPLIST" ), makeString( "maplist" ) ), ConsesLow.list( makeSymbol( "MAX" ), makeString( "max" ) ), ConsesLow.list(
-                                                          makeSymbol( "MEMBER" ), makeString( "member" ) ), ConsesLow.list( makeSymbol( "MEMBER-IF" ), makeString( "member_if" ) ), ConsesLow.list( makeSymbol( "MIN" ),
-                                                              makeString( "min" ) ), ConsesLow.list( makeSymbol( "MINUSP" ), makeString( "dp_minusp" ) ), ConsesLow.list( makeSymbol( "MISMATCH" ), makeString(
-                                                                  "mismatch" ) ), ConsesLow.list( makeSymbol( "MOD" ), makeString( "mod" ) ), ConsesLow.list( makeSymbol( "NBUTLAST" ), makeString( "nbutlast" ) ),
-      ConsesLow.list( makeSymbol( "NCONC" ), makeString( "nconc" ) ), ConsesLow.list( makeSymbol( "NEW-GUID" ), makeString( "new_guid" ) ), ConsesLow.list( makeSymbol( "NINTERSECTION" ), makeString( "nintersection" ) ),
-      ConsesLow.list( makeSymbol( "NINTH" ), makeString( "ninth" ) ), ConsesLow.list( makeSymbol( "NON-CIRCULAR-LIST-P" ), makeString( "dp_non_circular_list_p" ) ), ConsesLow.list( makeSymbol( "NOT-A-NUMBER-P" ),
-          makeString( "dp_not_a_number_p" ) ), ConsesLow.list( makeSymbol( "NOTIFY" ), makeString( "notify" ) ), ConsesLow.list( makeSymbol( "NOTIFY-USER" ), makeString( "notify_user" ) ), ConsesLow.list( makeSymbol(
-              "NRECONC" ), makeString( "nreconc" ) ), ConsesLow.list( makeSymbol( "NREVERSE" ), makeString( "nreverse" ) ), ConsesLow.list( makeSymbol( "NSET-DIFFERENCE" ), makeString( "nset_difference" ) ), ConsesLow
-                  .list( makeSymbol( "NSET-EXCLUSIVE-OR" ), makeString( "nset_exclusive_or" ) ), ConsesLow.list( makeSymbol( "NSTRING-CAPITALIZE" ), makeString( "nstring_capitalize" ) ), ConsesLow.list( makeSymbol(
-                      "NSTRING-DOWNCASE" ), makeString( "nstring_downcase" ) ), ConsesLow.list( makeSymbol( "NSTRING-UPCASE" ), makeString( "nstring_upcase" ) ), ConsesLow.list( makeSymbol( "NSUBLIS" ), makeString(
-                          "nsublis" ) ), ConsesLow.list( makeSymbol( "NSUBST" ), makeString( "nsubst" ) ), ConsesLow.list( makeSymbol( "NSUBST-IF" ), makeString( "nsubst_if" ) ), ConsesLow.list( makeSymbol(
-                              "NSUBSTITUTE" ), makeString( "nsubstitute" ) ), ConsesLow.list( makeSymbol( "NSUBSTITUTE-IF" ), makeString( "nsubstitute_if" ) ), ConsesLow.list( makeSymbol( "NTH" ), makeString( "nth" ) ),
-      ConsesLow.list( makeSymbol( "NTHCDR" ), makeString( "nthcdr" ) ), ConsesLow.list( makeSymbol( "NULL" ), makeString( "dp_null" ) ), ConsesLow.list( makeSymbol( "NUMBERP" ), makeString( "dp_numberp" ) ), ConsesLow
-          .list( makeSymbol( "NUNION" ), makeString( "sublisp_nunion" ) ), ConsesLow.list( makeSymbol( "ODDP" ), makeString( "dp_oddp" ) ), ConsesLow.list( makeSymbol( "OPEN-BINARY" ), makeString( "open_binary" ) ),
-      ConsesLow.list( makeSymbol( "OPEN-STREAM-P" ), makeString( "open_stream_p" ) ), ConsesLow.list( makeSymbol( "OPEN-TCP-STREAM" ), makeString( "open_tcp_stream" ) ), ConsesLow.list( makeSymbol( "OPEN-TEXT" ),
-          makeString( "open_text" ) ), ConsesLow.list( makeSymbol( "OUTPUT-STREAM-P" ), makeString( "output_stream_p" ) ), ConsesLow.list( makeSymbol( "PACKAGE-LOCKED-P" ), makeString( "dp_package_locked_p" ) ),
-      ConsesLow.list( makeSymbol( "PACKAGE-NAME" ), makeString( "package_name" ) ), ConsesLow.list( makeSymbol( "PACKAGE-NICKNAMES" ), makeString( "package_nicknames" ) ), ConsesLow.list( makeSymbol(
-          "PACKAGE-SHADOWING-SYMBOLS" ), makeString( "package_shadowing_symbols" ) ), ConsesLow.list( makeSymbol( "PACKAGE-USE-LIST" ), makeString( "package_use_list" ) ), ConsesLow.list( makeSymbol(
-              "PACKAGE-USED-BY-LIST" ), makeString( "package_used_by_list" ) ), ConsesLow.list( makeSymbol( "PACKAGEP" ), makeString( "dp_packagep" ) ), ConsesLow.list( makeSymbol( "PAIRLIS" ), makeString( "pairlis" ) ),
-      ConsesLow.list( makeSymbol( "PARSE-INTEGER" ), makeString( "parse_integer" ) ), ConsesLow.list( makeSymbol( "PEEK-CHAR" ), makeString( "peek_char" ) ), ConsesLow.list( makeSymbol( "PLUSP" ), makeString(
-          "dp_plusp" ) ), ConsesLow.list( makeSymbol( "POSITION" ), makeString( "position" ) ), ConsesLow.list( makeSymbol( "POSITION-IF" ), makeString( "position_if" ) ), ConsesLow.list( makeSymbol( "PRIN1" ),
-              makeString( "prin1" ) ), ConsesLow.list( makeSymbol( "PRIN1-TO-STRING" ), makeString( "prin1_to_string" ) ), ConsesLow.list( makeSymbol( "PRINC" ), makeString( "princ" ) ), ConsesLow.list( makeSymbol(
-                  "PRINC-TO-STRING" ), makeString( "princ_to_string" ) ), ConsesLow.list( makeSymbol( "PRINT" ), makeString( "print" ) ), ConsesLow.list( makeSymbol( "PRINT-OBJECT" ), makeString( "print_object" ) ),
-      ConsesLow.list( makeSymbol( "PROBE-FILE" ), makeString( "dp_probe_file" ) ), ConsesLow.list( makeSymbol( "PROCESS-ACTIVE-P" ), makeString( "process_active_p" ) ), ConsesLow.list( makeSymbol( "PROCESS-BLOCK" ),
-          makeString( "process_block" ) ), ConsesLow.list( makeSymbol( "PROCESS-NAME" ), makeString( "process_name" ) ), ConsesLow.list( makeSymbol( "PROCESS-PRIORITY" ), makeString( "process_priority" ) ), ConsesLow
-              .list( makeSymbol( "PROCESS-STATE" ), makeString( "process_state" ) ), ConsesLow.list( makeSymbol( "PROCESS-UNBLOCK" ), makeString( "process_unblock" ) ), ConsesLow.list( makeSymbol( "PROCESS-WAIT" ),
-                  makeString( "process_wait" ) ), ConsesLow.list( makeSymbol( "PROCESS-WAIT-WITH-TIMEOUT" ), makeString( "process_wait_with_timeout" ) ), ConsesLow.list( makeSymbol( "PROCESS-WHOSTATE" ), makeString(
-                      "process_whostate" ) ), ConsesLow.list( makeSymbol( "PROCESSP" ), makeString( "dp_processp" ) ), ConsesLow.list( makeSymbol( "PUT" ), makeString( "put" ) ), ConsesLow.list( makeSymbol( "PUTF" ),
-                          makeString( "putf" ) ), ConsesLow.list( makeSymbol( "RANDOM" ), makeString( "sublisp_random" ) ), ConsesLow.list( makeSymbol( "RASSOC" ), makeString( "rassoc" ) ), ConsesLow.list( makeSymbol(
-                              "RASSOC-IF" ), makeString( "rassoc_if" ) ), ConsesLow.list( makeSymbol( "READ" ), makeString( "sublisp_read" ) ), ConsesLow.list( makeSymbol( "READ-BYTE" ), makeString( "read_byte" ) ),
-      ConsesLow.list( makeSymbol( "READ-CHAR" ), makeString( "read_char" ) ), ConsesLow.list( makeSymbol( "READ-CHAR-NO-HANG" ), makeString( "read_char_no_hang" ) ), ConsesLow.list( makeSymbol( "READ-DELIMITED-LIST" ),
-          makeString( "read_delimited_list" ) ), ConsesLow.list( makeSymbol( "READ-FROM-STRING" ), makeString( "read_from_string" ) ), ConsesLow.list( makeSymbol( "READ-FROM-STRING-IGNORING-ERRORS" ), makeString(
-              "f_read_from_string_ignoring_errors" ) ), ConsesLow.list( makeSymbol( "READ-IGNORING-ERRORS" ), makeString( "read_ignoring_errors" ) ), ConsesLow.list( makeSymbol( "READ-LINE" ), makeString(
-                  "read_line" ) ), ConsesLow.list( makeSymbol( "READ-PRESERVING-WHITESPACE" ), makeString( "read_preserving_whitespace" ) ), ConsesLow.list( makeSymbol( "READ-SEQUENCE" ), makeString( "read_sequence" ) ),
-      ConsesLow.list( makeSymbol( "READTABLE-CASE" ), makeString( "readtable_case" ) ), ConsesLow.list( makeSymbol( "READTABLEP" ), makeString( "readtablep" ) ), ConsesLow.list( makeSymbol(
-          "REGISTER-LOW-MEMORY-CALLBACK" ), makeString( "register_low_memory_callback" ) ), ConsesLow.list( makeSymbol( "DEREGISTER-LOW-MEMORY-CALLBACK" ), makeString( "deregister_low_memory_callback" ) ), ConsesLow
-              .list( makeSymbol( "LOW-MEMORY-CALLBACKS" ), makeString( "register_low_memory_callback" ) ), ConsesLow.list( makeSymbol( "REM" ), makeString( "rem" ) ), ConsesLow.list( makeSymbol( "REMF" ), makeString(
-                  "remf" ) ), ConsesLow.list( makeSymbol( "REMHASH" ), makeString( "remhash" ) ), ConsesLow.list( makeSymbol( "REMOVE" ), makeString( "sublisp_remove" ) ), ConsesLow.list( makeSymbol(
-                      "REMOVE-DUPLICATES" ), makeString( "remove_duplicates" ) ), ConsesLow.list( makeSymbol( "REMOVE-IF" ), makeString( "sublisp_remove_if" ) ), ConsesLow.list( makeSymbol( "REMPROP" ), makeString(
-                          "remprop" ) ), ConsesLow.list( makeSymbol( "RENAME-FILE" ), makeString( "rename_file" ) ), ConsesLow.list( makeSymbol( "REPLACE" ), makeString( "replace" ) ), ConsesLow.list( makeSymbol(
-                              "REST" ), makeString( "rest" ) ), ConsesLow.list( makeSymbol( "RESTART-PROCESS" ), makeString( "restart_process" ) ), ConsesLow.list( makeSymbol( "REVAPPEND" ), makeString( "revappend" ) ),
-      ConsesLow.list( makeSymbol( "REVERSE" ), makeString( "reverse" ) ), ConsesLow.list( makeSymbol( "ROOM" ), makeString( "room" ) ), ConsesLow.list( makeSymbol( "ROUND" ), makeString( "sublisp_round" ) ), ConsesLow
-          .list( makeSymbol( "RPLACA" ), makeString( "rplaca" ) ), ConsesLow.list( makeSymbol( "RPLACD" ), makeString( "rplacd" ) ), ConsesLow.list( makeSymbol( "SCALE-FLOAT" ), makeString( "scale_float" ) ), ConsesLow
-              .list( makeSymbol( "SEARCH" ), makeString( "search" ) ), ConsesLow.list( makeSymbol( "SECOND" ), makeString( "second" ) ), ConsesLow.list( makeSymbol( "SEED-RANDOM" ), makeString( "seed_random" ) ),
-      ConsesLow.list( makeSymbol( "SEQUENCEP" ), makeString( "dp_sequencep" ) ), ConsesLow.list( makeSymbol( "SET" ), makeString( "set" ) ), ConsesLow.list( makeSymbol( "SET-AREF" ), makeString( "set_aref" ) ), ConsesLow
-          .list( makeSymbol( "SET-CHAR" ), makeString( "sublisp_set_char" ) ), ConsesLow.list( makeSymbol( "SET-DIFFERENCE" ), makeString( "set_difference" ) ), ConsesLow.list( makeSymbol(
-              "SET-DISPATCH-MACRO-CHARACTER" ), makeString( "set_dispatch_macro_character" ) ), ConsesLow.list( makeSymbol( "SET-EXCLUSIVE-OR" ), makeString( "set_exclusive_or" ) ), ConsesLow.list( makeSymbol(
-                  "SET-FILE-POSITION" ), makeString( "set_file_position" ) ), ConsesLow.list( makeSymbol( "SET-MACRO-CHARACTER" ), makeString( "set_macro_character" ) ), ConsesLow.list( makeSymbol( "SET-NTH" ),
-                      makeString( "set_nth" ) ), ConsesLow.list( makeSymbol( "SET-PROCESS-PRIORITY" ), makeString( "set_process_priority" ) ), ConsesLow.list( makeSymbol( "SET-SYNTAX-FROM-CHAR" ), makeString(
-                          "set_syntax_from_char" ) ), ConsesLow.list( makeSymbol( "SETHASH" ), makeString( "sethash" ) ), ConsesLow.list( makeSymbol( "SEVENTH" ), makeString( "seventh" ) ), ConsesLow.list( makeSymbol(
-                              "SHORT-SITE-NAME" ), makeString( "short_site_name" ) ), ConsesLow.list( makeSymbol( "SHOW-PROCESSES" ), makeString( "show_processes" ) ), ConsesLow.list( makeSymbol( "SIMPLE-READER-ERROR" ),
-                                  makeString( "simple_reader_error" ) ), ConsesLow.list( makeSymbol( "SIN" ), makeString( "sublisp_sin" ) ), ConsesLow.list( makeSymbol( "SIXTH" ), makeString( "sixth" ) ), ConsesLow.list(
-                                      makeSymbol( "SLEEP" ), makeString( "sublisp_sleep" ) ), ConsesLow.list( makeSymbol( "SOFTWARE-TYPE" ), makeString( "software_type" ) ), ConsesLow.list( makeSymbol(
-                                          "SOFTWARE-VERSION" ), makeString( "software_version" ) ), ConsesLow.list( makeSymbol( "SORT" ), makeString( "sort" ) ), ConsesLow.list( makeSymbol( "SQRT" ), makeString(
-                                              "sublisp_sqrt" ) ), ConsesLow.list( makeSymbol( "STABLE-SORT" ), makeString( "stable_sort" ) ), ConsesLow.list( makeSymbol( "STREAM-ELEMENT-TYPE" ), makeString(
-                                                  "stream_element_type" ) ), ConsesLow.list( makeSymbol( "STREAMP" ), makeString( "dp_streamp" ) ), ConsesLow.list( makeSymbol( "STRING" ), makeString(
-                                                      "sublisp_string" ) ), ConsesLow.list( makeSymbol( "STRING-CAPITALIZE" ), makeString( "string_capitalize" ) ), ConsesLow.list( makeSymbol( "STRING-DOWNCASE" ),
-                                                          makeString( "string_downcase" ) ), ConsesLow.list( makeSymbol( "STRING-EQUAL" ), makeString( "dp_string_equal" ) ), ConsesLow.list( makeSymbol(
-                                                              "STRING-GREATERP" ), makeString( "dp_string_greaterp" ) ), ConsesLow.list( makeSymbol( "STRING-LEFT-TRIM" ), makeString( "string_left_trim" ) ), ConsesLow
-                                                                  .list( makeSymbol( "STRING-LESSP" ), makeString( "dp_string_lessp" ) ), ConsesLow.list( makeSymbol( "STRING-NOT-EQUAL" ), makeString(
-                                                                      "dp_string_not_equal" ) ), ConsesLow.list( makeSymbol( "STRING-NOT-GREATERP" ), makeString( "dp_string_not_greaterp" ) ), ConsesLow.list( makeSymbol(
-                                                                          "STRING-NOT-LESSP" ), makeString( "dp_string_not_lessp" ) ), ConsesLow.list( makeSymbol( "STRING-RIGHT-TRIM" ), makeString(
-                                                                              "string_right_trim" ) ), ConsesLow.list( makeSymbol( "STRING-TO-GUID" ), makeString( "string_to_guid" ) ), ConsesLow.list( makeSymbol(
-                                                                                  "STRING-TRIM" ), makeString( "string_trim" ) ), ConsesLow.list( makeSymbol( "STRING-UPCASE" ), makeString( "string_upcase" ) ), ConsesLow
-                                                                                      .list( makeSymbol( "STRING/=" ), makeString( "dp_stringNE" ) ), ConsesLow.list( makeSymbol( "STRING<" ), makeString( "dp_stringL" ) ),
-      ConsesLow.list( makeSymbol( "STRING<=" ), makeString( "dp_stringLE" ) ), ConsesLow.list( makeSymbol( "STRING=" ), makeString( "dp_stringE" ) ), ConsesLow.list( makeSymbol( "STRING>" ), makeString( "dp_stringG" ) ),
-      ConsesLow.list( makeSymbol( "STRING>=" ), makeString( "dp_stringGE" ) ), ConsesLow.list( makeSymbol( "STRINGP" ), makeString( "dp_stringp" ) ), ConsesLow.list( makeSymbol( "SUBLIS" ), makeString( "sublis" ) ),
-      ConsesLow.list( makeSymbol( "ALIEN-NULL-PTR?", "SUBLISP" ), makeString( "alien_null_ptr_P" ) ), ConsesLow.list( makeSymbol( "ALIEN-P", "SUBLISP" ), makeString( "dp_alienp" ) ), ConsesLow.list( makeSymbol(
-          "ALIEN-TYPE", "SUBLISP" ), makeString( "alien_type" ) ), ConsesLow.list( makeSymbol( "BACKUP-ARGS", "SUBLISP" ), makeString( "backup_args" ) ), ConsesLow.list( makeSymbol( "BAD-FORMAT-DIRECTIVE", "SUBLISP" ),
-              makeString( "bad_format_directive" ) ), ConsesLow.list( makeSymbol( "CALL-FORMAT-DIRECTIVE", "SUBLISP" ), makeString( "call_format_directive" ) ), ConsesLow.list( makeSymbol( "CHECK-FLAGS", "SUBLISP" ),
-                  makeString( "check_flags" ) ), ConsesLow.list( makeSymbol( "DECLARATION-INFORMATION", "SUBLISP" ), makeString( "declaration_information" ) ), ConsesLow.list( makeSymbol( "END-OF-FILE-ERROR",
-                      "SUBLISP" ), makeString( "end_of_file_error" ) ), ConsesLow.list( makeSymbol( "FIND-DIRECTIVE", "SUBLISP" ), makeString( "find_directive" ) ), ConsesLow.list( makeSymbol( "FORMAT-CARDINAL",
-                          "SUBLISP" ), makeString( "format_cardinal" ) ), ConsesLow.list( makeSymbol( "FORMAT-CARDINAL-INTERNAL", "SUBLISP" ), makeString( "format_cardinal_internal" ) ), ConsesLow.list( makeSymbol(
-                              "FORMAT-DIRECTIVE-P", "SUBLISP" ), makeString( "format_directive_p" ) ), ConsesLow.list( makeSymbol( "FORMAT-INTEGER", "SUBLISP" ), makeString( "format_integer" ) ), ConsesLow.list(
-                                  makeSymbol( "FORMAT-INTEGER-INTERNAL", "SUBLISP" ), makeString( "format_integer_internal" ) ), ConsesLow.list( makeSymbol( "FORMAT-INTERNAL", "SUBLISP" ), makeString(
-                                      "format_internal" ) ), ConsesLow.list( makeSymbol( "FORMAT-ITERATION", "SUBLISP" ), makeString( "format_iteration" ) ), ConsesLow.list( makeSymbol( "FORMAT-ORDINAL", "SUBLISP" ),
-                                          makeString( "format_ordinal" ) ), ConsesLow.list( makeSymbol( "FORMAT-PADDED", "SUBLISP" ), makeString( "format_padded" ) ), ConsesLow.list( makeSymbol( "FORMAT-REPEAT",
-                                              "SUBLISP" ), makeString( "format_repeat" ) ), ConsesLow.list( makeSymbol( "FORMAT-SUBLIST-ITERATION", "SUBLISP" ), makeString( "format_sublist_iteration" ) ), ConsesLow.list(
-                                                  makeSymbol( "FORMAT-TYPEP", "SUBLISP" ), makeString( "format_typep" ) ), ConsesLow.list( makeSymbol( "GETHASH-BUCKET", "SUBLISP" ), makeString( "gethash_bucket" ) ),
-      ConsesLow.list( makeSymbol( "ILLEGAL-DIRECTIVE", "SUBLISP" ), makeString( "illegal_directive" ) ), ConsesLow.list( makeSymbol( "MATCHING-BRACKET", "SUBLISP" ), makeString( "matching_bracket" ) ), ConsesLow.list(
-          makeSymbol( "MATCHING-BRACKET-NOT-FOUND", "SUBLISP" ), makeString( "matching_bracket_not_found" ) ), ConsesLow.list( makeSymbol( "NOT-A-FORMAT-CONTROL", "SUBLISP" ), makeString( "not_a_format_control" ) ),
-      ConsesLow.list( makeSymbol( "NOT-A-LIST-ARGUMENT", "SUBLISP" ), makeString( "not_a_list_argument" ) ), ConsesLow.list( makeSymbol( "NOT-ENOUGH-FORMAT-ARGUMENTS", "SUBLISP" ), makeString(
-          "not_enough_format_arguments" ) ), ConsesLow.list( makeSymbol( "PARSE-FORMAT-COMMAND", "SUBLISP" ), makeString( "parse_format_command" ) ), ConsesLow.list( makeSymbol( "POSSIBLY-NOTE-FUNCTION-ENTRY",
-              "SUBLISP" ), makeString( "f_possibly_note_function_entry" ) ), ConsesLow.list( makeSymbol( "REALLY-FORMAT", "SUBLISP" ), makeString( "really_format" ) ), ConsesLow.list( makeSymbol(
-                  "REPITITION-DESIGNATOR-VALUE", "SUBLISP" ), makeString( "repitition_designator_value" ) ), ConsesLow.list( makeSymbol( "ROUND-DIGITS", "SUBLISP" ), makeString( "round_digits" ) ), ConsesLow.list(
-                      makeSymbol( "SPLIT-FLONUM-DIGITS", "SUBLISP" ), makeString( "split_flonum_digits" ) ), ConsesLow.list( makeSymbol( "STREAM-LINE-COLUMN", "SUBLISP" ), makeString( "stream_line_column" ) ), ConsesLow
-                          .list( makeSymbol( "STREAM-LINE-COLUMN", "SUBLISP" ), makeString( "stream_line_column" ) ), ConsesLow.list( makeSymbol( "SXHASH-ROT", "SUBLISP" ), makeString( "sxhash_rot" ) ), ConsesLow.list(
-                              makeSymbol( "UNIMPLEMENTED-FORMAT-DIRECTIVE", "SUBLISP" ), makeString( "unimplemented_format_directive" ) ), ConsesLow.list( makeSymbol( "SUBSEQ" ), makeString( "subseq" ) ), ConsesLow.list(
-                                  makeSymbol( "SUBSETP" ), makeString( "dp_subsetp" ) ), ConsesLow.list( makeSymbol( "SUBST" ), makeString( "subst" ) ), ConsesLow.list( makeSymbol( "SUBST-IF" ), makeString(
-                                      "subst_if" ) ), ConsesLow.list( makeSymbol( "SUBSTITUTE" ), makeString( "substitute" ) ), ConsesLow.list( makeSymbol( "SUBSTITUTE-IF" ), makeString( "substitute_if" ) ), ConsesLow
-                                          .list( makeSymbol( "SXHASH" ), makeString( "sxhash" ) ), ConsesLow.list( makeSymbol( "SYMBOL-FUNCTION" ), makeString( "symbol_function" ) ), ConsesLow.list( makeSymbol(
-                                              "SYMBOL-NAME" ), makeString( "symbol_name" ) ), ConsesLow.list( makeSymbol( "SYMBOL-PACKAGE" ), makeString( "symbol_package" ) ), ConsesLow.list( makeSymbol(
-                                                  "SYMBOL-PLIST" ), makeString( "symbol_plist" ) ), ConsesLow.list( makeSymbol( "SYMBOL-VALUE" ), makeString( "symbol_value" ) ), ConsesLow.list( makeSymbol( "SYMBOLP" ),
-                                                      makeString( "dp_symbolp" ) ), ConsesLow.list( makeSymbol( "SYNONYM-STREAM-SYMBOL" ), makeString( "synonym_stream_symbol" ) ), ConsesLow.list( makeSymbol( "TAILP" ),
-                                                          makeString( "dp_tailp" ) ), ConsesLow.list( makeSymbol( "TAN" ), makeString( "sublisp_tan" ) ), ConsesLow.list( makeSymbol( "TENTH" ), makeString( "tenth" ) ),
-      ConsesLow.list( makeSymbol( "TERPRI" ), makeString( "terpri" ) ), ConsesLow.list( makeSymbol( "THIRD" ), makeString( "third" ) ), ConsesLow.list( makeSymbol( "THROW" ), makeString( "sublisp_throw" ) ), ConsesLow
-          .list( makeSymbol( "TIME-HAS-ARRIVED?" ), makeString( "time_has_arrived_p" ) ), ConsesLow.list( makeSymbol( "TREE-EQUAL" ), makeString( "dp_tree_equal" ) ), ConsesLow.list( makeSymbol( "TRUE" ), makeString(
-              "sublisp_true" ) ), ConsesLow.list( makeSymbol( "TRUNCATE" ), makeString( "sublisp_truncate" ) ), ConsesLow.list( makeSymbol( "TWO-WAY-STREAM-INPUT-STREAM" ), makeString( "two_way_stream_input_stream" ) ),
-      ConsesLow.list( makeSymbol( "TWO-WAY-STREAM-OUTPUT-STREAM" ), makeString( "two_way_stream_output_stream" ) ), ConsesLow.list( makeSymbol( "TYPE-OF" ), makeString( "sublisp_type_of" ) ), ConsesLow.list( makeSymbol(
-          "UNINTERN" ), makeString( "unintern" ) ), ConsesLow.list( makeSymbol( "UNION" ), makeString( "sublisp_union" ) ), ConsesLow.list( makeSymbol( "UNREAD-CHAR" ), makeString( "unread_char" ) ), ConsesLow.list(
-              makeSymbol( "UPPER-CASE-P" ), makeString( "dp_upper_case_p" ) ), ConsesLow.list( makeSymbol( "USER-CONFIRM" ), makeString( "user_confirm" ) ), ConsesLow.list( makeSymbol( "VALID-PROCESS-P" ), makeString(
-                  "valid_process_p" ) ), ConsesLow.list( makeSymbol( "VALUES" ), makeString( "values" ) ), ConsesLow.list( makeSymbol( "VARIABLE-INFORMATION" ), makeString( "variable_information" ) ), ConsesLow.list(
-                      makeSymbol( "VECTOR" ), makeString( "sublisp_vector" ) ), ConsesLow.list( makeSymbol( "VECTORP" ), makeString( "dp_vectorp" ) ), ConsesLow.list( makeSymbol( "VISIT-DEFSTRUCT" ), makeString(
-                          "f_visit_defstruct" ) ), ConsesLow.list( makeSymbol( "WARN" ), makeString( "sublisp_warn" ) ), ConsesLow.list( makeSymbol( "WRITE" ), makeString( "write_g" ) ), ConsesLow.list( makeSymbol(
-                              "WRITE-BYTE" ), makeString( "write_byte" ) ), ConsesLow.list( makeSymbol( "WRITE-CHAR" ), makeString( "write_char" ) ), ConsesLow.list( makeSymbol( "WRITE-IMAGE" ), makeString(
-                                  "write_image" ) ), ConsesLow.list( makeSymbol( "WRITE-LINE" ), makeString( "write_line" ) ), ConsesLow.list( makeSymbol( "WRITE-SEQUENCE" ), makeString( "write_sequence" ) ), ConsesLow
-                                      .list( makeSymbol( "WRITE-STRING" ), makeString( "write_string" ) ), ConsesLow.list( makeSymbol( "WRITE-TO-STRING" ), makeString( "write_to_string_g" ) ), ConsesLow.list( makeSymbol(
-                                          "ZEROP" ), makeString( "dp_zerop" ) ), ConsesLow.list( makeSymbol( "DECLARE-FOREIGN-SHARED-LIBRARY", "SUBLISP" ), makeString( "f_declare_foreign_shared_library" ) ), ConsesLow
-                                              .list( makeSymbol( "DEFINE-FOREIGN-FUNCTION-INTERNAL", "SUBLISP" ), makeString( "f_define_foreign_function_internal" ) ), ConsesLow.list( makeSymbol(
-                                                  "FOREIGN-SHARED-LIBRARY-INSTALLED?", "SUBLISP" ), makeString( "f_foreign_shared_library_installedP" ) ), ConsesLow.list( makeSymbol(
-                                                      "ENSURE-FOREIGN-SHARED-LIBRARY-LOADED", "SUBLISP" ), makeString( "f_ensure_foreign_shared_library_loaded" ) ), ConsesLow.list( makeSymbol( "VECTOR-FOR-MARSHALLING",
-                                                          "SUBLISP" ), makeString( "f_vector_for_marshalling" ) ), ConsesLow.list( makeSymbol( "CDESTRUCTURING-BIND-ERROR", "SUBLISP" ), makeString(
-                                                              "f_cdestructuring_bind_error" ) ), ConsesLow.list( makeSymbol( "DESTRUCTURING-BIND-MUST-CONSP", "SUBLISP" ), makeString(
-                                                                  "f_destructuring_bind_must_consp" ) ), ConsesLow.list( makeSymbol( "DESTRUCTURING-BIND-MUST-LISTP", "SUBLISP" ), makeString(
-                                                                      "f_destructuring_bind_must_listp" ) ), ConsesLow.list( makeSymbol( "PROPERTY-LIST-MEMBER", "SUBLISP" ), makeString( "f_property_list_member" ) ),
-      ConsesLow.list( makeSymbol( "PRINT-UNREADABLE-OBJECT-PREAMBLE", "SUBLISP" ), makeString( "f_print_unreadable_object_preamble" ) ), ConsesLow.list( makeSymbol( "PRINT-UNREADABLE-OBJECT-POSTAMBLE", "SUBLISP" ),
-          makeString( "f_print_unreadable_object_postamble" ) ), ConsesLow.list( makeSymbol( "BQ-CONS" ), makeString( "f_bq_cons" ) ), ConsesLow.list( makeSymbol( "BQ-VECTOR" ), makeString( "f_bq_vector" ) ), ConsesLow
-              .list( makeSymbol( "DEFSTRUCT-ANALYZE", "SUBLISP" ), makeString( "f_defstruct_analyze" ) ), ConsesLow.list( makeSymbol( "JAVA-CALL" ), makeString( "java_call" ) ), ConsesLow.list( makeSymbol(
-                  "JAVA-CLASS" ), makeString( "java_class" ) ), ConsesLow.list( makeSymbol( "JAVA-CONSTRUCTOR" ), makeString( "java_constructor" ) ), ConsesLow.list( makeSymbol( "JAVA-METHOD" ), makeString(
-                      "java_method" ) ), ConsesLow.list( makeSymbol( "JAVA-NEW" ), makeString( "java_new" ) ), ConsesLow.list( makeSymbol( "JAVA-OBJECT-P" ), makeString( "java_object_p" ) ), ConsesLow.list( makeSymbol(
-                          "JAVA-STATIC" ), makeString( "java_static" ) )
-    } );
-  }
+    public static SubLObject c_backend_function_arglist_lookup(final SubLObject function) {
+        return gethash_without_values(function, $c_backend_function_arglist_table$.getGlobalValue(), $UNSPECIFIED);
+    }
 
-  private static SubLObject _constant_1_initializer()
-  {
-    return ConsesLow.list( new SubLObject[] { ConsesLow.list( makeSymbol( "OPEN" ), makeString( "open_g" ), ConsesLow.list( makeSymbol( "FILESPEC" ), makeSymbol( "&REST" ), makeSymbol( "KEYS" ) ) ), ConsesLow.list(
-        makeSymbol( "%B-CHECK-TYPE" ), makeString( "CHECK_TYPE" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "TYPE" ) ) ), ConsesLow.list( makeSymbol( "%B-ENFORCE-TYPE" ), makeString( "ENFORCE_TYPE" ),
-            ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "TYPE" ) ) ), ConsesLow.list( makeSymbol( "%BEGIN-WITH-PROCESS-RESOURCE-TRACKING" ), makeString( "BEGIN_WITH_PROCESS_RESOURCE_TRACKING" ), ConsesLow.list(
-                makeSymbol( "ENV" ), makeSymbol( "RESULT" ) ) ), ConsesLow.list( makeSymbol( "%BIND" ), makeString( "BIND" ), ConsesLow.list( makeSymbol( "VAR" ), makeSymbol( "VAL" ) ) ), ConsesLow.list( makeSymbol(
-                    "%BIND-SPECIAL-VARS" ), makeString( "BIND_SPECIAL_VARS" ), ConsesLow.list( makeSymbol( "SPECIAL-VARS" ), makeSymbol( "BINDINGS" ) ) ), ConsesLow.list( makeSymbol( "%BTD" ), makeString( "BTD" ),
-                        ConsesLow.list( makeSymbol( "OBJ" ) ) ), ConsesLow.list( makeSymbol( "%CATCH-VALUE" ), makeString( "CATCH_VALUE" ), NIL ), ConsesLow.list( makeSymbol( "%CBIG" ), makeString( "CBIG" ), ConsesLow
-                            .list( makeSymbol( "INTEGER" ) ) ), ConsesLow.list( makeSymbol( "%CCHAR" ), makeString( "CCHAR" ), ConsesLow.list( makeSymbol( "CODE" ) ) ), ConsesLow.list( makeSymbol( "%CFIX" ), makeString(
-                                "CFIX" ), ConsesLow.list( makeSymbol( "FIXNUM" ) ) ), ConsesLow.list( makeSymbol( "%CFLOAT" ), makeString( "CFLOAT" ), ConsesLow.list( makeSymbol( "FLOAT" ) ) ), ConsesLow.list(
-                                    makeSymbol( "%CGUID" ), makeString( "CGUID" ), ConsesLow.list( makeSymbol( "STRING" ) ) ), ConsesLow.list( makeSymbol( "%CINTERN" ), makeString( "CINTERN" ), ConsesLow.list(
-                                        makeSymbol( "STRING" ) ) ), ConsesLow.list( makeSymbol( "%CKEYWORD" ), makeString( "CKEYWORD" ), ConsesLow.list( makeSymbol( "STRING" ) ) ), ConsesLow.list( makeSymbol(
-                                            "%CMAKE-SYMBOL" ), makeString( "CMAKE_SYMBOL" ), ConsesLow.list( makeSymbol( "STRING" ) ) ), ConsesLow.list( makeSymbol( "%CPACKAGE" ), makeString( "CPACKAGE" ), ConsesLow
-                                                .list( makeSymbol( "STRING" ) ) ), ConsesLow.list( makeSymbol( "%CSTRING" ), makeString( "CSTRING" ), ConsesLow.list( makeSymbol( "STRING" ) ) ), ConsesLow.list(
-                                                    makeSymbol( "%CSYMBOL" ), makeString( "CSYMBOL" ), ConsesLow.list( makeSymbol( "SYMBOL-NAME" ), makeSymbol( "PACKAGE-NAME" ) ) ), ConsesLow.list( makeSymbol(
-                                                        "%CDO-SYMBOLS-END" ), makeString( "CDO_SYMBOLS_DONE" ), ConsesLow.list( makeSymbol( "PKG-VAR" ), makeSymbol( "ITERATOR-VAR" ) ) ), ConsesLow.list( makeSymbol(
-                                                            "%CDO-SYMBOLS-LOOP" ), makeString( "CDO_SYMBOLS_LOOP_DEFAULT" ), ConsesLow.list( makeSymbol( "SYM-VAR" ), makeSymbol( "ITERATOR-VAR" ) ) ), ConsesLow.list(
-                                                                makeSymbol( "%CDO-SYMBOLS-SETUP" ), makeString( "CDO_SYMBOLS_SETUP" ), ConsesLow.list( makeSymbol( "PKG-VAR" ), makeSymbol( "ITERATOR-VAR" ) ) ), ConsesLow
-                                                                    .list( makeSymbol( "%CDOHASH-BEGIN" ), makeString( "CDOHASH_BEGIN" ), ConsesLow.list( makeSymbol( "KEY-VAR" ), makeSymbol( "OBJ-VAR" ), makeSymbol(
-                                                                        "TABLE-FORM" ), makeSymbol( "TABLE-VAR" ), makeSymbol( "INDEX-VAR" ) ) ), ConsesLow.list( makeSymbol( "%CDOHASH-END" ), makeString( "CDOHASH_END" ),
-                                                                            ConsesLow.list( makeSymbol( "KEY-VAR" ), makeSymbol( "OBJ-VAR" ), makeSymbol( "TABLE-VAR" ), makeSymbol( "INDEX-VAR" ) ) ), ConsesLow.list(
-                                                                                makeSymbol( "%CDOLIST-BEGIN" ), makeString( "CDOLIST_BEGIN" ), ConsesLow.list( makeSymbol( "VAR" ), makeSymbol( "INIT-FORM" ), makeSymbol(
-                                                                                    "CDOLIST-VAR" ) ) ), ConsesLow.list( makeSymbol( "%CDOLIST-END" ), makeString( "CDOLIST_END" ), ConsesLow.list( makeSymbol( "VAR" ) ) ),
-      ConsesLow.list( makeSymbol( "%CDOTIMES-BEGIN" ), makeString( "CDOTIMES_BEGIN" ), ConsesLow.list( makeSymbol( "VAR" ), makeSymbol( "INIT-FORM" ), makeSymbol( "CDOTIMES-VAR" ) ) ), ConsesLow.list( makeSymbol(
-          "%CDOTIMES-END" ), makeString( "CDOTIMES_END" ), ConsesLow.list( makeSymbol( "VAR" ) ) ), ConsesLow.list( makeSymbol( "%CSOME-BEGIN" ), makeString( "CSOME_BEGIN" ), ConsesLow.list( makeSymbol( "VAR" ),
-              makeSymbol( "INIT-FORM" ), makeSymbol( "DONE-FORM" ), makeSymbol( "CSOME-VAR" ) ) ), ConsesLow.list( makeSymbol( "%CSOME-END" ), makeString( "CSOME_END" ), ConsesLow.list( makeSymbol( "VAR" ) ) ), ConsesLow
-                  .list( makeSymbol( "%DP-CHECK-TYPE" ), makeString( "DP_CHECK_TYPE" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "TYPE" ) ) ), ConsesLow.list( makeSymbol( "%DP-ENFORCE-TYPE" ), makeString(
-                      "DP_ENFORCE_TYPE" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "TYPE" ) ) ), ConsesLow.list( makeSymbol( "%DTB" ), makeString( "DTB" ), ConsesLow.list( makeSymbol( "OBJ" ) ) ), ConsesLow
-                          .list( makeSymbol( "%DYN" ), makeString( "DYN" ), ConsesLow.list( makeSymbol( "VAR" ) ) ), ConsesLow.list( makeSymbol( "%END-PRINTING-OBJECT" ), makeString( "END_PRINTING_OBJECT" ), ConsesLow
-                              .list( makeSymbol( "OBJECT" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "%END-WITH-PROCESS-RESOURCE-TRACKING" ), makeString( "END_WITH_PROCESS_RESOURCE_TRACKING" ), ConsesLow
-                                  .list( makeSymbol( "ENV" ), makeSymbol( "RESULT" ) ) ), ConsesLow.list( makeSymbol( "%FINISH-CATCH" ), makeString( "FINISH_CATCH" ), ConsesLow.list( makeSymbol( "TAG" ), makeSymbol(
-                                      "ENV" ) ) ), ConsesLow.list( makeSymbol( "%FINISH-UNWIND" ), makeString( "FINISH_UNWIND" ), ConsesLow.list( makeSymbol( "ENV" ) ) ), ConsesLow.list( makeSymbol(
-                                          "%FORMAT-0A-DIRECTIVE" ), makeString( "format_0a_directive" ), ConsesLow.list( new SubLObject[]
-                                          { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ),
-                                            makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-24-DIRECTIVE" ), makeString( "format_24_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-25-DIRECTIVE" ), makeString( "format_25_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-26-DIRECTIVE" ), makeString( "format_26_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-28-DIRECTIVE" ), makeString( "format_28_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-29-DIRECTIVE" ), makeString( "format_29_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-2A-DIRECTIVE" ), makeString( "format_2a_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-2F-DIRECTIVE" ), makeString( "format_2f_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-3B-DIRECTIVE" ), makeString( "format_3b_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-3C-DIRECTIVE" ), makeString( "format_3c_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-3E-DIRECTIVE" ), makeString( "format_3e_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-3F-DIRECTIVE" ), makeString( "format_3f_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-5B-DIRECTIVE" ), makeString( "format_5b_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-5D-DIRECTIVE" ), makeString( "format_5d_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-5E-DIRECTIVE" ), makeString( "format_5e_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-5F-DIRECTIVE" ), makeString( "format_5f_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-7B-DIRECTIVE" ), makeString( "format_7b_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-7C-DIRECTIVE" ), makeString( "format_7c_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-7D-DIRECTIVE" ), makeString( "format_7d_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-7E-DIRECTIVE" ), makeString( "format_7e_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ),
-        makeSymbol( "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-A-DIRECTIVE" ), makeString( "format_a_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-B-DIRECTIVE" ), makeString( "format_b_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-C-DIRECTIVE" ), makeString( "format_c_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-D-DIRECTIVE" ), makeString( "format_d_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-E-DIRECTIVE" ), makeString( "format_e_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-F-DIRECTIVE" ), makeString( "format_f_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-G-DIRECTIVE" ), makeString( "format_g_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-I-DIRECTIVE" ), makeString( "format_i_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-O-DIRECTIVE" ), makeString( "format_o_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-P-DIRECTIVE" ), makeString( "format_p_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-R-DIRECTIVE" ), makeString( "format_r_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-S-DIRECTIVE" ), makeString( "format_s_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-T-DIRECTIVE" ), makeString( "format_t_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-W-DIRECTIVE" ), makeString( "format_w_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "%FORMAT-X-DIRECTIVE" ), makeString( "format_x_directive" ), ConsesLow.list( new SubLObject[] { makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "START" ), makeSymbol(
-          "END" ), makeSymbol( "ARGS" ), makeSymbol( "ALL-ARGS" ), makeSymbol( "PARAMETERS" ), makeSymbol( "AT-SIGN-P" ), makeSymbol( "COLONP" )
-      } ) ), ConsesLow.list( makeSymbol( "GET-STATIC-AREA" ), makeString( "get_static_area" ) ), ConsesLow.list( makeSymbol( "GET-THREAD-PRIVATE-AREA" ), makeString( "get_thread-private_area" ) ), ConsesLow.list(
-          makeSymbol( "GET-WORKING-AREA" ), makeString( "get_working_area" ) ), ConsesLow.list( makeSymbol( "%HASH-INDEX-KEY", "SUBLISP" ), makeString( "HASH_INDEX_KEY" ), ConsesLow.list( makeSymbol( "TABLE" ),
-              makeSymbol( "INDEX" ) ) ), ConsesLow.list( makeSymbol( "%HASH-INDEX-OBJ", "SUBLISP" ), makeString( "HASH_INDEX_OBJ" ), ConsesLow.list( makeSymbol( "TABLE" ), makeSymbol( "INDEX" ) ) ), ConsesLow.list(
-                  makeSymbol( "%INIT-OPT-ARG" ), makeString( "INIT_OPT_ARG" ), ConsesLow.list( makeSymbol( "ARG" ), makeSymbol( "VAL" ) ) ), ConsesLow.list( makeSymbol( "%LEX" ), makeString( "LEX" ), ConsesLow.list(
-                      makeSymbol( "VAR" ) ) ), ConsesLow.list( makeSymbol( "%MULTIPLE-VALUE-LIST" ), makeString( "MULTIPLE_VALUE_LIST" ), ConsesLow.list( makeSymbol( "EXPRESSION" ) ) ), ConsesLow.list( makeSymbol(
-                          "%MVAL" ), makeString( "MVAL" ), ConsesLow.list( makeSymbol( "N" ) ) ), ConsesLow.list( makeSymbol( "%MVAL-COUNT" ), makeString( "MVAL_COUNT" ), NIL ), ConsesLow.list( makeSymbol(
-                              "%NEXT-HASH-INDEX", "SUBLISP" ), makeString( "NEXT_HASH_INDEX" ), ConsesLow.list( makeSymbol( "TABLE" ), makeSymbol( "INDEX" ) ) ), ConsesLow.list( makeSymbol( "%NOTE-SUPPLIED" ),
-                                  makeString( "NOTE_SUPPLIED" ), ConsesLow.list( makeSymbol( "VAR" ) ) ), ConsesLow.list( makeSymbol( "%NTH-VALUE" ), makeString( "NTH_VALUE" ), ConsesLow.list( makeSymbol( "N" ),
-                                      makeSymbol( "FORM" ) ) ), ConsesLow.list( makeSymbol( "PRINT-NOT-READABLE" ), makeString( "print_not_readable" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "STREAM" ) ) ),
-      ConsesLow.list( makeSymbol( "%PROCLAIM" ), makeString( "PROCLAIM" ), ConsesLow.list( makeSymbol( "DECL" ) ) ), ConsesLow.list( makeSymbol( "%REBIND" ), makeString( "REBIND" ), ConsesLow.list( makeSymbol(
-          "VAR" ) ) ), ConsesLow.list( makeSymbol( "%REBIND-SPECIAL-VARS" ), makeString( "REBIND_SPECIAL_VARS" ), ConsesLow.list( makeSymbol( "SPECIAL-VARS" ) ) ), ConsesLow.list( makeSymbol( "%RESET-MVAL" ), makeString(
-              "RESET_MVAL" ), NIL ), ConsesLow.list( makeSymbol( "%SET-CATCH" ), makeString( "SET_CATCH" ), ConsesLow.list( makeSymbol( "TAG" ), makeSymbol( "ENV" ) ) ), ConsesLow.list( makeSymbol( "%SET-DYN" ),
-                  makeString( "SET_DYN" ), ConsesLow.list( makeSymbol( "VAR" ), makeSymbol( "VAL" ) ) ), ConsesLow.list( makeSymbol( "%SET-LEX" ), makeString( "SET_LEX" ), ConsesLow.list( makeSymbol( "VAR" ), makeSymbol(
-                      "VAL" ) ) ), ConsesLow.list( makeSymbol( "%SET-UNWIND" ), makeString( "SET_UNWIND" ), ConsesLow.list( makeSymbol( "ENV" ) ) ), ConsesLow.list( makeSymbol( "%START-PRINTING-OBJECT" ), makeString(
-                          "START_PRINTING_OBJECT" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "%START-UNWIND" ), makeString( "START_UNWIND" ), ConsesLow.list(
-                              makeSymbol( "ENV" ) ) ), ConsesLow.list( makeSymbol( "%THROWN-TO" ), makeString( "DP_THROWN_TO" ), ConsesLow.list( makeSymbol( "ENV" ) ) ), ConsesLow.list( makeSymbol( "IN-PACKAGE" ),
-                                  makeString( "in_package" ), ConsesLow.list( makeSymbol( "NAME" ) ) ), ConsesLow.list( makeSymbol( "%CLEAR-GC-RESOURCE-ACCUMULATOR", "SUBLISP" ), makeString(
-                                      "sublisp_clear_gc_resource_accumulator" ), NIL ), ConsesLow.list( makeSymbol( "%CURRENT-GC-RESOURCE-ACCUMULATOR", "SUBLISP" ), makeString(
-                                          "sublisp_current_gc_resource_accumulator" ), NIL ), ConsesLow.list( makeSymbol( "%GET-INITIAL-CONTINUATION", "SUBLISP" ), makeString( "_get_initial_continuation" ), NIL ),
-      ConsesLow.list( makeSymbol( "%GET-RED-OBJECT", "SUBLISP" ), makeString( "_get_red_object" ), NIL ), ConsesLow.list( makeSymbol( "%INTERPRET-CSPACE-RESULTS", "SUBLISP" ), makeString(
-          "sublisp_interpret_cspace_results" ), ConsesLow.list( makeSymbol( "PROBE" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "%SET-INITIAL-CONTINUATION", "SUBLISP" ), makeString(
-              "_set_initial_continuation" ), ConsesLow.list( makeSymbol( "FUNCTIONSPEC" ) ) ), ConsesLow.list( makeSymbol( "ADD-SPACE-PROBE", "SUBLISP" ), makeString( "add_space_probe" ), NIL ), ConsesLow.list(
-                  makeSymbol( "ALIEN-AS-STRING", "SUBLISP" ), makeString( "alien_as_string" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "CANONICAL-NULL-FILE-STREAM-PATH", "SUBLISP" ),
-                      makeString( "canonical_null_file_stream_path" ) ), ConsesLow.list( makeSymbol( "CIRCULAR-REFERENCE-P", "SUBLISP" ), makeString( "circular_reference_p" ), ConsesLow.list( makeSymbol( "OBJECT" ),
-                          makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "DEF-FOREIGN-FUNCTION", "SUBLISP" ), makeString( "sublisp_def_foreign_function" ), ConsesLow.list( makeSymbol( "FOREIGN-SHARED-LIBRARY" ),
-                              makeSymbol( "FOREIGN-NAME" ), makeSymbol( "SYMBOL" ), makeSymbol( "ARG-CONVERSION" ), makeSymbol( "RET-TYPE" ), makeSymbol( "CALLING-CONVENTION" ), makeSymbol( "NULL-DEFAULT-RETURN" ) ) ),
-      ConsesLow.list( makeSymbol( "DESCRIPTOR-STREAM-CLOSE", "SUBLISP" ), makeString( "descriptor_stream_close" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol( "ABORT" ) ) ), ConsesLow.list( makeSymbol(
-          "DESCRIPTOR-STREAM-FILE-LENGTH", "SUBLISP" ), makeString( "descriptor_stream_file_length" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "DESCRIPTOR-STREAM-FILE-POSITION",
-              "SUBLISP" ), makeString( "descriptor_stream_file_position" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "DESCRIPTOR-STREAM-NEXT-INPUT-BUFFER", "SUBLISP" ), makeString(
-                  "descriptor_stream_next_input_buffer" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol( "WAITP" ) ) ), ConsesLow.list( makeSymbol( "DESCRIPTOR-STREAM-SEND-OUTPUT-BUFFER", "SUBLISP" ), makeString(
-                      "descriptor_stream_send_output_buffer" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "DESCRIPTOR-STREAM-SET-FILE-POSITION", "SUBLISP" ), makeString(
-                          "descriptor_stream_set_file_position" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol( "POSITION-SPEC" ) ) ), ConsesLow.list( makeSymbol( "ENCODE-UNIVERSAL-TIME-INTERNAL", "SUBLISP" ),
-                              makeString( "encode_universal_time_internal" ), ConsesLow.list( makeSymbol( "SECOND" ), makeSymbol( "MINUTE" ), makeSymbol( "HOUR" ), makeSymbol( "DATE" ), makeSymbol( "MONTH" ), makeSymbol(
-                                  "YEAR" ), makeSymbol( "TIME-ZONE" ) ) ), ConsesLow.list( makeSymbol( "EXTERNAL-PROCESSES-SUPPORTED?", "SUBLISP" ), makeString( "external_processes_supportedP" ), NIL ), ConsesLow.list(
-                                      makeSymbol( "FILE-POINTER-STREAM-CLOSE", "SUBLISP" ), makeString( "file_pointer_stream_close" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol( "ABORT" ) ) ), ConsesLow.list(
-                                          makeSymbol( "FILE-POINTER-STREAM-FILE-LENGTH", "SUBLISP" ), makeString( "file_pointer_stream_file_length" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list(
-                                              makeSymbol( "FILE-POINTER-STREAM-FILE-POSITION", "SUBLISP" ), makeString( "file_pointer_stream_file_position" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list(
-                                                  makeSymbol( "FILE-POINTER-STREAM-NEXT-INPUT-BUFFER", "SUBLISP" ), makeString( "file_pointer_stream_next_input_buffer" ), ConsesLow.list( makeSymbol( "STREAM" ),
-                                                      makeSymbol( "WAITP" ) ) ), ConsesLow.list( makeSymbol( "FILE-POINTER-STREAM-SEND-OUTPUT-BUFFER", "SUBLISP" ), makeString( "file_pointer_stream_send_output_buffer" ),
-                                                          ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "FILE-POINTER-STREAM-SET-FILE-POSITION", "SUBLISP" ), makeString(
-                                                              "file_pointer_stream_set_file_position" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol( "POSITION-SPEC" ) ) ), ConsesLow.list( makeSymbol(
-                                                                  "FOLLOW-SYNONYM-STREAM", "SUBLISP" ), makeString( "follow_synonym_stream" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol(
-                                                                      "GET-EXTERNAL-PROCESS-STATUS", "SUBLISP" ), makeString( "get_external_process_status" ), ConsesLow.list( makeSymbol( "PROCESS-ID" ), makeSymbol(
-                                                                          "&OPTIONAL" ), makeSymbol( "WAIT-UNTIL-DONE?" ) ) ), ConsesLow.list( makeSymbol( "GET-TIME", "SUBLISP" ), makeString( "get_time" ), NIL ),
-      ConsesLow.list( makeSymbol( "GET-TIMEZONE", "SUBLISP" ), makeString( "get_timezone" ), ConsesLow.list( makeSymbol( "&OPTIONAL" ), makeSymbol( "UNIVERSAL-TIME" ) ) ), ConsesLow.list( makeSymbol(
-          "HANDLE-CIRCULARITY", "SUBLISP" ), makeString( "handle_circularity" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "ILLEGAL-STREAM-OPERATION", "SUBLISP" ),
-              makeString( "illegal_stream_operation" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol( "OPERATION" ) ) ), ConsesLow.list( makeSymbol( "INHIBIT-PREEMPTION-P", "SUBLISP" ), makeString(
-                  "inhibit_preemption_p" ), NIL ), ConsesLow.list( makeSymbol( "INPUT-STREAM-DESIGNATOR-STREAM", "SUBLISP" ), makeString( "input_stream_designator_stream" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ),
-      ConsesLow.list( makeSymbol( "INTERNED-SYMBOLP", "SUBLISP" ), makeString( "interned_symbolp" ), ConsesLow.list( makeSymbol( "SYMBOL" ) ) ), ConsesLow.list( makeSymbol( "JVM-CALL", "SUBLISP" ), makeString(
-          "f_jvm_call" ), ConsesLow.list( makeSymbol( "FUNC" ), makeSymbol( "STACK-FRAME" ), makeSymbol( "ARGSTART" ), makeSymbol( "ARGCNT" ) ) ), ConsesLow.list( makeSymbol( "JVMI-OPCODE-INTERPRETER", "SUBLISP" ),
-              makeString( "jvmi_opcode_interpreter" ), ConsesLow.list( makeSymbol( "JVMI" ), makeSymbol( "CODE" ) ) ), ConsesLow.list( makeSymbol( "KILL-EXTERNAL-PROCESS", "SUBLISP" ), makeString(
-                  "kill_external_process" ), ConsesLow.list( makeSymbol( "PROCESS-ID" ) ) ), ConsesLow.list( makeSymbol( "LOAD-SHARED-OBJECT", "SUBLISP" ), makeString( "sublisp_load_shared_object" ), ConsesLow.list(
-                      makeSymbol( "MONIKER" ), makeSymbol( "PATHNAME" ), makeSymbol( "OPTIONS" ) ) ), ConsesLow.list( makeSymbol( "MAKE-DESCRIPTOR-STREAM", "SUBLISP" ), makeString( "make_descriptor_stream" ), ConsesLow
-                          .list( makeSymbol( "DESCRIPTOR" ), makeSymbol( "DIRECTION" ), makeSymbol( "ELEMENT-TYPE" ) ) ), ConsesLow.list( makeSymbol( "MAKE-GUID-BLOCK", "SUBLISP" ), makeString( "make_block_of_guids" ) ),
-      ConsesLow.list( makeSymbol( "MAKE-PRIVATE-DESCRIPTOR-STREAM", "SUBLISP" ), makeString( "make_private_descriptor_stream" ), ConsesLow.list( makeSymbol( "DESCRIPTOR" ), makeSymbol( "DIRECTION" ), makeSymbol(
-          "ELEMENT-TYPE" ) ) ), ConsesLow.list( makeSymbol( "MAKE-STREAM", "SUBLISP" ), makeString( "make_stream" ), ConsesLow.list( makeSymbol( "&OPTIONAL" ), makeSymbol( "ARGLIST" ) ) ), ConsesLow.list( makeSymbol(
-              "MY-GETF", "SUBLISP" ), makeString( "my_getf" ), ConsesLow.list( makeSymbol( "PLIST" ), makeSymbol( "INDICATOR" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "DEFAULT" ) ) ), ConsesLow.list( makeSymbol(
-                  "OPEN-DESCRIPTOR", "SUBLISP" ), makeString( "open_descriptor" ), ConsesLow.list( makeSymbol( "FILESPEC" ), makeSymbol( "DIRECTION" ), makeSymbol( "ELEMENT-TYPE" ), makeSymbol( "IF-EXISTS" ), makeSymbol(
-                      "IF-DOES-NOT-EXIST" ), makeSymbol( "EXTERNAL-FORMAT" ) ) ), ConsesLow.list( makeSymbol( "OUTPUT-STREAM-DESIGNATOR-STREAM", "SUBLISP" ), makeString( "output_stream_designator_stream" ), ConsesLow
-                          .list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "PATHNAME-DESIGNATOR-PATHNAME", "SUBLISP" ), makeString( "pathname_designator_pathname" ), ConsesLow.list( makeSymbol(
-                              "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "POINTER", "SUBLISP" ), makeString( "sublisp_pointer" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol(
-                                  "PRINT-BIGNUM-INTERNAL", "SUBLISP" ), makeString( "print_bignum_internal" ), ConsesLow.list( makeSymbol( "BIGNUM" ), makeSymbol( "STREAM" ), makeSymbol( "RADIX" ), makeSymbol(
-                                      "DIVISOR" ), makeSymbol( "POWER-LESS-ONE" ) ) ), ConsesLow.list( makeSymbol( "PRINT-CHARACTER", "SUBLISP" ), makeString( "print_character" ), ConsesLow.list( makeSymbol(
-                                          "CHARACTER" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "PRINT-CONS-CELLS", "SUBLISP" ), makeString( "print_cons_cells" ), ConsesLow.list( makeSymbol( "CONS" ),
-                                              makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "PRINT-ERROR", "SUBLISP" ), makeString( "print_error" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol(
-                                                  "STREAM" ) ) ), ConsesLow.list( makeSymbol( "PRINT-FLONUM", "SUBLISP" ), makeString( "print_flonum" ), ConsesLow.list( makeSymbol( "FLONUM" ), makeSymbol( "STREAM" ) ) ),
-      ConsesLow.list( makeSymbol( "PRINT-FUNCTION", "SUBLISP" ), makeString( "print_function" ), ConsesLow.list( makeSymbol( "FUNCTION" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "PRINT-HASHTABLE",
-          "SUBLISP" ), makeString( "print_hashtable" ), ConsesLow.list( makeSymbol( "HASH-TABLE" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "PRINT-INTEGER", "SUBLISP" ), makeString( "print_integer" ),
-              ConsesLow.list( makeSymbol( "INTEGER" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "PRINT-INTEGER-INTERNAL", "SUBLISP" ), makeString( "print_integer_internal" ), ConsesLow.list( makeSymbol(
-                  "INTEGER" ), makeSymbol( "STREAM" ), makeSymbol( "PRINT-BASE" ) ) ), ConsesLow.list( makeSymbol( "PRINT-OBJECT-WRAPPER", "SUBLISP" ), makeString( "print_object_wrapper" ), ConsesLow.list( makeSymbol(
-                      "OBJECT" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "PRINT-STREAM", "SUBLISP" ), makeString( "print_stream" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "STREAM" ),
-                          makeSymbol( "DEPTH" ) ) ), ConsesLow.list( makeSymbol( "PRINT-STRING", "SUBLISP" ), makeString( "print_string" ), ConsesLow.list( makeSymbol( "STRING" ), makeSymbol( "STREAM" ) ) ), ConsesLow
-                              .list( makeSymbol( "PRINT-SYMBOL", "SUBLISP" ), makeString( "print_symbol" ), ConsesLow.list( makeSymbol( "SYMBOL" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "PRINT-VECTOR",
-                                  "SUBLISP" ), makeString( "print_vector" ), ConsesLow.list( makeSymbol( "VECTOR" ), makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "PROCESS-YIELD", "SUBLISP" ), makeString(
-                                      "process_yield" ), NIL ), ConsesLow.list( makeSymbol( "READ-PRINT-EQ", "SUBLISP" ), makeString( "read_print_eq" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list(
-                                          makeSymbol( "REALLY-OPEN", "SUBLISP" ), makeString( "really_open" ), ConsesLow.list( makeSymbol( "FILESPEC" ), makeSymbol( "KEYS" ) ) ), ConsesLow.list( makeSymbol(
-                                              "REALLY-WRITE", "SUBLISP" ), makeString( "really_write" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "KEYS" ) ) ), ConsesLow.list( makeSymbol(
-                                                  "REALLY-WRITE-TO-STRING", "SUBLISP" ), makeString( "really_write_to_string" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "KEYS" ) ) ), ConsesLow.list(
-                                                      makeSymbol( "RELEASE-LOCK", "SUBLISP" ), makeString( "release_lock" ), ConsesLow.list( makeSymbol( "LOCK" ) ) ), ConsesLow.list( makeSymbol( "REMOVE-SPACE-PROBE",
-                                                          "SUBLISP" ), makeString( "remove_space_probe" ), ConsesLow.list( makeSymbol( "PROBE" ) ) ), ConsesLow.list( makeSymbol( "RESTART-CYC", "SUBLISP" ), makeString(
-                                                              "restart_cyc" ), ConsesLow.list( makeSymbol( "&OPTIONAL" ), makeSymbol( "WORLD" ), makeSymbol( "INIT-FILE" ), makeSymbol( "INIT-FORM" ) ) ), ConsesLow.list(
-                                                                  makeSymbol( "RUN-EXTERNAL-PROCESS", "SUBLISP" ), makeString( "run_external_process" ), ConsesLow.list( makeSymbol( "PROGRAM" ), makeSymbol( "&OPTIONAL" ),
-                                                                      makeSymbol( "ARGS" ), makeSymbol( "STDIN-SPEC" ), makeSymbol( "STDOUT-SPEC" ), makeSymbol( "STDERR-SPEC" ) ) ), ConsesLow.list( makeSymbol(
-                                                                          "SEIZE-LOCK", "SUBLISP" ), makeString( "seize_lock" ), ConsesLow.list( makeSymbol( "LOCK" ) ) ), ConsesLow.list( makeSymbol(
-                                                                              "SET-INHIBIT-PREEMPTION", "SUBLISP" ), makeString( "set_inhibit_preemption" ), ConsesLow.list( makeSymbol( "VALUE" ) ) ), ConsesLow.list(
-                                                                                  makeSymbol( "SET-STREAM-COLUMN", "SUBLISP" ), makeString( "set_stream_column" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol(
-                                                                                      "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SET-STREAM-COMPONENTS", "SUBLISP" ), makeString( "set_stream_components" ), ConsesLow
-                                                                                          .list( makeSymbol( "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SET-STREAM-DIRECTION", "SUBLISP" ),
-                                                                                              makeString( "set_stream_direction" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list(
-                                                                                                  makeSymbol( "SET-STREAM-ELEMENT-TYPE", "SUBLISP" ), makeString( "set_stream_element_type" ), ConsesLow.list( makeSymbol(
-                                                                                                      "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SET-STREAM-HANDLE", "SUBLISP" ), makeString(
-                                                                                                          "set_stream_handle" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list(
-                                                                                                              makeSymbol( "SET-STREAM-INPUT-BUFFER", "SUBLISP" ), makeString( "set_stream_input_buffer" ), ConsesLow.list(
-                                                                                                                  makeSymbol( "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SET-STREAM-INPUT-INDEX",
-                                                                                                                      "SUBLISP" ), makeString( "set_stream_input_index" ), ConsesLow.list( makeSymbol( "OBJECT" ),
-                                                                                                                          makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SET-STREAM-INPUT-LIMIT", "SUBLISP" ),
-                                                                                                                              makeString( "set_stream_input_limit" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol(
-                                                                                                                                  "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SET-STREAM-LAST-CHAR", "SUBLISP" ),
-                                                                                                                                      makeString( "set_stream_last_char" ), ConsesLow.list( makeSymbol( "OBJECT" ),
-                                                                                                                                          makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SET-STREAM-LOCK",
-                                                                                                                                              "SUBLISP" ), makeString( "set_stream_lock" ), ConsesLow.list( makeSymbol(
-                                                                                                                                                  "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol(
-                                                                                                                                                      "SET-STREAM-OPEN-P", "SUBLISP" ), makeString( "set_stream_open_p" ),
-                                                                                                                                                      ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "VALUE" ) ) ),
-      ConsesLow.list( makeSymbol( "SET-STREAM-OUTPUT-BUFFER", "SUBLISP" ), makeString( "set_stream_output_buffer" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol(
-          "SET-STREAM-OUTPUT-INDEX", "SUBLISP" ), makeString( "set_stream_output_index" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SET-STREAM-OUTPUT-LIMIT",
-              "SUBLISP" ), makeString( "set_stream_output_limit" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SET-STREAM-PATHNAME", "SUBLISP" ), makeString(
-                  "set_stream_pathname" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SET-STREAM-STREAM-TYPE", "SUBLISP" ), makeString( "set_stream_stream_type" ),
-                      ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol( "SIMPLE-STREAM-ERROR", "SUBLISP" ), makeString( "simple_stream_error" ), ConsesLow.list( makeSymbol(
-                          "FORMAT-CONTROL" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "ARGS" ) ) ), ConsesLow.list( makeSymbol( "STREAM-ADVANCE-TO-COLUMN", "SUBLISP" ), makeString( "stream_advance_to_column" ), ConsesLow
-                              .list( makeSymbol( "STREAM" ), makeSymbol( "COLUMN" ) ) ), ConsesLow.list( makeSymbol( "STREAM-CHECK-TYPE", "SUBLISP" ), makeString( "stream_check_type" ), ConsesLow.list( makeSymbol(
-                                  "STREAM" ), makeSymbol( "TYPE" ) ) ), ConsesLow.list( makeSymbol( "STREAM-CLEAR-INPUT", "SUBLISP" ), makeString( "stream_clear_input" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ),
-      ConsesLow.list( makeSymbol( "STREAM-CLEAR-OUTPUT", "SUBLISP" ), makeString( "stream_clear_output" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-COLUMN", "SUBLISP" ), makeString(
-          "stream_column" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-COMPONENTS", "SUBLISP" ), makeString( "stream_components" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ),
-      ConsesLow.list( makeSymbol( "STREAM-DIRECTION", "SUBLISP" ), makeString( "stream_direction" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-FILE-LENGTH", "SUBLISP" ), makeString(
-          "stream_file_length" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-FILE-POSITION", "SUBLISP" ), makeString( "stream_file_position" ), ConsesLow.list( makeSymbol(
-              "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-FILE-STRING-LENGTH", "SUBLISP" ), makeString( "stream_file_string_length" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol( "OBJECT" ) ) ), ConsesLow
-                  .list( makeSymbol( "STREAM-FINISH-OUTPUT", "SUBLISP" ), makeString( "stream_finish_output" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-FORCE-OUTPUT", "SUBLISP" ),
-                      makeString( "stream_force_output" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-FRESH-LINE", "SUBLISP" ), makeString( "stream_fresh_line" ), ConsesLow.list(
-                          makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-HANDLE", "SUBLISP" ), makeString( "stream_handle" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol(
-                              "STREAM-INPUT-BUFFER", "SUBLISP" ), makeString( "stream_input_buffer" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-INPUT-INDEX", "SUBLISP" ),
-                                  makeString( "stream_input_index" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-INPUT-LIMIT", "SUBLISP" ), makeString( "stream_input_limit" ),
-                                      ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-LAST-CHAR", "SUBLISP" ), makeString( "stream_last_char" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ),
-      ConsesLow.list( makeSymbol( "STREAM-LISTEN", "SUBLISP" ), makeString( "stream_listen" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-LOCK", "SUBLISP" ), makeString(
-          "stream_lock" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-NEXT-INPUT-BUFFER", "SUBLISP" ), makeString( "stream_next_input_buffer" ), ConsesLow.list( makeSymbol(
-              "STREAM" ), makeSymbol( "WAITP" ) ) ), ConsesLow.list( makeSymbol( "STREAM-OPEN-P", "SUBLISP" ), makeString( "stream_open_p" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol(
-                  "STREAM-OUTPUT-BUFFER", "SUBLISP" ), makeString( "stream_output_buffer" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-OUTPUT-INDEX", "SUBLISP" ), makeString(
-                      "stream_output_index" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-OUTPUT-LIMIT", "SUBLISP" ), makeString( "stream_output_limit" ), ConsesLow.list( makeSymbol(
-                          "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-P", "SUBLISP" ), makeString( "stream_p" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-PATHNAME",
-                              "SUBLISP" ), makeString( "stream_pathname" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-PEEK-CHAR", "SUBLISP" ), makeString( "stream_peek_char" ),
-                                  ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-READ-BYTE", "SUBLISP" ), makeString( "stream_read_byte" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ),
-      ConsesLow.list( makeSymbol( "STREAM-READ-CHAR", "SUBLISP" ), makeString( "stream_read_char" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-READ-CHAR-NO-HANG", "SUBLISP" ),
-          makeString( "stream_read_char_no_hang" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-READ-LINE", "SUBLISP" ), makeString( "stream_read_line" ), ConsesLow.list( makeSymbol(
-              "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-READ-SEQUENCE", "SUBLISP" ), makeString( "stream_read_sequence" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol( "SEQUENCE" ), makeSymbol(
-                  "START" ), makeSymbol( "END" ) ) ), ConsesLow.list( makeSymbol( "STREAM-SEND-OUTPUT-BUFFER", "SUBLISP" ), makeString( "stream_send_output_buffer" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow
-                      .list( makeSymbol( "STREAM-SET-FILE-POSITION", "SUBLISP" ), makeString( "stream_set_file_position" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol( "POSITION-SPEC" ) ) ), ConsesLow.list(
-                          makeSymbol( "STREAM-START-LINE-P", "SUBLISP" ), makeString( "stream_start_line_p" ), ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-STREAM-TYPE", "SUBLISP" ),
-                              makeString( "stream_stream_type" ), ConsesLow.list( makeSymbol( "OBJECT" ) ) ), ConsesLow.list( makeSymbol( "STREAM-TERPRI", "SUBLISP" ), makeString( "stream_terpri" ), ConsesLow.list(
-                                  makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "STREAM-UNREAD-CHAR", "SUBLISP" ), makeString( "stream_unread_char" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol(
-                                      "CHARACTER" ) ) ), ConsesLow.list( makeSymbol( "STREAM-WRITE-BYTE", "SUBLISP" ), makeString( "stream_write_byte" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol(
-                                          "INTEGER" ) ) ), ConsesLow.list( makeSymbol( "STREAM-WRITE-CHAR", "SUBLISP" ), makeString( "stream_write_char" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol(
-                                              "CHARACTER" ) ) ), ConsesLow.list( makeSymbol( "STREAM-WRITE-SEQUENCE", "SUBLISP" ), makeString( "stream_write_sequence" ), ConsesLow.list( makeSymbol( "STREAM" ),
-                                                  makeSymbol( "SEQUENCE" ), makeSymbol( "START" ), makeSymbol( "END" ) ) ), ConsesLow.list( makeSymbol( "STREAM-WRITE-STRING", "SUBLISP" ), makeString(
-                                                      "stream_write_string" ), ConsesLow.list( makeSymbol( "STREAM" ), makeSymbol( "STRING" ), makeSymbol( "&OPTIONAL" ), ConsesLow.list( makeSymbol( "START" ),
-                                                          ZERO_INTEGER ), makeSymbol( "END" ) ) ), ConsesLow.list( makeSymbol( "TIMESTRING", "SUBLISP" ), makeString( "f_timestring" ), ConsesLow.list( makeSymbol(
-                                                              "&OPTIONAL" ), makeSymbol( "UNIVERSAL-TIME" ) ) ), ConsesLow.list( makeSymbol( "UNKNOWN-STREAM-TYPE", "SUBLISP" ), makeString( "unknown_stream_type" ),
-                                                                  ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "UNLOAD-SHARED-OBJECT", "SUBLISP" ), makeString( "sublisp_unload_shared_object" ),
-                                                                      ConsesLow.list( makeSymbol( "PATHNAME" ) ) ), ConsesLow.list( makeSymbol( "WIDE-NEWLINE-STREAM-P", "SUBLISP" ), makeString( "wide_newline_stream_p" ),
-                                                                          ConsesLow.list( makeSymbol( "STREAM" ) ) ), ConsesLow.list( makeSymbol( "_CLEAR-STRUCTURE", "SUBLISP" ), makeString( "CLEAR_STRUCTURE" ),
-                                                                              ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "SIZE" ) ) ), ConsesLow.list( makeSymbol( "_CLEAR-SUB-STRUCTURE", "SUBLISP" ), makeString(
-                                                                                  "CLEAR_SUB_STRUCTURE" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "SIZE" ), makeSymbol( "TYPE" ) ) ), ConsesLow.list(
-                                                                                      makeSymbol( "_CSETF-READTABLE-CASE", "SUBLISP" ), makeString( "f__csetf_readtable_case" ), ConsesLow.list( makeSymbol( "OBJECT" ),
-                                                                                          makeSymbol( "VALUE" ) ) ), ConsesLow.list( makeSymbol( "_DEF-CSETF", "SUBLISP" ), makeString( "DEF_CSETF" ), ConsesLow.list(
-                                                                                              makeSymbol( "ACCESSOR" ), makeSymbol( "SETTER" ) ) ), ConsesLow.list( makeSymbol( "_METHOD", "SUBLISP" ), makeString(
-                                                                                                  "METHOD_FUNC" ), ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "METHOD-TABLE" ) ) ), ConsesLow.list( makeSymbol(
-                                                                                                      "_NEW-STRUCTURE", "SUBLISP" ), makeString( "NEW_STRUCTURE" ), ConsesLow.list( makeSymbol( "TYPE" ), makeSymbol(
-                                                                                                          "SIZE" ) ) ), ConsesLow.list( makeSymbol( "_REGISTER-DEFSTRUCT", "SUBLISP" ), makeString( "REGISTER_DEFSTRUCT" ),
-                                                                                                              ConsesLow.list( makeSymbol( "NAME" ), makeSymbol( "TYPE" ), makeSymbol( "SIZE" ), makeSymbol(
-                                                                                                                  "PRINT-FUNCTION" ), makeSymbol( "SLOTS" ) ) ), ConsesLow.list( makeSymbol( "_REGISTER-METHOD",
-                                                                                                                      "SUBLISP" ), makeString( "REGISTER_METHOD" ), ConsesLow.list( makeSymbol( "METHOD-TABLE" ),
-                                                                                                                          makeSymbol( "TYPE" ), makeSymbol( "FUNCTION" ) ) ), ConsesLow.list( makeSymbol(
-                                                                                                                              "_SET-STRUCTURE-SLOT", "SUBLISP" ), makeString( "SET_STRUCTURE_SLOT" ), ConsesLow.list(
-                                                                                                                                  makeSymbol( "OBJECT" ), makeSymbol( "SLOT" ), makeSymbol( "VALUE" ) ) ), ConsesLow.list(
-                                                                                                                                      makeSymbol( "_STRUCTURE-SLOT", "SUBLISP" ), makeString( "STRUCTURE_SLOT" ), ConsesLow
-                                                                                                                                          .list( makeSymbol( "OBJECT" ), makeSymbol( "SLOT" ) ) ), ConsesLow.list(
-                                                                                                                                              makeSymbol( "_STRUCTURE-TYPE", "SUBLISP" ), makeString( "STRUCTURE_TYPE" ),
-                                                                                                                                              ConsesLow.list( makeSymbol( "OBJECT" ), makeSymbol( "TYPE" ) ) ), ConsesLow
-                                                                                                                                                  .list( makeSymbol( "_STRUCTURES-BAG-P", "SUBLISP" ), makeString(
-                                                                                                                                                      "dp_structures_bag_p" ), ConsesLow.list( makeSymbol( "X" ) ) )
-    } );
-  }
+    public static SubLObject initialize_c_backend_function_arglist_table() {
+        final SubLObject table = make_hash_table($int$500, symbol_function(EQ), UNPROVIDED);
+        SubLObject cdolist_list_var = $c_backend_defined_function_name_data$.getGlobalValue();
+        SubLObject item = NIL;
+        item = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            SubLObject current;
+            final SubLObject datum = current = item;
+            SubLObject symbol = NIL;
+            SubLObject c_backend_name = NIL;
+            destructuring_bind_must_consp(current, datum, $list14);
+            symbol = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list14);
+            c_backend_name = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                if (NIL != subl_promotions.function_symbol_p(symbol)) {
+                    final SubLObject arglist = subl_promotions.function_symbol_arglist(symbol);
+                    sethash(symbol, table, arglist);
+                }
+            } else {
+                cdestructuring_bind_error(datum, $list14);
+            }
+            cdolist_list_var = cdolist_list_var.rest();
+            item = cdolist_list_var.first();
+        } 
+        SubLObject cdolist_list_var2;
+        final SubLObject data = cdolist_list_var2 = nconc(copy_list($c_backend_undefined_function_name_data$.getGlobalValue()), copy_list($c_backend_undefined_arity_function_name_data$.getGlobalValue()), copy_list($c_backend_undefined_boolean_function_name_data$.getGlobalValue()));
+        SubLObject item2 = NIL;
+        item2 = cdolist_list_var2.first();
+        while (NIL != cdolist_list_var2) {
+            SubLObject current2;
+            final SubLObject datum2 = current2 = item2;
+            SubLObject symbol2 = NIL;
+            SubLObject c_backend_name2 = NIL;
+            destructuring_bind_must_consp(current2, datum2, $list11);
+            symbol2 = current2.first();
+            current2 = current2.rest();
+            destructuring_bind_must_consp(current2, datum2, $list11);
+            c_backend_name2 = current2.first();
+            current2 = current2.rest();
+            final SubLObject arglist2 = (current2.isCons()) ? current2.first() : NIL;
+            destructuring_bind_must_listp(current2, datum2, $list11);
+            current2 = current2.rest();
+            if (NIL == current2) {
+                sethash(symbol2, table, arglist2);
+            } else {
+                cdestructuring_bind_error(datum2, $list11);
+            }
+            cdolist_list_var2 = cdolist_list_var2.rest();
+            item2 = cdolist_list_var2.first();
+        } 
+        $c_backend_function_arglist_table$.setGlobalValue(table);
+        return table;
+    }
 
-  private static SubLObject _constant_10_initializer()
-  {
-    return ConsesLow.list( new SubLObject[] { ConsesLow.list( makeSymbol( "%B-/=" ), makeString( "numNE" ), ConsesLow.list( makeSymbol( "NUM1" ), makeSymbol( "NUM2" ) ) ), ConsesLow.list( makeSymbol( "%B-<" ),
-        makeString( "numL" ), ConsesLow.list( makeSymbol( "NUM1" ), makeSymbol( "NUM2" ) ) ), ConsesLow.list( makeSymbol( "%B-<=" ), makeString( "numLE" ), ConsesLow.list( makeSymbol( "NUM1" ), makeSymbol( "NUM2" ) ) ),
-      ConsesLow.list( makeSymbol( "%B-=" ), makeString( "numE" ), ConsesLow.list( makeSymbol( "NUM1" ), makeSymbol( "NUM2" ) ) ), ConsesLow.list( makeSymbol( "%B->" ), makeString( "numG" ), ConsesLow.list( makeSymbol(
-          "NUM1" ), makeSymbol( "NUM2" ) ) ), ConsesLow.list( makeSymbol( "%B->=" ), makeString( "numGE" ), ConsesLow.list( makeSymbol( "NUM1" ), makeSymbol( "NUM2" ) ) ), ConsesLow.list( makeSymbol( "%B-ALIEN-P" ),
-              makeString( "alienp" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-ALPHA-CHARP" ), makeString( "alpha_char_p" ), ConsesLow.list( makeSymbol( "CHAR" ) ) ), ConsesLow.list(
-                  makeSymbol( "%B-ALPHANUMERICP" ), makeString( "alphanumericp" ), ConsesLow.list( makeSymbol( "CHAR" ) ) ), ConsesLow.list( makeSymbol( "%B-ATOM" ), makeString( "atom" ), ConsesLow.list( makeSymbol(
-                      "X" ) ) ), ConsesLow.list( makeSymbol( "%B-BOTH-CASEP" ), makeString( "both_case_p" ), ConsesLow.list( makeSymbol( "CHAR" ) ) ), ConsesLow.list( makeSymbol( "%B-BOUNDP" ), makeString( "boundp" ),
-                          ConsesLow.list( makeSymbol( "SYMBOL" ) ) ), ConsesLow.list( makeSymbol( "%B-CHAR-EQUAL" ), makeString( "char_equal" ), ConsesLow.list( makeSymbol( "CHAR1" ), makeSymbol( "CHAR2" ) ) ), ConsesLow
-                              .list( makeSymbol( "%B-CHAR-GREATERP" ), makeString( "char_greaterp" ), ConsesLow.list( makeSymbol( "CHAR1" ), makeSymbol( "CHAR2" ) ) ), ConsesLow.list( makeSymbol( "%B-CHAR-LESSP" ),
-                                  makeString( "char_lessp" ), ConsesLow.list( makeSymbol( "CHAR1" ), makeSymbol( "CHAR2" ) ) ), ConsesLow.list( makeSymbol( "%B-CHAR-NOT-EQUAL" ), makeString( "char_not_equal" ), ConsesLow
-                                      .list( makeSymbol( "CHAR1" ), makeSymbol( "CHAR2" ) ) ), ConsesLow.list( makeSymbol( "%B-CHAR-NOT-GREATERP" ), makeString( "char_not_greaterp" ), ConsesLow.list( makeSymbol(
-                                          "CHAR1" ), makeSymbol( "CHAR2" ) ) ), ConsesLow.list( makeSymbol( "%B-CHAR-NOT-LESSP" ), makeString( "char_not_lessp" ), ConsesLow.list( makeSymbol( "CHAR1" ), makeSymbol(
-                                              "CHAR2" ) ) ), ConsesLow.list( makeSymbol( "%B-CHAR/=" ), makeString( "charNE" ), ConsesLow.list( makeSymbol( "CHAR1" ), makeSymbol( "CHAR2" ) ) ), ConsesLow.list(
-                                                  makeSymbol( "%B-CHAR<" ), makeString( "charL" ), ConsesLow.list( makeSymbol( "CHAR1" ), makeSymbol( "CHAR2" ) ) ), ConsesLow.list( makeSymbol( "%B-CHAR<=" ), makeString(
-                                                      "charLE" ), ConsesLow.list( makeSymbol( "CHAR1" ), makeSymbol( "CHAR2" ) ) ), ConsesLow.list( makeSymbol( "%B-CHAR=" ), makeString( "charE" ), ConsesLow.list(
-                                                          makeSymbol( "CHAR1" ), makeSymbol( "CHAR2" ) ) ), ConsesLow.list( makeSymbol( "%B-CHAR>" ), makeString( "charG" ), ConsesLow.list( makeSymbol( "CHAR1" ),
-                                                              makeSymbol( "CHAR2" ) ) ), ConsesLow.list( makeSymbol( "%B-CHAR>=" ), makeString( "charGE" ), ConsesLow.list( makeSymbol( "CHAR1" ), makeSymbol(
-                                                                  "CHAR2" ) ) ), ConsesLow.list( makeSymbol( "%B-CHARACTERP" ), makeString( "characterp" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list(
-                                                                      makeSymbol( "%B-CONSP" ), makeString( "consp" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-EQ" ), makeString( "EQ" ),
-                                                                          ConsesLow.list( makeSymbol( "X" ), makeSymbol( "Y" ) ) ), ConsesLow.list( makeSymbol( "%B-EQL" ), makeString( "eql" ), ConsesLow.list( makeSymbol(
-                                                                              "X" ), makeSymbol( "Y" ) ) ), ConsesLow.list( makeSymbol( "%B-EQUAL" ), makeString( "equal" ), ConsesLow.list( makeSymbol( "X" ), makeSymbol(
-                                                                                  "Y" ) ) ), ConsesLow.list( makeSymbol( "%B-EQUALP" ), makeString( "equalp" ), ConsesLow.list( makeSymbol( "X" ), makeSymbol( "Y" ) ) ),
-      ConsesLow.list( makeSymbol( "%B-EVENP" ), makeString( "evenp" ), ConsesLow.list( makeSymbol( "NUMBER" ) ) ), ConsesLow.list( makeSymbol( "%B-FBOUNDP" ), makeString( "fboundp" ), ConsesLow.list( makeSymbol(
-          "SYMBOL" ) ) ), ConsesLow.list( makeSymbol( "%B-FIXNUMP" ), makeString( "fixnump" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-FLOATP" ), makeString( "floatp" ), ConsesLow.list(
-              makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-FUNCTION-SPEC-P" ), makeString( "function_spec_p" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-FUNCTIONP" ), makeString(
-                  "functionp" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-GUID-P" ), makeString( "guid_p" ), ConsesLow.list( makeSymbol( "OBJ" ) ) ), ConsesLow.list( makeSymbol(
-                      "%B-HASH-TABLE-P" ), makeString( "hash_table_p" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-INTEGERP" ), makeString( "integerp" ), ConsesLow.list( makeSymbol(
-                          "X" ) ) ), ConsesLow.list( makeSymbol( "%B-KEYWORDP" ), makeString( "keywordp" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-LISTP" ), makeString( "listp" ),
-                              ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-LOCK-P" ), makeString( "lockp" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol(
-                                  "%B-LOWER-CASEP" ), makeString( "lower_case_p" ), ConsesLow.list( makeSymbol( "CHAR" ) ) ), ConsesLow.list( makeSymbol( "%B-MACRO-OPERATOR-P" ), makeString( "macro_operator_p" ),
-                                      ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-MINUSP" ), makeString( "minusp" ), ConsesLow.list( makeSymbol( "NUMBER" ) ) ), ConsesLow.list( makeSymbol(
-                                          "%B-NULL" ), makeString( "SUBLISP_NULL" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-NUMBERP" ), makeString( "numberp" ), ConsesLow.list( makeSymbol(
-                                              "X" ) ) ), ConsesLow.list( makeSymbol( "%B-ODDP" ), makeString( "oddp" ), ConsesLow.list( makeSymbol( "NUMBER" ) ) ), ConsesLow.list( makeSymbol( "%B-PACKAGEP" ), makeString(
-                                                  "packagep" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-PLUSP" ), makeString( "plusp" ), ConsesLow.list( makeSymbol( "NUMBER" ) ) ),
-      ConsesLow.list( makeSymbol( "%B-PROBE-FILE" ), makeString( "probe_file" ), ConsesLow.list( makeSymbol( "FILENAME" ) ) ), ConsesLow.list( makeSymbol( "%B-PROCESSP" ), makeString( "processp" ), ConsesLow.list(
-          makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-SEQUENCEP" ), makeString( "sequencep" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-STREAMP" ), makeString( "streamp" ),
-              ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-STRING-EQUAL" ), makeString( "string_equal" ), ConsesLow.list( makeSymbol( "STRING1" ), makeSymbol( "STRING2" ), makeSymbol(
-                  "&OPTIONAL" ), makeSymbol( "START1" ), makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol( "END2" ) ) ), ConsesLow.list( makeSymbol( "%B-STRING-GREATERP" ), makeString( "string_greaterp" ),
-                      ConsesLow.list( makeSymbol( "STRING1" ), makeSymbol( "STRING2" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "START1" ), makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol( "END2" ) ) ), ConsesLow
-                          .list( makeSymbol( "%B-STRING-LESSP" ), makeString( "string_lessp" ), ConsesLow.list( makeSymbol( "STRING1" ), makeSymbol( "STRING2" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "START1" ),
-                              makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol( "END2" ) ) ), ConsesLow.list( makeSymbol( "%B-STRING-NOT-EQUAL" ), makeString( "string_not_equal" ), ConsesLow.list( makeSymbol(
-                                  "STRING1" ), makeSymbol( "STRING2" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "START1" ), makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol( "END2" ) ) ), ConsesLow.list(
-                                      makeSymbol( "%B-STRING-NOT-GREATERP" ), makeString( "string_not_greaterp" ), ConsesLow.list( makeSymbol( "STRING1" ), makeSymbol( "STRING2" ), makeSymbol( "&OPTIONAL" ), makeSymbol(
-                                          "START1" ), makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol( "END2" ) ) ), ConsesLow.list( makeSymbol( "%B-STRING-NOT-LESSP" ), makeString( "string_not_lessp" ),
-                                              ConsesLow.list( makeSymbol( "STRING1" ), makeSymbol( "STRING2" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "START1" ), makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol(
-                                                  "END2" ) ) ), ConsesLow.list( makeSymbol( "%B-STRING/=" ), makeString( "stringNE" ), ConsesLow.list( makeSymbol( "STRING1" ), makeSymbol( "STRING2" ), makeSymbol(
-                                                      "&OPTIONAL" ), makeSymbol( "START1" ), makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol( "END2" ) ) ), ConsesLow.list( makeSymbol( "%B-STRING<" ), makeString(
-                                                          "stringL" ), ConsesLow.list( makeSymbol( "STRING1" ), makeSymbol( "STRING2" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "START1" ), makeSymbol( "END1" ),
-                                                              makeSymbol( "START2" ), makeSymbol( "END2" ) ) ), ConsesLow.list( makeSymbol( "%B-STRING<=" ), makeString( "stringLE" ), ConsesLow.list( makeSymbol(
-                                                                  "STRING1" ), makeSymbol( "STRING2" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "START1" ), makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol(
-                                                                      "END2" ) ) ), ConsesLow.list( makeSymbol( "%B-STRING=" ), makeString( "stringE" ), ConsesLow.list( makeSymbol( "STRING1" ), makeSymbol( "STRING2" ),
-                                                                          makeSymbol( "&OPTIONAL" ), makeSymbol( "START1" ), makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol( "END2" ) ) ), ConsesLow.list(
-                                                                              makeSymbol( "%B-STRING>" ), makeString( "stringG" ), ConsesLow.list( makeSymbol( "STRING1" ), makeSymbol( "STRING2" ), makeSymbol(
-                                                                                  "&OPTIONAL" ), makeSymbol( "START1" ), makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol( "END2" ) ) ), ConsesLow.list( makeSymbol(
-                                                                                      "%B-STRING>=" ), makeString( "stringGE" ), ConsesLow.list( makeSymbol( "STRING1" ), makeSymbol( "STRING2" ), makeSymbol(
-                                                                                          "&OPTIONAL" ), makeSymbol( "START1" ), makeSymbol( "END1" ), makeSymbol( "START2" ), makeSymbol( "END2" ) ) ), ConsesLow.list(
-                                                                                              makeSymbol( "%B-STRINGP" ), makeString( "stringp" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol(
-                                                                                                  "%B-STRUCTURES-BAG-P" ), makeString( "structures_bag_p" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list(
-                                                                                                      makeSymbol( "%B-SYMBOLP" ), makeString( "symbolp" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list(
-                                                                                                          makeSymbol( "%B-THROWN-TO" ), makeString( "THROWN_TO" ), ConsesLow.list( makeSymbol( "ENV" ) ) ), ConsesLow.list(
-                                                                                                              makeSymbol( "%B-UPPER-CASEP" ), makeString( "upper_case_p" ), ConsesLow.list( makeSymbol( "CHAR" ) ) ),
-      ConsesLow.list( makeSymbol( "%B-VECTORP" ), makeString( "vectorp" ), ConsesLow.list( makeSymbol( "X" ) ) ), ConsesLow.list( makeSymbol( "%B-ZEROP" ), makeString( "zerop" ), ConsesLow.list( makeSymbol(
-          "NUMBER" ) ) )
-    } );
-  }
+    public static SubLObject c_backend_predefined_constant_name(final SubLObject constant) {
+        return list_utilities.alist_lookup_without_values($c_backend_predefined_constant_table$.getGlobalValue(), constant, symbol_function(EQL), UNPROVIDED);
+    }
 
-  private static SubLObject _constant_15_initializer()
-  {
-    return ConsesLow.list( new SubLObject[] { ConsesLow.cons( T, makeString( "T" ) ), ConsesLow.cons( NIL, makeString( "NIL" ) ), ConsesLow.cons( EQ, makeString( "eq_sym" ) ), ConsesLow.cons( EQL, makeString(
-        "eql_sym" ) ), ConsesLow.cons( EQUAL, makeString( "equal_sym" ) ), ConsesLow.cons( EQUALP, makeString( "equalp_sym" ) ), ConsesLow.cons( IDENTITY, makeString( "identity_sym" ) ), ConsesLow.cons(
-            MINUS_ONE_INTEGER, makeString( "minus_one" ) ), ConsesLow.cons( ZERO_INTEGER, makeString( "zero" ) ), ConsesLow.cons( ONE_INTEGER, makeString( "one" ) ), ConsesLow.cons( TWO_INTEGER, makeString( "two" ) ),
-      ConsesLow.cons( THREE_INTEGER, makeString( "three" ) ), ConsesLow.cons( FOUR_INTEGER, makeString( "four" ) ), ConsesLow.cons( FIVE_INTEGER, makeString( "five" ) ), ConsesLow.cons( SIX_INTEGER, makeString(
-          "six" ) ), ConsesLow.cons( SEVEN_INTEGER, makeString( "seven" ) ), ConsesLow.cons( EIGHT_INTEGER, makeString( "eight" ) ), ConsesLow.cons( NINE_INTEGER, makeString( "nine" ) ), ConsesLow.cons( TEN_INTEGER,
-              makeString( "ten" ) ), ConsesLow.cons( ELEVEN_INTEGER, makeString( "eleven" ) ), ConsesLow.cons( TWELVE_INTEGER, makeString( "twelve" ) ), ConsesLow.cons( THIRTEEN_INTEGER, makeString( "thirteen" ) ),
-      ConsesLow.cons( FOURTEEN_INTEGER, makeString( "fourteen" ) ), ConsesLow.cons( FIFTEEN_INTEGER, makeString( "fifteen" ) ), ConsesLow.cons( SIXTEEN_INTEGER, makeString( "sixteen" ) ), ConsesLow.cons(
-          SEVENTEEN_INTEGER, makeString( "seventeen" ) ), ConsesLow.cons( EIGHTEEN_INTEGER, makeString( "eighteen" ) ), ConsesLow.cons( NINETEEN_INTEGER, makeString( "nineteen" ) ), ConsesLow.cons( TWENTY_INTEGER,
-              makeString( "twenty" ) ), ConsesLow.cons( Characters.CHAR_null, makeString( "c_null" ) ), ConsesLow.cons( Characters.CHAR_backspace, makeString( "c_backspace" ) ), ConsesLow.cons( Characters.CHAR_tab,
-                  makeString( "c_tab" ) ), ConsesLow.cons( Characters.CHAR_newline, makeString( "c_newline" ) ), ConsesLow.cons( Characters.CHAR_return, makeString( "c_return" ) ), ConsesLow.cons( Characters.CHAR_page,
-                      makeString( "c_page" ) ), ConsesLow.cons( Characters.CHAR_escape, makeString( "c_esc" ) ), ConsesLow.cons( Characters.CHAR_space, makeString( "c_space" ) ), ConsesLow.cons(
-                          Characters.CHAR_exclamation, makeString( "c_exclamation" ) ), ConsesLow.cons( Characters.CHAR_quotation, makeString( "c_quotation" ) ), ConsesLow.cons( Characters.CHAR_hash, makeString(
-                              "c_hash" ) ), ConsesLow.cons( Characters.CHAR_dollar, makeString( "c_dollar" ) ), ConsesLow.cons( Characters.CHAR_percent, makeString( "c_percent" ) ), ConsesLow.cons(
-                                  Characters.CHAR_ampersand, makeString( "c_ampersand" ) ), ConsesLow.cons( Characters.CHAR_quote, makeString( "c_quote" ) ), ConsesLow.cons( Characters.CHAR_lparen, makeString(
-                                      "c_lparen" ) ), ConsesLow.cons( Characters.CHAR_rparen, makeString( "c_rparen" ) ), ConsesLow.cons( Characters.CHAR_asterisk, makeString( "c_asterisk" ) ), ConsesLow.cons(
-                                          Characters.CHAR_plus, makeString( "c_plus" ) ), ConsesLow.cons( Characters.CHAR_comma, makeString( "c_comma" ) ), ConsesLow.cons( Characters.CHAR_hyphen, makeString(
-                                              "c_hyphen" ) ), ConsesLow.cons( Characters.CHAR_period, makeString( "c_period" ) ), ConsesLow.cons( Characters.CHAR_slash, makeString( "c_slash" ) ), ConsesLow.cons(
-                                                  Characters.CHAR_0, makeString( "c_0" ) ), ConsesLow.cons( Characters.CHAR_1, makeString( "c_1" ) ), ConsesLow.cons( Characters.CHAR_2, makeString( "c_2" ) ), ConsesLow
-                                                      .cons( Characters.CHAR_3, makeString( "c_3" ) ), ConsesLow.cons( Characters.CHAR_4, makeString( "c_4" ) ), ConsesLow.cons( Characters.CHAR_5, makeString( "c_5" ) ),
-      ConsesLow.cons( Characters.CHAR_6, makeString( "c_6" ) ), ConsesLow.cons( Characters.CHAR_7, makeString( "c_7" ) ), ConsesLow.cons( Characters.CHAR_8, makeString( "c_8" ) ), ConsesLow.cons( Characters.CHAR_9,
-          makeString( "c_9" ) ), ConsesLow.cons( Characters.CHAR_colon, makeString( "c_colon" ) ), ConsesLow.cons( Characters.CHAR_semicolon, makeString( "c_semicolon" ) ), ConsesLow.cons( Characters.CHAR_less,
-              makeString( "c_less" ) ), ConsesLow.cons( Characters.CHAR_equal, makeString( "c_equal" ) ), ConsesLow.cons( Characters.CHAR_greater, makeString( "c_greater" ) ), ConsesLow.cons( Characters.CHAR_question,
-                  makeString( "c_question" ) ), ConsesLow.cons( Characters.CHAR_at, makeString( "c_at" ) ), ConsesLow.cons( Characters.CHAR_A, makeString( "c_A" ) ), ConsesLow.cons( Characters.CHAR_B, makeString(
-                      "c_B" ) ), ConsesLow.cons( Characters.CHAR_C, makeString( "c_C" ) ), ConsesLow.cons( Characters.CHAR_D, makeString( "c_D" ) ), ConsesLow.cons( Characters.CHAR_E, makeString( "c_E" ) ), ConsesLow
-                          .cons( Characters.CHAR_F, makeString( "c_F" ) ), ConsesLow.cons( Characters.CHAR_G, makeString( "c_G" ) ), ConsesLow.cons( Characters.CHAR_H, makeString( "c_H" ) ), ConsesLow.cons(
-                              Characters.CHAR_I, makeString( "c_I" ) ), ConsesLow.cons( Characters.CHAR_J, makeString( "c_J" ) ), ConsesLow.cons( Characters.CHAR_K, makeString( "c_K" ) ), ConsesLow.cons(
-                                  Characters.CHAR_L, makeString( "c_L" ) ), ConsesLow.cons( Characters.CHAR_M, makeString( "c_M" ) ), ConsesLow.cons( Characters.CHAR_N, makeString( "c_N" ) ), ConsesLow.cons(
-                                      Characters.CHAR_O, makeString( "c_O" ) ), ConsesLow.cons( Characters.CHAR_P, makeString( "c_P" ) ), ConsesLow.cons( Characters.CHAR_Q, makeString( "c_Q" ) ), ConsesLow.cons(
-                                          Characters.CHAR_R, makeString( "c_R" ) ), ConsesLow.cons( Characters.CHAR_S, makeString( "c_S" ) ), ConsesLow.cons( Characters.CHAR_T, makeString( "c_T" ) ), ConsesLow.cons(
-                                              Characters.CHAR_U, makeString( "c_U" ) ), ConsesLow.cons( Characters.CHAR_V, makeString( "c_V" ) ), ConsesLow.cons( Characters.CHAR_W, makeString( "c_W" ) ), ConsesLow.cons(
-                                                  Characters.CHAR_X, makeString( "c_X" ) ), ConsesLow.cons( Characters.CHAR_Y, makeString( "c_Y" ) ), ConsesLow.cons( Characters.CHAR_Z, makeString( "c_Z" ) ), ConsesLow
-                                                      .cons( Characters.CHAR_lbracket, makeString( "c_lbracket" ) ), ConsesLow.cons( Characters.CHAR_backslash, makeString( "c_backslash" ) ), ConsesLow.cons(
-                                                          Characters.CHAR_rbracket, makeString( "c_rbracket" ) ), ConsesLow.cons( Characters.CHAR_caret, makeString( "c_caret" ) ), ConsesLow.cons(
-                                                              Characters.CHAR_underbar, makeString( "c_underbar" ) ), ConsesLow.cons( Characters.CHAR_backquote, makeString( "c_backquote" ) ), ConsesLow.cons(
-                                                                  Characters.CHAR_a, makeString( "c_a" ) ), ConsesLow.cons( Characters.CHAR_b, makeString( "c_b" ) ), ConsesLow.cons( Characters.CHAR_c, makeString(
-                                                                      "c_c" ) ), ConsesLow.cons( Characters.CHAR_d, makeString( "c_d" ) ), ConsesLow.cons( Characters.CHAR_e, makeString( "c_e" ) ), ConsesLow.cons(
-                                                                          Characters.CHAR_f, makeString( "c_f" ) ), ConsesLow.cons( Characters.CHAR_g, makeString( "c_g" ) ), ConsesLow.cons( Characters.CHAR_h, makeString(
-                                                                              "c_h" ) ), ConsesLow.cons( Characters.CHAR_i, makeString( "c_i" ) ), ConsesLow.cons( Characters.CHAR_j, makeString( "c_j" ) ), ConsesLow.cons(
-                                                                                  Characters.CHAR_k, makeString( "c_k" ) ), ConsesLow.cons( Characters.CHAR_l, makeString( "c_l" ) ), ConsesLow.cons( Characters.CHAR_m,
-                                                                                      makeString( "c_m" ) ), ConsesLow.cons( Characters.CHAR_n, makeString( "c_n" ) ), ConsesLow.cons( Characters.CHAR_o, makeString(
-                                                                                          "c_o" ) ), ConsesLow.cons( Characters.CHAR_p, makeString( "c_p" ) ), ConsesLow.cons( Characters.CHAR_q, makeString( "c_q" ) ),
-      ConsesLow.cons( Characters.CHAR_r, makeString( "c_r" ) ), ConsesLow.cons( Characters.CHAR_s, makeString( "c_s" ) ), ConsesLow.cons( Characters.CHAR_t, makeString( "c_t" ) ), ConsesLow.cons( Characters.CHAR_u,
-          makeString( "c_u" ) ), ConsesLow.cons( Characters.CHAR_v, makeString( "c_v" ) ), ConsesLow.cons( Characters.CHAR_w, makeString( "c_w" ) ), ConsesLow.cons( Characters.CHAR_x, makeString( "c_x" ) ), ConsesLow
-              .cons( Characters.CHAR_y, makeString( "c_y" ) ), ConsesLow.cons( Characters.CHAR_z, makeString( "c_z" ) ), ConsesLow.cons( Characters.CHAR_lbrace, makeString( "c_lbrace" ) ), ConsesLow.cons(
-                  Characters.CHAR_vertical, makeString( "c_vertical" ) ), ConsesLow.cons( Characters.CHAR_rbrace, makeString( "c_rbrace" ) ), ConsesLow.cons( Characters.CHAR_tilde, makeString( "c_tilde" ) ), ConsesLow
-                      .cons( Characters.CHAR_rubout, makeString( "c_rubout" ) )
-    } );
-  }
+    public static SubLObject c_backend_undefined_variable_binding_type_lookup(final SubLObject variable) {
+        return third(assoc(variable, $c_backend_undefined_global_name_data$.getGlobalValue(), symbol_function(EQ), UNPROVIDED));
+    }
 
-  @Override
-  public void declareFunctions()
-  {
-    declare_c_name_translation_file();
-  }
+    public static SubLObject c_backend_global_name_lookup(final SubLObject global) {
+        return gethash_without_values(global, $c_backend_global_name_table$.getGlobalValue(), NIL);
+    }
 
-  @Override
-  public void initializeVariables()
-  {
-    init_c_name_translation_file();
-  }
+    public static SubLObject c_backend_predefined_global_p(final SubLObject global) {
+        return list_utilities.sublisp_boolean(gethash_without_values(global, $c_backend_global_name_table$.getGlobalValue(), NIL));
+    }
 
-  @Override
-  public void runTopLevelForms()
-  {
-    setup_c_name_translation_file();
-  }
-  static
-  {
-    me = new c_name_translation();
-    $c_backend_defined_function_name_data$ = null;
-    $c_backend_undefined_function_name_data$ = null;
-    $c_backend_function_arity_version_table$ = null;
-    $c_backend_undefined_arity_function_name_data$ = null;
-    $c_backend_function_boolean_version_table$ = null;
-    $c_backend_function_boolean_hash$ = null;
-    $c_backend_undefined_boolean_function_name_data$ = null;
-    $c_backend_function_name_table$ = null;
-    $c_backend_function_arglist_table$ = null;
-    $c_backend_predefined_constant_table$ = null;
-    $c_backend_defined_global_name_data$ = null;
-    $c_backend_undefined_global_name_data$ = null;
-    $c_backend_global_name_table$ = null;
-    $list0 = _constant_0_initializer();
-    $list1 = _constant_1_initializer();
-    $list2 = ConsesLow.list( makeSymbol( "OPERATOR" ), makeSymbol( "&REST" ), makeSymbol( "ARGS" ) );
-    $list3 = ConsesLow.list( ConsesLow.list( makeSymbol( "*" ), ConsesLow.cons( TWO_INTEGER, makeSymbol( "%MULT2" ) ) ), ConsesLow.list( makeSymbol( "+" ), ConsesLow.cons( TWO_INTEGER, makeSymbol( "%ADD2" ) ) ),
-        ConsesLow.list( makeSymbol( "-" ), ConsesLow.cons( ONE_INTEGER, makeSymbol( "%MINUS" ) ), ConsesLow.cons( TWO_INTEGER, makeSymbol( "%SUB2" ) ) ), ConsesLow.list( makeSymbol( "/" ), ConsesLow.cons( ONE_INTEGER,
-            makeSymbol( "%INVERT" ) ), ConsesLow.cons( TWO_INTEGER, makeSymbol( "%DIV2" ) ) ), ConsesLow.list( makeSymbol( "FUNCALL" ), ConsesLow.cons( ONE_INTEGER, makeSymbol( "%FUNCALL0" ) ), ConsesLow.cons(
-                TWO_INTEGER, makeSymbol( "%FUNCALL1" ) ), ConsesLow.cons( THREE_INTEGER, makeSymbol( "%FUNCALL2" ) ), ConsesLow.cons( FOUR_INTEGER, makeSymbol( "%FUNCALL3" ) ) ), ConsesLow.list( makeSymbol( "MAX" ),
-                    ConsesLow.cons( TWO_INTEGER, makeSymbol( "%MAX2" ) ) ), ConsesLow.list( makeSymbol( "MIN" ), ConsesLow.cons( TWO_INTEGER, makeSymbol( "%MIN2" ) ) ) );
-    $list4 = ConsesLow.list( new SubLObject[] { ConsesLow.list( makeSymbol( "%ADD2" ), makeString( "add2" ), ConsesLow.list( makeSymbol( "NUM1" ), makeSymbol( "NUM2" ) ) ), ConsesLow.list( makeSymbol( "%DIV2" ),
-        makeString( "div2" ), ConsesLow.list( makeSymbol( "NUM1" ), makeSymbol( "NUM2" ) ) ), ConsesLow.list( makeSymbol( "%FUNCALL0" ), makeString( "funcall0" ), ConsesLow.list( makeSymbol( "FUNCTION" ) ) ), ConsesLow
-            .list( makeSymbol( "%FUNCALL1" ), makeString( "funcall1" ), ConsesLow.list( makeSymbol( "FUNCTION" ), makeSymbol( "ARG1" ) ) ), ConsesLow.list( makeSymbol( "%FUNCALL2" ), makeString( "funcall2" ), ConsesLow
-                .list( makeSymbol( "FUNCTION" ), makeSymbol( "ARG1" ), makeSymbol( "ARG2" ) ) ), ConsesLow.list( makeSymbol( "%FUNCALL3" ), makeString( "funcall3" ), ConsesLow.list( makeSymbol( "FUNCTION" ), makeSymbol(
-                    "ARG1" ), makeSymbol( "ARG2" ), makeSymbol( "ARG3" ) ) ), ConsesLow.list( makeSymbol( "%INVERT" ), makeString( "invert" ), ConsesLow.list( makeSymbol( "NUM" ) ) ), ConsesLow.list( makeSymbol(
-                        "%MAX2" ), makeString( "max2" ), ConsesLow.list( makeSymbol( "NUM1" ), makeSymbol( "NUM2" ) ) ), ConsesLow.list( makeSymbol( "%MIN2" ), makeString( "min2" ), ConsesLow.list( makeSymbol( "NUM1" ),
-                            makeSymbol( "NUM2" ) ) ), ConsesLow.list( makeSymbol( "%MINUS" ), makeString( "minus" ), ConsesLow.list( makeSymbol( "NUM" ) ) ), ConsesLow.list( makeSymbol( "%MULT2" ), makeString( "mult2" ),
-                                ConsesLow.list( makeSymbol( "NUM1" ), makeSymbol( "NUM2" ) ) ), ConsesLow.list( makeSymbol( "%SUB2" ), makeString( "sub2" ), ConsesLow.list( makeSymbol( "NUM1" ), makeSymbol( "NUM2" ) ) )
-    } );
-    $sym5$_DTB = makeSymbol( "%DTB" );
-    $sym6$_BTD = makeSymbol( "%BTD" );
-    $list7 = ConsesLow.list( new SubLObject[] { ConsesLow.cons( makeSymbol( "%THROWN-TO" ), makeSymbol( "%B-THROWN-TO" ) ), ConsesLow.cons( makeSymbol( "/=" ), makeSymbol( "%B-/=" ) ), ConsesLow.cons( makeSymbol( "<" ),
-        makeSymbol( "%B-<" ) ), ConsesLow.cons( makeSymbol( "<=" ), makeSymbol( "%B-<=" ) ), ConsesLow.cons( makeSymbol( "=" ), makeSymbol( "%B-=" ) ), ConsesLow.cons( makeSymbol( ">" ), makeSymbol( "%B->" ) ), ConsesLow
-            .cons( makeSymbol( ">=" ), makeSymbol( "%B->=" ) ), ConsesLow.cons( makeSymbol( "ALPHA-CHAR-P" ), makeSymbol( "%B-ALPHA-CHARP" ) ), ConsesLow.cons( makeSymbol( "ALPHANUMERICP" ), makeSymbol(
-                "%B-ALPHANUMERICP" ) ), ConsesLow.cons( makeSymbol( "ATOM" ), makeSymbol( "%B-ATOM" ) ), ConsesLow.cons( makeSymbol( "BOTH-CASE-P" ), makeSymbol( "%B-BOTH-CASEP" ) ), ConsesLow.cons( makeSymbol(
-                    "BOUNDP" ), makeSymbol( "%B-BOUNDP" ) ), ConsesLow.cons( makeSymbol( "CHAR-EQUAL" ), makeSymbol( "%B-CHAR-EQUAL" ) ), ConsesLow.cons( makeSymbol( "CHAR-GREATERP" ), makeSymbol( "%B-CHAR-GREATERP" ) ),
-      ConsesLow.cons( makeSymbol( "CHAR-LESSP" ), makeSymbol( "%B-CHAR-LESSP" ) ), ConsesLow.cons( makeSymbol( "CHAR-NOT-EQUAL" ), makeSymbol( "%B-CHAR-NOT-EQUAL" ) ), ConsesLow.cons( makeSymbol( "CHAR-NOT-GREATERP" ),
-          makeSymbol( "%B-CHAR-NOT-GREATERP" ) ), ConsesLow.cons( makeSymbol( "CHAR-NOT-LESSP" ), makeSymbol( "%B-CHAR-NOT-LESSP" ) ), ConsesLow.cons( makeSymbol( "CHAR/=" ), makeSymbol( "%B-CHAR/=" ) ), ConsesLow.cons(
-              makeSymbol( "CHAR<" ), makeSymbol( "%B-CHAR<" ) ), ConsesLow.cons( makeSymbol( "CHAR<=" ), makeSymbol( "%B-CHAR<=" ) ), ConsesLow.cons( makeSymbol( "CHAR=" ), makeSymbol( "%B-CHAR=" ) ), ConsesLow.cons(
-                  makeSymbol( "CHAR>" ), makeSymbol( "%B-CHAR>" ) ), ConsesLow.cons( makeSymbol( "CHAR>=" ), makeSymbol( "%B-CHAR>=" ) ), ConsesLow.cons( makeSymbol( "CHARACTERP" ), makeSymbol( "%B-CHARACTERP" ) ),
-      ConsesLow.cons( makeSymbol( "CONSP" ), makeSymbol( "%B-CONSP" ) ), ConsesLow.cons( EQ, makeSymbol( "%B-EQ" ) ), ConsesLow.cons( EQL, makeSymbol( "%B-EQL" ) ), ConsesLow.cons( EQUAL, makeSymbol( "%B-EQUAL" ) ),
-      ConsesLow.cons( EQUALP, makeSymbol( "%B-EQUALP" ) ), ConsesLow.cons( makeSymbol( "EVENP" ), makeSymbol( "%B-EVENP" ) ), ConsesLow.cons( makeSymbol( "FBOUNDP" ), makeSymbol( "%B-FBOUNDP" ) ), ConsesLow.cons(
-          makeSymbol( "FIXNUMP" ), makeSymbol( "%B-FIXNUMP" ) ), ConsesLow.cons( makeSymbol( "FLOATP" ), makeSymbol( "%B-FLOATP" ) ), ConsesLow.cons( makeSymbol( "FUNCTION-SPEC-P" ), makeSymbol( "%B-FUNCTION-SPEC-P" ) ),
-      ConsesLow.cons( makeSymbol( "FUNCTIONP" ), makeSymbol( "%B-FUNCTIONP" ) ), ConsesLow.cons( makeSymbol( "GUID-P" ), makeSymbol( "%B-GUID-P" ) ), ConsesLow.cons( makeSymbol( "HASH-TABLE-P" ), makeSymbol(
-          "%B-HASH-TABLE-P" ) ), ConsesLow.cons( makeSymbol( "INTEGERP" ), makeSymbol( "%B-INTEGERP" ) ), ConsesLow.cons( makeSymbol( "KEYWORDP" ), makeSymbol( "%B-KEYWORDP" ) ), ConsesLow.cons( makeSymbol( "LISTP" ),
-              makeSymbol( "%B-LISTP" ) ), ConsesLow.cons( makeSymbol( "LOCK-P" ), makeSymbol( "%B-LOCK-P" ) ), ConsesLow.cons( makeSymbol( "LOWER-CASE-P" ), makeSymbol( "%B-LOWER-CASEP" ) ), ConsesLow.cons( makeSymbol(
-                  "MACRO-OPERATOR-P" ), makeSymbol( "%B-MACRO-OPERATOR-P" ) ), ConsesLow.cons( makeSymbol( "MINUSP" ), makeSymbol( "%B-MINUSP" ) ), ConsesLow.cons( makeSymbol( "NULL" ), makeSymbol( "%B-NULL" ) ),
-      ConsesLow.cons( makeSymbol( "NUMBERP" ), makeSymbol( "%B-NUMBERP" ) ), ConsesLow.cons( makeSymbol( "ODDP" ), makeSymbol( "%B-ODDP" ) ), ConsesLow.cons( makeSymbol( "PACKAGEP" ), makeSymbol( "%B-PACKAGEP" ) ),
-      ConsesLow.cons( makeSymbol( "PLUSP" ), makeSymbol( "%B-PLUSP" ) ), ConsesLow.cons( makeSymbol( "PROBE-FILE" ), makeSymbol( "%B-PROBE-FILE" ) ), ConsesLow.cons( makeSymbol( "PROCESSP" ), makeSymbol(
-          "%B-PROCESSP" ) ), ConsesLow.cons( makeSymbol( "SEQUENCEP" ), makeSymbol( "%B-SEQUENCEP" ) ), ConsesLow.cons( makeSymbol( "STREAMP" ), makeSymbol( "%B-STREAMP" ) ), ConsesLow.cons( makeSymbol( "STRING-EQUAL" ),
-              makeSymbol( "%B-STRING-EQUAL" ) ), ConsesLow.cons( makeSymbol( "STRING-GREATERP" ), makeSymbol( "%B-STRING-GREATERP" ) ), ConsesLow.cons( makeSymbol( "STRING-LESSP" ), makeSymbol( "%B-STRING-LESSP" ) ),
-      ConsesLow.cons( makeSymbol( "STRING-NOT-EQUAL" ), makeSymbol( "%B-STRING-NOT-EQUAL" ) ), ConsesLow.cons( makeSymbol( "STRING-NOT-GREATERP" ), makeSymbol( "%B-STRING-NOT-GREATERP" ) ), ConsesLow.cons( makeSymbol(
-          "STRING-NOT-LESSP" ), makeSymbol( "%B-STRING-NOT-LESSP" ) ), ConsesLow.cons( makeSymbol( "STRING/=" ), makeSymbol( "%B-STRING/=" ) ), ConsesLow.cons( makeSymbol( "STRING<" ), makeSymbol( "%B-STRING<" ) ),
-      ConsesLow.cons( makeSymbol( "STRING<=" ), makeSymbol( "%B-STRING<=" ) ), ConsesLow.cons( makeSymbol( "STRING=" ), makeSymbol( "%B-STRING=" ) ), ConsesLow.cons( makeSymbol( "STRING>" ), makeSymbol( "%B-STRING>" ) ),
-      ConsesLow.cons( makeSymbol( "STRING>=" ), makeSymbol( "%B-STRING>=" ) ), ConsesLow.cons( makeSymbol( "STRINGP" ), makeSymbol( "%B-STRINGP" ) ), ConsesLow.cons( makeSymbol( "ALIEN-P", "SUBLISP" ), makeSymbol(
-          "%B-ALIEN-P" ) ), ConsesLow.cons( makeSymbol( "_STRUCTURES-BAG-P", "SUBLISP" ), makeSymbol( "%B-STRUCTURES-BAG-P" ) ), ConsesLow.cons( makeSymbol( "SYMBOLP" ), makeSymbol( "%B-SYMBOLP" ) ), ConsesLow.cons(
-              makeSymbol( "UPPER-CASE-P" ), makeSymbol( "%B-UPPER-CASEP" ) ), ConsesLow.cons( makeSymbol( "VECTORP" ), makeSymbol( "%B-VECTORP" ) ), ConsesLow.cons( makeSymbol( "ZEROP" ), makeSymbol( "%B-ZEROP" ) )
-    } );
-    $kw8$UNINITIALIZED = makeKeyword( "UNINITIALIZED" );
-    $list9 = ConsesLow.cons( makeSymbol( "FUNCTION" ), makeSymbol( "BOOLEAN-VERSION" ) );
-    $list10 = _constant_10_initializer();
-    $list11 = ConsesLow.list( makeSymbol( "SYMBOL" ), makeSymbol( "C-BACKEND-NAME" ), makeSymbol( "&OPTIONAL" ), makeSymbol( "ARGLIST" ) );
-    $kw12$UNSPECIFIED = makeKeyword( "UNSPECIFIED" );
-    $int13$500 = makeInteger( 500 );
-    $list14 = ConsesLow.list( makeSymbol( "SYMBOL" ), makeSymbol( "C-BACKEND-NAME" ) );
-    $list15 = _constant_15_initializer();
-    $list16 = ConsesLow.list( new SubLObject[] { ConsesLow.list( makeSymbol( "*" ), makeString( "gv_S" ) ), ConsesLow.list( makeSymbol( "**" ), makeString( "gv_SS" ) ), ConsesLow.list( makeSymbol( "***" ), makeString(
-        "gv_SSS" ) ), ConsesLow.list( makeSymbol( "*BREAK-ON-ERROR?*" ), makeString( "gv_break_on_errorP" ) ), ConsesLow.list( makeSymbol( "*BREAK-ON-WARN?*" ), makeString( "gv_break_on_warnP" ) ), ConsesLow.list(
-            makeSymbol( "*CONTINUE-CERROR?*" ), makeString( "gv_continue_cerrorP" ) ), ConsesLow.list( makeSymbol( "*CURRENT-AREA*" ), makeString( "gv_current_area" ) ), ConsesLow.list( makeSymbol( "*DEBUG-IO*" ),
-                makeString( "gv_debug_io" ) ), ConsesLow.list( makeSymbol( "*DEFAULT-PATHNAME-DEFAULTS*" ), makeString( "gv_default_pathname_defaults" ) ), ConsesLow.list( makeSymbol( "*ERROR-ABORT-HANDLER*" ),
-                    makeString( "gv_error_abort_handler" ) ), ConsesLow.list( makeSymbol( "*ERROR-HANDLER*" ), makeString( "gv_error_handler" ) ), ConsesLow.list( makeSymbol( "*ERROR-MESSAGE*" ), makeString(
-                        "gv_error_message" ) ), ConsesLow.list( makeSymbol( "*ERROR-OUTPUT*" ), makeString( "gv_error_output" ) ), ConsesLow.list( makeSymbol( "*EXP1*" ), makeString( "gv_exp1" ) ), ConsesLow.list(
-                            makeSymbol( "*FEATURES*" ), makeString( "gv_features" ) ), ConsesLow.list( makeSymbol( "*GENSYM-COUNTER*" ), makeString( "gv_gensym_counter" ) ), ConsesLow.list( makeSymbol(
-                                "*IGNORE-BREAKS?*" ), makeString( "gv_ignore_breaksP" ) ), ConsesLow.list( makeSymbol( "*IGNORE-MUSTS?*" ), makeString( "gv_ignore_mustsP" ) ), ConsesLow.list( makeSymbol(
-                                    "*IGNORE-WARNS?*" ), makeString( "gv_ignore_warnsP" ) ), ConsesLow.list( makeSymbol( "*INTERNAL-TIME-UNITS-PER-SECOND*" ), makeString( "gv_internal_time_units_per_second" ) ),
-      ConsesLow.list( makeSymbol( "*MOST-NEGATIVE-FIXNUM*" ), makeString( "gv_most_negative_fixnum" ) ), ConsesLow.list( makeSymbol( "*MOST-POSITIVE-FIXNUM*" ), makeString( "gv_most_positive_fixnum" ) ), ConsesLow.list(
-          makeSymbol( "*NULL-INPUT*" ), makeString( "gv_null_input" ) ), ConsesLow.list( makeSymbol( "*NULL-OUTPUT*" ), makeString( "gv_null_output" ) ), ConsesLow.list( makeSymbol( "*PACKAGE*" ), makeString(
-              "gv_current_package" ) ), ConsesLow.list( makeSymbol( "*PRINT-BASE*" ), makeString( "gv_print_base" ) ), ConsesLow.list( makeSymbol( "*PRINT-CASE*" ), makeString( "gv_print_case" ) ), ConsesLow.list(
-                  makeSymbol( "*PRINT-ESCAPE*" ), makeString( "gv_print_escape" ) ), ConsesLow.list( makeSymbol( "*PRINT-LENGTH*" ), makeString( "gv_print_length" ) ), ConsesLow.list( makeSymbol( "*PRINT-LEVEL*" ),
-                      makeString( "gv_print_level" ) ), ConsesLow.list( makeSymbol( "*PRINT-PRETTY*" ), makeString( "gv_print_pretty" ) ), ConsesLow.list( makeSymbol( "*PRINT-READABLY*" ), makeString(
-                          "gv_print_readably" ) ), ConsesLow.list( makeSymbol( "*PROCESS-BACKGROUND-PRIORITY*" ), makeString( "gv_process_background_priority" ) ), ConsesLow.list( makeSymbol( "*PROCESS-MAX-PRIORITY*" ),
-                              makeString( "gv_process_max_priority" ) ), ConsesLow.list( makeSymbol( "*PROCESS-MIN-PRIORITY*" ), makeString( "gv_process_min_priority" ) ), ConsesLow.list( makeSymbol(
-                                  "*PROCESS-NORMAL-PRIORITY*" ), makeString( "gv_process_normal_priority" ) ), ConsesLow.list( makeSymbol( "*RAND-MAX*" ), makeString( "gv_rand_max" ) ), ConsesLow.list( makeSymbol(
-                                      "*READ-DEFAULT-FLOAT-FORMAT*" ), makeString( "gv_read_default_float_format" ) ), ConsesLow.list( makeSymbol( "*READ-EVAL*" ), makeString( "gv_read_eval" ) ), ConsesLow.list(
-                                          makeSymbol( "*READ-SUPPRESS*" ), makeString( "gv_read_suppress" ) ), ConsesLow.list( makeSymbol( "*READTABLE*" ), makeString( "gv_readtable" ) ), ConsesLow.list( makeSymbol(
-                                              "*RETAIN-CLIENT-SOCKET?*" ), makeString( "gv_retain_client_socketP" ) ), ConsesLow.list( makeSymbol( "*STANDARD-INPUT*" ), makeString( "gv_standard_input" ) ), ConsesLow
-                                                  .list( makeSymbol( "*STANDARD-OUTPUT*" ), makeString( "gv_standard_output" ) ), ConsesLow.list( makeSymbol( "*STREAM-INITIAL-INPUT-BUFFER-SIZE*" ), makeString(
-                                                      "gv_stream_initial_input_buffer_size" ) ), ConsesLow.list( makeSymbol( "*STREAM-INITIAL-OUTPUT-BUFFER-SIZE*" ), makeString(
-                                                          "gv_stream_initial_output_buffer_size" ) ), ConsesLow.list( makeSymbol( "*SUSPEND-TYPE-CHECKING?*" ), makeString( "gv_suspend_type_checkingP" ) ), ConsesLow.list(
-                                                              makeSymbol( "*TERMINAL-IO*" ), makeString( "gv_terminal_io" ) ), ConsesLow.list( makeSymbol( "*TCP-LOCALHOST-ONLY?*" ), makeString(
-                                                                  "gv_tcp_localhost_onlyP" ) ), ConsesLow.list( makeSymbol( "*TRACE-OUTPUT*" ), makeString( "gv_trace_output" ) ), ConsesLow.list( makeSymbol( "BOOLE-1" ),
-                                                                      makeString( "gv_boole_1" ) ), ConsesLow.list( makeSymbol( "BOOLE-2" ), makeString( "gv_boole_2" ) ), ConsesLow.list( makeSymbol( "BOOLE-AND" ),
-                                                                          makeString( "gv_boole_and" ) ), ConsesLow.list( makeSymbol( "BOOLE-ANDC1" ), makeString( "gv_boole_andc1" ) ), ConsesLow.list( makeSymbol(
-                                                                              "BOOLE-ANDC2" ), makeString( "gv_boole_andc2" ) ), ConsesLow.list( makeSymbol( "BOOLE-C1" ), makeString( "gv_boole_c1" ) ), ConsesLow.list(
-                                                                                  makeSymbol( "BOOLE-C2" ), makeString( "gv_boole_c2" ) ), ConsesLow.list( makeSymbol( "BOOLE-CLR" ), makeString( "gv_boole_clr" ) ),
-      ConsesLow.list( makeSymbol( "BOOLE-EQV" ), makeString( "gv_boole_eqv" ) ), ConsesLow.list( makeSymbol( "BOOLE-IOR" ), makeString( "gv_boole_ior" ) ), ConsesLow.list( makeSymbol( "BOOLE-NAND" ), makeString(
-          "gv_boole_nand" ) ), ConsesLow.list( makeSymbol( "BOOLE-NOR" ), makeString( "gv_boole_nor" ) ), ConsesLow.list( makeSymbol( "BOOLE-ORC1" ), makeString( "gv_boole_orc1" ) ), ConsesLow.list( makeSymbol(
-              "BOOLE-ORC2" ), makeString( "gv_boole_orc2" ) ), ConsesLow.list( makeSymbol( "BOOLE-SET" ), makeString( "gv_boole_set" ) ), ConsesLow.list( makeSymbol( "BOOLE-XOR" ), makeString( "gv_boole_xor" ) ),
-      ConsesLow.list( makeSymbol( "*PRINT-OBJECT-METHOD-TABLE*", "SUBLISP" ), makeString( "gv_print_object_method_table" ) ), ConsesLow.list( makeSymbol( "*RESTARTS*", "SUBLISP" ), makeString( "gv_restarts" ) ),
-      ConsesLow.list( makeSymbol( "*STREAM-REQUIRES-LOCKING*", "SUBLISP" ), makeString( "gv_stream_requires_locking" ) ), ConsesLow.list( makeSymbol( "*SXHASH-METHOD-TABLE*" ), makeString( "gv_sxhash_method_table" ) ),
-      ConsesLow.list( makeSymbol( "*VISIT-DEFSTRUCT-OBJECT-METHOD-TABLE*", "SUBLISP" ), makeString( "gv_visit_defstruct_object_method_table" ) ), ConsesLow.list( makeSymbol( "*CALL-PROFILING-ENABLED?*", "SUBLISP" ),
-          makeString( "gv_call_profiling_enabledP" ) ), ConsesLow.list( makeSymbol( "*CALL-PROFILING-TABLE*", "SUBLISP" ), makeString( "gv_call_profiling_table" ) )
-    } );
-    $list17 = ConsesLow.list( new SubLObject[] { ConsesLow.list( makeSymbol( "*DTP-SYMBOL*" ), makeString( "gv_dtp_symbol" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*DTP-CONS*" ), makeString(
-        "gv_dtp_cons" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*DTP-FIXNUM*" ), makeString( "gv_dtp_fixnum" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*DTP-FLOAT*" ), makeString(
-            "gv_dtp_float" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*DTP-CHARACTER*" ), makeString( "gv_dtp_character" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*DTP-STRING*" ),
-                makeString( "gv_dtp_string" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*DTP-VECTOR*" ), makeString( "gv_dtp_vector" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol(
-                    "*DTP-FUNCTION*" ), makeString( "gv_dtp_function" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*DTP-HASH-TABLE*" ), makeString( "gv_dtp_hash_table" ), makeKeyword( "CONSTANT" ) ),
-      ConsesLow.list( makeSymbol( "*DTP-PACKAGE*" ), makeString( "gv_dtp_package" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*DTP-STREAM*" ), makeString( "gv_dtp_stream" ), makeKeyword( "CONSTANT" ) ),
-      ConsesLow.list( makeSymbol( "*DTP-BIGNUM*" ), makeString( "gv_dtp_bignum" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*DTP-GUID*" ), makeString( "gv_dtp_guid" ), makeKeyword( "CONSTANT" ) ),
-      ConsesLow.list( makeSymbol( "*DTP-LOCK*" ), makeString( "gv_dtp_lock" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*DTP-PROCESS*" ), makeString( "gv_dtp_process" ), makeKeyword( "CONSTANT" ) ),
-      ConsesLow.list( makeSymbol( "*DTP-STRUCTURES-BAG*" ), makeString( "gv_dtp_structures_bag" ), makeKeyword( "CONSTANT" ) ), ConsesLow.list( makeSymbol( "*%EVALUATOR-METHOD*", "SUBLISP" ), makeString(
-          "gv_evaluator_method" ), makeKeyword( "DYNAMIC" ) ), ConsesLow.list( makeSymbol( "*REMOTE-ADDRESS*", "SUBLISP" ), makeString( "gv_remote_address" ), makeKeyword( "DYNAMIC" ) ), ConsesLow.list( makeSymbol(
-              "*REMOTE-HOSTNAME*", "SUBLISP" ), makeString( "gv_remote_hostname" ), makeKeyword( "DYNAMIC" ) )
-    } );
-  }
+    public static SubLObject initialize_c_backend_global_name_table() {
+        final SubLObject data = nconc(copy_list($c_backend_defined_global_name_data$.getGlobalValue()), copy_list($c_backend_undefined_global_name_data$.getGlobalValue()));
+        final SubLObject table = make_hash_table(length(data), symbol_function(EQ), UNPROVIDED);
+        SubLObject cdolist_list_var = data;
+        SubLObject item = NIL;
+        item = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            SubLObject current;
+            final SubLObject datum = current = item;
+            SubLObject symbol = NIL;
+            SubLObject c_backend_name = NIL;
+            destructuring_bind_must_consp(current, datum, $list11);
+            symbol = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list11);
+            c_backend_name = current.first();
+            current = current.rest();
+            final SubLObject arglist = (current.isCons()) ? current.first() : NIL;
+            destructuring_bind_must_listp(current, datum, $list11);
+            current = current.rest();
+            if (NIL == current) {
+                sethash(symbol, table, c_backend_name);
+            } else {
+                cdestructuring_bind_error(datum, $list11);
+            }
+            cdolist_list_var = cdolist_list_var.rest();
+            item = cdolist_list_var.first();
+        } 
+        $c_backend_global_name_table$.setGlobalValue(table);
+        return table;
+    }
+
+    public static SubLObject declare_c_name_translation_file() {
+        declareFunction(me, "c_backend_defined_function_p", "C-BACKEND-DEFINED-FUNCTION-P", 1, 0, false);
+        declareFunction(me, "c_backend_function_call_arity_transform", "C-BACKEND-FUNCTION-CALL-ARITY-TRANSFORM", 1, 0, false);
+        declareFunction(me, "c_backend_function_call_arity_lookup", "C-BACKEND-FUNCTION-CALL-ARITY-LOOKUP", 2, 0, false);
+        declareFunction(me, "c_backend_simplify_Xdtb_transform", "C-BACKEND-SIMPLIFY-%DTB-TRANSFORM", 1, 0, false);
+        declareFunction(me, "initialize_c_backend_function_boolean_hash", "INITIALIZE-C-BACKEND-FUNCTION-BOOLEAN-HASH", 0, 0, false);
+        declareFunction(me, "c_backend_boolean_function_call_lookup", "C-BACKEND-BOOLEAN-FUNCTION-CALL-LOOKUP", 1, 0, false);
+        declareFunction(me, "c_backend_function_name_lookup", "C-BACKEND-FUNCTION-NAME-LOOKUP", 1, 0, false);
+        declareFunction(me, "c_backend_predefined_function_p", "C-BACKEND-PREDEFINED-FUNCTION-P", 1, 0, false);
+        declareFunction(me, "initialize_c_backend_function_name_table", "INITIALIZE-C-BACKEND-FUNCTION-NAME-TABLE", 0, 0, false);
+        declareFunction(me, "c_backend_function_arglist_lookup", "C-BACKEND-FUNCTION-ARGLIST-LOOKUP", 1, 0, false);
+        declareFunction(me, "initialize_c_backend_function_arglist_table", "INITIALIZE-C-BACKEND-FUNCTION-ARGLIST-TABLE", 0, 0, false);
+        declareFunction(me, "c_backend_predefined_constant_name", "C-BACKEND-PREDEFINED-CONSTANT-NAME", 1, 0, false);
+        declareFunction(me, "c_backend_undefined_variable_binding_type_lookup", "C-BACKEND-UNDEFINED-VARIABLE-BINDING-TYPE-LOOKUP", 1, 0, false);
+        declareFunction(me, "c_backend_global_name_lookup", "C-BACKEND-GLOBAL-NAME-LOOKUP", 1, 0, false);
+        declareFunction(me, "c_backend_predefined_global_p", "C-BACKEND-PREDEFINED-GLOBAL-P", 1, 0, false);
+        declareFunction(me, "initialize_c_backend_global_name_table", "INITIALIZE-C-BACKEND-GLOBAL-NAME-TABLE", 0, 0, false);
+        return NIL;
+    }
+
+    public static SubLObject init_c_name_translation_file() {
+        deflexical("*C-BACKEND-DEFINED-FUNCTION-NAME-DATA*", $list0);
+        deflexical("*C-BACKEND-UNDEFINED-FUNCTION-NAME-DATA*", $list1);
+        deflexical("*C-BACKEND-FUNCTION-ARITY-VERSION-TABLE*", $list3);
+        deflexical("*C-BACKEND-UNDEFINED-ARITY-FUNCTION-NAME-DATA*", $list4);
+        deflexical("*C-BACKEND-FUNCTION-BOOLEAN-VERSION-TABLE*", $list7);
+        deflexical("*C-BACKEND-FUNCTION-BOOLEAN-HASH*", $UNINITIALIZED);
+        deflexical("*C-BACKEND-UNDEFINED-BOOLEAN-FUNCTION-NAME-DATA*", $list10);
+        deflexical("*C-BACKEND-FUNCTION-NAME-TABLE*", $UNINITIALIZED);
+        deflexical("*C-BACKEND-FUNCTION-ARGLIST-TABLE*", $UNINITIALIZED);
+        deflexical("*C-BACKEND-PREDEFINED-CONSTANT-TABLE*", $list15);
+        deflexical("*C-BACKEND-DEFINED-GLOBAL-NAME-DATA*", $list16);
+        deflexical("*C-BACKEND-UNDEFINED-GLOBAL-NAME-DATA*", $list17);
+        deflexical("*C-BACKEND-GLOBAL-NAME-TABLE*", $UNINITIALIZED);
+        return NIL;
+    }
+
+    public static SubLObject setup_c_name_translation_file() {
+        initialize_c_backend_function_boolean_hash();
+        initialize_c_backend_function_name_table();
+        initialize_c_backend_function_arglist_table();
+        initialize_c_backend_global_name_table();
+        return NIL;
+    }
+
+    private static SubLObject _constant_0_initializer() {
+        return list(new SubLObject[]{ list(makeSymbol("*"), makeString("mult")), list(makeSymbol("+"), makeString("add")), list(makeSymbol("-"), makeString("sub")), list(makeSymbol("/"), makeString("divide")), list(makeSymbol("/="), makeString("dp_numNE")), list(makeSymbol("<"), makeString("dp_numL")), list(makeSymbol("<="), makeString("dp_numLE")), list(makeSymbol("="), makeString("dp_numE")), list(makeSymbol(">"), makeString("dp_numG")), list(makeSymbol(">="), makeString("dp_numGE")), list(makeSymbol("ABS"), makeString("sublisp_abs")), list(makeSymbol("ACONS"), makeString("acons")), list(makeSymbol("ACOS"), makeString("sublisp_acos")), list(makeSymbol("ADJOIN"), makeString("adjoin")), list(makeSymbol("ALERT-USER"), makeString("alert_user")), list(makeSymbol("ALL-PROCESSES"), makeString("all_processes")), list(makeSymbol("ALPHA-CHAR-P"), makeString("dp_alpha_char_p")), list(makeSymbol("ALPHANUMERICP"), makeString("dp_alphanumericp")), list(makeSymbol("APPEND"), makeString("append")), list(makeSymbol("APPLY"), makeString("apply")), list(makeSymbol("APROPOS"), makeString("apropos")), list(makeSymbol("AREF"), makeString("aref")), list(makeSymbol("ASH"), makeString("ash")), list(makeSymbol("ASIN"), makeString("sublisp_asin")), list(makeSymbol("ASSEMBLE-FIXNUMS-TO-GUID"), makeString("assemble_fixnums_to_guid")), list(makeSymbol("ASSEMBLE-FIXNUMS-TO-INTEGER"), makeString("assemble_fixnums_to_integer")), list(makeSymbol("ASSOC"), makeString("assoc")), list(makeSymbol("ASSOC-IF"), makeString("assoc_if")), list(makeSymbol("ATAN"), makeString("sublisp_atan")), list(makeSymbol("ATOM"), makeString("dp_atom")), list(makeSymbol("BOOLE"), makeString("boole")), list(makeSymbol("BOTH-CASE-P"), makeString("dp_both_case_p")), list(makeSymbol("BOUNDP"), makeString("dp_boundp")), list(makeSymbol("BREAK"), makeString("sublisp_break")), list(makeSymbol("BROADCAST-STREAM-STREAMS"), makeString("broadcast_stream_streams")), list(makeSymbol("BUTLAST"), makeString("butlast")), list(makeSymbol("BYTE"), makeString("f_byte")), list(makeSymbol("CAAR"), makeString("caar")), list(makeSymbol("CADR"), makeString("cadr")), list(makeSymbol("CAR"), makeString("car")), list(makeSymbol("CCONCATENATE"), makeString("cconcatenate")), list(makeSymbol("CDAR"), makeString("cdar")), list(makeSymbol("CDDR"), makeString("cddr")), list(makeSymbol("CDR"), makeString("cdr")), list(makeSymbol("CEILING"), makeString("sublisp_ceiling")), list(makeSymbol("CERROR"), makeString("sublisp_cerror")), list(makeSymbol("CHAR"), makeString("sublisp_char")), list(makeSymbol("CHAR-CODE"), makeString("char_code")), list(makeSymbol("CHAR-DOWNCASE"), makeString("char_downcase")), list(makeSymbol("CHAR-EQUAL"), makeString("dp_char_equal")), list(makeSymbol("CHAR-GREATERP"), makeString("dp_char_greaterp")), list(makeSymbol("CHAR-LESSP"), makeString("dp_char_lessp")), list(makeSymbol("CHAR-NOT-EQUAL"), makeString("dp_char_not_equal")), list(makeSymbol("CHAR-NOT-GREATERP"), makeString("dp_char_not_greaterp")), list(makeSymbol("CHAR-NOT-LESSP"), makeString("dp_char_not_lessp")), list(makeSymbol("CHAR-UPCASE"), makeString("char_upcase")), list(makeSymbol("CHAR/="), makeString("dp_charNE")), list(makeSymbol("CHAR<"), makeString("dp_charL")), list(makeSymbol("CHAR<="), makeString("dp_charLE")), list(makeSymbol("CHAR="), makeString("dp_charE")), list(makeSymbol("CHAR>"), makeString("dp_charG")), list(makeSymbol("CHAR>="), makeString("dp_charGE")), list(makeSymbol("CHARACTERP"), makeString("dp_characterp")), list(makeSymbol("CIRCULAR-LIST-P"), makeString("dp_circular_list_p")), list(makeSymbol("CLEAR-INPUT"), makeString("clear_input")), list(makeSymbol("CLEAR-OUTPUT"), makeString("clear_output")), list(makeSymbol("CLOSE"), makeString("sublisp_close")), list(makeSymbol("CLRHASH"), makeString("clrhash")), list(makeSymbol("CMERGE"), makeString("cmerge")), list(makeSymbol("CODE-CHAR"), makeString("code_char")), list(makeSymbol("CONCATENATED-STREAM-STREAMS"), makeString("concatenated_stream_streams")), list(makeSymbol("CONS"), makeString("cons")), list(makeSymbol("CONSP"), makeString("dp_consp")), list(makeSymbol("CONSTANTP"), makeString("dp_constantp")), list(makeSymbol("CONSTRUCT-FILENAME"), makeString("construct_filename")), list(makeSymbol("COPY-ALIST"), makeString("copy_alist")), list(makeSymbol("COPY-LIST"), makeString("copy_list")), list(makeSymbol("COPY-READTABLE"), makeString("copy_readtable")), list(makeSymbol("COPY-SEQ"), makeString("copy_seq")), list(makeSymbol("COPY-TREE"), makeString("copy_tree")), list(makeSymbol("COS"), makeString("sublisp_cos")), list(makeSymbol("COUNT"), makeString("count")), list(makeSymbol("COUNT-IF"), makeString("count_if")), list(makeSymbol("CRACK-DATE-RELATIVE-GUID"), makeString("crack_date_relative_guid")), list(makeSymbol("CREDUCE"), makeString("creduce")), list(makeSymbol("CURRENT-PROCESS"), makeString("current_process")), list(makeSymbol("DATE-RELATIVE-GUID-P"), makeString("date_relative_guid_p")), list(makeSymbol("DEBUG"), makeString("debug")), list(makeSymbol("DEBUG-PROCESS"), makeString("debug_process")), list(makeSymbol("DECODE-FLOAT"), makeString("decode_float")), list(makeSymbol("DECODE-UNIVERSAL-TIME"), makeString("decode_universal_time")), list(makeSymbol("DEFAULT-STRUCT-PRINT-FUNCTION"), makeString("default_struct_print_function")), list(makeSymbol("DELETE"), makeString("delete")), list(makeSymbol("DELETE-DIRECTORY"), makeString("delete_directory")), list(makeSymbol("DELETE-DUPLICATES"), makeString("delete_duplicates")), list(makeSymbol("DELETE-FILE"), makeString("delete_file")), list(makeSymbol("DELETE-IF"), makeString("delete_if")), list(makeSymbol("DESTROY-HASH-TABLE-ITERATOR"), makeString("destroy_hash_table_iterator")), list(makeSymbol("DIGIT-CHAR"), makeString("digit_char")), list(makeSymbol("DIGIT-CHAR-P"), makeString("dp_digit_char_p")), list(makeSymbol("DIRECTORY"), makeString("directory")), list(makeSymbol("DIRECTORY-P"), makeString("directory_p")), list(makeSymbol("DISASSEMBLE-GUID-TO-FIXNUMS"), makeString("disassemble_guid_to_fixnums")), list(makeSymbol("DISASSEMBLE-INTEGER-TO-FIXNUMS"), makeString("disassemble_integer_to_fixnums")), list(makeSymbol("DPB"), makeString("f_dpb")), list(makeSymbol("ECHO-STREAM-INPUT-STREAM"), makeString("echo_stream_input_stream")), list(makeSymbol("ECHO-STREAM-OUTPUT-STREAM"), makeString("echo_stream_output_stream")), list(makeSymbol("EIGHTH"), makeString("eighth")), list(makeSymbol("ELT"), makeString("elt")), list(makeSymbol("ENCODE-UNIVERSAL-TIME"), makeString("encode_universal_time")), list(makeSymbol("ENDP"), makeString("dp_endp")), list(EQ, makeString("dp_eq")), list(EQL, makeString("dp_eql")), list(EQUAL, makeString("dp_equal")), list(EQUALP, makeString("dp_equalp")), list(makeSymbol("ERROR"), makeString("sublisp_error")), list(makeSymbol("EVAL"), makeString("eval")), list(makeSymbol("EVENP"), makeString("dp_evenp")), list(makeSymbol("EXIT"), makeString("sublisp_exit")), list(makeSymbol("EXP"), makeString("sublisp_exp")), list(makeSymbol("EXPORT"), makeString("export")), list(makeSymbol("EXPT"), makeString("expt")), list(makeSymbol("FALSE"), makeString("sublisp_false")), list(makeSymbol("FBOUNDP"), makeString("dp_fboundp")), list(makeSymbol("FIFTH"), makeString("fifth")), list(makeSymbol("FILE-AUTHOR"), makeString("file_author")), list(makeSymbol("FILE-LENGTH"), makeString("file_length")), list(makeSymbol("FILE-LENGTH"), makeString("file_length")), list(makeSymbol("FILE-POSITION"), makeString("file_position")), list(makeSymbol("FILE-STRING-LENGTH"), makeString("file_string_length")), list(makeSymbol("FILE-WRITE-DATE"), makeString("file_write_date")), list(makeSymbol("FILL"), makeString("fill")), list(makeSymbol("FIND"), makeString("find")), list(makeSymbol("FIND-IF"), makeString("find_if")), list(makeSymbol("FIND-PACKAGE"), makeString("find_package")), list(makeSymbol("FIND-SYMBOL"), makeString("find_symbol")), list(makeSymbol("FINISH-OUTPUT"), makeString("finish_output")), list(makeSymbol("FIRST"), makeString("first")), list(makeSymbol("FIXNUM*"), makeString("fixnum_mult")), list(makeSymbol("FIXNUMP"), makeString("dp_fixnump")), list(makeSymbol("FLOAT"), makeString("sublisp_float")), list(makeSymbol("FLOAT-DIGITS"), makeString("float_digits")), list(makeSymbol("FLOAT-RADIX"), makeString("float_radix")), list(makeSymbol("FLOAT-SIGN"), makeString("float_sign")), list(makeSymbol("FLOATP"), makeString("dp_floatp")), list(makeSymbol("FLOOR"), makeString("sublisp_floor")), list(makeSymbol("FMAKUNBOUND"), makeString("fmakunbound")), list(makeSymbol("FORCE-OUTPUT"), makeString("force_output")), list(makeSymbol("FORK-PROCESS"), makeString("fork_process")), list(makeSymbol("FORMAT"), makeString("format_g")), list(makeSymbol("FOURTH"), makeString("fourth")), list(makeSymbol("FRESH-LINE"), makeString("fresh_line")), list(makeSymbol("FUNCALL"), makeString("funcall")), list(makeSymbol("FUNCTION-INFORMATION"), makeString("function_information")), list(makeSymbol("FUNCTION-SPEC-P"), makeString("dp_function_spec_p")), list(makeSymbol("FUNCTIONP"), makeString("dp_functionp")), list(makeSymbol("GC"), makeString("gc")), list(makeSymbol("GC-DYNAMIC"), makeString("gc_dynamic")), list(makeSymbol("GC-EPHEMERAL"), makeString("gc_ephemeral")), list(makeSymbol("GC-FULL"), makeString("gc_full")), list(makeSymbol("GENSYM"), makeString("gensym")), list(makeSymbol("GENTEMP"), makeString("gentemp")), list(makeSymbol("GET"), makeString("get")), list(makeSymbol("GET-DECODED-TIME"), makeString("get_decoded_time")), list(makeSymbol("GET-DISPATCH-MACRO-CHARACTER"), makeString("get_dispatch_macro_character")), list(makeSymbol("GET-FILE-POSITION"), makeString("get_file_position")), list(makeSymbol("GET-FILE-POSITION"), makeString("get_file_position")), list(makeSymbol("GET-INTERNAL-REAL-TIME"), makeString("get_internal_real_time")), list(makeSymbol("GET-INTERNAL-RUN-TIME"), makeString("get_internal_run_time")), list(makeSymbol("GET-MACHINE-NAME"), makeString("get_machine_name")), list(makeSymbol("GET-MACRO-CHARACTER"), makeString("get_macro_character")), list(makeSymbol("GET-NETWORK-NAME"), makeString("get_network_name")), list(makeSymbol("GET-OUTPUT-STREAM-STRING"), makeString("get_output_stream_string")), list(makeSymbol("GET-PROCESS-ID"), makeString("get_process_id")), list(makeSymbol("GET-STRING-FROM-USER"), makeString("get_string_from_user")), list(makeSymbol("GET-UNIVERSAL-TIME"), makeString("get_universal_time")), list(makeSymbol("GET-USER-NAME"), makeString("get_user_name")), list(makeSymbol("GETF"), makeString("getf")), list(makeSymbol("GETHASH"), makeString("gethash")), list(makeSymbol("GETHASH-WITHOUT-VALUES"), makeString("gethash_without_values")), list(makeSymbol("GUID-P"), makeString("dp_guid_p")), list(makeSymbol("GUID-STRING-P"), makeString("guid_string_p")), list(makeSymbol("GUID-TO-STRING"), makeString("guid_to_string")), list(makeSymbol("GUID/="), makeString("dp_guidNE")), list(makeSymbol("GUID<"), makeString("dp_guidL")), list(makeSymbol("GUID<="), makeString("dp_guidLE")), list(makeSymbol("GUID="), makeString("dp_guidE")), list(makeSymbol("GUID>"), makeString("dp_guidG")), list(makeSymbol("GUID>="), makeString("dp_guidGE")), list(makeSymbol("HASH-TABLE-COUNT"), makeString("hash_table_count")), list(makeSymbol("HASH-TABLE-ITERATOR-DONE-P"), makeString("hash_table_iterator_done_p")), list(makeSymbol("HASH-TABLE-ITERATOR-HASH-TABLE"), makeString("hash_table_iterator_hash_table")), list(makeSymbol("HASH-TABLE-ITERATOR-KEY"), makeString("hash_table_iterator_key")), list(makeSymbol("HASH-TABLE-ITERATOR-NEXT"), makeString("hash_table_iterator_next")), list(makeSymbol("HASH-TABLE-ITERATOR-P"), makeString("hash_table_iterator_p")), list(makeSymbol("HASH-TABLE-ITERATOR-VALUE"), makeString("hash_table_iterator_value")), list(makeSymbol("HASH-TABLE-P"), makeString("dp_hash_table_p")), list(makeSymbol("HASH-TABLE-SIZE"), makeString("hash_table_size")), list(makeSymbol("HASH-TABLE-TEST"), makeString("hash_table_test")), list(IDENTITY, makeString("identity")), list(makeSymbol("IGNORE"), makeString("ignore")), list(makeSymbol("IMPORT"), makeString("import")), list(makeSymbol("INFINITY-P"), makeString("dp_infinity_p")), list(makeSymbol("INPUT-STREAM-P"), makeString("input_stream_p")), list(makeSymbol("INT/"), makeString("int_div")), list(makeSymbol("INTEGER-DECODE-FLOAT"), makeString("integer_decode_float")), list(makeSymbol("INTEGER-LENGTH"), makeString("integer_length")), list(makeSymbol("INTEGERP"), makeString("dp_integerp")), list(makeSymbol("INTERACTIVE-STREAM-P"), makeString("interactive_stream_p")), list(makeSymbol("INTERN"), makeString("intern")), list(makeSymbol("INTERNAL-REAL-TIME-HAS-ARRIVED?"), makeString("internal_real_time_has_arrived_p")), list(makeSymbol("INTERRUPT-PROCESS"), makeString("interrupt_process")), list(makeSymbol("INTERSECTION"), makeString("intersection")), list(makeSymbol("ISQRT"), makeString("isqrt")), list(makeSymbol("KEYWORDP"), makeString("dp_keywordp")), list(makeSymbol("KILL-PROCESS"), makeString("kill_process")), list(makeSymbol("LAST"), makeString("last")), list(makeSymbol("LDB"), makeString("f_ldb")), list(makeSymbol("LDIFF"), makeString("ldiff")), list(makeSymbol("LENGTH"), makeString("length")), list(makeSymbol("LISP-IMPLEMENTATION-TYPE"), makeString("lisp_implementation_type")), list(makeSymbol("LISP-IMPLEMENTATION-VERSION"), makeString("lisp_implementation_version")), list(makeSymbol("LIST"), makeString("list")), list(makeSymbol("LIST*"), makeString("listS")), list(makeSymbol("LIST-ALL-PACKAGES"), makeString("list_all_packages")), list(makeSymbol("LIST-LENGTH"), makeString("list_length")), list(makeSymbol("LISTEN"), makeString("sublisp_listen")), list(makeSymbol("LISTP"), makeString("dp_listp")), list(makeSymbol("LOAD"), makeString("load")), list(makeSymbol("LOCK-IDLE-P"), makeString("lock_idle_p")), list(makeSymbol("LOCK-LOCKER"), makeString("lock_locker")), list(makeSymbol("LOCK-NAME"), makeString("lock_name")), list(makeSymbol("LOCK-P"), makeString("dp_lockp")), list(makeSymbol("LOCK-PACKAGE"), makeString("lock_package")), list(makeSymbol("LOG"), makeString("sublisp_log")), list(makeSymbol("LOG-MESSAGE"), makeString("log_message")), list(makeSymbol("LOGAND"), makeString("logand")), list(makeSymbol("LOGANDC1"), makeString("logandc1")), list(makeSymbol("LOGANDC2"), makeString("logandc2")), list(makeSymbol("LOGBITP"), makeString("logbitp")), list(makeSymbol("LOGCOUNT"), makeString("logcount")), list(makeSymbol("LOGEQV"), makeString("logeqv")), list(makeSymbol("LOGIOR"), makeString("logior")), list(makeSymbol("LOGNAND"), makeString("lognand")), list(makeSymbol("LOGNOR"), makeString("lognor")), list(makeSymbol("LOGNOT"), makeString("lognot")), list(makeSymbol("LOGORC1"), makeString("logorc1")), list(makeSymbol("LOGORC2"), makeString("logorc2")), list(makeSymbol("LOGTEST"), makeString("logtest")), list(makeSymbol("LOGXOR"), makeString("logxor")), list(makeSymbol("LONG-SITE-NAME"), makeString("long_site_name")), list(makeSymbol("LOWER-CASE-P"), makeString("dp_lower_case_p")), list(makeSymbol("MACHINE-INSTANCE"), makeString("machine_instance")), list(makeSymbol("MACHINE-TYPE"), makeString("machine_type")), list(makeSymbol("MACHINE-VERSION"), makeString("machine_version")), list(makeSymbol("MACRO-OPERATOR-P"), makeString("dp_macro_operator_p")), list(makeSymbol("MACROEXPAND"), makeString("sublisp_macroexpand")), list(makeSymbol("MACROEXPAND-1"), makeString("sublisp_macroexpand_one")), list(makeSymbol("MAKE-BROADCAST-STREAM"), makeString("make_broadcast_stream")), list(makeSymbol("MAKE-CONCATENATED-STREAM"), makeString("make_concatenated_stream")), list(makeSymbol("MAKE-DATE-RELATIVE-GUID"), makeString("make_date_relative_guid")), list(makeSymbol("MAKE-DIRECTORY"), makeString("make_directory")), list(makeSymbol("MAKE-DISPATCH-MACRO-CHARACTER"), makeString("make_dispatch_macro_character")), list(makeSymbol("MAKE-ECHO-STREAM"), makeString("make_echo_stream")), list(makeSymbol("MAKE-HASH-TABLE"), makeString("make_hash_table")), list(makeSymbol("MAKE-HASH-TABLE-ITERATOR"), makeString("make_hash_table_iterator")), list(makeSymbol("MAKE-KEYWORD"), makeString("make_keyword")), list(makeSymbol("MAKE-LIST"), makeString("make_list")), list(makeSymbol("MAKE-LOCK"), makeString("make_lock")), list(makeSymbol("MAKE-PACKAGE"), makeString("make_package")), list(makeSymbol("MAKE-PRIVATE-BROADCAST-STREAM"), makeString("make_private_broadcast_stream")), list(makeSymbol("MAKE-PRIVATE-CONCATENATED-STREAM"), makeString("make_private_concatenated_stream")), list(makeSymbol("MAKE-PRIVATE-ECHO-STREAM"), makeString("make_private_echo_stream")), list(makeSymbol("MAKE-PRIVATE-STRING-INPUT-STREAM"), makeString("make_private_string_input_stream")), list(makeSymbol("MAKE-PRIVATE-STRING-OUTPUT-STREAM"), makeString("make_private_string_output_stream")), list(makeSymbol("MAKE-PRIVATE-SYNONYM-STREAM"), makeString("make_private_synonym_stream")), list(makeSymbol("MAKE-PRIVATE-TWO-WAY-STREAM"), makeString("make_private_two_way_stream")), list(makeSymbol("MAKE-PROCESS"), makeString("make_process")), list(makeSymbol("MAKE-STRING"), makeString("make_string")), list(makeSymbol("MAKE-STRING-INPUT-STREAM"), makeString("make_string_input_stream")), list(makeSymbol("MAKE-STRING-OUTPUT-STREAM"), makeString("make_string_output_stream")), list(makeSymbol("MAKE-SYMBOL"), makeString("make_symbol")), list(makeSymbol("MAKE-SYNONYM-STREAM"), makeString("make_synonym_stream")), list(makeSymbol("MAKE-TWO-WAY-STREAM"), makeString("make_two_way_stream")), list(makeSymbol("MAKE-VECTOR"), makeString("make_vector")), list(makeSymbol("MAKUNBOUND"), makeString("makunbound")), list(makeSymbol("MAPC"), makeString("mapc")), list(makeSymbol("MAPCAN"), makeString("mapcan")), list(makeSymbol("MAPCAR"), makeString("mapcar")), list(makeSymbol("MAPCON"), makeString("mapcon")), list(makeSymbol("MAPHASH"), makeString("maphash")), list(makeSymbol("MAPL"), makeString("mapl")), list(makeSymbol("MAPLIST"), makeString("maplist")), list(makeSymbol("MAX"), makeString("max")), list(makeSymbol("MEMBER"), makeString("member")), list(makeSymbol("MEMBER-IF"), makeString("member_if")), list(makeSymbol("MIN"), makeString("min")), list(makeSymbol("MINUSP"), makeString("dp_minusp")), list(makeSymbol("MISMATCH"), makeString("mismatch")), list(makeSymbol("MOD"), makeString("mod")), list(makeSymbol("NBUTLAST"), makeString("nbutlast")), list(makeSymbol("NCONC"), makeString("nconc")), list(makeSymbol("NEW-GUID"), makeString("new_guid")), list(makeSymbol("NINTERSECTION"), makeString("nintersection")), list(makeSymbol("NINTH"), makeString("ninth")), list(makeSymbol("NON-CIRCULAR-LIST-P"), makeString("dp_non_circular_list_p")), list(makeSymbol("NOT-A-NUMBER-P"), makeString("dp_not_a_number_p")), list(makeSymbol("NOTIFY"), makeString("notify")), list(makeSymbol("NOTIFY-USER"), makeString("notify_user")), list(makeSymbol("NRECONC"), makeString("nreconc")), list(makeSymbol("NREVERSE"), makeString("nreverse")), list(makeSymbol("NSET-DIFFERENCE"), makeString("nset_difference")), list(makeSymbol("NSET-EXCLUSIVE-OR"), makeString("nset_exclusive_or")), list(makeSymbol("NSTRING-CAPITALIZE"), makeString("nstring_capitalize")), list(makeSymbol("NSTRING-DOWNCASE"), makeString("nstring_downcase")), list(makeSymbol("NSTRING-UPCASE"), makeString("nstring_upcase")), list(makeSymbol("NSUBLIS"), makeString("nsublis")), list(makeSymbol("NSUBST"), makeString("nsubst")), list(makeSymbol("NSUBST-IF"), makeString("nsubst_if")), list(makeSymbol("NSUBSTITUTE"), makeString("nsubstitute")), list(makeSymbol("NSUBSTITUTE-IF"), makeString("nsubstitute_if")), list(makeSymbol("NTH"), makeString("nth")), list(makeSymbol("NTHCDR"), makeString("nthcdr")), list(makeSymbol("NULL"), makeString("dp_null")), list(makeSymbol("NUMBERP"), makeString("dp_numberp")), list(makeSymbol("NUNION"), makeString("sublisp_nunion")), list(makeSymbol("ODDP"), makeString("dp_oddp")), list(makeSymbol("OPEN-BINARY"), makeString("open_binary")), list(makeSymbol("OPEN-STREAM-P"), makeString("open_stream_p")), list(makeSymbol("OPEN-TCP-STREAM"), makeString("open_tcp_stream")), list(makeSymbol("OPEN-TEXT"), makeString("open_text")), list(makeSymbol("OUTPUT-STREAM-P"), makeString("output_stream_p")), list(makeSymbol("PACKAGE-LOCKED-P"), makeString("dp_package_locked_p")), list(makeSymbol("PACKAGE-NAME"), makeString("package_name")), list(makeSymbol("PACKAGE-NICKNAMES"), makeString("package_nicknames")), list(makeSymbol("PACKAGE-SHADOWING-SYMBOLS"), makeString("package_shadowing_symbols")), list(makeSymbol("PACKAGE-USE-LIST"), makeString("package_use_list")), list(makeSymbol("PACKAGE-USED-BY-LIST"), makeString("package_used_by_list")), list(makeSymbol("PACKAGEP"), makeString("dp_packagep")), list(makeSymbol("PAIRLIS"), makeString("pairlis")), list(makeSymbol("PARSE-INTEGER"), makeString("parse_integer")), list(makeSymbol("PEEK-CHAR"), makeString("peek_char")), list(makeSymbol("PLUSP"), makeString("dp_plusp")), list(makeSymbol("POSITION"), makeString("position")), list(makeSymbol("POSITION-IF"), makeString("position_if")), list(makeSymbol("PRIN1"), makeString("prin1")), list(makeSymbol("PRIN1-TO-STRING"), makeString("prin1_to_string")), list(makeSymbol("PRINC"), makeString("princ")), list(makeSymbol("PRINC-TO-STRING"), makeString("princ_to_string")), list(makeSymbol("PRINT"), makeString("print")), list(makeSymbol("PRINT-OBJECT"), makeString("print_object")), list(makeSymbol("PROBE-FILE"), makeString("dp_probe_file")), list(makeSymbol("PROCESS-ACTIVE-P"), makeString("process_active_p")), list(makeSymbol("PROCESS-BLOCK"), makeString("process_block")), list(makeSymbol("PROCESS-NAME"), makeString("process_name")), list(makeSymbol("PROCESS-PRIORITY"), makeString("process_priority")), list(makeSymbol("PROCESS-STATE"), makeString("process_state")), list(makeSymbol("PROCESS-UNBLOCK"), makeString("process_unblock")), list(makeSymbol("PROCESS-WAIT"), makeString("process_wait")), list(makeSymbol("PROCESS-WAIT-WITH-TIMEOUT"), makeString("process_wait_with_timeout")), list(makeSymbol("PROCESS-WHOSTATE"), makeString("process_whostate")), list(makeSymbol("PROCESSP"), makeString("dp_processp")), list(makeSymbol("PUT"), makeString("put")), list(makeSymbol("PUTF"), makeString("putf")), list(makeSymbol("RANDOM"), makeString("sublisp_random")), list(makeSymbol("RASSOC"), makeString("rassoc")), list(makeSymbol("RASSOC-IF"), makeString("rassoc_if")), list(makeSymbol("READ"), makeString("sublisp_read")), list(makeSymbol("READ-BYTE"), makeString("read_byte")), list(makeSymbol("READ-CHAR"), makeString("read_char")), list(makeSymbol("READ-CHAR-NO-HANG"), makeString("read_char_no_hang")), list(makeSymbol("READ-DELIMITED-LIST"), makeString("read_delimited_list")), list(makeSymbol("READ-FROM-STRING"), makeString("read_from_string")), list(makeSymbol("READ-FROM-STRING-IGNORING-ERRORS"), makeString("f_read_from_string_ignoring_errors")), list(makeSymbol("READ-IGNORING-ERRORS"), makeString("read_ignoring_errors")), list(makeSymbol("READ-LINE"), makeString("read_line")), list(makeSymbol("READ-PRESERVING-WHITESPACE"), makeString("read_preserving_whitespace")), list(makeSymbol("READ-SEQUENCE"), makeString("read_sequence")), list(makeSymbol("READTABLE-CASE"), makeString("readtable_case")), list(makeSymbol("READTABLEP"), makeString("readtablep")), list(makeSymbol("REGISTER-LOW-MEMORY-CALLBACK"), makeString("register_low_memory_callback")), list(makeSymbol("DEREGISTER-LOW-MEMORY-CALLBACK"), makeString("deregister_low_memory_callback")), list(makeSymbol("LOW-MEMORY-CALLBACKS"), makeString("register_low_memory_callback")), list(makeSymbol("REM"), makeString("rem")), list(makeSymbol("REMF"), makeString("remf")), list(makeSymbol("REMHASH"), makeString("remhash")), list(makeSymbol("REMOVE"), makeString("sublisp_remove")), list(makeSymbol("REMOVE-DUPLICATES"), makeString("remove_duplicates")), list(makeSymbol("REMOVE-IF"), makeString("sublisp_remove_if")), list(makeSymbol("REMPROP"), makeString("remprop")), list(makeSymbol("RENAME-FILE"), makeString("rename_file")), list(makeSymbol("REPLACE"), makeString("replace")), list(makeSymbol("REST"), makeString("rest")), list(makeSymbol("RESTART-PROCESS"), makeString("restart_process")), list(makeSymbol("REVAPPEND"), makeString("revappend")), list(makeSymbol("REVERSE"), makeString("reverse")), list(makeSymbol("ROOM"), makeString("room")), list(makeSymbol("ROUND"), makeString("sublisp_round")), list(makeSymbol("RPLACA"), makeString("rplaca")), list(makeSymbol("RPLACD"), makeString("rplacd")), list(makeSymbol("SCALE-FLOAT"), makeString("scale_float")), list(makeSymbol("SEARCH"), makeString("search")), list(makeSymbol("SECOND"), makeString("second")), list(makeSymbol("SEED-RANDOM"), makeString("seed_random")), list(makeSymbol("SEQUENCEP"), makeString("dp_sequencep")), list(makeSymbol("SET"), makeString("set")), list(makeSymbol("SET-AREF"), makeString("set_aref")), list(makeSymbol("SET-CHAR"), makeString("sublisp_set_char")), list(makeSymbol("SET-DIFFERENCE"), makeString("set_difference")), list(makeSymbol("SET-DISPATCH-MACRO-CHARACTER"), makeString("set_dispatch_macro_character")), list(makeSymbol("SET-EXCLUSIVE-OR"), makeString("set_exclusive_or")), list(makeSymbol("SET-FILE-POSITION"), makeString("set_file_position")), list(makeSymbol("SET-MACRO-CHARACTER"), makeString("set_macro_character")), list(makeSymbol("SET-NTH"), makeString("set_nth")), list(makeSymbol("SET-PROCESS-PRIORITY"), makeString("set_process_priority")), list(makeSymbol("SET-SYNTAX-FROM-CHAR"), makeString("set_syntax_from_char")), list(makeSymbol("SETHASH"), makeString("sethash")), list(makeSymbol("SEVENTH"), makeString("seventh")), list(makeSymbol("SHORT-SITE-NAME"), makeString("short_site_name")), list(makeSymbol("SHOW-PROCESSES"), makeString("show_processes")), list(makeSymbol("SIMPLE-READER-ERROR"), makeString("simple_reader_error")), list(makeSymbol("SIN"), makeString("sublisp_sin")), list(makeSymbol("SIXTH"), makeString("sixth")), list(makeSymbol("SLEEP"), makeString("sublisp_sleep")), list(makeSymbol("SOFTWARE-TYPE"), makeString("software_type")), list(makeSymbol("SOFTWARE-VERSION"), makeString("software_version")), list(makeSymbol("SORT"), makeString("sort")), list(makeSymbol("SQRT"), makeString("sublisp_sqrt")), list(makeSymbol("STABLE-SORT"), makeString("stable_sort")), list(makeSymbol("STREAM-ELEMENT-TYPE"), makeString("stream_element_type")), list(makeSymbol("STREAMP"), makeString("dp_streamp")), list(makeSymbol("STRING"), makeString("sublisp_string")), list(makeSymbol("STRING-CAPITALIZE"), makeString("string_capitalize")), list(makeSymbol("STRING-DOWNCASE"), makeString("string_downcase")), list(makeSymbol("STRING-EQUAL"), makeString("dp_string_equal")), list(makeSymbol("STRING-GREATERP"), makeString("dp_string_greaterp")), list(makeSymbol("STRING-LEFT-TRIM"), makeString("string_left_trim")), list(makeSymbol("STRING-LESSP"), makeString("dp_string_lessp")), list(makeSymbol("STRING-NOT-EQUAL"), makeString("dp_string_not_equal")), list(makeSymbol("STRING-NOT-GREATERP"), makeString("dp_string_not_greaterp")), list(makeSymbol("STRING-NOT-LESSP"), makeString("dp_string_not_lessp")), list(makeSymbol("STRING-RIGHT-TRIM"), makeString("string_right_trim")), list(makeSymbol("STRING-TO-GUID"), makeString("string_to_guid")), list(makeSymbol("STRING-TRIM"), makeString("string_trim")), list(makeSymbol("STRING-UPCASE"), makeString("string_upcase")), list(makeSymbol("STRING/="), makeString("dp_stringNE")), list(makeSymbol("STRING<"), makeString("dp_stringL")), list(makeSymbol("STRING<="), makeString("dp_stringLE")), list(makeSymbol("STRING="), makeString("dp_stringE")), list(makeSymbol("STRING>"), makeString("dp_stringG")), list(makeSymbol("STRING>="), makeString("dp_stringGE")), list(makeSymbol("STRINGP"), makeString("dp_stringp")), list(makeSymbol("SUBLIS"), makeString("sublis")), list(makeSymbol("ALIEN-NULL-PTR?", "SUBLISP"), makeString("alien_null_ptr_P")), list(makeSymbol("ALIEN-P", "SUBLISP"), makeString("dp_alienp")), list(makeSymbol("ALIEN-TYPE", "SUBLISP"), makeString("alien_type")), list(makeSymbol("BACKUP-ARGS", "SUBLISP"), makeString("backup_args")), list(makeSymbol("BAD-FORMAT-DIRECTIVE", "SUBLISP"), makeString("bad_format_directive")), list(makeSymbol("CALL-FORMAT-DIRECTIVE", "SUBLISP"), makeString("call_format_directive")), list(makeSymbol("CHECK-FLAGS", "SUBLISP"), makeString("check_flags")), list(makeSymbol("DECLARATION-INFORMATION", "SUBLISP"), makeString("declaration_information")), list(makeSymbol("END-OF-FILE-ERROR", "SUBLISP"), makeString("end_of_file_error")), list(makeSymbol("FIND-DIRECTIVE", "SUBLISP"), makeString("find_directive")), list(makeSymbol("FORMAT-CARDINAL", "SUBLISP"), makeString("format_cardinal")), list(makeSymbol("FORMAT-CARDINAL-INTERNAL", "SUBLISP"), makeString("format_cardinal_internal")), list(makeSymbol("FORMAT-DIRECTIVE-P", "SUBLISP"), makeString("format_directive_p")), list(makeSymbol("FORMAT-INTEGER", "SUBLISP"), makeString("format_integer")), list(makeSymbol("FORMAT-INTEGER-INTERNAL", "SUBLISP"), makeString("format_integer_internal")), list(makeSymbol("FORMAT-INTERNAL", "SUBLISP"), makeString("format_internal")), list(makeSymbol("FORMAT-ITERATION", "SUBLISP"), makeString("format_iteration")), list(makeSymbol("FORMAT-ORDINAL", "SUBLISP"), makeString("format_ordinal")), list(makeSymbol("FORMAT-PADDED", "SUBLISP"), makeString("format_padded")), list(makeSymbol("FORMAT-REPEAT", "SUBLISP"), makeString("format_repeat")), list(makeSymbol("FORMAT-SUBLIST-ITERATION", "SUBLISP"), makeString("format_sublist_iteration")), list(makeSymbol("FORMAT-TYPEP", "SUBLISP"), makeString("format_typep")), list(makeSymbol("GETHASH-BUCKET", "SUBLISP"), makeString("gethash_bucket")), list(makeSymbol("ILLEGAL-DIRECTIVE", "SUBLISP"), makeString("illegal_directive")), list(makeSymbol("MATCHING-BRACKET", "SUBLISP"), makeString("matching_bracket")), list(makeSymbol("MATCHING-BRACKET-NOT-FOUND", "SUBLISP"), makeString("matching_bracket_not_found")), list(makeSymbol("NOT-A-FORMAT-CONTROL", "SUBLISP"), makeString("not_a_format_control")), list(makeSymbol("NOT-A-LIST-ARGUMENT", "SUBLISP"), makeString("not_a_list_argument")), list(makeSymbol("NOT-ENOUGH-FORMAT-ARGUMENTS", "SUBLISP"), makeString("not_enough_format_arguments")), list(makeSymbol("PARSE-FORMAT-COMMAND", "SUBLISP"), makeString("parse_format_command")), list(makeSymbol("POSSIBLY-NOTE-FUNCTION-ENTRY", "SUBLISP"), makeString("f_possibly_note_function_entry")), list(makeSymbol("REALLY-FORMAT", "SUBLISP"), makeString("really_format")), list(makeSymbol("REPITITION-DESIGNATOR-VALUE", "SUBLISP"), makeString("repitition_designator_value")), list(makeSymbol("ROUND-DIGITS", "SUBLISP"), makeString("round_digits")), list(makeSymbol("SPLIT-FLONUM-DIGITS", "SUBLISP"), makeString("split_flonum_digits")), list(makeSymbol("STREAM-LINE-COLUMN", "SUBLISP"), makeString("stream_line_column")), list(makeSymbol("STREAM-LINE-COLUMN", "SUBLISP"), makeString("stream_line_column")), list(makeSymbol("SXHASH-ROT", "SUBLISP"), makeString("sxhash_rot")), list(makeSymbol("UNIMPLEMENTED-FORMAT-DIRECTIVE", "SUBLISP"), makeString("unimplemented_format_directive")), list(makeSymbol("SUBSEQ"), makeString("subseq")), list(makeSymbol("SUBSETP"), makeString("dp_subsetp")), list(makeSymbol("SUBST"), makeString("subst")), list(makeSymbol("SUBST-IF"), makeString("subst_if")), list(makeSymbol("SUBSTITUTE"), makeString("substitute")), list(makeSymbol("SUBSTITUTE-IF"), makeString("substitute_if")), list(makeSymbol("SXHASH"), makeString("sxhash")), list(makeSymbol("SYMBOL-FUNCTION"), makeString("symbol_function")), list(makeSymbol("SYMBOL-NAME"), makeString("symbol_name")), list(makeSymbol("SYMBOL-PACKAGE"), makeString("symbol_package")), list(makeSymbol("SYMBOL-PLIST"), makeString("symbol_plist")), list(makeSymbol("SYMBOL-VALUE"), makeString("symbol_value")), list(makeSymbol("SYMBOLP"), makeString("dp_symbolp")), list(makeSymbol("SYNONYM-STREAM-SYMBOL"), makeString("synonym_stream_symbol")), list(makeSymbol("TAILP"), makeString("dp_tailp")), list(makeSymbol("TAN"), makeString("sublisp_tan")), list(makeSymbol("TENTH"), makeString("tenth")), list(makeSymbol("TERPRI"), makeString("terpri")), list(makeSymbol("THIRD"), makeString("third")), list(makeSymbol("THROW"), makeString("sublisp_throw")), list(makeSymbol("TIME-HAS-ARRIVED?"), makeString("time_has_arrived_p")), list(makeSymbol("TREE-EQUAL"), makeString("dp_tree_equal")), list(makeSymbol("TRUE"), makeString("sublisp_true")), list(makeSymbol("TRUNCATE"), makeString("sublisp_truncate")), list(makeSymbol("TWO-WAY-STREAM-INPUT-STREAM"), makeString("two_way_stream_input_stream")), list(makeSymbol("TWO-WAY-STREAM-OUTPUT-STREAM"), makeString("two_way_stream_output_stream")), list(makeSymbol("TYPE-OF"), makeString("sublisp_type_of")), list(makeSymbol("UNINTERN"), makeString("unintern")), list(makeSymbol("UNION"), makeString("sublisp_union")), list(makeSymbol("UNREAD-CHAR"), makeString("unread_char")), list(makeSymbol("UPPER-CASE-P"), makeString("dp_upper_case_p")), list(makeSymbol("USER-CONFIRM"), makeString("user_confirm")), list(makeSymbol("VALID-PROCESS-P"), makeString("valid_process_p")), list(makeSymbol("VALUES"), makeString("values")), list(makeSymbol("VARIABLE-INFORMATION"), makeString("variable_information")), list(makeSymbol("VECTOR"), makeString("sublisp_vector")), list(makeSymbol("VECTORP"), makeString("dp_vectorp")), list(makeSymbol("VISIT-DEFSTRUCT"), makeString("f_visit_defstruct")), list(makeSymbol("WARN"), makeString("sublisp_warn")), list(makeSymbol("WRITE"), makeString("write_g")), list(makeSymbol("WRITE-BYTE"), makeString("write_byte")), list(makeSymbol("WRITE-CHAR"), makeString("write_char")), list(makeSymbol("WRITE-IMAGE"), makeString("write_image")), list(makeSymbol("WRITE-LINE"), makeString("write_line")), list(makeSymbol("WRITE-SEQUENCE"), makeString("write_sequence")), list(makeSymbol("WRITE-STRING"), makeString("write_string")), list(makeSymbol("WRITE-TO-STRING"), makeString("write_to_string_g")), list(makeSymbol("ZEROP"), makeString("dp_zerop")), list(makeSymbol("DECLARE-FOREIGN-SHARED-LIBRARY", "SUBLISP"), makeString("f_declare_foreign_shared_library")), list(makeSymbol("DEFINE-FOREIGN-FUNCTION-INTERNAL", "SUBLISP"), makeString("f_define_foreign_function_internal")), list(makeSymbol("FOREIGN-SHARED-LIBRARY-INSTALLED?", "SUBLISP"), makeString("f_foreign_shared_library_installedP")), list(makeSymbol("ENSURE-FOREIGN-SHARED-LIBRARY-LOADED", "SUBLISP"), makeString("f_ensure_foreign_shared_library_loaded")), list(makeSymbol("VECTOR-FOR-MARSHALLING", "SUBLISP"), makeString("f_vector_for_marshalling")), list(makeSymbol("CDESTRUCTURING-BIND-ERROR", "SUBLISP"), makeString("f_cdestructuring_bind_error")), list(makeSymbol("DESTRUCTURING-BIND-MUST-CONSP", "SUBLISP"), makeString("f_destructuring_bind_must_consp")), list(makeSymbol("DESTRUCTURING-BIND-MUST-LISTP", "SUBLISP"), makeString("f_destructuring_bind_must_listp")), list(makeSymbol("PROPERTY-LIST-MEMBER", "SUBLISP"), makeString("f_property_list_member")), list(makeSymbol("PRINT-UNREADABLE-OBJECT-PREAMBLE", "SUBLISP"), makeString("f_print_unreadable_object_preamble")), list(makeSymbol("PRINT-UNREADABLE-OBJECT-POSTAMBLE", "SUBLISP"), makeString("f_print_unreadable_object_postamble")), list(makeSymbol("BQ-CONS"), makeString("f_bq_cons")), list(makeSymbol("BQ-VECTOR"), makeString("f_bq_vector")), list(makeSymbol("DEFSTRUCT-ANALYZE", "SUBLISP"), makeString("f_defstruct_analyze")), list(makeSymbol("JAVA-CALL"), makeString("java_call")), list(makeSymbol("JAVA-CLASS"), makeString("java_class")), list(makeSymbol("JAVA-CONSTRUCTOR"), makeString("java_constructor")), list(makeSymbol("JAVA-METHOD"), makeString("java_method")), list(makeSymbol("JAVA-NEW"), makeString("java_new")), list(makeSymbol("JAVA-OBJECT-P"), makeString("java_object_p")), list(makeSymbol("JAVA-STATIC"), makeString("java_static")) });
+    }
+
+    private static SubLObject _constant_1_initializer() {
+        return list(new SubLObject[]{ list(makeSymbol("OPEN"), makeString("open_g"), list(makeSymbol("FILESPEC"), makeSymbol("&REST"), makeSymbol("KEYS"))), list(makeSymbol("%B-CHECK-TYPE"), makeString("CHECK_TYPE"), list(makeSymbol("OBJECT"), makeSymbol("TYPE"))), list(makeSymbol("%B-ENFORCE-TYPE"), makeString("ENFORCE_TYPE"), list(makeSymbol("OBJECT"), makeSymbol("TYPE"))), list(makeSymbol("%BEGIN-WITH-PROCESS-RESOURCE-TRACKING"), makeString("BEGIN_WITH_PROCESS_RESOURCE_TRACKING"), list(makeSymbol("ENV"), makeSymbol("RESULT"))), list(makeSymbol("%BIND"), makeString("BIND"), list(makeSymbol("VAR"), makeSymbol("VAL"))), list(makeSymbol("%BIND-SPECIAL-VARS"), makeString("BIND_SPECIAL_VARS"), list(makeSymbol("SPECIAL-VARS"), makeSymbol("BINDINGS"))), list(makeSymbol("%BTD"), makeString("BTD"), list(makeSymbol("OBJ"))), list(makeSymbol("%CATCH-VALUE"), makeString("CATCH_VALUE"), NIL), list(makeSymbol("%CBIG"), makeString("CBIG"), list(makeSymbol("INTEGER"))), list(makeSymbol("%CCHAR"), makeString("CCHAR"), list(makeSymbol("CODE"))), list(makeSymbol("%CFIX"), makeString("CFIX"), list(makeSymbol("FIXNUM"))), list(makeSymbol("%CFLOAT"), makeString("CFLOAT"), list(makeSymbol("FLOAT"))), list(makeSymbol("%CGUID"), makeString("CGUID"), list(makeSymbol("STRING"))), list(makeSymbol("%CINTERN"), makeString("CINTERN"), list(makeSymbol("STRING"))), list(makeSymbol("%CKEYWORD"), makeString("CKEYWORD"), list(makeSymbol("STRING"))), list(makeSymbol("%CMAKE-SYMBOL"), makeString("CMAKE_SYMBOL"), list(makeSymbol("STRING"))), list(makeSymbol("%CPACKAGE"), makeString("CPACKAGE"), list(makeSymbol("STRING"))), list(makeSymbol("%CSTRING"), makeString("CSTRING"), list(makeSymbol("STRING"))), list(makeSymbol("%CSYMBOL"), makeString("CSYMBOL"), list(makeSymbol("SYMBOL-NAME"), makeSymbol("PACKAGE-NAME"))), list(makeSymbol("%CDO-SYMBOLS-END"), makeString("CDO_SYMBOLS_DONE"), list(makeSymbol("PKG-VAR"), makeSymbol("ITERATOR-VAR"))), list(makeSymbol("%CDO-SYMBOLS-LOOP"), makeString("CDO_SYMBOLS_LOOP_DEFAULT"), list(makeSymbol("SYM-VAR"), makeSymbol("ITERATOR-VAR"))), list(makeSymbol("%CDO-SYMBOLS-SETUP"), makeString("CDO_SYMBOLS_SETUP"), list(makeSymbol("PKG-VAR"), makeSymbol("ITERATOR-VAR"))), list(makeSymbol("%CDOHASH-BEGIN"), makeString("CDOHASH_BEGIN"), list(makeSymbol("KEY-VAR"), makeSymbol("OBJ-VAR"), makeSymbol("TABLE-FORM"), makeSymbol("TABLE-VAR"), makeSymbol("INDEX-VAR"))), list(makeSymbol("%CDOHASH-END"), makeString("CDOHASH_END"), list(makeSymbol("KEY-VAR"), makeSymbol("OBJ-VAR"), makeSymbol("TABLE-VAR"), makeSymbol("INDEX-VAR"))), list(makeSymbol("%CDOLIST-BEGIN"), makeString("CDOLIST_BEGIN"), list(makeSymbol("VAR"), makeSymbol("INIT-FORM"), makeSymbol("CDOLIST-VAR"))), list(makeSymbol("%CDOLIST-END"), makeString("CDOLIST_END"), list(makeSymbol("VAR"))), list(makeSymbol("%CDOTIMES-BEGIN"), makeString("CDOTIMES_BEGIN"), list(makeSymbol("VAR"), makeSymbol("INIT-FORM"), makeSymbol("CDOTIMES-VAR"))), list(makeSymbol("%CDOTIMES-END"), makeString("CDOTIMES_END"), list(makeSymbol("VAR"))), list(makeSymbol("%CSOME-BEGIN"), makeString("CSOME_BEGIN"), list(makeSymbol("VAR"), makeSymbol("INIT-FORM"), makeSymbol("DONE-FORM"), makeSymbol("CSOME-VAR"))), list(makeSymbol("%CSOME-END"), makeString("CSOME_END"), list(makeSymbol("VAR"))), list(makeSymbol("%DP-CHECK-TYPE"), makeString("DP_CHECK_TYPE"), list(makeSymbol("OBJECT"), makeSymbol("TYPE"))), list(makeSymbol("%DP-ENFORCE-TYPE"), makeString("DP_ENFORCE_TYPE"), list(makeSymbol("OBJECT"), makeSymbol("TYPE"))), list(makeSymbol("%DTB"), makeString("DTB"), list(makeSymbol("OBJ"))), list(makeSymbol("%DYN"), makeString("DYN"), list(makeSymbol("VAR"))), list(makeSymbol("%END-PRINTING-OBJECT"), makeString("END_PRINTING_OBJECT"), list(makeSymbol("OBJECT"), makeSymbol("STREAM"))), list(makeSymbol("%END-WITH-PROCESS-RESOURCE-TRACKING"), makeString("END_WITH_PROCESS_RESOURCE_TRACKING"), list(makeSymbol("ENV"), makeSymbol("RESULT"))), list(makeSymbol("%FINISH-CATCH"), makeString("FINISH_CATCH"), list(makeSymbol("TAG"), makeSymbol("ENV"))), list(makeSymbol("%FINISH-UNWIND"), makeString("FINISH_UNWIND"), list(makeSymbol("ENV"))), list(makeSymbol("%FORMAT-0A-DIRECTIVE"), makeString("format_0a_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-24-DIRECTIVE"), makeString("format_24_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-25-DIRECTIVE"), makeString("format_25_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-26-DIRECTIVE"), makeString("format_26_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-28-DIRECTIVE"), makeString("format_28_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-29-DIRECTIVE"), makeString("format_29_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-2A-DIRECTIVE"), makeString("format_2a_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-2F-DIRECTIVE"), makeString("format_2f_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-3B-DIRECTIVE"), makeString("format_3b_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-3C-DIRECTIVE"), makeString("format_3c_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-3E-DIRECTIVE"), makeString("format_3e_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-3F-DIRECTIVE"), makeString("format_3f_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-5B-DIRECTIVE"), makeString("format_5b_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-5D-DIRECTIVE"), makeString("format_5d_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-5E-DIRECTIVE"), makeString("format_5e_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-5F-DIRECTIVE"), makeString("format_5f_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-7B-DIRECTIVE"), makeString("format_7b_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-7C-DIRECTIVE"), makeString("format_7c_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-7D-DIRECTIVE"), makeString("format_7d_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-7E-DIRECTIVE"), makeString("format_7e_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-A-DIRECTIVE"), makeString("format_a_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-B-DIRECTIVE"), makeString("format_b_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-C-DIRECTIVE"), makeString("format_c_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-D-DIRECTIVE"), makeString("format_d_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-E-DIRECTIVE"), makeString("format_e_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-F-DIRECTIVE"), makeString("format_f_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-G-DIRECTIVE"), makeString("format_g_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-I-DIRECTIVE"), makeString("format_i_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-O-DIRECTIVE"), makeString("format_o_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-P-DIRECTIVE"), makeString("format_p_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-R-DIRECTIVE"), makeString("format_r_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-S-DIRECTIVE"), makeString("format_s_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-T-DIRECTIVE"), makeString("format_t_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-W-DIRECTIVE"), makeString("format_w_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("%FORMAT-X-DIRECTIVE"), makeString("format_x_directive"), list(new SubLObject[]{ makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("START"), makeSymbol("END"), makeSymbol("ARGS"), makeSymbol("ALL-ARGS"), makeSymbol("PARAMETERS"), makeSymbol("AT-SIGN-P"), makeSymbol("COLONP") })), list(makeSymbol("GET-STATIC-AREA"), makeString("get_static_area")), list(makeSymbol("GET-THREAD-PRIVATE-AREA"), makeString("get_thread-private_area")), list(makeSymbol("GET-WORKING-AREA"), makeString("get_working_area")), list(makeSymbol("%HASH-INDEX-KEY", "SUBLISP"), makeString("HASH_INDEX_KEY"), list(makeSymbol("TABLE"), makeSymbol("INDEX"))), list(makeSymbol("%HASH-INDEX-OBJ", "SUBLISP"), makeString("HASH_INDEX_OBJ"), list(makeSymbol("TABLE"), makeSymbol("INDEX"))), list(makeSymbol("%INIT-OPT-ARG"), makeString("INIT_OPT_ARG"), list(makeSymbol("ARG"), makeSymbol("VAL"))), list(makeSymbol("%LEX"), makeString("LEX"), list(makeSymbol("VAR"))), list(makeSymbol("%MULTIPLE-VALUE-LIST"), makeString("MULTIPLE_VALUE_LIST"), list(makeSymbol("EXPRESSION"))), list(makeSymbol("%MVAL"), makeString("MVAL"), list(makeSymbol("N"))), list(makeSymbol("%MVAL-COUNT"), makeString("MVAL_COUNT"), NIL), list(makeSymbol("%NEXT-HASH-INDEX", "SUBLISP"), makeString("NEXT_HASH_INDEX"), list(makeSymbol("TABLE"), makeSymbol("INDEX"))), list(makeSymbol("%NOTE-SUPPLIED"), makeString("NOTE_SUPPLIED"), list(makeSymbol("VAR"))), list(makeSymbol("%NTH-VALUE"), makeString("NTH_VALUE"), list(makeSymbol("N"), makeSymbol("FORM"))), list(makeSymbol("PRINT-NOT-READABLE"), makeString("print_not_readable"), list(makeSymbol("OBJECT"), makeSymbol("STREAM"))), list(makeSymbol("%PROCLAIM"), makeString("PROCLAIM"), list(makeSymbol("DECL"))), list(makeSymbol("%REBIND"), makeString("REBIND"), list(makeSymbol("VAR"))), list(makeSymbol("%REBIND-SPECIAL-VARS"), makeString("REBIND_SPECIAL_VARS"), list(makeSymbol("SPECIAL-VARS"))), list(makeSymbol("%RESET-MVAL"), makeString("RESET_MVAL"), NIL), list(makeSymbol("%SET-CATCH"), makeString("SET_CATCH"), list(makeSymbol("TAG"), makeSymbol("ENV"))), list(makeSymbol("%SET-DYN"), makeString("SET_DYN"), list(makeSymbol("VAR"), makeSymbol("VAL"))), list(makeSymbol("%SET-LEX"), makeString("SET_LEX"), list(makeSymbol("VAR"), makeSymbol("VAL"))), list(makeSymbol("%SET-UNWIND"), makeString("SET_UNWIND"), list(makeSymbol("ENV"))), list(makeSymbol("%START-PRINTING-OBJECT"), makeString("START_PRINTING_OBJECT"), list(makeSymbol("OBJECT"), makeSymbol("STREAM"))), list(makeSymbol("%START-UNWIND"), makeString("START_UNWIND"), list(makeSymbol("ENV"))), list(makeSymbol("%THROWN-TO"), makeString("DP_THROWN_TO"), list(makeSymbol("ENV"))), list(makeSymbol("IN-PACKAGE"), makeString("in_package"), list(makeSymbol("NAME"))), list(makeSymbol("%CLEAR-GC-RESOURCE-ACCUMULATOR", "SUBLISP"), makeString("sublisp_clear_gc_resource_accumulator"), NIL), list(makeSymbol("%CURRENT-GC-RESOURCE-ACCUMULATOR", "SUBLISP"), makeString("sublisp_current_gc_resource_accumulator"), NIL), list(makeSymbol("%GET-INITIAL-CONTINUATION", "SUBLISP"), makeString("_get_initial_continuation"), NIL), list(makeSymbol("%GET-RED-OBJECT", "SUBLISP"), makeString("_get_red_object"), NIL), list(makeSymbol("%INTERPRET-CSPACE-RESULTS", "SUBLISP"), makeString("sublisp_interpret_cspace_results"), list(makeSymbol("PROBE"), makeSymbol("STREAM"))), list(makeSymbol("%SET-INITIAL-CONTINUATION", "SUBLISP"), makeString("_set_initial_continuation"), list(makeSymbol("FUNCTIONSPEC"))), list(makeSymbol("ADD-SPACE-PROBE", "SUBLISP"), makeString("add_space_probe"), NIL), list(makeSymbol("ALIEN-AS-STRING", "SUBLISP"), makeString("alien_as_string"), list(makeSymbol("OBJECT"))), list(makeSymbol("CANONICAL-NULL-FILE-STREAM-PATH", "SUBLISP"), makeString("canonical_null_file_stream_path")), list(makeSymbol("CIRCULAR-REFERENCE-P", "SUBLISP"), makeString("circular_reference_p"), list(makeSymbol("OBJECT"), makeSymbol("STREAM"))), list(makeSymbol("DEF-FOREIGN-FUNCTION", "SUBLISP"), makeString("sublisp_def_foreign_function"), list(makeSymbol("FOREIGN-SHARED-LIBRARY"), makeSymbol("FOREIGN-NAME"), makeSymbol("SYMBOL"), makeSymbol("ARG-CONVERSION"), makeSymbol("RET-TYPE"), makeSymbol("CALLING-CONVENTION"), makeSymbol("NULL-DEFAULT-RETURN"))), list(makeSymbol("DESCRIPTOR-STREAM-CLOSE", "SUBLISP"), makeString("descriptor_stream_close"), list(makeSymbol("STREAM"), makeSymbol("ABORT"))), list(makeSymbol("DESCRIPTOR-STREAM-FILE-LENGTH", "SUBLISP"), makeString("descriptor_stream_file_length"), list(makeSymbol("STREAM"))), list(makeSymbol("DESCRIPTOR-STREAM-FILE-POSITION", "SUBLISP"), makeString("descriptor_stream_file_position"), list(makeSymbol("STREAM"))), list(makeSymbol("DESCRIPTOR-STREAM-NEXT-INPUT-BUFFER", "SUBLISP"), makeString("descriptor_stream_next_input_buffer"), list(makeSymbol("STREAM"), makeSymbol("WAITP"))), list(makeSymbol("DESCRIPTOR-STREAM-SEND-OUTPUT-BUFFER", "SUBLISP"), makeString("descriptor_stream_send_output_buffer"), list(makeSymbol("STREAM"))), list(makeSymbol("DESCRIPTOR-STREAM-SET-FILE-POSITION", "SUBLISP"), makeString("descriptor_stream_set_file_position"), list(makeSymbol("STREAM"), makeSymbol("POSITION-SPEC"))), list(makeSymbol("ENCODE-UNIVERSAL-TIME-INTERNAL", "SUBLISP"), makeString("encode_universal_time_internal"), list(makeSymbol("SECOND"), makeSymbol("MINUTE"), makeSymbol("HOUR"), makeSymbol("DATE"), makeSymbol("MONTH"), makeSymbol("YEAR"), makeSymbol("TIME-ZONE"))), list(makeSymbol("EXTERNAL-PROCESSES-SUPPORTED?", "SUBLISP"), makeString("external_processes_supportedP"), NIL), list(makeSymbol("FILE-POINTER-STREAM-CLOSE", "SUBLISP"), makeString("file_pointer_stream_close"), list(makeSymbol("STREAM"), makeSymbol("ABORT"))), list(makeSymbol("FILE-POINTER-STREAM-FILE-LENGTH", "SUBLISP"), makeString("file_pointer_stream_file_length"), list(makeSymbol("STREAM"))), list(makeSymbol("FILE-POINTER-STREAM-FILE-POSITION", "SUBLISP"), makeString("file_pointer_stream_file_position"), list(makeSymbol("STREAM"))), list(makeSymbol("FILE-POINTER-STREAM-NEXT-INPUT-BUFFER", "SUBLISP"), makeString("file_pointer_stream_next_input_buffer"), list(makeSymbol("STREAM"), makeSymbol("WAITP"))), list(makeSymbol("FILE-POINTER-STREAM-SEND-OUTPUT-BUFFER", "SUBLISP"), makeString("file_pointer_stream_send_output_buffer"), list(makeSymbol("STREAM"))), list(makeSymbol("FILE-POINTER-STREAM-SET-FILE-POSITION", "SUBLISP"), makeString("file_pointer_stream_set_file_position"), list(makeSymbol("STREAM"), makeSymbol("POSITION-SPEC"))), list(makeSymbol("FOLLOW-SYNONYM-STREAM", "SUBLISP"), makeString("follow_synonym_stream"), list(makeSymbol("STREAM"))), list(makeSymbol("GET-EXTERNAL-PROCESS-STATUS", "SUBLISP"), makeString("get_external_process_status"), list(makeSymbol("PROCESS-ID"), makeSymbol("&OPTIONAL"), makeSymbol("WAIT-UNTIL-DONE?"))), list(makeSymbol("GET-TIME", "SUBLISP"), makeString("get_time"), NIL), list(makeSymbol("GET-TIMEZONE", "SUBLISP"), makeString("get_timezone"), list(makeSymbol("&OPTIONAL"), makeSymbol("UNIVERSAL-TIME"))), list(makeSymbol("HANDLE-CIRCULARITY", "SUBLISP"), makeString("handle_circularity"), list(makeSymbol("OBJECT"), makeSymbol("STREAM"))), list(makeSymbol("ILLEGAL-STREAM-OPERATION", "SUBLISP"), makeString("illegal_stream_operation"), list(makeSymbol("STREAM"), makeSymbol("OPERATION"))), list(makeSymbol("INHIBIT-PREEMPTION-P", "SUBLISP"), makeString("inhibit_preemption_p"), NIL), list(makeSymbol("INPUT-STREAM-DESIGNATOR-STREAM", "SUBLISP"), makeString("input_stream_designator_stream"), list(makeSymbol("OBJECT"))), list(makeSymbol("INTERNED-SYMBOLP", "SUBLISP"), makeString("interned_symbolp"), list(makeSymbol("SYMBOL"))), list(makeSymbol("JVM-CALL", "SUBLISP"), makeString("f_jvm_call"), list(makeSymbol("FUNC"), makeSymbol("STACK-FRAME"), makeSymbol("ARGSTART"), makeSymbol("ARGCNT"))), list(makeSymbol("JVMI-OPCODE-INTERPRETER", "SUBLISP"), makeString("jvmi_opcode_interpreter"), list(makeSymbol("JVMI"), makeSymbol("CODE"))), list(makeSymbol("KILL-EXTERNAL-PROCESS", "SUBLISP"), makeString("kill_external_process"), list(makeSymbol("PROCESS-ID"))), list(makeSymbol("LOAD-SHARED-OBJECT", "SUBLISP"), makeString("sublisp_load_shared_object"), list(makeSymbol("MONIKER"), makeSymbol("PATHNAME"), makeSymbol("OPTIONS"))), list(makeSymbol("MAKE-DESCRIPTOR-STREAM", "SUBLISP"), makeString("make_descriptor_stream"), list(makeSymbol("DESCRIPTOR"), makeSymbol("DIRECTION"), makeSymbol("ELEMENT-TYPE"))), list(makeSymbol("MAKE-GUID-BLOCK", "SUBLISP"), makeString("make_block_of_guids")), list(makeSymbol("MAKE-PRIVATE-DESCRIPTOR-STREAM", "SUBLISP"), makeString("make_private_descriptor_stream"), list(makeSymbol("DESCRIPTOR"), makeSymbol("DIRECTION"), makeSymbol("ELEMENT-TYPE"))), list(makeSymbol("MAKE-STREAM", "SUBLISP"), makeString("make_stream"), list(makeSymbol("&OPTIONAL"), makeSymbol("ARGLIST"))), list(makeSymbol("MY-GETF", "SUBLISP"), makeString("my_getf"), list(makeSymbol("PLIST"), makeSymbol("INDICATOR"), makeSymbol("&OPTIONAL"), makeSymbol("DEFAULT"))), list(makeSymbol("OPEN-DESCRIPTOR", "SUBLISP"), makeString("open_descriptor"), list(makeSymbol("FILESPEC"), makeSymbol("DIRECTION"), makeSymbol("ELEMENT-TYPE"), makeSymbol("IF-EXISTS"), makeSymbol("IF-DOES-NOT-EXIST"), makeSymbol("EXTERNAL-FORMAT"))), list(makeSymbol("OUTPUT-STREAM-DESIGNATOR-STREAM", "SUBLISP"), makeString("output_stream_designator_stream"), list(makeSymbol("OBJECT"))), list(makeSymbol("PATHNAME-DESIGNATOR-PATHNAME", "SUBLISP"), makeString("pathname_designator_pathname"), list(makeSymbol("OBJECT"))), list(makeSymbol("POINTER", "SUBLISP"), makeString("sublisp_pointer"), list(makeSymbol("OBJECT"))), list(makeSymbol("PRINT-BIGNUM-INTERNAL", "SUBLISP"), makeString("print_bignum_internal"), list(makeSymbol("BIGNUM"), makeSymbol("STREAM"), makeSymbol("RADIX"), makeSymbol("DIVISOR"), makeSymbol("POWER-LESS-ONE"))), list(makeSymbol("PRINT-CHARACTER", "SUBLISP"), makeString("print_character"), list(makeSymbol("CHARACTER"), makeSymbol("STREAM"))), list(makeSymbol("PRINT-CONS-CELLS", "SUBLISP"), makeString("print_cons_cells"), list(makeSymbol("CONS"), makeSymbol("STREAM"))), list(makeSymbol("PRINT-ERROR", "SUBLISP"), makeString("print_error"), list(makeSymbol("OBJECT"), makeSymbol("STREAM"))), list(makeSymbol("PRINT-FLONUM", "SUBLISP"), makeString("print_flonum"), list(makeSymbol("FLONUM"), makeSymbol("STREAM"))), list(makeSymbol("PRINT-FUNCTION", "SUBLISP"), makeString("print_function"), list(makeSymbol("FUNCTION"), makeSymbol("STREAM"))), list(makeSymbol("PRINT-HASHTABLE", "SUBLISP"), makeString("print_hashtable"), list(makeSymbol("HASH-TABLE"), makeSymbol("STREAM"))), list(makeSymbol("PRINT-INTEGER", "SUBLISP"), makeString("print_integer"), list(makeSymbol("INTEGER"), makeSymbol("STREAM"))), list(makeSymbol("PRINT-INTEGER-INTERNAL", "SUBLISP"), makeString("print_integer_internal"), list(makeSymbol("INTEGER"), makeSymbol("STREAM"), makeSymbol("PRINT-BASE"))), list(makeSymbol("PRINT-OBJECT-WRAPPER", "SUBLISP"), makeString("print_object_wrapper"), list(makeSymbol("OBJECT"), makeSymbol("STREAM"))), list(makeSymbol("PRINT-STREAM", "SUBLISP"), makeString("print_stream"), list(makeSymbol("OBJECT"), makeSymbol("STREAM"), makeSymbol("DEPTH"))), list(makeSymbol("PRINT-STRING", "SUBLISP"), makeString("print_string"), list(makeSymbol("STRING"), makeSymbol("STREAM"))), list(makeSymbol("PRINT-SYMBOL", "SUBLISP"), makeString("print_symbol"), list(makeSymbol("SYMBOL"), makeSymbol("STREAM"))), list(makeSymbol("PRINT-VECTOR", "SUBLISP"), makeString("print_vector"), list(makeSymbol("VECTOR"), makeSymbol("STREAM"))), list(makeSymbol("PROCESS-YIELD", "SUBLISP"), makeString("process_yield"), NIL), list(makeSymbol("READ-PRINT-EQ", "SUBLISP"), makeString("read_print_eq"), list(makeSymbol("OBJECT"))), list(makeSymbol("REALLY-OPEN", "SUBLISP"), makeString("really_open"), list(makeSymbol("FILESPEC"), makeSymbol("KEYS"))), list(makeSymbol("REALLY-WRITE", "SUBLISP"), makeString("really_write"), list(makeSymbol("OBJECT"), makeSymbol("KEYS"))), list(makeSymbol("REALLY-WRITE-TO-STRING", "SUBLISP"), makeString("really_write_to_string"), list(makeSymbol("OBJECT"), makeSymbol("KEYS"))), list(makeSymbol("RELEASE-LOCK", "SUBLISP"), makeString("release_lock"), list(makeSymbol("LOCK"))), list(makeSymbol("REMOVE-SPACE-PROBE", "SUBLISP"), makeString("remove_space_probe"), list(makeSymbol("PROBE"))), list(makeSymbol("RESTART-CYC", "SUBLISP"), makeString("restart_cyc"), list(makeSymbol("&OPTIONAL"), makeSymbol("WORLD"), makeSymbol("INIT-FILE"), makeSymbol("INIT-FORM"))), list(makeSymbol("RUN-EXTERNAL-PROCESS", "SUBLISP"), makeString("run_external_process"), list(makeSymbol("PROGRAM"), makeSymbol("&OPTIONAL"), makeSymbol("ARGS"), makeSymbol("STDIN-SPEC"), makeSymbol("STDOUT-SPEC"), makeSymbol("STDERR-SPEC"))), list(makeSymbol("SEIZE-LOCK", "SUBLISP"), makeString("seize_lock"), list(makeSymbol("LOCK"))), list(makeSymbol("SET-INHIBIT-PREEMPTION", "SUBLISP"), makeString("set_inhibit_preemption"), list(makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-COLUMN", "SUBLISP"), makeString("set_stream_column"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-COMPONENTS", "SUBLISP"), makeString("set_stream_components"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-DIRECTION", "SUBLISP"), makeString("set_stream_direction"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-ELEMENT-TYPE", "SUBLISP"), makeString("set_stream_element_type"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-HANDLE", "SUBLISP"), makeString("set_stream_handle"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-INPUT-BUFFER", "SUBLISP"), makeString("set_stream_input_buffer"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-INPUT-INDEX", "SUBLISP"), makeString("set_stream_input_index"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-INPUT-LIMIT", "SUBLISP"), makeString("set_stream_input_limit"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-LAST-CHAR", "SUBLISP"), makeString("set_stream_last_char"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-LOCK", "SUBLISP"), makeString("set_stream_lock"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-OPEN-P", "SUBLISP"), makeString("set_stream_open_p"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-OUTPUT-BUFFER", "SUBLISP"), makeString("set_stream_output_buffer"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-OUTPUT-INDEX", "SUBLISP"), makeString("set_stream_output_index"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-OUTPUT-LIMIT", "SUBLISP"), makeString("set_stream_output_limit"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-PATHNAME", "SUBLISP"), makeString("set_stream_pathname"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SET-STREAM-STREAM-TYPE", "SUBLISP"), makeString("set_stream_stream_type"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("SIMPLE-STREAM-ERROR", "SUBLISP"), makeString("simple_stream_error"), list(makeSymbol("FORMAT-CONTROL"), makeSymbol("&OPTIONAL"), makeSymbol("ARGS"))), list(makeSymbol("STREAM-ADVANCE-TO-COLUMN", "SUBLISP"), makeString("stream_advance_to_column"), list(makeSymbol("STREAM"), makeSymbol("COLUMN"))), list(makeSymbol("STREAM-CHECK-TYPE", "SUBLISP"), makeString("stream_check_type"), list(makeSymbol("STREAM"), makeSymbol("TYPE"))), list(makeSymbol("STREAM-CLEAR-INPUT", "SUBLISP"), makeString("stream_clear_input"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-CLEAR-OUTPUT", "SUBLISP"), makeString("stream_clear_output"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-COLUMN", "SUBLISP"), makeString("stream_column"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-COMPONENTS", "SUBLISP"), makeString("stream_components"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-DIRECTION", "SUBLISP"), makeString("stream_direction"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-FILE-LENGTH", "SUBLISP"), makeString("stream_file_length"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-FILE-POSITION", "SUBLISP"), makeString("stream_file_position"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-FILE-STRING-LENGTH", "SUBLISP"), makeString("stream_file_string_length"), list(makeSymbol("STREAM"), makeSymbol("OBJECT"))), list(makeSymbol("STREAM-FINISH-OUTPUT", "SUBLISP"), makeString("stream_finish_output"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-FORCE-OUTPUT", "SUBLISP"), makeString("stream_force_output"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-FRESH-LINE", "SUBLISP"), makeString("stream_fresh_line"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-HANDLE", "SUBLISP"), makeString("stream_handle"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-INPUT-BUFFER", "SUBLISP"), makeString("stream_input_buffer"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-INPUT-INDEX", "SUBLISP"), makeString("stream_input_index"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-INPUT-LIMIT", "SUBLISP"), makeString("stream_input_limit"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-LAST-CHAR", "SUBLISP"), makeString("stream_last_char"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-LISTEN", "SUBLISP"), makeString("stream_listen"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-LOCK", "SUBLISP"), makeString("stream_lock"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-NEXT-INPUT-BUFFER", "SUBLISP"), makeString("stream_next_input_buffer"), list(makeSymbol("STREAM"), makeSymbol("WAITP"))), list(makeSymbol("STREAM-OPEN-P", "SUBLISP"), makeString("stream_open_p"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-OUTPUT-BUFFER", "SUBLISP"), makeString("stream_output_buffer"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-OUTPUT-INDEX", "SUBLISP"), makeString("stream_output_index"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-OUTPUT-LIMIT", "SUBLISP"), makeString("stream_output_limit"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-P", "SUBLISP"), makeString("stream_p"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-PATHNAME", "SUBLISP"), makeString("stream_pathname"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-PEEK-CHAR", "SUBLISP"), makeString("stream_peek_char"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-READ-BYTE", "SUBLISP"), makeString("stream_read_byte"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-READ-CHAR", "SUBLISP"), makeString("stream_read_char"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-READ-CHAR-NO-HANG", "SUBLISP"), makeString("stream_read_char_no_hang"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-READ-LINE", "SUBLISP"), makeString("stream_read_line"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-READ-SEQUENCE", "SUBLISP"), makeString("stream_read_sequence"), list(makeSymbol("STREAM"), makeSymbol("SEQUENCE"), makeSymbol("START"), makeSymbol("END"))), list(makeSymbol("STREAM-SEND-OUTPUT-BUFFER", "SUBLISP"), makeString("stream_send_output_buffer"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-SET-FILE-POSITION", "SUBLISP"), makeString("stream_set_file_position"), list(makeSymbol("STREAM"), makeSymbol("POSITION-SPEC"))), list(makeSymbol("STREAM-START-LINE-P", "SUBLISP"), makeString("stream_start_line_p"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-STREAM-TYPE", "SUBLISP"), makeString("stream_stream_type"), list(makeSymbol("OBJECT"))), list(makeSymbol("STREAM-TERPRI", "SUBLISP"), makeString("stream_terpri"), list(makeSymbol("STREAM"))), list(makeSymbol("STREAM-UNREAD-CHAR", "SUBLISP"), makeString("stream_unread_char"), list(makeSymbol("STREAM"), makeSymbol("CHARACTER"))), list(makeSymbol("STREAM-WRITE-BYTE", "SUBLISP"), makeString("stream_write_byte"), list(makeSymbol("STREAM"), makeSymbol("INTEGER"))), list(makeSymbol("STREAM-WRITE-CHAR", "SUBLISP"), makeString("stream_write_char"), list(makeSymbol("STREAM"), makeSymbol("CHARACTER"))), list(makeSymbol("STREAM-WRITE-SEQUENCE", "SUBLISP"), makeString("stream_write_sequence"), list(makeSymbol("STREAM"), makeSymbol("SEQUENCE"), makeSymbol("START"), makeSymbol("END"))), list(makeSymbol("STREAM-WRITE-STRING", "SUBLISP"), makeString("stream_write_string"), list(makeSymbol("STREAM"), makeSymbol("STRING"), makeSymbol("&OPTIONAL"), list(makeSymbol("START"), ZERO_INTEGER), makeSymbol("END"))), list(makeSymbol("TIMESTRING", "SUBLISP"), makeString("f_timestring"), list(makeSymbol("&OPTIONAL"), makeSymbol("UNIVERSAL-TIME"))), list(makeSymbol("UNKNOWN-STREAM-TYPE", "SUBLISP"), makeString("unknown_stream_type"), list(makeSymbol("STREAM"))), list(makeSymbol("UNLOAD-SHARED-OBJECT", "SUBLISP"), makeString("sublisp_unload_shared_object"), list(makeSymbol("PATHNAME"))), list(makeSymbol("WIDE-NEWLINE-STREAM-P", "SUBLISP"), makeString("wide_newline_stream_p"), list(makeSymbol("STREAM"))), list(makeSymbol("_CLEAR-STRUCTURE", "SUBLISP"), makeString("CLEAR_STRUCTURE"), list(makeSymbol("OBJECT"), makeSymbol("SIZE"))), list(makeSymbol("_CLEAR-SUB-STRUCTURE", "SUBLISP"), makeString("CLEAR_SUB_STRUCTURE"), list(makeSymbol("OBJECT"), makeSymbol("SIZE"), makeSymbol("TYPE"))), list(makeSymbol("_CSETF-READTABLE-CASE", "SUBLISP"), makeString("f__csetf_readtable_case"), list(makeSymbol("OBJECT"), makeSymbol("VALUE"))), list(makeSymbol("_DEF-CSETF", "SUBLISP"), makeString("DEF_CSETF"), list(makeSymbol("ACCESSOR"), makeSymbol("SETTER"))), list(makeSymbol("_METHOD", "SUBLISP"), makeString("METHOD_FUNC"), list(makeSymbol("OBJECT"), makeSymbol("METHOD-TABLE"))), list(makeSymbol("_NEW-STRUCTURE", "SUBLISP"), makeString("NEW_STRUCTURE"), list(makeSymbol("TYPE"), makeSymbol("SIZE"))), list(makeSymbol("_REGISTER-DEFSTRUCT", "SUBLISP"), makeString("REGISTER_DEFSTRUCT"), list(makeSymbol("NAME"), makeSymbol("TYPE"), makeSymbol("SIZE"), makeSymbol("PRINT-FUNCTION"), makeSymbol("SLOTS"))), list(makeSymbol("_REGISTER-METHOD", "SUBLISP"), makeString("REGISTER_METHOD"), list(makeSymbol("METHOD-TABLE"), makeSymbol("TYPE"), makeSymbol("FUNCTION"))), list(makeSymbol("_SET-STRUCTURE-SLOT", "SUBLISP"), makeString("SET_STRUCTURE_SLOT"), list(makeSymbol("OBJECT"), makeSymbol("SLOT"), makeSymbol("VALUE"))), list(makeSymbol("_STRUCTURE-SLOT", "SUBLISP"), makeString("STRUCTURE_SLOT"), list(makeSymbol("OBJECT"), makeSymbol("SLOT"))), list(makeSymbol("_STRUCTURE-TYPE", "SUBLISP"), makeString("STRUCTURE_TYPE"), list(makeSymbol("OBJECT"), makeSymbol("TYPE"))), list(makeSymbol("_STRUCTURES-BAG-P", "SUBLISP"), makeString("dp_structures_bag_p"), list(makeSymbol("X"))) });
+    }
+
+    private static SubLObject _constant_10_initializer() {
+        return list(new SubLObject[]{ list(makeSymbol("%B-/="), makeString("numNE"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%B-<"), makeString("numL"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%B-<="), makeString("numLE"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%B-="), makeString("numE"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%B->"), makeString("numG"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%B->="), makeString("numGE"), list(makeSymbol("NUM1"), makeSymbol("NUM2"))), list(makeSymbol("%B-ALIEN-P"), makeString("alienp"), list(makeSymbol("X"))), list(makeSymbol("%B-ALPHA-CHARP"), makeString("alpha_char_p"), list(makeSymbol("CHAR"))), list(makeSymbol("%B-ALPHANUMERICP"), makeString("alphanumericp"), list(makeSymbol("CHAR"))), list(makeSymbol("%B-ATOM"), makeString("atom"), list(makeSymbol("X"))), list(makeSymbol("%B-BOTH-CASEP"), makeString("both_case_p"), list(makeSymbol("CHAR"))), list(makeSymbol("%B-BOUNDP"), makeString("boundp"), list(makeSymbol("SYMBOL"))), list(makeSymbol("%B-CHAR-EQUAL"), makeString("char_equal"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR-GREATERP"), makeString("char_greaterp"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR-LESSP"), makeString("char_lessp"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR-NOT-EQUAL"), makeString("char_not_equal"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR-NOT-GREATERP"), makeString("char_not_greaterp"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR-NOT-LESSP"), makeString("char_not_lessp"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR/="), makeString("charNE"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR<"), makeString("charL"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR<="), makeString("charLE"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR="), makeString("charE"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR>"), makeString("charG"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHAR>="), makeString("charGE"), list(makeSymbol("CHAR1"), makeSymbol("CHAR2"))), list(makeSymbol("%B-CHARACTERP"), makeString("characterp"), list(makeSymbol("X"))), list(makeSymbol("%B-CONSP"), makeString("consp"), list(makeSymbol("X"))), list(makeSymbol("%B-EQ"), makeString("EQ"), list(makeSymbol("X"), makeSymbol("Y"))), list(makeSymbol("%B-EQL"), makeString("eql"), list(makeSymbol("X"), makeSymbol("Y"))), list(makeSymbol("%B-EQUAL"), makeString("equal"), list(makeSymbol("X"), makeSymbol("Y"))), list(makeSymbol("%B-EQUALP"), makeString("equalp"), list(makeSymbol("X"), makeSymbol("Y"))), list(makeSymbol("%B-EVENP"), makeString("evenp"), list(makeSymbol("NUMBER"))), list(makeSymbol("%B-FBOUNDP"), makeString("fboundp"), list(makeSymbol("SYMBOL"))), list(makeSymbol("%B-FIXNUMP"), makeString("fixnump"), list(makeSymbol("X"))), list(makeSymbol("%B-FLOATP"), makeString("floatp"), list(makeSymbol("X"))), list(makeSymbol("%B-FUNCTION-SPEC-P"), makeString("function_spec_p"), list(makeSymbol("X"))), list(makeSymbol("%B-FUNCTIONP"), makeString("functionp"), list(makeSymbol("X"))), list(makeSymbol("%B-GUID-P"), makeString("guid_p"), list(makeSymbol("OBJ"))), list(makeSymbol("%B-HASH-TABLE-P"), makeString("hash_table_p"), list(makeSymbol("X"))), list(makeSymbol("%B-INTEGERP"), makeString("integerp"), list(makeSymbol("X"))), list(makeSymbol("%B-KEYWORDP"), makeString("keywordp"), list(makeSymbol("X"))), list(makeSymbol("%B-LISTP"), makeString("listp"), list(makeSymbol("X"))), list(makeSymbol("%B-LOCK-P"), makeString("lockp"), list(makeSymbol("X"))), list(makeSymbol("%B-LOWER-CASEP"), makeString("lower_case_p"), list(makeSymbol("CHAR"))), list(makeSymbol("%B-MACRO-OPERATOR-P"), makeString("macro_operator_p"), list(makeSymbol("X"))), list(makeSymbol("%B-MINUSP"), makeString("minusp"), list(makeSymbol("NUMBER"))), list(makeSymbol("%B-NULL"), makeString("SUBLISP_NULL"), list(makeSymbol("X"))), list(makeSymbol("%B-NUMBERP"), makeString("numberp"), list(makeSymbol("X"))), list(makeSymbol("%B-ODDP"), makeString("oddp"), list(makeSymbol("NUMBER"))), list(makeSymbol("%B-PACKAGEP"), makeString("packagep"), list(makeSymbol("X"))), list(makeSymbol("%B-PLUSP"), makeString("plusp"), list(makeSymbol("NUMBER"))), list(makeSymbol("%B-PROBE-FILE"), makeString("probe_file"), list(makeSymbol("FILENAME"))), list(makeSymbol("%B-PROCESSP"), makeString("processp"), list(makeSymbol("X"))), list(makeSymbol("%B-SEQUENCEP"), makeString("sequencep"), list(makeSymbol("X"))), list(makeSymbol("%B-STREAMP"), makeString("streamp"), list(makeSymbol("X"))), list(makeSymbol("%B-STRING-EQUAL"), makeString("string_equal"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING-GREATERP"), makeString("string_greaterp"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING-LESSP"), makeString("string_lessp"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING-NOT-EQUAL"), makeString("string_not_equal"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING-NOT-GREATERP"), makeString("string_not_greaterp"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING-NOT-LESSP"), makeString("string_not_lessp"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING/="), makeString("stringNE"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING<"), makeString("stringL"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING<="), makeString("stringLE"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING="), makeString("stringE"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING>"), makeString("stringG"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRING>="), makeString("stringGE"), list(makeSymbol("STRING1"), makeSymbol("STRING2"), makeSymbol("&OPTIONAL"), makeSymbol("START1"), makeSymbol("END1"), makeSymbol("START2"), makeSymbol("END2"))), list(makeSymbol("%B-STRINGP"), makeString("stringp"), list(makeSymbol("X"))), list(makeSymbol("%B-STRUCTURES-BAG-P"), makeString("structures_bag_p"), list(makeSymbol("X"))), list(makeSymbol("%B-SYMBOLP"), makeString("symbolp"), list(makeSymbol("X"))), list(makeSymbol("%B-THROWN-TO"), makeString("THROWN_TO"), list(makeSymbol("ENV"))), list(makeSymbol("%B-UPPER-CASEP"), makeString("upper_case_p"), list(makeSymbol("CHAR"))), list(makeSymbol("%B-VECTORP"), makeString("vectorp"), list(makeSymbol("X"))), list(makeSymbol("%B-ZEROP"), makeString("zerop"), list(makeSymbol("NUMBER"))) });
+    }
+
+    private static SubLObject _constant_15_initializer() {
+        return list(new SubLObject[]{ cons(T, makeString("T")), cons(NIL, makeString("NIL")), cons(EQ, makeString("eq_sym")), cons(EQL, makeString("eql_sym")), cons(EQUAL, makeString("equal_sym")), cons(EQUALP, makeString("equalp_sym")), cons(IDENTITY, makeString("identity_sym")), cons(MINUS_ONE_INTEGER, makeString("minus_one")), cons(ZERO_INTEGER, makeString("zero")), cons(ONE_INTEGER, makeString("one")), cons(TWO_INTEGER, makeString("two")), cons(THREE_INTEGER, makeString("three")), cons(FOUR_INTEGER, makeString("four")), cons(FIVE_INTEGER, makeString("five")), cons(SIX_INTEGER, makeString("six")), cons(SEVEN_INTEGER, makeString("seven")), cons(EIGHT_INTEGER, makeString("eight")), cons(NINE_INTEGER, makeString("nine")), cons(TEN_INTEGER, makeString("ten")), cons(ELEVEN_INTEGER, makeString("eleven")), cons(TWELVE_INTEGER, makeString("twelve")), cons(THIRTEEN_INTEGER, makeString("thirteen")), cons(FOURTEEN_INTEGER, makeString("fourteen")), cons(FIFTEEN_INTEGER, makeString("fifteen")), cons(SIXTEEN_INTEGER, makeString("sixteen")), cons(SEVENTEEN_INTEGER, makeString("seventeen")), cons(EIGHTEEN_INTEGER, makeString("eighteen")), cons(NINETEEN_INTEGER, makeString("nineteen")), cons(TWENTY_INTEGER, makeString("twenty")), cons(CHAR_null, makeString("c_null")), cons(CHAR_backspace, makeString("c_backspace")), cons(CHAR_tab, makeString("c_tab")), cons(CHAR_newline, makeString("c_newline")), cons(CHAR_return, makeString("c_return")), cons(CHAR_page, makeString("c_page")), cons(CHAR_escape, makeString("c_esc")), cons(CHAR_space, makeString("c_space")), cons(CHAR_exclamation, makeString("c_exclamation")), cons(CHAR_quotation, makeString("c_quotation")), cons(CHAR_hash, makeString("c_hash")), cons(CHAR_dollar, makeString("c_dollar")), cons(CHAR_percent, makeString("c_percent")), cons(CHAR_ampersand, makeString("c_ampersand")), cons(CHAR_quote, makeString("c_quote")), cons(CHAR_lparen, makeString("c_lparen")), cons(CHAR_rparen, makeString("c_rparen")), cons(CHAR_asterisk, makeString("c_asterisk")), cons(CHAR_plus, makeString("c_plus")), cons(CHAR_comma, makeString("c_comma")), cons(CHAR_hyphen, makeString("c_hyphen")), cons(CHAR_period, makeString("c_period")), cons(CHAR_slash, makeString("c_slash")), cons(CHAR_0, makeString("c_0")), cons(CHAR_1, makeString("c_1")), cons(CHAR_2, makeString("c_2")), cons(CHAR_3, makeString("c_3")), cons(CHAR_4, makeString("c_4")), cons(CHAR_5, makeString("c_5")), cons(CHAR_6, makeString("c_6")), cons(CHAR_7, makeString("c_7")), cons(CHAR_8, makeString("c_8")), cons(CHAR_9, makeString("c_9")), cons(CHAR_colon, makeString("c_colon")), cons(CHAR_semicolon, makeString("c_semicolon")), cons(CHAR_less, makeString("c_less")), cons(CHAR_equal, makeString("c_equal")), cons(CHAR_greater, makeString("c_greater")), cons(CHAR_question, makeString("c_question")), cons(CHAR_at, makeString("c_at")), cons(CHAR_A, makeString("c_A")), cons(CHAR_B, makeString("c_B")), cons(CHAR_C, makeString("c_C")), cons(CHAR_D, makeString("c_D")), cons(CHAR_E, makeString("c_E")), cons(CHAR_F, makeString("c_F")), cons(CHAR_G, makeString("c_G")), cons(CHAR_H, makeString("c_H")), cons(CHAR_I, makeString("c_I")), cons(CHAR_J, makeString("c_J")), cons(CHAR_K, makeString("c_K")), cons(CHAR_L, makeString("c_L")), cons(CHAR_M, makeString("c_M")), cons(CHAR_N, makeString("c_N")), cons(CHAR_O, makeString("c_O")), cons(CHAR_P, makeString("c_P")), cons(CHAR_Q, makeString("c_Q")), cons(CHAR_R, makeString("c_R")), cons(CHAR_S, makeString("c_S")), cons(CHAR_T, makeString("c_T")), cons(CHAR_U, makeString("c_U")), cons(CHAR_V, makeString("c_V")), cons(CHAR_W, makeString("c_W")), cons(CHAR_X, makeString("c_X")), cons(CHAR_Y, makeString("c_Y")), cons(CHAR_Z, makeString("c_Z")), cons(CHAR_lbracket, makeString("c_lbracket")), cons(CHAR_backslash, makeString("c_backslash")), cons(CHAR_rbracket, makeString("c_rbracket")), cons(CHAR_caret, makeString("c_caret")), cons(CHAR_underbar, makeString("c_underbar")), cons(CHAR_backquote, makeString("c_backquote")), cons(CHAR_a, makeString("c_a")), cons(CHAR_b, makeString("c_b")), cons(CHAR_c, makeString("c_c")), cons(CHAR_d, makeString("c_d")), cons(CHAR_e, makeString("c_e")), cons(CHAR_f, makeString("c_f")), cons(CHAR_g, makeString("c_g")), cons(CHAR_h, makeString("c_h")), cons(CHAR_i, makeString("c_i")), cons(CHAR_j, makeString("c_j")), cons(CHAR_k, makeString("c_k")), cons(CHAR_l, makeString("c_l")), cons(CHAR_m, makeString("c_m")), cons(CHAR_n, makeString("c_n")), cons(CHAR_o, makeString("c_o")), cons(CHAR_p, makeString("c_p")), cons(CHAR_q, makeString("c_q")), cons(CHAR_r, makeString("c_r")), cons(CHAR_s, makeString("c_s")), cons(CHAR_t, makeString("c_t")), cons(CHAR_u, makeString("c_u")), cons(CHAR_v, makeString("c_v")), cons(CHAR_w, makeString("c_w")), cons(CHAR_x, makeString("c_x")), cons(CHAR_y, makeString("c_y")), cons(CHAR_z, makeString("c_z")), cons(CHAR_lbrace, makeString("c_lbrace")), cons(CHAR_vertical, makeString("c_vertical")), cons(CHAR_rbrace, makeString("c_rbrace")), cons(CHAR_tilde, makeString("c_tilde")), cons(CHAR_rubout, makeString("c_rubout")) });
+    }
+
+    @Override
+    public void declareFunctions() {
+        declare_c_name_translation_file();
+    }
+
+    @Override
+    public void initializeVariables() {
+        init_c_name_translation_file();
+    }
+
+    @Override
+    public void runTopLevelForms() {
+        setup_c_name_translation_file();
+    }
+
+    static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }
-/*
- * 
+
+/**
  * Total time: 1160 ms
- * 
  */

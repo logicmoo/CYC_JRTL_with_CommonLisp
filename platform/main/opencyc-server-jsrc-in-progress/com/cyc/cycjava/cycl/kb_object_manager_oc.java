@@ -1743,7 +1743,7 @@ public final class kb_object_manager_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $sX13152_native.structDecl;
+      return $structDecl;
     }
 
     @Override

@@ -950,7 +950,7 @@ public final class deduction_handles_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $sX14450_native.structDecl;
+      return $structDecl;
     }
 
     @Override

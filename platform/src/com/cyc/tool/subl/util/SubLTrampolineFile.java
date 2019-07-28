@@ -22,7 +22,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 public abstract class SubLTrampolineFile 
 //
 //
-implements SubLFile,  Singleton
+implements SubLFile,  Singleton, CommonSymbols 
 {
   /**
    * @return

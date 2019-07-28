@@ -21,7 +21,7 @@
 
 import org.armedbear.lisp.*;
 
-public class Main
+class MainJE
 {
     /**
      * This example creates an Interpreter instance, loads our

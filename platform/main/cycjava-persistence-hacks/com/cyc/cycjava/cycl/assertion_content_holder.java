@@ -23,18 +23,16 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.cycjava.cycl.assertions_low;
-import static com.cyc.cycjava.cycl.assertions_low.$assertion_content_native.structDecl;
+import static com.cyc.cycjava.cycl.assertions_low.$assertion_content_native. //
+	structDecl;
 
-public final class assertion_content_holder
-{
-  public static SubLStruct makeNewInstance()
-  {
-    return structDecl.newInstance();
-  }
+public final class assertion_content_holder {
+    public static SubLStruct makeNewInstance() {
+	return structDecl.newInstance();
+    }
 
-  public static SubLObject isInstance(SubLObject v_object)
-  {
-    final SubLObject was = structDecl.isInstance( v_object );
-    return was;
-  }
+    public static SubLObject isInstance(SubLObject v_object) {
+	final SubLObject was = structDecl.isInstance(v_object);
+	return was;
+    }
 }

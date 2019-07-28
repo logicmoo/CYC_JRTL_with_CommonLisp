@@ -1,101 +1,87 @@
 package com.cyc.cycjava.cycl.inference.harness;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.cycjava.cycl.utilities_macros;
-import com.cyc.tool.subl.util.SubLFiles;
+
+import com.cyc.cycjava.cycl.inference.harness.removal_tactician;
 import com.cyc.cycjava.cycl.stacks;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class removal_tactician
-    extends
-      SubLTranslatedFile
-{
-  public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.inference.harness.removal_tactician";
-  public static final String myFingerPrint = "b18065b17f747e85484ef1e15647b3555122545603621e4fcd7addc77defe05a";
-  private static final SubLSymbol $kw0$REMOVAL;
-  private static final SubLList $list1;
-  private static final SubLSymbol $sym2$REMOVAL_STRATEGY_INITIALIZE;
+import static com.cyc.cycjava.cycl.inference.harness.removal_tactician.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-  @SubLTranslatedFile.SubL(source = "cycl/inference/harness/removal-tactician.lisp", position = 2766L)
-  public static SubLObject removal_strategy_p(final SubLObject v_object)
-  {
-    return makeBoolean( NIL != inference_datastructures_strategy.strategy_p( v_object ) && $kw0$REMOVAL == inference_datastructures_strategy.strategy_type( v_object ) );
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/inference/harness/removal-tactician.lisp", position = 2964L)
-  public static SubLObject removal_strategy_initialize(final SubLObject strategy)
-  {
-    final SubLObject removal_index = stacks.create_stack();
-    final SubLObject data = removal_tactician_datastructures.new_removal_strategy_data( removal_index );
-    inference_datastructures_strategy.set_strategy_data( strategy, data );
-    return strategy;
-  }
+public final class removal_tactician extends SubLTranslatedFile {
+    public static final SubLFile me = new removal_tactician();
 
-  public static SubLObject declare_removal_tactician_file()
-  {
-    SubLFiles.declareFunction( me, "removal_strategy_p", "REMOVAL-STRATEGY-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "removal_strategy_initialize", "REMOVAL-STRATEGY-INITIALIZE", 1, 0, false );
-    return NIL;
-  }
+    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.removal_tactician";
 
-  public static SubLObject init_removal_tactician_file()
-  {
-    return NIL;
-  }
+    public static final String myFingerPrint = "b18065b17f747e85484ef1e15647b3555122545603621e4fcd7addc77defe05a";
 
-  public static SubLObject setup_removal_tactician_file()
-  {
-    inference_tactician.inference_strategy_type( $kw0$REMOVAL, $list1 );
-    utilities_macros.note_funcall_helper_function( $sym2$REMOVAL_STRATEGY_INITIALIZE );
-    return NIL;
-  }
 
-  @Override
-  public void declareFunctions()
-  {
-    declare_removal_tactician_file();
-  }
 
-  @Override
-  public void initializeVariables()
-  {
-    init_removal_tactician_file();
-  }
+    public static final SubLList $list1 = list(new SubLObject[]{ makeKeyword("NAME"), makeString("The REMOVAL Tactician"), makeKeyword("COMMENT"), makeString("The REMOVAL Tactician needs no introduction."), makeKeyword("CONSTRUCTOR"), makeSymbol("REMOVAL-STRATEGY-INITIALIZE"), makeKeyword("DONE?"), makeSymbol("REMOVAL-STRATEGY-DONE?"), makeKeyword("DO-ONE-STEP"), makeSymbol("REMOVAL-STRATEGY-DO-ONE-STEP"), makeKeyword("POSSIBLY-ACTIVATE-PROBLEM"), makeSymbol("REMOVAL-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM"), makeKeyword("SELECT-BEST-STRATEGEM"), makeSymbol("REMOVAL-STRATEGY-DEFAULT-SELECT-BEST-STRATEGEM"), makeKeyword("EXECUTE-STRATEGEM"), makeSymbol("REMOVAL-STRATEGY-EXECUTE-STRATEGEM"), makeKeyword("RECONSIDER-SET-ASIDES"), makeSymbol("REMOVAL-STRATEGY-RECONSIDER-SET-ASIDES"), makeKeyword("THROW-AWAY-UNINTERESTING-SET-ASIDES"), makeSymbol("REMOVAL-STRATEGY-THROW-AWAY-UNINTERESTING-SET-ASIDES"), makeKeyword("QUIESCE"), makeSymbol("REMOVAL-STRATEGY-QUIESCE"), makeKeyword("NEW-TACTIC"), makeSymbol("REMOVAL-STRATEGY-NOTE-NEW-TACTIC"), makeKeyword("RELEVANT-TACTICS-WRT-REMOVAL"), makeSymbol("REMOVAL-STRATEGY-CATEGORIZE-STRATEGEMS"), makeKeyword("SPLIT-TACTICS-POSSIBLE"), makeSymbol("REMOVAL-STRATEGY-NOTE-SPLIT-TACTICS-STRATEGICALLY-POSSIBLE"), makeKeyword("PROBLEM-COULD-BE-PENDING"), makeSymbol("REMOVAL-STRATEGY-CONSIDER-THAT-PROBLEM-COULD-BE-STRATEGICALLY-PENDING"), makeKeyword("PROBLEM-NOTHING-TO-DO?"), makeSymbol("REMOVAL-STRATEGY-PROBLEM-NOTHING-TO-DO?"), makeKeyword("THROW-AWAY-PROBLEM"), makeSymbol("REMOVAL-STRATEGY-CHOOSES-TO-THROW-AWAY-PROBLEM?"), makeKeyword("SET-ASIDE-PROBLEM"), makeSymbol("REMOVAL-STRATEGY-CHOOSES-TO-SET-ASIDE-PROBLEM?"), makeKeyword("THROW-AWAY-TACTIC"), makeSymbol("REMOVAL-STRATEGY-CHOOSES-TO-THROW-AWAY-TACTIC?"), makeKeyword("SET-ASIDE-TACTIC"), makeSymbol("REMOVAL-STRATEGY-CHOOSES-TO-SET-ASIDE-TACTIC?"), makeKeyword("NEW-ARGUMENT-LINK"), makeSymbol("IGNORE"), makeKeyword("MOTIVATE-STRATEGEM"), makeSymbol("REMOVAL-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM"), makeKeyword("LINK-HEAD-MOTIVATED?"), makeSymbol("REMOVAL-STRATEGY-LINK-HEAD-MOTIVATED?"), makeKeyword("RECONSIDER-SPLIT-SET-ASIDES"), makeSymbol("REMOVAL-STRATEGY-POSSIBLY-RECONSIDER-SPLIT-SET-ASIDES") });
 
-  @Override
-  public void runTopLevelForms()
-  {
-    setup_removal_tactician_file();
-  }
-  static
-  {
-    me = new removal_tactician();
-    $kw0$REMOVAL = makeKeyword( "REMOVAL" );
-    $list1 = ConsesLow.list( new SubLObject[] { makeKeyword( "NAME" ), makeString( "The REMOVAL Tactician" ), makeKeyword( "COMMENT" ), makeString( "The REMOVAL Tactician needs no introduction." ), makeKeyword(
-        "CONSTRUCTOR" ), makeSymbol( "REMOVAL-STRATEGY-INITIALIZE" ), makeKeyword( "DONE?" ), makeSymbol( "REMOVAL-STRATEGY-DONE?" ), makeKeyword( "DO-ONE-STEP" ), makeSymbol( "REMOVAL-STRATEGY-DO-ONE-STEP" ),
-      makeKeyword( "POSSIBLY-ACTIVATE-PROBLEM" ), makeSymbol( "REMOVAL-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM" ), makeKeyword( "SELECT-BEST-STRATEGEM" ), makeSymbol( "REMOVAL-STRATEGY-DEFAULT-SELECT-BEST-STRATEGEM" ),
-      makeKeyword( "EXECUTE-STRATEGEM" ), makeSymbol( "REMOVAL-STRATEGY-EXECUTE-STRATEGEM" ), makeKeyword( "RECONSIDER-SET-ASIDES" ), makeSymbol( "REMOVAL-STRATEGY-RECONSIDER-SET-ASIDES" ), makeKeyword(
-          "THROW-AWAY-UNINTERESTING-SET-ASIDES" ), makeSymbol( "REMOVAL-STRATEGY-THROW-AWAY-UNINTERESTING-SET-ASIDES" ), makeKeyword( "QUIESCE" ), makeSymbol( "REMOVAL-STRATEGY-QUIESCE" ), makeKeyword( "NEW-TACTIC" ),
-      makeSymbol( "REMOVAL-STRATEGY-NOTE-NEW-TACTIC" ), makeKeyword( "RELEVANT-TACTICS-WRT-REMOVAL" ), makeSymbol( "REMOVAL-STRATEGY-CATEGORIZE-STRATEGEMS" ), makeKeyword( "SPLIT-TACTICS-POSSIBLE" ), makeSymbol(
-          "REMOVAL-STRATEGY-NOTE-SPLIT-TACTICS-STRATEGICALLY-POSSIBLE" ), makeKeyword( "PROBLEM-COULD-BE-PENDING" ), makeSymbol( "REMOVAL-STRATEGY-CONSIDER-THAT-PROBLEM-COULD-BE-STRATEGICALLY-PENDING" ), makeKeyword(
-              "PROBLEM-NOTHING-TO-DO?" ), makeSymbol( "REMOVAL-STRATEGY-PROBLEM-NOTHING-TO-DO?" ), makeKeyword( "THROW-AWAY-PROBLEM" ), makeSymbol( "REMOVAL-STRATEGY-CHOOSES-TO-THROW-AWAY-PROBLEM?" ), makeKeyword(
-                  "SET-ASIDE-PROBLEM" ), makeSymbol( "REMOVAL-STRATEGY-CHOOSES-TO-SET-ASIDE-PROBLEM?" ), makeKeyword( "THROW-AWAY-TACTIC" ), makeSymbol( "REMOVAL-STRATEGY-CHOOSES-TO-THROW-AWAY-TACTIC?" ), makeKeyword(
-                      "SET-ASIDE-TACTIC" ), makeSymbol( "REMOVAL-STRATEGY-CHOOSES-TO-SET-ASIDE-TACTIC?" ), makeKeyword( "NEW-ARGUMENT-LINK" ), makeSymbol( "IGNORE" ), makeKeyword( "MOTIVATE-STRATEGEM" ), makeSymbol(
-                          "REMOVAL-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM" ), makeKeyword( "LINK-HEAD-MOTIVATED?" ), makeSymbol( "REMOVAL-STRATEGY-LINK-HEAD-MOTIVATED?" ), makeKeyword(
-                              "RECONSIDER-SPLIT-SET-ASIDES" ), makeSymbol( "REMOVAL-STRATEGY-POSSIBLY-RECONSIDER-SPLIT-SET-ASIDES" )
-    } );
-    $sym2$REMOVAL_STRATEGY_INITIALIZE = makeSymbol( "REMOVAL-STRATEGY-INITIALIZE" );
-  }
+    public static final SubLSymbol REMOVAL_STRATEGY_INITIALIZE = makeSymbol("REMOVAL-STRATEGY-INITIALIZE");
+
+    public static SubLObject removal_strategy_p(final SubLObject v_object) {
+        return makeBoolean((NIL != inference_datastructures_strategy.strategy_p(v_object)) && ($REMOVAL == inference_datastructures_strategy.strategy_type(v_object)));
+    }
+
+    public static SubLObject removal_strategy_initialize(final SubLObject strategy) {
+        final SubLObject removal_index = stacks.create_stack();
+        final SubLObject data = removal_tactician_datastructures.new_removal_strategy_data(removal_index);
+        inference_datastructures_strategy.set_strategy_data(strategy, data);
+        return strategy;
+    }
+
+    public static SubLObject declare_removal_tactician_file() {
+        declareFunction(me, "removal_strategy_p", "REMOVAL-STRATEGY-P", 1, 0, false);
+        declareFunction(me, "removal_strategy_initialize", "REMOVAL-STRATEGY-INITIALIZE", 1, 0, false);
+        return NIL;
+    }
+
+    public static SubLObject init_removal_tactician_file() {
+        return NIL;
+    }
+
+    public static SubLObject setup_removal_tactician_file() {
+        inference_tactician.inference_strategy_type($REMOVAL, $list1);
+        note_funcall_helper_function(REMOVAL_STRATEGY_INITIALIZE);
+        return NIL;
+    }
+
+    @Override
+    public void declareFunctions() {
+        declare_removal_tactician_file();
+    }
+
+    @Override
+    public void initializeVariables() {
+        init_removal_tactician_file();
+    }
+
+    @Override
+    public void runTopLevelForms() {
+        setup_removal_tactician_file();
+    }
+
+    static {
+
+
+
+
+    }
 }
-/*
- * 
+
+/**
  * Total time: 16 ms
- * 
  */

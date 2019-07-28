@@ -2772,7 +2772,7 @@ public final class module0679 extends SubLTranslatedFile
         }
         
         public SubLStructDecl getStructDecl() {
-            return (SubLStructDecl)$cb_partition_save_native.structDecl;
+            return (SstructDecl;
         }
         
         public SubLObject getField2() {

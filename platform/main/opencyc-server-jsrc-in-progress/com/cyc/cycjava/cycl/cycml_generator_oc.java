@@ -3412,7 +3412,7 @@ public final class cycml_generator_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $sX55592_native.structDecl;
+      return $structDecl;
     }
 
     @Override

@@ -3738,7 +3738,7 @@ public final class module0034 extends SubLTranslatedFile
         }
         
         public SubLStructDecl getStructDecl() {
-            return (SubLStructDecl)$sX3030_native.structDecl;
+            return (SstructDecl;
         }
         
         public SubLObject getField2() {
@@ -3831,7 +3831,7 @@ public final class module0034 extends SubLTranslatedFile
         }
         
         public SubLStructDecl getStructDecl() {
-            return (SubLStructDecl)$sX3043_native.structDecl;
+            return (SstructDecl;
         }
         
         public SubLObject getField2() {

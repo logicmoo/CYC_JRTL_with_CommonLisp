@@ -953,7 +953,7 @@ public final class assertion_handles_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $sX12582_native.structDecl;
+      return $structDecl;
     }
 
     @Override

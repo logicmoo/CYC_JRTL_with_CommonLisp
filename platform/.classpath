@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry combineaccessrules="false" kind="src" path="/spoon"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="src" path="/roaster-jdt"/>
 	<classpathentry kind="src" path="main/cycjava-persistence-hacks"/>
-	<classpathentry excluding="bsh/" kind="src" path="main/logicmoo-main"/>
+	<classpathentry excluding="bsh/|org/logicmoo/system/spoon/gen/|org/logicmoo/translate/spoon/gen/|org/logicmoo/translate/spoon/spoon_test.java" kind="src" path="main/logicmoo-main"/>
 	<classpathentry excluding="com/cyc/cycjava/cycl/" kind="src" path="main/opencyc-server-jsrc-in-progress"/>
 	<classpathentry kind="src" path="main/objectweb-asm-src"/>
 	<classpathentry kind="src" path="main/armedbear-j-src"/>
@@ -12,9 +19,20 @@
 	<classpathentry excluding="com/cyc/tool/subl/jrtl/nativeCode/subLisp/UnitTest.java|com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLHashtable_broken.java" including="**/*.*|META-INF/|com/|org/" kind="src" path="src"/>
 	<classpathentry excluding="com/cyc/cycjava_1/cycl/" kind="src" path="main/platform-1.1"/>
 	<classpathentry excluding="test/" including="**/*" kind="src" path="main/beanshell"/>
-	<classpathentry kind="src" path="main/server-u"/>
-	<classpathentry kind="src" path="main/server-4q"/>
-	<classpathentry kind="src" path="main/server-1a"/>
+	<classpathentry excluding="com/cyc/tool/subl/jrtl/translatedCode_2/sublisp/|com/cyc/cycjava_3/cycl/" kind="src" path="main/server-4q"/>
+	<classpathentry kind="src" path="main/server-4u"/>
+	<classpathentry kind="src" path="main/server-4v"/>
+	<classpathentry kind="src" path="main/output"/>
+	<classpathentry kind="src" path="examples/google-app-engine/src"/>
+	<classpathentry kind="src" path="examples/gui"/>
+	<classpathentry kind="src" path="examples/java-exception"/>
+	<classpathentry kind="src" path="examples/java-interface"/>
+	<classpathentry kind="src" path="examples/java-to-lisp-1"/>
+	<classpathentry kind="src" path="examples/java-to-lisp-2"/>
+	<classpathentry kind="src" path="examples/jsr-223"/>
+	<classpathentry kind="src" path="examples/lisp-to-java"/>
+	<classpathentry kind="src" path="examples/misc"/>
+	<classpathentry kind="src" path="examples/pure-lisp-to-java"/>
 	<classpathentry exported="true" kind="lib" path="lib/jetty-continuation-8.0.4.v20111024.jar" sourcepath="C:/Users/ADMINI~1/AppData/Local/Temp/.org.sf.feeling.decompiler1559995346763/source/jetty-continuation-8.0.4.v20111024-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-2.1-glassfish-2.1.v20100127.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
@@ -293,18 +311,14 @@
 	<classpathentry exported="true" kind="lib" path="ext/owlim-big-3.1.a7.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/mpj.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/ikvm-api.jar"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
-		<attributes>
-			<attribute name="module" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="src" path=".apt_generated">
 		<attributes>
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="ansi-test" sourcepath="ansi-test"/>
+	<classpathentry exported="true" kind="lib" path="ansi-test" sourcepath="ansi-test"/>
 	<classpathentry exported="true" kind="lib" path="C:/pf/Java/jdk1.8.0_162/lib/tools.jar"/>
-	<classpathentry kind="lib" path="lib/spoon-core-7.5.0-SNAPSHOT-jar-with-dependencies.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/spoon-core-7.5.0-SNAPSHOT-jar-with-dependencies.jar"/>
+	<classpathentry exported="true" kind="src" path="/FlexibleRefactoring"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

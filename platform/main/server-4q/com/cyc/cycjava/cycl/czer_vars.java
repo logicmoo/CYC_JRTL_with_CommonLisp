@@ -1,779 +1,1221 @@
 package com.cyc.cycjava.cycl;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+
+import com.cyc.cycjava.cycl.control_vars;
+import com.cyc.cycjava.cycl.czer_vars;
+import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
+import java.util.function.Supplier;
 
-public final class czer_vars
-    extends
-      SubLTranslatedFile
-{
-  public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.czer_vars";
-  public static final String myFingerPrint = "66633f58aefd67cbbbeb5fbb15496653f8bc09240f797e2ea41a0ff598384b15";
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 387L)
-  public static SubLSymbol $required_arg_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 689L)
-  public static SubLSymbol $arg_positions$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 839L)
-  public static SubLSymbol $accumulating_semantic_violationsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 950L)
-  public static SubLSymbol $semantic_violations$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 1073L)
-  public static SubLSymbol $assertion_key$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 1202L)
-  public static SubLSymbol $nart_key$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 1317L)
-  public static SubLSymbol $rf_key$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 1469L)
-  public static SubLSymbol $implication_operators$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 1571L)
-  public static SubLSymbol $logical_operators$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 1970L)
-  public static SubLSymbol $skolem_function_functions$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 2263L)
-  public static SubLSymbol $arg_isa_binary_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 2382L)
-  public static SubLSymbol $arg_isa_ternary_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 2692L)
-  public static SubLSymbol $arg_not_isa_binary_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 2836L)
-  public static SubLSymbol $arg_not_isa_ternary_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 2902L)
-  public static SubLSymbol $arg_quoted_isa_binary_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 3082L)
-  public static SubLSymbol $arg_quoted_isa_ternary_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 3176L)
-  public static SubLSymbol $arg_genl_binary_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 3303L)
-  public static SubLSymbol $arg_genl_ternary_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 3381L)
-  public static SubLSymbol $arg_format_binary_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 3511L)
-  public static SubLSymbol $arg_format_ternary_preds$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 3576L)
-  public static SubLSymbol $meta_arg_type$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 3664L)
-  public static SubLSymbol $possibly_meta_arg_type$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 3761L)
-  public static SubLSymbol $variables_that_cannot_be_sequence_variables$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 3964L)
-  public static SubLSymbol $el_supports_dot_syntaxP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 4054L)
-  public static SubLSymbol $el_supports_variable_arity_skolemsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 4117L)
-  public static SubLSymbol $el_supports_contractionsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 4236L)
-  public static SubLSymbol $inside_quote$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 4329L)
-  public static SubLSymbol $fi_last_assertions_asserted$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 4382L)
-  public static SubLSymbol $new_canonicalizerP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 4713L)
-  public static SubLSymbol $within_canonicalizerP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 4850L)
-  public static SubLSymbol $form_of_clausal_form$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 4945L)
-  public static SubLSymbol $must_enforce_semanticsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 5037L)
-  public static SubLSymbol $el_trace_level$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 5131L)
-  public static SubLSymbol $canon_verboseP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 5295L)
-  public static SubLSymbol $varP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 5378L)
-  public static SubLSymbol $subordinate_fi_opsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 5429L)
-  public static SubLSymbol $cryP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 5499L)
-  public static SubLSymbol $minimal_skolem_arityP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 5709L)
-  public static SubLSymbol $skolemize_during_asksP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 5867L)
-  public static SubLSymbol $drop_all_existentialsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 6327L)
-  public static SubLSymbol $leave_skolem_constants_aloneP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 6849L)
-  public static SubLSymbol $forbid_quantified_sequence_variablesP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 7271L)
-  public static SubLSymbol $use_skolem_constantsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 7431L)
-  public static SubLSymbol $canonicalize_gaf_commutative_termsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 7544L)
-  public static SubLSymbol $canon_var_function$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 7867L)
-  public static SubLSymbol $canonical_variable_type$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 8011L)
-  public static SubLSymbol $standardize_variables_memory$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 8176L)
-  public static SubLSymbol $distributing_meta_knowledgeP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 8307L)
-  public static SubLSymbol $distribute_meta_over_common_elP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 8484L)
-  public static SubLSymbol $find_uncanonical_decontextualized_assertionsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 8793L)
-  public static SubLSymbol $canonicalize_el_template_vars_during_queriesP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 9478L)
-  public static SubLSymbol $robust_assertion_lookup$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 9945L)
-  public static SubLSymbol $robust_nart_lookup$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 10183L)
-  public static SubLSymbol $recanonicalizing_candidate_natP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 10324L)
-  public static SubLSymbol $el_var_blist$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 10477L)
-  public static SubLSymbol $gathering_quantified_fn_termsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 10600L)
-  public static SubLSymbol $expand_el_relationsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 10725L)
-  public static SubLSymbol $canonicalize_all_sentence_argsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 10897L)
-  public static SubLSymbol $canonicalize_tensed_literalsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11036L)
-  public static SubLSymbol $add_term_of_unit_litsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11088L)
-  public static SubLSymbol $turn_existentials_into_skolemsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11229L)
-  public static SubLSymbol $reify_skolemsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11273L)
-  public static SubLSymbol $create_narts_regardless_of_whether_within_assertP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11354L)
-  public static SubLSymbol $disable_create_narts_regardless_of_whether_within_assertP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11597L)
-  public static SubLSymbol $canonicalize_functionsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11650L)
-  public static SubLSymbol $canonicalize_termsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11699L)
-  public static SubLSymbol $canonicalize_literalsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11751L)
-  public static SubLSymbol $canonicalize_disjunction_as_enumerationP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11916L)
-  public static SubLSymbol $canonicalize_variablesP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 11969L)
-  public static SubLSymbol $implicitify_universalsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 12189L)
-  public static SubLSymbol $assume_free_vars_are_existentially_boundP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 12471L)
-  public static SubLSymbol $encapsulate_var_formulaP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 12608L)
-  public static SubLSymbol $encapsulate_intensional_formulaP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 12781L)
-  public static SubLSymbol $czer_quiescence_iteration_limit$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 12934L)
-  public static SubLSymbol $clause_el_var_names$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 12986L)
-  public static SubLSymbol $el_symbol_suffix_table$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 13087L)
-  public static SubLSymbol $within_negationP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 13195L)
-  public static SubLSymbol $hl_pred_order$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 13388L)
-  public static SubLSymbol $controlP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 13521L)
-  public static SubLSymbol $control_1$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 13654L)
-  public static SubLSymbol $control_2$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 13788L)
-  public static SubLSymbol $control_3$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 13921L)
-  public static SubLSymbol $control_4$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 14054L)
-  public static SubLSymbol $control_5$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 14187L)
-  public static SubLSymbol $control_6$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 14320L)
-  public static SubLSymbol $control_ecaP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 14456L)
-  public static SubLSymbol $czer_memoization_state$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 14576L)
-  public static SubLSymbol $use_czer_fort_typesP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 14667L)
-  public static SubLSymbol $use_czer_fort_types_globallyP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 14889L)
-  public static SubLSymbol $canonicalizer_directive_predicates$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 15239L)
-  public static SubLSymbol $assume_hlmt_is_canonicalP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 15410L)
-  public static SubLSymbol $ununiquify_el_varsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 15612L)
-  public static SubLSymbol $unremove_universalsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 15747L)
-  public static SubLSymbol $uncanonicalize_tensed_literalsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 15898L)
-  public static SubLSymbol $recanonicalizingP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 16056L)
-  public static SubLSymbol $recanonicalizing_candidate_assertion_stack$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 16161L)
-  public static SubLSymbol $noting_ill_formed_meta_argsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 16299L)
-  public static SubLSymbol $recan_ill_formed_meta_argsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 16541L)
-  public static SubLSymbol $simplify_sentenceP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 16635L)
-  public static SubLSymbol $simplify_literalP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 16682L)
-  public static SubLSymbol $simplify_implicationP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 16733L)
-  public static SubLSymbol $simplify_non_wff_literalP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 16841L)
-  public static SubLSymbol $try_to_simplify_non_wff_into_wffP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 17019L)
-  public static SubLSymbol $trying_to_simplify_non_wff_into_wffP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 17184L)
-  public static SubLSymbol $simplify_using_semanticsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 17317L)
-  public static SubLSymbol $simplify_redundanciesP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 17452L)
-  public static SubLSymbol $simplify_transitive_redundanciesP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 17613L)
-  public static SubLSymbol $simplify_contradictionsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 17804L)
-  public static SubLSymbol $simplify_sequence_vars_using_kb_arityP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 18089L)
-  public static SubLSymbol $sequence_variable_split_limit$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 18406L)
-  public static SubLSymbol $simplify_equality_literalsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 18740L)
-  public static SubLSymbol $simplify_true_sentence_awayP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 18964L)
-  public static SubLSymbol $skolem_axiom_table$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 19105L)
-  public static SubLSymbol $infer_skolem_result_isa_via_arg_constraintsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 19300L)
-  public static SubLSymbol $interpolate_singleton_arg_isaP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 19439L)
-  public static SubLSymbol $clothe_naked_skolemsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 19869L)
-  public static SubLSymbol $preds_of_computed_skolem_gafs$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 20231L)
-  public static SubLSymbol $preds_of_editable_skolem_gafs$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 20850L)
-  public static SubLSymbol $empty_skolems$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 20990L)
-  public static SubLSymbol $mal_skolems$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21114L)
-  public static SubLSymbol $express_as_rule_macroP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21218L)
-  public static SubLSymbol $express_as_genlsP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21292L)
-  public static SubLSymbol $express_as_arg_isaP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21343L)
-  public static SubLSymbol $express_as_arg_genlP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21474L)
-  public static SubLSymbol $express_as_genl_predicatesP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21533L)
-  public static SubLSymbol $express_as_genl_inverseP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21589L)
-  public static SubLSymbol $express_as_inter_arg_isaP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21646L)
-  public static SubLSymbol $express_as_disjoint_withP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21704L)
-  public static SubLSymbol $express_as_negation_predicatesP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21767L)
-  public static SubLSymbol $express_as_negation_inverseP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21827L)
-  public static SubLSymbol $express_as_reflexiveP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21881L)
-  public static SubLSymbol $express_as_symmetricP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21934L)
-  public static SubLSymbol $express_as_transitiveP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 21988L)
-  public static SubLSymbol $express_as_irreflexiveP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 22043L)
-  public static SubLSymbol $express_as_asymmetricP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 22097L)
-  public static SubLSymbol $express_as_relation_typeP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 22180L)
-  public static SubLSymbol $express_as_required_arg_predP$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 22241L)
-  public static SubLSymbol $tense_czer_mode$;
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 22325L)
-  private static SubLSymbol $valid_tense_czer_modes$;
-  private static final SubLList $list0;
-  private static final SubLList $list1;
-  private static final SubLSymbol $sym2$ASSERTION_FORMULA;
-  private static final SubLSymbol $sym3$NART_HL_FORMULA;
-  private static final SubLSymbol $sym4$RF_FORMULA;
-  private static final SubLList $list5;
-  private static final SubLList $list6;
-  private static final SubLList $list7;
-  private static final SubLList $list8;
-  private static final SubLList $list9;
-  private static final SubLList $list10;
-  private static final SubLList $list11;
-  private static final SubLList $list12;
-  private static final SubLList $list13;
-  private static final SubLList $list14;
-  private static final SubLList $list15;
-  private static final SubLList $list16;
-  private static final SubLList $list17;
-  private static final SubLObject $const18$CycLAssertion;
-  private static final SubLObject $const19$CycLIndexedTerm;
-  private static final SubLSymbol $sym20$_FI_LAST_ASSERTIONS_ASSERTED_;
-  private static final SubLSymbol $sym21$EL_VAR_;
-  private static final SubLSymbol $kw22$ASSERT_ONLY;
-  private static final SubLSymbol $kw23$DEFAULT;
-  private static final SubLSymbol $kw24$KB_VAR;
-  private static final SubLList $list25;
-  private static final SubLList $list26;
-  private static final SubLSymbol $sym27$_SKOLEM_AXIOM_TABLE_;
-  private static final SubLInteger $int28$2048;
-  private static final SubLList $list29;
-  private static final SubLList $list30;
-  private static final SubLList $list31;
-  private static final SubLList $list32;
-  private static final SubLSymbol $kw33$ASSERT;
-  private static final SubLSymbol $kw34$QUERY;
-  private static final SubLString $str35$Canonicalizer_tense_mode_not_set_;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.czer_vars.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 22399L)
-  public static SubLObject valid_tense_czer_mode_p(final SubLObject mode)
-  {
-    return list_utilities.member_eqP( mode, $valid_tense_czer_modes$.getGlobalValue() );
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 22501L)
-  public static SubLObject get_tense_czer_mode()
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( $tense_czer_mode$.getDynamicValue( thread ) != $kw23$DEFAULT )
-    {
-      return $tense_czer_mode$.getDynamicValue( thread );
+public final class czer_vars extends SubLTranslatedFile {
+    public static final SubLFile me = new czer_vars();
+
+    public static final String myName = "com.cyc.cycjava.cycl.czer_vars";
+
+    public static final String myFingerPrint = "66633f58aefd67cbbbeb5fbb15496653f8bc09240f797e2ea41a0ff598384b15";
+
+    // defparameter
+    public static final SubLSymbol $required_arg_preds$ = makeSymbol("*REQUIRED-ARG-PREDS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_positions$ = makeSymbol("*ARG-POSITIONS*");
+
+    // defparameter
+    public static final SubLSymbol $accumulating_semantic_violationsP$ = makeSymbol("*ACCUMULATING-SEMANTIC-VIOLATIONS?*");
+
+    // defparameter
+    // descriptions of how a relational expression is not semantically valid
+    public static final SubLSymbol $semantic_violations$ = makeSymbol("*SEMANTIC-VIOLATIONS*");
+
+    // defparameter
+    // which function to use when accessing the formula for an assertion
+    public static final SubLSymbol $assertion_key$ = makeSymbol("*ASSERTION-KEY*");
+
+    // defparameter
+    // which function to use when accessing the formula for a nart
+    public static final SubLSymbol $nart_key$ = makeSymbol("*NART-KEY*");
+
+    // defparameter
+    /**
+     * which function to use when accessing the formula for a reified formula (the
+     * genl of nart and assertion)
+     */
+    public static final SubLSymbol $rf_key$ = makeSymbol("*RF-KEY*");
+
+    // deflexical
+    public static final SubLSymbol $implication_operators$ = makeSymbol("*IMPLICATION-OPERATORS*");
+
+    // deflexical
+    public static final SubLSymbol $logical_operators$ = makeSymbol("*LOGICAL-OPERATORS*");
+
+    // deflexical
+    // cyc constants that denote functions whose ranges are skolem functions
+    public static final SubLSymbol $skolem_function_functions$ = makeSymbol("*SKOLEM-FUNCTION-FUNCTIONS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_isa_binary_preds$ = makeSymbol("*ARG-ISA-BINARY-PREDS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_isa_ternary_preds$ = makeSymbol("*ARG-ISA-TERNARY-PREDS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_not_isa_binary_preds$ = makeSymbol("*ARG-NOT-ISA-BINARY-PREDS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_not_isa_ternary_preds$ = makeSymbol("*ARG-NOT-ISA-TERNARY-PREDS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_quoted_isa_binary_preds$ = makeSymbol("*ARG-QUOTED-ISA-BINARY-PREDS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_quoted_isa_ternary_preds$ = makeSymbol("*ARG-QUOTED-ISA-TERNARY-PREDS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_genl_binary_preds$ = makeSymbol("*ARG-GENL-BINARY-PREDS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_genl_ternary_preds$ = makeSymbol("*ARG-GENL-TERNARY-PREDS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_format_binary_preds$ = makeSymbol("*ARG-FORMAT-BINARY-PREDS*");
+
+    // deflexical
+    public static final SubLSymbol $arg_format_ternary_preds$ = makeSymbol("*ARG-FORMAT-TERNARY-PREDS*");
+
+    // deflexical
+    // arg-type for meta predicates
+    public static final SubLSymbol $meta_arg_type$ = makeSymbol("*META-ARG-TYPE*");
+
+    // deflexical
+    // arg-type for meta predicates
+    public static final SubLSymbol $possibly_meta_arg_type$ = makeSymbol("*POSSIBLY-META-ARG-TYPE*");
+
+    // defparameter
+    /**
+     * a dynamic stack of variables that are currently not permitted to be used as
+     * sequence variables (e.g. because they're scoped)
+     */
+    public static final SubLSymbol $variables_that_cannot_be_sequence_variables$ = makeSymbol("*VARIABLES-THAT-CANNOT-BE-SEQUENCE-VARIABLES*");
+
+    // defparameter
+    // are sequence variables permitted?
+    public static final SubLSymbol $el_supports_dot_syntaxP$ = makeSymbol("*EL-SUPPORTS-DOT-SYNTAX?*");
+
+    // deflexical
+    public static final SubLSymbol $el_supports_variable_arity_skolemsP$ = makeSymbol("*EL-SUPPORTS-VARIABLE-ARITY-SKOLEMS?*");
+
+    // defparameter
+    // is support for contractions (inverse #$expansions) enabled?
+    public static final SubLSymbol $el_supports_contractionsP$ = makeSymbol("*EL-SUPPORTS-CONTRACTIONS?*");
+
+    // defvar
+    // Variable to keep track if we are inside a quote form
+    public static final SubLSymbol $inside_quote$ = makeSymbol("*INSIDE-QUOTE*");
+
+
+
+    // defparameter
+    // Whether to use the code for the new canonicalizer
+    public static final SubLSymbol $new_canonicalizerP$ = makeSymbol("*NEW-CANONICALIZER?*");
+
+    // defparameter
+    /**
+     * transient state variable; is t during the execution of canonicalizing
+     * functions
+     */
+    public static final SubLSymbol $within_canonicalizerP$ = makeSymbol("*WITHIN-CANONICALIZER?*");
+
+    // defparameter
+    // canonicalizer state variable [:cnf :dnf]
+    public static final SubLSymbol $form_of_clausal_form$ = makeSymbol("*FORM-OF-CLAUSAL-FORM*");
+
+    // defparameter
+    public static final SubLSymbol $must_enforce_semanticsP$ = makeSymbol("*MUST-ENFORCE-SEMANTICS?*");
+
+    // defparameter
+    // controls tracing level for canonicalizer [0..5]
+    public static final SubLSymbol $el_trace_level$ = makeSymbol("*EL-TRACE-LEVEL*");
+
+    // defparameter
+    /**
+     * controls whether the formula is printed after each step of canonicalization.
+     * only set to t for debugging purposes.
+     */
+    public static final SubLSymbol $canon_verboseP$ = makeSymbol("*CANON-VERBOSE?*");
+
+    // defparameter
+    // default predicate to identify variables
+    public static final SubLSymbol $varP$ = makeSymbol("*VAR?*");
+
+    // defparameter
+    public static final SubLSymbol $subordinate_fi_opsP$ = makeSymbol("*SUBORDINATE-FI-OPS?*");
+
+    // defparameter
+    // flag to break on error conditions
+    public static final SubLSymbol $cryP$ = makeSymbol("*CRY?*");
+
+    // defparameter
+    /**
+     * should the canonicalizer include only free vars referenced in existentially
+     * quantified formulas in argument lists of the resulting skolem functions?
+     */
+    public static final SubLSymbol $minimal_skolem_arityP$ = makeSymbol("*MINIMAL-SKOLEM-ARITY?*");
+
+    // defparameter
+    /**
+     * should the canonicalizer translate existentially quantified vars into skolem
+     * functions during asks?
+     */
+    public static final SubLSymbol $skolemize_during_asksP$ = makeSymbol("*SKOLEMIZE-DURING-ASKS?*");
+
+    // defparameter
+    /**
+     * should the canonicalizer, when canonicalizing existentials, simply drop them
+     * (like it does by default during asks)? This setting, if true, overrides the
+     * combination of *within-ask* and *skolemize-during-asks?*, but does not
+     * override the case of *turn-existentials-into-skolems?* being false, which
+     * will cause no existential handling at all to be done.
+     *
+     * @see drop-all-existentials?
+     * @see existentials-out
+     */
+    public static final SubLSymbol $drop_all_existentialsP$ = makeSymbol("*DROP-ALL-EXISTENTIALS?*");
+
+    // defparameter
+    /**
+     * should the canonicalizer, when canonicalizing existentials that are not in
+     * the scope of any other variable, simply drop them (like it does by default
+     * during asks)? This setting, if true, overrides the combination of
+     * within-ask* and *skolemize-during-asks?*, but does not override the case of
+     * turn-existentials-into-skolems?* being false, which will cause no
+     * existential handling at all to be done.
+     *
+     * @see leave-skolem-constants-alone?
+     * @see existentials-out
+     */
+    public static final SubLSymbol $leave_skolem_constants_aloneP$ = makeSymbol("*LEAVE-SKOLEM-CONSTANTS-ALONE?*");
+
+    // defparameter
+    /**
+     * Whether to enforce criterion Q2 in the Sequence Variable Specification,
+     * namely: Q2: Within asserts, sequence variables can only be universally
+     * quantified; using existentially quantified variables as sequence variables is
+     * not permitted. If T, Q2 is enforced. If NIL, Q2 is not enforced. If
+     * :assert-only, Q2 is enforced iff (within-assert?).
+     */
+    public static final SubLSymbol $forbid_quantified_sequence_variablesP$ = makeSymbol("*FORBID-QUANTIFIED-SEQUENCE-VARIABLES?*");
+
+    // defparameter
+    /**
+     * should the canonicalizer create and reference skolem constants instead of
+     * zero-arity skolem functions?
+     */
+    public static final SubLSymbol $use_skolem_constantsP$ = makeSymbol("*USE-SKOLEM-CONSTANTS?*");
+
+    // defparameter
+    // should commutative terms of gafs be sorted?
+    public static final SubLSymbol $canonicalize_gaf_commutative_termsP$ = makeSymbol("*CANONICALIZE-GAF-COMMUTATIVE-TERMS?*");
+
+    // defparameter
+    /**
+     * The function that the canonicalizer uses internally to check whether
+     * something is a variable. :default means that it will use the default
+     * function @xref cyc-var? (this is slightly more efficient than just making the
+     * default be #'cyc-var?)
+     *
+     * @see canon-var?
+     */
+    public static final SubLSymbol $canon_var_function$ = makeSymbol("*CANON-VAR-FUNCTION*");
+
+    // defparameter
+    /**
+     * determines the type of variables produced by the canonicalzer [:el-var
+     * :kb-var]
+     */
+    public static final SubLSymbol $canonical_variable_type$ = makeSymbol("*CANONICAL-VARIABLE-TYPE*");
+
+    // defparameter
+    /**
+     * stores the variable rename mappings formed while standardizing variables
+     * during canonicalization
+     */
+    public static final SubLSymbol $standardize_variables_memory$ = makeSymbol("*STANDARDIZE-VARIABLES-MEMORY*");
+
+    // defparameter
+    // is distributing meta-knowledge over multiple assertions permitted?
+    public static final SubLSymbol $distributing_meta_knowledgeP$ = makeSymbol("*DISTRIBUTING-META-KNOWLEDGE?*");
+
+    // defparameter
+    /**
+     * should meta-knowledge distribute over multiple assertions when those
+     * assertions all share a common el formula?
+     */
+    public static final SubLSymbol $distribute_meta_over_common_elP$ = makeSymbol("*DISTRIBUTE-META-OVER-COMMON-EL?*");
+
+    // defparameter
+    /**
+     * If a decontextualized assertion is in the wrong mt, should the canonicalizer,
+     * if asked to look up that assertion, find it? If T, it will find it. If NIL,
+     * it will treat it like any other uncanonical assertion and fail to find it.
+     */
+    public static final SubLSymbol $find_uncanonical_decontextualized_assertionsP$ = makeSymbol("*FIND-UNCANONICAL-DECONTEXTUALIZED-ASSERTIONS?*");
+
+    // defparameter
+    /**
+     * should EL variables in EL template args be canonicalized into HL variables
+     * during asks? If t, then queries like (expansion genls (implies (isa ?OBJ
+     * :ARG1) (isa ?OBJ :ARG2))) will not be interpreted as a boolean query, and
+     * will return ((?OBJ . ?OBJ)) instead of ((T . T)). If it is set to nil, then
+     * queries like (expansion genls ?WHAT) will be interpreted as a boolean query,
+     * and will return NIL instead of the expansion of genls.
+     */
+    public static final SubLSymbol $canonicalize_el_template_vars_during_queriesP$ = makeSymbol("*CANONICALIZE-EL-TEMPLATE-VARS-DURING-QUERIES?*");
+
+    // defparameter
+    /**
+     * Controls whether, upon failing to find an assertion, a more thorough (and
+     * more time-consuming) lookup is performed. You can set this to T or NIL if you
+     * want to control its behavior.
+     */
+    public static final SubLSymbol $robust_assertion_lookup$ = makeSymbol("*ROBUST-ASSERTION-LOOKUP*");
+
+    // defparameter
+    /**
+     * Controls whether, upon failing to find a nart, a more thorough (and more
+     * time-consuming) lookup is performed. You can set this to T or NIL if you want
+     * to control its behavior.
+     */
+    public static final SubLSymbol $robust_nart_lookup$ = makeSymbol("*ROBUST-NART-LOOKUP*");
+
+    // defparameter
+    // Dynamic variable set while recanonicalizing a nat for robust nart lookup.
+    public static final SubLSymbol $recanonicalizing_candidate_natP$ = makeSymbol("*RECANONICALIZING-CANDIDATE-NAT?*");
+
+    // defparameter
+    /**
+     * stores the variable rename mappings formed while standardizing variables
+     * during uncanonicalization
+     */
+    public static final SubLSymbol $el_var_blist$ = makeSymbol("*EL-VAR-BLIST*");
+
+    // defparameter
+    // control var used to collect non-ground reifiable fn terms
+    public static final SubLSymbol $gathering_quantified_fn_termsP$ = makeSymbol("*GATHERING-QUANTIFIED-FN-TERMS?*");
+
+    // defparameter
+    // should #$ELRelations be automatically expanded by the precanonicalizer?
+    public static final SubLSymbol $expand_el_relationsP$ = makeSymbol("*EXPAND-EL-RELATIONS?*");
+
+    // defparameter
+    /**
+     * should all sentence args (of literals or denotational functions) be
+     * canonicalized into their el version?
+     */
+    public static final SubLSymbol $canonicalize_all_sentence_argsP$ = makeSymbol("*CANONICALIZE-ALL-SENTENCE-ARGS?*");
+
+    // defparameter
+    /**
+     * should tensed literals be canonicalized into their time quantified version?
+     */
+    public static final SubLSymbol $canonicalize_tensed_literalsP$ = makeSymbol("*CANONICALIZE-TENSED-LITERALS?*");
+
+    // defparameter
+    public static final SubLSymbol $add_term_of_unit_litsP$ = makeSymbol("*ADD-TERM-OF-UNIT-LITS?*");
+
+    // defparameter
+    /**
+     * If you set this to NIL, the canonicalizer will be severely crippled. Beware!
+     */
+    public static final SubLSymbol $turn_existentials_into_skolemsP$ = makeSymbol("*TURN-EXISTENTIALS-INTO-SKOLEMS?*");
+
+    // defparameter
+    public static final SubLSymbol $reify_skolemsP$ = makeSymbol("*REIFY-SKOLEMS?*");
+
+    // defparameter
+    public static final SubLSymbol $create_narts_regardless_of_whether_within_assertP$ = makeSymbol("*CREATE-NARTS-REGARDLESS-OF-WHETHER-WITHIN-ASSERT?*");
+
+    // defparameter
+    public static final SubLSymbol $disable_create_narts_regardless_of_whether_within_assertP$ = makeSymbol("*DISABLE-CREATE-NARTS-REGARDLESS-OF-WHETHER-WITHIN-ASSERT?*");
+
+    // defparameter
+    public static final SubLSymbol $canonicalize_functionsP$ = makeSymbol("*CANONICALIZE-FUNCTIONS?*");
+
+    // defparameter
+    public static final SubLSymbol $canonicalize_termsP$ = makeSymbol("*CANONICALIZE-TERMS?*");
+
+    // defparameter
+    public static final SubLSymbol $canonicalize_literalsP$ = makeSymbol("*CANONICALIZE-LITERALS?*");
+
+    // defparameter
+    /**
+     * whether to canonicalize a disjunction over a common predicate as an
+     * #$elementOf expression
+     */
+    public static final SubLSymbol $canonicalize_disjunction_as_enumerationP$ = makeSymbol("*CANONICALIZE-DISJUNCTION-AS-ENUMERATION?*");
+
+    // defparameter
+    public static final SubLSymbol $canonicalize_variablesP$ = makeSymbol("*CANONICALIZE-VARIABLES?*");
+
+    // defparameter
+    /**
+     * whether to eliminate universals which could be removed and still maintain the
+     * logical equivalence of the sentence if they are viewed as implicitly
+     * encapsulating it.
+     */
+    public static final SubLSymbol $implicitify_universalsP$ = makeSymbol("*IMPLICITIFY-UNIVERSALS?*");
+
+    // defparameter
+    /**
+     * whether the clausifier will assume that free variables are existentially
+     * bound, as opposed to the default which is universally bound. This ought to be
+     * the mode in which the clausifier is run for queries.
+     */
+    public static final SubLSymbol $assume_free_vars_are_existentially_boundP$ = makeSymbol("*ASSUME-FREE-VARS-ARE-EXISTENTIALLY-BOUND?*");
+
+    // defparameter
+    /**
+     * translate variables appearing as logical operators into encapsulated
+     * literals?
+     */
+    public static final SubLSymbol $encapsulate_var_formulaP$ = makeSymbol("*ENCAPSULATE-VAR-FORMULA?*");
+
+    // defparameter
+    /**
+     * translate intensional (e.g., negated universally quantified) formulas into
+     * encapsulated negative literals?
+     */
+    public static final SubLSymbol $encapsulate_intensional_formulaP$ = makeSymbol("*ENCAPSULATE-INTENSIONAL-FORMULA?*");
+
+    // defparameter
+    /**
+     * If an expression fails to quiesce after 10 iterations, give up and deem it
+     * ill-formed.
+     */
+    public static final SubLSymbol $czer_quiescence_iteration_limit$ = makeSymbol("*CZER-QUIESCENCE-ITERATION-LIMIT*");
+
+    // defparameter
+    public static final SubLSymbol $clause_el_var_names$ = makeSymbol("*CLAUSE-EL-VAR-NAMES*");
+
+    // defparameter
+    // dynamic table of uniquifying el var suffixes
+    public static final SubLSymbol $el_symbol_suffix_table$ = makeSymbol("*EL-SYMBOL-SUFFIX-TABLE*");
+
+    // defparameter
+    // is canonicalization occuring within scope of a negation?
+    public static final SubLSymbol $within_negationP$ = makeSymbol("*WITHIN-NEGATION?*");
+
+    // deflexical
+    // preferred order of preds wrt canonicalization
+    public static final SubLSymbol $hl_pred_order$ = makeSymbol("*HL-PRED-ORDER*");
+
+    // defparameter
+    /**
+     * temp: used to control canonicalizer to include (= nil) or exclude (= t)
+     * experimental code
+     */
+    public static final SubLSymbol $controlP$ = makeSymbol("*CONTROL?*");
+
+    // defparameter
+    /**
+     * temp: used to control canonicalizer to include (= nil) or exclude (= t)
+     * experimental code
+     */
+    public static final SubLSymbol $control_1$ = makeSymbol("*CONTROL-1*");
+
+    // defparameter
+    /**
+     * temp: used to control canonicalizer to include (= nil) or exclude (= t)
+     * experimental code
+     */
+    public static final SubLSymbol $control_2$ = makeSymbol("*CONTROL-2*");
+
+    // defparameter
+    /**
+     * temp: used to control canonicalizer to include (= nil) or exclude (= t)
+     * experimental code
+     */
+    public static final SubLSymbol $control_3$ = makeSymbol("*CONTROL-3*");
+
+    // defparameter
+    /**
+     * temp: used to control canonicalizer to include (= nil) or exclude (= t)
+     * experimental code
+     */
+    public static final SubLSymbol $control_4$ = makeSymbol("*CONTROL-4*");
+
+    // defparameter
+    /**
+     * temp: used to control canonicalizer to include (= nil) or exclude (= t)
+     * experimental code
+     */
+    public static final SubLSymbol $control_5$ = makeSymbol("*CONTROL-5*");
+
+    // defparameter
+    /**
+     * temp: used to control canonicalizer to include (= nil) or exclude (= t)
+     * experimental code
+     */
+    public static final SubLSymbol $control_6$ = makeSymbol("*CONTROL-6*");
+
+    // defparameter
+    /**
+     * temp: used to control canonicalizer to include (= nil) or exclude (= t)
+     * experimental code
+     */
+    public static final SubLSymbol $control_ecaP$ = makeSymbol("*CONTROL-ECA?*");
+
+    // defparameter
+    // dynamically bound to a memoization state for the canonicalizer
+    public static final SubLSymbol $czer_memoization_state$ = makeSymbol("*CZER-MEMOIZATION-STATE*");
+
+    // defparameter
+    // whether to use czer-fort-types at all.
+    public static final SubLSymbol $use_czer_fort_typesP$ = makeSymbol("*USE-CZER-FORT-TYPES?*");
+
+    // defparameter
+    /**
+     * whether to always use czer-fort types. If NIL, they will only be used within
+     * the canonicalizer. If *use-czer-fort-types?* is NIL, this variable doesn't
+     * matter.
+     */
+    public static final SubLSymbol $use_czer_fort_types_globallyP$ = makeSymbol("*USE-CZER-FORT-TYPES-GLOBALLY?*");
+
+    // deflexical
+    /**
+     * The set of predicates which specify #$CanonicalizerDirectives. Not to be
+     * confused with the set of all instances of #$CanonicalizerDirectivePredicate,
+     * which is much broader.
+     */
+    public static final SubLSymbol $canonicalizer_directive_predicates$ = makeSymbol("*CANONICALIZER-DIRECTIVE-PREDICATES*");
+
+    // defparameter
+    public static final SubLSymbol $assume_hlmt_is_canonicalP$ = makeSymbol("*ASSUME-HLMT-IS-CANONICAL?*");
+
+    // defparameter
+    /**
+     * Whether the uncanonicalizer should remove uniquifying numerical suffixes on
+     * EL variables.
+     */
+    public static final SubLSymbol $ununiquify_el_varsP$ = makeSymbol("*UNUNIQUIFY-EL-VARS?*");
+
+    // defparameter
+    /**
+     * Whether the uncanonicalizer should insert #$forAlls around unquantified
+     * variables.
+     */
+    public static final SubLSymbol $unremove_universalsP$ = makeSymbol("*UNREMOVE-UNIVERSALS?*");
+
+    // defparameter
+    /**
+     * Whether the uncanonicalizer should rephrase sentences in terms of #$was,
+     * #$willBe, etc.
+     */
+    public static final SubLSymbol $uncanonicalize_tensed_literalsP$ = makeSymbol("*UNCANONICALIZE-TENSED-LITERALS?*");
+
+    // defparameter
+    // is an existing assertion being recanonicalized?
+    public static final SubLSymbol $recanonicalizingP$ = makeSymbol("*RECANONICALIZING?*");
+
+    // defparameter
+    // used for recursion detection
+    public static final SubLSymbol $recanonicalizing_candidate_assertion_stack$ = makeSymbol("*RECANONICALIZING-CANDIDATE-ASSERTION-STACK*");
+
+    // defparameter
+    /**
+     * whether el-meta should set the value of @xref *recan-ill-formed-meta-args?*
+     */
+    public static final SubLSymbol $noting_ill_formed_meta_argsP$ = makeSymbol("*NOTING-ILL-FORMED-META-ARGS?*");
+
+    // defparameter
+    /**
+     * bound by el-meta when called from the recanonicalizer, so that the
+     * recanonicalizer can correctly analyze problems with finding meta assertions
+     * (which may be due to uncanonicality).
+     */
+    public static final SubLSymbol $recan_ill_formed_meta_argsP$ = makeSymbol("*RECAN-ILL-FORMED-META-ARGS?*");
+
+    // defparameter
+    public static final SubLSymbol $simplify_sentenceP$ = makeSymbol("*SIMPLIFY-SENTENCE?*");
+
+    // defparameter
+    public static final SubLSymbol $simplify_literalP$ = makeSymbol("*SIMPLIFY-LITERAL?*");
+
+    // defparameter
+    public static final SubLSymbol $simplify_implicationP$ = makeSymbol("*SIMPLIFY-IMPLICATION?*");
+
+    // defparameter
+    // If t, non-wff literals will be reduced to #$False.
+    public static final SubLSymbol $simplify_non_wff_literalP$ = makeSymbol("*SIMPLIFY-NON-WFF-LITERAL?*");
+
+    // defparameter
+    /**
+     * If t, non-wffs will be simplified to see if they become wff. This usually
+     * only happens with sequence variables.
+     */
+    public static final SubLSymbol $try_to_simplify_non_wff_into_wffP$ = makeSymbol("*TRY-TO-SIMPLIFY-NON-WFF-INTO-WFF?*");
+
+    // defparameter
+    /**
+     * transient state variable, t iff we're in the middle of trying to simplify a
+     * non-wff into a wff
+     */
+    public static final SubLSymbol $trying_to_simplify_non_wff_into_wffP$ = makeSymbol("*TRYING-TO-SIMPLIFY-NON-WFF-INTO-WFF?*");
+
+    // defparameter
+    /**
+     * If nil, simplify-cycl-sentence will only perform syntactic simplifications.
+     */
+    public static final SubLSymbol $simplify_using_semanticsP$ = makeSymbol("*SIMPLIFY-USING-SEMANTICS?*");
+
+    // defparameter
+    /**
+     * If t, simplify-cycl-sentence will look for redundant literals and remove
+     * them.
+     */
+    public static final SubLSymbol $simplify_redundanciesP$ = makeSymbol("*SIMPLIFY-REDUNDANCIES?*");
+
+    // defparameter
+    /**
+     * If t, simplify-transitive-redundancies will look for transitive redundancies
+     * and remove them.
+     */
+    public static final SubLSymbol $simplify_transitive_redundanciesP$ = makeSymbol("*SIMPLIFY-TRANSITIVE-REDUNDANCIES?*");
+
+    // defparameter
+    public static final SubLSymbol $simplify_contradictionsP$ = makeSymbol("*SIMPLIFY-CONTRADICTIONS?*");
+
+    // defparameter
+    /**
+     * If t, simplify-sequence-vars will use arity information from the KB to
+     * eliminate sequence variables or convert them to term variables when possible.
+     * (It will always use the arity of logical operators to simplify.)
+     */
+    public static final SubLSymbol $simplify_sequence_vars_using_kb_arityP$ = makeSymbol("*SIMPLIFY-SEQUENCE-VARS-USING-KB-ARITY?*");
+
+    // defparameter
+    /**
+     * The maximum number of term variables that a sequence variable can be split
+     * into if we're using the arity information to simplify. If 0 or 1, no
+     * splitting will be performed, except that EL relations will always be split,
+     * no matter what the split limit is.
+     */
+    public static final SubLSymbol $sequence_variable_split_limit$ = makeSymbol("*SEQUENCE-VARIABLE-SPLIT-LIMIT*");
+
+    // defparameter
+    public static final SubLSymbol $simplify_equality_literalsP$ = makeSymbol("*SIMPLIFY-EQUALITY-LITERALS?*");
+
+    // defparameter
+    /**
+     * If T, the simplifier will be more zealous in simplifying #$trueSentence
+     * literals away. WARNING: This may cause inference problems and has not been
+     * fully tested.
+     */
+    public static final SubLSymbol $simplify_true_sentence_awayP$ = makeSymbol("*SIMPLIFY-TRUE-SENTENCE-AWAY?*");
+
+
+
+    // defparameter
+    /**
+     * in the absence of explicit #$isa pos-lits, use applicable arg-isa constraints
+     * to infer the #$resultIsa of a skolem?
+     */
+    public static final SubLSymbol $infer_skolem_result_isa_via_arg_constraintsP$ = makeSymbol("*INFER-SKOLEM-RESULT-ISA-VIA-ARG-CONSTRAINTS?*");
+
+    // defparameter
+    // should skolem arg-isa constraints be interpolated into a singleton set?
+    public static final SubLSymbol $interpolate_singleton_arg_isaP$ = makeSymbol("*INTERPOLATE-SINGLETON-ARG-ISA?*");
+
+    // defparameter
+    /**
+     * should newly-created skolems have #$termDependsOn assertions asserted about
+     * them. If NIL, we assume that the caller will assert the definitional
+     * assertions of the newly-created skolems. If T, the czer will assert
+     * #$termDependsOn assertions in lieu of having actual definitional assertions.
+     * This is for use in testing code that calls canonicalize-assert directly.
+     */
+    public static final SubLSymbol $clothe_naked_skolemsP$ = makeSymbol("*CLOTHE-NAKED-SKOLEMS?*");
+
+    // defparameter
+    /**
+     * predicates for gafs that reference skolem functions that may be computed and
+     * asserted by the canonicalizer and may be manually edited
+     */
+    public static final SubLSymbol $preds_of_computed_skolem_gafs$ = makeSymbol("*PREDS-OF-COMPUTED-SKOLEM-GAFS*");
+
+    // deflexical
+    /**
+     * predicates for gafs that reference skolem functions that may be computed and
+     * asserted by the canonicalizer, or the interface time-stamper, or may be
+     * manually edited
+     */
+    public static final SubLSymbol $preds_of_editable_skolem_gafs$ = makeSymbol("*PREDS-OF-EDITABLE-SKOLEM-GAFS*");
+
+    // defparameter
+    /**
+     * skolems having no defining assertions encountered while reinitializing
+     * skolem-axiom-table*
+     */
+    public static final SubLSymbol $empty_skolems$ = makeSymbol("*EMPTY-SKOLEMS*");
+
+    // defparameter
+    /**
+     * skolems diagnosed as having problems while reinitializing
+     * skolem-axiom-table*
+     */
+    public static final SubLSymbol $mal_skolems$ = makeSymbol("*MAL-SKOLEMS*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_rule_macroP$ = makeSymbol("*EXPRESS-AS-RULE-MACRO?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_genlsP$ = makeSymbol("*EXPRESS-AS-GENLS?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_arg_isaP$ = makeSymbol("*EXPRESS-AS-ARG-ISA?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_arg_genlP$ = makeSymbol("*EXPRESS-AS-ARG-GENL?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_genl_predicatesP$ = makeSymbol("*EXPRESS-AS-GENL-PREDICATES?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_genl_inverseP$ = makeSymbol("*EXPRESS-AS-GENL-INVERSE?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_inter_arg_isaP$ = makeSymbol("*EXPRESS-AS-INTER-ARG-ISA?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_disjoint_withP$ = makeSymbol("*EXPRESS-AS-DISJOINT-WITH?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_negation_predicatesP$ = makeSymbol("*EXPRESS-AS-NEGATION-PREDICATES?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_negation_inverseP$ = makeSymbol("*EXPRESS-AS-NEGATION-INVERSE?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_reflexiveP$ = makeSymbol("*EXPRESS-AS-REFLEXIVE?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_symmetricP$ = makeSymbol("*EXPRESS-AS-SYMMETRIC?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_transitiveP$ = makeSymbol("*EXPRESS-AS-TRANSITIVE?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_irreflexiveP$ = makeSymbol("*EXPRESS-AS-IRREFLEXIVE?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_asymmetricP$ = makeSymbol("*EXPRESS-AS-ASYMMETRIC?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_relation_typeP$ = makeSymbol("*EXPRESS-AS-RELATION-TYPE?*");
+
+    // defparameter
+    public static final SubLSymbol $express_as_required_arg_predP$ = makeSymbol("*EXPRESS-AS-REQUIRED-ARG-PRED?*");
+
+    // defparameter
+    public static final SubLSymbol $tense_czer_mode$ = makeSymbol("*TENSE-CZER-MODE*");
+
+    // deflexical
+    private static final SubLSymbol $valid_tense_czer_modes$ = makeSymbol("*VALID-TENSE-CZER-MODES*");
+
+    // Internal Constants
+    public static final SubLList $list0 = list(reader_make_constant_shell(makeString("requiredArg1Pred")), reader_make_constant_shell(makeString("requiredArg2Pred")));
+
+    public static final SubLList $list1 = list(ONE_INTEGER, TWO_INTEGER, THREE_INTEGER, FOUR_INTEGER, FIVE_INTEGER);
+
+
+
+    public static final SubLSymbol NART_HL_FORMULA = makeSymbol("NART-HL-FORMULA");
+
+    public static final SubLSymbol RF_FORMULA = makeSymbol("RF-FORMULA");
+
+    public static final SubLList $list5 = list(reader_make_constant_shell(makeString("implies")));
+
+    public static final SubLList $list6 = list(new SubLObject[]{ reader_make_constant_shell(makeString("not")), reader_make_constant_shell(makeString("or")), reader_make_constant_shell(makeString("xor")), reader_make_constant_shell(makeString("and")), reader_make_constant_shell(makeString("equiv")), reader_make_constant_shell(makeString("implies")), reader_make_constant_shell(makeString("exceptFor")), reader_make_constant_shell(makeString("exceptWhen")), reader_make_constant_shell(makeString("forAll")), reader_make_constant_shell(makeString("thereExists")), reader_make_constant_shell(makeString("thereExistExactly")), reader_make_constant_shell(makeString("thereExistAtLeast")), reader_make_constant_shell(makeString("thereExistAtMost")) });
+
+    public static final SubLList $list7 = list(reader_make_constant_shell(makeString("SkolemFunctionFn")), reader_make_constant_shell(makeString("SkolemFuncNFn")));
+
+    public static final SubLList $list8 = list(reader_make_constant_shell(makeString("arg1Isa")), reader_make_constant_shell(makeString("arg2Isa")), reader_make_constant_shell(makeString("arg3Isa")), reader_make_constant_shell(makeString("arg4Isa")), reader_make_constant_shell(makeString("arg5Isa")), reader_make_constant_shell(makeString("arg6Isa")), reader_make_constant_shell(makeString("argsIsa")));
+
+    public static final SubLList $list9 = list(reader_make_constant_shell(makeString("argIsa")), reader_make_constant_shell(makeString("argAndRestIsa")));
+
+    public static final SubLList $list10 = list(reader_make_constant_shell(makeString("arg1NotIsa")), reader_make_constant_shell(makeString("arg2NotIsa")), reader_make_constant_shell(makeString("arg3NotIsa")), reader_make_constant_shell(makeString("arg4NotIsa")), reader_make_constant_shell(makeString("arg5NotIsa")), reader_make_constant_shell(makeString("arg6NotIsa")), reader_make_constant_shell(makeString("argsNotIsa")));
+
+    public static final SubLList $list11 = list(reader_make_constant_shell(makeString("argNotIsa")));
+
+    public static final SubLList $list12 = list(reader_make_constant_shell(makeString("arg1QuotedIsa")), reader_make_constant_shell(makeString("arg2QuotedIsa")), reader_make_constant_shell(makeString("arg3QuotedIsa")), reader_make_constant_shell(makeString("arg4QuotedIsa")), reader_make_constant_shell(makeString("arg5QuotedIsa")), reader_make_constant_shell(makeString("arg6QuotedIsa")), reader_make_constant_shell(makeString("argsQuotedIsa")));
+
+    public static final SubLList $list13 = list(reader_make_constant_shell(makeString("argQuotedIsa")), reader_make_constant_shell(makeString("argAndRestQuotedIsa")));
+
+    public static final SubLList $list14 = list(reader_make_constant_shell(makeString("arg1Genl")), reader_make_constant_shell(makeString("arg2Genl")), reader_make_constant_shell(makeString("argsGenl")), reader_make_constant_shell(makeString("arg3Genl")), reader_make_constant_shell(makeString("arg4Genl")), reader_make_constant_shell(makeString("arg5Genl")), reader_make_constant_shell(makeString("arg6Genl")));
+
+    public static final SubLList $list15 = list(reader_make_constant_shell(makeString("argGenl")), reader_make_constant_shell(makeString("argAndRestGenl")));
+
+    private static final SubLList $list16 = list(reader_make_constant_shell(makeString("arg1Format")), reader_make_constant_shell(makeString("arg2Format")), reader_make_constant_shell(makeString("arg3Format")), reader_make_constant_shell(makeString("arg4Format")), reader_make_constant_shell(makeString("arg5Format")), reader_make_constant_shell(makeString("arg6Format")));
+
+    private static final SubLList $list17 = list(reader_make_constant_shell(makeString("argFormat")));
+
+    private static final SubLObject $$CycLAssertion = reader_make_constant_shell(makeString("CycLAssertion"));
+
+    private static final SubLObject $$CycLIndexedTerm = reader_make_constant_shell(makeString("CycLIndexedTerm"));
+
+    public static final SubLSymbol $fi_last_assertions_asserted$ = makeSymbol("*FI-LAST-ASSERTIONS-ASSERTED*");
+
+    private static final SubLSymbol $sym21$EL_VAR_ = makeSymbol("EL-VAR?");
+
+
+
+
+
+
+
+    private static final SubLList $list25 = list(reader_make_constant_shell(makeString("isa")), reader_make_constant_shell(makeString("genls")));
+
+    public static final SubLList $list26 = list(reader_make_constant_shell(makeString("canonicalizerDirectiveForArg")), reader_make_constant_shell(makeString("canonicalizerDirectiveForAllArgs")), reader_make_constant_shell(makeString("canonicalizerDirectiveForArgAndRest")));
+
+    public static final SubLSymbol $skolem_axiom_table$ = makeSymbol("*SKOLEM-AXIOM-TABLE*");
+
+    private static final SubLInteger $int$2048 = makeInteger(2048);
+
+    public static final SubLList $list29 = list(new SubLObject[]{ reader_make_constant_shell(makeString("isa")), reader_make_constant_shell(makeString("arity")), reader_make_constant_shell(makeString("arityMin")), reader_make_constant_shell(makeString("arityMax")), reader_make_constant_shell(makeString("resultIsa")), reader_make_constant_shell(makeString("resultGenl")), reader_make_constant_shell(makeString("resultIsaArg")), reader_make_constant_shell(makeString("resultGenlArg")), reader_make_constant_shell(makeString("arg1Isa")), reader_make_constant_shell(makeString("arg2Isa")), reader_make_constant_shell(makeString("arg3Isa")), reader_make_constant_shell(makeString("arg4Isa")), reader_make_constant_shell(makeString("arg5Isa")), reader_make_constant_shell(makeString("arg6Isa")) });
+
+    private static final SubLList $list30 = list(new SubLObject[]{ reader_make_constant_shell(makeString("isa")), reader_make_constant_shell(makeString("arity")), reader_make_constant_shell(makeString("arityMin")), reader_make_constant_shell(makeString("arityMax")), reader_make_constant_shell(makeString("resultIsa")), reader_make_constant_shell(makeString("resultGenl")), reader_make_constant_shell(makeString("resultIsaArg")), reader_make_constant_shell(makeString("resultGenlArg")), reader_make_constant_shell(makeString("resultQuotedIsa")), reader_make_constant_shell(makeString("evaluationResultQuotedIsa")) });
+
+    private static final SubLList $list31 = list(reader_make_constant_shell(makeString("myCreator")), reader_make_constant_shell(makeString("myCreationTime")), reader_make_constant_shell(makeString("myCreationSecond")), reader_make_constant_shell(makeString("comment")), reader_make_constant_shell(makeString("sharedNotes")), reader_make_constant_shell(makeString("skolemizeForward")));
+
+    private static final SubLList $list32 = list(makeKeyword("DEFAULT"), makeKeyword("QUERY"), makeKeyword("ASSERT"));
+
+
+
+
+
+    private static final SubLString $str35$Canonicalizer_tense_mode_not_set_ = makeString("Canonicalizer tense mode not set.");
+
+    public static SubLObject valid_tense_czer_mode_p(final SubLObject mode) {
+        return list_utilities.member_eqP(mode, $valid_tense_czer_modes$.getGlobalValue());
     }
-    if( NIL != control_vars.$within_assert$.getDynamicValue( thread ) )
-    {
-      return $kw33$ASSERT;
+
+    public static SubLObject get_tense_czer_mode() {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if ($tense_czer_mode$.getDynamicValue(thread) != $DEFAULT) {
+            return $tense_czer_mode$.getDynamicValue(thread);
+        }
+        if (NIL != $within_assert$.getDynamicValue(thread)) {
+            return $ASSERT;
+        }
+        if (NIL != $within_ask$.getDynamicValue(thread)) {
+            return $QUERY;
+        }
+        Errors.warn($str35$Canonicalizer_tense_mode_not_set_);
+        return $DEFAULT;
     }
-    if( NIL != control_vars.$within_ask$.getDynamicValue( thread ) )
-    {
-      return $kw34$QUERY;
+
+    public static SubLObject within_assert_tense_czer_modeP() {
+        return eq(get_tense_czer_mode(), $ASSERT);
     }
-    Errors.warn( $str35$Canonicalizer_tense_mode_not_set_ );
-    return $kw23$DEFAULT;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 22758L)
-  public static SubLObject within_assert_tense_czer_modeP()
-  {
-    return Equality.eq( get_tense_czer_mode(), $kw33$ASSERT );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/czer-vars.lisp", position = 22855L)
-  public static SubLObject within_query_tense_czer_modeP()
-  {
-    return Equality.eq( get_tense_czer_mode(), $kw34$QUERY );
-  }
-
-  public static SubLObject declare_czer_vars_file()
-  {
-    SubLFiles.declareFunction( me, "valid_tense_czer_mode_p", "VALID-TENSE-CZER-MODE-P", 1, 0, false );
-    SubLFiles.declareFunction( me, "get_tense_czer_mode", "GET-TENSE-CZER-MODE", 0, 0, false );
-    SubLFiles.declareFunction( me, "within_assert_tense_czer_modeP", "WITHIN-ASSERT-TENSE-CZER-MODE?", 0, 0, false );
-    SubLFiles.declareFunction( me, "within_query_tense_czer_modeP", "WITHIN-QUERY-TENSE-CZER-MODE?", 0, 0, false );
-    return NIL;
-  }
-
-  public static SubLObject init_czer_vars_file()
-  {
-    $required_arg_preds$ = SubLFiles.defparameter( "*REQUIRED-ARG-PREDS*", $list0 );
-    $arg_positions$ = SubLFiles.deflexical( "*ARG-POSITIONS*", $list1 );
-    $accumulating_semantic_violationsP$ = SubLFiles.defparameter( "*ACCUMULATING-SEMANTIC-VIOLATIONS?*", NIL );
-    $semantic_violations$ = SubLFiles.defparameter( "*SEMANTIC-VIOLATIONS*", NIL );
-    $assertion_key$ = SubLFiles.defparameter( "*ASSERTION-KEY*", $sym2$ASSERTION_FORMULA );
-    $nart_key$ = SubLFiles.defparameter( "*NART-KEY*", $sym3$NART_HL_FORMULA );
-    $rf_key$ = SubLFiles.defparameter( "*RF-KEY*", $sym4$RF_FORMULA );
-    $implication_operators$ = SubLFiles.deflexical( "*IMPLICATION-OPERATORS*", $list5 );
-    $logical_operators$ = SubLFiles.deflexical( "*LOGICAL-OPERATORS*", $list6 );
-    $skolem_function_functions$ = SubLFiles.deflexical( "*SKOLEM-FUNCTION-FUNCTIONS*", $list7 );
-    $arg_isa_binary_preds$ = SubLFiles.deflexical( "*ARG-ISA-BINARY-PREDS*", $list8 );
-    $arg_isa_ternary_preds$ = SubLFiles.deflexical( "*ARG-ISA-TERNARY-PREDS*", $list9 );
-    $arg_not_isa_binary_preds$ = SubLFiles.deflexical( "*ARG-NOT-ISA-BINARY-PREDS*", $list10 );
-    $arg_not_isa_ternary_preds$ = SubLFiles.deflexical( "*ARG-NOT-ISA-TERNARY-PREDS*", $list11 );
-    $arg_quoted_isa_binary_preds$ = SubLFiles.deflexical( "*ARG-QUOTED-ISA-BINARY-PREDS*", $list12 );
-    $arg_quoted_isa_ternary_preds$ = SubLFiles.deflexical( "*ARG-QUOTED-ISA-TERNARY-PREDS*", $list13 );
-    $arg_genl_binary_preds$ = SubLFiles.deflexical( "*ARG-GENL-BINARY-PREDS*", $list14 );
-    $arg_genl_ternary_preds$ = SubLFiles.deflexical( "*ARG-GENL-TERNARY-PREDS*", $list15 );
-    $arg_format_binary_preds$ = SubLFiles.deflexical( "*ARG-FORMAT-BINARY-PREDS*", $list16 );
-    $arg_format_ternary_preds$ = SubLFiles.deflexical( "*ARG-FORMAT-TERNARY-PREDS*", $list17 );
-    $meta_arg_type$ = SubLFiles.deflexical( "*META-ARG-TYPE*", $const18$CycLAssertion );
-    $possibly_meta_arg_type$ = SubLFiles.deflexical( "*POSSIBLY-META-ARG-TYPE*", $const19$CycLIndexedTerm );
-    $variables_that_cannot_be_sequence_variables$ = SubLFiles.defparameter( "*VARIABLES-THAT-CANNOT-BE-SEQUENCE-VARIABLES*", NIL );
-    $el_supports_dot_syntaxP$ = SubLFiles.defparameter( "*EL-SUPPORTS-DOT-SYNTAX?*", T );
-    $el_supports_variable_arity_skolemsP$ = SubLFiles.deflexical( "*EL-SUPPORTS-VARIABLE-ARITY-SKOLEMS?*", T );
-    $el_supports_contractionsP$ = SubLFiles.defparameter( "*EL-SUPPORTS-CONTRACTIONS?*", NIL );
-    $inside_quote$ = SubLFiles.defvar( "*INSIDE-QUOTE*", NIL );
-    $fi_last_assertions_asserted$ = SubLFiles.defparameter( "*FI-LAST-ASSERTIONS-ASSERTED*", NIL );
-    $new_canonicalizerP$ = SubLFiles.defparameter( "*NEW-CANONICALIZER?*", NIL );
-    $within_canonicalizerP$ = SubLFiles.defparameter( "*WITHIN-CANONICALIZER?*", NIL );
-    $form_of_clausal_form$ = SubLFiles.defparameter( "*FORM-OF-CLAUSAL-FORM*", NIL );
-    $must_enforce_semanticsP$ = SubLFiles.defparameter( "*MUST-ENFORCE-SEMANTICS?*", NIL );
-    $el_trace_level$ = SubLFiles.defparameter( "*EL-TRACE-LEVEL*", ZERO_INTEGER );
-    $canon_verboseP$ = SubLFiles.defparameter( "*CANON-VERBOSE?*", NIL );
-    $varP$ = SubLFiles.defparameter( "*VAR?*", $sym21$EL_VAR_ );
-    $subordinate_fi_opsP$ = SubLFiles.defparameter( "*SUBORDINATE-FI-OPS?*", NIL );
-    $cryP$ = SubLFiles.defparameter( "*CRY?*", T );
-    $minimal_skolem_arityP$ = SubLFiles.defparameter( "*MINIMAL-SKOLEM-ARITY?*", NIL );
-    $skolemize_during_asksP$ = SubLFiles.defparameter( "*SKOLEMIZE-DURING-ASKS?*", NIL );
-    $drop_all_existentialsP$ = SubLFiles.defparameter( "*DROP-ALL-EXISTENTIALS?*", NIL );
-    $leave_skolem_constants_aloneP$ = SubLFiles.defparameter( "*LEAVE-SKOLEM-CONSTANTS-ALONE?*", NIL );
-    $forbid_quantified_sequence_variablesP$ = SubLFiles.defparameter( "*FORBID-QUANTIFIED-SEQUENCE-VARIABLES?*", $kw22$ASSERT_ONLY );
-    $use_skolem_constantsP$ = SubLFiles.defparameter( "*USE-SKOLEM-CONSTANTS?*", NIL );
-    $canonicalize_gaf_commutative_termsP$ = SubLFiles.defparameter( "*CANONICALIZE-GAF-COMMUTATIVE-TERMS?*", T );
-    $canon_var_function$ = SubLFiles.defparameter( "*CANON-VAR-FUNCTION*", $kw23$DEFAULT );
-    $canonical_variable_type$ = SubLFiles.defparameter( "*CANONICAL-VARIABLE-TYPE*", $kw24$KB_VAR );
-    $standardize_variables_memory$ = SubLFiles.defparameter( "*STANDARDIZE-VARIABLES-MEMORY*", NIL );
-    $distributing_meta_knowledgeP$ = SubLFiles.defparameter( "*DISTRIBUTING-META-KNOWLEDGE?*", NIL );
-    $distribute_meta_over_common_elP$ = SubLFiles.defparameter( "*DISTRIBUTE-META-OVER-COMMON-EL?*", T );
-    $find_uncanonical_decontextualized_assertionsP$ = SubLFiles.defparameter( "*FIND-UNCANONICAL-DECONTEXTUALIZED-ASSERTIONS?*", T );
-    $canonicalize_el_template_vars_during_queriesP$ = SubLFiles.defparameter( "*CANONICALIZE-EL-TEMPLATE-VARS-DURING-QUERIES?*", T );
-    $robust_assertion_lookup$ = SubLFiles.defparameter( "*ROBUST-ASSERTION-LOOKUP*", NIL );
-    $robust_nart_lookup$ = SubLFiles.defparameter( "*ROBUST-NART-LOOKUP*", $kw23$DEFAULT );
-    $recanonicalizing_candidate_natP$ = SubLFiles.defparameter( "*RECANONICALIZING-CANDIDATE-NAT?*", NIL );
-    $el_var_blist$ = SubLFiles.defparameter( "*EL-VAR-BLIST*", NIL );
-    $gathering_quantified_fn_termsP$ = SubLFiles.defparameter( "*GATHERING-QUANTIFIED-FN-TERMS?*", NIL );
-    $expand_el_relationsP$ = SubLFiles.defparameter( "*EXPAND-EL-RELATIONS?*", T );
-    $canonicalize_all_sentence_argsP$ = SubLFiles.defparameter( "*CANONICALIZE-ALL-SENTENCE-ARGS?*", NIL );
-    $canonicalize_tensed_literalsP$ = SubLFiles.defparameter( "*CANONICALIZE-TENSED-LITERALS?*", T );
-    $add_term_of_unit_litsP$ = SubLFiles.defparameter( "*ADD-TERM-OF-UNIT-LITS?*", T );
-    $turn_existentials_into_skolemsP$ = SubLFiles.defparameter( "*TURN-EXISTENTIALS-INTO-SKOLEMS?*", T );
-    $reify_skolemsP$ = SubLFiles.defparameter( "*REIFY-SKOLEMS?*", T );
-    $create_narts_regardless_of_whether_within_assertP$ = SubLFiles.defparameter( "*CREATE-NARTS-REGARDLESS-OF-WHETHER-WITHIN-ASSERT?*", NIL );
-    $disable_create_narts_regardless_of_whether_within_assertP$ = SubLFiles.defparameter( "*DISABLE-CREATE-NARTS-REGARDLESS-OF-WHETHER-WITHIN-ASSERT?*", NIL );
-    $canonicalize_functionsP$ = SubLFiles.defparameter( "*CANONICALIZE-FUNCTIONS?*", T );
-    $canonicalize_termsP$ = SubLFiles.defparameter( "*CANONICALIZE-TERMS?*", T );
-    $canonicalize_literalsP$ = SubLFiles.defparameter( "*CANONICALIZE-LITERALS?*", T );
-    $canonicalize_disjunction_as_enumerationP$ = SubLFiles.defparameter( "*CANONICALIZE-DISJUNCTION-AS-ENUMERATION?*", NIL );
-    $canonicalize_variablesP$ = SubLFiles.defparameter( "*CANONICALIZE-VARIABLES?*", T );
-    $implicitify_universalsP$ = SubLFiles.defparameter( "*IMPLICITIFY-UNIVERSALS?*", T );
-    $assume_free_vars_are_existentially_boundP$ = SubLFiles.defparameter( "*ASSUME-FREE-VARS-ARE-EXISTENTIALLY-BOUND?*", NIL );
-    $encapsulate_var_formulaP$ = SubLFiles.defparameter( "*ENCAPSULATE-VAR-FORMULA?*", T );
-    $encapsulate_intensional_formulaP$ = SubLFiles.defparameter( "*ENCAPSULATE-INTENSIONAL-FORMULA?*", T );
-    $czer_quiescence_iteration_limit$ = SubLFiles.defparameter( "*CZER-QUIESCENCE-ITERATION-LIMIT*", TEN_INTEGER );
-    $clause_el_var_names$ = SubLFiles.defparameter( "*CLAUSE-EL-VAR-NAMES*", NIL );
-    $el_symbol_suffix_table$ = SubLFiles.defparameter( "*EL-SYMBOL-SUFFIX-TABLE*", NIL );
-    $within_negationP$ = SubLFiles.defparameter( "*WITHIN-NEGATION?*", NIL );
-    $hl_pred_order$ = SubLFiles.deflexical( "*HL-PRED-ORDER*", $list25 );
-    $controlP$ = SubLFiles.defparameter( "*CONTROL?*", NIL );
-    $control_1$ = SubLFiles.defparameter( "*CONTROL-1*", NIL );
-    $control_2$ = SubLFiles.defparameter( "*CONTROL-2*", NIL );
-    $control_3$ = SubLFiles.defparameter( "*CONTROL-3*", NIL );
-    $control_4$ = SubLFiles.defparameter( "*CONTROL-4*", NIL );
-    $control_5$ = SubLFiles.defparameter( "*CONTROL-5*", NIL );
-    $control_6$ = SubLFiles.defparameter( "*CONTROL-6*", NIL );
-    $control_ecaP$ = SubLFiles.defparameter( "*CONTROL-ECA?*", NIL );
-    $czer_memoization_state$ = SubLFiles.defparameter( "*CZER-MEMOIZATION-STATE*", NIL );
-    $use_czer_fort_typesP$ = SubLFiles.defparameter( "*USE-CZER-FORT-TYPES?*", T );
-    $use_czer_fort_types_globallyP$ = SubLFiles.defparameter( "*USE-CZER-FORT-TYPES-GLOBALLY?*", T );
-    $canonicalizer_directive_predicates$ = SubLFiles.deflexical( "*CANONICALIZER-DIRECTIVE-PREDICATES*", $list26 );
-    $assume_hlmt_is_canonicalP$ = SubLFiles.defparameter( "*ASSUME-HLMT-IS-CANONICAL?*", NIL );
-    $ununiquify_el_varsP$ = SubLFiles.defparameter( "*UNUNIQUIFY-EL-VARS?*", NIL );
-    $unremove_universalsP$ = SubLFiles.defparameter( "*UNREMOVE-UNIVERSALS?*", T );
-    $uncanonicalize_tensed_literalsP$ = SubLFiles.defparameter( "*UNCANONICALIZE-TENSED-LITERALS?*", T );
-    $recanonicalizingP$ = SubLFiles.defparameter( "*RECANONICALIZING?*", NIL );
-    $recanonicalizing_candidate_assertion_stack$ = SubLFiles.defparameter( "*RECANONICALIZING-CANDIDATE-ASSERTION-STACK*", NIL );
-    $noting_ill_formed_meta_argsP$ = SubLFiles.defparameter( "*NOTING-ILL-FORMED-META-ARGS?*", NIL );
-    $recan_ill_formed_meta_argsP$ = SubLFiles.defparameter( "*RECAN-ILL-FORMED-META-ARGS?*", NIL );
-    $simplify_sentenceP$ = SubLFiles.defparameter( "*SIMPLIFY-SENTENCE?*", T );
-    $simplify_literalP$ = SubLFiles.defparameter( "*SIMPLIFY-LITERAL?*", T );
-    $simplify_implicationP$ = SubLFiles.defparameter( "*SIMPLIFY-IMPLICATION?*", T );
-    $simplify_non_wff_literalP$ = SubLFiles.defparameter( "*SIMPLIFY-NON-WFF-LITERAL?*", T );
-    $try_to_simplify_non_wff_into_wffP$ = SubLFiles.defparameter( "*TRY-TO-SIMPLIFY-NON-WFF-INTO-WFF?*", T );
-    $trying_to_simplify_non_wff_into_wffP$ = SubLFiles.defparameter( "*TRYING-TO-SIMPLIFY-NON-WFF-INTO-WFF?*", NIL );
-    $simplify_using_semanticsP$ = SubLFiles.defparameter( "*SIMPLIFY-USING-SEMANTICS?*", T );
-    $simplify_redundanciesP$ = SubLFiles.defparameter( "*SIMPLIFY-REDUNDANCIES?*", NIL );
-    $simplify_transitive_redundanciesP$ = SubLFiles.defparameter( "*SIMPLIFY-TRANSITIVE-REDUNDANCIES?*", NIL );
-    $simplify_contradictionsP$ = SubLFiles.defparameter( "*SIMPLIFY-CONTRADICTIONS?*", NIL );
-    $simplify_sequence_vars_using_kb_arityP$ = SubLFiles.defparameter( "*SIMPLIFY-SEQUENCE-VARS-USING-KB-ARITY?*", T );
-    $sequence_variable_split_limit$ = SubLFiles.defparameter( "*SEQUENCE-VARIABLE-SPLIT-LIMIT*", FIVE_INTEGER );
-    $simplify_equality_literalsP$ = SubLFiles.defparameter( "*SIMPLIFY-EQUALITY-LITERALS?*", NIL );
-    $simplify_true_sentence_awayP$ = SubLFiles.defparameter( "*SIMPLIFY-TRUE-SENTENCE-AWAY?*", NIL );
-    $skolem_axiom_table$ = SubLFiles.deflexical( "*SKOLEM-AXIOM-TABLE*", maybeDefault( $sym27$_SKOLEM_AXIOM_TABLE_, $skolem_axiom_table$, () -> ( Hashtables.make_hash_table( $int28$2048, Symbols.symbol_function( EQUAL ),
-        UNPROVIDED ) ) ) );
-    $infer_skolem_result_isa_via_arg_constraintsP$ = SubLFiles.defparameter( "*INFER-SKOLEM-RESULT-ISA-VIA-ARG-CONSTRAINTS?*", T );
-    $interpolate_singleton_arg_isaP$ = SubLFiles.defparameter( "*INTERPOLATE-SINGLETON-ARG-ISA?*", NIL );
-    $clothe_naked_skolemsP$ = SubLFiles.defparameter( "*CLOTHE-NAKED-SKOLEMS?*", NIL );
-    $preds_of_computed_skolem_gafs$ = SubLFiles.defparameter( "*PREDS-OF-COMPUTED-SKOLEM-GAFS*", $list29 );
-    $preds_of_editable_skolem_gafs$ = SubLFiles.deflexical( "*PREDS-OF-EDITABLE-SKOLEM-GAFS*", ConsesLow.append( new SubLObject[] { $list30, $arg_isa_binary_preds$.getGlobalValue(), $arg_isa_ternary_preds$
-        .getGlobalValue(), $arg_quoted_isa_binary_preds$.getGlobalValue(), $arg_quoted_isa_ternary_preds$.getGlobalValue(), $list31
-    } ) );
-    $empty_skolems$ = SubLFiles.defparameter( "*EMPTY-SKOLEMS*", NIL );
-    $mal_skolems$ = SubLFiles.defparameter( "*MAL-SKOLEMS*", NIL );
-    $express_as_rule_macroP$ = SubLFiles.defparameter( "*EXPRESS-AS-RULE-MACRO?*", NIL );
-    $express_as_genlsP$ = SubLFiles.defparameter( "*EXPRESS-AS-GENLS?*", NIL );
-    $express_as_arg_isaP$ = SubLFiles.defparameter( "*EXPRESS-AS-ARG-ISA?*", NIL );
-    $express_as_arg_genlP$ = SubLFiles.defparameter( "*EXPRESS-AS-ARG-GENL?*", NIL );
-    $express_as_genl_predicatesP$ = SubLFiles.defparameter( "*EXPRESS-AS-GENL-PREDICATES?*", NIL );
-    $express_as_genl_inverseP$ = SubLFiles.defparameter( "*EXPRESS-AS-GENL-INVERSE?*", NIL );
-    $express_as_inter_arg_isaP$ = SubLFiles.defparameter( "*EXPRESS-AS-INTER-ARG-ISA?*", NIL );
-    $express_as_disjoint_withP$ = SubLFiles.defparameter( "*EXPRESS-AS-DISJOINT-WITH?*", NIL );
-    $express_as_negation_predicatesP$ = SubLFiles.defparameter( "*EXPRESS-AS-NEGATION-PREDICATES?*", NIL );
-    $express_as_negation_inverseP$ = SubLFiles.defparameter( "*EXPRESS-AS-NEGATION-INVERSE?*", NIL );
-    $express_as_reflexiveP$ = SubLFiles.defparameter( "*EXPRESS-AS-REFLEXIVE?*", NIL );
-    $express_as_symmetricP$ = SubLFiles.defparameter( "*EXPRESS-AS-SYMMETRIC?*", NIL );
-    $express_as_transitiveP$ = SubLFiles.defparameter( "*EXPRESS-AS-TRANSITIVE?*", NIL );
-    $express_as_irreflexiveP$ = SubLFiles.defparameter( "*EXPRESS-AS-IRREFLEXIVE?*", NIL );
-    $express_as_asymmetricP$ = SubLFiles.defparameter( "*EXPRESS-AS-ASYMMETRIC?*", NIL );
-    $express_as_relation_typeP$ = SubLFiles.defparameter( "*EXPRESS-AS-RELATION-TYPE?*", NIL );
-    $express_as_required_arg_predP$ = SubLFiles.defparameter( "*EXPRESS-AS-REQUIRED-ARG-PRED?*", NIL );
-    $tense_czer_mode$ = SubLFiles.defparameter( "*TENSE-CZER-MODE*", $kw23$DEFAULT );
-    $valid_tense_czer_modes$ = SubLFiles.deflexical( "*VALID-TENSE-CZER-MODES*", $list32 );
-    return NIL;
-  }
-
-  public static SubLObject setup_czer_vars_file()
-  {
-    utilities_macros.register_html_state_variable( $sym20$_FI_LAST_ASSERTIONS_ASSERTED_ );
-    final SubLObject item_var = $sym20$_FI_LAST_ASSERTIONS_ASSERTED_;
-    if( NIL == conses_high.member( item_var, utilities_macros.$fi_state_variables$.getGlobalValue(), Symbols.symbol_function( EQL ), Symbols.symbol_function( IDENTITY ) ) )
-    {
-      utilities_macros.$fi_state_variables$.setGlobalValue( ConsesLow.cons( item_var, utilities_macros.$fi_state_variables$.getGlobalValue() ) );
+    public static SubLObject within_query_tense_czer_modeP() {
+        return eq(get_tense_czer_mode(), $QUERY);
     }
-    subl_macro_promotions.declare_defglobal( $sym27$_SKOLEM_AXIOM_TABLE_ );
-    return NIL;
-  }
 
-  @Override
-  public void declareFunctions()
-  {
-    declare_czer_vars_file();
-  }
+    public static SubLObject declare_czer_vars_file() {
+        declareFunction(me, "valid_tense_czer_mode_p", "VALID-TENSE-CZER-MODE-P", 1, 0, false);
+        declareFunction(me, "get_tense_czer_mode", "GET-TENSE-CZER-MODE", 0, 0, false);
+        declareFunction(me, "within_assert_tense_czer_modeP", "WITHIN-ASSERT-TENSE-CZER-MODE?", 0, 0, false);
+        declareFunction(me, "within_query_tense_czer_modeP", "WITHIN-QUERY-TENSE-CZER-MODE?", 0, 0, false);
+        return NIL;
+    }
 
-  @Override
-  public void initializeVariables()
-  {
-    init_czer_vars_file();
-  }
+    public static SubLObject init_czer_vars_file() {
+        defparameter("*REQUIRED-ARG-PREDS*", $list0);
+        deflexical("*ARG-POSITIONS*", $list1);
+        defparameter("*ACCUMULATING-SEMANTIC-VIOLATIONS?*", NIL);
+        defparameter("*SEMANTIC-VIOLATIONS*", NIL);
+        defparameter("*ASSERTION-KEY*", ASSERTION_FORMULA);
+        defparameter("*NART-KEY*", NART_HL_FORMULA);
+        defparameter("*RF-KEY*", RF_FORMULA);
+        deflexical("*IMPLICATION-OPERATORS*", $list5);
+        deflexical("*LOGICAL-OPERATORS*", $list6);
+        deflexical("*SKOLEM-FUNCTION-FUNCTIONS*", $list7);
+        deflexical("*ARG-ISA-BINARY-PREDS*", $list8);
+        deflexical("*ARG-ISA-TERNARY-PREDS*", $list9);
+        deflexical("*ARG-NOT-ISA-BINARY-PREDS*", $list10);
+        deflexical("*ARG-NOT-ISA-TERNARY-PREDS*", $list11);
+        deflexical("*ARG-QUOTED-ISA-BINARY-PREDS*", $list12);
+        deflexical("*ARG-QUOTED-ISA-TERNARY-PREDS*", $list13);
+        deflexical("*ARG-GENL-BINARY-PREDS*", $list14);
+        deflexical("*ARG-GENL-TERNARY-PREDS*", $list15);
+        deflexical("*ARG-FORMAT-BINARY-PREDS*", $list16);
+        deflexical("*ARG-FORMAT-TERNARY-PREDS*", $list17);
+        deflexical("*META-ARG-TYPE*", $$CycLAssertion);
+        deflexical("*POSSIBLY-META-ARG-TYPE*", $$CycLIndexedTerm);
+        defparameter("*VARIABLES-THAT-CANNOT-BE-SEQUENCE-VARIABLES*", NIL);
+        defparameter("*EL-SUPPORTS-DOT-SYNTAX?*", T);
+        deflexical("*EL-SUPPORTS-VARIABLE-ARITY-SKOLEMS?*", T);
+        defparameter("*EL-SUPPORTS-CONTRACTIONS?*", NIL);
+        defvar("*INSIDE-QUOTE*", NIL);
+        defparameter("*FI-LAST-ASSERTIONS-ASSERTED*", NIL);
+        defparameter("*NEW-CANONICALIZER?*", NIL);
+        defparameter("*WITHIN-CANONICALIZER?*", NIL);
+        defparameter("*FORM-OF-CLAUSAL-FORM*", NIL);
+        defparameter("*MUST-ENFORCE-SEMANTICS?*", NIL);
+        defparameter("*EL-TRACE-LEVEL*", ZERO_INTEGER);
+        defparameter("*CANON-VERBOSE?*", NIL);
+        defparameter("*VAR?*", $sym21$EL_VAR_);
+        defparameter("*SUBORDINATE-FI-OPS?*", NIL);
+        defparameter("*CRY?*", T);
+        defparameter("*MINIMAL-SKOLEM-ARITY?*", NIL);
+        defparameter("*SKOLEMIZE-DURING-ASKS?*", NIL);
+        defparameter("*DROP-ALL-EXISTENTIALS?*", NIL);
+        defparameter("*LEAVE-SKOLEM-CONSTANTS-ALONE?*", NIL);
+        defparameter("*FORBID-QUANTIFIED-SEQUENCE-VARIABLES?*", $ASSERT_ONLY);
+        defparameter("*USE-SKOLEM-CONSTANTS?*", NIL);
+        defparameter("*CANONICALIZE-GAF-COMMUTATIVE-TERMS?*", T);
+        defparameter("*CANON-VAR-FUNCTION*", $DEFAULT);
+        defparameter("*CANONICAL-VARIABLE-TYPE*", $KB_VAR);
+        defparameter("*STANDARDIZE-VARIABLES-MEMORY*", NIL);
+        defparameter("*DISTRIBUTING-META-KNOWLEDGE?*", NIL);
+        defparameter("*DISTRIBUTE-META-OVER-COMMON-EL?*", T);
+        defparameter("*FIND-UNCANONICAL-DECONTEXTUALIZED-ASSERTIONS?*", T);
+        defparameter("*CANONICALIZE-EL-TEMPLATE-VARS-DURING-QUERIES?*", T);
+        defparameter("*ROBUST-ASSERTION-LOOKUP*", NIL);
+        defparameter("*ROBUST-NART-LOOKUP*", $DEFAULT);
+        defparameter("*RECANONICALIZING-CANDIDATE-NAT?*", NIL);
+        defparameter("*EL-VAR-BLIST*", NIL);
+        defparameter("*GATHERING-QUANTIFIED-FN-TERMS?*", NIL);
+        defparameter("*EXPAND-EL-RELATIONS?*", T);
+        defparameter("*CANONICALIZE-ALL-SENTENCE-ARGS?*", NIL);
+        defparameter("*CANONICALIZE-TENSED-LITERALS?*", T);
+        defparameter("*ADD-TERM-OF-UNIT-LITS?*", T);
+        defparameter("*TURN-EXISTENTIALS-INTO-SKOLEMS?*", T);
+        defparameter("*REIFY-SKOLEMS?*", T);
+        defparameter("*CREATE-NARTS-REGARDLESS-OF-WHETHER-WITHIN-ASSERT?*", NIL);
+        defparameter("*DISABLE-CREATE-NARTS-REGARDLESS-OF-WHETHER-WITHIN-ASSERT?*", NIL);
+        defparameter("*CANONICALIZE-FUNCTIONS?*", T);
+        defparameter("*CANONICALIZE-TERMS?*", T);
+        defparameter("*CANONICALIZE-LITERALS?*", T);
+        defparameter("*CANONICALIZE-DISJUNCTION-AS-ENUMERATION?*", NIL);
+        defparameter("*CANONICALIZE-VARIABLES?*", T);
+        defparameter("*IMPLICITIFY-UNIVERSALS?*", T);
+        defparameter("*ASSUME-FREE-VARS-ARE-EXISTENTIALLY-BOUND?*", NIL);
+        defparameter("*ENCAPSULATE-VAR-FORMULA?*", T);
+        defparameter("*ENCAPSULATE-INTENSIONAL-FORMULA?*", T);
+        defparameter("*CZER-QUIESCENCE-ITERATION-LIMIT*", TEN_INTEGER);
+        defparameter("*CLAUSE-EL-VAR-NAMES*", NIL);
+        defparameter("*EL-SYMBOL-SUFFIX-TABLE*", NIL);
+        defparameter("*WITHIN-NEGATION?*", NIL);
+        deflexical("*HL-PRED-ORDER*", $list25);
+        defparameter("*CONTROL?*", NIL);
+        defparameter("*CONTROL-1*", NIL);
+        defparameter("*CONTROL-2*", NIL);
+        defparameter("*CONTROL-3*", NIL);
+        defparameter("*CONTROL-4*", NIL);
+        defparameter("*CONTROL-5*", NIL);
+        defparameter("*CONTROL-6*", NIL);
+        defparameter("*CONTROL-ECA?*", NIL);
+        defparameter("*CZER-MEMOIZATION-STATE*", NIL);
+        defparameter("*USE-CZER-FORT-TYPES?*", T);
+        defparameter("*USE-CZER-FORT-TYPES-GLOBALLY?*", T);
+        deflexical("*CANONICALIZER-DIRECTIVE-PREDICATES*", $list26);
+        defparameter("*ASSUME-HLMT-IS-CANONICAL?*", NIL);
+        defparameter("*UNUNIQUIFY-EL-VARS?*", NIL);
+        defparameter("*UNREMOVE-UNIVERSALS?*", T);
+        defparameter("*UNCANONICALIZE-TENSED-LITERALS?*", T);
+        defparameter("*RECANONICALIZING?*", NIL);
+        defparameter("*RECANONICALIZING-CANDIDATE-ASSERTION-STACK*", NIL);
+        defparameter("*NOTING-ILL-FORMED-META-ARGS?*", NIL);
+        defparameter("*RECAN-ILL-FORMED-META-ARGS?*", NIL);
+        defparameter("*SIMPLIFY-SENTENCE?*", T);
+        defparameter("*SIMPLIFY-LITERAL?*", T);
+        defparameter("*SIMPLIFY-IMPLICATION?*", T);
+        defparameter("*SIMPLIFY-NON-WFF-LITERAL?*", T);
+        defparameter("*TRY-TO-SIMPLIFY-NON-WFF-INTO-WFF?*", T);
+        defparameter("*TRYING-TO-SIMPLIFY-NON-WFF-INTO-WFF?*", NIL);
+        defparameter("*SIMPLIFY-USING-SEMANTICS?*", T);
+        defparameter("*SIMPLIFY-REDUNDANCIES?*", NIL);
+        defparameter("*SIMPLIFY-TRANSITIVE-REDUNDANCIES?*", NIL);
+        defparameter("*SIMPLIFY-CONTRADICTIONS?*", NIL);
+        defparameter("*SIMPLIFY-SEQUENCE-VARS-USING-KB-ARITY?*", T);
+        defparameter("*SEQUENCE-VARIABLE-SPLIT-LIMIT*", FIVE_INTEGER);
+        defparameter("*SIMPLIFY-EQUALITY-LITERALS?*", NIL);
+        defparameter("*SIMPLIFY-TRUE-SENTENCE-AWAY?*", NIL);
+        deflexical("*SKOLEM-AXIOM-TABLE*", SubLTrampolineFile.maybeDefault($skolem_axiom_table$, $skolem_axiom_table$, () -> make_hash_table($int$2048, symbol_function(EQUAL), UNPROVIDED)));
+        defparameter("*INFER-SKOLEM-RESULT-ISA-VIA-ARG-CONSTRAINTS?*", T);
+        defparameter("*INTERPOLATE-SINGLETON-ARG-ISA?*", NIL);
+        defparameter("*CLOTHE-NAKED-SKOLEMS?*", NIL);
+        defparameter("*PREDS-OF-COMPUTED-SKOLEM-GAFS*", $list29);
+        deflexical("*PREDS-OF-EDITABLE-SKOLEM-GAFS*", append(new SubLObject[]{ $list30, $arg_isa_binary_preds$.getGlobalValue(), $arg_isa_ternary_preds$.getGlobalValue(), $arg_quoted_isa_binary_preds$.getGlobalValue(), $arg_quoted_isa_ternary_preds$.getGlobalValue(), $list31 }));
+        defparameter("*EMPTY-SKOLEMS*", NIL);
+        defparameter("*MAL-SKOLEMS*", NIL);
+        defparameter("*EXPRESS-AS-RULE-MACRO?*", NIL);
+        defparameter("*EXPRESS-AS-GENLS?*", NIL);
+        defparameter("*EXPRESS-AS-ARG-ISA?*", NIL);
+        defparameter("*EXPRESS-AS-ARG-GENL?*", NIL);
+        defparameter("*EXPRESS-AS-GENL-PREDICATES?*", NIL);
+        defparameter("*EXPRESS-AS-GENL-INVERSE?*", NIL);
+        defparameter("*EXPRESS-AS-INTER-ARG-ISA?*", NIL);
+        defparameter("*EXPRESS-AS-DISJOINT-WITH?*", NIL);
+        defparameter("*EXPRESS-AS-NEGATION-PREDICATES?*", NIL);
+        defparameter("*EXPRESS-AS-NEGATION-INVERSE?*", NIL);
+        defparameter("*EXPRESS-AS-REFLEXIVE?*", NIL);
+        defparameter("*EXPRESS-AS-SYMMETRIC?*", NIL);
+        defparameter("*EXPRESS-AS-TRANSITIVE?*", NIL);
+        defparameter("*EXPRESS-AS-IRREFLEXIVE?*", NIL);
+        defparameter("*EXPRESS-AS-ASYMMETRIC?*", NIL);
+        defparameter("*EXPRESS-AS-RELATION-TYPE?*", NIL);
+        defparameter("*EXPRESS-AS-REQUIRED-ARG-PRED?*", NIL);
+        defparameter("*TENSE-CZER-MODE*", $DEFAULT);
+        deflexical("*VALID-TENSE-CZER-MODES*", $list32);
+        return NIL;
+    }
 
-  @Override
-  public void runTopLevelForms()
-  {
-    setup_czer_vars_file();
-  }
-  static
-  {
-    me = new czer_vars();
-    $required_arg_preds$ = null;
-    $arg_positions$ = null;
-    $accumulating_semantic_violationsP$ = null;
-    $semantic_violations$ = null;
-    $assertion_key$ = null;
-    $nart_key$ = null;
-    $rf_key$ = null;
-    $implication_operators$ = null;
-    $logical_operators$ = null;
-    $skolem_function_functions$ = null;
-    $arg_isa_binary_preds$ = null;
-    $arg_isa_ternary_preds$ = null;
-    $arg_not_isa_binary_preds$ = null;
-    $arg_not_isa_ternary_preds$ = null;
-    $arg_quoted_isa_binary_preds$ = null;
-    $arg_quoted_isa_ternary_preds$ = null;
-    $arg_genl_binary_preds$ = null;
-    $arg_genl_ternary_preds$ = null;
-    $arg_format_binary_preds$ = null;
-    $arg_format_ternary_preds$ = null;
-    $meta_arg_type$ = null;
-    $possibly_meta_arg_type$ = null;
-    $variables_that_cannot_be_sequence_variables$ = null;
-    $el_supports_dot_syntaxP$ = null;
-    $el_supports_variable_arity_skolemsP$ = null;
-    $el_supports_contractionsP$ = null;
-    $inside_quote$ = null;
-    $fi_last_assertions_asserted$ = null;
-    $new_canonicalizerP$ = null;
-    $within_canonicalizerP$ = null;
-    $form_of_clausal_form$ = null;
-    $must_enforce_semanticsP$ = null;
-    $el_trace_level$ = null;
-    $canon_verboseP$ = null;
-    $varP$ = null;
-    $subordinate_fi_opsP$ = null;
-    $cryP$ = null;
-    $minimal_skolem_arityP$ = null;
-    $skolemize_during_asksP$ = null;
-    $drop_all_existentialsP$ = null;
-    $leave_skolem_constants_aloneP$ = null;
-    $forbid_quantified_sequence_variablesP$ = null;
-    $use_skolem_constantsP$ = null;
-    $canonicalize_gaf_commutative_termsP$ = null;
-    $canon_var_function$ = null;
-    $canonical_variable_type$ = null;
-    $standardize_variables_memory$ = null;
-    $distributing_meta_knowledgeP$ = null;
-    $distribute_meta_over_common_elP$ = null;
-    $find_uncanonical_decontextualized_assertionsP$ = null;
-    $canonicalize_el_template_vars_during_queriesP$ = null;
-    $robust_assertion_lookup$ = null;
-    $robust_nart_lookup$ = null;
-    $recanonicalizing_candidate_natP$ = null;
-    $el_var_blist$ = null;
-    $gathering_quantified_fn_termsP$ = null;
-    $expand_el_relationsP$ = null;
-    $canonicalize_all_sentence_argsP$ = null;
-    $canonicalize_tensed_literalsP$ = null;
-    $add_term_of_unit_litsP$ = null;
-    $turn_existentials_into_skolemsP$ = null;
-    $reify_skolemsP$ = null;
-    $create_narts_regardless_of_whether_within_assertP$ = null;
-    $disable_create_narts_regardless_of_whether_within_assertP$ = null;
-    $canonicalize_functionsP$ = null;
-    $canonicalize_termsP$ = null;
-    $canonicalize_literalsP$ = null;
-    $canonicalize_disjunction_as_enumerationP$ = null;
-    $canonicalize_variablesP$ = null;
-    $implicitify_universalsP$ = null;
-    $assume_free_vars_are_existentially_boundP$ = null;
-    $encapsulate_var_formulaP$ = null;
-    $encapsulate_intensional_formulaP$ = null;
-    $czer_quiescence_iteration_limit$ = null;
-    $clause_el_var_names$ = null;
-    $el_symbol_suffix_table$ = null;
-    $within_negationP$ = null;
-    $hl_pred_order$ = null;
-    $controlP$ = null;
-    $control_1$ = null;
-    $control_2$ = null;
-    $control_3$ = null;
-    $control_4$ = null;
-    $control_5$ = null;
-    $control_6$ = null;
-    $control_ecaP$ = null;
-    $czer_memoization_state$ = null;
-    $use_czer_fort_typesP$ = null;
-    $use_czer_fort_types_globallyP$ = null;
-    $canonicalizer_directive_predicates$ = null;
-    $assume_hlmt_is_canonicalP$ = null;
-    $ununiquify_el_varsP$ = null;
-    $unremove_universalsP$ = null;
-    $uncanonicalize_tensed_literalsP$ = null;
-    $recanonicalizingP$ = null;
-    $recanonicalizing_candidate_assertion_stack$ = null;
-    $noting_ill_formed_meta_argsP$ = null;
-    $recan_ill_formed_meta_argsP$ = null;
-    $simplify_sentenceP$ = null;
-    $simplify_literalP$ = null;
-    $simplify_implicationP$ = null;
-    $simplify_non_wff_literalP$ = null;
-    $try_to_simplify_non_wff_into_wffP$ = null;
-    $trying_to_simplify_non_wff_into_wffP$ = null;
-    $simplify_using_semanticsP$ = null;
-    $simplify_redundanciesP$ = null;
-    $simplify_transitive_redundanciesP$ = null;
-    $simplify_contradictionsP$ = null;
-    $simplify_sequence_vars_using_kb_arityP$ = null;
-    $sequence_variable_split_limit$ = null;
-    $simplify_equality_literalsP$ = null;
-    $simplify_true_sentence_awayP$ = null;
-    $skolem_axiom_table$ = null;
-    $infer_skolem_result_isa_via_arg_constraintsP$ = null;
-    $interpolate_singleton_arg_isaP$ = null;
-    $clothe_naked_skolemsP$ = null;
-    $preds_of_computed_skolem_gafs$ = null;
-    $preds_of_editable_skolem_gafs$ = null;
-    $empty_skolems$ = null;
-    $mal_skolems$ = null;
-    $express_as_rule_macroP$ = null;
-    $express_as_genlsP$ = null;
-    $express_as_arg_isaP$ = null;
-    $express_as_arg_genlP$ = null;
-    $express_as_genl_predicatesP$ = null;
-    $express_as_genl_inverseP$ = null;
-    $express_as_inter_arg_isaP$ = null;
-    $express_as_disjoint_withP$ = null;
-    $express_as_negation_predicatesP$ = null;
-    $express_as_negation_inverseP$ = null;
-    $express_as_reflexiveP$ = null;
-    $express_as_symmetricP$ = null;
-    $express_as_transitiveP$ = null;
-    $express_as_irreflexiveP$ = null;
-    $express_as_asymmetricP$ = null;
-    $express_as_relation_typeP$ = null;
-    $express_as_required_arg_predP$ = null;
-    $tense_czer_mode$ = null;
-    $valid_tense_czer_modes$ = null;
-    $list0 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "requiredArg1Pred" ) ), constant_handles.reader_make_constant_shell( makeString( "requiredArg2Pred" ) ) );
-    $list1 = ConsesLow.list( ONE_INTEGER, TWO_INTEGER, THREE_INTEGER, FOUR_INTEGER, FIVE_INTEGER );
-    $sym2$ASSERTION_FORMULA = makeSymbol( "ASSERTION-FORMULA" );
-    $sym3$NART_HL_FORMULA = makeSymbol( "NART-HL-FORMULA" );
-    $sym4$RF_FORMULA = makeSymbol( "RF-FORMULA" );
-    $list5 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "implies" ) ) );
-    $list6 = ConsesLow.list( new SubLObject[] { constant_handles.reader_make_constant_shell( makeString( "not" ) ), constant_handles.reader_make_constant_shell( makeString( "or" ) ), constant_handles
-        .reader_make_constant_shell( makeString( "xor" ) ), constant_handles.reader_make_constant_shell( makeString( "and" ) ), constant_handles.reader_make_constant_shell( makeString( "equiv" ) ), constant_handles
-            .reader_make_constant_shell( makeString( "implies" ) ), constant_handles.reader_make_constant_shell( makeString( "exceptFor" ) ), constant_handles.reader_make_constant_shell( makeString( "exceptWhen" ) ),
-      constant_handles.reader_make_constant_shell( makeString( "forAll" ) ), constant_handles.reader_make_constant_shell( makeString( "thereExists" ) ), constant_handles.reader_make_constant_shell( makeString(
-          "thereExistExactly" ) ), constant_handles.reader_make_constant_shell( makeString( "thereExistAtLeast" ) ), constant_handles.reader_make_constant_shell( makeString( "thereExistAtMost" ) )
-    } );
-    $list7 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "SkolemFunctionFn" ) ), constant_handles.reader_make_constant_shell( makeString( "SkolemFuncNFn" ) ) );
-    $list8 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "arg1Isa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg2Isa" ) ), constant_handles.reader_make_constant_shell(
-        makeString( "arg3Isa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg4Isa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg5Isa" ) ), constant_handles
-            .reader_make_constant_shell( makeString( "arg6Isa" ) ), constant_handles.reader_make_constant_shell( makeString( "argsIsa" ) ) );
-    $list9 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "argIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "argAndRestIsa" ) ) );
-    $list10 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "arg1NotIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg2NotIsa" ) ), constant_handles
-        .reader_make_constant_shell( makeString( "arg3NotIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg4NotIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg5NotIsa" ) ),
-        constant_handles.reader_make_constant_shell( makeString( "arg6NotIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "argsNotIsa" ) ) );
-    $list11 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "argNotIsa" ) ) );
-    $list12 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "arg1QuotedIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg2QuotedIsa" ) ), constant_handles
-        .reader_make_constant_shell( makeString( "arg3QuotedIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg4QuotedIsa" ) ), constant_handles.reader_make_constant_shell( makeString(
-            "arg5QuotedIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg6QuotedIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "argsQuotedIsa" ) ) );
-    $list13 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "argQuotedIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "argAndRestQuotedIsa" ) ) );
-    $list14 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "arg1Genl" ) ), constant_handles.reader_make_constant_shell( makeString( "arg2Genl" ) ), constant_handles.reader_make_constant_shell(
-        makeString( "argsGenl" ) ), constant_handles.reader_make_constant_shell( makeString( "arg3Genl" ) ), constant_handles.reader_make_constant_shell( makeString( "arg4Genl" ) ), constant_handles
-            .reader_make_constant_shell( makeString( "arg5Genl" ) ), constant_handles.reader_make_constant_shell( makeString( "arg6Genl" ) ) );
-    $list15 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "argGenl" ) ), constant_handles.reader_make_constant_shell( makeString( "argAndRestGenl" ) ) );
-    $list16 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "arg1Format" ) ), constant_handles.reader_make_constant_shell( makeString( "arg2Format" ) ), constant_handles
-        .reader_make_constant_shell( makeString( "arg3Format" ) ), constant_handles.reader_make_constant_shell( makeString( "arg4Format" ) ), constant_handles.reader_make_constant_shell( makeString( "arg5Format" ) ),
-        constant_handles.reader_make_constant_shell( makeString( "arg6Format" ) ) );
-    $list17 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "argFormat" ) ) );
-    $const18$CycLAssertion = constant_handles.reader_make_constant_shell( makeString( "CycLAssertion" ) );
-    $const19$CycLIndexedTerm = constant_handles.reader_make_constant_shell( makeString( "CycLIndexedTerm" ) );
-    $sym20$_FI_LAST_ASSERTIONS_ASSERTED_ = makeSymbol( "*FI-LAST-ASSERTIONS-ASSERTED*" );
-    $sym21$EL_VAR_ = makeSymbol( "EL-VAR?" );
-    $kw22$ASSERT_ONLY = makeKeyword( "ASSERT-ONLY" );
-    $kw23$DEFAULT = makeKeyword( "DEFAULT" );
-    $kw24$KB_VAR = makeKeyword( "KB-VAR" );
-    $list25 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "isa" ) ), constant_handles.reader_make_constant_shell( makeString( "genls" ) ) );
-    $list26 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "canonicalizerDirectiveForArg" ) ), constant_handles.reader_make_constant_shell( makeString( "canonicalizerDirectiveForAllArgs" ) ),
-        constant_handles.reader_make_constant_shell( makeString( "canonicalizerDirectiveForArgAndRest" ) ) );
-    $sym27$_SKOLEM_AXIOM_TABLE_ = makeSymbol( "*SKOLEM-AXIOM-TABLE*" );
-    $int28$2048 = makeInteger( 2048 );
-    $list29 = ConsesLow.list( new SubLObject[] { constant_handles.reader_make_constant_shell( makeString( "isa" ) ), constant_handles.reader_make_constant_shell( makeString( "arity" ) ), constant_handles
-        .reader_make_constant_shell( makeString( "arityMin" ) ), constant_handles.reader_make_constant_shell( makeString( "arityMax" ) ), constant_handles.reader_make_constant_shell( makeString( "resultIsa" ) ),
-      constant_handles.reader_make_constant_shell( makeString( "resultGenl" ) ), constant_handles.reader_make_constant_shell( makeString( "resultIsaArg" ) ), constant_handles.reader_make_constant_shell( makeString(
-          "resultGenlArg" ) ), constant_handles.reader_make_constant_shell( makeString( "arg1Isa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg2Isa" ) ), constant_handles.reader_make_constant_shell(
-              makeString( "arg3Isa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg4Isa" ) ), constant_handles.reader_make_constant_shell( makeString( "arg5Isa" ) ), constant_handles
-                  .reader_make_constant_shell( makeString( "arg6Isa" ) )
-    } );
-    $list30 = ConsesLow.list( new SubLObject[] { constant_handles.reader_make_constant_shell( makeString( "isa" ) ), constant_handles.reader_make_constant_shell( makeString( "arity" ) ), constant_handles
-        .reader_make_constant_shell( makeString( "arityMin" ) ), constant_handles.reader_make_constant_shell( makeString( "arityMax" ) ), constant_handles.reader_make_constant_shell( makeString( "resultIsa" ) ),
-      constant_handles.reader_make_constant_shell( makeString( "resultGenl" ) ), constant_handles.reader_make_constant_shell( makeString( "resultIsaArg" ) ), constant_handles.reader_make_constant_shell( makeString(
-          "resultGenlArg" ) ), constant_handles.reader_make_constant_shell( makeString( "resultQuotedIsa" ) ), constant_handles.reader_make_constant_shell( makeString( "evaluationResultQuotedIsa" ) )
-    } );
-    $list31 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "myCreator" ) ), constant_handles.reader_make_constant_shell( makeString( "myCreationTime" ) ), constant_handles
-        .reader_make_constant_shell( makeString( "myCreationSecond" ) ), constant_handles.reader_make_constant_shell( makeString( "comment" ) ), constant_handles.reader_make_constant_shell( makeString( "sharedNotes" ) ),
-        constant_handles.reader_make_constant_shell( makeString( "skolemizeForward" ) ) );
-    $list32 = ConsesLow.list( makeKeyword( "DEFAULT" ), makeKeyword( "QUERY" ), makeKeyword( "ASSERT" ) );
-    $kw33$ASSERT = makeKeyword( "ASSERT" );
-    $kw34$QUERY = makeKeyword( "QUERY" );
-    $str35$Canonicalizer_tense_mode_not_set_ = makeString( "Canonicalizer tense mode not set." );
-  }
+    public static SubLObject setup_czer_vars_file() {
+        register_html_state_variable($fi_last_assertions_asserted$);
+        final SubLObject item_var = $fi_last_assertions_asserted$;
+        if (NIL == member(item_var, $fi_state_variables$.getGlobalValue(), symbol_function(EQL), symbol_function(IDENTITY))) {
+            $fi_state_variables$.setGlobalValue(cons(item_var, $fi_state_variables$.getGlobalValue()));
+        }
+        declare_defglobal($skolem_axiom_table$);
+        return NIL;
+    }
+
+    @Override
+    public void declareFunctions() {
+        declare_czer_vars_file();
+    }
+
+    @Override
+    public void initializeVariables() {
+        init_czer_vars_file();
+    }
+
+    @Override
+    public void runTopLevelForms() {
+        setup_czer_vars_file();
+    }
+
+    static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }
-/*
- * 
+
+/**
  * Total time: 171 ms
- * 
  */

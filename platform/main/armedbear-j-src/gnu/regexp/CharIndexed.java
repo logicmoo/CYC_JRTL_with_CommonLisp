@@ -54,6 +54,8 @@ public interface CharIndexed {
     /**
      * Shifts the input buffer by a given number of positions.  Returns
      * true if the new cursor position is valid.
+     * @param index 
+     * @return 
      */
     boolean move(int index);
 

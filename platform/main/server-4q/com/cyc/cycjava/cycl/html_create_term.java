@@ -1,3200 +1,2905 @@
 package com.cyc.cycjava.cycl;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
-import com.cyc.tool.subl.util.SubLFiles;
+
+import com.cyc.cycjava.cycl.cb_parameters;
+import com.cyc.cycjava.cycl.html_create_term;
 import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class html_create_term
-    extends
-      SubLTranslatedFile
-{
-  public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.html_create_term";
-  public static final String myFingerPrint = "a68669d646a9e31202d4dfdc430ff763d246d212066a497a66f64033f93f707c";
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 807L)
-  public static SubLSymbol $cb_create_info$;
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 5959L)
-  public static SubLSymbol $cb_categorize_info$;
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 10748L)
-  private static SubLSymbol $cb_categorize_generalization_possibilities$;
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 27918L)
-  private static SubLSymbol $ke_requirements_query$;
-  private static final SubLSymbol $sym0$_CB_CREATE_INFO_;
-  private static final SubLSymbol $kw1$CB_CREATE_TERM;
-  private static final SubLString $str2$cb_create_term_html;
-  private static final SubLString $str3$the_Create_Term_page;
-  private static final SubLString $str4$Create_Term;
-  private static final SubLString $str5$__DOCTYPE_html_PUBLIC_____W3C__DT;
-  private static final SubLString $str6$_meta_http_equiv__X_UA_Compatible;
-  private static final SubLSymbol $kw7$UNINITIALIZED;
-  private static final SubLSymbol $kw8$CB_CYC;
-  private static final SubLSymbol $kw9$SAM_AUTOCOMPLETE_CSS;
-  private static final SubLSymbol $kw10$SHA1;
-  private static final SubLString $str11$yui_skin_sam;
-  private static final SubLString $str12$reloadFrameButton;
-  private static final SubLString $str13$button;
-  private static final SubLString $str14$reload;
-  private static final SubLString $str15$Refresh_Frames;
-  private static final SubLString $str16$post;
-  private static final SubLString $str17$cb_handle_create_term;
-  private static final SubLSymbol $kw18$SELF;
-  private static final SubLString $str19$Cancel_Create;
-  private static final SubLString $str20$Reset;
-  private static final SubLString $str21$Create_Constant;
-  private static final SubLSymbol $kw22$TOP;
-  private static final SubLString $str23$Name__required____;
-  private static final SubLString $str24$new_name;
-  private static final SubLString $str25$Clear;
-  private static final SubLString $str26$Complete;
-  private static final SubLString $str27$;
-  private static final SubLInteger $int28$35;
-  private static final SubLObject $const29$termStrings;
-  private static final SubLString $str30$__one_per_line__optional____;
-  private static final SubLString $str31$term_strings;
-  private static final SubLSymbol $kw32$BOTTOM;
-  private static final SubLObject $const33$comment;
-  private static final SubLString $str34$__required____;
-  private static final SubLString $str35$comment;
-  private static final SubLInteger $int36$80;
-  private static final SubLString $str37$virtual;
-  private static final SubLSymbol $sym38$CB_CREATE_TERM;
-  private static final SubLSymbol $kw39$HTML_HANDLER;
-  private static final SubLString $str40$Creating;
-  private static final SubLString $str41$No_name_was_specified;
-  private static final SubLString $str42$_S_is_not_a_valid_constant_name;
-  private static final SubLString $str43$No_comment_was_specified;
-  private static final SubLString $str44$Unable_to_create_a_constant_named;
-  private static final SubLSymbol $sym45$CB_HANDLE_CREATE_TERM;
-  private static final SubLSymbol $kw46$MAIN;
-  private static final SubLString $str47$cb_create_term;
-  private static final SubLSymbol $kw48$CREATE_TERM;
-  private static final SubLSymbol $sym49$CB_LINK_CREATE_TERM;
-  private static final SubLString $str50$Crt;
-  private static final SubLString $str51$Cyc_Constant_Creation_Wizard;
-  private static final SubLSymbol $sym52$STRINGP;
-  private static final SubLSymbol $kw53$DEFAULT;
-  private static final SubLSymbol $kw54$FORWARD;
-  private static final SubLObject $const55$TemporaryLexicalAssertionsMt;
-  private static final SubLSymbol $sym56$CR_OR_LF;
-  private static final SubLString $str57$_a_does_not_specify_a_Cyc_term;
-  private static final SubLSymbol $sym58$CB_CATEGORIZE_TERM;
-  private static final SubLString $str59$Categorize_Term;
-  private static final SubLString $str60$cb_categorize_term__a;
-  private static final SubLSymbol $kw61$CATEGORIZE_TERM;
-  private static final SubLSymbol $sym62$CB_LINK_CATEGORIZE_TERM;
-  private static final SubLSymbol $sym63$_CB_CATEGORIZE_INFO_;
-  private static final SubLSymbol $kw64$CB_CATEGORIZE_TERM;
-  private static final SubLString $str65$cb_categorize_term_html;
-  private static final SubLSymbol $sym66$FORT_P;
-  private static final SubLString $str67$cb_handle_categorize_term;
-  private static final SubLString $str68$Categorize;
-  private static final SubLString $str69$Categorize_;
-  private static final SubLString $str70$_;
-  private static final SubLString $str71$term;
-  private static final SubLString $str72$Mt___;
-  private static final SubLString $str73$mt;
-  private static final SubLObject $const74$Microtheory;
-  private static final SubLString $str75$Similar_to___;
-  private static final SubLString $str76$similar_to;
-  private static final SubLInteger $int77$40;
-  private static final SubLString $str78$Instance_of___;
-  private static final SubLString $str79$isa;
-  private static final SubLString $str80$Specialization_of___;
-  private static final SubLString $str81$genl;
-  private static final SubLString $str82$generalization;
-  private static final SubLString $str83$_a_does_not_specify_a_Cyc_Microth;
-  private static final SubLSymbol $sym84$CB_HANDLE_CATEGORIZE_TERM;
-  private static final SubLList $list85;
-  private static final SubLSymbol $sym86$RELEVANT_MT_IS_EVERYTHING;
-  private static final SubLObject $const87$EverythingPSC;
-  private static final SubLObject $const88$isa;
-  private static final SubLSymbol $kw89$GAF;
-  private static final SubLSymbol $kw90$TRUE;
-  private static final SubLSymbol $kw91$MONOTONIC;
-  private static final SubLObject $const92$genls;
-  private static final SubLList $list93;
-  private static final SubLSymbol $kw94$CB_COPY_FROM_SIMILAR;
-  private static final SubLString $str95$cb_copy_from_similar_html;
-  private static final SubLString $str96$cb_handle_copy_from_similar;
-  private static final SubLString $str97$Copy_from_;
-  private static final SubLString $str98$_to_;
-  private static final SubLString $str99$Copy_Assertions;
-  private static final SubLString $str100$Check_the_assertions_from_;
-  private static final SubLString $str101$_which_you_wish_to_copy__;
-  private static final SubLSymbol $sym102$CB_COPY_FROM_SIMILAR_CHECKBOX;
-  private static final SubLString $str103$copy_from_similar_facilities;
-  private static final SubLString $str104$No_source_term_was_specified;
-  private static final SubLString $str105$Unable_to_determine_a_term_from__;
-  private static final SubLString $str106$No_term_was_specified;
-  private static final SubLSymbol $sym107$CB_HANDLE_COPY_FROM_SIMILAR;
-  private static final SubLSymbol $kw108$CB_CONCEPTUALLY_RELATED_TERMS;
-  private static final SubLString $str109$cb_conceptually_related_terms_htm;
-  private static final SubLString $str110$Conceptually_Related_Suggestions;
-  private static final SubLString $str111$cb_conceptually_related_terms;
-  private static final SubLString $str112$fort;
-  private static final SubLString $str113$Clear_All;
-  private static final SubLString $str114$Term___;
-  private static final SubLString $str115$Existing_Conceptually_Related_Ter;
-  private static final SubLSymbol $kw116$CT_CR_JUSTIFY;
-  private static final SubLString $str117$_Justify_;
-  private static final SubLString $str118$None;
-  private static final SubLString $str119$Specify_the_Microtheory_for_new__;
-  private static final SubLString $str120$_Mt___;
-  private static final SubLString $str121$_Select_terms_and_or_type_in_a_te;
-  private static final SubLString $str122$__;
-  private static final SubLString $str123$entered;
-  private static final SubLString $str124$_Term___;
-  private static final SubLString $str125$Possible_Terms_to_Add___;
-  private static final SubLString $str126$Add_Terms_Backward;
-  private static final SubLString $str127$add_backward;
-  private static final SubLString $str128$_as_;
-  private static final SubLObject $const129$conceptuallyRelated;
-  private static final SubLSymbol $sym130$TERM;
-  private static final SubLString $str131$_in_MT;
-  private static final SubLString $str132$Add_Terms_Forward;
-  private static final SubLString $str133$add_forward;
-  private static final SubLList $list134;
-  private static final SubLString $str135$Unable_to_determine_last_term__wh;
-  private static final SubLString $str136$Invalid_Mt_specified____S;
-  private static final SubLSymbol $kw137$BACKWARD;
-  private static final SubLSymbol $sym138$CB_CONCEPTUALLY_RELATED_TERMS;
-  private static final SubLString $str139$id;
-  private static final SubLString $str140$Formulas_Asserted;
-  private static final SubLString $str141$Formulas_Asserted__;
-  private static final SubLString $str142$_in_;
-  private static final SubLSymbol $sym143$WHY_CONCEPTUALLY_RELATED_;
-  private static final SubLString $str144$Sorry__System_74_92_or_later_is_r;
-  private static final SubLString $str145$Justify_Conceptually_Related;
-  private static final SubLSymbol $sym146$CT_CR_JUSTIFY;
-  private static final SubLString $str147$ct_cr_justify__a;
-  private static final SubLSymbol $sym148$CB_LINK_CT_CR_JUSTIFY;
-  private static final SubLSymbol $sym149$CB_ELABORATE_TERM;
-  private static final SubLString $str150$Elaborate_Term;
-  private static final SubLString $str151$cb_elaborate_term__a;
-  private static final SubLSymbol $kw152$ELABORATE_TERM;
-  private static final SubLSymbol $sym153$CB_LINK_ELABORATE_TERM;
-  private static final SubLSymbol $kw154$CB_ELABORATE_TERM;
-  private static final SubLString $str155$cb_elaborate_term_html;
-  private static final SubLString $str156$cb_handle_elaborate_term;
-  private static final SubLString $str157$Elaborate;
-  private static final SubLString $str158$Elaborate_;
-  private static final SubLString $str159$Requirements___;
-  private static final SubLString $str160$Suggestions___;
-  private static final SubLList $list161;
-  private static final SubLSymbol $kw162$TERM;
-  private static final SubLObject $const163$InferencePSC;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.html_create_term.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THIRTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 995L)
-  public static SubLObject cb_create_term(SubLObject args)
-  {
-    if( args == UNPROVIDED )
-    {
-      args = NIL;
-    }
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( NIL != ke.cyclist_is_guest() )
-    {
-      return cyc_navigator_internals.guest_warn( $str3$the_Create_Term_page );
-    }
-    final SubLObject title_var = $str4$Create_Term;
-    final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding( thread );
-    try
-    {
-      html_macros.$html_id_space_id_generator$.bind( ( NIL != integer_sequence_generator.integer_sequence_generator_p( html_macros.$html_id_space_id_generator$.getDynamicValue( thread ) ) )
-          ? html_macros.$html_id_space_id_generator$.getDynamicValue( thread )
-          : integer_sequence_generator.new_integer_sequence_generator( UNPROVIDED, UNPROVIDED, UNPROVIDED ), thread );
-      html_utilities.html_markup( $str5$__DOCTYPE_html_PUBLIC_____W3C__DT );
-      if( NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue( thread ) )
-      {
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        html_utilities.html_markup( $str6$_meta_http_equiv__X_UA_Compatible );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-      final SubLObject _prev_bind_0_$1 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding( thread );
-      try
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.bind( ( cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ) == $kw7$UNINITIALIZED ) ? ConsesLow.list( EMPTY_SUBL_OBJECT_ARRAY )
-            : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ), thread );
-        html_utilities.html_markup( html_macros.$html_html_head$.getGlobalValue() );
-        html_utilities.html_markup( html_macros.$html_head_head$.getGlobalValue() );
-        html_macros.html_head_content_type();
-        cb_parameters.cb_head_shortcut_icon();
-        html_utilities.html_meta_robot_instructions( cb_parameters.$cb_permit_robots_to_indexP$.getDynamicValue( thread ), cb_parameters.$cb_permit_robots_to_followP$.getDynamicValue( thread ) );
-        cyc_file_dependencies.css( $kw8$CB_CYC );
-        dhtml_macros.html_basic_cb_scripts();
-        if( NIL != title_var )
-        {
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-          html_utilities.html_markup( html_macros.$html_title_head$.getGlobalValue() );
-          html_utilities.html_princ( title_var );
-          html_utilities.html_markup( html_macros.$html_title_tail$.getGlobalValue() );
+
+public final class html_create_term extends SubLTranslatedFile {
+    public static final SubLFile me = new html_create_term();
+
+    public static final String myName = "com.cyc.cycjava.cycl.html_create_term";
+
+    public static final String myFingerPrint = "a68669d646a9e31202d4dfdc430ff763d246d212066a497a66f64033f93f707c";
+
+
+
+
+
+    // deflexical
+    private static final SubLSymbol $cb_categorize_generalization_possibilities$ = makeSymbol("*CB-CATEGORIZE-GENERALIZATION-POSSIBILITIES*");
+
+    // deflexical
+    private static final SubLSymbol $ke_requirements_query$ = makeSymbol("*KE-REQUIREMENTS-QUERY*");
+
+    // Internal Constants
+    public static final SubLSymbol $cb_create_info$ = makeSymbol("*CB-CREATE-INFO*");
+
+    private static final SubLSymbol $CB_CREATE_TERM = makeKeyword("CB-CREATE-TERM");
+
+    public static final SubLString $str2$cb_create_term_html = makeString("cb-create-term.html");
+
+    public static final SubLString $$$the_Create_Term_page = makeString("the Create Term page");
+
+    public static final SubLString $$$Create_Term = makeString("Create Term");
+
+    private static final SubLString $str5$__DOCTYPE_html_PUBLIC_____W3C__DT = makeString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+
+    private static final SubLString $str6$_meta_http_equiv__X_UA_Compatible = makeString("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\" >");
+
+
+
+
+
+    private static final SubLSymbol $SAM_AUTOCOMPLETE_CSS = makeKeyword("SAM-AUTOCOMPLETE-CSS");
+
+
+
+    private static final SubLString $str11$yui_skin_sam = makeString("yui-skin-sam");
+
+    private static final SubLString $$$reloadFrameButton = makeString("reloadFrameButton");
+
+    private static final SubLString $$$button = makeString("button");
+
+    private static final SubLString $$$reload = makeString("reload");
+
+    private static final SubLString $$$Refresh_Frames = makeString("Refresh Frames");
+
+    private static final SubLString $$$post = makeString("post");
+
+    private static final SubLString $str17$cb_handle_create_term = makeString("cb-handle-create-term");
+
+
+
+    private static final SubLString $$$Cancel_Create = makeString("Cancel Create");
+
+    private static final SubLString $$$Reset = makeString("Reset");
+
+    private static final SubLString $$$Create_Constant = makeString("Create Constant");
+
+
+
+    private static final SubLString $str23$Name__required____ = makeString("Name (required) : ");
+
+    private static final SubLString $str24$new_name = makeString("new-name");
+
+    private static final SubLString $$$Clear = makeString("Clear");
+
+    private static final SubLString $$$Complete = makeString("Complete");
+
+    private static final SubLString $str27$ = makeString("");
+
+    private static final SubLInteger $int$35 = makeInteger(35);
+
+    private static final SubLObject $$termStrings = reader_make_constant_shell(makeString("termStrings"));
+
+    private static final SubLString $str30$__one_per_line__optional____ = makeString(", one per line (optional) : ");
+
+    private static final SubLString $str31$term_strings = makeString("term-strings");
+
+
+
+    private static final SubLObject $$comment = reader_make_constant_shell(makeString("comment"));
+
+    private static final SubLString $str34$__required____ = makeString(" (required) : ");
+
+    private static final SubLString $$$comment = makeString("comment");
+
+    private static final SubLInteger $int$80 = makeInteger(80);
+
+    private static final SubLString $$$virtual = makeString("virtual");
+
+    private static final SubLSymbol CB_CREATE_TERM = makeSymbol("CB-CREATE-TERM");
+
+
+
+    private static final SubLString $$$Creating = makeString("Creating");
+
+    private static final SubLString $$$No_name_was_specified = makeString("No name was specified");
+
+    private static final SubLString $str42$_S_is_not_a_valid_constant_name = makeString("~S is not a valid constant name");
+
+    private static final SubLString $$$No_comment_was_specified = makeString("No comment was specified");
+
+    private static final SubLString $str44$Unable_to_create_a_constant_named = makeString("Unable to create a constant named ~S");
+
+    private static final SubLSymbol CB_HANDLE_CREATE_TERM = makeSymbol("CB-HANDLE-CREATE-TERM");
+
+
+
+    private static final SubLString $str47$cb_create_term = makeString("cb-create-term");
+
+
+
+    private static final SubLSymbol CB_LINK_CREATE_TERM = makeSymbol("CB-LINK-CREATE-TERM");
+
+    private static final SubLString $$$Crt = makeString("Crt");
+
+    private static final SubLString $$$Cyc_Constant_Creation_Wizard = makeString("Cyc Constant Creation Wizard");
+
+
+
+
+
+
+
+    private static final SubLObject $$TemporaryLexicalAssertionsMt = reader_make_constant_shell(makeString("TemporaryLexicalAssertionsMt"));
+
+    private static final SubLSymbol CR_OR_LF = makeSymbol("CR-OR-LF");
+
+    private static final SubLString $str57$_a_does_not_specify_a_Cyc_term = makeString("~a does not specify a Cyc term");
+
+    private static final SubLSymbol CB_CATEGORIZE_TERM = makeSymbol("CB-CATEGORIZE-TERM");
+
+    private static final SubLString $$$Categorize_Term = makeString("Categorize Term");
+
+    private static final SubLString $str60$cb_categorize_term__a = makeString("cb-categorize-term&~a");
+
+
+
+    private static final SubLSymbol CB_LINK_CATEGORIZE_TERM = makeSymbol("CB-LINK-CATEGORIZE-TERM");
+
+    public static final SubLSymbol $cb_categorize_info$ = makeSymbol("*CB-CATEGORIZE-INFO*");
+
+    private static final SubLSymbol $CB_CATEGORIZE_TERM = makeKeyword("CB-CATEGORIZE-TERM");
+
+    private static final SubLString $str65$cb_categorize_term_html = makeString("cb-categorize-term.html");
+
+
+
+    private static final SubLString $str67$cb_handle_categorize_term = makeString("cb-handle-categorize-term");
+
+    private static final SubLString $$$Categorize = makeString("Categorize");
+
+    private static final SubLString $$$Categorize_ = makeString("Categorize ");
+
+    private static final SubLString $str70$_ = makeString(":");
+
+    private static final SubLString $$$term = makeString("term");
+
+    private static final SubLString $str72$Mt___ = makeString("Mt : ");
+
+    private static final SubLString $$$mt = makeString("mt");
+
+    private static final SubLObject $$Microtheory = reader_make_constant_shell(makeString("Microtheory"));
+
+    private static final SubLString $str75$Similar_to___ = makeString("Similar to : ");
+
+    private static final SubLString $str76$similar_to = makeString("similar-to");
+
+    private static final SubLInteger $int$40 = makeInteger(40);
+
+    private static final SubLString $str78$Instance_of___ = makeString("Instance of : ");
+
+    private static final SubLString $$$isa = makeString("isa");
+
+    private static final SubLString $str80$Specialization_of___ = makeString("Specialization of : ");
+
+    private static final SubLString $$$genl = makeString("genl");
+
+    private static final SubLString $$$generalization = makeString("generalization");
+
+    private static final SubLString $str83$_a_does_not_specify_a_Cyc_Microth = makeString("~a does not specify a Cyc Microtheory");
+
+    private static final SubLSymbol CB_HANDLE_CATEGORIZE_TERM = makeSymbol("CB-HANDLE-CATEGORIZE-TERM");
+
+    private static final SubLList $list85 = list(list(reader_make_constant_shell(makeString("genls")), reader_make_constant_shell(makeString("Collection"))), list(reader_make_constant_shell(makeString("genlMt")), reader_make_constant_shell(makeString("Microtheory"))), list(reader_make_constant_shell(makeString("genlPreds")), reader_make_constant_shell(makeString("Predicate"))), list(reader_make_constant_shell(makeString("genlInverse")), reader_make_constant_shell(makeString("Predicate"))));
+
+
+
+    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
+
+    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+
+
+
+
+
+
+
+    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
+
+    private static final SubLList $list93 = list(makeSymbol("PRED"), makeSymbol("COL"));
+
+    private static final SubLSymbol $CB_COPY_FROM_SIMILAR = makeKeyword("CB-COPY-FROM-SIMILAR");
+
+    private static final SubLString $str95$cb_copy_from_similar_html = makeString("cb-copy-from-similar.html");
+
+    private static final SubLString $str96$cb_handle_copy_from_similar = makeString("cb-handle-copy-from-similar");
+
+    private static final SubLString $$$Copy_from_ = makeString("Copy from ");
+
+    private static final SubLString $$$_to_ = makeString(" to ");
+
+    private static final SubLString $$$Copy_Assertions = makeString("Copy Assertions");
+
+    private static final SubLString $$$Check_the_assertions_from_ = makeString("Check the assertions from ");
+
+    private static final SubLString $str101$_which_you_wish_to_copy__ = makeString(" which you wish to copy: ");
+
+    private static final SubLSymbol CB_COPY_FROM_SIMILAR_CHECKBOX = makeSymbol("CB-COPY-FROM-SIMILAR-CHECKBOX");
+
+    private static final SubLString $$$copy_from_similar_facilities = makeString("copy from similar facilities");
+
+    private static final SubLString $$$No_source_term_was_specified = makeString("No source term was specified");
+
+    private static final SubLString $str105$Unable_to_determine_a_term_from__ = makeString("Unable to determine a term from ~S");
+
+    private static final SubLString $$$No_term_was_specified = makeString("No term was specified");
+
+    private static final SubLSymbol CB_HANDLE_COPY_FROM_SIMILAR = makeSymbol("CB-HANDLE-COPY-FROM-SIMILAR");
+
+    private static final SubLSymbol $CB_CONCEPTUALLY_RELATED_TERMS = makeKeyword("CB-CONCEPTUALLY-RELATED-TERMS");
+
+    private static final SubLString $str109$cb_conceptually_related_terms_htm = makeString("cb-conceptually-related-terms.html");
+
+    private static final SubLString $$$Conceptually_Related_Suggestions = makeString("Conceptually Related Suggestions");
+
+    private static final SubLString $str111$cb_conceptually_related_terms = makeString("cb-conceptually-related-terms");
+
+    private static final SubLString $$$fort = makeString("fort");
+
+    private static final SubLString $$$Clear_All = makeString("Clear All");
+
+    private static final SubLString $str114$Term___ = makeString("Term : ");
+
+    private static final SubLString $str115$Existing_Conceptually_Related_Ter = makeString("Existing Conceptually Related Terms : ");
+
+    private static final SubLSymbol $CT_CR_JUSTIFY = makeKeyword("CT-CR-JUSTIFY");
+
+    private static final SubLString $str117$_Justify_ = makeString("[Justify]");
+
+    private static final SubLString $$$None = makeString("None");
+
+    private static final SubLString $str119$Specify_the_Microtheory_for_new__ = makeString("Specify the Microtheory for new #$conceptuallyRelated assertions:");
+
+    private static final SubLString $str120$_Mt___ = makeString(" Mt : ");
+
+    private static final SubLString $str121$_Select_terms_and_or_type_in_a_te = makeString(" Select terms and/or type in a term to add as #$conceptuallyRelated to ");
+
+    private static final SubLString $str122$__ = makeString(": ");
+
+    private static final SubLString $$$entered = makeString("entered");
+
+    private static final SubLString $str124$_Term___ = makeString(" Term : ");
+
+    private static final SubLString $str125$Possible_Terms_to_Add___ = makeString("Possible Terms to Add : ");
+
+    private static final SubLString $$$Add_Terms_Backward = makeString("Add Terms Backward");
+
+    private static final SubLString $str127$add_backward = makeString("add-backward");
+
+    private static final SubLString $$$_as_ = makeString(" as ");
+
+    private static final SubLObject $$conceptuallyRelated = reader_make_constant_shell(makeString("conceptuallyRelated"));
+
+
+
+    private static final SubLString $$$_in_MT = makeString(" in MT");
+
+    private static final SubLString $$$Add_Terms_Forward = makeString("Add Terms Forward");
+
+    private static final SubLString $str133$add_forward = makeString("add-forward");
+
+    private static final SubLList $list134 = list(makeSymbol("TERM"));
+
+    private static final SubLString $str135$Unable_to_determine_last_term__wh = makeString("Unable to determine last term (why?)");
+
+    private static final SubLString $str136$Invalid_Mt_specified____S = makeString("Invalid Mt specified : ~S");
+
+
+
+    private static final SubLSymbol CB_CONCEPTUALLY_RELATED_TERMS = makeSymbol("CB-CONCEPTUALLY-RELATED-TERMS");
+
+    private static final SubLString $$$id = makeString("id");
+
+    private static final SubLString $$$Formulas_Asserted = makeString("Formulas Asserted");
+
+    private static final SubLString $str141$Formulas_Asserted__ = makeString("Formulas Asserted :");
+
+    private static final SubLString $$$_in_ = makeString(" in ");
+
+    private static final SubLSymbol $sym143$WHY_CONCEPTUALLY_RELATED_ = makeSymbol("WHY-CONCEPTUALLY-RELATED?");
+
+    private static final SubLString $str144$Sorry__System_74_92_or_later_is_r = makeString("Sorry, System 74.92 or later is required for justification to work.");
+
+    private static final SubLString $$$Justify_Conceptually_Related = makeString("Justify Conceptually Related");
+
+    private static final SubLSymbol CT_CR_JUSTIFY = makeSymbol("CT-CR-JUSTIFY");
+
+    private static final SubLString $str147$ct_cr_justify__a = makeString("ct-cr-justify&~a");
+
+    private static final SubLSymbol CB_LINK_CT_CR_JUSTIFY = makeSymbol("CB-LINK-CT-CR-JUSTIFY");
+
+    private static final SubLSymbol CB_ELABORATE_TERM = makeSymbol("CB-ELABORATE-TERM");
+
+    private static final SubLString $$$Elaborate_Term = makeString("Elaborate Term");
+
+    private static final SubLString $str151$cb_elaborate_term__a = makeString("cb-elaborate-term&~a");
+
+
+
+    private static final SubLSymbol CB_LINK_ELABORATE_TERM = makeSymbol("CB-LINK-ELABORATE-TERM");
+
+    private static final SubLSymbol $CB_ELABORATE_TERM = makeKeyword("CB-ELABORATE-TERM");
+
+    private static final SubLString $str155$cb_elaborate_term_html = makeString("cb-elaborate-term.html");
+
+    private static final SubLString $str156$cb_handle_elaborate_term = makeString("cb-handle-elaborate-term");
+
+    private static final SubLString $$$Elaborate = makeString("Elaborate");
+
+    private static final SubLString $$$Elaborate_ = makeString("Elaborate ");
+
+    private static final SubLString $str159$Requirements___ = makeString("Requirements : ");
+
+    private static final SubLString $str160$Suggestions___ = makeString("Suggestions : ");
+
+    private static final SubLList $list161 = list(reader_make_constant_shell(makeString("keRequirement")), makeKeyword("TERM"), makeSymbol("?FORMULA"));
+
+
+
+    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
+
+    public static SubLObject cb_create_term(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
         }
-        html_complete.html_complete_script();
-        cyc_file_dependencies.css( $kw9$SAM_AUTOCOMPLETE_CSS );
-        html_utilities.html_markup( html_macros.$html_head_tail$.getGlobalValue() );
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        final SubLObject _prev_bind_0_$2 = html_macros.$html_inside_bodyP$.currentBinding( thread );
-        try
-        {
-          html_macros.$html_inside_bodyP$.bind( T, thread );
-          html_utilities.html_markup( html_macros.$html_body_head$.getGlobalValue() );
-          if( NIL != html_macros.$html_default_bgcolor$.getDynamicValue( thread ) )
-          {
-            html_utilities.html_markup( html_macros.$html_body_bgcolor$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( html_utilities.html_color( html_macros.$html_default_bgcolor$.getDynamicValue( thread ) ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          }
-          html_utilities.html_markup( html_macros.$html_body_class$.getGlobalValue() );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_markup( $str11$yui_skin_sam );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-          final SubLObject _prev_bind_0_$3 = html_macros.$html_safe_print$.currentBinding( thread );
-          try
-          {
-            html_macros.$html_safe_print$.bind( T, thread );
-            html_utilities.html_markup( html_macros.$html_div_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_attribute_id$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str12$reloadFrameButton );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$4 = html_macros.$html_safe_print$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_utilities.html_markup( html_macros.$html_input_head$.getGlobalValue() );
-              html_utilities.html_markup( html_macros.$html_input_type$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str13$button );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_name$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str14$reload );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_value$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_princ( $str15$Refresh_Frames );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              if( NIL != html_macros.$html_input_disabledP$.getDynamicValue( thread ) )
-              {
-                html_utilities.html_simple_attribute( html_macros.$html_input_disabled$.getGlobalValue() );
-              }
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if (NIL != ke.cyclist_is_guest()) {
+            return cyc_navigator_internals.guest_warn($$$the_Create_Term_page);
+        }
+        final SubLObject title_var = $$$Create_Term;
+        final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
+        try {
+            html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? html_macros.$html_id_space_id_generator$.getDynamicValue(thread) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+            html_markup($str5$__DOCTYPE_html_PUBLIC_____W3C__DT);
+            if (NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue(thread)) {
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup($str6$_meta_http_equiv__X_UA_Compatible);
             }
-            finally
-            {
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$4, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_div_tail$.getGlobalValue() );
-            if( NIL != title_var )
-            {
-              html_utilities.html_markup( html_macros.$html_heading_head$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              html_utilities.html_princ( title_var );
-              html_utilities.html_markup( html_macros.$html_heading_tail$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            }
-            final SubLObject frame_name_var = cb_utilities.cb_frame_name( NIL );
-            html_utilities.html_markup( html_macros.$html_form_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_form_action$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( system_parameters.$cyc_cgi_program$.getDynamicValue( thread ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( html_macros.$html_form_method$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str16$post );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            if( NIL != frame_name_var )
-            {
-              html_utilities.html_markup( html_macros.$html_form_target$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( frame_name_var );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            }
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$5 = html_macros.$html_safe_print$.currentBinding( thread );
-            final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding( thread );
-            final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_macros.$within_html_form$.bind( T, thread );
-              html_macros.$html_form_field_uniquifier_code$.bind( html_macros.next_html_form_field_uniquifier_code(), thread );
-              html_utilities.html_hidden_input( $str17$cb_handle_create_term, T, UNPROVIDED );
-              cb_utilities.cb_help_preamble( $kw1$CB_CREATE_TERM, NIL, UNPROVIDED );
-              cb_utilities.cb_back_button( $kw18$SELF, $str19$Cancel_Create );
-              html_utilities.html_indent( UNPROVIDED );
-              html_utilities.html_reset_input( $str20$Reset );
-              html_utilities.html_indent( UNPROVIDED );
-              html_utilities.html_submit_input( $str21$Create_Constant, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_table_head$.getGlobalValue() );
-              html_utilities.html_simple_attribute( html_macros.$html_table_noflow$.getGlobalValue() );
-              html_utilities.html_simple_attribute( html_macros.$html_table_nowrap$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              final SubLObject _prev_bind_0_$6 = html_macros.$html_safe_print$.currentBinding( thread );
-              try
-              {
-                html_macros.$html_safe_print$.bind( T, thread );
-                html_utilities.html_markup( html_macros.$html_table_row_head$.getGlobalValue() );
-                html_utilities.html_markup( html_macros.$html_table_data_valign$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( html_utilities.html_align( $kw22$TOP ) );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                final SubLObject _prev_bind_0_$7 = html_macros.$html_safe_print$.currentBinding( thread );
-                try
-                {
-                  html_macros.$html_safe_print$.bind( T, thread );
-                  html_utilities.html_markup( html_macros.$html_table_data_head$.getGlobalValue() );
-                  html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                  final SubLObject _prev_bind_0_$8 = html_macros.$html_safe_print$.currentBinding( thread );
-                  try
-                  {
-                    html_macros.$html_safe_print$.bind( T, thread );
-                    html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                    html_utilities.html_princ( $str23$Name__required____ );
-                    html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                    html_script_utilities.html_clear_input_button( $str24$new_name, $str25$Clear, UNPROVIDED );
-                    html_complete.html_complete_button( $str24$new_name, $str26$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-                    html_utilities.html_newline( UNPROVIDED );
-                    html_utilities.html_text_input( $str24$new_name, $str27$, $int28$35 );
-                  }
-                  finally
-                  {
-                    html_macros.$html_safe_print$.rebind( _prev_bind_0_$8, thread );
-                  }
-                  html_utilities.html_markup( html_macros.$html_table_data_tail$.getGlobalValue() );
-                  html_utilities.html_markup( html_macros.$html_table_data_head$.getGlobalValue() );
-                  html_utilities.html_markup( html_macros.$html_table_data_rowspan$.getGlobalValue() );
-                  html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                  html_utilities.html_markup( TWO_INTEGER );
-                  html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                  html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                  final SubLObject _prev_bind_0_$9 = html_macros.$html_safe_print$.currentBinding( thread );
-                  try
-                  {
-                    html_macros.$html_safe_print$.bind( T, thread );
-                    html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                    cb_utilities.cb_form( $const29$termStrings, UNPROVIDED, UNPROVIDED );
-                    html_utilities.html_princ( $str30$__one_per_line__optional____ );
-                    html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                    html_script_utilities.html_clear_input_button( $str31$term_strings, $str25$Clear, UNPROVIDED );
-                    html_utilities.html_newline( UNPROVIDED );
-                    html_utilities.html_markup( html_macros.$html_textarea_head$.getGlobalValue() );
-                    html_utilities.html_markup( html_macros.$html_textarea_name$.getGlobalValue() );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( $str31$term_strings );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( html_macros.$html_textarea_cols$.getGlobalValue() );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( $int28$35 );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( html_macros.$html_textarea_rows$.getGlobalValue() );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( THREE_INTEGER );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                    final SubLObject _prev_bind_0_$10 = html_macros.$html_safe_print$.currentBinding( thread );
-                    try
-                    {
-                      html_macros.$html_safe_print$.bind( T, thread );
+            html_source_readability_terpri(UNPROVIDED);
+            final SubLObject _prev_bind_0_$1 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding(thread);
+            try {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.bind(cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread) == $UNINITIALIZED ? list(EMPTY_SUBL_OBJECT_ARRAY) : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread), thread);
+                html_markup(html_macros.$html_html_head$.getGlobalValue());
+                html_markup(html_macros.$html_head_head$.getGlobalValue());
+                html_macros.html_head_content_type();
+                cb_head_shortcut_icon();
+                html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
+                cyc_file_dependencies.css($CB_CYC);
+                dhtml_macros.html_basic_cb_scripts();
+                if (NIL != title_var) {
+                    html_source_readability_terpri(UNPROVIDED);
+                    html_markup(html_macros.$html_title_head$.getGlobalValue());
+                    html_princ(title_var);
+                    html_markup(html_macros.$html_title_tail$.getGlobalValue());
+                }
+                html_complete.html_complete_script();
+                cyc_file_dependencies.css($SAM_AUTOCOMPLETE_CSS);
+                html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                html_source_readability_terpri(UNPROVIDED);
+                final SubLObject _prev_bind_0_$2 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                try {
+                    html_macros.$html_inside_bodyP$.bind(T, thread);
+                    html_markup(html_macros.$html_body_head$.getGlobalValue());
+                    if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
+                        html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
+                        html_char(CHAR_quotation, UNPROVIDED);
                     }
-                    finally
-                    {
-                      html_macros.$html_safe_print$.rebind( _prev_bind_0_$10, thread );
+                    html_markup(html_macros.$html_body_class$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup($str11$yui_skin_sam);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_char(CHAR_greater, UNPROVIDED);
+                    final SubLObject _prev_bind_0_$3 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_markup(html_macros.$html_div_head$.getGlobalValue());
+                        html_markup(html_macros.$html_attribute_id$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($$$reloadFrameButton);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$4 = html_macros.$html_safe_print$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_markup(html_macros.$html_input_head$.getGlobalValue());
+                            html_markup(html_macros.$html_input_type$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$button);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_name$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$reload);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_value$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_princ($$$Refresh_Frames);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            if (NIL != html_macros.$html_input_disabledP$.getDynamicValue(thread)) {
+                                html_simple_attribute(html_macros.$html_input_disabled$.getGlobalValue());
+                            }
+                            html_char(CHAR_greater, UNPROVIDED);
+                        } finally {
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$4, thread);
+                        }
+                        html_markup(html_macros.$html_div_tail$.getGlobalValue());
+                        if (NIL != title_var) {
+                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            html_princ(title_var);
+                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                        }
+                        final SubLObject frame_name_var = cb_frame_name(NIL);
+                        html_markup(html_macros.$html_form_head$.getGlobalValue());
+                        html_markup(html_macros.$html_form_action$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(html_macros.$html_form_method$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($$$post);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        if (NIL != frame_name_var) {
+                            html_markup(html_macros.$html_form_target$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(frame_name_var);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                        }
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$5 = html_macros.$html_safe_print$.currentBinding(thread);
+                        final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding(thread);
+                        final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_macros.$within_html_form$.bind(T, thread);
+                            html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                            html_hidden_input($str17$cb_handle_create_term, T, UNPROVIDED);
+                            cb_help_preamble($CB_CREATE_TERM, NIL, UNPROVIDED);
+                            cb_back_button($SELF, $$$Cancel_Create);
+                            html_indent(UNPROVIDED);
+                            html_reset_input($$$Reset);
+                            html_indent(UNPROVIDED);
+                            html_submit_input($$$Create_Constant, UNPROVIDED, UNPROVIDED);
+                            html_markup(html_macros.$html_table_head$.getGlobalValue());
+                            html_simple_attribute(html_macros.$html_table_noflow$.getGlobalValue());
+                            html_simple_attribute(html_macros.$html_table_nowrap$.getGlobalValue());
+                            html_char(CHAR_greater, UNPROVIDED);
+                            final SubLObject _prev_bind_0_$6 = html_macros.$html_safe_print$.currentBinding(thread);
+                            try {
+                                html_macros.$html_safe_print$.bind(T, thread);
+                                html_markup(html_macros.$html_table_row_head$.getGlobalValue());
+                                html_markup(html_macros.$html_table_data_valign$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(html_align($TOP));
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_char(CHAR_greater, UNPROVIDED);
+                                final SubLObject _prev_bind_0_$7 = html_macros.$html_safe_print$.currentBinding(thread);
+                                try {
+                                    html_macros.$html_safe_print$.bind(T, thread);
+                                    html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                    html_char(CHAR_greater, UNPROVIDED);
+                                    final SubLObject _prev_bind_0_$8 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                        html_princ($str23$Name__required____);
+                                        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                        html_script_utilities.html_clear_input_button($str24$new_name, $$$Clear, UNPROVIDED);
+                                        html_complete.html_complete_button($str24$new_name, $$$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                        html_newline(UNPROVIDED);
+                                        html_text_input($str24$new_name, $str27$, $int$35);
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_$8, thread);
+                                    }
+                                    html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                    html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                    html_markup(html_macros.$html_table_data_rowspan$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(TWO_INTEGER);
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_char(CHAR_greater, UNPROVIDED);
+                                    final SubLObject _prev_bind_0_$9 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                        cb_form($$termStrings, UNPROVIDED, UNPROVIDED);
+                                        html_princ($str30$__one_per_line__optional____);
+                                        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                        html_script_utilities.html_clear_input_button($str31$term_strings, $$$Clear, UNPROVIDED);
+                                        html_newline(UNPROVIDED);
+                                        html_markup(html_macros.$html_textarea_head$.getGlobalValue());
+                                        html_markup(html_macros.$html_textarea_name$.getGlobalValue());
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup($str31$term_strings);
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup(html_macros.$html_textarea_cols$.getGlobalValue());
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup($int$35);
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup(html_macros.$html_textarea_rows$.getGlobalValue());
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup(THREE_INTEGER);
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_char(CHAR_greater, UNPROVIDED);
+                                        final SubLObject _prev_bind_0_$10 = html_macros.$html_safe_print$.currentBinding(thread);
+                                        try {
+                                            html_macros.$html_safe_print$.bind(T, thread);
+                                        } finally {
+                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$10, thread);
+                                        }
+                                        html_markup(html_macros.$html_textarea_tail$.getGlobalValue());
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_$9, thread);
+                                    }
+                                    html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                } finally {
+                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_$7, thread);
+                                }
+                                html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
+                                html_source_readability_terpri(UNPROVIDED);
+                                html_markup(html_macros.$html_table_row_head$.getGlobalValue());
+                                html_markup(html_macros.$html_table_data_valign$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(html_align($BOTTOM));
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_char(CHAR_greater, UNPROVIDED);
+                                final SubLObject _prev_bind_0_$11 = html_macros.$html_safe_print$.currentBinding(thread);
+                                try {
+                                    html_macros.$html_safe_print$.bind(T, thread);
+                                    html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                    html_char(CHAR_greater, UNPROVIDED);
+                                    final SubLObject _prev_bind_0_$12 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                        cb_form($$comment, UNPROVIDED, UNPROVIDED);
+                                        html_princ($str34$__required____);
+                                        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                        html_script_utilities.html_clear_input_button($$$comment, $$$Clear, UNPROVIDED);
+                                        html_complete.html_complete_button($$$comment, $$$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_$12, thread);
+                                    }
+                                    html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                } finally {
+                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_$11, thread);
+                                }
+                                html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
+                                html_source_readability_terpri(UNPROVIDED);
+                                html_markup(html_macros.$html_table_row_head$.getGlobalValue());
+                                html_markup(html_macros.$html_table_data_valign$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(html_align($TOP));
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_char(CHAR_greater, UNPROVIDED);
+                                final SubLObject _prev_bind_0_$13 = html_macros.$html_safe_print$.currentBinding(thread);
+                                try {
+                                    html_macros.$html_safe_print$.bind(T, thread);
+                                    html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                    html_markup(html_macros.$html_table_data_colspan$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(TWO_INTEGER);
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_char(CHAR_greater, UNPROVIDED);
+                                    final SubLObject _prev_bind_0_$14 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        html_markup(html_macros.$html_textarea_head$.getGlobalValue());
+                                        html_markup(html_macros.$html_textarea_name$.getGlobalValue());
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup($$$comment);
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup(html_macros.$html_textarea_cols$.getGlobalValue());
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup($int$80);
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup(html_macros.$html_textarea_rows$.getGlobalValue());
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup(TEN_INTEGER);
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup(html_macros.$html_table_wrap$.getGlobalValue());
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup($$$virtual);
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_char(CHAR_greater, UNPROVIDED);
+                                        final SubLObject _prev_bind_0_$15 = html_macros.$html_safe_print$.currentBinding(thread);
+                                        try {
+                                            html_macros.$html_safe_print$.bind(T, thread);
+                                        } finally {
+                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$15, thread);
+                                        }
+                                        html_markup(html_macros.$html_textarea_tail$.getGlobalValue());
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_$14, thread);
+                                    }
+                                    html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                } finally {
+                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_$13, thread);
+                                }
+                                html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
+                                html_source_readability_terpri(UNPROVIDED);
+                            } finally {
+                                html_macros.$html_safe_print$.rebind(_prev_bind_0_$6, thread);
+                            }
+                            html_markup(html_macros.$html_table_tail$.getGlobalValue());
+                            html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                        } finally {
+                            html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_3, thread);
+                            html_macros.$within_html_form$.rebind(_prev_bind_2, thread);
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$5, thread);
+                        }
+                        html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                        html_copyright_notice();
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0_$3, thread);
                     }
-                    html_utilities.html_markup( html_macros.$html_textarea_tail$.getGlobalValue() );
-                  }
-                  finally
-                  {
-                    html_macros.$html_safe_print$.rebind( _prev_bind_0_$9, thread );
-                  }
-                  html_utilities.html_markup( html_macros.$html_table_data_tail$.getGlobalValue() );
+                    html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_$2, thread);
                 }
-                finally
-                {
-                  html_macros.$html_safe_print$.rebind( _prev_bind_0_$7, thread );
-                }
-                html_utilities.html_markup( html_macros.$html_table_row_tail$.getGlobalValue() );
-                html_utilities.html_source_readability_terpri( UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_table_row_head$.getGlobalValue() );
-                html_utilities.html_markup( html_macros.$html_table_data_valign$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( html_utilities.html_align( $kw32$BOTTOM ) );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                final SubLObject _prev_bind_0_$11 = html_macros.$html_safe_print$.currentBinding( thread );
-                try
-                {
-                  html_macros.$html_safe_print$.bind( T, thread );
-                  html_utilities.html_markup( html_macros.$html_table_data_head$.getGlobalValue() );
-                  html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                  final SubLObject _prev_bind_0_$12 = html_macros.$html_safe_print$.currentBinding( thread );
-                  try
-                  {
-                    html_macros.$html_safe_print$.bind( T, thread );
-                    html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                    cb_utilities.cb_form( $const33$comment, UNPROVIDED, UNPROVIDED );
-                    html_utilities.html_princ( $str34$__required____ );
-                    html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                    html_script_utilities.html_clear_input_button( $str35$comment, $str25$Clear, UNPROVIDED );
-                    html_complete.html_complete_button( $str35$comment, $str26$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-                  }
-                  finally
-                  {
-                    html_macros.$html_safe_print$.rebind( _prev_bind_0_$12, thread );
-                  }
-                  html_utilities.html_markup( html_macros.$html_table_data_tail$.getGlobalValue() );
-                }
-                finally
-                {
-                  html_macros.$html_safe_print$.rebind( _prev_bind_0_$11, thread );
-                }
-                html_utilities.html_markup( html_macros.$html_table_row_tail$.getGlobalValue() );
-                html_utilities.html_source_readability_terpri( UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_table_row_head$.getGlobalValue() );
-                html_utilities.html_markup( html_macros.$html_table_data_valign$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( html_utilities.html_align( $kw22$TOP ) );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                final SubLObject _prev_bind_0_$13 = html_macros.$html_safe_print$.currentBinding( thread );
-                try
-                {
-                  html_macros.$html_safe_print$.bind( T, thread );
-                  html_utilities.html_markup( html_macros.$html_table_data_head$.getGlobalValue() );
-                  html_utilities.html_markup( html_macros.$html_table_data_colspan$.getGlobalValue() );
-                  html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                  html_utilities.html_markup( TWO_INTEGER );
-                  html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                  html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                  final SubLObject _prev_bind_0_$14 = html_macros.$html_safe_print$.currentBinding( thread );
-                  try
-                  {
-                    html_macros.$html_safe_print$.bind( T, thread );
-                    html_utilities.html_markup( html_macros.$html_textarea_head$.getGlobalValue() );
-                    html_utilities.html_markup( html_macros.$html_textarea_name$.getGlobalValue() );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( $str35$comment );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( html_macros.$html_textarea_cols$.getGlobalValue() );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( $int36$80 );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( html_macros.$html_textarea_rows$.getGlobalValue() );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( TEN_INTEGER );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( html_macros.$html_table_wrap$.getGlobalValue() );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_markup( $str37$virtual );
-                    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                    html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                    final SubLObject _prev_bind_0_$15 = html_macros.$html_safe_print$.currentBinding( thread );
-                    try
-                    {
-                      html_macros.$html_safe_print$.bind( T, thread );
-                    }
-                    finally
-                    {
-                      html_macros.$html_safe_print$.rebind( _prev_bind_0_$15, thread );
-                    }
-                    html_utilities.html_markup( html_macros.$html_textarea_tail$.getGlobalValue() );
-                  }
-                  finally
-                  {
-                    html_macros.$html_safe_print$.rebind( _prev_bind_0_$14, thread );
-                  }
-                  html_utilities.html_markup( html_macros.$html_table_data_tail$.getGlobalValue() );
-                }
-                finally
-                {
-                  html_macros.$html_safe_print$.rebind( _prev_bind_0_$13, thread );
-                }
-                html_utilities.html_markup( html_macros.$html_table_row_tail$.getGlobalValue() );
-                html_utilities.html_source_readability_terpri( UNPROVIDED );
-              }
-              finally
-              {
-                html_macros.$html_safe_print$.rebind( _prev_bind_0_$6, thread );
-              }
-              html_utilities.html_markup( html_macros.$html_table_tail$.getGlobalValue() );
-              html_macros.embed_form_field_code( html_macros.$html_form_field_uniquifier_code$.getDynamicValue( thread ) );
+                html_markup(html_macros.$html_html_tail$.getGlobalValue());
+            } finally {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.rebind(_prev_bind_0_$1, thread);
             }
-            finally
-            {
-              html_macros.$html_form_field_uniquifier_code$.rebind( _prev_bind_3, thread );
-              html_macros.$within_html_form$.rebind( _prev_bind_2, thread );
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$5, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_form_tail$.getGlobalValue() );
-            html_utilities.html_source_readability_terpri( UNPROVIDED );
-            html_utilities.html_copyright_notice();
-          }
-          finally
-          {
-            html_macros.$html_safe_print$.rebind( _prev_bind_0_$3, thread );
-          }
-          html_utilities.html_markup( html_macros.$html_body_tail$.getGlobalValue() );
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
+            html_source_readability_terpri(UNPROVIDED);
+        } finally {
+            html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
         }
-        finally
-        {
-          html_macros.$html_inside_bodyP$.rebind( _prev_bind_0_$2, thread );
-        }
-        html_utilities.html_markup( html_macros.$html_html_tail$.getGlobalValue() );
-      }
-      finally
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.rebind( _prev_bind_0_$1, thread );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-    }
-    finally
-    {
-      html_macros.$html_id_space_id_generator$.rebind( _prev_bind_0, thread );
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 2514L)
-  public static SubLObject cb_handle_create_term(final SubLObject args)
-  {
-    if( NIL != ke.cyclist_is_guest() )
-    {
-      cyc_navigator_internals.guest_warn( $str40$Creating );
-      return NIL;
-    }
-    final SubLObject new_name = string_utilities.trim_whitespace( html_utilities.html_extract_input( $str24$new_name, args ) );
-    final SubLObject comment = html_utilities.html_extract_input( $str35$comment, args );
-    final SubLObject term_string_text = html_utilities.html_extract_input( $str31$term_strings, args );
-    SubLObject term_strings = NIL;
-    if( !new_name.isString() || new_name.equal( $str27$ ) )
-    {
-      cb_utilities.cb_error( $str41$No_name_was_specified, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    else if( NIL == constant_completion_high.valid_constant_name_p( new_name ) )
-    {
-      cb_utilities.cb_error( $str42$_S_is_not_a_valid_constant_name, new_name, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    else
-    {
-      final SubLObject existing = constants_high.find_constant( new_name );
-      if( NIL != existing )
-      {
-        return cb_categorize_term_guts( existing );
-      }
-    }
-    if( !comment.isString() || comment.equal( $str27$ ) )
-    {
-      cb_utilities.cb_error( $str43$No_comment_was_specified, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    if( term_string_text.isString() && !term_strings.equal( $str27$ ) )
-    {
-      term_strings = cb_extract_lines( term_string_text );
-    }
-    final SubLObject new_constant = cb_create_term_hook( new_name, comment, term_strings );
-    if( NIL != constant_handles.constant_p( new_constant ) )
-    {
-      cb_tools.cb_add_to_constant_history( new_constant );
-      cb_categorize_term_guts( new_constant );
-    }
-    else
-    {
-      cb_utilities.cb_error( $str44$Unable_to_create_a_constant_named, new_name, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 3910L)
-  public static SubLObject cb_link_create_term(SubLObject linktext)
-  {
-    if( linktext == UNPROVIDED )
-    {
-      linktext = NIL;
-    }
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( NIL == linktext )
-    {
-      linktext = $str4$Create_Term;
-    }
-    final SubLObject frame_name_var = cb_utilities.cb_frame_name( $kw46$MAIN );
-    html_utilities.html_markup( html_macros.$html_anchor_head$.getGlobalValue() );
-    html_utilities.html_markup( html_macros.$html_anchor_href$.getGlobalValue() );
-    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    cb_parameters.cyc_cgi_url_int();
-    html_utilities.html_princ( $str47$cb_create_term );
-    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    if( NIL != frame_name_var )
-    {
-      html_utilities.html_markup( html_macros.$html_anchor_target$.getGlobalValue() );
-      html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-      html_utilities.html_markup( frame_name_var );
-      html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    }
-    html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-    final SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding( thread );
-    try
-    {
-      html_macros.$html_safe_print$.bind( T, thread );
-      html_utilities.html_princ( linktext );
-    }
-    finally
-    {
-      html_macros.$html_safe_print$.rebind( _prev_bind_0, thread );
-    }
-    html_utilities.html_markup( html_macros.$html_anchor_tail$.getGlobalValue() );
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 4207L)
-  public static SubLObject cb_create_term_hook(final SubLObject new_name, SubLObject comment, SubLObject term_strings)
-  {
-    if( comment == UNPROVIDED )
-    {
-      comment = NIL;
-    }
-    if( term_strings == UNPROVIDED )
-    {
-      term_strings = NIL;
-    }
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != Types.stringp( new_name ) : new_name;
-    SubLObject new_constant = NIL;
-    final SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding( thread );
-    try
-    {
-      api_control_vars.$use_local_queueP$.bind( NIL, thread );
-      new_constant = ke.ke_create( new_name );
-      if( NIL != new_constant )
-      {
-        if( comment.isString() )
-        {
-          ke.ke_assert( ConsesLow.list( $const33$comment, new_constant, comment ), mt_vars.$default_assert_mt$.getGlobalValue(), $kw53$DEFAULT, $kw54$FORWARD );
-        }
-        SubLObject cdolist_list_var = term_strings;
-        SubLObject term_string = NIL;
-        term_string = cdolist_list_var.first();
-        while ( NIL != cdolist_list_var)
-        {
-          assert NIL != Types.stringp( term_string ) : term_string;
-          ke.ke_assert( ConsesLow.list( $const29$termStrings, new_constant, term_string ), $const55$TemporaryLexicalAssertionsMt, $kw53$DEFAULT, $kw54$FORWARD );
-          cdolist_list_var = cdolist_list_var.rest();
-          term_string = cdolist_list_var.first();
-        }
-      }
-    }
-    finally
-    {
-      api_control_vars.$use_local_queueP$.rebind( _prev_bind_0, thread );
-    }
-    return new_constant;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 4815L)
-  public static SubLObject cb_extract_lines(final SubLObject string)
-  {
-    return Sequences.delete( $str27$, cb_extract_lines_recursive( string, ZERO_INTEGER ), Symbols.symbol_function( EQUAL ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 4925L)
-  public static SubLObject cb_extract_lines_recursive(final SubLObject string, SubLObject start)
-  {
-    if( start == UNPROVIDED )
-    {
-      start = ZERO_INTEGER;
-    }
-    final SubLObject position = Sequences.position_if( Symbols.symbol_function( $sym56$CR_OR_LF ), string, Symbols.symbol_function( IDENTITY ), start, UNPROVIDED );
-    if( position.isInteger() )
-    {
-      return ConsesLow.cons( string_utilities.trim_whitespace( Sequences.subseq( string, start, position ) ), cb_extract_lines_recursive( string, Numbers.add( position, ONE_INTEGER ) ) );
-    }
-    return ConsesLow.list( string_utilities.trim_whitespace( Sequences.subseq( string, start, UNPROVIDED ) ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 5276L)
-  public static SubLObject cr_or_lf(final SubLObject v_char)
-  {
-    return makeBoolean( Characters.char_code( v_char ).numE( TEN_INTEGER ) || Characters.char_code( v_char ).numE( THIRTEEN_INTEGER ) );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 5377L)
-  public static SubLObject cb_categorize_term(final SubLObject args)
-  {
-    final SubLObject fort_spec = args.first();
-    final SubLObject fort = cb_utilities.cb_guess_fort( args.first(), UNPROVIDED );
-    if( NIL == forts.fort_p( fort ) )
-    {
-      cb_utilities.cb_error( $str57$_a_does_not_specify_a_Cyc_term, fort_spec, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-      return NIL;
-    }
-    return cb_categorize_term_guts( fort );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 5703L)
-  public static SubLObject cb_link_categorize_term(final SubLObject v_term, SubLObject linktext)
-  {
-    if( linktext == UNPROVIDED )
-    {
-      linktext = NIL;
-    }
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( NIL == linktext )
-    {
-      linktext = $str59$Categorize_Term;
-    }
-    final SubLObject frame_name_var = cb_utilities.cb_frame_name( $kw46$MAIN );
-    html_utilities.html_markup( html_macros.$html_anchor_head$.getGlobalValue() );
-    html_utilities.html_markup( html_macros.$html_anchor_href$.getGlobalValue() );
-    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    cb_parameters.cyc_cgi_url_int();
-    PrintLow.format( html_macros.$html_stream$.getDynamicValue( thread ), $str60$cb_categorize_term__a, cb_utilities.cb_fort_identifier( v_term ) );
-    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    if( NIL != frame_name_var )
-    {
-      html_utilities.html_markup( html_macros.$html_anchor_target$.getGlobalValue() );
-      html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-      html_utilities.html_markup( frame_name_var );
-      html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    }
-    html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-    final SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding( thread );
-    try
-    {
-      html_macros.$html_safe_print$.bind( T, thread );
-      html_utilities.html_princ( linktext );
-    }
-    finally
-    {
-      html_macros.$html_safe_print$.rebind( _prev_bind_0, thread );
-    }
-    html_utilities.html_markup( html_macros.$html_anchor_tail$.getGlobalValue() );
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 6096L)
-  public static SubLObject cb_categorize_term_guts(final SubLObject v_term)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != forts.fort_p( v_term ) : v_term;
-    final SubLObject mt = mt_vars.$default_assert_mt$.getGlobalValue();
-    final SubLObject title_var = $str59$Categorize_Term;
-    final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding( thread );
-    try
-    {
-      html_macros.$html_id_space_id_generator$.bind( ( NIL != integer_sequence_generator.integer_sequence_generator_p( html_macros.$html_id_space_id_generator$.getDynamicValue( thread ) ) )
-          ? html_macros.$html_id_space_id_generator$.getDynamicValue( thread )
-          : integer_sequence_generator.new_integer_sequence_generator( UNPROVIDED, UNPROVIDED, UNPROVIDED ), thread );
-      html_utilities.html_markup( $str5$__DOCTYPE_html_PUBLIC_____W3C__DT );
-      if( NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue( thread ) )
-      {
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        html_utilities.html_markup( $str6$_meta_http_equiv__X_UA_Compatible );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-      final SubLObject _prev_bind_0_$16 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding( thread );
-      try
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.bind( ( cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ) == $kw7$UNINITIALIZED ) ? ConsesLow.list( EMPTY_SUBL_OBJECT_ARRAY )
-            : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ), thread );
-        html_utilities.html_markup( html_macros.$html_html_head$.getGlobalValue() );
-        html_utilities.html_markup( html_macros.$html_head_head$.getGlobalValue() );
-        html_macros.html_head_content_type();
-        cb_parameters.cb_head_shortcut_icon();
-        html_utilities.html_meta_robot_instructions( cb_parameters.$cb_permit_robots_to_indexP$.getDynamicValue( thread ), cb_parameters.$cb_permit_robots_to_followP$.getDynamicValue( thread ) );
-        cyc_file_dependencies.css( $kw8$CB_CYC );
-        dhtml_macros.html_basic_cb_scripts();
-        if( NIL != title_var )
-        {
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-          html_utilities.html_markup( html_macros.$html_title_head$.getGlobalValue() );
-          html_utilities.html_princ( title_var );
-          html_utilities.html_markup( html_macros.$html_title_tail$.getGlobalValue() );
-        }
-        html_complete.html_complete_script();
-        cyc_file_dependencies.css( $kw9$SAM_AUTOCOMPLETE_CSS );
-        html_utilities.html_markup( html_macros.$html_head_tail$.getGlobalValue() );
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        final SubLObject _prev_bind_0_$17 = html_macros.$html_inside_bodyP$.currentBinding( thread );
-        try
-        {
-          html_macros.$html_inside_bodyP$.bind( T, thread );
-          html_utilities.html_markup( html_macros.$html_body_head$.getGlobalValue() );
-          if( NIL != html_macros.$html_default_bgcolor$.getDynamicValue( thread ) )
-          {
-            html_utilities.html_markup( html_macros.$html_body_bgcolor$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( html_utilities.html_color( html_macros.$html_default_bgcolor$.getDynamicValue( thread ) ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          }
-          html_utilities.html_markup( html_macros.$html_body_class$.getGlobalValue() );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_markup( $str11$yui_skin_sam );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-          final SubLObject _prev_bind_0_$18 = html_macros.$html_safe_print$.currentBinding( thread );
-          try
-          {
-            html_macros.$html_safe_print$.bind( T, thread );
-            html_utilities.html_markup( html_macros.$html_div_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_attribute_id$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str12$reloadFrameButton );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$19 = html_macros.$html_safe_print$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_utilities.html_markup( html_macros.$html_input_head$.getGlobalValue() );
-              html_utilities.html_markup( html_macros.$html_input_type$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str13$button );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_name$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str14$reload );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_value$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_princ( $str15$Refresh_Frames );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              if( NIL != html_macros.$html_input_disabledP$.getDynamicValue( thread ) )
-              {
-                html_utilities.html_simple_attribute( html_macros.$html_input_disabled$.getGlobalValue() );
-              }
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            }
-            finally
-            {
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$19, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_div_tail$.getGlobalValue() );
-            if( NIL != title_var )
-            {
-              html_utilities.html_markup( html_macros.$html_heading_head$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              html_utilities.html_princ( title_var );
-              html_utilities.html_markup( html_macros.$html_heading_tail$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            }
-            final SubLObject frame_name_var = cb_utilities.cb_frame_name( NIL );
-            html_utilities.html_markup( html_macros.$html_form_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_form_action$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( system_parameters.$cyc_cgi_program$.getDynamicValue( thread ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( html_macros.$html_form_method$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str16$post );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            if( NIL != frame_name_var )
-            {
-              html_utilities.html_markup( html_macros.$html_form_target$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( frame_name_var );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            }
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$20 = html_macros.$html_safe_print$.currentBinding( thread );
-            final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding( thread );
-            final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_macros.$within_html_form$.bind( T, thread );
-              html_macros.$html_form_field_uniquifier_code$.bind( html_macros.next_html_form_field_uniquifier_code(), thread );
-              html_utilities.html_hidden_input( $str67$cb_handle_categorize_term, T, UNPROVIDED );
-              cb_utilities.cb_help_preamble( $kw64$CB_CATEGORIZE_TERM, NIL, UNPROVIDED );
-              cb_utilities.cb_back_button( $kw18$SELF, UNPROVIDED );
-              html_utilities.html_indent( UNPROVIDED );
-              html_utilities.html_reset_input( $str25$Clear );
-              html_utilities.html_indent( UNPROVIDED );
-              html_utilities.html_submit_input( $str68$Categorize, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_newline( TWO_INTEGER );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str69$Categorize_ );
-              cb_utilities.cb_form( v_term, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_princ( $str70$_ );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              SubLObject comment = kb_mapping_utilities.fpred_value_in_mt( v_term, $const33$comment, mt_vars.$default_comment_mt$.getGlobalValue(), UNPROVIDED, UNPROVIDED, UNPROVIDED );
-              if( NIL == comment )
-              {
-                comment = kb_mapping_utilities.fpred_value_in_any_mt( v_term, $const33$comment, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-              }
-              if( comment.isString() )
-              {
-                html_utilities.html_newline( UNPROVIDED );
-                cb_browser.cb_c_documentation_string( comment );
-              }
-              html_utilities.html_newline( UNPROVIDED );
-              html_utilities.html_hidden_input( $str71$term, cb_utilities.cb_fort_identifier( v_term ), UNPROVIDED );
-              html_utilities.html_newline( UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str72$Mt___ );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              html_script_utilities.html_clear_input_button( $str73$mt, $str25$Clear, UNPROVIDED );
-              html_utilities.html_newline( UNPROVIDED );
-              html_complete.html_complete_button( $str73$mt, $str26$Complete, $const74$Microtheory, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_text_input( $str73$mt, ( NIL != mt ) ? cb_utilities.cb_string_for_fort( mt ) : NIL, cb_parameters.$cb_constant_input_width$.getDynamicValue( thread ) );
-              html_utilities.html_newline( UNPROVIDED );
-              html_utilities.html_newline( UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str75$Similar_to___ );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              html_script_utilities.html_clear_input_button( $str76$similar_to, $str25$Clear, UNPROVIDED );
-              html_utilities.html_newline( UNPROVIDED );
-              html_complete.html_complete_button( $str76$similar_to, $str26$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-              final SubLObject last_similar = $cb_categorize_info$.getDynamicValue( thread ).first();
-              html_utilities.html_text_input( $str76$similar_to, last_similar, $int77$40 );
-              html_utilities.html_newline( UNPROVIDED );
-              html_utilities.html_newline( UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str78$Instance_of___ );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              html_script_utilities.html_clear_input_button( $str79$isa, $str25$Clear, UNPROVIDED );
-              html_utilities.html_newline( UNPROVIDED );
-              html_complete.html_complete_button( $str79$isa, $str26$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-              final SubLObject last_isa = conses_high.second( $cb_categorize_info$.getDynamicValue( thread ) );
-              html_utilities.html_text_input( $str79$isa, last_isa, $int77$40 );
-              html_utilities.html_newline( UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str80$Specialization_of___ );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              html_script_utilities.html_clear_input_button( $str81$genl, $str25$Clear, UNPROVIDED );
-              html_utilities.html_newline( UNPROVIDED );
-              html_complete.html_complete_button( $str81$genl, $str26$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-              final SubLObject last_genl = conses_high.third( $cb_categorize_info$.getDynamicValue( thread ) );
-              html_utilities.html_text_input( $str81$genl, last_genl, $int77$40 );
-              html_macros.embed_form_field_code( html_macros.$html_form_field_uniquifier_code$.getDynamicValue( thread ) );
-            }
-            finally
-            {
-              html_macros.$html_form_field_uniquifier_code$.rebind( _prev_bind_3, thread );
-              html_macros.$within_html_form$.rebind( _prev_bind_2, thread );
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$20, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_form_tail$.getGlobalValue() );
-            html_utilities.html_source_readability_terpri( UNPROVIDED );
-            html_utilities.html_copyright_notice();
-          }
-          finally
-          {
-            html_macros.$html_safe_print$.rebind( _prev_bind_0_$18, thread );
-          }
-          html_utilities.html_markup( html_macros.$html_body_tail$.getGlobalValue() );
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-        }
-        finally
-        {
-          html_macros.$html_inside_bodyP$.rebind( _prev_bind_0_$17, thread );
-        }
-        html_utilities.html_markup( html_macros.$html_html_tail$.getGlobalValue() );
-      }
-      finally
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.rebind( _prev_bind_0_$16, thread );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-    }
-    finally
-    {
-      html_macros.$html_id_space_id_generator$.rebind( _prev_bind_0, thread );
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 8134L)
-  public static SubLObject cb_handle_categorize_term(final SubLObject args)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    final SubLObject term_id = html_utilities.html_extract_input( $str71$term, args );
-    final SubLObject mt_string = html_utilities.html_extract_input( $str73$mt, args );
-    final SubLObject similar_to_string = html_utilities.html_extract_input( $str76$similar_to, args );
-    final SubLObject isa_string = html_utilities.html_extract_input( $str79$isa, args );
-    final SubLObject generalization_string = html_utilities.html_extract_input( $str82$generalization, args );
-    SubLObject v_term = NIL;
-    SubLObject mt = NIL;
-    SubLObject similar_to = NIL;
-    SubLObject v_isa = NIL;
-    SubLObject generalization = NIL;
-    v_term = cb_utilities.cb_guess_fort( term_id, UNPROVIDED );
-    if( NIL == forts.fort_p( v_term ) )
-    {
-      cb_utilities.cb_error( $str57$_a_does_not_specify_a_Cyc_term, term_id, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-      return NIL;
-    }
-    mt = cb_utilities.cb_guess_fort( mt_string, UNPROVIDED );
-    if( NIL == forts.fort_p( mt ) || NIL == isa.isa_in_any_mtP( mt, $const74$Microtheory ) )
-    {
-      cb_utilities.cb_error( $str83$_a_does_not_specify_a_Cyc_Microth, mt_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-      return NIL;
-    }
-    if( similar_to_string.isString() && !$str27$.equal( similar_to_string ) )
-    {
-      similar_to = cb_utilities.cb_guess_fort( similar_to_string, UNPROVIDED );
-      if( NIL == forts.fort_p( similar_to ) )
-      {
-        cb_utilities.cb_error( $str57$_a_does_not_specify_a_Cyc_term, similar_to_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
         return NIL;
-      }
     }
-    if( isa_string.isString() && !$str27$.equal( isa_string ) )
-    {
-      v_isa = cb_utilities.cb_guess_fort( isa_string, UNPROVIDED );
-      if( NIL == forts.fort_p( v_isa ) )
-      {
-        cb_utilities.cb_error( $str57$_a_does_not_specify_a_Cyc_term, isa_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-        return NIL;
-      }
-    }
-    if( generalization_string.isString() && !$str27$.equal( generalization_string ) )
-    {
-      generalization = cb_utilities.cb_guess_fort( generalization_string, UNPROVIDED );
-      if( NIL == forts.fort_p( generalization ) )
-      {
-        cb_utilities.cb_error( $str57$_a_does_not_specify_a_Cyc_term, generalization_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-        return NIL;
-      }
-    }
-    if( NIL == $cb_categorize_info$.getDynamicValue( thread ) )
-    {
-      $cb_categorize_info$.setDynamicValue( ConsesLow.list( $str27$, $str27$, $str27$ ), thread );
-    }
-    ConsesLow.set_nth( ZERO_INTEGER, $cb_categorize_info$.getDynamicValue( thread ), similar_to_string );
-    ConsesLow.set_nth( ONE_INTEGER, $cb_categorize_info$.getDynamicValue( thread ), isa_string );
-    ConsesLow.set_nth( TWO_INTEGER, $cb_categorize_info$.getDynamicValue( thread ), generalization_string );
-    if( NIL != similar_to )
-    {
-      cb_categorize_similar( v_term, similar_to );
-    }
-    if( NIL != v_isa )
-    {
-      cb_categorize_isa( v_term, v_isa );
-    }
-    if( NIL != generalization )
-    {
-      cb_categorize_generalization( v_term, generalization );
-    }
-    if( NIL != similar_to )
-    {
-      cb_copy_from_similar_guts( v_term, similar_to );
-    }
-    else
-    {
-      cb_conceptually_related_guts( v_term );
-    }
-    return NIL;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 10946L)
-  public static SubLObject cb_categorize_similar(final SubLObject v_term, final SubLObject similar_to)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != forts.fort_p( v_term ) : v_term;
-    assert NIL != forts.fort_p( similar_to ) : similar_to;
-    final SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding( thread );
-    try
-    {
-      api_control_vars.$use_local_queueP$.bind( NIL, thread );
-      final SubLObject _prev_bind_0_$21 = mt_relevance_macros.$relevant_mt_function$.currentBinding( thread );
-      final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding( thread );
-      try
-      {
-        mt_relevance_macros.$relevant_mt_function$.bind( $sym86$RELEVANT_MT_IS_EVERYTHING, thread );
-        mt_relevance_macros.$mt$.bind( $const87$EverythingPSC, thread );
-        final SubLObject pred_var = $const88$isa;
-        if( NIL != kb_mapping_macros.do_gaf_arg_index_key_validator( similar_to, ONE_INTEGER, pred_var ) )
-        {
-          final SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator( similar_to, ONE_INTEGER, pred_var );
-          SubLObject done_var = NIL;
-          final SubLObject token_var = NIL;
-          while ( NIL == done_var)
-          {
-            final SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper( iterator_var, token_var );
-            final SubLObject valid = makeBoolean( !token_var.eql( final_index_spec ) );
-            if( NIL != valid )
-            {
-              SubLObject final_index_iterator = NIL;
-              try
-              {
-                final_index_iterator = kb_mapping_macros.new_final_index_iterator( final_index_spec, $kw89$GAF, $kw90$TRUE, NIL );
-                SubLObject done_var_$22 = NIL;
-                final SubLObject token_var_$23 = NIL;
-                while ( NIL == done_var_$22)
-                {
-                  final SubLObject ass = iteration.iteration_next_without_values_macro_helper( final_index_iterator, token_var_$23 );
-                  final SubLObject valid_$24 = makeBoolean( !token_var_$23.eql( ass ) );
-                  if( NIL != valid_$24 && NIL != assertions_high.asserted_assertionP( ass ) )
-                  {
-                    final SubLObject mt = assertions_high.assertion_mt( ass );
-                    final SubLObject col = assertions_high.gaf_arg2( ass );
-                    final SubLObject strength = assertions_high.assertion_strength( ass );
-                    ke.ke_assert( ConsesLow.list( $const88$isa, v_term, col ), mt, strength, $kw54$FORWARD );
-                  }
-                  done_var_$22 = makeBoolean( NIL == valid_$24 );
+    public static SubLObject cb_handle_create_term(final SubLObject args) {
+        if (NIL != ke.cyclist_is_guest()) {
+            cyc_navigator_internals.guest_warn($$$Creating);
+            return NIL;
+        }
+        final SubLObject new_name = string_utilities.trim_whitespace(html_extract_input($str24$new_name, args));
+        final SubLObject comment = html_extract_input($$$comment, args);
+        final SubLObject term_string_text = html_extract_input($str31$term_strings, args);
+        SubLObject term_strings = NIL;
+        if ((!new_name.isString()) || new_name.equal($str27$)) {
+            cb_error($$$No_name_was_specified, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        } else
+            if (NIL == constant_completion_high.valid_constant_name_p(new_name)) {
+                cb_error($str42$_S_is_not_a_valid_constant_name, new_name, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            } else {
+                final SubLObject existing = constants_high.find_constant(new_name);
+                if (NIL != existing) {
+                    return cb_categorize_term_guts(existing);
                 }
-              }
-              finally
-              {
-                final SubLObject _prev_bind_0_$22 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-                try
-                {
-                  Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-                  final SubLObject _values = Values.getValuesAsVector();
-                  if( NIL != final_index_iterator )
-                  {
-                    kb_mapping_macros.destroy_final_index_iterator( final_index_iterator );
-                  }
-                  Values.restoreValuesFromVector( _values );
-                }
-                finally
-                {
-                  Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$22, thread );
-                }
-              }
             }
-            done_var = makeBoolean( NIL == valid );
-          }
+
+        if ((!comment.isString()) || comment.equal($str27$)) {
+            cb_error($$$No_comment_was_specified, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         }
-      }
-      finally
-      {
-        mt_relevance_macros.$mt$.rebind( _prev_bind_2, thread );
-        mt_relevance_macros.$relevant_mt_function$.rebind( _prev_bind_0_$21, thread );
-      }
-      SubLObject cdolist_list_var = $cb_categorize_generalization_possibilities$.getGlobalValue();
-      SubLObject info = NIL;
-      info = cdolist_list_var.first();
-      while ( NIL != cdolist_list_var)
-      {
-        final SubLObject pred = info.first();
-        final SubLObject _prev_bind_0_$23 = mt_relevance_macros.$relevant_mt_function$.currentBinding( thread );
-        final SubLObject _prev_bind_3 = mt_relevance_macros.$mt$.currentBinding( thread );
-        try
-        {
-          mt_relevance_macros.$relevant_mt_function$.bind( $sym86$RELEVANT_MT_IS_EVERYTHING, thread );
-          mt_relevance_macros.$mt$.bind( $const87$EverythingPSC, thread );
-          final SubLObject pred_var2 = pred;
-          if( NIL != kb_mapping_macros.do_gaf_arg_index_key_validator( similar_to, ONE_INTEGER, pred_var2 ) )
-          {
-            final SubLObject iterator_var2 = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator( similar_to, ONE_INTEGER, pred_var2 );
-            SubLObject done_var2 = NIL;
-            final SubLObject token_var2 = NIL;
-            while ( NIL == done_var2)
-            {
-              final SubLObject final_index_spec2 = iteration.iteration_next_without_values_macro_helper( iterator_var2, token_var2 );
-              final SubLObject valid2 = makeBoolean( !token_var2.eql( final_index_spec2 ) );
-              if( NIL != valid2 )
-              {
-                SubLObject final_index_iterator2 = NIL;
-                try
-                {
-                  final_index_iterator2 = kb_mapping_macros.new_final_index_iterator( final_index_spec2, $kw89$GAF, $kw90$TRUE, NIL );
-                  SubLObject done_var_$23 = NIL;
-                  final SubLObject token_var_$24 = NIL;
-                  while ( NIL == done_var_$23)
-                  {
-                    final SubLObject ass2 = iteration.iteration_next_without_values_macro_helper( final_index_iterator2, token_var_$24 );
-                    final SubLObject valid_$25 = makeBoolean( !token_var_$24.eql( ass2 ) );
-                    if( NIL != valid_$25 && NIL != assertions_high.asserted_assertionP( ass2 ) )
-                    {
-                      final SubLObject mt2 = assertions_high.assertion_mt( ass2 );
-                      final SubLObject arg2 = assertions_high.gaf_arg2( ass2 );
-                      final SubLObject strength2 = assertions_high.assertion_strength( ass2 );
-                      ke.ke_assert( ConsesLow.list( pred, v_term, arg2 ), mt2, strength2, $kw54$FORWARD );
-                    }
-                    done_var_$23 = makeBoolean( NIL == valid_$25 );
-                  }
+        if (term_string_text.isString() && (!term_strings.equal($str27$))) {
+            term_strings = cb_extract_lines(term_string_text);
+        }
+        final SubLObject new_constant = cb_create_term_hook(new_name, comment, term_strings);
+        if (NIL != constant_p(new_constant)) {
+            cb_tools.cb_add_to_constant_history(new_constant);
+            cb_categorize_term_guts(new_constant);
+        } else {
+            cb_error($str44$Unable_to_create_a_constant_named, new_name, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        return NIL;
+    }
+
+    public static SubLObject cb_link_create_term(SubLObject linktext) {
+        if (linktext == UNPROVIDED) {
+            linktext = NIL;
+        }
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if (NIL == linktext) {
+            linktext = $$$Create_Term;
+        }
+        final SubLObject frame_name_var = cb_frame_name($MAIN);
+        html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+        html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+        html_char(CHAR_quotation, UNPROVIDED);
+        cyc_cgi_url_int();
+        html_princ($str47$cb_create_term);
+        html_char(CHAR_quotation, UNPROVIDED);
+        if (NIL != frame_name_var) {
+            html_markup(html_macros.$html_anchor_target$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(frame_name_var);
+            html_char(CHAR_quotation, UNPROVIDED);
+        }
+        html_char(CHAR_greater, UNPROVIDED);
+        final SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+        try {
+            html_macros.$html_safe_print$.bind(T, thread);
+            html_princ(linktext);
+        } finally {
+            html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+        }
+        html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+        return NIL;
+    }
+
+    public static SubLObject cb_create_term_hook(final SubLObject new_name, SubLObject comment, SubLObject term_strings) {
+        if (comment == UNPROVIDED) {
+            comment = NIL;
+        }
+        if (term_strings == UNPROVIDED) {
+            term_strings = NIL;
+        }
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != stringp(new_name) : "Types.stringp(new_name) " + "CommonSymbols.NIL != Types.stringp(new_name) " + new_name;
+        SubLObject new_constant = NIL;
+        final SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding(thread);
+        try {
+            api_control_vars.$use_local_queueP$.bind(NIL, thread);
+            new_constant = ke.ke_create(new_name);
+            if (NIL != new_constant) {
+                if (comment.isString()) {
+                    ke.ke_assert(list($$comment, new_constant, comment), mt_vars.$default_assert_mt$.getGlobalValue(), $DEFAULT, $FORWARD);
                 }
-                finally
-                {
-                  final SubLObject _prev_bind_0_$24 = Threads.$is_thread_performing_cleanupP$.currentBinding( thread );
-                  try
-                  {
-                    Threads.$is_thread_performing_cleanupP$.bind( T, thread );
-                    final SubLObject _values2 = Values.getValuesAsVector();
-                    if( NIL != final_index_iterator2 )
-                    {
-                      kb_mapping_macros.destroy_final_index_iterator( final_index_iterator2 );
-                    }
-                    Values.restoreValuesFromVector( _values2 );
-                  }
-                  finally
-                  {
-                    Threads.$is_thread_performing_cleanupP$.rebind( _prev_bind_0_$24, thread );
-                  }
-                }
-              }
-              done_var2 = makeBoolean( NIL == valid2 );
+                SubLObject cdolist_list_var = term_strings;
+                SubLObject term_string = NIL;
+                term_string = cdolist_list_var.first();
+                while (NIL != cdolist_list_var) {
+                    assert NIL != stringp(term_string) : "Types.stringp(term_string) " + "CommonSymbols.NIL != Types.stringp(term_string) " + term_string;
+                    ke.ke_assert(list($$termStrings, new_constant, term_string), $$TemporaryLexicalAssertionsMt, $DEFAULT, $FORWARD);
+                    cdolist_list_var = cdolist_list_var.rest();
+                    term_string = cdolist_list_var.first();
+                } 
             }
-          }
+        } finally {
+            api_control_vars.$use_local_queueP$.rebind(_prev_bind_0, thread);
         }
-        finally
-        {
-          mt_relevance_macros.$mt$.rebind( _prev_bind_3, thread );
-          mt_relevance_macros.$relevant_mt_function$.rebind( _prev_bind_0_$23, thread );
+        return new_constant;
+    }
+
+    public static SubLObject cb_extract_lines(final SubLObject string) {
+        return delete($str27$, cb_extract_lines_recursive(string, ZERO_INTEGER), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static SubLObject cb_extract_lines_recursive(final SubLObject string, SubLObject start) {
+        if (start == UNPROVIDED) {
+            start = ZERO_INTEGER;
         }
-        cdolist_list_var = cdolist_list_var.rest();
-        info = cdolist_list_var.first();
-      }
+        final SubLObject position = position_if(symbol_function(CR_OR_LF), string, symbol_function(IDENTITY), start, UNPROVIDED);
+        if (position.isInteger()) {
+            return cons(string_utilities.trim_whitespace(subseq(string, start, position)), cb_extract_lines_recursive(string, add(position, ONE_INTEGER)));
+        }
+        return list(string_utilities.trim_whitespace(subseq(string, start, UNPROVIDED)));
     }
-    finally
-    {
-      api_control_vars.$use_local_queueP$.rebind( _prev_bind_0, thread );
-    }
-    return NIL;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 11903L)
-  public static SubLObject cb_categorize_isa(final SubLObject v_term, final SubLObject collection)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != forts.fort_p( v_term ) : v_term;
-    assert NIL != forts.fort_p( collection ) : collection;
-    final SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding( thread );
-    try
-    {
-      api_control_vars.$use_local_queueP$.bind( NIL, thread );
-      SubLObject cdolist_list_var;
-      final SubLObject mts = cdolist_list_var = cb_categorize_isa_guess_mts( collection );
-      SubLObject mt = NIL;
-      mt = cdolist_list_var.first();
-      while ( NIL != cdolist_list_var)
-      {
-        ke.ke_assert( ConsesLow.list( $const88$isa, v_term, collection ), mt, $kw91$MONOTONIC, $kw54$FORWARD );
-        cdolist_list_var = cdolist_list_var.rest();
-        mt = cdolist_list_var.first();
-      }
+    public static SubLObject cr_or_lf(final SubLObject v_char) {
+        return makeBoolean(char_code(v_char).numE(TEN_INTEGER) || char_code(v_char).numE(THIRTEEN_INTEGER));
     }
-    finally
-    {
-      api_control_vars.$use_local_queueP$.rebind( _prev_bind_0, thread );
+
+    public static SubLObject cb_categorize_term(final SubLObject args) {
+        final SubLObject fort_spec = args.first();
+        final SubLObject fort = cb_guess_fort(args.first(), UNPROVIDED);
+        if (NIL == forts.fort_p(fort)) {
+            cb_error($str57$_a_does_not_specify_a_Cyc_term, fort_spec, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            return NIL;
+        }
+        return cb_categorize_term_guts(fort);
     }
-    return NIL;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 12219L)
-  public static SubLObject cb_categorize_isa_guess_mts(final SubLObject collection)
-  {
-    final SubLObject mts_where_genls = kb_indexing.key_gaf_arg_index( collection, ONE_INTEGER, $const92$genls );
-    final SubLObject mts = genl_mts.max_mts( mts_where_genls, UNPROVIDED );
-    return mts;
-  }
+    public static SubLObject cb_link_categorize_term(final SubLObject v_term, SubLObject linktext) {
+        if (linktext == UNPROVIDED) {
+            linktext = NIL;
+        }
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if (NIL == linktext) {
+            linktext = $$$Categorize_Term;
+        }
+        final SubLObject frame_name_var = cb_frame_name($MAIN);
+        html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+        html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+        html_char(CHAR_quotation, UNPROVIDED);
+        cyc_cgi_url_int();
+        format(html_macros.$html_stream$.getDynamicValue(thread), $str60$cb_categorize_term__a, cb_fort_identifier(v_term));
+        html_char(CHAR_quotation, UNPROVIDED);
+        if (NIL != frame_name_var) {
+            html_markup(html_macros.$html_anchor_target$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(frame_name_var);
+            html_char(CHAR_quotation, UNPROVIDED);
+        }
+        html_char(CHAR_greater, UNPROVIDED);
+        final SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+        try {
+            html_macros.$html_safe_print$.bind(T, thread);
+            html_princ(linktext);
+        } finally {
+            html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+        }
+        html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+        return NIL;
+    }
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 12396L)
-  public static SubLObject cb_categorize_generalization(final SubLObject v_term, final SubLObject generalization)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != forts.fort_p( v_term ) : v_term;
-    assert NIL != forts.fort_p( generalization ) : generalization;
-    thread.resetMultipleValues();
-    final SubLObject generalization_pred = cb_categorize_guess_generalization( generalization );
-    final SubLObject collection = thread.secondMultipleValue();
-    thread.resetMultipleValues();
-    if( NIL != generalization_pred )
-    {
-      final SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding( thread );
-      try
-      {
-        api_control_vars.$use_local_queueP$.bind( NIL, thread );
-        ke.ke_assert( ConsesLow.list( $const88$isa, v_term, collection ), mt_vars.$default_assert_mt$.getGlobalValue(), $kw91$MONOTONIC, $kw54$FORWARD );
-        SubLObject cdolist_list_var;
-        final SubLObject mts = cdolist_list_var = cb_categorize_generalization_guess_mts( generalization, generalization_pred, collection );
+    public static SubLObject cb_categorize_term_guts(final SubLObject v_term) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
+        final SubLObject mt = mt_vars.$default_assert_mt$.getGlobalValue();
+        final SubLObject title_var = $$$Categorize_Term;
+        final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
+        try {
+            html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? html_macros.$html_id_space_id_generator$.getDynamicValue(thread) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+            html_markup($str5$__DOCTYPE_html_PUBLIC_____W3C__DT);
+            if (NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue(thread)) {
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup($str6$_meta_http_equiv__X_UA_Compatible);
+            }
+            html_source_readability_terpri(UNPROVIDED);
+            final SubLObject _prev_bind_0_$16 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding(thread);
+            try {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.bind(cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread) == $UNINITIALIZED ? list(EMPTY_SUBL_OBJECT_ARRAY) : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread), thread);
+                html_markup(html_macros.$html_html_head$.getGlobalValue());
+                html_markup(html_macros.$html_head_head$.getGlobalValue());
+                html_macros.html_head_content_type();
+                cb_head_shortcut_icon();
+                html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
+                cyc_file_dependencies.css($CB_CYC);
+                dhtml_macros.html_basic_cb_scripts();
+                if (NIL != title_var) {
+                    html_source_readability_terpri(UNPROVIDED);
+                    html_markup(html_macros.$html_title_head$.getGlobalValue());
+                    html_princ(title_var);
+                    html_markup(html_macros.$html_title_tail$.getGlobalValue());
+                }
+                html_complete.html_complete_script();
+                cyc_file_dependencies.css($SAM_AUTOCOMPLETE_CSS);
+                html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                html_source_readability_terpri(UNPROVIDED);
+                final SubLObject _prev_bind_0_$17 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                try {
+                    html_macros.$html_inside_bodyP$.bind(T, thread);
+                    html_markup(html_macros.$html_body_head$.getGlobalValue());
+                    if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
+                        html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
+                        html_char(CHAR_quotation, UNPROVIDED);
+                    }
+                    html_markup(html_macros.$html_body_class$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup($str11$yui_skin_sam);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_char(CHAR_greater, UNPROVIDED);
+                    final SubLObject _prev_bind_0_$18 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_markup(html_macros.$html_div_head$.getGlobalValue());
+                        html_markup(html_macros.$html_attribute_id$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($$$reloadFrameButton);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$19 = html_macros.$html_safe_print$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_markup(html_macros.$html_input_head$.getGlobalValue());
+                            html_markup(html_macros.$html_input_type$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$button);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_name$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$reload);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_value$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_princ($$$Refresh_Frames);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            if (NIL != html_macros.$html_input_disabledP$.getDynamicValue(thread)) {
+                                html_simple_attribute(html_macros.$html_input_disabled$.getGlobalValue());
+                            }
+                            html_char(CHAR_greater, UNPROVIDED);
+                        } finally {
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$19, thread);
+                        }
+                        html_markup(html_macros.$html_div_tail$.getGlobalValue());
+                        if (NIL != title_var) {
+                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            html_princ(title_var);
+                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                        }
+                        final SubLObject frame_name_var = cb_frame_name(NIL);
+                        html_markup(html_macros.$html_form_head$.getGlobalValue());
+                        html_markup(html_macros.$html_form_action$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(html_macros.$html_form_method$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($$$post);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        if (NIL != frame_name_var) {
+                            html_markup(html_macros.$html_form_target$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(frame_name_var);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                        }
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$20 = html_macros.$html_safe_print$.currentBinding(thread);
+                        final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding(thread);
+                        final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_macros.$within_html_form$.bind(T, thread);
+                            html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                            html_hidden_input($str67$cb_handle_categorize_term, T, UNPROVIDED);
+                            cb_help_preamble($CB_CATEGORIZE_TERM, NIL, UNPROVIDED);
+                            cb_back_button($SELF, UNPROVIDED);
+                            html_indent(UNPROVIDED);
+                            html_reset_input($$$Clear);
+                            html_indent(UNPROVIDED);
+                            html_submit_input($$$Categorize, UNPROVIDED, UNPROVIDED);
+                            html_newline(TWO_INTEGER);
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($$$Categorize_);
+                            cb_form(v_term, UNPROVIDED, UNPROVIDED);
+                            html_princ($str70$_);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            SubLObject comment = kb_mapping_utilities.fpred_value_in_mt(v_term, $$comment, mt_vars.$default_comment_mt$.getGlobalValue(), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            if (NIL == comment) {
+                                comment = kb_mapping_utilities.fpred_value_in_any_mt(v_term, $$comment, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            }
+                            if (comment.isString()) {
+                                html_newline(UNPROVIDED);
+                                cb_browser.cb_c_documentation_string(comment);
+                            }
+                            html_newline(UNPROVIDED);
+                            html_hidden_input($$$term, cb_fort_identifier(v_term), UNPROVIDED);
+                            html_newline(UNPROVIDED);
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($str72$Mt___);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            html_script_utilities.html_clear_input_button($$$mt, $$$Clear, UNPROVIDED);
+                            html_newline(UNPROVIDED);
+                            html_complete.html_complete_button($$$mt, $$$Complete, $$Microtheory, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            html_text_input($$$mt, NIL != mt ? cb_string_for_fort(mt) : NIL, $cb_constant_input_width$.getDynamicValue(thread));
+                            html_newline(UNPROVIDED);
+                            html_newline(UNPROVIDED);
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($str75$Similar_to___);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            html_script_utilities.html_clear_input_button($str76$similar_to, $$$Clear, UNPROVIDED);
+                            html_newline(UNPROVIDED);
+                            html_complete.html_complete_button($str76$similar_to, $$$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            final SubLObject last_similar = $cb_categorize_info$.getDynamicValue(thread).first();
+                            html_text_input($str76$similar_to, last_similar, $int$40);
+                            html_newline(UNPROVIDED);
+                            html_newline(UNPROVIDED);
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($str78$Instance_of___);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            html_script_utilities.html_clear_input_button($$$isa, $$$Clear, UNPROVIDED);
+                            html_newline(UNPROVIDED);
+                            html_complete.html_complete_button($$$isa, $$$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            final SubLObject last_isa = second($cb_categorize_info$.getDynamicValue(thread));
+                            html_text_input($$$isa, last_isa, $int$40);
+                            html_newline(UNPROVIDED);
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($str80$Specialization_of___);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            html_script_utilities.html_clear_input_button($$$genl, $$$Clear, UNPROVIDED);
+                            html_newline(UNPROVIDED);
+                            html_complete.html_complete_button($$$genl, $$$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            final SubLObject last_genl = third($cb_categorize_info$.getDynamicValue(thread));
+                            html_text_input($$$genl, last_genl, $int$40);
+                            html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                        } finally {
+                            html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_3, thread);
+                            html_macros.$within_html_form$.rebind(_prev_bind_2, thread);
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$20, thread);
+                        }
+                        html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                        html_copyright_notice();
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0_$18, thread);
+                    }
+                    html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_$17, thread);
+                }
+                html_markup(html_macros.$html_html_tail$.getGlobalValue());
+            } finally {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.rebind(_prev_bind_0_$16, thread);
+            }
+            html_source_readability_terpri(UNPROVIDED);
+        } finally {
+            html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
+        }
+        return NIL;
+    }
+
+    public static SubLObject cb_handle_categorize_term(final SubLObject args) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        final SubLObject term_id = html_extract_input($$$term, args);
+        final SubLObject mt_string = html_extract_input($$$mt, args);
+        final SubLObject similar_to_string = html_extract_input($str76$similar_to, args);
+        final SubLObject isa_string = html_extract_input($$$isa, args);
+        final SubLObject generalization_string = html_extract_input($$$generalization, args);
+        SubLObject v_term = NIL;
         SubLObject mt = NIL;
-        mt = cdolist_list_var.first();
-        while ( NIL != cdolist_list_var)
-        {
-          ke.ke_assert( ConsesLow.list( generalization_pred, v_term, generalization ), mt, $kw91$MONOTONIC, $kw54$FORWARD );
-          cdolist_list_var = cdolist_list_var.rest();
-          mt = cdolist_list_var.first();
+        SubLObject similar_to = NIL;
+        SubLObject v_isa = NIL;
+        SubLObject generalization = NIL;
+        v_term = cb_guess_fort(term_id, UNPROVIDED);
+        if (NIL == forts.fort_p(v_term)) {
+            cb_error($str57$_a_does_not_specify_a_Cyc_term, term_id, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            return NIL;
         }
-      }
-      finally
-      {
-        api_control_vars.$use_local_queueP$.rebind( _prev_bind_0, thread );
-      }
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 13051L)
-  public static SubLObject cb_categorize_guess_generalization(final SubLObject generalization)
-  {
-    SubLObject cdolist_list_var = $cb_categorize_generalization_possibilities$.getGlobalValue();
-    SubLObject info = NIL;
-    info = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      SubLObject current;
-      final SubLObject datum = current = info;
-      SubLObject pred = NIL;
-      SubLObject col = NIL;
-      cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list93 );
-      pred = current.first();
-      current = current.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list93 );
-      col = current.first();
-      current = current.rest();
-      if( NIL == current )
-      {
-        if( NIL != isa.isa_in_any_mtP( generalization, col ) )
-        {
-          return Values.values( pred, col );
+        mt = cb_guess_fort(mt_string, UNPROVIDED);
+        if ((NIL == forts.fort_p(mt)) || (NIL == isa.isa_in_any_mtP(mt, $$Microtheory))) {
+            cb_error($str83$_a_does_not_specify_a_Cyc_Microth, mt_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            return NIL;
         }
-      }
-      else
-      {
-        cdestructuring_bind.cdestructuring_bind_error( datum, $list93 );
-      }
-      cdolist_list_var = cdolist_list_var.rest();
-      info = cdolist_list_var.first();
-    }
-    return Values.values( NIL, NIL );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 13378L)
-  public static SubLObject cb_categorize_generalization_guess_mts(final SubLObject generalization, final SubLObject generalization_pred, final SubLObject collection)
-  {
-    final SubLObject mts_where_generalizations = kb_indexing.key_gaf_arg_index( generalization, ONE_INTEGER, generalization_pred );
-    final SubLObject mts = genl_mts.max_mts( mts_where_generalizations, UNPROVIDED );
-    if( NIL != mts )
-    {
-      return mts;
-    }
-    return isa.max_floor_mts_of_isa_paths( generalization, collection, UNPROVIDED );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 13844L)
-  public static SubLObject cb_copy_from_similar_guts(final SubLObject v_term, final SubLObject similar_to)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != forts.fort_p( v_term ) : v_term;
-    assert NIL != forts.fort_p( similar_to ) : similar_to;
-    final SubLObject fort_spec = cb_utilities.cb_fort_identifier( similar_to );
-    final SubLObject title_var = NIL;
-    final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding( thread );
-    try
-    {
-      html_macros.$html_id_space_id_generator$.bind( ( NIL != integer_sequence_generator.integer_sequence_generator_p( html_macros.$html_id_space_id_generator$.getDynamicValue( thread ) ) )
-          ? html_macros.$html_id_space_id_generator$.getDynamicValue( thread )
-          : integer_sequence_generator.new_integer_sequence_generator( UNPROVIDED, UNPROVIDED, UNPROVIDED ), thread );
-      html_utilities.html_markup( $str5$__DOCTYPE_html_PUBLIC_____W3C__DT );
-      if( NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue( thread ) )
-      {
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        html_utilities.html_markup( $str6$_meta_http_equiv__X_UA_Compatible );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-      final SubLObject _prev_bind_0_$31 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding( thread );
-      try
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.bind( ( cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ) == $kw7$UNINITIALIZED ) ? ConsesLow.list( EMPTY_SUBL_OBJECT_ARRAY )
-            : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ), thread );
-        html_utilities.html_markup( html_macros.$html_html_head$.getGlobalValue() );
-        html_utilities.html_markup( html_macros.$html_head_head$.getGlobalValue() );
-        html_macros.html_head_content_type();
-        cb_parameters.cb_head_shortcut_icon();
-        html_utilities.html_meta_robot_instructions( cb_parameters.$cb_permit_robots_to_indexP$.getDynamicValue( thread ), cb_parameters.$cb_permit_robots_to_followP$.getDynamicValue( thread ) );
-        cyc_file_dependencies.css( $kw8$CB_CYC );
-        dhtml_macros.html_basic_cb_scripts();
-        if( NIL != title_var )
-        {
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-          html_utilities.html_markup( html_macros.$html_title_head$.getGlobalValue() );
-          html_utilities.html_princ( title_var );
-          html_utilities.html_markup( html_macros.$html_title_tail$.getGlobalValue() );
+        if (similar_to_string.isString() && (!$str27$.equal(similar_to_string))) {
+            similar_to = cb_guess_fort(similar_to_string, UNPROVIDED);
+            if (NIL == forts.fort_p(similar_to)) {
+                cb_error($str57$_a_does_not_specify_a_Cyc_term, similar_to_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                return NIL;
+            }
         }
-        html_complete.html_complete_script();
-        cyc_file_dependencies.css( $kw9$SAM_AUTOCOMPLETE_CSS );
-        html_utilities.html_markup( html_macros.$html_head_tail$.getGlobalValue() );
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        final SubLObject _prev_bind_0_$32 = html_macros.$html_inside_bodyP$.currentBinding( thread );
-        try
-        {
-          html_macros.$html_inside_bodyP$.bind( T, thread );
-          html_utilities.html_markup( html_macros.$html_body_head$.getGlobalValue() );
-          if( NIL != html_macros.$html_default_bgcolor$.getDynamicValue( thread ) )
-          {
-            html_utilities.html_markup( html_macros.$html_body_bgcolor$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( html_utilities.html_color( html_macros.$html_default_bgcolor$.getDynamicValue( thread ) ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          }
-          html_utilities.html_markup( html_macros.$html_body_class$.getGlobalValue() );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_markup( $str11$yui_skin_sam );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-          final SubLObject _prev_bind_0_$33 = html_macros.$html_safe_print$.currentBinding( thread );
-          try
-          {
-            html_macros.$html_safe_print$.bind( T, thread );
-            html_utilities.html_markup( html_macros.$html_div_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_attribute_id$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str12$reloadFrameButton );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$34 = html_macros.$html_safe_print$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_utilities.html_markup( html_macros.$html_input_head$.getGlobalValue() );
-              html_utilities.html_markup( html_macros.$html_input_type$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str13$button );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_name$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str14$reload );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_value$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_princ( $str15$Refresh_Frames );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              if( NIL != html_macros.$html_input_disabledP$.getDynamicValue( thread ) )
-              {
-                html_utilities.html_simple_attribute( html_macros.$html_input_disabled$.getGlobalValue() );
-              }
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
+        if (isa_string.isString() && (!$str27$.equal(isa_string))) {
+            v_isa = cb_guess_fort(isa_string, UNPROVIDED);
+            if (NIL == forts.fort_p(v_isa)) {
+                cb_error($str57$_a_does_not_specify_a_Cyc_term, isa_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                return NIL;
             }
-            finally
-            {
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$34, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_div_tail$.getGlobalValue() );
-            if( NIL != title_var )
-            {
-              html_utilities.html_markup( html_macros.$html_heading_head$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              html_utilities.html_princ( title_var );
-              html_utilities.html_markup( html_macros.$html_heading_tail$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            }
-            final SubLObject frame_name_var = cb_utilities.cb_frame_name( NIL );
-            html_utilities.html_markup( html_macros.$html_form_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_form_action$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( system_parameters.$cyc_cgi_program$.getDynamicValue( thread ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( html_macros.$html_form_method$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str16$post );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            if( NIL != frame_name_var )
-            {
-              html_utilities.html_markup( html_macros.$html_form_target$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( frame_name_var );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            }
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$35 = html_macros.$html_safe_print$.currentBinding( thread );
-            final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding( thread );
-            final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_macros.$within_html_form$.bind( T, thread );
-              html_macros.$html_form_field_uniquifier_code$.bind( html_macros.next_html_form_field_uniquifier_code(), thread );
-              html_utilities.html_hidden_input( $str96$cb_handle_copy_from_similar, fort_spec, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_heading_head$.getGlobalValue() );
-              html_utilities.html_markup( ONE_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              html_utilities.html_princ( $str97$Copy_from_ );
-              cb_utilities.cb_form( similar_to, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_princ( $str98$_to_ );
-              cb_utilities.cb_form( v_term, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_heading_tail$.getGlobalValue() );
-              html_utilities.html_markup( ONE_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              cb_utilities.cb_help_preamble( $kw94$CB_COPY_FROM_SIMILAR, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_indent( UNPROVIDED );
-              html_utilities.html_submit_input( $str99$Copy_Assertions, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_newline( TWO_INTEGER );
-              html_utilities.html_hr( UNPROVIDED, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str100$Check_the_assertions_from_ );
-              cb_utilities.cb_form( similar_to, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_princ( $str101$_which_you_wish_to_copy__ );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              html_utilities.html_hidden_input( $str76$similar_to, fort_spec, UNPROVIDED );
-              html_utilities.html_hidden_input( $str71$term, cb_utilities.cb_fort_identifier( v_term ), UNPROVIDED );
-              html_utilities.html_newline( TWO_INTEGER );
-              final SubLObject _prev_bind_0_$36 = cb_parameters.$cb_assertion_link_hook$.currentBinding( thread );
-              final SubLObject _prev_bind_1_$37 = cb_parameters.$cb_c_gaf_arg_use_binary$.currentBinding( thread );
-              try
-              {
-                cb_parameters.$cb_assertion_link_hook$.bind( $sym102$CB_COPY_FROM_SIMILAR_CHECKBOX, thread );
-                cb_parameters.$cb_c_gaf_arg_use_binary$.bind( NIL, thread );
-                cb_frames.cb_default_content_internal( similar_to );
-              }
-              finally
-              {
-                cb_parameters.$cb_c_gaf_arg_use_binary$.rebind( _prev_bind_1_$37, thread );
-                cb_parameters.$cb_assertion_link_hook$.rebind( _prev_bind_0_$36, thread );
-              }
-              html_macros.embed_form_field_code( html_macros.$html_form_field_uniquifier_code$.getDynamicValue( thread ) );
-            }
-            finally
-            {
-              html_macros.$html_form_field_uniquifier_code$.rebind( _prev_bind_3, thread );
-              html_macros.$within_html_form$.rebind( _prev_bind_2, thread );
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$35, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_form_tail$.getGlobalValue() );
-            html_utilities.html_source_readability_terpri( UNPROVIDED );
-            html_utilities.html_copyright_notice();
-          }
-          finally
-          {
-            html_macros.$html_safe_print$.rebind( _prev_bind_0_$33, thread );
-          }
-          html_utilities.html_markup( html_macros.$html_body_tail$.getGlobalValue() );
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
         }
-        finally
-        {
-          html_macros.$html_inside_bodyP$.rebind( _prev_bind_0_$32, thread );
-        }
-        html_utilities.html_markup( html_macros.$html_html_tail$.getGlobalValue() );
-      }
-      finally
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.rebind( _prev_bind_0_$31, thread );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-    }
-    finally
-    {
-      html_macros.$html_id_space_id_generator$.rebind( _prev_bind_0, thread );
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 15086L)
-  public static SubLObject cb_handle_copy_from_similar(final SubLObject args)
-  {
-    if( NIL != ke.cyclist_is_guest() )
-    {
-      cyc_navigator_internals.guest_warn( $str103$copy_from_similar_facilities );
-      return NIL;
-    }
-    final SubLObject source_fort_string = html_utilities.html_extract_input( $str76$similar_to, args );
-    final SubLObject new_name = html_utilities.html_extract_input( $str71$term, args );
-    SubLObject source_fort = NIL;
-    SubLObject target_fort = NIL;
-    if( !source_fort_string.isString() || source_fort_string.equal( $str27$ ) )
-    {
-      return cb_utilities.cb_error( $str104$No_source_term_was_specified, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    source_fort = cb_utilities.cb_guess_fort( source_fort_string, UNPROVIDED );
-    if( NIL == forts.fort_p( source_fort ) )
-    {
-      return cb_utilities.cb_error( $str105$Unable_to_determine_a_term_from__, source_fort_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    if( !new_name.isString() || new_name.equal( $str27$ ) )
-    {
-      return cb_utilities.cb_error( $str106$No_term_was_specified, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    target_fort = cb_utilities.cb_guess_fort( new_name, UNPROVIDED );
-    if( NIL == forts.fort_p( target_fort ) )
-    {
-      return cb_utilities.cb_error( $str105$Unable_to_determine_a_term_from__, new_name, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    if( NIL != constant_handles.constant_p( target_fort ) )
-    {
-      cb_tools.cb_add_to_constant_history( target_fort );
-    }
-    else if( NIL != nart_handles.nart_p( target_fort ) )
-    {
-      cb_tools.cb_add_to_nat_history( target_fort );
-    }
-    final SubLObject source_fort_el_formula = forts.fort_el_formula( source_fort );
-    final SubLObject target_fort_el_formula = forts.fort_el_formula( target_fort );
-    SubLObject cdolist_list_var = conses_high.nthcdr( THREE_INTEGER, args );
-    SubLObject copy_spec = NIL;
-    copy_spec = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      final SubLObject id = reader.read_from_string_ignoring_errors( copy_spec.first(), NIL, NIL, UNPROVIDED, UNPROVIDED );
-      if( id.isInteger() )
-      {
-        final SubLObject assertion = assertion_handles.find_assertion_by_id( id );
-        if( NIL != assertion_handles.assertion_p( assertion ) )
-        {
-          SubLObject similar_formula = ke.ke_assertion_edit_formula( assertion );
-          final SubLObject mt = assertions_high.assertion_mt( assertion );
-          final SubLObject strength = assertions_high.assertion_strength( assertion );
-          final SubLObject direction = assertions_high.assertion_direction( assertion );
-          if( NIL != list_utilities.tree_find( source_fort_el_formula, similar_formula, Symbols.symbol_function( EQUAL ), UNPROVIDED ) )
-          {
-            similar_formula = conses_high.subst( target_fort_el_formula, source_fort_el_formula, similar_formula, Symbols.symbol_function( EQUAL ), UNPROVIDED );
-            ke.ke_assert( similar_formula, mt, strength, direction );
-          }
-        }
-      }
-      cdolist_list_var = cdolist_list_var.rest();
-      copy_spec = cdolist_list_var.first();
-    }
-    return cb_conceptually_related_guts( target_fort );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 17315L)
-  public static SubLObject cb_copy_from_similar_checkbox(final SubLObject assertion)
-  {
-    if( NIL != assertion_handles.assertion_p( assertion ) && NIL != assertions_high.asserted_assertionP( assertion ) )
-    {
-      final SubLObject id = assertion_handles.assertion_id( assertion );
-      html_utilities.html_checkbox_input( id, T, NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 17562L)
-  public static SubLObject cb_suggested_conceptually_related(final SubLObject v_term)
-  {
-    final SubLObject v_answer = NIL;
-    return v_answer;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 17926L)
-  public static SubLObject cb_conceptually_related_guts(final SubLObject v_term)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( NIL != v_term )
-    {
-      assert NIL != forts.fort_p( v_term ) : v_term;
-      ct_cr_setup();
-      SubLObject suggestions = cb_suggested_conceptually_related( v_term );
-      SubLObject existing_terms = NIL;
-      final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding( thread );
-      final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding( thread );
-      try
-      {
-        mt_relevance_macros.$relevant_mt_function$.bind( $sym86$RELEVANT_MT_IS_EVERYTHING, thread );
-        mt_relevance_macros.$mt$.bind( $const87$EverythingPSC, thread );
-        existing_terms = removal_modules_conceptually_related.all_conceptually_related( v_term, UNPROVIDED );
-      }
-      finally
-      {
-        mt_relevance_macros.$mt$.rebind( _prev_bind_2, thread );
-        mt_relevance_macros.$relevant_mt_function$.rebind( _prev_bind_0, thread );
-      }
-      suggestions = conses_high.set_difference( suggestions, existing_terms, UNPROVIDED, UNPROVIDED );
-      final SubLObject title_var = $str110$Conceptually_Related_Suggestions;
-      final SubLObject _prev_bind_3 = html_macros.$html_id_space_id_generator$.currentBinding( thread );
-      try
-      {
-        html_macros.$html_id_space_id_generator$.bind( ( NIL != integer_sequence_generator.integer_sequence_generator_p( html_macros.$html_id_space_id_generator$.getDynamicValue( thread ) ) )
-            ? html_macros.$html_id_space_id_generator$.getDynamicValue( thread )
-            : integer_sequence_generator.new_integer_sequence_generator( UNPROVIDED, UNPROVIDED, UNPROVIDED ), thread );
-        html_utilities.html_markup( $str5$__DOCTYPE_html_PUBLIC_____W3C__DT );
-        if( NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue( thread ) )
-        {
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-          html_utilities.html_markup( $str6$_meta_http_equiv__X_UA_Compatible );
-        }
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        final SubLObject _prev_bind_0_$38 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding( thread );
-        try
-        {
-          cyc_file_dependencies.$html_emitted_file_dependencies$.bind( ( cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ) == $kw7$UNINITIALIZED ) ? ConsesLow.list(
-              EMPTY_SUBL_OBJECT_ARRAY ) : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ), thread );
-          html_utilities.html_markup( html_macros.$html_html_head$.getGlobalValue() );
-          html_utilities.html_markup( html_macros.$html_head_head$.getGlobalValue() );
-          html_macros.html_head_content_type();
-          cb_parameters.cb_head_shortcut_icon();
-          html_utilities.html_meta_robot_instructions( cb_parameters.$cb_permit_robots_to_indexP$.getDynamicValue( thread ), cb_parameters.$cb_permit_robots_to_followP$.getDynamicValue( thread ) );
-          cyc_file_dependencies.css( $kw8$CB_CYC );
-          dhtml_macros.html_basic_cb_scripts();
-          if( NIL != title_var )
-          {
-            html_utilities.html_source_readability_terpri( UNPROVIDED );
-            html_utilities.html_markup( html_macros.$html_title_head$.getGlobalValue() );
-            html_utilities.html_princ( title_var );
-            html_utilities.html_markup( html_macros.$html_title_tail$.getGlobalValue() );
-          }
-          html_complete.html_complete_script();
-          cyc_file_dependencies.css( $kw9$SAM_AUTOCOMPLETE_CSS );
-          html_utilities.html_markup( html_macros.$html_head_tail$.getGlobalValue() );
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-          final SubLObject _prev_bind_0_$39 = html_macros.$html_inside_bodyP$.currentBinding( thread );
-          try
-          {
-            html_macros.$html_inside_bodyP$.bind( T, thread );
-            html_utilities.html_markup( html_macros.$html_body_head$.getGlobalValue() );
-            if( NIL != html_macros.$html_default_bgcolor$.getDynamicValue( thread ) )
-            {
-              html_utilities.html_markup( html_macros.$html_body_bgcolor$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_utilities.html_color( html_macros.$html_default_bgcolor$.getDynamicValue( thread ) ) );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
+        if (generalization_string.isString() && (!$str27$.equal(generalization_string))) {
+            generalization = cb_guess_fort(generalization_string, UNPROVIDED);
+            if (NIL == forts.fort_p(generalization)) {
+                cb_error($str57$_a_does_not_specify_a_Cyc_term, generalization_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                return NIL;
             }
-            html_utilities.html_markup( html_macros.$html_body_class$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str11$yui_skin_sam );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$40 = html_macros.$html_safe_print$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_utilities.html_markup( html_macros.$html_div_head$.getGlobalValue() );
-              html_utilities.html_markup( html_macros.$html_attribute_id$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str12$reloadFrameButton );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              final SubLObject _prev_bind_0_$41 = html_macros.$html_safe_print$.currentBinding( thread );
-              try
-              {
-                html_macros.$html_safe_print$.bind( T, thread );
-                html_utilities.html_markup( html_macros.$html_input_head$.getGlobalValue() );
-                html_utilities.html_markup( html_macros.$html_input_type$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( $str13$button );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_input_name$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( $str14$reload );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_input_value$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_princ( $str15$Refresh_Frames );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                if( NIL != html_macros.$html_input_disabledP$.getDynamicValue( thread ) )
-                {
-                  html_utilities.html_simple_attribute( html_macros.$html_input_disabled$.getGlobalValue() );
+        }
+        if (NIL == $cb_categorize_info$.getDynamicValue(thread)) {
+            $cb_categorize_info$.setDynamicValue(list($str27$, $str27$, $str27$), thread);
+        }
+        set_nth(ZERO_INTEGER, $cb_categorize_info$.getDynamicValue(thread), similar_to_string);
+        set_nth(ONE_INTEGER, $cb_categorize_info$.getDynamicValue(thread), isa_string);
+        set_nth(TWO_INTEGER, $cb_categorize_info$.getDynamicValue(thread), generalization_string);
+        if (NIL != similar_to) {
+            cb_categorize_similar(v_term, similar_to);
+        }
+        if (NIL != v_isa) {
+            cb_categorize_isa(v_term, v_isa);
+        }
+        if (NIL != generalization) {
+            cb_categorize_generalization(v_term, generalization);
+        }
+        if (NIL != similar_to) {
+            cb_copy_from_similar_guts(v_term, similar_to);
+        } else {
+            cb_conceptually_related_guts(v_term);
+        }
+        return NIL;
+    }
+
+    public static SubLObject cb_categorize_similar(final SubLObject v_term, final SubLObject similar_to) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
+        assert NIL != forts.fort_p(similar_to) : "forts.fort_p(similar_to) " + "CommonSymbols.NIL != forts.fort_p(similar_to) " + similar_to;
+        final SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding(thread);
+        try {
+            api_control_vars.$use_local_queueP$.bind(NIL, thread);
+            final SubLObject _prev_bind_0_$21 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+            final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
+            try {
+                mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                final SubLObject pred_var = $$isa;
+                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(similar_to, ONE_INTEGER, pred_var)) {
+                    final SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(similar_to, ONE_INTEGER, pred_var);
+                    SubLObject done_var = NIL;
+                    final SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        final SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                        final SubLObject valid = makeBoolean(!token_var.eql(final_index_spec));
+                        if (NIL != valid) {
+                            SubLObject final_index_iterator = NIL;
+                            try {
+                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                SubLObject done_var_$22 = NIL;
+                                final SubLObject token_var_$23 = NIL;
+                                while (NIL == done_var_$22) {
+                                    final SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_$23);
+                                    final SubLObject valid_$24 = makeBoolean(!token_var_$23.eql(ass));
+                                    if ((NIL != valid_$24) && (NIL != assertions_high.asserted_assertionP(ass))) {
+                                        final SubLObject mt = assertions_high.assertion_mt(ass);
+                                        final SubLObject col = assertions_high.gaf_arg2(ass);
+                                        final SubLObject strength = assertions_high.assertion_strength(ass);
+                                        ke.ke_assert(list($$isa, v_term, col), mt, strength, $FORWARD);
+                                    }
+                                    done_var_$22 = makeBoolean(NIL == valid_$24);
+                                } 
+                            } finally {
+                                final SubLObject _prev_bind_0_$22 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                try {
+                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                    final SubLObject _values = getValuesAsVector();
+                                    if (NIL != final_index_iterator) {
+                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                    }
+                                    restoreValuesFromVector(_values);
+                                } finally {
+                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$22, thread);
+                                }
+                            }
+                        }
+                        done_var = makeBoolean(NIL == valid);
+                    } 
                 }
-                html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              }
-              finally
-              {
-                html_macros.$html_safe_print$.rebind( _prev_bind_0_$41, thread );
-              }
-              html_utilities.html_markup( html_macros.$html_div_tail$.getGlobalValue() );
-              if( NIL != title_var )
-              {
-                html_utilities.html_markup( html_macros.$html_heading_head$.getGlobalValue() );
-                html_utilities.html_markup( TWO_INTEGER );
-                html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                html_utilities.html_princ( title_var );
-                html_utilities.html_markup( html_macros.$html_heading_tail$.getGlobalValue() );
-                html_utilities.html_markup( TWO_INTEGER );
-                html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              }
-              final SubLObject frame_name_var = cb_utilities.cb_frame_name( NIL );
-              html_utilities.html_markup( html_macros.$html_form_head$.getGlobalValue() );
-              html_utilities.html_markup( html_macros.$html_form_action$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( system_parameters.$cyc_cgi_program$.getDynamicValue( thread ) );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_form_method$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str16$post );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              if( NIL != frame_name_var )
-              {
-                html_utilities.html_markup( html_macros.$html_form_target$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( frame_name_var );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              }
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              final SubLObject _prev_bind_0_$42 = html_macros.$html_safe_print$.currentBinding( thread );
-              final SubLObject _prev_bind_4 = html_macros.$within_html_form$.currentBinding( thread );
-              final SubLObject _prev_bind_5 = html_macros.$html_form_field_uniquifier_code$.currentBinding( thread );
-              try
-              {
-                html_macros.$html_safe_print$.bind( T, thread );
-                html_macros.$within_html_form$.bind( T, thread );
-                html_macros.$html_form_field_uniquifier_code$.bind( html_macros.next_html_form_field_uniquifier_code(), thread );
-                html_utilities.html_hidden_input( $str111$cb_conceptually_related_terms, T, UNPROVIDED );
-                html_utilities.html_hidden_input( $str112$fort, cb_utilities.cb_fort_identifier( v_term ), UNPROVIDED );
-                cb_utilities.cb_help_preamble( $kw108$CB_CONCEPTUALLY_RELATED_TERMS, NIL, UNPROVIDED );
-                cb_utilities.cb_back_button( $kw18$SELF, UNPROVIDED );
-                html_utilities.html_reset_input( $str113$Clear_All );
-                html_utilities.html_newline( TWO_INTEGER );
-                html_utilities.html_markup( html_macros.$html_big_head$.getGlobalValue() );
-                html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                html_utilities.html_princ( $str114$Term___ );
-                cb_utilities.cb_form( v_term, UNPROVIDED, UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                html_utilities.html_markup( html_macros.$html_big_tail$.getGlobalValue() );
-                html_utilities.html_newline( UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                html_utilities.html_princ( $str115$Existing_Conceptually_Related_Ter );
-                html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                if( NIL != existing_terms )
-                {
-                  html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                  cb_utilities.cb_link( $kw116$CT_CR_JUSTIFY, v_term, $str117$_Justify_, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-                  html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                  html_utilities.html_newline( TWO_INTEGER );
-                  SubLObject cdolist_list_var = existing_terms;
-                  SubLObject existing_term = NIL;
-                  existing_term = cdolist_list_var.first();
-                  while ( NIL != cdolist_list_var)
-                  {
-                    cb_utilities.cb_form( existing_term, UNPROVIDED, UNPROVIDED );
-                    html_utilities.html_indent( TWO_INTEGER );
+            } finally {
+                mt_relevance_macros.$mt$.rebind(_prev_bind_2, thread);
+                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0_$21, thread);
+            }
+            SubLObject cdolist_list_var = $cb_categorize_generalization_possibilities$.getGlobalValue();
+            SubLObject info = NIL;
+            info = cdolist_list_var.first();
+            while (NIL != cdolist_list_var) {
+                final SubLObject pred = info.first();
+                final SubLObject _prev_bind_0_$23 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                final SubLObject _prev_bind_3 = mt_relevance_macros.$mt$.currentBinding(thread);
+                try {
+                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                    final SubLObject pred_var2 = pred;
+                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(similar_to, ONE_INTEGER, pred_var2)) {
+                        final SubLObject iterator_var2 = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(similar_to, ONE_INTEGER, pred_var2);
+                        SubLObject done_var2 = NIL;
+                        final SubLObject token_var2 = NIL;
+                        while (NIL == done_var2) {
+                            final SubLObject final_index_spec2 = iteration.iteration_next_without_values_macro_helper(iterator_var2, token_var2);
+                            final SubLObject valid2 = makeBoolean(!token_var2.eql(final_index_spec2));
+                            if (NIL != valid2) {
+                                SubLObject final_index_iterator2 = NIL;
+                                try {
+                                    final_index_iterator2 = kb_mapping_macros.new_final_index_iterator(final_index_spec2, $GAF, $TRUE, NIL);
+                                    SubLObject done_var_$23 = NIL;
+                                    final SubLObject token_var_$24 = NIL;
+                                    while (NIL == done_var_$23) {
+                                        final SubLObject ass2 = iteration.iteration_next_without_values_macro_helper(final_index_iterator2, token_var_$24);
+                                        final SubLObject valid_$25 = makeBoolean(!token_var_$24.eql(ass2));
+                                        if ((NIL != valid_$25) && (NIL != assertions_high.asserted_assertionP(ass2))) {
+                                            final SubLObject mt2 = assertions_high.assertion_mt(ass2);
+                                            final SubLObject arg2 = assertions_high.gaf_arg2(ass2);
+                                            final SubLObject strength2 = assertions_high.assertion_strength(ass2);
+                                            ke.ke_assert(list(pred, v_term, arg2), mt2, strength2, $FORWARD);
+                                        }
+                                        done_var_$23 = makeBoolean(NIL == valid_$25);
+                                    } 
+                                } finally {
+                                    final SubLObject _prev_bind_0_$24 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        final SubLObject _values2 = getValuesAsVector();
+                                        if (NIL != final_index_iterator2) {
+                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator2);
+                                        }
+                                        restoreValuesFromVector(_values2);
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$24, thread);
+                                    }
+                                }
+                            }
+                            done_var2 = makeBoolean(NIL == valid2);
+                        } 
+                    }
+                } finally {
+                    mt_relevance_macros.$mt$.rebind(_prev_bind_3, thread);
+                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0_$23, thread);
+                }
+                cdolist_list_var = cdolist_list_var.rest();
+                info = cdolist_list_var.first();
+            } 
+        } finally {
+            api_control_vars.$use_local_queueP$.rebind(_prev_bind_0, thread);
+        }
+        return NIL;
+    }
+
+    public static SubLObject cb_categorize_isa(final SubLObject v_term, final SubLObject collection) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
+        assert NIL != forts.fort_p(collection) : "forts.fort_p(collection) " + "CommonSymbols.NIL != forts.fort_p(collection) " + collection;
+        final SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding(thread);
+        try {
+            api_control_vars.$use_local_queueP$.bind(NIL, thread);
+            SubLObject cdolist_list_var;
+            final SubLObject mts = cdolist_list_var = cb_categorize_isa_guess_mts(collection);
+            SubLObject mt = NIL;
+            mt = cdolist_list_var.first();
+            while (NIL != cdolist_list_var) {
+                ke.ke_assert(list($$isa, v_term, collection), mt, $MONOTONIC, $FORWARD);
+                cdolist_list_var = cdolist_list_var.rest();
+                mt = cdolist_list_var.first();
+            } 
+        } finally {
+            api_control_vars.$use_local_queueP$.rebind(_prev_bind_0, thread);
+        }
+        return NIL;
+    }
+
+    public static SubLObject cb_categorize_isa_guess_mts(final SubLObject collection) {
+        final SubLObject mts_where_genls = kb_indexing.key_gaf_arg_index(collection, ONE_INTEGER, $$genls);
+        final SubLObject mts = genl_mts.max_mts(mts_where_genls, UNPROVIDED);
+        return mts;
+    }
+
+    public static SubLObject cb_categorize_generalization(final SubLObject v_term, final SubLObject generalization) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
+        assert NIL != forts.fort_p(generalization) : "forts.fort_p(generalization) " + "CommonSymbols.NIL != forts.fort_p(generalization) " + generalization;
+        thread.resetMultipleValues();
+        final SubLObject generalization_pred = cb_categorize_guess_generalization(generalization);
+        final SubLObject collection = thread.secondMultipleValue();
+        thread.resetMultipleValues();
+        if (NIL != generalization_pred) {
+            final SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding(thread);
+            try {
+                api_control_vars.$use_local_queueP$.bind(NIL, thread);
+                ke.ke_assert(list($$isa, v_term, collection), mt_vars.$default_assert_mt$.getGlobalValue(), $MONOTONIC, $FORWARD);
+                SubLObject cdolist_list_var;
+                final SubLObject mts = cdolist_list_var = cb_categorize_generalization_guess_mts(generalization, generalization_pred, collection);
+                SubLObject mt = NIL;
+                mt = cdolist_list_var.first();
+                while (NIL != cdolist_list_var) {
+                    ke.ke_assert(list(generalization_pred, v_term, generalization), mt, $MONOTONIC, $FORWARD);
                     cdolist_list_var = cdolist_list_var.rest();
-                    existing_term = cdolist_list_var.first();
-                  }
+                    mt = cdolist_list_var.first();
+                } 
+            } finally {
+                api_control_vars.$use_local_queueP$.rebind(_prev_bind_0, thread);
+            }
+        }
+        return NIL;
+    }
+
+    public static SubLObject cb_categorize_guess_generalization(final SubLObject generalization) {
+        SubLObject cdolist_list_var = $cb_categorize_generalization_possibilities$.getGlobalValue();
+        SubLObject info = NIL;
+        info = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            SubLObject current;
+            final SubLObject datum = current = info;
+            SubLObject pred = NIL;
+            SubLObject col = NIL;
+            destructuring_bind_must_consp(current, datum, $list93);
+            pred = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list93);
+            col = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                if (NIL != isa.isa_in_any_mtP(generalization, col)) {
+                    return values(pred, col);
                 }
-                else
-                {
-                  html_utilities.html_princ( $str118$None );
+            } else {
+                cdestructuring_bind_error(datum, $list93);
+            }
+            cdolist_list_var = cdolist_list_var.rest();
+            info = cdolist_list_var.first();
+        } 
+        return values(NIL, NIL);
+    }
+
+    public static SubLObject cb_categorize_generalization_guess_mts(final SubLObject generalization, final SubLObject generalization_pred, final SubLObject collection) {
+        final SubLObject mts_where_generalizations = kb_indexing.key_gaf_arg_index(generalization, ONE_INTEGER, generalization_pred);
+        final SubLObject mts = genl_mts.max_mts(mts_where_generalizations, UNPROVIDED);
+        if (NIL != mts) {
+            return mts;
+        }
+        return isa.max_floor_mts_of_isa_paths(generalization, collection, UNPROVIDED);
+    }
+
+    public static SubLObject cb_copy_from_similar_guts(final SubLObject v_term, final SubLObject similar_to) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
+        assert NIL != forts.fort_p(similar_to) : "forts.fort_p(similar_to) " + "CommonSymbols.NIL != forts.fort_p(similar_to) " + similar_to;
+        final SubLObject fort_spec = cb_fort_identifier(similar_to);
+        final SubLObject title_var = NIL;
+        final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
+        try {
+            html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? html_macros.$html_id_space_id_generator$.getDynamicValue(thread) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+            html_markup($str5$__DOCTYPE_html_PUBLIC_____W3C__DT);
+            if (NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue(thread)) {
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup($str6$_meta_http_equiv__X_UA_Compatible);
+            }
+            html_source_readability_terpri(UNPROVIDED);
+            final SubLObject _prev_bind_0_$31 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding(thread);
+            try {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.bind(cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread) == $UNINITIALIZED ? list(EMPTY_SUBL_OBJECT_ARRAY) : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread), thread);
+                html_markup(html_macros.$html_html_head$.getGlobalValue());
+                html_markup(html_macros.$html_head_head$.getGlobalValue());
+                html_macros.html_head_content_type();
+                cb_head_shortcut_icon();
+                html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
+                cyc_file_dependencies.css($CB_CYC);
+                dhtml_macros.html_basic_cb_scripts();
+                if (NIL != title_var) {
+                    html_source_readability_terpri(UNPROVIDED);
+                    html_markup(html_macros.$html_title_head$.getGlobalValue());
+                    html_princ(title_var);
+                    html_markup(html_macros.$html_title_tail$.getGlobalValue());
                 }
-                html_utilities.html_hr( UNPROVIDED, UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                html_utilities.html_princ( $str119$Specify_the_Microtheory_for_new__ );
-                html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                html_utilities.html_newline( UNPROVIDED );
-                html_complete.html_complete_button( $str73$mt, $str26$Complete, $const74$Microtheory, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                html_utilities.html_princ( $str120$_Mt___ );
-                html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                html_utilities.html_text_input( $str73$mt, string_utilities.str( mt_vars.$default_ask_mt$.getGlobalValue() ), $int77$40 );
-                html_utilities.html_br();
-                html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                html_utilities.html_princ( $str121$_Select_terms_and_or_type_in_a_te );
-                cb_utilities.cb_form( v_term, UNPROVIDED, UNPROVIDED );
-                html_utilities.html_princ( $str122$__ );
-                html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                html_utilities.html_newline( UNPROVIDED );
-                html_complete.html_complete_button( $str123$entered, $str26$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                html_utilities.html_princ( $str124$_Term___ );
-                html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                html_utilities.html_text_input( $str123$entered, NIL, $int77$40 );
-                html_utilities.html_newline( UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                html_utilities.html_princ( $str125$Possible_Terms_to_Add___ );
-                html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                html_utilities.html_markup( html_macros.$html_table_head$.getGlobalValue() );
-                html_utilities.html_simple_attribute( html_macros.$html_table_noflow$.getGlobalValue() );
-                html_utilities.html_markup( html_macros.$html_table_border$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( ZERO_INTEGER );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_table_cellpadding$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( ZERO_INTEGER );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_table_cellspacing$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_markup( ZERO_INTEGER );
-                html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-                html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                final SubLObject _prev_bind_0_$43 = html_macros.$html_safe_print$.currentBinding( thread );
-                try
-                {
-                  html_macros.$html_safe_print$.bind( T, thread );
-                  while ( NIL != suggestions)
-                  {
-                    html_utilities.html_markup( html_macros.$html_table_row_head$.getGlobalValue() );
-                    html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                    final SubLObject _prev_bind_0_$44 = html_macros.$html_safe_print$.currentBinding( thread );
-                    try
-                    {
-                      html_macros.$html_safe_print$.bind( T, thread );
-                      suggestions = ct_cr_search_show_next_suggestion( suggestions );
-                      suggestions = ct_cr_search_show_next_suggestion( suggestions );
-                      suggestions = ct_cr_search_show_next_suggestion( suggestions );
+                html_complete.html_complete_script();
+                cyc_file_dependencies.css($SAM_AUTOCOMPLETE_CSS);
+                html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                html_source_readability_terpri(UNPROVIDED);
+                final SubLObject _prev_bind_0_$32 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                try {
+                    html_macros.$html_inside_bodyP$.bind(T, thread);
+                    html_markup(html_macros.$html_body_head$.getGlobalValue());
+                    if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
+                        html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
+                        html_char(CHAR_quotation, UNPROVIDED);
                     }
-                    finally
-                    {
-                      html_macros.$html_safe_print$.rebind( _prev_bind_0_$44, thread );
+                    html_markup(html_macros.$html_body_class$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup($str11$yui_skin_sam);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_char(CHAR_greater, UNPROVIDED);
+                    final SubLObject _prev_bind_0_$33 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_markup(html_macros.$html_div_head$.getGlobalValue());
+                        html_markup(html_macros.$html_attribute_id$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($$$reloadFrameButton);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$34 = html_macros.$html_safe_print$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_markup(html_macros.$html_input_head$.getGlobalValue());
+                            html_markup(html_macros.$html_input_type$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$button);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_name$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$reload);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_value$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_princ($$$Refresh_Frames);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            if (NIL != html_macros.$html_input_disabledP$.getDynamicValue(thread)) {
+                                html_simple_attribute(html_macros.$html_input_disabled$.getGlobalValue());
+                            }
+                            html_char(CHAR_greater, UNPROVIDED);
+                        } finally {
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$34, thread);
+                        }
+                        html_markup(html_macros.$html_div_tail$.getGlobalValue());
+                        if (NIL != title_var) {
+                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            html_princ(title_var);
+                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                        }
+                        final SubLObject frame_name_var = cb_frame_name(NIL);
+                        html_markup(html_macros.$html_form_head$.getGlobalValue());
+                        html_markup(html_macros.$html_form_action$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(html_macros.$html_form_method$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($$$post);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        if (NIL != frame_name_var) {
+                            html_markup(html_macros.$html_form_target$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(frame_name_var);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                        }
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$35 = html_macros.$html_safe_print$.currentBinding(thread);
+                        final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding(thread);
+                        final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_macros.$within_html_form$.bind(T, thread);
+                            html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                            html_hidden_input($str96$cb_handle_copy_from_similar, fort_spec, UNPROVIDED);
+                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                            html_markup(ONE_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            html_princ($$$Copy_from_);
+                            cb_form(similar_to, UNPROVIDED, UNPROVIDED);
+                            html_princ($$$_to_);
+                            cb_form(v_term, UNPROVIDED, UNPROVIDED);
+                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                            html_markup(ONE_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            cb_help_preamble($CB_COPY_FROM_SIMILAR, UNPROVIDED, UNPROVIDED);
+                            html_indent(UNPROVIDED);
+                            html_submit_input($$$Copy_Assertions, UNPROVIDED, UNPROVIDED);
+                            html_newline(TWO_INTEGER);
+                            html_hr(UNPROVIDED, UNPROVIDED);
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($$$Check_the_assertions_from_);
+                            cb_form(similar_to, UNPROVIDED, UNPROVIDED);
+                            html_princ($str101$_which_you_wish_to_copy__);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            html_hidden_input($str76$similar_to, fort_spec, UNPROVIDED);
+                            html_hidden_input($$$term, cb_fort_identifier(v_term), UNPROVIDED);
+                            html_newline(TWO_INTEGER);
+                            final SubLObject _prev_bind_0_$36 = $cb_assertion_link_hook$.currentBinding(thread);
+                            final SubLObject _prev_bind_1_$37 = $cb_c_gaf_arg_use_binary$.currentBinding(thread);
+                            try {
+                                $cb_assertion_link_hook$.bind(CB_COPY_FROM_SIMILAR_CHECKBOX, thread);
+                                $cb_c_gaf_arg_use_binary$.bind(NIL, thread);
+                                cb_frames.cb_default_content_internal(similar_to);
+                            } finally {
+                                $cb_c_gaf_arg_use_binary$.rebind(_prev_bind_1_$37, thread);
+                                $cb_assertion_link_hook$.rebind(_prev_bind_0_$36, thread);
+                            }
+                            html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                        } finally {
+                            html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_3, thread);
+                            html_macros.$within_html_form$.rebind(_prev_bind_2, thread);
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$35, thread);
+                        }
+                        html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                        html_copyright_notice();
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0_$33, thread);
                     }
-                    html_utilities.html_markup( html_macros.$html_table_row_tail$.getGlobalValue() );
-                    html_utilities.html_source_readability_terpri( UNPROVIDED );
-                  }
+                    html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_$32, thread);
                 }
-                finally
-                {
-                  html_macros.$html_safe_print$.rebind( _prev_bind_0_$43, thread );
-                }
-                html_utilities.html_markup( html_macros.$html_table_tail$.getGlobalValue() );
-                html_utilities.html_newline( UNPROVIDED );
-                html_utilities.html_submit_input( $str126$Add_Terms_Backward, $str127$add_backward, UNPROVIDED );
-                html_utilities.html_princ( $str128$_as_ );
-                cb_utilities.cb_form( ConsesLow.list( $const129$conceptuallyRelated, $sym130$TERM, v_term ), UNPROVIDED, UNPROVIDED );
-                html_utilities.html_princ( $str131$_in_MT );
-                html_utilities.html_newline( UNPROVIDED );
-                html_utilities.html_submit_input( $str132$Add_Terms_Forward, $str133$add_forward, UNPROVIDED );
-                html_utilities.html_princ( $str128$_as_ );
-                cb_utilities.cb_form( ConsesLow.listS( $const129$conceptuallyRelated, v_term, $list134 ), UNPROVIDED, UNPROVIDED );
-                html_utilities.html_princ( $str131$_in_MT );
-                html_macros.embed_form_field_code( html_macros.$html_form_field_uniquifier_code$.getDynamicValue( thread ) );
-              }
-              finally
-              {
-                html_macros.$html_form_field_uniquifier_code$.rebind( _prev_bind_5, thread );
-                html_macros.$within_html_form$.rebind( _prev_bind_4, thread );
-                html_macros.$html_safe_print$.rebind( _prev_bind_0_$42, thread );
-              }
-              html_utilities.html_markup( html_macros.$html_form_tail$.getGlobalValue() );
-              html_utilities.html_source_readability_terpri( UNPROVIDED );
-              html_utilities.html_copyright_notice();
+                html_markup(html_macros.$html_html_tail$.getGlobalValue());
+            } finally {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.rebind(_prev_bind_0_$31, thread);
             }
-            finally
-            {
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$40, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_body_tail$.getGlobalValue() );
-            html_utilities.html_source_readability_terpri( UNPROVIDED );
-          }
-          finally
-          {
-            html_macros.$html_inside_bodyP$.rebind( _prev_bind_0_$39, thread );
-          }
-          html_utilities.html_markup( html_macros.$html_html_tail$.getGlobalValue() );
+            html_source_readability_terpri(UNPROVIDED);
+        } finally {
+            html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
         }
-        finally
-        {
-          cyc_file_dependencies.$html_emitted_file_dependencies$.rebind( _prev_bind_0_$38, thread );
-        }
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-      }
-      finally
-      {
-        html_macros.$html_id_space_id_generator$.rebind( _prev_bind_3, thread );
-      }
+        return NIL;
     }
-    return NIL;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 20745L)
-  public static SubLObject ct_cr_search_show_next_suggestion(final SubLObject suggestions)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( NIL != suggestions )
-    {
-      final SubLObject suggestion = suggestions.first();
-      html_utilities.html_markup( html_macros.$html_table_data_head$.getGlobalValue() );
-      html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-      SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding( thread );
-      try
-      {
-        html_macros.$html_safe_print$.bind( T, thread );
-        ct_cr_search_show_suggestion( suggestion );
-      }
-      finally
-      {
-        html_macros.$html_safe_print$.rebind( _prev_bind_0, thread );
-      }
-      html_utilities.html_markup( html_macros.$html_table_data_tail$.getGlobalValue() );
-      html_utilities.html_markup( html_macros.$html_table_data_head$.getGlobalValue() );
-      html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-      _prev_bind_0 = html_macros.$html_safe_print$.currentBinding( thread );
-      try
-      {
-        html_macros.$html_safe_print$.bind( T, thread );
-        html_utilities.html_indent( TWO_INTEGER );
-      }
-      finally
-      {
-        html_macros.$html_safe_print$.rebind( _prev_bind_0, thread );
-      }
-      html_utilities.html_markup( html_macros.$html_table_data_tail$.getGlobalValue() );
-      return suggestions.rest();
-    }
-    return NIL;
-  }
+    public static SubLObject cb_handle_copy_from_similar(final SubLObject args) {
+        if (NIL != ke.cyclist_is_guest()) {
+            cyc_navigator_internals.guest_warn($$$copy_from_similar_facilities);
+            return NIL;
+        }
+        final SubLObject source_fort_string = html_extract_input($str76$similar_to, args);
+        final SubLObject new_name = html_extract_input($$$term, args);
+        SubLObject source_fort = NIL;
+        SubLObject target_fort = NIL;
+        if ((!source_fort_string.isString()) || source_fort_string.equal($str27$)) {
+            return cb_error($$$No_source_term_was_specified, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        source_fort = cb_guess_fort(source_fort_string, UNPROVIDED);
+        if (NIL == forts.fort_p(source_fort)) {
+            return cb_error($str105$Unable_to_determine_a_term_from__, source_fort_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        if ((!new_name.isString()) || new_name.equal($str27$)) {
+            return cb_error($$$No_term_was_specified, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        target_fort = cb_guess_fort(new_name, UNPROVIDED);
+        if (NIL == forts.fort_p(target_fort)) {
+            return cb_error($str105$Unable_to_determine_a_term_from__, new_name, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        if (NIL != constant_p(target_fort)) {
+            cb_tools.cb_add_to_constant_history(target_fort);
+        } else
+            if (NIL != nart_handles.nart_p(target_fort)) {
+                cb_tools.cb_add_to_nat_history(target_fort);
+            }
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 21016L)
-  public static SubLObject cb_conceptually_related_terms(final SubLObject args)
-  {
-    final SubLObject fort_string = html_utilities.html_extract_input( $str112$fort, args );
-    final SubLObject fort = cb_utilities.cb_guess_fort( fort_string, UNPROVIDED );
-    final SubLObject mt_string = html_utilities.html_extract_input( $str73$mt, args );
-    final SubLObject mt = cb_utilities.cb_guess_fort( mt_string, UNPROVIDED );
-    if( NIL == forts.fort_p( fort ) )
-    {
-      return cb_utilities.cb_error( $str135$Unable_to_determine_last_term__wh, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    if( NIL == forts.fort_p( mt ) )
-    {
-      return cb_utilities.cb_error( $str136$Invalid_Mt_specified____S, mt_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    final SubLObject v_forward = html_utilities.html_extract_input( $str133$add_forward, args );
-    final SubLObject suggestions = ct_cr_extract_suggestions( args );
-    final SubLObject direction = ( NIL != v_forward ) ? $kw54$FORWARD : $kw137$BACKWARD;
-    return ct_cr_assertion_suggestions( fort, suggestions, mt, direction );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 21888L)
-  public static SubLObject ct_cr_extract_suggestions(final SubLObject args)
-  {
-    final SubLObject entered_string = html_utilities.html_extract_input( $str123$entered, args );
-    SubLObject entered = NIL;
-    SubLObject suggestions = NIL;
-    if( NIL != entered_string )
-    {
-      if( !Sequences.length( entered_string ).numE( ZERO_INTEGER ) )
-      {
-        entered = cb_utilities.cb_guess_constant( entered_string );
-        if( NIL == forts.fort_p( entered ) )
-        {
-          return cb_utilities.cb_error( $str105$Unable_to_determine_a_term_from__, entered_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-        }
-        suggestions = ConsesLow.cons( entered, suggestions );
-      }
-    }
-    SubLObject cdolist_list_var = args;
-    SubLObject arg = NIL;
-    arg = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      if( arg.isCons() && arg.first().equal( $str139$id ) )
-      {
-        final SubLObject suggestion = cb_utilities.cb_guess_fort( conses_high.second( arg ), UNPROVIDED );
-        if( NIL != forts.fort_p( suggestion ) )
-        {
-          final SubLObject item_var = suggestion;
-          if( NIL == conses_high.member( item_var, suggestions, Symbols.symbol_function( EQL ), Symbols.symbol_function( IDENTITY ) ) )
-          {
-            suggestions = ConsesLow.cons( item_var, suggestions );
-          }
-        }
-      }
-      cdolist_list_var = cdolist_list_var.rest();
-      arg = cdolist_list_var.first();
-    }
-    suggestions = Sequences.nreverse( suggestions );
-    return suggestions;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 22611L)
-  public static SubLObject ct_cr_assertion_suggestions(final SubLObject fort, final SubLObject suggestions, final SubLObject mt, final SubLObject direction)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    SubLObject formulas = NIL;
-    SubLObject cdolist_list_var = suggestions;
-    SubLObject suggestion = NIL;
-    suggestion = cdolist_list_var.first();
-    while ( NIL != cdolist_list_var)
-    {
-      SubLObject formula = NIL;
-      if( direction.eql( $kw54$FORWARD ) )
-      {
-        formula = ConsesLow.list( $const129$conceptuallyRelated, fort, suggestion );
-      }
-      else if( direction.eql( $kw137$BACKWARD ) )
-      {
-        formula = ConsesLow.list( $const129$conceptuallyRelated, suggestion, fort );
-      }
-      if( NIL != formula )
-      {
-        formulas = ConsesLow.cons( formula, formulas );
-        ke.ke_assert( formula, mt, UNPROVIDED, UNPROVIDED );
-      }
-      cdolist_list_var = cdolist_list_var.rest();
-      suggestion = cdolist_list_var.first();
-    }
-    formulas = Sequences.nreverse( formulas );
-    final SubLObject title_var = $str140$Formulas_Asserted;
-    final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding( thread );
-    try
-    {
-      html_macros.$html_id_space_id_generator$.bind( ( NIL != integer_sequence_generator.integer_sequence_generator_p( html_macros.$html_id_space_id_generator$.getDynamicValue( thread ) ) )
-          ? html_macros.$html_id_space_id_generator$.getDynamicValue( thread )
-          : integer_sequence_generator.new_integer_sequence_generator( UNPROVIDED, UNPROVIDED, UNPROVIDED ), thread );
-      html_utilities.html_markup( $str5$__DOCTYPE_html_PUBLIC_____W3C__DT );
-      if( NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue( thread ) )
-      {
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        html_utilities.html_markup( $str6$_meta_http_equiv__X_UA_Compatible );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-      final SubLObject _prev_bind_0_$45 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding( thread );
-      try
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.bind( ( cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ) == $kw7$UNINITIALIZED ) ? ConsesLow.list( EMPTY_SUBL_OBJECT_ARRAY )
-            : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ), thread );
-        html_utilities.html_markup( html_macros.$html_html_head$.getGlobalValue() );
-        html_utilities.html_markup( html_macros.$html_head_head$.getGlobalValue() );
-        html_macros.html_head_content_type();
-        cb_parameters.cb_head_shortcut_icon();
-        html_utilities.html_meta_robot_instructions( cb_parameters.$cb_permit_robots_to_indexP$.getDynamicValue( thread ), cb_parameters.$cb_permit_robots_to_followP$.getDynamicValue( thread ) );
-        cyc_file_dependencies.css( $kw8$CB_CYC );
-        dhtml_macros.html_basic_cb_scripts();
-        if( NIL != title_var )
-        {
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-          html_utilities.html_markup( html_macros.$html_title_head$.getGlobalValue() );
-          html_utilities.html_princ( title_var );
-          html_utilities.html_markup( html_macros.$html_title_tail$.getGlobalValue() );
-        }
-        html_utilities.html_markup( html_macros.$html_head_tail$.getGlobalValue() );
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        final SubLObject _prev_bind_0_$46 = html_macros.$html_inside_bodyP$.currentBinding( thread );
-        try
-        {
-          html_macros.$html_inside_bodyP$.bind( T, thread );
-          html_utilities.html_markup( html_macros.$html_body_head$.getGlobalValue() );
-          if( NIL != html_macros.$html_default_bgcolor$.getDynamicValue( thread ) )
-          {
-            html_utilities.html_markup( html_macros.$html_body_bgcolor$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( html_utilities.html_color( html_macros.$html_default_bgcolor$.getDynamicValue( thread ) ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          }
-          html_utilities.html_markup( html_macros.$html_body_class$.getGlobalValue() );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_markup( $str11$yui_skin_sam );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-          final SubLObject _prev_bind_0_$47 = html_macros.$html_safe_print$.currentBinding( thread );
-          try
-          {
-            html_macros.$html_safe_print$.bind( T, thread );
-            html_utilities.html_markup( html_macros.$html_div_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_attribute_id$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str12$reloadFrameButton );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$48 = html_macros.$html_safe_print$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_utilities.html_markup( html_macros.$html_input_head$.getGlobalValue() );
-              html_utilities.html_markup( html_macros.$html_input_type$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str13$button );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_name$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str14$reload );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_value$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_princ( $str15$Refresh_Frames );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              if( NIL != html_macros.$html_input_disabledP$.getDynamicValue( thread ) )
-              {
-                html_utilities.html_simple_attribute( html_macros.$html_input_disabled$.getGlobalValue() );
-              }
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            }
-            finally
-            {
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$48, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_div_tail$.getGlobalValue() );
-            if( NIL != title_var )
-            {
-              html_utilities.html_markup( html_macros.$html_heading_head$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              html_utilities.html_princ( title_var );
-              html_utilities.html_markup( html_macros.$html_heading_tail$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            }
-            html_utilities.html_markup( html_macros.$html_form_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_form_action$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( system_parameters.$cyc_cgi_program$.getDynamicValue( thread ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$49 = html_macros.$html_safe_print$.currentBinding( thread );
-            final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding( thread );
-            final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_macros.$within_html_form$.bind( T, thread );
-              html_macros.$html_form_field_uniquifier_code$.bind( html_macros.next_html_form_field_uniquifier_code(), thread );
-              cb_utilities.cb_back_button( UNPROVIDED, UNPROVIDED );
-              html_utilities.html_newline( TWO_INTEGER );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str114$Term___ );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              cb_utilities.cb_form( fort, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_newline( TWO_INTEGER );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str141$Formulas_Asserted__ );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              if( NIL != formulas )
-              {
-                SubLObject cdolist_list_var2 = formulas;
-                SubLObject formula2 = NIL;
-                formula2 = cdolist_list_var2.first();
-                while ( NIL != cdolist_list_var2)
-                {
-                  html_utilities.html_newline( UNPROVIDED );
-                  cb_utilities.cb_form( formula2, UNPROVIDED, UNPROVIDED );
-                  html_utilities.html_princ( $str142$_in_ );
-                  cb_utilities.cb_form( mt, UNPROVIDED, UNPROVIDED );
-                  cdolist_list_var2 = cdolist_list_var2.rest();
-                  formula2 = cdolist_list_var2.first();
-                }
-              }
-              else
-              {
-                html_utilities.html_princ( $str118$None );
-              }
-              html_macros.embed_form_field_code( html_macros.$html_form_field_uniquifier_code$.getDynamicValue( thread ) );
-            }
-            finally
-            {
-              html_macros.$html_form_field_uniquifier_code$.rebind( _prev_bind_3, thread );
-              html_macros.$within_html_form$.rebind( _prev_bind_2, thread );
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$49, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_form_tail$.getGlobalValue() );
-            html_utilities.html_source_readability_terpri( UNPROVIDED );
-            html_utilities.html_copyright_notice();
-          }
-          finally
-          {
-            html_macros.$html_safe_print$.rebind( _prev_bind_0_$47, thread );
-          }
-          html_utilities.html_markup( html_macros.$html_body_tail$.getGlobalValue() );
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-        }
-        finally
-        {
-          html_macros.$html_inside_bodyP$.rebind( _prev_bind_0_$46, thread );
-        }
-        html_utilities.html_markup( html_macros.$html_html_tail$.getGlobalValue() );
-      }
-      finally
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.rebind( _prev_bind_0_$45, thread );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-    }
-    finally
-    {
-      html_macros.$html_id_space_id_generator$.rebind( _prev_bind_0, thread );
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 23511L)
-  public static SubLObject ct_cr_justify(final SubLObject args)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    final SubLObject fort = cb_utilities.cb_guess_fort( args, UNPROVIDED );
-    if( NIL == forts.fort_p( fort ) )
-    {
-      return cb_utilities.cb_error( $str135$Unable_to_determine_last_term__wh, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    if( NIL == Symbols.fboundp( $sym143$WHY_CONCEPTUALLY_RELATED_ ) )
-    {
-      return cb_utilities.cb_error( $str144$Sorry__System_74_92_or_later_is_r, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    }
-    final SubLObject title_var = $str145$Justify_Conceptually_Related;
-    final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding( thread );
-    try
-    {
-      html_macros.$html_id_space_id_generator$.bind( ( NIL != integer_sequence_generator.integer_sequence_generator_p( html_macros.$html_id_space_id_generator$.getDynamicValue( thread ) ) )
-          ? html_macros.$html_id_space_id_generator$.getDynamicValue( thread )
-          : integer_sequence_generator.new_integer_sequence_generator( UNPROVIDED, UNPROVIDED, UNPROVIDED ), thread );
-      html_utilities.html_markup( $str5$__DOCTYPE_html_PUBLIC_____W3C__DT );
-      if( NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue( thread ) )
-      {
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        html_utilities.html_markup( $str6$_meta_http_equiv__X_UA_Compatible );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-      final SubLObject _prev_bind_0_$50 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding( thread );
-      try
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.bind( ( cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ) == $kw7$UNINITIALIZED ) ? ConsesLow.list( EMPTY_SUBL_OBJECT_ARRAY )
-            : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ), thread );
-        html_utilities.html_markup( html_macros.$html_html_head$.getGlobalValue() );
-        html_utilities.html_markup( html_macros.$html_head_head$.getGlobalValue() );
-        html_macros.html_head_content_type();
-        cb_parameters.cb_head_shortcut_icon();
-        html_utilities.html_meta_robot_instructions( cb_parameters.$cb_permit_robots_to_indexP$.getDynamicValue( thread ), cb_parameters.$cb_permit_robots_to_followP$.getDynamicValue( thread ) );
-        cyc_file_dependencies.css( $kw8$CB_CYC );
-        dhtml_macros.html_basic_cb_scripts();
-        if( NIL != title_var )
-        {
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-          html_utilities.html_markup( html_macros.$html_title_head$.getGlobalValue() );
-          html_utilities.html_princ( title_var );
-          html_utilities.html_markup( html_macros.$html_title_tail$.getGlobalValue() );
-        }
-        html_utilities.html_markup( html_macros.$html_head_tail$.getGlobalValue() );
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        final SubLObject _prev_bind_0_$51 = html_macros.$html_inside_bodyP$.currentBinding( thread );
-        try
-        {
-          html_macros.$html_inside_bodyP$.bind( T, thread );
-          html_utilities.html_markup( html_macros.$html_body_head$.getGlobalValue() );
-          if( NIL != html_macros.$html_default_bgcolor$.getDynamicValue( thread ) )
-          {
-            html_utilities.html_markup( html_macros.$html_body_bgcolor$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( html_utilities.html_color( html_macros.$html_default_bgcolor$.getDynamicValue( thread ) ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          }
-          html_utilities.html_markup( html_macros.$html_body_class$.getGlobalValue() );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_markup( $str11$yui_skin_sam );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-          final SubLObject _prev_bind_0_$52 = html_macros.$html_safe_print$.currentBinding( thread );
-          try
-          {
-            html_macros.$html_safe_print$.bind( T, thread );
-            html_utilities.html_markup( html_macros.$html_div_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_attribute_id$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str12$reloadFrameButton );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$53 = html_macros.$html_safe_print$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_utilities.html_markup( html_macros.$html_input_head$.getGlobalValue() );
-              html_utilities.html_markup( html_macros.$html_input_type$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str13$button );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_name$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str14$reload );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_value$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_princ( $str15$Refresh_Frames );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              if( NIL != html_macros.$html_input_disabledP$.getDynamicValue( thread ) )
-              {
-                html_utilities.html_simple_attribute( html_macros.$html_input_disabled$.getGlobalValue() );
-              }
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            }
-            finally
-            {
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$53, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_div_tail$.getGlobalValue() );
-            if( NIL != title_var )
-            {
-              html_utilities.html_markup( html_macros.$html_heading_head$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              html_utilities.html_princ( title_var );
-              html_utilities.html_markup( html_macros.$html_heading_tail$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            }
-            html_utilities.html_markup( html_macros.$html_form_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_form_action$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( system_parameters.$cyc_cgi_program$.getDynamicValue( thread ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$54 = html_macros.$html_safe_print$.currentBinding( thread );
-            final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding( thread );
-            final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_macros.$within_html_form$.bind( T, thread );
-              html_macros.$html_form_field_uniquifier_code$.bind( html_macros.next_html_form_field_uniquifier_code(), thread );
-              cb_utilities.cb_back_button( UNPROVIDED, UNPROVIDED );
-              html_utilities.html_indent( UNPROVIDED );
-              html_utilities.html_newline( TWO_INTEGER );
-              html_utilities.html_markup( html_macros.$html_big_head$.getGlobalValue() );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str114$Term___ );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              cb_utilities.cb_form( fort, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_big_tail$.getGlobalValue() );
-              html_utilities.html_newline( TWO_INTEGER );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str115$Existing_Conceptually_Related_Ter );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              final SubLObject _prev_bind_0_$55 = mt_relevance_macros.$relevant_mt_function$.currentBinding( thread );
-              final SubLObject _prev_bind_1_$56 = mt_relevance_macros.$mt$.currentBinding( thread );
-              try
-              {
-                mt_relevance_macros.$relevant_mt_function$.bind( $sym86$RELEVANT_MT_IS_EVERYTHING, thread );
-                mt_relevance_macros.$mt$.bind( $const87$EverythingPSC, thread );
-                final SubLObject existing = removal_modules_conceptually_related.all_conceptually_related( fort, UNPROVIDED );
-                html_utilities.html_markup( html_macros.$html_definition_list_head$.getGlobalValue() );
-                html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-                final SubLObject _prev_bind_0_$56 = html_macros.$html_safe_print$.currentBinding( thread );
-                try
-                {
-                  html_macros.$html_safe_print$.bind( T, thread );
-                  SubLObject cdolist_list_var = existing;
-                  SubLObject related = NIL;
-                  related = cdolist_list_var.first();
-                  while ( NIL != cdolist_list_var)
-                  {
-                    final SubLObject supports = removal_modules_conceptually_related.why_conceptually_relatedP( fort, related, UNPROVIDED );
-                    html_utilities.html_markup( html_macros.$html_definition_list_term_head$.getGlobalValue() );
-                    cb_utilities.cb_form( related, UNPROVIDED, UNPROVIDED );
-                    html_utilities.html_markup( html_macros.$html_definition_list_term_tail$.getGlobalValue() );
-                    html_utilities.html_markup( html_macros.$html_definition_list_def_head$.getGlobalValue() );
-                    SubLObject cdolist_list_var_$58 = supports;
-                    SubLObject support = NIL;
-                    support = cdolist_list_var_$58.first();
-                    while ( NIL != cdolist_list_var_$58)
-                    {
-                      cb_assertion_browser.cb_show_support( support, UNPROVIDED );
-                      html_utilities.html_newline( UNPROVIDED );
-                      cdolist_list_var_$58 = cdolist_list_var_$58.rest();
-                      support = cdolist_list_var_$58.first();
+        final SubLObject source_fort_el_formula = forts.fort_el_formula(source_fort);
+        final SubLObject target_fort_el_formula = forts.fort_el_formula(target_fort);
+        SubLObject cdolist_list_var = nthcdr(THREE_INTEGER, args);
+        SubLObject copy_spec = NIL;
+        copy_spec = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            final SubLObject id = read_from_string_ignoring_errors(copy_spec.first(), NIL, NIL, UNPROVIDED, UNPROVIDED);
+            if (id.isInteger()) {
+                final SubLObject assertion = assertion_handles.find_assertion_by_id(id);
+                if (NIL != assertion_handles.assertion_p(assertion)) {
+                    SubLObject similar_formula = ke.ke_assertion_edit_formula(assertion);
+                    final SubLObject mt = assertions_high.assertion_mt(assertion);
+                    final SubLObject strength = assertions_high.assertion_strength(assertion);
+                    final SubLObject direction = assertions_high.assertion_direction(assertion);
+                    if (NIL != list_utilities.tree_find(source_fort_el_formula, similar_formula, symbol_function(EQUAL), UNPROVIDED)) {
+                        similar_formula = subst(target_fort_el_formula, source_fort_el_formula, similar_formula, symbol_function(EQUAL), UNPROVIDED);
+                        ke.ke_assert(similar_formula, mt, strength, direction);
                     }
-                    html_utilities.html_newline( UNPROVIDED );
-                    html_utilities.html_markup( html_macros.$html_definition_list_def_tail$.getGlobalValue() );
-                    cdolist_list_var = cdolist_list_var.rest();
-                    related = cdolist_list_var.first();
-                  }
                 }
-                finally
-                {
-                  html_macros.$html_safe_print$.rebind( _prev_bind_0_$56, thread );
+            }
+            cdolist_list_var = cdolist_list_var.rest();
+            copy_spec = cdolist_list_var.first();
+        } 
+        return cb_conceptually_related_guts(target_fort);
+    }
+
+    public static SubLObject cb_copy_from_similar_checkbox(final SubLObject assertion) {
+        if ((NIL != assertion_handles.assertion_p(assertion)) && (NIL != assertions_high.asserted_assertionP(assertion))) {
+            final SubLObject id = assertion_handles.assertion_id(assertion);
+            html_checkbox_input(id, T, NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        return NIL;
+    }
+
+    public static SubLObject cb_suggested_conceptually_related(final SubLObject v_term) {
+        final SubLObject v_answer = NIL;
+        return v_answer;
+    }
+
+    public static SubLObject cb_conceptually_related_guts(final SubLObject v_term) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if (NIL != v_term) {
+            assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
+            ct_cr_setup();
+            SubLObject suggestions = cb_suggested_conceptually_related(v_term);
+            SubLObject existing_terms = NIL;
+            final SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+            final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
+            try {
+                mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                existing_terms = removal_modules_conceptually_related.all_conceptually_related(v_term, UNPROVIDED);
+            } finally {
+                mt_relevance_macros.$mt$.rebind(_prev_bind_2, thread);
+                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+            }
+            suggestions = set_difference(suggestions, existing_terms, UNPROVIDED, UNPROVIDED);
+            final SubLObject title_var = $$$Conceptually_Related_Suggestions;
+            final SubLObject _prev_bind_3 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
+            try {
+                html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? html_macros.$html_id_space_id_generator$.getDynamicValue(thread) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+                html_markup($str5$__DOCTYPE_html_PUBLIC_____W3C__DT);
+                if (NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue(thread)) {
+                    html_source_readability_terpri(UNPROVIDED);
+                    html_markup($str6$_meta_http_equiv__X_UA_Compatible);
                 }
-                html_utilities.html_markup( html_macros.$html_definition_list_tail$.getGlobalValue() );
-              }
-              finally
-              {
-                mt_relevance_macros.$mt$.rebind( _prev_bind_1_$56, thread );
-                mt_relevance_macros.$relevant_mt_function$.rebind( _prev_bind_0_$55, thread );
-              }
-              html_macros.embed_form_field_code( html_macros.$html_form_field_uniquifier_code$.getDynamicValue( thread ) );
-            }
-            finally
-            {
-              html_macros.$html_form_field_uniquifier_code$.rebind( _prev_bind_3, thread );
-              html_macros.$within_html_form$.rebind( _prev_bind_2, thread );
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$54, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_form_tail$.getGlobalValue() );
-            html_utilities.html_source_readability_terpri( UNPROVIDED );
-            html_utilities.html_copyright_notice();
-          }
-          finally
-          {
-            html_macros.$html_safe_print$.rebind( _prev_bind_0_$52, thread );
-          }
-          html_utilities.html_markup( html_macros.$html_body_tail$.getGlobalValue() );
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-        }
-        finally
-        {
-          html_macros.$html_inside_bodyP$.rebind( _prev_bind_0_$51, thread );
-        }
-        html_utilities.html_markup( html_macros.$html_html_tail$.getGlobalValue() );
-      }
-      finally
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.rebind( _prev_bind_0_$50, thread );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-    }
-    finally
-    {
-      html_macros.$html_id_space_id_generator$.rebind( _prev_bind_0, thread );
-    }
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 24595L)
-  public static SubLObject cb_link_ct_cr_justify(final SubLObject fort, SubLObject linktext)
-  {
-    if( linktext == UNPROVIDED )
-    {
-      linktext = NIL;
-    }
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != forts.fort_p( fort ) : fort;
-    if( NIL == linktext )
-    {
-      html_utilities.html_princ( $str117$_Justify_ );
-    }
-    final SubLObject frame_name_var = cb_utilities.cb_frame_name( $kw46$MAIN );
-    html_utilities.html_markup( html_macros.$html_anchor_head$.getGlobalValue() );
-    html_utilities.html_markup( html_macros.$html_anchor_href$.getGlobalValue() );
-    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    cb_parameters.cyc_cgi_url_int();
-    PrintLow.format( html_macros.$html_stream$.getDynamicValue( thread ), $str147$ct_cr_justify__a, cb_utilities.cb_fort_identifier( fort ) );
-    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    if( NIL != frame_name_var )
-    {
-      html_utilities.html_markup( html_macros.$html_anchor_target$.getGlobalValue() );
-      html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-      html_utilities.html_markup( frame_name_var );
-      html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    }
-    html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-    final SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding( thread );
-    try
-    {
-      html_macros.$html_safe_print$.bind( T, thread );
-      html_utilities.html_princ( linktext );
-    }
-    finally
-    {
-      html_macros.$html_safe_print$.rebind( _prev_bind_0, thread );
-    }
-    html_utilities.html_markup( html_macros.$html_anchor_tail$.getGlobalValue() );
-    return fort;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 24865L)
-  public static SubLObject ct_cr_search_show_suggestion(final SubLObject suggestion)
-  {
-    html_utilities.html_checkbox_input( $str139$id, cb_utilities.cb_fort_identifier( suggestion ), NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    html_utilities.html_indent( UNPROVIDED );
-    cb_utilities.cb_form( suggestion, UNPROVIDED, UNPROVIDED );
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 25041L)
-  public static SubLObject ct_cr_setup()
-  {
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 25645L)
-  public static SubLObject ct_cr_initialize_irrelevant_term_table()
-  {
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 26308L)
-  public static SubLObject cb_elaborate_term(final SubLObject args)
-  {
-    final SubLObject fort_spec = args.first();
-    final SubLObject fort = cb_utilities.cb_guess_fort( args.first(), UNPROVIDED );
-    if( NIL == forts.fort_p( fort ) )
-    {
-      cb_utilities.cb_error( $str57$_a_does_not_specify_a_Cyc_term, fort_spec, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-      return NIL;
-    }
-    return cb_elaborate_term_guts( fort );
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 26630L)
-  public static SubLObject cb_link_elaborate_term(final SubLObject v_term, SubLObject linktext)
-  {
-    if( linktext == UNPROVIDED )
-    {
-      linktext = NIL;
-    }
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    if( NIL == linktext )
-    {
-      linktext = $str150$Elaborate_Term;
-    }
-    final SubLObject frame_name_var = cb_utilities.cb_frame_name( $kw46$MAIN );
-    html_utilities.html_markup( html_macros.$html_anchor_head$.getGlobalValue() );
-    html_utilities.html_markup( html_macros.$html_anchor_href$.getGlobalValue() );
-    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    cb_parameters.cyc_cgi_url_int();
-    PrintLow.format( html_macros.$html_stream$.getDynamicValue( thread ), $str151$cb_elaborate_term__a, cb_utilities.cb_fort_identifier( v_term ) );
-    html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    if( NIL != frame_name_var )
-    {
-      html_utilities.html_markup( html_macros.$html_anchor_target$.getGlobalValue() );
-      html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-      html_utilities.html_markup( frame_name_var );
-      html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-    }
-    html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-    final SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding( thread );
-    try
-    {
-      html_macros.$html_safe_print$.bind( T, thread );
-      html_utilities.html_princ( linktext );
-    }
-    finally
-    {
-      html_macros.$html_safe_print$.rebind( _prev_bind_0, thread );
-    }
-    html_utilities.html_markup( html_macros.$html_anchor_tail$.getGlobalValue() );
-    return NIL;
-  }
-
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 26956L)
-  public static SubLObject cb_elaborate_term_guts(final SubLObject v_term)
-  {
-    final SubLThread thread = SubLProcess.currentSubLThread();
-    assert NIL != forts.fort_p( v_term ) : v_term;
-    final SubLObject title_var = $str150$Elaborate_Term;
-    final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding( thread );
-    try
-    {
-      html_macros.$html_id_space_id_generator$.bind( ( NIL != integer_sequence_generator.integer_sequence_generator_p( html_macros.$html_id_space_id_generator$.getDynamicValue( thread ) ) )
-          ? html_macros.$html_id_space_id_generator$.getDynamicValue( thread )
-          : integer_sequence_generator.new_integer_sequence_generator( UNPROVIDED, UNPROVIDED, UNPROVIDED ), thread );
-      html_utilities.html_markup( $str5$__DOCTYPE_html_PUBLIC_____W3C__DT );
-      if( NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue( thread ) )
-      {
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        html_utilities.html_markup( $str6$_meta_http_equiv__X_UA_Compatible );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
-      final SubLObject _prev_bind_0_$59 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding( thread );
-      try
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.bind( ( cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ) == $kw7$UNINITIALIZED ) ? ConsesLow.list( EMPTY_SUBL_OBJECT_ARRAY )
-            : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue( thread ), thread );
-        html_utilities.html_markup( html_macros.$html_html_head$.getGlobalValue() );
-        html_utilities.html_markup( html_macros.$html_head_head$.getGlobalValue() );
-        html_macros.html_head_content_type();
-        cb_parameters.cb_head_shortcut_icon();
-        html_utilities.html_meta_robot_instructions( cb_parameters.$cb_permit_robots_to_indexP$.getDynamicValue( thread ), cb_parameters.$cb_permit_robots_to_followP$.getDynamicValue( thread ) );
-        cyc_file_dependencies.css( $kw8$CB_CYC );
-        dhtml_macros.html_basic_cb_scripts();
-        if( NIL != title_var )
-        {
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-          html_utilities.html_markup( html_macros.$html_title_head$.getGlobalValue() );
-          html_utilities.html_princ( title_var );
-          html_utilities.html_markup( html_macros.$html_title_tail$.getGlobalValue() );
-        }
-        html_complete.html_complete_script();
-        cyc_file_dependencies.css( $kw9$SAM_AUTOCOMPLETE_CSS );
-        html_utilities.html_markup( html_macros.$html_head_tail$.getGlobalValue() );
-        html_utilities.html_source_readability_terpri( UNPROVIDED );
-        final SubLObject _prev_bind_0_$60 = html_macros.$html_inside_bodyP$.currentBinding( thread );
-        try
-        {
-          html_macros.$html_inside_bodyP$.bind( T, thread );
-          html_utilities.html_markup( html_macros.$html_body_head$.getGlobalValue() );
-          if( NIL != html_macros.$html_default_bgcolor$.getDynamicValue( thread ) )
-          {
-            html_utilities.html_markup( html_macros.$html_body_bgcolor$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( html_utilities.html_color( html_macros.$html_default_bgcolor$.getDynamicValue( thread ) ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          }
-          html_utilities.html_markup( html_macros.$html_body_class$.getGlobalValue() );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_markup( $str11$yui_skin_sam );
-          html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-          html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-          final SubLObject _prev_bind_0_$61 = html_macros.$html_safe_print$.currentBinding( thread );
-          try
-          {
-            html_macros.$html_safe_print$.bind( T, thread );
-            html_utilities.html_markup( html_macros.$html_div_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_attribute_id$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str12$reloadFrameButton );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$62 = html_macros.$html_safe_print$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_utilities.html_markup( html_macros.$html_input_head$.getGlobalValue() );
-              html_utilities.html_markup( html_macros.$html_input_type$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str13$button );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_name$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( $str14$reload );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( html_macros.$html_input_value$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_princ( $str15$Refresh_Frames );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              if( NIL != html_macros.$html_input_disabledP$.getDynamicValue( thread ) )
-              {
-                html_utilities.html_simple_attribute( html_macros.$html_input_disabled$.getGlobalValue() );
-              }
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            }
-            finally
-            {
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$62, thread );
-            }
-            html_utilities.html_markup( html_macros.$html_div_tail$.getGlobalValue() );
-            if( NIL != title_var )
-            {
-              html_utilities.html_markup( html_macros.$html_heading_head$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-              html_utilities.html_princ( title_var );
-              html_utilities.html_markup( html_macros.$html_heading_tail$.getGlobalValue() );
-              html_utilities.html_markup( TWO_INTEGER );
-              html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            }
-            final SubLObject frame_name_var = cb_utilities.cb_frame_name( NIL );
-            html_utilities.html_markup( html_macros.$html_form_head$.getGlobalValue() );
-            html_utilities.html_markup( html_macros.$html_form_action$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( system_parameters.$cyc_cgi_program$.getDynamicValue( thread ) );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( html_macros.$html_form_method$.getGlobalValue() );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            html_utilities.html_markup( $str16$post );
-            html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            if( NIL != frame_name_var )
-            {
-              html_utilities.html_markup( html_macros.$html_form_target$.getGlobalValue() );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-              html_utilities.html_markup( frame_name_var );
-              html_utilities.html_char( Characters.CHAR_quotation, UNPROVIDED );
-            }
-            html_utilities.html_char( Characters.CHAR_greater, UNPROVIDED );
-            final SubLObject _prev_bind_0_$63 = html_macros.$html_safe_print$.currentBinding( thread );
-            final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding( thread );
-            final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding( thread );
-            try
-            {
-              html_macros.$html_safe_print$.bind( T, thread );
-              html_macros.$within_html_form$.bind( T, thread );
-              html_macros.$html_form_field_uniquifier_code$.bind( html_macros.next_html_form_field_uniquifier_code(), thread );
-              html_utilities.html_hidden_input( $str156$cb_handle_elaborate_term, T, UNPROVIDED );
-              cb_utilities.cb_help_preamble( $kw154$CB_ELABORATE_TERM, NIL, UNPROVIDED );
-              cb_utilities.cb_back_button( $kw18$SELF, UNPROVIDED );
-              html_utilities.html_indent( UNPROVIDED );
-              html_utilities.html_reset_input( $str25$Clear );
-              html_utilities.html_indent( UNPROVIDED );
-              html_utilities.html_submit_input( $str157$Elaborate, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_newline( TWO_INTEGER );
-              html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-              html_utilities.html_princ( $str158$Elaborate_ );
-              cb_utilities.cb_form( v_term, UNPROVIDED, UNPROVIDED );
-              html_utilities.html_princ( $str70$_ );
-              html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-              final SubLObject requirements = ke_requirements( v_term );
-              final SubLObject suggestions = ke_suggestions( v_term );
-              if( NIL != requirements )
-              {
-                html_utilities.html_newline( TWO_INTEGER );
-                html_utilities.html_markup( html_macros.$html_strong_head$.getGlobalValue() );
-                html_utilities.html_princ( $str159$Requirements___ );
-                html_utilities.html_markup( html_macros.$html_strong_tail$.getGlobalValue() );
-                SubLObject cdolist_list_var = requirements;
-                SubLObject requirement = NIL;
-                requirement = cdolist_list_var.first();
-                while ( NIL != cdolist_list_var)
-                {
-                  html_utilities.html_newline( UNPROVIDED );
-                  cb_elaborate_requirement( v_term, requirement );
-                  cdolist_list_var = cdolist_list_var.rest();
-                  requirement = cdolist_list_var.first();
+                html_source_readability_terpri(UNPROVIDED);
+                final SubLObject _prev_bind_0_$38 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding(thread);
+                try {
+                    cyc_file_dependencies.$html_emitted_file_dependencies$.bind(cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread) == $UNINITIALIZED ? list(EMPTY_SUBL_OBJECT_ARRAY) : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread), thread);
+                    html_markup(html_macros.$html_html_head$.getGlobalValue());
+                    html_markup(html_macros.$html_head_head$.getGlobalValue());
+                    html_macros.html_head_content_type();
+                    cb_head_shortcut_icon();
+                    html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
+                    cyc_file_dependencies.css($CB_CYC);
+                    dhtml_macros.html_basic_cb_scripts();
+                    if (NIL != title_var) {
+                        html_source_readability_terpri(UNPROVIDED);
+                        html_markup(html_macros.$html_title_head$.getGlobalValue());
+                        html_princ(title_var);
+                        html_markup(html_macros.$html_title_tail$.getGlobalValue());
+                    }
+                    html_complete.html_complete_script();
+                    cyc_file_dependencies.css($SAM_AUTOCOMPLETE_CSS);
+                    html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                    final SubLObject _prev_bind_0_$39 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                    try {
+                        html_macros.$html_inside_bodyP$.bind(T, thread);
+                        html_markup(html_macros.$html_body_head$.getGlobalValue());
+                        if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
+                            html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
+                            html_char(CHAR_quotation, UNPROVIDED);
+                        }
+                        html_markup(html_macros.$html_body_class$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($str11$yui_skin_sam);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$40 = html_macros.$html_safe_print$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_markup(html_macros.$html_div_head$.getGlobalValue());
+                            html_markup(html_macros.$html_attribute_id$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$reloadFrameButton);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            final SubLObject _prev_bind_0_$41 = html_macros.$html_safe_print$.currentBinding(thread);
+                            try {
+                                html_macros.$html_safe_print$.bind(T, thread);
+                                html_markup(html_macros.$html_input_head$.getGlobalValue());
+                                html_markup(html_macros.$html_input_type$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup($$$button);
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(html_macros.$html_input_name$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup($$$reload);
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(html_macros.$html_input_value$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_princ($$$Refresh_Frames);
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                if (NIL != html_macros.$html_input_disabledP$.getDynamicValue(thread)) {
+                                    html_simple_attribute(html_macros.$html_input_disabled$.getGlobalValue());
+                                }
+                                html_char(CHAR_greater, UNPROVIDED);
+                            } finally {
+                                html_macros.$html_safe_print$.rebind(_prev_bind_0_$41, thread);
+                            }
+                            html_markup(html_macros.$html_div_tail$.getGlobalValue());
+                            if (NIL != title_var) {
+                                html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                                html_markup(TWO_INTEGER);
+                                html_char(CHAR_greater, UNPROVIDED);
+                                html_princ(title_var);
+                                html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                                html_markup(TWO_INTEGER);
+                                html_char(CHAR_greater, UNPROVIDED);
+                            }
+                            final SubLObject frame_name_var = cb_frame_name(NIL);
+                            html_markup(html_macros.$html_form_head$.getGlobalValue());
+                            html_markup(html_macros.$html_form_action$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_form_method$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$post);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            if (NIL != frame_name_var) {
+                                html_markup(html_macros.$html_form_target$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(frame_name_var);
+                                html_char(CHAR_quotation, UNPROVIDED);
+                            }
+                            html_char(CHAR_greater, UNPROVIDED);
+                            final SubLObject _prev_bind_0_$42 = html_macros.$html_safe_print$.currentBinding(thread);
+                            final SubLObject _prev_bind_4 = html_macros.$within_html_form$.currentBinding(thread);
+                            final SubLObject _prev_bind_5 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                            try {
+                                html_macros.$html_safe_print$.bind(T, thread);
+                                html_macros.$within_html_form$.bind(T, thread);
+                                html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                                html_hidden_input($str111$cb_conceptually_related_terms, T, UNPROVIDED);
+                                html_hidden_input($$$fort, cb_fort_identifier(v_term), UNPROVIDED);
+                                cb_help_preamble($CB_CONCEPTUALLY_RELATED_TERMS, NIL, UNPROVIDED);
+                                cb_back_button($SELF, UNPROVIDED);
+                                html_reset_input($$$Clear_All);
+                                html_newline(TWO_INTEGER);
+                                html_markup(html_macros.$html_big_head$.getGlobalValue());
+                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                html_princ($str114$Term___);
+                                cb_form(v_term, UNPROVIDED, UNPROVIDED);
+                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                html_markup(html_macros.$html_big_tail$.getGlobalValue());
+                                html_newline(UNPROVIDED);
+                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                html_princ($str115$Existing_Conceptually_Related_Ter);
+                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                if (NIL != existing_terms) {
+                                    html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                    cb_link($CT_CR_JUSTIFY, v_term, $str117$_Justify_, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                    html_newline(TWO_INTEGER);
+                                    SubLObject cdolist_list_var = existing_terms;
+                                    SubLObject existing_term = NIL;
+                                    existing_term = cdolist_list_var.first();
+                                    while (NIL != cdolist_list_var) {
+                                        cb_form(existing_term, UNPROVIDED, UNPROVIDED);
+                                        html_indent(TWO_INTEGER);
+                                        cdolist_list_var = cdolist_list_var.rest();
+                                        existing_term = cdolist_list_var.first();
+                                    } 
+                                } else {
+                                    html_princ($$$None);
+                                }
+                                html_hr(UNPROVIDED, UNPROVIDED);
+                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                html_princ($str119$Specify_the_Microtheory_for_new__);
+                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                html_newline(UNPROVIDED);
+                                html_complete.html_complete_button($$$mt, $$$Complete, $$Microtheory, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                html_princ($str120$_Mt___);
+                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                html_text_input($$$mt, string_utilities.str(mt_vars.$default_ask_mt$.getGlobalValue()), $int$40);
+                                html_br();
+                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                html_princ($str121$_Select_terms_and_or_type_in_a_te);
+                                cb_form(v_term, UNPROVIDED, UNPROVIDED);
+                                html_princ($str122$__);
+                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                html_newline(UNPROVIDED);
+                                html_complete.html_complete_button($$$entered, $$$Complete, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                html_princ($str124$_Term___);
+                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                html_text_input($$$entered, NIL, $int$40);
+                                html_newline(UNPROVIDED);
+                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                html_princ($str125$Possible_Terms_to_Add___);
+                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                html_markup(html_macros.$html_table_head$.getGlobalValue());
+                                html_simple_attribute(html_macros.$html_table_noflow$.getGlobalValue());
+                                html_markup(html_macros.$html_table_border$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(ZERO_INTEGER);
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(html_macros.$html_table_cellpadding$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(ZERO_INTEGER);
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(html_macros.$html_table_cellspacing$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(ZERO_INTEGER);
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_char(CHAR_greater, UNPROVIDED);
+                                final SubLObject _prev_bind_0_$43 = html_macros.$html_safe_print$.currentBinding(thread);
+                                try {
+                                    html_macros.$html_safe_print$.bind(T, thread);
+                                    while (NIL != suggestions) {
+                                        html_markup(html_macros.$html_table_row_head$.getGlobalValue());
+                                        html_char(CHAR_greater, UNPROVIDED);
+                                        final SubLObject _prev_bind_0_$44 = html_macros.$html_safe_print$.currentBinding(thread);
+                                        try {
+                                            html_macros.$html_safe_print$.bind(T, thread);
+                                            suggestions = ct_cr_search_show_next_suggestion(suggestions);
+                                            suggestions = ct_cr_search_show_next_suggestion(suggestions);
+                                            suggestions = ct_cr_search_show_next_suggestion(suggestions);
+                                        } finally {
+                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$44, thread);
+                                        }
+                                        html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
+                                        html_source_readability_terpri(UNPROVIDED);
+                                    } 
+                                } finally {
+                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_$43, thread);
+                                }
+                                html_markup(html_macros.$html_table_tail$.getGlobalValue());
+                                html_newline(UNPROVIDED);
+                                html_submit_input($$$Add_Terms_Backward, $str127$add_backward, UNPROVIDED);
+                                html_princ($$$_as_);
+                                cb_form(list($$conceptuallyRelated, TERM, v_term), UNPROVIDED, UNPROVIDED);
+                                html_princ($$$_in_MT);
+                                html_newline(UNPROVIDED);
+                                html_submit_input($$$Add_Terms_Forward, $str133$add_forward, UNPROVIDED);
+                                html_princ($$$_as_);
+                                cb_form(listS($$conceptuallyRelated, v_term, $list134), UNPROVIDED, UNPROVIDED);
+                                html_princ($$$_in_MT);
+                                html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                            } finally {
+                                html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_5, thread);
+                                html_macros.$within_html_form$.rebind(_prev_bind_4, thread);
+                                html_macros.$html_safe_print$.rebind(_prev_bind_0_$42, thread);
+                            }
+                            html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                            html_source_readability_terpri(UNPROVIDED);
+                            html_copyright_notice();
+                        } finally {
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$40, thread);
+                        }
+                        html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_$39, thread);
+                    }
+                    html_markup(html_macros.$html_html_tail$.getGlobalValue());
+                } finally {
+                    cyc_file_dependencies.$html_emitted_file_dependencies$.rebind(_prev_bind_0_$38, thread);
                 }
-              }
-              if( NIL != suggestions )
-              {
-                html_utilities.html_newline( TWO_INTEGER );
-                html_utilities.html_princ( $str160$Suggestions___ );
-                SubLObject cdolist_list_var = suggestions;
-                SubLObject suggestion = NIL;
-                suggestion = cdolist_list_var.first();
-                while ( NIL != cdolist_list_var)
-                {
-                  html_utilities.html_newline( UNPROVIDED );
-                  cb_elaborate_suggestion( v_term, suggestion );
-                  cdolist_list_var = cdolist_list_var.rest();
-                  suggestion = cdolist_list_var.first();
+                html_source_readability_terpri(UNPROVIDED);
+            } finally {
+                html_macros.$html_id_space_id_generator$.rebind(_prev_bind_3, thread);
+            }
+        }
+        return NIL;
+    }
+
+    public static SubLObject ct_cr_search_show_next_suggestion(final SubLObject suggestions) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if (NIL != suggestions) {
+            final SubLObject suggestion = suggestions.first();
+            html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+            html_char(CHAR_greater, UNPROVIDED);
+            SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+            try {
+                html_macros.$html_safe_print$.bind(T, thread);
+                ct_cr_search_show_suggestion(suggestion);
+            } finally {
+                html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+            }
+            html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+            html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+            html_char(CHAR_greater, UNPROVIDED);
+            _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+            try {
+                html_macros.$html_safe_print$.bind(T, thread);
+                html_indent(TWO_INTEGER);
+            } finally {
+                html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+            }
+            html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+            return suggestions.rest();
+        }
+        return NIL;
+    }
+
+    public static SubLObject cb_conceptually_related_terms(final SubLObject args) {
+        final SubLObject fort_string = html_extract_input($$$fort, args);
+        final SubLObject fort = cb_guess_fort(fort_string, UNPROVIDED);
+        final SubLObject mt_string = html_extract_input($$$mt, args);
+        final SubLObject mt = cb_guess_fort(mt_string, UNPROVIDED);
+        if (NIL == forts.fort_p(fort)) {
+            return cb_error($str135$Unable_to_determine_last_term__wh, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        if (NIL == forts.fort_p(mt)) {
+            return cb_error($str136$Invalid_Mt_specified____S, mt_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        final SubLObject v_forward = html_extract_input($str133$add_forward, args);
+        final SubLObject suggestions = ct_cr_extract_suggestions(args);
+        final SubLObject direction = (NIL != v_forward) ? $FORWARD : $BACKWARD;
+        return ct_cr_assertion_suggestions(fort, suggestions, mt, direction);
+    }
+
+    public static SubLObject ct_cr_extract_suggestions(final SubLObject args) {
+        final SubLObject entered_string = html_extract_input($$$entered, args);
+        SubLObject entered = NIL;
+        SubLObject suggestions = NIL;
+        if (NIL != entered_string) {
+            if (!length(entered_string).numE(ZERO_INTEGER)) {
+                entered = cb_guess_constant(entered_string);
+                if (NIL == forts.fort_p(entered)) {
+                    return cb_error($str105$Unable_to_determine_a_term_from__, entered_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
                 }
-              }
-              html_macros.embed_form_field_code( html_macros.$html_form_field_uniquifier_code$.getDynamicValue( thread ) );
+                suggestions = cons(entered, suggestions);
             }
-            finally
-            {
-              html_macros.$html_form_field_uniquifier_code$.rebind( _prev_bind_3, thread );
-              html_macros.$within_html_form$.rebind( _prev_bind_2, thread );
-              html_macros.$html_safe_print$.rebind( _prev_bind_0_$63, thread );
+        }
+        SubLObject cdolist_list_var = args;
+        SubLObject arg = NIL;
+        arg = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            if (arg.isCons() && arg.first().equal($$$id)) {
+                final SubLObject suggestion = cb_guess_fort(second(arg), UNPROVIDED);
+                if (NIL != forts.fort_p(suggestion)) {
+                    final SubLObject item_var = suggestion;
+                    if (NIL == member(item_var, suggestions, symbol_function(EQL), symbol_function(IDENTITY))) {
+                        suggestions = cons(item_var, suggestions);
+                    }
+                }
             }
-            html_utilities.html_markup( html_macros.$html_form_tail$.getGlobalValue() );
-            html_utilities.html_source_readability_terpri( UNPROVIDED );
-            html_utilities.html_copyright_notice();
-          }
-          finally
-          {
-            html_macros.$html_safe_print$.rebind( _prev_bind_0_$61, thread );
-          }
-          html_utilities.html_markup( html_macros.$html_body_tail$.getGlobalValue() );
-          html_utilities.html_source_readability_terpri( UNPROVIDED );
-        }
-        finally
-        {
-          html_macros.$html_inside_bodyP$.rebind( _prev_bind_0_$60, thread );
-        }
-        html_utilities.html_markup( html_macros.$html_html_tail$.getGlobalValue() );
-      }
-      finally
-      {
-        cyc_file_dependencies.$html_emitted_file_dependencies$.rebind( _prev_bind_0_$59, thread );
-      }
-      html_utilities.html_source_readability_terpri( UNPROVIDED );
+            cdolist_list_var = cdolist_list_var.rest();
+            arg = cdolist_list_var.first();
+        } 
+        suggestions = nreverse(suggestions);
+        return suggestions;
     }
-    finally
-    {
-      html_macros.$html_id_space_id_generator$.rebind( _prev_bind_0, thread );
-    }
-    return NIL;
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 28006L)
-  public static SubLObject ke_requirements(final SubLObject v_term)
-  {
-    final SubLObject formula = conses_high.subst( v_term, $kw162$TERM, $ke_requirements_query$.getGlobalValue(), UNPROVIDED, UNPROVIDED );
-    final SubLObject v_bindings = fi.fi_ask_int( formula, $const163$InferencePSC, ONE_INTEGER, UNPROVIDED, UNPROVIDED, UNPROVIDED );
-    if( NIL != v_bindings )
-    {
-      SubLObject v_true = NIL;
-      SubLObject unknown = NIL;
-      SubLObject cdolist_list_var = v_bindings;
-      SubLObject binding = NIL;
-      binding = cdolist_list_var.first();
-      while ( NIL != cdolist_list_var)
-      {
-        final SubLObject requirement = bindings.variable_binding_value( binding.first() );
-        if( NIL != fi.fi_ask_int( requirement, $const163$InferencePSC, NIL, ONE_INTEGER, UNPROVIDED, UNPROVIDED ) )
-        {
-          v_true = ConsesLow.cons( requirement, v_true );
+    public static SubLObject ct_cr_assertion_suggestions(final SubLObject fort, final SubLObject suggestions, final SubLObject mt, final SubLObject direction) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        SubLObject formulas = NIL;
+        SubLObject cdolist_list_var = suggestions;
+        SubLObject suggestion = NIL;
+        suggestion = cdolist_list_var.first();
+        while (NIL != cdolist_list_var) {
+            SubLObject formula = NIL;
+            if (direction.eql($FORWARD)) {
+                formula = list($$conceptuallyRelated, fort, suggestion);
+            } else
+                if (direction.eql($BACKWARD)) {
+                    formula = list($$conceptuallyRelated, suggestion, fort);
+                }
+
+            if (NIL != formula) {
+                formulas = cons(formula, formulas);
+                ke.ke_assert(formula, mt, UNPROVIDED, UNPROVIDED);
+            }
+            cdolist_list_var = cdolist_list_var.rest();
+            suggestion = cdolist_list_var.first();
+        } 
+        formulas = nreverse(formulas);
+        final SubLObject title_var = $$$Formulas_Asserted;
+        final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
+        try {
+            html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? html_macros.$html_id_space_id_generator$.getDynamicValue(thread) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+            html_markup($str5$__DOCTYPE_html_PUBLIC_____W3C__DT);
+            if (NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue(thread)) {
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup($str6$_meta_http_equiv__X_UA_Compatible);
+            }
+            html_source_readability_terpri(UNPROVIDED);
+            final SubLObject _prev_bind_0_$45 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding(thread);
+            try {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.bind(cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread) == $UNINITIALIZED ? list(EMPTY_SUBL_OBJECT_ARRAY) : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread), thread);
+                html_markup(html_macros.$html_html_head$.getGlobalValue());
+                html_markup(html_macros.$html_head_head$.getGlobalValue());
+                html_macros.html_head_content_type();
+                cb_head_shortcut_icon();
+                html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
+                cyc_file_dependencies.css($CB_CYC);
+                dhtml_macros.html_basic_cb_scripts();
+                if (NIL != title_var) {
+                    html_source_readability_terpri(UNPROVIDED);
+                    html_markup(html_macros.$html_title_head$.getGlobalValue());
+                    html_princ(title_var);
+                    html_markup(html_macros.$html_title_tail$.getGlobalValue());
+                }
+                html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                html_source_readability_terpri(UNPROVIDED);
+                final SubLObject _prev_bind_0_$46 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                try {
+                    html_macros.$html_inside_bodyP$.bind(T, thread);
+                    html_markup(html_macros.$html_body_head$.getGlobalValue());
+                    if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
+                        html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
+                        html_char(CHAR_quotation, UNPROVIDED);
+                    }
+                    html_markup(html_macros.$html_body_class$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup($str11$yui_skin_sam);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_char(CHAR_greater, UNPROVIDED);
+                    final SubLObject _prev_bind_0_$47 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_markup(html_macros.$html_div_head$.getGlobalValue());
+                        html_markup(html_macros.$html_attribute_id$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($$$reloadFrameButton);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$48 = html_macros.$html_safe_print$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_markup(html_macros.$html_input_head$.getGlobalValue());
+                            html_markup(html_macros.$html_input_type$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$button);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_name$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$reload);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_value$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_princ($$$Refresh_Frames);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            if (NIL != html_macros.$html_input_disabledP$.getDynamicValue(thread)) {
+                                html_simple_attribute(html_macros.$html_input_disabled$.getGlobalValue());
+                            }
+                            html_char(CHAR_greater, UNPROVIDED);
+                        } finally {
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$48, thread);
+                        }
+                        html_markup(html_macros.$html_div_tail$.getGlobalValue());
+                        if (NIL != title_var) {
+                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            html_princ(title_var);
+                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                        }
+                        html_markup(html_macros.$html_form_head$.getGlobalValue());
+                        html_markup(html_macros.$html_form_action$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$49 = html_macros.$html_safe_print$.currentBinding(thread);
+                        final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding(thread);
+                        final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_macros.$within_html_form$.bind(T, thread);
+                            html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                            cb_back_button(UNPROVIDED, UNPROVIDED);
+                            html_newline(TWO_INTEGER);
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($str114$Term___);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            cb_form(fort, UNPROVIDED, UNPROVIDED);
+                            html_newline(TWO_INTEGER);
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($str141$Formulas_Asserted__);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            if (NIL != formulas) {
+                                SubLObject cdolist_list_var2 = formulas;
+                                SubLObject formula2 = NIL;
+                                formula2 = cdolist_list_var2.first();
+                                while (NIL != cdolist_list_var2) {
+                                    html_newline(UNPROVIDED);
+                                    cb_form(formula2, UNPROVIDED, UNPROVIDED);
+                                    html_princ($$$_in_);
+                                    cb_form(mt, UNPROVIDED, UNPROVIDED);
+                                    cdolist_list_var2 = cdolist_list_var2.rest();
+                                    formula2 = cdolist_list_var2.first();
+                                } 
+                            } else {
+                                html_princ($$$None);
+                            }
+                            html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                        } finally {
+                            html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_3, thread);
+                            html_macros.$within_html_form$.rebind(_prev_bind_2, thread);
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$49, thread);
+                        }
+                        html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                        html_copyright_notice();
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0_$47, thread);
+                    }
+                    html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_$46, thread);
+                }
+                html_markup(html_macros.$html_html_tail$.getGlobalValue());
+            } finally {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.rebind(_prev_bind_0_$45, thread);
+            }
+            html_source_readability_terpri(UNPROVIDED);
+        } finally {
+            html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
         }
-        else
-        {
-          unknown = ConsesLow.cons( requirement, unknown );
-        }
-        cdolist_list_var = cdolist_list_var.rest();
-        binding = cdolist_list_var.first();
-      }
-      v_true = Sequences.nreverse( v_true );
-      unknown = Sequences.nreverse( unknown );
-      return Values.values( unknown, v_true );
+        return NIL;
     }
-    return Values.values( NIL, NIL );
-  }
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 28545L)
-  public static SubLObject cb_elaborate_requirement(final SubLObject v_term, final SubLObject requirement)
-  {
-    cb_utilities.cb_form( requirement, ZERO_INTEGER, T );
-    return NIL;
-  }
+    public static SubLObject ct_cr_justify(final SubLObject args) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        final SubLObject fort = cb_guess_fort(args, UNPROVIDED);
+        if (NIL == forts.fort_p(fort)) {
+            return cb_error($str135$Unable_to_determine_last_term__wh, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        if (NIL == fboundp($sym143$WHY_CONCEPTUALLY_RELATED_)) {
+            return cb_error($str144$Sorry__System_74_92_or_later_is_r, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        final SubLObject title_var = $$$Justify_Conceptually_Related;
+        final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
+        try {
+            html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? html_macros.$html_id_space_id_generator$.getDynamicValue(thread) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+            html_markup($str5$__DOCTYPE_html_PUBLIC_____W3C__DT);
+            if (NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue(thread)) {
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup($str6$_meta_http_equiv__X_UA_Compatible);
+            }
+            html_source_readability_terpri(UNPROVIDED);
+            final SubLObject _prev_bind_0_$50 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding(thread);
+            try {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.bind(cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread) == $UNINITIALIZED ? list(EMPTY_SUBL_OBJECT_ARRAY) : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread), thread);
+                html_markup(html_macros.$html_html_head$.getGlobalValue());
+                html_markup(html_macros.$html_head_head$.getGlobalValue());
+                html_macros.html_head_content_type();
+                cb_head_shortcut_icon();
+                html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
+                cyc_file_dependencies.css($CB_CYC);
+                dhtml_macros.html_basic_cb_scripts();
+                if (NIL != title_var) {
+                    html_source_readability_terpri(UNPROVIDED);
+                    html_markup(html_macros.$html_title_head$.getGlobalValue());
+                    html_princ(title_var);
+                    html_markup(html_macros.$html_title_tail$.getGlobalValue());
+                }
+                html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                html_source_readability_terpri(UNPROVIDED);
+                final SubLObject _prev_bind_0_$51 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                try {
+                    html_macros.$html_inside_bodyP$.bind(T, thread);
+                    html_markup(html_macros.$html_body_head$.getGlobalValue());
+                    if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
+                        html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
+                        html_char(CHAR_quotation, UNPROVIDED);
+                    }
+                    html_markup(html_macros.$html_body_class$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup($str11$yui_skin_sam);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_char(CHAR_greater, UNPROVIDED);
+                    final SubLObject _prev_bind_0_$52 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_markup(html_macros.$html_div_head$.getGlobalValue());
+                        html_markup(html_macros.$html_attribute_id$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($$$reloadFrameButton);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$53 = html_macros.$html_safe_print$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_markup(html_macros.$html_input_head$.getGlobalValue());
+                            html_markup(html_macros.$html_input_type$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$button);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_name$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$reload);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_value$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_princ($$$Refresh_Frames);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            if (NIL != html_macros.$html_input_disabledP$.getDynamicValue(thread)) {
+                                html_simple_attribute(html_macros.$html_input_disabled$.getGlobalValue());
+                            }
+                            html_char(CHAR_greater, UNPROVIDED);
+                        } finally {
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$53, thread);
+                        }
+                        html_markup(html_macros.$html_div_tail$.getGlobalValue());
+                        if (NIL != title_var) {
+                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            html_princ(title_var);
+                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                        }
+                        html_markup(html_macros.$html_form_head$.getGlobalValue());
+                        html_markup(html_macros.$html_form_action$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$54 = html_macros.$html_safe_print$.currentBinding(thread);
+                        final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding(thread);
+                        final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_macros.$within_html_form$.bind(T, thread);
+                            html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                            cb_back_button(UNPROVIDED, UNPROVIDED);
+                            html_indent(UNPROVIDED);
+                            html_newline(TWO_INTEGER);
+                            html_markup(html_macros.$html_big_head$.getGlobalValue());
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($str114$Term___);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            cb_form(fort, UNPROVIDED, UNPROVIDED);
+                            html_markup(html_macros.$html_big_tail$.getGlobalValue());
+                            html_newline(TWO_INTEGER);
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($str115$Existing_Conceptually_Related_Ter);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            final SubLObject _prev_bind_0_$55 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            final SubLObject _prev_bind_1_$56 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                                mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                                final SubLObject existing = removal_modules_conceptually_related.all_conceptually_related(fort, UNPROVIDED);
+                                html_markup(html_macros.$html_definition_list_head$.getGlobalValue());
+                                html_char(CHAR_greater, UNPROVIDED);
+                                final SubLObject _prev_bind_0_$56 = html_macros.$html_safe_print$.currentBinding(thread);
+                                try {
+                                    html_macros.$html_safe_print$.bind(T, thread);
+                                    SubLObject cdolist_list_var = existing;
+                                    SubLObject related = NIL;
+                                    related = cdolist_list_var.first();
+                                    while (NIL != cdolist_list_var) {
+                                        final SubLObject supports = removal_modules_conceptually_related.why_conceptually_relatedP(fort, related, UNPROVIDED);
+                                        html_markup(html_macros.$html_definition_list_term_head$.getGlobalValue());
+                                        cb_form(related, UNPROVIDED, UNPROVIDED);
+                                        html_markup(html_macros.$html_definition_list_term_tail$.getGlobalValue());
+                                        html_markup(html_macros.$html_definition_list_def_head$.getGlobalValue());
+                                        SubLObject cdolist_list_var_$58 = supports;
+                                        SubLObject support = NIL;
+                                        support = cdolist_list_var_$58.first();
+                                        while (NIL != cdolist_list_var_$58) {
+                                            cb_assertion_browser.cb_show_support(support, UNPROVIDED);
+                                            html_newline(UNPROVIDED);
+                                            cdolist_list_var_$58 = cdolist_list_var_$58.rest();
+                                            support = cdolist_list_var_$58.first();
+                                        } 
+                                        html_newline(UNPROVIDED);
+                                        html_markup(html_macros.$html_definition_list_def_tail$.getGlobalValue());
+                                        cdolist_list_var = cdolist_list_var.rest();
+                                        related = cdolist_list_var.first();
+                                    } 
+                                } finally {
+                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_$56, thread);
+                                }
+                                html_markup(html_macros.$html_definition_list_tail$.getGlobalValue());
+                            } finally {
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_1_$56, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0_$55, thread);
+                            }
+                            html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                        } finally {
+                            html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_3, thread);
+                            html_macros.$within_html_form$.rebind(_prev_bind_2, thread);
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$54, thread);
+                        }
+                        html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                        html_copyright_notice();
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0_$52, thread);
+                    }
+                    html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_$51, thread);
+                }
+                html_markup(html_macros.$html_html_tail$.getGlobalValue());
+            } finally {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.rebind(_prev_bind_0_$50, thread);
+            }
+            html_source_readability_terpri(UNPROVIDED);
+        } finally {
+            html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
+        }
+        return NIL;
+    }
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 28745L)
-  public static SubLObject ke_suggestions(final SubLObject v_term)
-  {
-    return NIL;
-  }
+    public static SubLObject cb_link_ct_cr_justify(final SubLObject fort, SubLObject linktext) {
+        if (linktext == UNPROVIDED) {
+            linktext = NIL;
+        }
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
+        if (NIL == linktext) {
+            html_princ($str117$_Justify_);
+        }
+        final SubLObject frame_name_var = cb_frame_name($MAIN);
+        html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+        html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+        html_char(CHAR_quotation, UNPROVIDED);
+        cyc_cgi_url_int();
+        format(html_macros.$html_stream$.getDynamicValue(thread), $str147$ct_cr_justify__a, cb_fort_identifier(fort));
+        html_char(CHAR_quotation, UNPROVIDED);
+        if (NIL != frame_name_var) {
+            html_markup(html_macros.$html_anchor_target$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(frame_name_var);
+            html_char(CHAR_quotation, UNPROVIDED);
+        }
+        html_char(CHAR_greater, UNPROVIDED);
+        final SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+        try {
+            html_macros.$html_safe_print$.bind(T, thread);
+            html_princ(linktext);
+        } finally {
+            html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+        }
+        html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+        return fort;
+    }
 
-  @SubLTranslatedFile.SubL(source = "cycl/html-create-term.lisp", position = 28826L)
-  public static SubLObject cb_elaborate_suggestion(final SubLObject v_term, final SubLObject suggestion)
-  {
-    return NIL;
-  }
+    public static SubLObject ct_cr_search_show_suggestion(final SubLObject suggestion) {
+        html_checkbox_input($$$id, cb_fort_identifier(suggestion), NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        html_indent(UNPROVIDED);
+        cb_form(suggestion, UNPROVIDED, UNPROVIDED);
+        return NIL;
+    }
 
-  public static SubLObject declare_html_create_term_file()
-  {
-    SubLFiles.declareFunction( me, "cb_create_term", "CB-CREATE-TERM", 0, 1, false );
-    SubLFiles.declareFunction( me, "cb_handle_create_term", "CB-HANDLE-CREATE-TERM", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_link_create_term", "CB-LINK-CREATE-TERM", 0, 1, false );
-    SubLFiles.declareFunction( me, "cb_create_term_hook", "CB-CREATE-TERM-HOOK", 1, 2, false );
-    SubLFiles.declareFunction( me, "cb_extract_lines", "CB-EXTRACT-LINES", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_extract_lines_recursive", "CB-EXTRACT-LINES-RECURSIVE", 1, 1, false );
-    SubLFiles.declareFunction( me, "cr_or_lf", "CR-OR-LF", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_categorize_term", "CB-CATEGORIZE-TERM", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_link_categorize_term", "CB-LINK-CATEGORIZE-TERM", 1, 1, false );
-    SubLFiles.declareFunction( me, "cb_categorize_term_guts", "CB-CATEGORIZE-TERM-GUTS", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_handle_categorize_term", "CB-HANDLE-CATEGORIZE-TERM", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_categorize_similar", "CB-CATEGORIZE-SIMILAR", 2, 0, false );
-    SubLFiles.declareFunction( me, "cb_categorize_isa", "CB-CATEGORIZE-ISA", 2, 0, false );
-    SubLFiles.declareFunction( me, "cb_categorize_isa_guess_mts", "CB-CATEGORIZE-ISA-GUESS-MTS", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_categorize_generalization", "CB-CATEGORIZE-GENERALIZATION", 2, 0, false );
-    SubLFiles.declareFunction( me, "cb_categorize_guess_generalization", "CB-CATEGORIZE-GUESS-GENERALIZATION", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_categorize_generalization_guess_mts", "CB-CATEGORIZE-GENERALIZATION-GUESS-MTS", 3, 0, false );
-    SubLFiles.declareFunction( me, "cb_copy_from_similar_guts", "CB-COPY-FROM-SIMILAR-GUTS", 2, 0, false );
-    SubLFiles.declareFunction( me, "cb_handle_copy_from_similar", "CB-HANDLE-COPY-FROM-SIMILAR", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_copy_from_similar_checkbox", "CB-COPY-FROM-SIMILAR-CHECKBOX", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_suggested_conceptually_related", "CB-SUGGESTED-CONCEPTUALLY-RELATED", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_conceptually_related_guts", "CB-CONCEPTUALLY-RELATED-GUTS", 1, 0, false );
-    SubLFiles.declareFunction( me, "ct_cr_search_show_next_suggestion", "CT-CR-SEARCH-SHOW-NEXT-SUGGESTION", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_conceptually_related_terms", "CB-CONCEPTUALLY-RELATED-TERMS", 1, 0, false );
-    SubLFiles.declareFunction( me, "ct_cr_extract_suggestions", "CT-CR-EXTRACT-SUGGESTIONS", 1, 0, false );
-    SubLFiles.declareFunction( me, "ct_cr_assertion_suggestions", "CT-CR-ASSERTION-SUGGESTIONS", 4, 0, false );
-    SubLFiles.declareFunction( me, "ct_cr_justify", "CT-CR-JUSTIFY", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_link_ct_cr_justify", "CB-LINK-CT-CR-JUSTIFY", 1, 1, false );
-    SubLFiles.declareFunction( me, "ct_cr_search_show_suggestion", "CT-CR-SEARCH-SHOW-SUGGESTION", 1, 0, false );
-    SubLFiles.declareFunction( me, "ct_cr_setup", "CT-CR-SETUP", 0, 0, false );
-    SubLFiles.declareFunction( me, "ct_cr_initialize_irrelevant_term_table", "CT-CR-INITIALIZE-IRRELEVANT-TERM-TABLE", 0, 0, false );
-    SubLFiles.declareFunction( me, "cb_elaborate_term", "CB-ELABORATE-TERM", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_link_elaborate_term", "CB-LINK-ELABORATE-TERM", 1, 1, false );
-    SubLFiles.declareFunction( me, "cb_elaborate_term_guts", "CB-ELABORATE-TERM-GUTS", 1, 0, false );
-    SubLFiles.declareFunction( me, "ke_requirements", "KE-REQUIREMENTS", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_elaborate_requirement", "CB-ELABORATE-REQUIREMENT", 2, 0, false );
-    SubLFiles.declareFunction( me, "ke_suggestions", "KE-SUGGESTIONS", 1, 0, false );
-    SubLFiles.declareFunction( me, "cb_elaborate_suggestion", "CB-ELABORATE-SUGGESTION", 2, 0, false );
-    return NIL;
-  }
+    public static SubLObject ct_cr_setup() {
+        return NIL;
+    }
 
-  public static SubLObject init_html_create_term_file()
-  {
-    $cb_create_info$ = SubLFiles.defparameter( "*CB-CREATE-INFO*", NIL );
-    $cb_categorize_info$ = SubLFiles.defparameter( "*CB-CATEGORIZE-INFO*", NIL );
-    $cb_categorize_generalization_possibilities$ = SubLFiles.deflexical( "*CB-CATEGORIZE-GENERALIZATION-POSSIBILITIES*", $list85 );
-    $ke_requirements_query$ = SubLFiles.deflexical( "*KE-REQUIREMENTS-QUERY*", $list161 );
-    return NIL;
-  }
+    public static SubLObject ct_cr_initialize_irrelevant_term_table() {
+        return NIL;
+    }
 
-  public static SubLObject setup_html_create_term_file()
-  {
-    utilities_macros.register_html_state_variable( $sym0$_CB_CREATE_INFO_ );
-    Hashtables.sethash( $kw1$CB_CREATE_TERM, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), ConsesLow.list( $str2$cb_create_term_html, NIL ) );
-    html_macros.note_cgi_handler_function( $sym38$CB_CREATE_TERM, $kw39$HTML_HANDLER );
-    html_macros.note_cgi_handler_function( $sym45$CB_HANDLE_CREATE_TERM, $kw39$HTML_HANDLER );
-    cb_utilities.setup_cb_link_method( $kw48$CREATE_TERM, $sym49$CB_LINK_CREATE_TERM, ONE_INTEGER );
-    cb_utilities.declare_cb_tool( $kw48$CREATE_TERM, $str4$Create_Term, $str50$Crt, $str51$Cyc_Constant_Creation_Wizard );
-    html_macros.note_cgi_handler_function( $sym58$CB_CATEGORIZE_TERM, $kw39$HTML_HANDLER );
-    cb_utilities.setup_cb_link_method( $kw61$CATEGORIZE_TERM, $sym62$CB_LINK_CATEGORIZE_TERM, TWO_INTEGER );
-    utilities_macros.register_html_state_variable( $sym63$_CB_CATEGORIZE_INFO_ );
-    Hashtables.sethash( $kw64$CB_CATEGORIZE_TERM, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), ConsesLow.list( $str65$cb_categorize_term_html, NIL ) );
-    html_macros.note_cgi_handler_function( $sym84$CB_HANDLE_CATEGORIZE_TERM, $kw39$HTML_HANDLER );
-    Hashtables.sethash( $kw94$CB_COPY_FROM_SIMILAR, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), ConsesLow.list( $str95$cb_copy_from_similar_html, NIL ) );
-    html_macros.note_cgi_handler_function( $sym107$CB_HANDLE_COPY_FROM_SIMILAR, $kw39$HTML_HANDLER );
-    Hashtables.sethash( $kw108$CB_CONCEPTUALLY_RELATED_TERMS, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), ConsesLow.list( $str109$cb_conceptually_related_terms_htm, NIL ) );
-    html_macros.note_cgi_handler_function( $sym138$CB_CONCEPTUALLY_RELATED_TERMS, $kw39$HTML_HANDLER );
-    html_macros.note_cgi_handler_function( $sym146$CT_CR_JUSTIFY, $kw39$HTML_HANDLER );
-    cb_utilities.setup_cb_link_method( $kw116$CT_CR_JUSTIFY, $sym148$CB_LINK_CT_CR_JUSTIFY, TWO_INTEGER );
-    html_macros.note_cgi_handler_function( $sym149$CB_ELABORATE_TERM, $kw39$HTML_HANDLER );
-    cb_utilities.setup_cb_link_method( $kw152$ELABORATE_TERM, $sym153$CB_LINK_ELABORATE_TERM, TWO_INTEGER );
-    Hashtables.sethash( $kw154$CB_ELABORATE_TERM, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), ConsesLow.list( $str155$cb_elaborate_term_html, NIL ) );
-    return NIL;
-  }
+    public static SubLObject cb_elaborate_term(final SubLObject args) {
+        final SubLObject fort_spec = args.first();
+        final SubLObject fort = cb_guess_fort(args.first(), UNPROVIDED);
+        if (NIL == forts.fort_p(fort)) {
+            cb_error($str57$_a_does_not_specify_a_Cyc_term, fort_spec, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            return NIL;
+        }
+        return cb_elaborate_term_guts(fort);
+    }
 
-  @Override
-  public void declareFunctions()
-  {
-    declare_html_create_term_file();
-  }
+    public static SubLObject cb_link_elaborate_term(final SubLObject v_term, SubLObject linktext) {
+        if (linktext == UNPROVIDED) {
+            linktext = NIL;
+        }
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        if (NIL == linktext) {
+            linktext = $$$Elaborate_Term;
+        }
+        final SubLObject frame_name_var = cb_frame_name($MAIN);
+        html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+        html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+        html_char(CHAR_quotation, UNPROVIDED);
+        cyc_cgi_url_int();
+        format(html_macros.$html_stream$.getDynamicValue(thread), $str151$cb_elaborate_term__a, cb_fort_identifier(v_term));
+        html_char(CHAR_quotation, UNPROVIDED);
+        if (NIL != frame_name_var) {
+            html_markup(html_macros.$html_anchor_target$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(frame_name_var);
+            html_char(CHAR_quotation, UNPROVIDED);
+        }
+        html_char(CHAR_greater, UNPROVIDED);
+        final SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+        try {
+            html_macros.$html_safe_print$.bind(T, thread);
+            html_princ(linktext);
+        } finally {
+            html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+        }
+        html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+        return NIL;
+    }
 
-  @Override
-  public void initializeVariables()
-  {
-    init_html_create_term_file();
-  }
+    public static SubLObject cb_elaborate_term_guts(final SubLObject v_term) {
+        final SubLThread thread = SubLProcess.currentSubLThread();
+        assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
+        final SubLObject title_var = $$$Elaborate_Term;
+        final SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
+        try {
+            html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? html_macros.$html_id_space_id_generator$.getDynamicValue(thread) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+            html_markup($str5$__DOCTYPE_html_PUBLIC_____W3C__DT);
+            if (NIL != html_macros.$html_force_ie_standards_mode$.getDynamicValue(thread)) {
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup($str6$_meta_http_equiv__X_UA_Compatible);
+            }
+            html_source_readability_terpri(UNPROVIDED);
+            final SubLObject _prev_bind_0_$59 = cyc_file_dependencies.$html_emitted_file_dependencies$.currentBinding(thread);
+            try {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.bind(cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread) == $UNINITIALIZED ? list(EMPTY_SUBL_OBJECT_ARRAY) : cyc_file_dependencies.$html_emitted_file_dependencies$.getDynamicValue(thread), thread);
+                html_markup(html_macros.$html_html_head$.getGlobalValue());
+                html_markup(html_macros.$html_head_head$.getGlobalValue());
+                html_macros.html_head_content_type();
+                cb_head_shortcut_icon();
+                html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
+                cyc_file_dependencies.css($CB_CYC);
+                dhtml_macros.html_basic_cb_scripts();
+                if (NIL != title_var) {
+                    html_source_readability_terpri(UNPROVIDED);
+                    html_markup(html_macros.$html_title_head$.getGlobalValue());
+                    html_princ(title_var);
+                    html_markup(html_macros.$html_title_tail$.getGlobalValue());
+                }
+                html_complete.html_complete_script();
+                cyc_file_dependencies.css($SAM_AUTOCOMPLETE_CSS);
+                html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                html_source_readability_terpri(UNPROVIDED);
+                final SubLObject _prev_bind_0_$60 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                try {
+                    html_macros.$html_inside_bodyP$.bind(T, thread);
+                    html_markup(html_macros.$html_body_head$.getGlobalValue());
+                    if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
+                        html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
+                        html_char(CHAR_quotation, UNPROVIDED);
+                    }
+                    html_markup(html_macros.$html_body_class$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup($str11$yui_skin_sam);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_char(CHAR_greater, UNPROVIDED);
+                    final SubLObject _prev_bind_0_$61 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_markup(html_macros.$html_div_head$.getGlobalValue());
+                        html_markup(html_macros.$html_attribute_id$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($$$reloadFrameButton);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$62 = html_macros.$html_safe_print$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_markup(html_macros.$html_input_head$.getGlobalValue());
+                            html_markup(html_macros.$html_input_type$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$button);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_name$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup($$$reload);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(html_macros.$html_input_value$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_princ($$$Refresh_Frames);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            if (NIL != html_macros.$html_input_disabledP$.getDynamicValue(thread)) {
+                                html_simple_attribute(html_macros.$html_input_disabled$.getGlobalValue());
+                            }
+                            html_char(CHAR_greater, UNPROVIDED);
+                        } finally {
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$62, thread);
+                        }
+                        html_markup(html_macros.$html_div_tail$.getGlobalValue());
+                        if (NIL != title_var) {
+                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            html_princ(title_var);
+                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                        }
+                        final SubLObject frame_name_var = cb_frame_name(NIL);
+                        html_markup(html_macros.$html_form_head$.getGlobalValue());
+                        html_markup(html_macros.$html_form_action$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup(html_macros.$html_form_method$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_markup($$$post);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        if (NIL != frame_name_var) {
+                            html_markup(html_macros.$html_form_target$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(frame_name_var);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                        }
+                        html_char(CHAR_greater, UNPROVIDED);
+                        final SubLObject _prev_bind_0_$63 = html_macros.$html_safe_print$.currentBinding(thread);
+                        final SubLObject _prev_bind_2 = html_macros.$within_html_form$.currentBinding(thread);
+                        final SubLObject _prev_bind_3 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_macros.$within_html_form$.bind(T, thread);
+                            html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                            html_hidden_input($str156$cb_handle_elaborate_term, T, UNPROVIDED);
+                            cb_help_preamble($CB_ELABORATE_TERM, NIL, UNPROVIDED);
+                            cb_back_button($SELF, UNPROVIDED);
+                            html_indent(UNPROVIDED);
+                            html_reset_input($$$Clear);
+                            html_indent(UNPROVIDED);
+                            html_submit_input($$$Elaborate, UNPROVIDED, UNPROVIDED);
+                            html_newline(TWO_INTEGER);
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($$$Elaborate_);
+                            cb_form(v_term, UNPROVIDED, UNPROVIDED);
+                            html_princ($str70$_);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            final SubLObject requirements = ke_requirements(v_term);
+                            final SubLObject suggestions = ke_suggestions(v_term);
+                            if (NIL != requirements) {
+                                html_newline(TWO_INTEGER);
+                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                html_princ($str159$Requirements___);
+                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                SubLObject cdolist_list_var = requirements;
+                                SubLObject requirement = NIL;
+                                requirement = cdolist_list_var.first();
+                                while (NIL != cdolist_list_var) {
+                                    html_newline(UNPROVIDED);
+                                    cb_elaborate_requirement(v_term, requirement);
+                                    cdolist_list_var = cdolist_list_var.rest();
+                                    requirement = cdolist_list_var.first();
+                                } 
+                            }
+                            if (NIL != suggestions) {
+                                html_newline(TWO_INTEGER);
+                                html_princ($str160$Suggestions___);
+                                SubLObject cdolist_list_var = suggestions;
+                                SubLObject suggestion = NIL;
+                                suggestion = cdolist_list_var.first();
+                                while (NIL != cdolist_list_var) {
+                                    html_newline(UNPROVIDED);
+                                    cb_elaborate_suggestion(v_term, suggestion);
+                                    cdolist_list_var = cdolist_list_var.rest();
+                                    suggestion = cdolist_list_var.first();
+                                } 
+                            }
+                            html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                        } finally {
+                            html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_3, thread);
+                            html_macros.$within_html_form$.rebind(_prev_bind_2, thread);
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0_$63, thread);
+                        }
+                        html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                        html_copyright_notice();
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0_$61, thread);
+                    }
+                    html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_$60, thread);
+                }
+                html_markup(html_macros.$html_html_tail$.getGlobalValue());
+            } finally {
+                cyc_file_dependencies.$html_emitted_file_dependencies$.rebind(_prev_bind_0_$59, thread);
+            }
+            html_source_readability_terpri(UNPROVIDED);
+        } finally {
+            html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
+        }
+        return NIL;
+    }
 
-  @Override
-  public void runTopLevelForms()
-  {
-    setup_html_create_term_file();
-  }
-  static
-  {
-    me = new html_create_term();
-    $cb_create_info$ = null;
-    $cb_categorize_info$ = null;
-    $cb_categorize_generalization_possibilities$ = null;
-    $ke_requirements_query$ = null;
-    $sym0$_CB_CREATE_INFO_ = makeSymbol( "*CB-CREATE-INFO*" );
-    $kw1$CB_CREATE_TERM = makeKeyword( "CB-CREATE-TERM" );
-    $str2$cb_create_term_html = makeString( "cb-create-term.html" );
-    $str3$the_Create_Term_page = makeString( "the Create Term page" );
-    $str4$Create_Term = makeString( "Create Term" );
-    $str5$__DOCTYPE_html_PUBLIC_____W3C__DT = makeString( "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">" );
-    $str6$_meta_http_equiv__X_UA_Compatible = makeString( "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\" >" );
-    $kw7$UNINITIALIZED = makeKeyword( "UNINITIALIZED" );
-    $kw8$CB_CYC = makeKeyword( "CB-CYC" );
-    $kw9$SAM_AUTOCOMPLETE_CSS = makeKeyword( "SAM-AUTOCOMPLETE-CSS" );
-    $kw10$SHA1 = makeKeyword( "SHA1" );
-    $str11$yui_skin_sam = makeString( "yui-skin-sam" );
-    $str12$reloadFrameButton = makeString( "reloadFrameButton" );
-    $str13$button = makeString( "button" );
-    $str14$reload = makeString( "reload" );
-    $str15$Refresh_Frames = makeString( "Refresh Frames" );
-    $str16$post = makeString( "post" );
-    $str17$cb_handle_create_term = makeString( "cb-handle-create-term" );
-    $kw18$SELF = makeKeyword( "SELF" );
-    $str19$Cancel_Create = makeString( "Cancel Create" );
-    $str20$Reset = makeString( "Reset" );
-    $str21$Create_Constant = makeString( "Create Constant" );
-    $kw22$TOP = makeKeyword( "TOP" );
-    $str23$Name__required____ = makeString( "Name (required) : " );
-    $str24$new_name = makeString( "new-name" );
-    $str25$Clear = makeString( "Clear" );
-    $str26$Complete = makeString( "Complete" );
-    $str27$ = makeString( "" );
-    $int28$35 = makeInteger( 35 );
-    $const29$termStrings = constant_handles.reader_make_constant_shell( makeString( "termStrings" ) );
-    $str30$__one_per_line__optional____ = makeString( ", one per line (optional) : " );
-    $str31$term_strings = makeString( "term-strings" );
-    $kw32$BOTTOM = makeKeyword( "BOTTOM" );
-    $const33$comment = constant_handles.reader_make_constant_shell( makeString( "comment" ) );
-    $str34$__required____ = makeString( " (required) : " );
-    $str35$comment = makeString( "comment" );
-    $int36$80 = makeInteger( 80 );
-    $str37$virtual = makeString( "virtual" );
-    $sym38$CB_CREATE_TERM = makeSymbol( "CB-CREATE-TERM" );
-    $kw39$HTML_HANDLER = makeKeyword( "HTML-HANDLER" );
-    $str40$Creating = makeString( "Creating" );
-    $str41$No_name_was_specified = makeString( "No name was specified" );
-    $str42$_S_is_not_a_valid_constant_name = makeString( "~S is not a valid constant name" );
-    $str43$No_comment_was_specified = makeString( "No comment was specified" );
-    $str44$Unable_to_create_a_constant_named = makeString( "Unable to create a constant named ~S" );
-    $sym45$CB_HANDLE_CREATE_TERM = makeSymbol( "CB-HANDLE-CREATE-TERM" );
-    $kw46$MAIN = makeKeyword( "MAIN" );
-    $str47$cb_create_term = makeString( "cb-create-term" );
-    $kw48$CREATE_TERM = makeKeyword( "CREATE-TERM" );
-    $sym49$CB_LINK_CREATE_TERM = makeSymbol( "CB-LINK-CREATE-TERM" );
-    $str50$Crt = makeString( "Crt" );
-    $str51$Cyc_Constant_Creation_Wizard = makeString( "Cyc Constant Creation Wizard" );
-    $sym52$STRINGP = makeSymbol( "STRINGP" );
-    $kw53$DEFAULT = makeKeyword( "DEFAULT" );
-    $kw54$FORWARD = makeKeyword( "FORWARD" );
-    $const55$TemporaryLexicalAssertionsMt = constant_handles.reader_make_constant_shell( makeString( "TemporaryLexicalAssertionsMt" ) );
-    $sym56$CR_OR_LF = makeSymbol( "CR-OR-LF" );
-    $str57$_a_does_not_specify_a_Cyc_term = makeString( "~a does not specify a Cyc term" );
-    $sym58$CB_CATEGORIZE_TERM = makeSymbol( "CB-CATEGORIZE-TERM" );
-    $str59$Categorize_Term = makeString( "Categorize Term" );
-    $str60$cb_categorize_term__a = makeString( "cb-categorize-term&~a" );
-    $kw61$CATEGORIZE_TERM = makeKeyword( "CATEGORIZE-TERM" );
-    $sym62$CB_LINK_CATEGORIZE_TERM = makeSymbol( "CB-LINK-CATEGORIZE-TERM" );
-    $sym63$_CB_CATEGORIZE_INFO_ = makeSymbol( "*CB-CATEGORIZE-INFO*" );
-    $kw64$CB_CATEGORIZE_TERM = makeKeyword( "CB-CATEGORIZE-TERM" );
-    $str65$cb_categorize_term_html = makeString( "cb-categorize-term.html" );
-    $sym66$FORT_P = makeSymbol( "FORT-P" );
-    $str67$cb_handle_categorize_term = makeString( "cb-handle-categorize-term" );
-    $str68$Categorize = makeString( "Categorize" );
-    $str69$Categorize_ = makeString( "Categorize " );
-    $str70$_ = makeString( ":" );
-    $str71$term = makeString( "term" );
-    $str72$Mt___ = makeString( "Mt : " );
-    $str73$mt = makeString( "mt" );
-    $const74$Microtheory = constant_handles.reader_make_constant_shell( makeString( "Microtheory" ) );
-    $str75$Similar_to___ = makeString( "Similar to : " );
-    $str76$similar_to = makeString( "similar-to" );
-    $int77$40 = makeInteger( 40 );
-    $str78$Instance_of___ = makeString( "Instance of : " );
-    $str79$isa = makeString( "isa" );
-    $str80$Specialization_of___ = makeString( "Specialization of : " );
-    $str81$genl = makeString( "genl" );
-    $str82$generalization = makeString( "generalization" );
-    $str83$_a_does_not_specify_a_Cyc_Microth = makeString( "~a does not specify a Cyc Microtheory" );
-    $sym84$CB_HANDLE_CATEGORIZE_TERM = makeSymbol( "CB-HANDLE-CATEGORIZE-TERM" );
-    $list85 = ConsesLow.list( ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "genls" ) ), constant_handles.reader_make_constant_shell( makeString( "Collection" ) ) ), ConsesLow.list(
-        constant_handles.reader_make_constant_shell( makeString( "genlMt" ) ), constant_handles.reader_make_constant_shell( makeString( "Microtheory" ) ) ), ConsesLow.list( constant_handles.reader_make_constant_shell(
-            makeString( "genlPreds" ) ), constant_handles.reader_make_constant_shell( makeString( "Predicate" ) ) ), ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "genlInverse" ) ),
-                constant_handles.reader_make_constant_shell( makeString( "Predicate" ) ) ) );
-    $sym86$RELEVANT_MT_IS_EVERYTHING = makeSymbol( "RELEVANT-MT-IS-EVERYTHING" );
-    $const87$EverythingPSC = constant_handles.reader_make_constant_shell( makeString( "EverythingPSC" ) );
-    $const88$isa = constant_handles.reader_make_constant_shell( makeString( "isa" ) );
-    $kw89$GAF = makeKeyword( "GAF" );
-    $kw90$TRUE = makeKeyword( "TRUE" );
-    $kw91$MONOTONIC = makeKeyword( "MONOTONIC" );
-    $const92$genls = constant_handles.reader_make_constant_shell( makeString( "genls" ) );
-    $list93 = ConsesLow.list( makeSymbol( "PRED" ), makeSymbol( "COL" ) );
-    $kw94$CB_COPY_FROM_SIMILAR = makeKeyword( "CB-COPY-FROM-SIMILAR" );
-    $str95$cb_copy_from_similar_html = makeString( "cb-copy-from-similar.html" );
-    $str96$cb_handle_copy_from_similar = makeString( "cb-handle-copy-from-similar" );
-    $str97$Copy_from_ = makeString( "Copy from " );
-    $str98$_to_ = makeString( " to " );
-    $str99$Copy_Assertions = makeString( "Copy Assertions" );
-    $str100$Check_the_assertions_from_ = makeString( "Check the assertions from " );
-    $str101$_which_you_wish_to_copy__ = makeString( " which you wish to copy: " );
-    $sym102$CB_COPY_FROM_SIMILAR_CHECKBOX = makeSymbol( "CB-COPY-FROM-SIMILAR-CHECKBOX" );
-    $str103$copy_from_similar_facilities = makeString( "copy from similar facilities" );
-    $str104$No_source_term_was_specified = makeString( "No source term was specified" );
-    $str105$Unable_to_determine_a_term_from__ = makeString( "Unable to determine a term from ~S" );
-    $str106$No_term_was_specified = makeString( "No term was specified" );
-    $sym107$CB_HANDLE_COPY_FROM_SIMILAR = makeSymbol( "CB-HANDLE-COPY-FROM-SIMILAR" );
-    $kw108$CB_CONCEPTUALLY_RELATED_TERMS = makeKeyword( "CB-CONCEPTUALLY-RELATED-TERMS" );
-    $str109$cb_conceptually_related_terms_htm = makeString( "cb-conceptually-related-terms.html" );
-    $str110$Conceptually_Related_Suggestions = makeString( "Conceptually Related Suggestions" );
-    $str111$cb_conceptually_related_terms = makeString( "cb-conceptually-related-terms" );
-    $str112$fort = makeString( "fort" );
-    $str113$Clear_All = makeString( "Clear All" );
-    $str114$Term___ = makeString( "Term : " );
-    $str115$Existing_Conceptually_Related_Ter = makeString( "Existing Conceptually Related Terms : " );
-    $kw116$CT_CR_JUSTIFY = makeKeyword( "CT-CR-JUSTIFY" );
-    $str117$_Justify_ = makeString( "[Justify]" );
-    $str118$None = makeString( "None" );
-    $str119$Specify_the_Microtheory_for_new__ = makeString( "Specify the Microtheory for new #$conceptuallyRelated assertions:" );
-    $str120$_Mt___ = makeString( " Mt : " );
-    $str121$_Select_terms_and_or_type_in_a_te = makeString( " Select terms and/or type in a term to add as #$conceptuallyRelated to " );
-    $str122$__ = makeString( ": " );
-    $str123$entered = makeString( "entered" );
-    $str124$_Term___ = makeString( " Term : " );
-    $str125$Possible_Terms_to_Add___ = makeString( "Possible Terms to Add : " );
-    $str126$Add_Terms_Backward = makeString( "Add Terms Backward" );
-    $str127$add_backward = makeString( "add-backward" );
-    $str128$_as_ = makeString( " as " );
-    $const129$conceptuallyRelated = constant_handles.reader_make_constant_shell( makeString( "conceptuallyRelated" ) );
-    $sym130$TERM = makeSymbol( "TERM" );
-    $str131$_in_MT = makeString( " in MT" );
-    $str132$Add_Terms_Forward = makeString( "Add Terms Forward" );
-    $str133$add_forward = makeString( "add-forward" );
-    $list134 = ConsesLow.list( makeSymbol( "TERM" ) );
-    $str135$Unable_to_determine_last_term__wh = makeString( "Unable to determine last term (why?)" );
-    $str136$Invalid_Mt_specified____S = makeString( "Invalid Mt specified : ~S" );
-    $kw137$BACKWARD = makeKeyword( "BACKWARD" );
-    $sym138$CB_CONCEPTUALLY_RELATED_TERMS = makeSymbol( "CB-CONCEPTUALLY-RELATED-TERMS" );
-    $str139$id = makeString( "id" );
-    $str140$Formulas_Asserted = makeString( "Formulas Asserted" );
-    $str141$Formulas_Asserted__ = makeString( "Formulas Asserted :" );
-    $str142$_in_ = makeString( " in " );
-    $sym143$WHY_CONCEPTUALLY_RELATED_ = makeSymbol( "WHY-CONCEPTUALLY-RELATED?" );
-    $str144$Sorry__System_74_92_or_later_is_r = makeString( "Sorry, System 74.92 or later is required for justification to work." );
-    $str145$Justify_Conceptually_Related = makeString( "Justify Conceptually Related" );
-    $sym146$CT_CR_JUSTIFY = makeSymbol( "CT-CR-JUSTIFY" );
-    $str147$ct_cr_justify__a = makeString( "ct-cr-justify&~a" );
-    $sym148$CB_LINK_CT_CR_JUSTIFY = makeSymbol( "CB-LINK-CT-CR-JUSTIFY" );
-    $sym149$CB_ELABORATE_TERM = makeSymbol( "CB-ELABORATE-TERM" );
-    $str150$Elaborate_Term = makeString( "Elaborate Term" );
-    $str151$cb_elaborate_term__a = makeString( "cb-elaborate-term&~a" );
-    $kw152$ELABORATE_TERM = makeKeyword( "ELABORATE-TERM" );
-    $sym153$CB_LINK_ELABORATE_TERM = makeSymbol( "CB-LINK-ELABORATE-TERM" );
-    $kw154$CB_ELABORATE_TERM = makeKeyword( "CB-ELABORATE-TERM" );
-    $str155$cb_elaborate_term_html = makeString( "cb-elaborate-term.html" );
-    $str156$cb_handle_elaborate_term = makeString( "cb-handle-elaborate-term" );
-    $str157$Elaborate = makeString( "Elaborate" );
-    $str158$Elaborate_ = makeString( "Elaborate " );
-    $str159$Requirements___ = makeString( "Requirements : " );
-    $str160$Suggestions___ = makeString( "Suggestions : " );
-    $list161 = ConsesLow.list( constant_handles.reader_make_constant_shell( makeString( "keRequirement" ) ), makeKeyword( "TERM" ), makeSymbol( "?FORMULA" ) );
-    $kw162$TERM = makeKeyword( "TERM" );
-    $const163$InferencePSC = constant_handles.reader_make_constant_shell( makeString( "InferencePSC" ) );
-  }
+    public static SubLObject ke_requirements(final SubLObject v_term) {
+        final SubLObject formula = subst(v_term, $TERM, $ke_requirements_query$.getGlobalValue(), UNPROVIDED, UNPROVIDED);
+        final SubLObject v_bindings = fi.fi_ask_int(formula, $$InferencePSC, ONE_INTEGER, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        if (NIL != v_bindings) {
+            SubLObject v_true = NIL;
+            SubLObject unknown = NIL;
+            SubLObject cdolist_list_var = v_bindings;
+            SubLObject binding = NIL;
+            binding = cdolist_list_var.first();
+            while (NIL != cdolist_list_var) {
+                final SubLObject requirement = bindings.variable_binding_value(binding.first());
+                if (NIL != fi.fi_ask_int(requirement, $$InferencePSC, NIL, ONE_INTEGER, UNPROVIDED, UNPROVIDED)) {
+                    v_true = cons(requirement, v_true);
+                } else {
+                    unknown = cons(requirement, unknown);
+                }
+                cdolist_list_var = cdolist_list_var.rest();
+                binding = cdolist_list_var.first();
+            } 
+            v_true = nreverse(v_true);
+            unknown = nreverse(unknown);
+            return values(unknown, v_true);
+        }
+        return values(NIL, NIL);
+    }
+
+    public static SubLObject cb_elaborate_requirement(final SubLObject v_term, final SubLObject requirement) {
+        cb_form(requirement, ZERO_INTEGER, T);
+        return NIL;
+    }
+
+    public static SubLObject ke_suggestions(final SubLObject v_term) {
+        return NIL;
+    }
+
+    public static SubLObject cb_elaborate_suggestion(final SubLObject v_term, final SubLObject suggestion) {
+        return NIL;
+    }
+
+    public static SubLObject declare_html_create_term_file() {
+        declareFunction(me, "cb_create_term", "CB-CREATE-TERM", 0, 1, false);
+        declareFunction(me, "cb_handle_create_term", "CB-HANDLE-CREATE-TERM", 1, 0, false);
+        declareFunction(me, "cb_link_create_term", "CB-LINK-CREATE-TERM", 0, 1, false);
+        declareFunction(me, "cb_create_term_hook", "CB-CREATE-TERM-HOOK", 1, 2, false);
+        declareFunction(me, "cb_extract_lines", "CB-EXTRACT-LINES", 1, 0, false);
+        declareFunction(me, "cb_extract_lines_recursive", "CB-EXTRACT-LINES-RECURSIVE", 1, 1, false);
+        declareFunction(me, "cr_or_lf", "CR-OR-LF", 1, 0, false);
+        declareFunction(me, "cb_categorize_term", "CB-CATEGORIZE-TERM", 1, 0, false);
+        declareFunction(me, "cb_link_categorize_term", "CB-LINK-CATEGORIZE-TERM", 1, 1, false);
+        declareFunction(me, "cb_categorize_term_guts", "CB-CATEGORIZE-TERM-GUTS", 1, 0, false);
+        declareFunction(me, "cb_handle_categorize_term", "CB-HANDLE-CATEGORIZE-TERM", 1, 0, false);
+        declareFunction(me, "cb_categorize_similar", "CB-CATEGORIZE-SIMILAR", 2, 0, false);
+        declareFunction(me, "cb_categorize_isa", "CB-CATEGORIZE-ISA", 2, 0, false);
+        declareFunction(me, "cb_categorize_isa_guess_mts", "CB-CATEGORIZE-ISA-GUESS-MTS", 1, 0, false);
+        declareFunction(me, "cb_categorize_generalization", "CB-CATEGORIZE-GENERALIZATION", 2, 0, false);
+        declareFunction(me, "cb_categorize_guess_generalization", "CB-CATEGORIZE-GUESS-GENERALIZATION", 1, 0, false);
+        declareFunction(me, "cb_categorize_generalization_guess_mts", "CB-CATEGORIZE-GENERALIZATION-GUESS-MTS", 3, 0, false);
+        declareFunction(me, "cb_copy_from_similar_guts", "CB-COPY-FROM-SIMILAR-GUTS", 2, 0, false);
+        declareFunction(me, "cb_handle_copy_from_similar", "CB-HANDLE-COPY-FROM-SIMILAR", 1, 0, false);
+        declareFunction(me, "cb_copy_from_similar_checkbox", "CB-COPY-FROM-SIMILAR-CHECKBOX", 1, 0, false);
+        declareFunction(me, "cb_suggested_conceptually_related", "CB-SUGGESTED-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction(me, "cb_conceptually_related_guts", "CB-CONCEPTUALLY-RELATED-GUTS", 1, 0, false);
+        declareFunction(me, "ct_cr_search_show_next_suggestion", "CT-CR-SEARCH-SHOW-NEXT-SUGGESTION", 1, 0, false);
+        declareFunction(me, "cb_conceptually_related_terms", "CB-CONCEPTUALLY-RELATED-TERMS", 1, 0, false);
+        declareFunction(me, "ct_cr_extract_suggestions", "CT-CR-EXTRACT-SUGGESTIONS", 1, 0, false);
+        declareFunction(me, "ct_cr_assertion_suggestions", "CT-CR-ASSERTION-SUGGESTIONS", 4, 0, false);
+        declareFunction(me, "ct_cr_justify", "CT-CR-JUSTIFY", 1, 0, false);
+        declareFunction(me, "cb_link_ct_cr_justify", "CB-LINK-CT-CR-JUSTIFY", 1, 1, false);
+        declareFunction(me, "ct_cr_search_show_suggestion", "CT-CR-SEARCH-SHOW-SUGGESTION", 1, 0, false);
+        declareFunction(me, "ct_cr_setup", "CT-CR-SETUP", 0, 0, false);
+        declareFunction(me, "ct_cr_initialize_irrelevant_term_table", "CT-CR-INITIALIZE-IRRELEVANT-TERM-TABLE", 0, 0, false);
+        declareFunction(me, "cb_elaborate_term", "CB-ELABORATE-TERM", 1, 0, false);
+        declareFunction(me, "cb_link_elaborate_term", "CB-LINK-ELABORATE-TERM", 1, 1, false);
+        declareFunction(me, "cb_elaborate_term_guts", "CB-ELABORATE-TERM-GUTS", 1, 0, false);
+        declareFunction(me, "ke_requirements", "KE-REQUIREMENTS", 1, 0, false);
+        declareFunction(me, "cb_elaborate_requirement", "CB-ELABORATE-REQUIREMENT", 2, 0, false);
+        declareFunction(me, "ke_suggestions", "KE-SUGGESTIONS", 1, 0, false);
+        declareFunction(me, "cb_elaborate_suggestion", "CB-ELABORATE-SUGGESTION", 2, 0, false);
+        return NIL;
+    }
+
+    public static SubLObject init_html_create_term_file() {
+        defparameter("*CB-CREATE-INFO*", NIL);
+        defparameter("*CB-CATEGORIZE-INFO*", NIL);
+        deflexical("*CB-CATEGORIZE-GENERALIZATION-POSSIBILITIES*", $list85);
+        deflexical("*KE-REQUIREMENTS-QUERY*", $list161);
+        return NIL;
+    }
+
+    public static SubLObject setup_html_create_term_file() {
+        register_html_state_variable($cb_create_info$);
+        sethash($CB_CREATE_TERM, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), list($str2$cb_create_term_html, NIL));
+        html_macros.note_cgi_handler_function(CB_CREATE_TERM, $HTML_HANDLER);
+        html_macros.note_cgi_handler_function(CB_HANDLE_CREATE_TERM, $HTML_HANDLER);
+        setup_cb_link_method($CREATE_TERM, CB_LINK_CREATE_TERM, ONE_INTEGER);
+        declare_cb_tool($CREATE_TERM, $$$Create_Term, $$$Crt, $$$Cyc_Constant_Creation_Wizard);
+        html_macros.note_cgi_handler_function(CB_CATEGORIZE_TERM, $HTML_HANDLER);
+        setup_cb_link_method($CATEGORIZE_TERM, CB_LINK_CATEGORIZE_TERM, TWO_INTEGER);
+        register_html_state_variable($cb_categorize_info$);
+        sethash($CB_CATEGORIZE_TERM, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), list($str65$cb_categorize_term_html, NIL));
+        html_macros.note_cgi_handler_function(CB_HANDLE_CATEGORIZE_TERM, $HTML_HANDLER);
+        sethash($CB_COPY_FROM_SIMILAR, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), list($str95$cb_copy_from_similar_html, NIL));
+        html_macros.note_cgi_handler_function(CB_HANDLE_COPY_FROM_SIMILAR, $HTML_HANDLER);
+        sethash($CB_CONCEPTUALLY_RELATED_TERMS, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), list($str109$cb_conceptually_related_terms_htm, NIL));
+        html_macros.note_cgi_handler_function(CB_CONCEPTUALLY_RELATED_TERMS, $HTML_HANDLER);
+        html_macros.note_cgi_handler_function(CT_CR_JUSTIFY, $HTML_HANDLER);
+        setup_cb_link_method($CT_CR_JUSTIFY, CB_LINK_CT_CR_JUSTIFY, TWO_INTEGER);
+        html_macros.note_cgi_handler_function(CB_ELABORATE_TERM, $HTML_HANDLER);
+        setup_cb_link_method($ELABORATE_TERM, CB_LINK_ELABORATE_TERM, TWO_INTEGER);
+        sethash($CB_ELABORATE_TERM, cyc_file_dependencies.$cb_help_definitions$.getGlobalValue(), list($str155$cb_elaborate_term_html, NIL));
+        return NIL;
+    }
+
+    @Override
+    public void declareFunctions() {
+        declare_html_create_term_file();
+    }
+
+    @Override
+    public void initializeVariables() {
+        init_html_create_term_file();
+    }
+
+    @Override
+    public void runTopLevelForms() {
+        setup_html_create_term_file();
+    }
+
+    static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }
-/*
- * 
+
+/**
  * Total time: 1071 ms
- * 
  */

@@ -1575,7 +1575,7 @@ public final class constant_handles_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $constant_native.structDecl;
+      return $structDecl;
     }
 
     @Override

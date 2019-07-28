@@ -181,6 +181,11 @@ public class SubLObjectFactory {
 	return makeSymbol(symbolName, SubLPackage.CYC_PACKAGE);
     }
 
+    public static SubLSymbol makeGSymbol(String symbolName) {
+	symbolName = symbolName.replace('_', '-').replace('$', '*').replace('q', '?').replace('a', '&');
+	return makeSymbol(symbolName, SubLPackage.CYC_PACKAGE);
+    }
+
     public static SubLDoubleFloat makeDouble(double theDouble) {
 	Threads.possiblyHandleInterrupts(true);
 	return SubLNumberFactory.makeDouble(theDouble);

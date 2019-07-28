@@ -606,7 +606,7 @@ public final class module0682 extends SubLTranslatedFile
         }
         
         public SubLStructDecl getStructDecl() {
-            return (SubLStructDecl)$sX45613_native.structDecl;
+            return (SstructDecl;
         }
         
         public SubLObject getField2() {

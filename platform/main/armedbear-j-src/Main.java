@@ -21,7 +21,13 @@
 
 import java.lang.reflect.Method;
 
-public final class Main
+// @TODO Remove
+public final class Main {
+    public static void main(String[] args) {
+	MainJ.main(args);
+    }
+}
+final class MainJ
 {
     public static void main(String[] args)
     {

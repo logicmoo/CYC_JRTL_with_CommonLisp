@@ -22,6 +22,6 @@
 ; in CLASSPATH, so we can just use it without having to load it
 ; separately.
 (defun void-function ()
-  (let* ((result (jstatic "addTwoNumbers" "Main" 2 4)))
+  (let* ((result (jstatic "addTwoNumbers" "MainPL2J" 2 4)))
     (format t "in void-function, result of calling addTwoNumbers(2, 4): ~a~%" result)))
 

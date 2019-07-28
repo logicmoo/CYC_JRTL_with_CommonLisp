@@ -1,1218 +1,1697 @@
-//
-// For LarKC
-//
+/**
+ *
+ */
+/**
+ * For LarKC
+ */
+/**
+ *
+ */
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
 
-import java.util.Iterator;
-import java.util.Map;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.format.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Environment.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
+import java.util.Iterator;
+import java.util.Map;
+
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ELEVEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOURTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINETEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVENTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THIRTEEN_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
 
 public class character_names extends SubLTranslatedFile {
-    @SubL(source = "sublisp/character-names.lisp", position = 888L)
     public static SubLObject character_names(SubLObject v_char) {
-	SubLThread thread = SubLProcess.currentSubLThread();
-	return ConsesLow.append(Hashtables.gethash(v_char, character_names.$character_names_table$.getDynamicValue(thread), CommonSymbols.UNPROVIDED), ConsesLow.list(Strings.make_string(CommonSymbols.ONE_INTEGER, v_char)));
+        SubLThread thread = SubLProcess.currentSubLThread();
+        return append(gethash(v_char, $character_names_table$.getDynamicValue(thread), UNPROVIDED), list(Strings.make_string(ONE_INTEGER, v_char)));
     }
 
     public static SubLObject declare_character_names_file() {
-	SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names", "character_names", "CHARACTER-NAMES", 1, 0, false);
-	return SubLNil.NIL;
+        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names", "character_names", "CHARACTER-NAMES", 1, 0, false);
+        return SubLNil.NIL;
     }
 
     public static SubLObject init_character_names_file() {
-	character_names.$character_names_table$ = SubLFiles.defvar("*CHARACTER-NAMES-TABLE*", Hashtables.make_hash_table(character_names.$int$256, Symbols.symbol_function(CommonSymbols.EQL), CommonSymbols.UNPROVIDED));
-	character_names.$name_character_table$ = SubLFiles.defvar("*NAME-CHARACTER-TABLE*", Hashtables.make_hash_table(character_names.$int$256, Symbols.symbol_function(CommonSymbols.EQUALP), CommonSymbols.UNPROVIDED));
-	return SubLNil.NIL;
+        defvar("*CHARACTER-NAMES-TABLE*", make_hash_table($int$256, symbol_function(EQL), UNPROVIDED));
+        defvar("*NAME-CHARACTER-TABLE*", make_hash_table($int$256, symbol_function(EQUALP), UNPROVIDED));
+        return SubLNil.NIL;
     }
 
     public static SubLObject setup_character_names_file() {
-	final SubLObject cnt = character_names.$character_names_table$.getDynamicValue();
-	Hashtables.sethash(Characters.code_char(CommonSymbols.ZERO_INTEGER), cnt, ConsesLow.list(character_names.$str1$Null, character_names.$str2$NUL));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.ONE_INTEGER), cnt, ConsesLow.list(character_names.$str3$Control_a, character_names.$str4$c_a));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.TWO_INTEGER), cnt, ConsesLow.list(character_names.$str5$Control_b, character_names.$str6$c_b));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.THREE_INTEGER), cnt, ConsesLow.list(character_names.$str7$Control_c, character_names.$str8$c_c));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.FOUR_INTEGER), cnt, ConsesLow.list(character_names.$str9$Control_d, character_names.$str10$c_d));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.FIVE_INTEGER), cnt, ConsesLow.list(character_names.$str11$Control_e, character_names.$str12$c_e));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.SIX_INTEGER), cnt, ConsesLow.list(character_names.$str13$Control_f, character_names.$str14$c_f));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.SEVEN_INTEGER), cnt, ConsesLow.list(character_names.$str15$Bell, character_names.$str16$BEL));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.EIGHT_INTEGER), cnt, ConsesLow.list(character_names.$str17$Backspace, character_names.$str18$BS));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.NINE_INTEGER), cnt, ConsesLow.list(character_names.$str19$Tab, character_names.$str20$HT));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.TEN_INTEGER), cnt, ConsesLow.list(character_names.$str21$Newline, character_names.$str22$Linefeed));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.ELEVEN_INTEGER), cnt, ConsesLow.list(character_names.$str23$Vertical_Tab, character_names.$str24$VT));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.TWELVE_INTEGER), cnt, ConsesLow.list(character_names.$str25$Page, character_names.$str26$FF));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.THIRTEEN_INTEGER), cnt, ConsesLow.list(character_names.$str27$Return, character_names.$str28$CR));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.FOURTEEN_INTEGER), cnt, ConsesLow.list(character_names.$str29$Control_n, character_names.$str30$c_n));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.FIFTEEN_INTEGER), cnt, ConsesLow.list(character_names.$str31$Control_o, character_names.$str32$c_o));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.SIXTEEN_INTEGER), cnt, ConsesLow.list(character_names.$str33$Control_p, character_names.$str34$c_p));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.SEVENTEEN_INTEGER), cnt, ConsesLow.list(character_names.$str35$Control_q, character_names.$str36$c_q));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.EIGHTEEN_INTEGER), cnt, ConsesLow.list(character_names.$str37$Control_r, character_names.$str38$c_r));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.NINETEEN_INTEGER), cnt, ConsesLow.list(character_names.$str39$Control_s, character_names.$str40$c_s));
-	Hashtables.sethash(Characters.code_char(CommonSymbols.TWENTY_INTEGER), cnt, ConsesLow.list(character_names.$str41$Control_t, character_names.$str42$c_t));
-	Hashtables.sethash(Characters.code_char(character_names.$int$21), cnt, ConsesLow.list(character_names.$str44$Control_u, character_names.$str45$c_u));
-	Hashtables.sethash(Characters.code_char(character_names.$int$22), cnt, ConsesLow.list(character_names.$str47$Control_v, character_names.$str48$c_v));
-	Hashtables.sethash(Characters.code_char(character_names.$int$23), cnt, ConsesLow.list(character_names.$str50$Control_w, character_names.$str51$c_w));
-	Hashtables.sethash(Characters.code_char(character_names.$int$24), cnt, ConsesLow.list(character_names.$str53$Control_x, character_names.$str54$c_x));
-	Hashtables.sethash(Characters.code_char(character_names.$int$25), cnt, ConsesLow.list(character_names.$str56$Control_y, character_names.$str57$c_y));
-	Hashtables.sethash(Characters.code_char(character_names.$int$26), cnt, ConsesLow.list(character_names.$str59$Control_z, character_names.$str60$c_z));
-	Hashtables.sethash(Characters.code_char(character_names.$int$27), cnt, ConsesLow.list(character_names.$str62$Escape, character_names.$str63$ESC));
-	Hashtables.sethash(Characters.code_char(character_names.$int$28), cnt, ConsesLow.list(character_names.$str65$Control__, character_names.$str66$c__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$29), cnt, ConsesLow.list(character_names.$str68$Control__, character_names.$str69$c__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$30), cnt, ConsesLow.list(character_names.$str71$Control__, character_names.$str72$c__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$31), cnt, ConsesLow.list(character_names.$str74$Control__, character_names.$str75$c__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$32), cnt, ConsesLow.list(character_names.$str77$Space, character_names.$str78$SP));
-	Hashtables.sethash(Characters.code_char(character_names.$int$127), cnt, ConsesLow.list(character_names.$str80$Rubout, character_names.$str81$DEL));
-	Hashtables.sethash(Characters.code_char(character_names.$int$128), cnt, ConsesLow.list(character_names.$str83$Meta_Null, character_names.$str84$m_Null));
-	Hashtables.sethash(Characters.code_char(character_names.$int$129), cnt, ConsesLow.list(character_names.$str86$Control_Meta_a, character_names.$str87$c_m_a));
-	Hashtables.sethash(Characters.code_char(character_names.$int$130), cnt, ConsesLow.list(character_names.$str89$Control_Meta_b, character_names.$str90$c_m_b));
-	Hashtables.sethash(Characters.code_char(character_names.$int$131), cnt, ConsesLow.list(character_names.$str92$Control_Meta_c, character_names.$str93$c_m_c));
-	Hashtables.sethash(Characters.code_char(character_names.$int$132), cnt, ConsesLow.list(character_names.$str95$Control_Meta_d, character_names.$str96$c_m_d));
-	Hashtables.sethash(Characters.code_char(character_names.$int$133), cnt, ConsesLow.list(character_names.$str98$Control_Meta_e, character_names.$str99$c_m_e));
-	Hashtables.sethash(Characters.code_char(character_names.$int$134), cnt, ConsesLow.list(character_names.$str101$Control_Meta_f, character_names.$str102$c_m_f));
-	Hashtables.sethash(Characters.code_char(character_names.$int$135), cnt, ConsesLow.list(character_names.$str104$Meta_Bell, character_names.$str105$m_Bell));
-	Hashtables.sethash(Characters.code_char(character_names.$int$136), cnt, ConsesLow.list(character_names.$str107$Meta_Backspace, character_names.$str108$m_Backspace));
-	Hashtables.sethash(Characters.code_char(character_names.$int$137), cnt, ConsesLow.list(character_names.$str110$Meta_Tab, character_names.$str111$m_Tab));
-	Hashtables.sethash(Characters.code_char(character_names.$int$138), cnt, ConsesLow.list(character_names.$str113$Meta_Newline, character_names.$str114$m_Newline));
-	Hashtables.sethash(Characters.code_char(character_names.$int$139), cnt, ConsesLow.list(character_names.$str116$Meta_Vertical_Tab, character_names.$str117$m_Vertical_Tab));
-	Hashtables.sethash(Characters.code_char(character_names.$int$140), cnt, ConsesLow.list(character_names.$str119$Meta_Page, character_names.$str120$m_Page));
-	Hashtables.sethash(Characters.code_char(character_names.$int$141), cnt, ConsesLow.list(character_names.$str122$Meta_Return, character_names.$str123$m_Return));
-	Hashtables.sethash(Characters.code_char(character_names.$int$142), cnt, ConsesLow.list(character_names.$str125$Control_Meta_n, character_names.$str126$c_m_n));
-	Hashtables.sethash(Characters.code_char(character_names.$int$143), cnt, ConsesLow.list(character_names.$str128$Control_Meta_o, character_names.$str129$c_m_o));
-	Hashtables.sethash(Characters.code_char(character_names.$int$144), cnt, ConsesLow.list(character_names.$str131$Control_Meta_p, character_names.$str132$c_m_p));
-	Hashtables.sethash(Characters.code_char(character_names.$int$145), cnt, ConsesLow.list(character_names.$str134$Control_Meta_q, character_names.$str135$c_m_q));
-	Hashtables.sethash(Characters.code_char(character_names.$int$146), cnt, ConsesLow.list(character_names.$str137$Control_Meta_r, character_names.$str138$c_m_r));
-	Hashtables.sethash(Characters.code_char(character_names.$int$147), cnt, ConsesLow.list(character_names.$str140$Control_Meta_s, character_names.$str141$c_m_s));
-	Hashtables.sethash(Characters.code_char(character_names.$int$148), cnt, ConsesLow.list(character_names.$str143$Control_Meta_t, character_names.$str144$c_m_t));
-	Hashtables.sethash(Characters.code_char(character_names.$int$149), cnt, ConsesLow.list(character_names.$str146$Control_Meta_u, character_names.$str147$c_m_u));
-	Hashtables.sethash(Characters.code_char(character_names.$int$150), cnt, ConsesLow.list(character_names.$str149$Control_Meta_v, character_names.$str150$c_m_v));
-	Hashtables.sethash(Characters.code_char(character_names.$int$151), cnt, ConsesLow.list(character_names.$str152$Control_Meta_w, character_names.$str153$c_m_w));
-	Hashtables.sethash(Characters.code_char(character_names.$int$152), cnt, ConsesLow.list(character_names.$str155$Control_Meta_x, character_names.$str156$c_m_x));
-	Hashtables.sethash(Characters.code_char(character_names.$int$153), cnt, ConsesLow.list(character_names.$str158$Control_Meta_y, character_names.$str159$c_m_y));
-	Hashtables.sethash(Characters.code_char(character_names.$int$154), cnt, ConsesLow.list(character_names.$str161$Control_Meta_z, character_names.$str162$c_m_z));
-	Hashtables.sethash(Characters.code_char(character_names.$int$155), cnt, ConsesLow.list(character_names.$str164$Meta_Escape, character_names.$str165$m_Escape));
-	Hashtables.sethash(Characters.code_char(character_names.$int$156), cnt, ConsesLow.list(character_names.$str167$Control_Meta__, character_names.$str168$c_m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$157), cnt, ConsesLow.list(character_names.$str170$Control_Meta__, character_names.$str171$c_m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$158), cnt, ConsesLow.list(character_names.$str173$Control_Meta__, character_names.$str174$c_m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$159), cnt, ConsesLow.list(character_names.$str176$Control_Meta__, character_names.$str177$c_m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$160), cnt, ConsesLow.list(character_names.$str179$Meta_Space, character_names.$str180$m_Space));
-	Hashtables.sethash(Characters.code_char(character_names.$int$161), cnt, ConsesLow.list(character_names.$str182$Meta__, character_names.$str183$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$162), cnt, ConsesLow.list(character_names.$str185$Meta__, character_names.$str186$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$163), cnt, ConsesLow.list(character_names.$str188$Meta__, character_names.$str189$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$164), cnt, ConsesLow.list(character_names.$str191$Meta__, character_names.$str192$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$165), cnt, ConsesLow.list(character_names.$str194$Meta__, character_names.$str195$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$166), cnt, ConsesLow.list(character_names.$str197$Meta__, character_names.$str198$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$167), cnt, ConsesLow.list(character_names.$str200$Meta__, character_names.$str201$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$168), cnt, ConsesLow.list(character_names.$str203$Meta__, character_names.$str204$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$169), cnt, ConsesLow.list(character_names.$str206$Meta__, character_names.$str207$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$170), cnt, ConsesLow.list(character_names.$str209$Meta__, character_names.$str210$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$171), cnt, ConsesLow.list(character_names.$str212$Meta__, character_names.$str213$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$172), cnt, ConsesLow.list(character_names.$str215$Meta__, character_names.$str216$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$173), cnt, ConsesLow.list(character_names.$str218$Meta__, character_names.$str219$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$174), cnt, ConsesLow.list(character_names.$str221$Meta__, character_names.$str222$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$175), cnt, ConsesLow.list(character_names.$str224$Meta__, character_names.$str225$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$176), cnt, ConsesLow.list(character_names.$str227$Meta_0, character_names.$str228$m_0));
-	Hashtables.sethash(Characters.code_char(character_names.$int$177), cnt, ConsesLow.list(character_names.$str230$Meta_1, character_names.$str231$m_1));
-	Hashtables.sethash(Characters.code_char(character_names.$int$178), cnt, ConsesLow.list(character_names.$str233$Meta_2, character_names.$str234$m_2));
-	Hashtables.sethash(Characters.code_char(character_names.$int$179), cnt, ConsesLow.list(character_names.$str236$Meta_3, character_names.$str237$m_3));
-	Hashtables.sethash(Characters.code_char(character_names.$int$180), cnt, ConsesLow.list(character_names.$str239$Meta_4, character_names.$str240$m_4));
-	Hashtables.sethash(Characters.code_char(character_names.$int$181), cnt, ConsesLow.list(character_names.$str242$Meta_5, character_names.$str243$m_5));
-	Hashtables.sethash(Characters.code_char(character_names.$int$182), cnt, ConsesLow.list(character_names.$str245$Meta_6, character_names.$str246$m_6));
-	Hashtables.sethash(Characters.code_char(character_names.$int$183), cnt, ConsesLow.list(character_names.$str248$Meta_7, character_names.$str249$m_7));
-	Hashtables.sethash(Characters.code_char(character_names.$int$184), cnt, ConsesLow.list(character_names.$str251$Meta_8, character_names.$str252$m_8));
-	Hashtables.sethash(Characters.code_char(character_names.$int$185), cnt, ConsesLow.list(character_names.$str254$Meta_9, character_names.$str255$m_9));
-	Hashtables.sethash(Characters.code_char(character_names.$int$186), cnt, ConsesLow.list(character_names.$str257$Meta__, character_names.$str258$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$187), cnt, ConsesLow.list(character_names.$str260$Meta__, character_names.$str261$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$188), cnt, ConsesLow.list(character_names.$str263$Meta__, character_names.$str264$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$189), cnt, ConsesLow.list(character_names.$str266$Meta__, character_names.$str267$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$190), cnt, ConsesLow.list(character_names.$str269$Meta__, character_names.$str270$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$191), cnt, ConsesLow.list(character_names.$str272$Meta__, character_names.$str273$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$192), cnt, ConsesLow.list(character_names.$str275$Meta__, character_names.$str276$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$193), cnt, ConsesLow.list(character_names.$str278$Meta_A, character_names.$str279$m_A));
-	Hashtables.sethash(Characters.code_char(character_names.$int$194), cnt, ConsesLow.list(character_names.$str281$Meta_B, character_names.$str282$m_B));
-	Hashtables.sethash(Characters.code_char(character_names.$int$195), cnt, ConsesLow.list(character_names.$str284$Meta_C, character_names.$str285$m_C));
-	Hashtables.sethash(Characters.code_char(character_names.$int$196), cnt, ConsesLow.list(character_names.$str287$Meta_D, character_names.$str288$m_D));
-	Hashtables.sethash(Characters.code_char(character_names.$int$197), cnt, ConsesLow.list(character_names.$str290$Meta_E, character_names.$str291$m_E));
-	Hashtables.sethash(Characters.code_char(character_names.$int$198), cnt, ConsesLow.list(character_names.$str293$Meta_F, character_names.$str294$m_F));
-	Hashtables.sethash(Characters.code_char(character_names.$int$199), cnt, ConsesLow.list(character_names.$str296$Meta_G, character_names.$str297$m_G));
-	Hashtables.sethash(Characters.code_char(character_names.$int$200), cnt, ConsesLow.list(character_names.$str299$Meta_H, character_names.$str300$m_H));
-	Hashtables.sethash(Characters.code_char(character_names.$int$201), cnt, ConsesLow.list(character_names.$str302$Meta_I, character_names.$str303$m_I));
-	Hashtables.sethash(Characters.code_char(character_names.$int$202), cnt, ConsesLow.list(character_names.$str305$Meta_J, character_names.$str306$m_J));
-	Hashtables.sethash(Characters.code_char(character_names.$int$203), cnt, ConsesLow.list(character_names.$str308$Meta_K, character_names.$str309$m_K));
-	Hashtables.sethash(Characters.code_char(character_names.$int$204), cnt, ConsesLow.list(character_names.$str311$Meta_L, character_names.$str312$m_L));
-	Hashtables.sethash(Characters.code_char(character_names.$int$205), cnt, ConsesLow.list(character_names.$str314$Meta_M, character_names.$str315$m_M));
-	Hashtables.sethash(Characters.code_char(character_names.$int$206), cnt, ConsesLow.list(character_names.$str317$Meta_N, character_names.$str318$m_N));
-	Hashtables.sethash(Characters.code_char(character_names.$int$207), cnt, ConsesLow.list(character_names.$str320$Meta_O, character_names.$str321$m_O));
-	Hashtables.sethash(Characters.code_char(character_names.$int$208), cnt, ConsesLow.list(character_names.$str323$Meta_P, character_names.$str324$m_P));
-	Hashtables.sethash(Characters.code_char(character_names.$int$209), cnt, ConsesLow.list(character_names.$str326$Meta_Q, character_names.$str327$m_Q));
-	Hashtables.sethash(Characters.code_char(character_names.$int$210), cnt, ConsesLow.list(character_names.$str329$Meta_R, character_names.$str330$m_R));
-	Hashtables.sethash(Characters.code_char(character_names.$int$211), cnt, ConsesLow.list(character_names.$str332$Meta_S, character_names.$str333$m_S));
-	Hashtables.sethash(Characters.code_char(character_names.$int$212), cnt, ConsesLow.list(character_names.$str335$Meta_T, character_names.$str336$m_T));
-	Hashtables.sethash(Characters.code_char(character_names.$int$213), cnt, ConsesLow.list(character_names.$str338$Meta_U, character_names.$str339$m_U));
-	Hashtables.sethash(Characters.code_char(character_names.$int$214), cnt, ConsesLow.list(character_names.$str341$Meta_V, character_names.$str342$m_V));
-	Hashtables.sethash(Characters.code_char(character_names.$int$215), cnt, ConsesLow.list(character_names.$str344$Meta_W, character_names.$str345$m_W));
-	Hashtables.sethash(Characters.code_char(character_names.$int$216), cnt, ConsesLow.list(character_names.$str347$Meta_X, character_names.$str348$m_X));
-	Hashtables.sethash(Characters.code_char(character_names.$int$217), cnt, ConsesLow.list(character_names.$str350$Meta_Y, character_names.$str351$m_Y));
-	Hashtables.sethash(Characters.code_char(character_names.$int$218), cnt, ConsesLow.list(character_names.$str353$Meta_Z, character_names.$str354$m_Z));
-	Hashtables.sethash(Characters.code_char(character_names.$int$219), cnt, ConsesLow.list(character_names.$str356$Meta__, character_names.$str357$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$220), cnt, ConsesLow.list(character_names.$str359$Meta__, character_names.$str360$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$221), cnt, ConsesLow.list(character_names.$str362$Meta__, character_names.$str363$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$222), cnt, ConsesLow.list(character_names.$str365$Meta__, character_names.$str366$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$223), cnt, ConsesLow.list(character_names.$str368$Meta__, character_names.$str369$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$224), cnt, ConsesLow.list(character_names.$str371$Meta__, character_names.$str372$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$225), cnt, ConsesLow.list(character_names.$str374$Meta_a, character_names.$str375$m_a));
-	Hashtables.sethash(Characters.code_char(character_names.$int$226), cnt, ConsesLow.list(character_names.$str377$Meta_b, character_names.$str378$m_b));
-	Hashtables.sethash(Characters.code_char(character_names.$int$227), cnt, ConsesLow.list(character_names.$str380$Meta_c, character_names.$str381$m_c));
-	Hashtables.sethash(Characters.code_char(character_names.$int$228), cnt, ConsesLow.list(character_names.$str383$Meta_d, character_names.$str384$m_d));
-	Hashtables.sethash(Characters.code_char(character_names.$int$229), cnt, ConsesLow.list(character_names.$str386$Meta_e, character_names.$str387$m_e));
-	Hashtables.sethash(Characters.code_char(character_names.$int$230), cnt, ConsesLow.list(character_names.$str389$Meta_f, character_names.$str390$m_f));
-	Hashtables.sethash(Characters.code_char(character_names.$int$231), cnt, ConsesLow.list(character_names.$str392$Meta_g, character_names.$str393$m_g));
-	Hashtables.sethash(Characters.code_char(character_names.$int$232), cnt, ConsesLow.list(character_names.$str395$Meta_h, character_names.$str396$m_h));
-	Hashtables.sethash(Characters.code_char(character_names.$int$233), cnt, ConsesLow.list(character_names.$str398$Meta_i, character_names.$str399$m_i));
-	Hashtables.sethash(Characters.code_char(character_names.$int$234), cnt, ConsesLow.list(character_names.$str401$Meta_j, character_names.$str402$m_j));
-	Hashtables.sethash(Characters.code_char(character_names.$int$235), cnt, ConsesLow.list(character_names.$str404$Meta_k, character_names.$str405$m_k));
-	Hashtables.sethash(Characters.code_char(character_names.$int$236), cnt, ConsesLow.list(character_names.$str407$Meta_l, character_names.$str408$m_l));
-	Hashtables.sethash(Characters.code_char(character_names.$int$237), cnt, ConsesLow.list(character_names.$str410$Meta_m, character_names.$str411$m_m));
-	Hashtables.sethash(Characters.code_char(character_names.$int$238), cnt, ConsesLow.list(character_names.$str413$Meta_n, character_names.$str414$m_n));
-	Hashtables.sethash(Characters.code_char(character_names.$int$239), cnt, ConsesLow.list(character_names.$str416$Meta_o, character_names.$str417$m_o));
-	Hashtables.sethash(Characters.code_char(character_names.$int$240), cnt, ConsesLow.list(character_names.$str419$Meta_p, character_names.$str420$m_p));
-	Hashtables.sethash(Characters.code_char(character_names.$int$241), cnt, ConsesLow.list(character_names.$str422$Meta_q, character_names.$str423$m_q));
-	Hashtables.sethash(Characters.code_char(character_names.$int$242), cnt, ConsesLow.list(character_names.$str425$Meta_r, character_names.$str426$m_r));
-	Hashtables.sethash(Characters.code_char(character_names.$int$243), cnt, ConsesLow.list(character_names.$str428$Meta_s, character_names.$str429$m_s));
-	Hashtables.sethash(Characters.code_char(character_names.$int$244), cnt, ConsesLow.list(character_names.$str431$Meta_t, character_names.$str432$m_t));
-	Hashtables.sethash(Characters.code_char(character_names.$int$245), cnt, ConsesLow.list(character_names.$str434$Meta_u, character_names.$str435$m_u));
-	Hashtables.sethash(Characters.code_char(character_names.$int$246), cnt, ConsesLow.list(character_names.$str437$Meta_v, character_names.$str438$m_v));
-	Hashtables.sethash(Characters.code_char(character_names.$int$247), cnt, ConsesLow.list(character_names.$str440$Meta_w, character_names.$str441$m_w));
-	Hashtables.sethash(Characters.code_char(character_names.$int$248), cnt, ConsesLow.list(character_names.$str443$Meta_x, character_names.$str444$m_x));
-	Hashtables.sethash(Characters.code_char(character_names.$int$249), cnt, ConsesLow.list(character_names.$str446$Meta_y, character_names.$str447$m_y));
-	Hashtables.sethash(Characters.code_char(character_names.$int$250), cnt, ConsesLow.list(character_names.$str449$Meta_z, character_names.$str450$m_z));
-	Hashtables.sethash(Characters.code_char(character_names.$int$251), cnt, ConsesLow.list(character_names.$str452$Meta__, character_names.$str453$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$252), cnt, ConsesLow.list(character_names.$str455$Meta__, character_names.$str456$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$253), cnt, ConsesLow.list(character_names.$str458$Meta__, character_names.$str459$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$254), cnt, ConsesLow.list(character_names.$str461$Meta__, character_names.$str462$m__));
-	Hashtables.sethash(Characters.code_char(character_names.$int$255), cnt, ConsesLow.list(character_names.$str464$Meta_Rubout, character_names.$str465$m_Rubout));
-	SubLObject cdohash_table = cnt;
-	SubLObject character = SubLNil.NIL;
-	SubLObject names = SubLNil.NIL;
-	Iterator cdohash_iterator = Hashtables.getEntrySetIterator(cdohash_table);
-	try {
-	    while (Hashtables.iteratorHasNext(cdohash_iterator)) {
-		Map.Entry cdohash_entry = Hashtables.iteratorNextEntry(cdohash_iterator);
-		character = Hashtables.getEntryKey(cdohash_entry);
-		SubLObject cdolist_list_var;
-		names = cdolist_list_var = Hashtables.getEntryValue(cdohash_entry);
-		SubLObject name = SubLNil.NIL;
-		name = cdolist_list_var.first();
-		while (SubLNil.NIL != cdolist_list_var) {
-		    Hashtables.sethash(name, character_names.$name_character_table$.getDynamicValue(), character);
-		    cdolist_list_var = cdolist_list_var.rest();
-		    name = cdolist_list_var.first();
-		}
-	    }
-	} finally {
-	    Hashtables.releaseEntrySetIterator(cdohash_iterator);
-	}
-	return SubLNil.NIL;
+        final SubLObject cnt = $character_names_table$.getDynamicValue();
+        sethash(code_char(ZERO_INTEGER), cnt, list($$$Null, $$$NUL));
+        sethash(code_char(ONE_INTEGER), cnt, list($str3$Control_a, $str4$c_a));
+        sethash(code_char(TWO_INTEGER), cnt, list($str5$Control_b, $str6$c_b));
+        sethash(code_char(THREE_INTEGER), cnt, list($str7$Control_c, $str8$c_c));
+        sethash(code_char(FOUR_INTEGER), cnt, list($str9$Control_d, $str10$c_d));
+        sethash(code_char(FIVE_INTEGER), cnt, list($str11$Control_e, $str12$c_e));
+        sethash(code_char(SIX_INTEGER), cnt, list($str13$Control_f, $str14$c_f));
+        sethash(code_char(SEVEN_INTEGER), cnt, list($$$Bell, $$$BEL));
+        sethash(code_char(EIGHT_INTEGER), cnt, list($$$Backspace, $$$BS));
+        sethash(code_char(NINE_INTEGER), cnt, list($$$Tab, $$$HT));
+        sethash(code_char(TEN_INTEGER), cnt, list($$$Newline, $$$Linefeed));
+        sethash(code_char(ELEVEN_INTEGER), cnt, list($str23$Vertical_Tab, $$$VT));
+        sethash(code_char(TWELVE_INTEGER), cnt, list($$$Page, $$$FF));
+        sethash(code_char(THIRTEEN_INTEGER), cnt, list($$$Return, $$$CR));
+        sethash(code_char(FOURTEEN_INTEGER), cnt, list($str29$Control_n, $str30$c_n));
+        sethash(code_char(FIFTEEN_INTEGER), cnt, list($str31$Control_o, $str32$c_o));
+        sethash(code_char(SIXTEEN_INTEGER), cnt, list($str33$Control_p, $str34$c_p));
+        sethash(code_char(SEVENTEEN_INTEGER), cnt, list($str35$Control_q, $str36$c_q));
+        sethash(code_char(EIGHTEEN_INTEGER), cnt, list($str37$Control_r, $str38$c_r));
+        sethash(code_char(NINETEEN_INTEGER), cnt, list($str39$Control_s, $str40$c_s));
+        sethash(code_char(TWENTY_INTEGER), cnt, list($str41$Control_t, $str42$c_t));
+        sethash(code_char($int$21), cnt, list($str44$Control_u, $str45$c_u));
+        sethash(code_char($int$22), cnt, list($str47$Control_v, $str48$c_v));
+        sethash(code_char($int$23), cnt, list($str50$Control_w, $str51$c_w));
+        sethash(code_char($int$24), cnt, list($str53$Control_x, $str54$c_x));
+        sethash(code_char($int$25), cnt, list($str56$Control_y, $str57$c_y));
+        sethash(code_char($int$26), cnt, list($str59$Control_z, $str60$c_z));
+        sethash(code_char($int$27), cnt, list($$$Escape, $$$ESC));
+        sethash(code_char($int$28), cnt, list($str65$Control__, $str66$c__));
+        sethash(code_char($int$29), cnt, list($str68$Control__, $str69$c__));
+        sethash(code_char($int$30), cnt, list($str71$Control__, $str72$c__));
+        sethash(code_char($int$31), cnt, list($str74$Control__, $str75$c__));
+        sethash(code_char($int$32), cnt, list($$$Space, $$$SP));
+        sethash(code_char($int$127), cnt, list($$$Rubout, $$$DEL));
+        sethash(code_char($int$128), cnt, list($str83$Meta_Null, $str84$m_Null));
+        sethash(code_char($int$129), cnt, list($str86$Control_Meta_a, $str87$c_m_a));
+        sethash(code_char($int$130), cnt, list($str89$Control_Meta_b, $str90$c_m_b));
+        sethash(code_char($int$131), cnt, list($str92$Control_Meta_c, $str93$c_m_c));
+        sethash(code_char($int$132), cnt, list($str95$Control_Meta_d, $str96$c_m_d));
+        sethash(code_char($int$133), cnt, list($str98$Control_Meta_e, $str99$c_m_e));
+        sethash(code_char($int$134), cnt, list($str101$Control_Meta_f, $str102$c_m_f));
+        sethash(code_char($int$135), cnt, list($str104$Meta_Bell, $str105$m_Bell));
+        sethash(code_char($int$136), cnt, list($str107$Meta_Backspace, $str108$m_Backspace));
+        sethash(code_char($int$137), cnt, list($str110$Meta_Tab, $str111$m_Tab));
+        sethash(code_char($int$138), cnt, list($str113$Meta_Newline, $str114$m_Newline));
+        sethash(code_char($int$139), cnt, list($str116$Meta_Vertical_Tab, $str117$m_Vertical_Tab));
+        sethash(code_char($int$140), cnt, list($str119$Meta_Page, $str120$m_Page));
+        sethash(code_char($int$141), cnt, list($str122$Meta_Return, $str123$m_Return));
+        sethash(code_char($int$142), cnt, list($str125$Control_Meta_n, $str126$c_m_n));
+        sethash(code_char($int$143), cnt, list($str128$Control_Meta_o, $str129$c_m_o));
+        sethash(code_char($int$144), cnt, list($str131$Control_Meta_p, $str132$c_m_p));
+        sethash(code_char($int$145), cnt, list($str134$Control_Meta_q, $str135$c_m_q));
+        sethash(code_char($int$146), cnt, list($str137$Control_Meta_r, $str138$c_m_r));
+        sethash(code_char($int$147), cnt, list($str140$Control_Meta_s, $str141$c_m_s));
+        sethash(code_char($int$148), cnt, list($str143$Control_Meta_t, $str144$c_m_t));
+        sethash(code_char($int$149), cnt, list($str146$Control_Meta_u, $str147$c_m_u));
+        sethash(code_char($int$150), cnt, list($str149$Control_Meta_v, $str150$c_m_v));
+        sethash(code_char($int$151), cnt, list($str152$Control_Meta_w, $str153$c_m_w));
+        sethash(code_char($int$152), cnt, list($str155$Control_Meta_x, $str156$c_m_x));
+        sethash(code_char($int$153), cnt, list($str158$Control_Meta_y, $str159$c_m_y));
+        sethash(code_char($int$154), cnt, list($str161$Control_Meta_z, $str162$c_m_z));
+        sethash(code_char($int$155), cnt, list($str164$Meta_Escape, $str165$m_Escape));
+        sethash(code_char($int$156), cnt, list($str167$Control_Meta__, $str168$c_m__));
+        sethash(code_char($int$157), cnt, list($str170$Control_Meta__, $str171$c_m__));
+        sethash(code_char($int$158), cnt, list($str173$Control_Meta__, $str174$c_m__));
+        sethash(code_char($int$159), cnt, list($str176$Control_Meta__, $str177$c_m__));
+        sethash(code_char($int$160), cnt, list($str179$Meta_Space, $str180$m_Space));
+        sethash(code_char($int$161), cnt, list($str182$Meta__, $str183$m__));
+        sethash(code_char($int$162), cnt, list($str185$Meta__, $str186$m__));
+        sethash(code_char($int$163), cnt, list($str188$Meta__, $str189$m__));
+        sethash(code_char($int$164), cnt, list($str191$Meta__, $str192$m__));
+        sethash(code_char($int$165), cnt, list($str194$Meta__, $str195$m__));
+        sethash(code_char($int$166), cnt, list($str197$Meta__, $str198$m__));
+        sethash(code_char($int$167), cnt, list($str200$Meta__, $str201$m__));
+        sethash(code_char($int$168), cnt, list($str203$Meta__, $str204$m__));
+        sethash(code_char($int$169), cnt, list($str206$Meta__, $str207$m__));
+        sethash(code_char($int$170), cnt, list($str209$Meta__, $str210$m__));
+        sethash(code_char($int$171), cnt, list($str212$Meta__, $str213$m__));
+        sethash(code_char($int$172), cnt, list($str215$Meta__, $str216$m__));
+        sethash(code_char($int$173), cnt, list($str218$Meta__, $str219$m__));
+        sethash(code_char($int$174), cnt, list($str221$Meta__, $str222$m__));
+        sethash(code_char($int$175), cnt, list($str224$Meta__, $str225$m__));
+        sethash(code_char($int$176), cnt, list($str227$Meta_0, $str228$m_0));
+        sethash(code_char($int$177), cnt, list($str230$Meta_1, $str231$m_1));
+        sethash(code_char($int$178), cnt, list($str233$Meta_2, $str234$m_2));
+        sethash(code_char($int$179), cnt, list($str236$Meta_3, $str237$m_3));
+        sethash(code_char($int$180), cnt, list($str239$Meta_4, $str240$m_4));
+        sethash(code_char($int$181), cnt, list($str242$Meta_5, $str243$m_5));
+        sethash(code_char($int$182), cnt, list($str245$Meta_6, $str246$m_6));
+        sethash(code_char($int$183), cnt, list($str248$Meta_7, $str249$m_7));
+        sethash(code_char($int$184), cnt, list($str251$Meta_8, $str252$m_8));
+        sethash(code_char($int$185), cnt, list($str254$Meta_9, $str255$m_9));
+        sethash(code_char($int$186), cnt, list($str257$Meta__, $str258$m__));
+        sethash(code_char($int$187), cnt, list($str260$Meta__, $str261$m__));
+        sethash(code_char($int$188), cnt, list($str263$Meta__, $str264$m__));
+        sethash(code_char($int$189), cnt, list($str266$Meta__, $str267$m__));
+        sethash(code_char($int$190), cnt, list($str269$Meta__, $str270$m__));
+        sethash(code_char($int$191), cnt, list($str272$Meta__, $str273$m__));
+        sethash(code_char($int$192), cnt, list($str275$Meta__, $str276$m__));
+        sethash(code_char($int$193), cnt, list($str278$Meta_A, $str279$m_A));
+        sethash(code_char($int$194), cnt, list($str281$Meta_B, $str282$m_B));
+        sethash(code_char($int$195), cnt, list($str284$Meta_C, $str285$m_C));
+        sethash(code_char($int$196), cnt, list($str287$Meta_D, $str288$m_D));
+        sethash(code_char($int$197), cnt, list($str290$Meta_E, $str291$m_E));
+        sethash(code_char($int$198), cnt, list($str293$Meta_F, $str294$m_F));
+        sethash(code_char($int$199), cnt, list($str296$Meta_G, $str297$m_G));
+        sethash(code_char($int$200), cnt, list($str299$Meta_H, $str300$m_H));
+        sethash(code_char($int$201), cnt, list($str302$Meta_I, $str303$m_I));
+        sethash(code_char($int$202), cnt, list($str305$Meta_J, $str306$m_J));
+        sethash(code_char($int$203), cnt, list($str308$Meta_K, $str309$m_K));
+        sethash(code_char($int$204), cnt, list($str311$Meta_L, $str312$m_L));
+        sethash(code_char($int$205), cnt, list($str314$Meta_M, $str315$m_M));
+        sethash(code_char($int$206), cnt, list($str317$Meta_N, $str318$m_N));
+        sethash(code_char($int$207), cnt, list($str320$Meta_O, $str321$m_O));
+        sethash(code_char($int$208), cnt, list($str323$Meta_P, $str324$m_P));
+        sethash(code_char($int$209), cnt, list($str326$Meta_Q, $str327$m_Q));
+        sethash(code_char($int$210), cnt, list($str329$Meta_R, $str330$m_R));
+        sethash(code_char($int$211), cnt, list($str332$Meta_S, $str333$m_S));
+        sethash(code_char($int$212), cnt, list($str335$Meta_T, $str336$m_T));
+        sethash(code_char($int$213), cnt, list($str338$Meta_U, $str339$m_U));
+        sethash(code_char($int$214), cnt, list($str341$Meta_V, $str342$m_V));
+        sethash(code_char($int$215), cnt, list($str344$Meta_W, $str345$m_W));
+        sethash(code_char($int$216), cnt, list($str347$Meta_X, $str348$m_X));
+        sethash(code_char($int$217), cnt, list($str350$Meta_Y, $str351$m_Y));
+        sethash(code_char($int$218), cnt, list($str353$Meta_Z, $str354$m_Z));
+        sethash(code_char($int$219), cnt, list($str356$Meta__, $str357$m__));
+        sethash(code_char($int$220), cnt, list($str359$Meta__, $str360$m__));
+        sethash(code_char($int$221), cnt, list($str362$Meta__, $str363$m__));
+        sethash(code_char($int$222), cnt, list($str365$Meta__, $str366$m__));
+        sethash(code_char($int$223), cnt, list($str368$Meta__, $str369$m__));
+        sethash(code_char($int$224), cnt, list($str371$Meta__, $str372$m__));
+        sethash(code_char($int$225), cnt, list($str374$Meta_a, $str375$m_a));
+        sethash(code_char($int$226), cnt, list($str377$Meta_b, $str378$m_b));
+        sethash(code_char($int$227), cnt, list($str380$Meta_c, $str381$m_c));
+        sethash(code_char($int$228), cnt, list($str383$Meta_d, $str384$m_d));
+        sethash(code_char($int$229), cnt, list($str386$Meta_e, $str387$m_e));
+        sethash(code_char($int$230), cnt, list($str389$Meta_f, $str390$m_f));
+        sethash(code_char($int$231), cnt, list($str392$Meta_g, $str393$m_g));
+        sethash(code_char($int$232), cnt, list($str395$Meta_h, $str396$m_h));
+        sethash(code_char($int$233), cnt, list($str398$Meta_i, $str399$m_i));
+        sethash(code_char($int$234), cnt, list($str401$Meta_j, $str402$m_j));
+        sethash(code_char($int$235), cnt, list($str404$Meta_k, $str405$m_k));
+        sethash(code_char($int$236), cnt, list($str407$Meta_l, $str408$m_l));
+        sethash(code_char($int$237), cnt, list($str410$Meta_m, $str411$m_m));
+        sethash(code_char($int$238), cnt, list($str413$Meta_n, $str414$m_n));
+        sethash(code_char($int$239), cnt, list($str416$Meta_o, $str417$m_o));
+        sethash(code_char($int$240), cnt, list($str419$Meta_p, $str420$m_p));
+        sethash(code_char($int$241), cnt, list($str422$Meta_q, $str423$m_q));
+        sethash(code_char($int$242), cnt, list($str425$Meta_r, $str426$m_r));
+        sethash(code_char($int$243), cnt, list($str428$Meta_s, $str429$m_s));
+        sethash(code_char($int$244), cnt, list($str431$Meta_t, $str432$m_t));
+        sethash(code_char($int$245), cnt, list($str434$Meta_u, $str435$m_u));
+        sethash(code_char($int$246), cnt, list($str437$Meta_v, $str438$m_v));
+        sethash(code_char($int$247), cnt, list($str440$Meta_w, $str441$m_w));
+        sethash(code_char($int$248), cnt, list($str443$Meta_x, $str444$m_x));
+        sethash(code_char($int$249), cnt, list($str446$Meta_y, $str447$m_y));
+        sethash(code_char($int$250), cnt, list($str449$Meta_z, $str450$m_z));
+        sethash(code_char($int$251), cnt, list($str452$Meta__, $str453$m__));
+        sethash(code_char($int$252), cnt, list($str455$Meta__, $str456$m__));
+        sethash(code_char($int$253), cnt, list($str458$Meta__, $str459$m__));
+        sethash(code_char($int$254), cnt, list($str461$Meta__, $str462$m__));
+        sethash(code_char($int$255), cnt, list($str464$Meta_Rubout, $str465$m_Rubout));
+        SubLObject cdohash_table = cnt;
+        SubLObject character = SubLNil.NIL;
+        SubLObject names = SubLNil.NIL;
+        Iterator cdohash_iterator = getEntrySetIterator(cdohash_table);
+        try {
+            while (iteratorHasNext(cdohash_iterator)) {
+                Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                character = getEntryKey(cdohash_entry);
+                SubLObject cdolist_list_var;
+                names = cdolist_list_var = getEntryValue(cdohash_entry);
+                SubLObject name = SubLNil.NIL;
+                name = cdolist_list_var.first();
+                while (SubLNil.NIL != cdolist_list_var) {
+                    sethash(name, $name_character_table$.getDynamicValue(), character);
+                    cdolist_list_var = cdolist_list_var.rest();
+                    name = cdolist_list_var.first();
+                } 
+            } 
+        } finally {
+            releaseEntrySetIterator(cdohash_iterator);
+        }
+        return SubLNil.NIL;
     }
 
-    public static SubLFile me;
-    public static String myName = "com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names";
-    @SubL(source = "sublisp/character-names.lisp", position = 427L)
-    private static SubLSymbol $character_names_table$;
-    @SubL(source = "sublisp/character-names.lisp", position = 1478L)
-    private static SubLSymbol $name_character_table$;
-    private static SubLInteger $int$256;
-    private static SubLString $str1$Null;
-    private static SubLString $str2$NUL;
-    private static SubLString $str3$Control_a;
-    private static SubLString $str4$c_a;
-    private static SubLString $str5$Control_b;
-    private static SubLString $str6$c_b;
-    private static SubLString $str7$Control_c;
-    private static SubLString $str8$c_c;
-    private static SubLString $str9$Control_d;
-    private static SubLString $str10$c_d;
-    private static SubLString $str11$Control_e;
-    private static SubLString $str12$c_e;
-    private static SubLString $str13$Control_f;
-    private static SubLString $str14$c_f;
-    private static SubLString $str15$Bell;
-    private static SubLString $str16$BEL;
-    private static SubLString $str17$Backspace;
-    private static SubLString $str18$BS;
-    private static SubLString $str19$Tab;
-    private static SubLString $str20$HT;
-    private static SubLString $str21$Newline;
-    private static SubLString $str22$Linefeed;
-    private static SubLString $str23$Vertical_Tab;
-    private static SubLString $str24$VT;
-    private static SubLString $str25$Page;
-    private static SubLString $str26$FF;
-    private static SubLString $str27$Return;
-    private static SubLString $str28$CR;
-    private static SubLString $str29$Control_n;
-    private static SubLString $str30$c_n;
-    private static SubLString $str31$Control_o;
-    private static SubLString $str32$c_o;
-    private static SubLString $str33$Control_p;
-    private static SubLString $str34$c_p;
-    private static SubLString $str35$Control_q;
-    private static SubLString $str36$c_q;
-    private static SubLString $str37$Control_r;
-    private static SubLString $str38$c_r;
-    private static SubLString $str39$Control_s;
-    private static SubLString $str40$c_s;
-    private static SubLString $str41$Control_t;
-    private static SubLString $str42$c_t;
-    private static SubLInteger $int$21;
-    private static SubLString $str44$Control_u;
-    private static SubLString $str45$c_u;
-    private static SubLInteger $int$22;
-    private static SubLString $str47$Control_v;
-    private static SubLString $str48$c_v;
-    private static SubLInteger $int$23;
-    private static SubLString $str50$Control_w;
-    private static SubLString $str51$c_w;
-    private static SubLInteger $int$24;
-    private static SubLString $str53$Control_x;
-    private static SubLString $str54$c_x;
-    private static SubLInteger $int$25;
-    private static SubLString $str56$Control_y;
-    private static SubLString $str57$c_y;
-    private static SubLInteger $int$26;
-    private static SubLString $str59$Control_z;
-    private static SubLString $str60$c_z;
-    private static SubLInteger $int$27;
-    private static SubLString $str62$Escape;
-    private static SubLString $str63$ESC;
-    private static SubLInteger $int$28;
-    private static SubLString $str65$Control__;
-    private static SubLString $str66$c__;
-    private static SubLInteger $int$29;
-    private static SubLString $str68$Control__;
-    private static SubLString $str69$c__;
-    private static SubLInteger $int$30;
-    private static SubLString $str71$Control__;
-    private static SubLString $str72$c__;
-    private static SubLInteger $int$31;
-    private static SubLString $str74$Control__;
-    private static SubLString $str75$c__;
-    private static SubLInteger $int$32;
-    private static SubLString $str77$Space;
-    private static SubLString $str78$SP;
-    private static SubLInteger $int$127;
-    private static SubLString $str80$Rubout;
-    private static SubLString $str81$DEL;
-    private static SubLInteger $int$128;
-    private static SubLString $str83$Meta_Null;
-    private static SubLString $str84$m_Null;
-    private static SubLInteger $int$129;
-    private static SubLString $str86$Control_Meta_a;
-    private static SubLString $str87$c_m_a;
-    private static SubLInteger $int$130;
-    private static SubLString $str89$Control_Meta_b;
-    private static SubLString $str90$c_m_b;
-    private static SubLInteger $int$131;
-    private static SubLString $str92$Control_Meta_c;
-    private static SubLString $str93$c_m_c;
-    private static SubLInteger $int$132;
-    private static SubLString $str95$Control_Meta_d;
-    private static SubLString $str96$c_m_d;
-    private static SubLInteger $int$133;
-    private static SubLString $str98$Control_Meta_e;
-    private static SubLString $str99$c_m_e;
-    private static SubLInteger $int$134;
-    private static SubLString $str101$Control_Meta_f;
-    private static SubLString $str102$c_m_f;
-    private static SubLInteger $int$135;
-    private static SubLString $str104$Meta_Bell;
-    private static SubLString $str105$m_Bell;
-    private static SubLInteger $int$136;
-    private static SubLString $str107$Meta_Backspace;
-    private static SubLString $str108$m_Backspace;
-    private static SubLInteger $int$137;
-    private static SubLString $str110$Meta_Tab;
-    private static SubLString $str111$m_Tab;
-    private static SubLInteger $int$138;
-    private static SubLString $str113$Meta_Newline;
-    private static SubLString $str114$m_Newline;
-    private static SubLInteger $int$139;
-    private static SubLString $str116$Meta_Vertical_Tab;
-    private static SubLString $str117$m_Vertical_Tab;
-    private static SubLInteger $int$140;
-    private static SubLString $str119$Meta_Page;
-    private static SubLString $str120$m_Page;
-    private static SubLInteger $int$141;
-    private static SubLString $str122$Meta_Return;
-    private static SubLString $str123$m_Return;
-    private static SubLInteger $int$142;
-    private static SubLString $str125$Control_Meta_n;
-    private static SubLString $str126$c_m_n;
-    private static SubLInteger $int$143;
-    private static SubLString $str128$Control_Meta_o;
-    private static SubLString $str129$c_m_o;
-    private static SubLInteger $int$144;
-    private static SubLString $str131$Control_Meta_p;
-    private static SubLString $str132$c_m_p;
-    private static SubLInteger $int$145;
-    private static SubLString $str134$Control_Meta_q;
-    private static SubLString $str135$c_m_q;
-    private static SubLInteger $int$146;
-    private static SubLString $str137$Control_Meta_r;
-    private static SubLString $str138$c_m_r;
-    private static SubLInteger $int$147;
-    private static SubLString $str140$Control_Meta_s;
-    private static SubLString $str141$c_m_s;
-    private static SubLInteger $int$148;
-    private static SubLString $str143$Control_Meta_t;
-    private static SubLString $str144$c_m_t;
-    private static SubLInteger $int$149;
-    private static SubLString $str146$Control_Meta_u;
-    private static SubLString $str147$c_m_u;
-    private static SubLInteger $int$150;
-    private static SubLString $str149$Control_Meta_v;
-    private static SubLString $str150$c_m_v;
-    private static SubLInteger $int$151;
-    private static SubLString $str152$Control_Meta_w;
-    private static SubLString $str153$c_m_w;
-    private static SubLInteger $int$152;
-    private static SubLString $str155$Control_Meta_x;
-    private static SubLString $str156$c_m_x;
-    private static SubLInteger $int$153;
-    private static SubLString $str158$Control_Meta_y;
-    private static SubLString $str159$c_m_y;
-    private static SubLInteger $int$154;
-    private static SubLString $str161$Control_Meta_z;
-    private static SubLString $str162$c_m_z;
-    private static SubLInteger $int$155;
-    private static SubLString $str164$Meta_Escape;
-    private static SubLString $str165$m_Escape;
-    private static SubLInteger $int$156;
-    private static SubLString $str167$Control_Meta__;
-    private static SubLString $str168$c_m__;
-    private static SubLInteger $int$157;
-    private static SubLString $str170$Control_Meta__;
-    private static SubLString $str171$c_m__;
-    private static SubLInteger $int$158;
-    private static SubLString $str173$Control_Meta__;
-    private static SubLString $str174$c_m__;
-    private static SubLInteger $int$159;
-    private static SubLString $str176$Control_Meta__;
-    private static SubLString $str177$c_m__;
-    private static SubLInteger $int$160;
-    private static SubLString $str179$Meta_Space;
-    private static SubLString $str180$m_Space;
-    private static SubLInteger $int$161;
-    private static SubLString $str182$Meta__;
-    private static SubLString $str183$m__;
-    private static SubLInteger $int$162;
-    private static SubLString $str185$Meta__;
-    private static SubLString $str186$m__;
-    private static SubLInteger $int$163;
-    private static SubLString $str188$Meta__;
-    private static SubLString $str189$m__;
-    private static SubLInteger $int$164;
-    private static SubLString $str191$Meta__;
-    private static SubLString $str192$m__;
-    private static SubLInteger $int$165;
-    private static SubLString $str194$Meta__;
-    private static SubLString $str195$m__;
-    private static SubLInteger $int$166;
-    private static SubLString $str197$Meta__;
-    private static SubLString $str198$m__;
-    private static SubLInteger $int$167;
-    private static SubLString $str200$Meta__;
-    private static SubLString $str201$m__;
-    private static SubLInteger $int$168;
-    private static SubLString $str203$Meta__;
-    private static SubLString $str204$m__;
-    private static SubLInteger $int$169;
-    private static SubLString $str206$Meta__;
-    private static SubLString $str207$m__;
-    private static SubLInteger $int$170;
-    private static SubLString $str209$Meta__;
-    private static SubLString $str210$m__;
-    private static SubLInteger $int$171;
-    private static SubLString $str212$Meta__;
-    private static SubLString $str213$m__;
-    private static SubLInteger $int$172;
-    private static SubLString $str215$Meta__;
-    private static SubLString $str216$m__;
-    private static SubLInteger $int$173;
-    private static SubLString $str218$Meta__;
-    private static SubLString $str219$m__;
-    private static SubLInteger $int$174;
-    private static SubLString $str221$Meta__;
-    private static SubLString $str222$m__;
-    private static SubLInteger $int$175;
-    private static SubLString $str224$Meta__;
-    private static SubLString $str225$m__;
-    private static SubLInteger $int$176;
-    private static SubLString $str227$Meta_0;
-    private static SubLString $str228$m_0;
-    private static SubLInteger $int$177;
-    private static SubLString $str230$Meta_1;
-    private static SubLString $str231$m_1;
-    private static SubLInteger $int$178;
-    private static SubLString $str233$Meta_2;
-    private static SubLString $str234$m_2;
-    private static SubLInteger $int$179;
-    private static SubLString $str236$Meta_3;
-    private static SubLString $str237$m_3;
-    private static SubLInteger $int$180;
-    private static SubLString $str239$Meta_4;
-    private static SubLString $str240$m_4;
-    private static SubLInteger $int$181;
-    private static SubLString $str242$Meta_5;
-    private static SubLString $str243$m_5;
-    private static SubLInteger $int$182;
-    private static SubLString $str245$Meta_6;
-    private static SubLString $str246$m_6;
-    private static SubLInteger $int$183;
-    private static SubLString $str248$Meta_7;
-    private static SubLString $str249$m_7;
-    private static SubLInteger $int$184;
-    private static SubLString $str251$Meta_8;
-    private static SubLString $str252$m_8;
-    private static SubLInteger $int$185;
-    private static SubLString $str254$Meta_9;
-    private static SubLString $str255$m_9;
-    private static SubLInteger $int$186;
-    private static SubLString $str257$Meta__;
-    private static SubLString $str258$m__;
-    private static SubLInteger $int$187;
-    private static SubLString $str260$Meta__;
-    private static SubLString $str261$m__;
-    private static SubLInteger $int$188;
-    private static SubLString $str263$Meta__;
-    private static SubLString $str264$m__;
-    private static SubLInteger $int$189;
-    private static SubLString $str266$Meta__;
-    private static SubLString $str267$m__;
-    private static SubLInteger $int$190;
-    private static SubLString $str269$Meta__;
-    private static SubLString $str270$m__;
-    private static SubLInteger $int$191;
-    private static SubLString $str272$Meta__;
-    private static SubLString $str273$m__;
-    private static SubLInteger $int$192;
-    private static SubLString $str275$Meta__;
-    private static SubLString $str276$m__;
-    private static SubLInteger $int$193;
-    private static SubLString $str278$Meta_A;
-    private static SubLString $str279$m_A;
-    private static SubLInteger $int$194;
-    private static SubLString $str281$Meta_B;
-    private static SubLString $str282$m_B;
-    private static SubLInteger $int$195;
-    private static SubLString $str284$Meta_C;
-    private static SubLString $str285$m_C;
-    private static SubLInteger $int$196;
-    private static SubLString $str287$Meta_D;
-    private static SubLString $str288$m_D;
-    private static SubLInteger $int$197;
-    private static SubLString $str290$Meta_E;
-    private static SubLString $str291$m_E;
-    private static SubLInteger $int$198;
-    private static SubLString $str293$Meta_F;
-    private static SubLString $str294$m_F;
-    private static SubLInteger $int$199;
-    private static SubLString $str296$Meta_G;
-    private static SubLString $str297$m_G;
-    private static SubLInteger $int$200;
-    private static SubLString $str299$Meta_H;
-    private static SubLString $str300$m_H;
-    private static SubLInteger $int$201;
-    private static SubLString $str302$Meta_I;
-    private static SubLString $str303$m_I;
-    private static SubLInteger $int$202;
-    private static SubLString $str305$Meta_J;
-    private static SubLString $str306$m_J;
-    private static SubLInteger $int$203;
-    private static SubLString $str308$Meta_K;
-    private static SubLString $str309$m_K;
-    private static SubLInteger $int$204;
-    private static SubLString $str311$Meta_L;
-    private static SubLString $str312$m_L;
-    private static SubLInteger $int$205;
-    private static SubLString $str314$Meta_M;
-    private static SubLString $str315$m_M;
-    private static SubLInteger $int$206;
-    private static SubLString $str317$Meta_N;
-    private static SubLString $str318$m_N;
-    private static SubLInteger $int$207;
-    private static SubLString $str320$Meta_O;
-    private static SubLString $str321$m_O;
-    private static SubLInteger $int$208;
-    private static SubLString $str323$Meta_P;
-    private static SubLString $str324$m_P;
-    private static SubLInteger $int$209;
-    private static SubLString $str326$Meta_Q;
-    private static SubLString $str327$m_Q;
-    private static SubLInteger $int$210;
-    private static SubLString $str329$Meta_R;
-    private static SubLString $str330$m_R;
-    private static SubLInteger $int$211;
-    private static SubLString $str332$Meta_S;
-    private static SubLString $str333$m_S;
-    private static SubLInteger $int$212;
-    private static SubLString $str335$Meta_T;
-    private static SubLString $str336$m_T;
-    private static SubLInteger $int$213;
-    private static SubLString $str338$Meta_U;
-    private static SubLString $str339$m_U;
-    private static SubLInteger $int$214;
-    private static SubLString $str341$Meta_V;
-    private static SubLString $str342$m_V;
-    private static SubLInteger $int$215;
-    private static SubLString $str344$Meta_W;
-    private static SubLString $str345$m_W;
-    private static SubLInteger $int$216;
-    private static SubLString $str347$Meta_X;
-    private static SubLString $str348$m_X;
-    private static SubLInteger $int$217;
-    private static SubLString $str350$Meta_Y;
-    private static SubLString $str351$m_Y;
-    private static SubLInteger $int$218;
-    private static SubLString $str353$Meta_Z;
-    private static SubLString $str354$m_Z;
-    private static SubLInteger $int$219;
-    private static SubLString $str356$Meta__;
-    private static SubLString $str357$m__;
-    private static SubLInteger $int$220;
-    private static SubLString $str359$Meta__;
-    private static SubLString $str360$m__;
-    private static SubLInteger $int$221;
-    private static SubLString $str362$Meta__;
-    private static SubLString $str363$m__;
-    private static SubLInteger $int$222;
-    private static SubLString $str365$Meta__;
-    private static SubLString $str366$m__;
-    private static SubLInteger $int$223;
-    private static SubLString $str368$Meta__;
-    private static SubLString $str369$m__;
-    private static SubLInteger $int$224;
-    private static SubLString $str371$Meta__;
-    private static SubLString $str372$m__;
-    private static SubLInteger $int$225;
-    private static SubLString $str374$Meta_a;
-    private static SubLString $str375$m_a;
-    private static SubLInteger $int$226;
-    private static SubLString $str377$Meta_b;
-    private static SubLString $str378$m_b;
-    private static SubLInteger $int$227;
-    private static SubLString $str380$Meta_c;
-    private static SubLString $str381$m_c;
-    private static SubLInteger $int$228;
-    private static SubLString $str383$Meta_d;
-    private static SubLString $str384$m_d;
-    private static SubLInteger $int$229;
-    private static SubLString $str386$Meta_e;
-    private static SubLString $str387$m_e;
-    private static SubLInteger $int$230;
-    private static SubLString $str389$Meta_f;
-    private static SubLString $str390$m_f;
-    private static SubLInteger $int$231;
-    private static SubLString $str392$Meta_g;
-    private static SubLString $str393$m_g;
-    private static SubLInteger $int$232;
-    private static SubLString $str395$Meta_h;
-    private static SubLString $str396$m_h;
-    private static SubLInteger $int$233;
-    private static SubLString $str398$Meta_i;
-    private static SubLString $str399$m_i;
-    private static SubLInteger $int$234;
-    private static SubLString $str401$Meta_j;
-    private static SubLString $str402$m_j;
-    private static SubLInteger $int$235;
-    private static SubLString $str404$Meta_k;
-    private static SubLString $str405$m_k;
-    private static SubLInteger $int$236;
-    private static SubLString $str407$Meta_l;
-    private static SubLString $str408$m_l;
-    private static SubLInteger $int$237;
-    private static SubLString $str410$Meta_m;
-    private static SubLString $str411$m_m;
-    private static SubLInteger $int$238;
-    private static SubLString $str413$Meta_n;
-    private static SubLString $str414$m_n;
-    private static SubLInteger $int$239;
-    private static SubLString $str416$Meta_o;
-    private static SubLString $str417$m_o;
-    private static SubLInteger $int$240;
-    private static SubLString $str419$Meta_p;
-    private static SubLString $str420$m_p;
-    private static SubLInteger $int$241;
-    private static SubLString $str422$Meta_q;
-    private static SubLString $str423$m_q;
-    private static SubLInteger $int$242;
-    private static SubLString $str425$Meta_r;
-    private static SubLString $str426$m_r;
-    private static SubLInteger $int$243;
-    private static SubLString $str428$Meta_s;
-    private static SubLString $str429$m_s;
-    private static SubLInteger $int$244;
-    private static SubLString $str431$Meta_t;
-    private static SubLString $str432$m_t;
-    private static SubLInteger $int$245;
-    private static SubLString $str434$Meta_u;
-    private static SubLString $str435$m_u;
-    private static SubLInteger $int$246;
-    private static SubLString $str437$Meta_v;
-    private static SubLString $str438$m_v;
-    private static SubLInteger $int$247;
-    private static SubLString $str440$Meta_w;
-    private static SubLString $str441$m_w;
-    private static SubLInteger $int$248;
-    private static SubLString $str443$Meta_x;
-    private static SubLString $str444$m_x;
-    private static SubLInteger $int$249;
-    private static SubLString $str446$Meta_y;
-    private static SubLString $str447$m_y;
-    private static SubLInteger $int$250;
-    private static SubLString $str449$Meta_z;
-    private static SubLString $str450$m_z;
-    private static SubLInteger $int$251;
-    private static SubLString $str452$Meta__;
-    private static SubLString $str453$m__;
-    private static SubLInteger $int$252;
-    private static SubLString $str455$Meta__;
-    private static SubLString $str456$m__;
-    private static SubLInteger $int$253;
-    private static SubLString $str458$Meta__;
-    private static SubLString $str459$m__;
-    private static SubLInteger $int$254;
-    private static SubLString $str461$Meta__;
-    private static SubLString $str462$m__;
-    private static SubLInteger $int$255;
-    private static SubLString $str464$Meta_Rubout;
-    private static SubLString $str465$m_Rubout;
+    public static final SubLFile me = new character_names();
+
+    public static final String myName = "com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names";
+
+    // defvar
+    // Definitions
+    private static final SubLSymbol $character_names_table$ = makeSymbol("*CHARACTER-NAMES-TABLE*");
+
+    // defvar
+    private static final SubLSymbol $name_character_table$ = makeSymbol("*NAME-CHARACTER-TABLE*");
+
+
+
+    public static final SubLString $$$Null = makeString("Null");
+
+    public static final SubLString $$$NUL = makeString("NUL");
+
+    public static final SubLString $str3$Control_a = makeString("Control-a");
+
+    public static final SubLString $str4$c_a = makeString("c-a");
+
+    public static final SubLString $str5$Control_b = makeString("Control-b");
+
+    public static final SubLString $str6$c_b = makeString("c-b");
+
+    public static final SubLString $str7$Control_c = makeString("Control-c");
+
+    public static final SubLString $str8$c_c = makeString("c-c");
+
+    public static final SubLString $str9$Control_d = makeString("Control-d");
+
+    public static final SubLString $str10$c_d = makeString("c-d");
+
+    public static final SubLString $str11$Control_e = makeString("Control-e");
+
+    public static final SubLString $str12$c_e = makeString("c-e");
+
+    public static final SubLString $str13$Control_f = makeString("Control-f");
+
+    public static final SubLString $str14$c_f = makeString("c-f");
+
+    public static final SubLString $$$Bell = makeString("Bell");
+
+    public static final SubLString $$$BEL = makeString("BEL");
+
+    public static final SubLString $$$Backspace = makeString("Backspace");
+
+    public static final SubLString $$$BS = makeString("BS");
+
+    public static final SubLString $$$Tab = makeString("Tab");
+
+    public static final SubLString $$$HT = makeString("HT");
+
+    public static final SubLString $$$Newline = makeString("Newline");
+
+    public static final SubLString $$$Linefeed = makeString("Linefeed");
+
+    public static final SubLString $str23$Vertical_Tab = makeString("Vertical-Tab");
+
+    public static final SubLString $$$VT = makeString("VT");
+
+    public static final SubLString $$$Page = makeString("Page");
+
+    public static final SubLString $$$FF = makeString("FF");
+
+    public static final SubLString $$$Return = makeString("Return");
+
+    public static final SubLString $$$CR = makeString("CR");
+
+    public static final SubLString $str29$Control_n = makeString("Control-n");
+
+    public static final SubLString $str30$c_n = makeString("c-n");
+
+    public static final SubLString $str31$Control_o = makeString("Control-o");
+
+    public static final SubLString $str32$c_o = makeString("c-o");
+
+    public static final SubLString $str33$Control_p = makeString("Control-p");
+
+    public static final SubLString $str34$c_p = makeString("c-p");
+
+    public static final SubLString $str35$Control_q = makeString("Control-q");
+
+    public static final SubLString $str36$c_q = makeString("c-q");
+
+    public static final SubLString $str37$Control_r = makeString("Control-r");
+
+    public static final SubLString $str38$c_r = makeString("c-r");
+
+    public static final SubLString $str39$Control_s = makeString("Control-s");
+
+    public static final SubLString $str40$c_s = makeString("c-s");
+
+    public static final SubLString $str41$Control_t = makeString("Control-t");
+
+    public static final SubLString $str42$c_t = makeString("c-t");
+
+    private static final SubLInteger $int$21 = makeInteger(21);
+
+    public static final SubLString $str44$Control_u = makeString("Control-u");
+
+    public static final SubLString $str45$c_u = makeString("c-u");
+
+    private static final SubLInteger $int$22 = makeInteger(22);
+
+    public static final SubLString $str47$Control_v = makeString("Control-v");
+
+    public static final SubLString $str48$c_v = makeString("c-v");
+
+    private static final SubLInteger $int$23 = makeInteger(23);
+
+    public static final SubLString $str50$Control_w = makeString("Control-w");
+
+    public static final SubLString $str51$c_w = makeString("c-w");
+
+    private static final SubLInteger $int$24 = makeInteger(24);
+
+    public static final SubLString $str53$Control_x = makeString("Control-x");
+
+    public static final SubLString $str54$c_x = makeString("c-x");
+
+    private static final SubLInteger $int$25 = makeInteger(25);
+
+    public static final SubLString $str56$Control_y = makeString("Control-y");
+
+    public static final SubLString $str57$c_y = makeString("c-y");
+
+    private static final SubLInteger $int$26 = makeInteger(26);
+
+    public static final SubLString $str59$Control_z = makeString("Control-z");
+
+    public static final SubLString $str60$c_z = makeString("c-z");
+
+    private static final SubLInteger $int$27 = makeInteger(27);
+
+    public static final SubLString $$$Escape = makeString("Escape");
+
+    public static final SubLString $$$ESC = makeString("ESC");
+
+    private static final SubLInteger $int$28 = makeInteger(28);
+
+    public static final SubLString $str65$Control__ = makeString("Control-\\");
+
+    public static final SubLString $str66$c__ = makeString("c-\\");
+
+    private static final SubLInteger $int$29 = makeInteger(29);
+
+    public static final SubLString $str68$Control__ = makeString("Control-]");
+
+    public static final SubLString $str69$c__ = makeString("c-]");
+
+    private static final SubLInteger $int$30 = makeInteger(30);
+
+    public static final SubLString $str71$Control__ = makeString("Control-^");
+
+    public static final SubLString $str72$c__ = makeString("c-^");
+
+    private static final SubLInteger $int$31 = makeInteger(31);
+
+    public static final SubLString $str74$Control__ = makeString("Control-_");
+
+    public static final SubLString $str75$c__ = makeString("c-_");
+
+
+
+    public static final SubLString $$$Space = makeString("Space");
+
+    public static final SubLString $$$SP = makeString("SP");
+
+    private static final SubLInteger $int$127 = makeInteger(127);
+
+    public static final SubLString $$$Rubout = makeString("Rubout");
+
+    public static final SubLString $$$DEL = makeString("DEL");
+
+    private static final SubLInteger $int$128 = makeInteger(128);
+
+    public static final SubLString $str83$Meta_Null = makeString("Meta-Null");
+
+    public static final SubLString $str84$m_Null = makeString("m-Null");
+
+    private static final SubLInteger $int$129 = makeInteger(129);
+
+    public static final SubLString $str86$Control_Meta_a = makeString("Control-Meta-a");
+
+    public static final SubLString $str87$c_m_a = makeString("c-m-a");
+
+    private static final SubLInteger $int$130 = makeInteger(130);
+
+    public static final SubLString $str89$Control_Meta_b = makeString("Control-Meta-b");
+
+    public static final SubLString $str90$c_m_b = makeString("c-m-b");
+
+    private static final SubLInteger $int$131 = makeInteger(131);
+
+    public static final SubLString $str92$Control_Meta_c = makeString("Control-Meta-c");
+
+    public static final SubLString $str93$c_m_c = makeString("c-m-c");
+
+    private static final SubLInteger $int$132 = makeInteger(132);
+
+    public static final SubLString $str95$Control_Meta_d = makeString("Control-Meta-d");
+
+    public static final SubLString $str96$c_m_d = makeString("c-m-d");
+
+    private static final SubLInteger $int$133 = makeInteger(133);
+
+    public static final SubLString $str98$Control_Meta_e = makeString("Control-Meta-e");
+
+    public static final SubLString $str99$c_m_e = makeString("c-m-e");
+
+    private static final SubLInteger $int$134 = makeInteger(134);
+
+    public static final SubLString $str101$Control_Meta_f = makeString("Control-Meta-f");
+
+    public static final SubLString $str102$c_m_f = makeString("c-m-f");
+
+    private static final SubLInteger $int$135 = makeInteger(135);
+
+    public static final SubLString $str104$Meta_Bell = makeString("Meta-Bell");
+
+    public static final SubLString $str105$m_Bell = makeString("m-Bell");
+
+    private static final SubLInteger $int$136 = makeInteger(136);
+
+    public static final SubLString $str107$Meta_Backspace = makeString("Meta-Backspace");
+
+    public static final SubLString $str108$m_Backspace = makeString("m-Backspace");
+
+    private static final SubLInteger $int$137 = makeInteger(137);
+
+    public static final SubLString $str110$Meta_Tab = makeString("Meta-Tab");
+
+    public static final SubLString $str111$m_Tab = makeString("m-Tab");
+
+    private static final SubLInteger $int$138 = makeInteger(138);
+
+    public static final SubLString $str113$Meta_Newline = makeString("Meta-Newline");
+
+    public static final SubLString $str114$m_Newline = makeString("m-Newline");
+
+    private static final SubLInteger $int$139 = makeInteger(139);
+
+    public static final SubLString $str116$Meta_Vertical_Tab = makeString("Meta-Vertical-Tab");
+
+    public static final SubLString $str117$m_Vertical_Tab = makeString("m-Vertical-Tab");
+
+    private static final SubLInteger $int$140 = makeInteger(140);
+
+    public static final SubLString $str119$Meta_Page = makeString("Meta-Page");
+
+    public static final SubLString $str120$m_Page = makeString("m-Page");
+
+    private static final SubLInteger $int$141 = makeInteger(141);
+
+    public static final SubLString $str122$Meta_Return = makeString("Meta-Return");
+
+    public static final SubLString $str123$m_Return = makeString("m-Return");
+
+    private static final SubLInteger $int$142 = makeInteger(142);
+
+    public static final SubLString $str125$Control_Meta_n = makeString("Control-Meta-n");
+
+    public static final SubLString $str126$c_m_n = makeString("c-m-n");
+
+    private static final SubLInteger $int$143 = makeInteger(143);
+
+    public static final SubLString $str128$Control_Meta_o = makeString("Control-Meta-o");
+
+    public static final SubLString $str129$c_m_o = makeString("c-m-o");
+
+    private static final SubLInteger $int$144 = makeInteger(144);
+
+    public static final SubLString $str131$Control_Meta_p = makeString("Control-Meta-p");
+
+    public static final SubLString $str132$c_m_p = makeString("c-m-p");
+
+    private static final SubLInteger $int$145 = makeInteger(145);
+
+    public static final SubLString $str134$Control_Meta_q = makeString("Control-Meta-q");
+
+    public static final SubLString $str135$c_m_q = makeString("c-m-q");
+
+    private static final SubLInteger $int$146 = makeInteger(146);
+
+    public static final SubLString $str137$Control_Meta_r = makeString("Control-Meta-r");
+
+    public static final SubLString $str138$c_m_r = makeString("c-m-r");
+
+    private static final SubLInteger $int$147 = makeInteger(147);
+
+    public static final SubLString $str140$Control_Meta_s = makeString("Control-Meta-s");
+
+    public static final SubLString $str141$c_m_s = makeString("c-m-s");
+
+    private static final SubLInteger $int$148 = makeInteger(148);
+
+    public static final SubLString $str143$Control_Meta_t = makeString("Control-Meta-t");
+
+    public static final SubLString $str144$c_m_t = makeString("c-m-t");
+
+    private static final SubLInteger $int$149 = makeInteger(149);
+
+    public static final SubLString $str146$Control_Meta_u = makeString("Control-Meta-u");
+
+    public static final SubLString $str147$c_m_u = makeString("c-m-u");
+
+    private static final SubLInteger $int$150 = makeInteger(150);
+
+    public static final SubLString $str149$Control_Meta_v = makeString("Control-Meta-v");
+
+    public static final SubLString $str150$c_m_v = makeString("c-m-v");
+
+    private static final SubLInteger $int$151 = makeInteger(151);
+
+    public static final SubLString $str152$Control_Meta_w = makeString("Control-Meta-w");
+
+    public static final SubLString $str153$c_m_w = makeString("c-m-w");
+
+    private static final SubLInteger $int$152 = makeInteger(152);
+
+    public static final SubLString $str155$Control_Meta_x = makeString("Control-Meta-x");
+
+    public static final SubLString $str156$c_m_x = makeString("c-m-x");
+
+    private static final SubLInteger $int$153 = makeInteger(153);
+
+    public static final SubLString $str158$Control_Meta_y = makeString("Control-Meta-y");
+
+    public static final SubLString $str159$c_m_y = makeString("c-m-y");
+
+    private static final SubLInteger $int$154 = makeInteger(154);
+
+    public static final SubLString $str161$Control_Meta_z = makeString("Control-Meta-z");
+
+    public static final SubLString $str162$c_m_z = makeString("c-m-z");
+
+    private static final SubLInteger $int$155 = makeInteger(155);
+
+    public static final SubLString $str164$Meta_Escape = makeString("Meta-Escape");
+
+    public static final SubLString $str165$m_Escape = makeString("m-Escape");
+
+    private static final SubLInteger $int$156 = makeInteger(156);
+
+    public static final SubLString $str167$Control_Meta__ = makeString("Control-Meta-\\");
+
+    public static final SubLString $str168$c_m__ = makeString("c-m-\\");
+
+    private static final SubLInteger $int$157 = makeInteger(157);
+
+    public static final SubLString $str170$Control_Meta__ = makeString("Control-Meta-]");
+
+    public static final SubLString $str171$c_m__ = makeString("c-m-]");
+
+    private static final SubLInteger $int$158 = makeInteger(158);
+
+    public static final SubLString $str173$Control_Meta__ = makeString("Control-Meta-^");
+
+    public static final SubLString $str174$c_m__ = makeString("c-m-^");
+
+    private static final SubLInteger $int$159 = makeInteger(159);
+
+    public static final SubLString $str176$Control_Meta__ = makeString("Control-Meta-_");
+
+    public static final SubLString $str177$c_m__ = makeString("c-m-_");
+
+    private static final SubLInteger $int$160 = makeInteger(160);
+
+    public static final SubLString $str179$Meta_Space = makeString("Meta-Space");
+
+    public static final SubLString $str180$m_Space = makeString("m-Space");
+
+    private static final SubLInteger $int$161 = makeInteger(161);
+
+    public static final SubLString $str182$Meta__ = makeString("Meta-!");
+
+    public static final SubLString $str183$m__ = makeString("m-!");
+
+    private static final SubLInteger $int$162 = makeInteger(162);
+
+    public static final SubLString $str185$Meta__ = makeString("Meta-\"");
+
+    public static final SubLString $str186$m__ = makeString("m-\"");
+
+    private static final SubLInteger $int$163 = makeInteger(163);
+
+    public static final SubLString $str188$Meta__ = makeString("Meta-#");
+
+    public static final SubLString $str189$m__ = makeString("m-#");
+
+    private static final SubLInteger $int$164 = makeInteger(164);
+
+    public static final SubLString $str191$Meta__ = makeString("Meta-$");
+
+    public static final SubLString $str192$m__ = makeString("m-$");
+
+    private static final SubLInteger $int$165 = makeInteger(165);
+
+    public static final SubLString $str194$Meta__ = makeString("Meta-%");
+
+    public static final SubLString $str195$m__ = makeString("m-%");
+
+    private static final SubLInteger $int$166 = makeInteger(166);
+
+    public static final SubLString $str197$Meta__ = makeString("Meta-&");
+
+    public static final SubLString $str198$m__ = makeString("m-&");
+
+    private static final SubLInteger $int$167 = makeInteger(167);
+
+    public static final SubLString $str200$Meta__ = makeString("Meta-'");
+
+    public static final SubLString $str201$m__ = makeString("m-'");
+
+    private static final SubLInteger $int$168 = makeInteger(168);
+
+    public static final SubLString $str203$Meta__ = makeString("Meta-(");
+
+    public static final SubLString $str204$m__ = makeString("m-(");
+
+    private static final SubLInteger $int$169 = makeInteger(169);
+
+    public static final SubLString $str206$Meta__ = makeString("Meta-)");
+
+    public static final SubLString $str207$m__ = makeString("m-)");
+
+    private static final SubLInteger $int$170 = makeInteger(170);
+
+    public static final SubLString $str209$Meta__ = makeString("Meta-*");
+
+    public static final SubLString $str210$m__ = makeString("m-*");
+
+    private static final SubLInteger $int$171 = makeInteger(171);
+
+    public static final SubLString $str212$Meta__ = makeString("Meta-+");
+
+    public static final SubLString $str213$m__ = makeString("m-+");
+
+    private static final SubLInteger $int$172 = makeInteger(172);
+
+    public static final SubLString $str215$Meta__ = makeString("Meta-,");
+
+    public static final SubLString $str216$m__ = makeString("m-,");
+
+    private static final SubLInteger $int$173 = makeInteger(173);
+
+    public static final SubLString $str218$Meta__ = makeString("Meta--");
+
+    public static final SubLString $str219$m__ = makeString("m--");
+
+    private static final SubLInteger $int$174 = makeInteger(174);
+
+    public static final SubLString $str221$Meta__ = makeString("Meta-.");
+
+    public static final SubLString $str222$m__ = makeString("m-.");
+
+    private static final SubLInteger $int$175 = makeInteger(175);
+
+    public static final SubLString $str224$Meta__ = makeString("Meta-/");
+
+    public static final SubLString $str225$m__ = makeString("m-/");
+
+    private static final SubLInteger $int$176 = makeInteger(176);
+
+    public static final SubLString $str227$Meta_0 = makeString("Meta-0");
+
+    public static final SubLString $str228$m_0 = makeString("m-0");
+
+    private static final SubLInteger $int$177 = makeInteger(177);
+
+    public static final SubLString $str230$Meta_1 = makeString("Meta-1");
+
+    public static final SubLString $str231$m_1 = makeString("m-1");
+
+    private static final SubLInteger $int$178 = makeInteger(178);
+
+    public static final SubLString $str233$Meta_2 = makeString("Meta-2");
+
+    public static final SubLString $str234$m_2 = makeString("m-2");
+
+    private static final SubLInteger $int$179 = makeInteger(179);
+
+    public static final SubLString $str236$Meta_3 = makeString("Meta-3");
+
+    public static final SubLString $str237$m_3 = makeString("m-3");
+
+    private static final SubLInteger $int$180 = makeInteger(180);
+
+    public static final SubLString $str239$Meta_4 = makeString("Meta-4");
+
+    public static final SubLString $str240$m_4 = makeString("m-4");
+
+    private static final SubLInteger $int$181 = makeInteger(181);
+
+    public static final SubLString $str242$Meta_5 = makeString("Meta-5");
+
+    public static final SubLString $str243$m_5 = makeString("m-5");
+
+    private static final SubLInteger $int$182 = makeInteger(182);
+
+    public static final SubLString $str245$Meta_6 = makeString("Meta-6");
+
+    public static final SubLString $str246$m_6 = makeString("m-6");
+
+    private static final SubLInteger $int$183 = makeInteger(183);
+
+    public static final SubLString $str248$Meta_7 = makeString("Meta-7");
+
+    public static final SubLString $str249$m_7 = makeString("m-7");
+
+    private static final SubLInteger $int$184 = makeInteger(184);
+
+    public static final SubLString $str251$Meta_8 = makeString("Meta-8");
+
+    public static final SubLString $str252$m_8 = makeString("m-8");
+
+    private static final SubLInteger $int$185 = makeInteger(185);
+
+    public static final SubLString $str254$Meta_9 = makeString("Meta-9");
+
+    public static final SubLString $str255$m_9 = makeString("m-9");
+
+    private static final SubLInteger $int$186 = makeInteger(186);
+
+    public static final SubLString $str257$Meta__ = makeString("Meta-:");
+
+    public static final SubLString $str258$m__ = makeString("m-:");
+
+    private static final SubLInteger $int$187 = makeInteger(187);
+
+    public static final SubLString $str260$Meta__ = makeString("Meta-;");
+
+    public static final SubLString $str261$m__ = makeString("m-;");
+
+    private static final SubLInteger $int$188 = makeInteger(188);
+
+    public static final SubLString $str263$Meta__ = makeString("Meta-<");
+
+    public static final SubLString $str264$m__ = makeString("m-<");
+
+    private static final SubLInteger $int$189 = makeInteger(189);
+
+    public static final SubLString $str266$Meta__ = makeString("Meta-=");
+
+    public static final SubLString $str267$m__ = makeString("m-=");
+
+    private static final SubLInteger $int$190 = makeInteger(190);
+
+    public static final SubLString $str269$Meta__ = makeString("Meta->");
+
+    public static final SubLString $str270$m__ = makeString("m->");
+
+    private static final SubLInteger $int$191 = makeInteger(191);
+
+    public static final SubLString $str272$Meta__ = makeString("Meta-?");
+
+    public static final SubLString $str273$m__ = makeString("m-?");
+
+    private static final SubLInteger $int$192 = makeInteger(192);
+
+    public static final SubLString $str275$Meta__ = makeString("Meta-@");
+
+    public static final SubLString $str276$m__ = makeString("m-@");
+
+    private static final SubLInteger $int$193 = makeInteger(193);
+
+    public static final SubLString $str278$Meta_A = makeString("Meta-A");
+
+    public static final SubLString $str279$m_A = makeString("m-A");
+
+    private static final SubLInteger $int$194 = makeInteger(194);
+
+    public static final SubLString $str281$Meta_B = makeString("Meta-B");
+
+    public static final SubLString $str282$m_B = makeString("m-B");
+
+    private static final SubLInteger $int$195 = makeInteger(195);
+
+    public static final SubLString $str284$Meta_C = makeString("Meta-C");
+
+    public static final SubLString $str285$m_C = makeString("m-C");
+
+    private static final SubLInteger $int$196 = makeInteger(196);
+
+    public static final SubLString $str287$Meta_D = makeString("Meta-D");
+
+    public static final SubLString $str288$m_D = makeString("m-D");
+
+    private static final SubLInteger $int$197 = makeInteger(197);
+
+    public static final SubLString $str290$Meta_E = makeString("Meta-E");
+
+    public static final SubLString $str291$m_E = makeString("m-E");
+
+    private static final SubLInteger $int$198 = makeInteger(198);
+
+    public static final SubLString $str293$Meta_F = makeString("Meta-F");
+
+    public static final SubLString $str294$m_F = makeString("m-F");
+
+    private static final SubLInteger $int$199 = makeInteger(199);
+
+    public static final SubLString $str296$Meta_G = makeString("Meta-G");
+
+    public static final SubLString $str297$m_G = makeString("m-G");
+
+    private static final SubLInteger $int$200 = makeInteger(200);
+
+    public static final SubLString $str299$Meta_H = makeString("Meta-H");
+
+    public static final SubLString $str300$m_H = makeString("m-H");
+
+    private static final SubLInteger $int$201 = makeInteger(201);
+
+    public static final SubLString $str302$Meta_I = makeString("Meta-I");
+
+    public static final SubLString $str303$m_I = makeString("m-I");
+
+    private static final SubLInteger $int$202 = makeInteger(202);
+
+    public static final SubLString $str305$Meta_J = makeString("Meta-J");
+
+    public static final SubLString $str306$m_J = makeString("m-J");
+
+    private static final SubLInteger $int$203 = makeInteger(203);
+
+    public static final SubLString $str308$Meta_K = makeString("Meta-K");
+
+    public static final SubLString $str309$m_K = makeString("m-K");
+
+    private static final SubLInteger $int$204 = makeInteger(204);
+
+    public static final SubLString $str311$Meta_L = makeString("Meta-L");
+
+    public static final SubLString $str312$m_L = makeString("m-L");
+
+    private static final SubLInteger $int$205 = makeInteger(205);
+
+    public static final SubLString $str314$Meta_M = makeString("Meta-M");
+
+    public static final SubLString $str315$m_M = makeString("m-M");
+
+    private static final SubLInteger $int$206 = makeInteger(206);
+
+    public static final SubLString $str317$Meta_N = makeString("Meta-N");
+
+    public static final SubLString $str318$m_N = makeString("m-N");
+
+    private static final SubLInteger $int$207 = makeInteger(207);
+
+    public static final SubLString $str320$Meta_O = makeString("Meta-O");
+
+    public static final SubLString $str321$m_O = makeString("m-O");
+
+    private static final SubLInteger $int$208 = makeInteger(208);
+
+    public static final SubLString $str323$Meta_P = makeString("Meta-P");
+
+    public static final SubLString $str324$m_P = makeString("m-P");
+
+    private static final SubLInteger $int$209 = makeInteger(209);
+
+    public static final SubLString $str326$Meta_Q = makeString("Meta-Q");
+
+    public static final SubLString $str327$m_Q = makeString("m-Q");
+
+    private static final SubLInteger $int$210 = makeInteger(210);
+
+    public static final SubLString $str329$Meta_R = makeString("Meta-R");
+
+    public static final SubLString $str330$m_R = makeString("m-R");
+
+    private static final SubLInteger $int$211 = makeInteger(211);
+
+    public static final SubLString $str332$Meta_S = makeString("Meta-S");
+
+    public static final SubLString $str333$m_S = makeString("m-S");
+
+    private static final SubLInteger $int$212 = makeInteger(212);
+
+    public static final SubLString $str335$Meta_T = makeString("Meta-T");
+
+    public static final SubLString $str336$m_T = makeString("m-T");
+
+    private static final SubLInteger $int$213 = makeInteger(213);
+
+    public static final SubLString $str338$Meta_U = makeString("Meta-U");
+
+    public static final SubLString $str339$m_U = makeString("m-U");
+
+    private static final SubLInteger $int$214 = makeInteger(214);
+
+    public static final SubLString $str341$Meta_V = makeString("Meta-V");
+
+    public static final SubLString $str342$m_V = makeString("m-V");
+
+    private static final SubLInteger $int$215 = makeInteger(215);
+
+    public static final SubLString $str344$Meta_W = makeString("Meta-W");
+
+    public static final SubLString $str345$m_W = makeString("m-W");
+
+    private static final SubLInteger $int$216 = makeInteger(216);
+
+    public static final SubLString $str347$Meta_X = makeString("Meta-X");
+
+    public static final SubLString $str348$m_X = makeString("m-X");
+
+    private static final SubLInteger $int$217 = makeInteger(217);
+
+    public static final SubLString $str350$Meta_Y = makeString("Meta-Y");
+
+    public static final SubLString $str351$m_Y = makeString("m-Y");
+
+    private static final SubLInteger $int$218 = makeInteger(218);
+
+    public static final SubLString $str353$Meta_Z = makeString("Meta-Z");
+
+    public static final SubLString $str354$m_Z = makeString("m-Z");
+
+    private static final SubLInteger $int$219 = makeInteger(219);
+
+    public static final SubLString $str356$Meta__ = makeString("Meta-[");
+
+    public static final SubLString $str357$m__ = makeString("m-[");
+
+    private static final SubLInteger $int$220 = makeInteger(220);
+
+    public static final SubLString $str359$Meta__ = makeString("Meta-\\");
+
+    public static final SubLString $str360$m__ = makeString("m-\\");
+
+    private static final SubLInteger $int$221 = makeInteger(221);
+
+    public static final SubLString $str362$Meta__ = makeString("Meta-]");
+
+    public static final SubLString $str363$m__ = makeString("m-]");
+
+    private static final SubLInteger $int$222 = makeInteger(222);
+
+    public static final SubLString $str365$Meta__ = makeString("Meta-^");
+
+    public static final SubLString $str366$m__ = makeString("m-^");
+
+    private static final SubLInteger $int$223 = makeInteger(223);
+
+    public static final SubLString $str368$Meta__ = makeString("Meta-_");
+
+    public static final SubLString $str369$m__ = makeString("m-_");
+
+    private static final SubLInteger $int$224 = makeInteger(224);
+
+    public static final SubLString $str371$Meta__ = makeString("Meta-`");
+
+    public static final SubLString $str372$m__ = makeString("m-`");
+
+    private static final SubLInteger $int$225 = makeInteger(225);
+
+    public static final SubLString $str374$Meta_a = makeString("Meta-a");
+
+    public static final SubLString $str375$m_a = makeString("m-a");
+
+    private static final SubLInteger $int$226 = makeInteger(226);
+
+    public static final SubLString $str377$Meta_b = makeString("Meta-b");
+
+    public static final SubLString $str378$m_b = makeString("m-b");
+
+    private static final SubLInteger $int$227 = makeInteger(227);
+
+    public static final SubLString $str380$Meta_c = makeString("Meta-c");
+
+    public static final SubLString $str381$m_c = makeString("m-c");
+
+    private static final SubLInteger $int$228 = makeInteger(228);
+
+    public static final SubLString $str383$Meta_d = makeString("Meta-d");
+
+    public static final SubLString $str384$m_d = makeString("m-d");
+
+    private static final SubLInteger $int$229 = makeInteger(229);
+
+    public static final SubLString $str386$Meta_e = makeString("Meta-e");
+
+    public static final SubLString $str387$m_e = makeString("m-e");
+
+    private static final SubLInteger $int$230 = makeInteger(230);
+
+    public static final SubLString $str389$Meta_f = makeString("Meta-f");
+
+    public static final SubLString $str390$m_f = makeString("m-f");
+
+    private static final SubLInteger $int$231 = makeInteger(231);
+
+    public static final SubLString $str392$Meta_g = makeString("Meta-g");
+
+    public static final SubLString $str393$m_g = makeString("m-g");
+
+    private static final SubLInteger $int$232 = makeInteger(232);
+
+    public static final SubLString $str395$Meta_h = makeString("Meta-h");
+
+    public static final SubLString $str396$m_h = makeString("m-h");
+
+    private static final SubLInteger $int$233 = makeInteger(233);
+
+    public static final SubLString $str398$Meta_i = makeString("Meta-i");
+
+    public static final SubLString $str399$m_i = makeString("m-i");
+
+    private static final SubLInteger $int$234 = makeInteger(234);
+
+    public static final SubLString $str401$Meta_j = makeString("Meta-j");
+
+    public static final SubLString $str402$m_j = makeString("m-j");
+
+    private static final SubLInteger $int$235 = makeInteger(235);
+
+    public static final SubLString $str404$Meta_k = makeString("Meta-k");
+
+    public static final SubLString $str405$m_k = makeString("m-k");
+
+    private static final SubLInteger $int$236 = makeInteger(236);
+
+    public static final SubLString $str407$Meta_l = makeString("Meta-l");
+
+    public static final SubLString $str408$m_l = makeString("m-l");
+
+    private static final SubLInteger $int$237 = makeInteger(237);
+
+    public static final SubLString $str410$Meta_m = makeString("Meta-m");
+
+    public static final SubLString $str411$m_m = makeString("m-m");
+
+    private static final SubLInteger $int$238 = makeInteger(238);
+
+    public static final SubLString $str413$Meta_n = makeString("Meta-n");
+
+    public static final SubLString $str414$m_n = makeString("m-n");
+
+    private static final SubLInteger $int$239 = makeInteger(239);
+
+    public static final SubLString $str416$Meta_o = makeString("Meta-o");
+
+    public static final SubLString $str417$m_o = makeString("m-o");
+
+    private static final SubLInteger $int$240 = makeInteger(240);
+
+    public static final SubLString $str419$Meta_p = makeString("Meta-p");
+
+    public static final SubLString $str420$m_p = makeString("m-p");
+
+    private static final SubLInteger $int$241 = makeInteger(241);
+
+    public static final SubLString $str422$Meta_q = makeString("Meta-q");
+
+    public static final SubLString $str423$m_q = makeString("m-q");
+
+    private static final SubLInteger $int$242 = makeInteger(242);
+
+    public static final SubLString $str425$Meta_r = makeString("Meta-r");
+
+    public static final SubLString $str426$m_r = makeString("m-r");
+
+    private static final SubLInteger $int$243 = makeInteger(243);
+
+    public static final SubLString $str428$Meta_s = makeString("Meta-s");
+
+    public static final SubLString $str429$m_s = makeString("m-s");
+
+    private static final SubLInteger $int$244 = makeInteger(244);
+
+    public static final SubLString $str431$Meta_t = makeString("Meta-t");
+
+    public static final SubLString $str432$m_t = makeString("m-t");
+
+    private static final SubLInteger $int$245 = makeInteger(245);
+
+    public static final SubLString $str434$Meta_u = makeString("Meta-u");
+
+    public static final SubLString $str435$m_u = makeString("m-u");
+
+    private static final SubLInteger $int$246 = makeInteger(246);
+
+    public static final SubLString $str437$Meta_v = makeString("Meta-v");
+
+    public static final SubLString $str438$m_v = makeString("m-v");
+
+    private static final SubLInteger $int$247 = makeInteger(247);
+
+    public static final SubLString $str440$Meta_w = makeString("Meta-w");
+
+    public static final SubLString $str441$m_w = makeString("m-w");
+
+    private static final SubLInteger $int$248 = makeInteger(248);
+
+    public static final SubLString $str443$Meta_x = makeString("Meta-x");
+
+    public static final SubLString $str444$m_x = makeString("m-x");
+
+    private static final SubLInteger $int$249 = makeInteger(249);
+
+    public static final SubLString $str446$Meta_y = makeString("Meta-y");
+
+    public static final SubLString $str447$m_y = makeString("m-y");
+
+    private static final SubLInteger $int$250 = makeInteger(250);
+
+    public static final SubLString $str449$Meta_z = makeString("Meta-z");
+
+    public static final SubLString $str450$m_z = makeString("m-z");
+
+    private static final SubLInteger $int$251 = makeInteger(251);
+
+    public static final SubLString $str452$Meta__ = makeString("Meta-{");
+
+    public static final SubLString $str453$m__ = makeString("m-{");
+
+    private static final SubLInteger $int$252 = makeInteger(252);
+
+    public static final SubLString $str455$Meta__ = makeString("Meta-|");
+
+    public static final SubLString $str456$m__ = makeString("m-|");
+
+    private static final SubLInteger $int$253 = makeInteger(253);
+
+    public static final SubLString $str458$Meta__ = makeString("Meta-}");
+
+    public static final SubLString $str459$m__ = makeString("m-}");
+
+    private static final SubLInteger $int$254 = makeInteger(254);
+
+    public static final SubLString $str461$Meta__ = makeString("Meta-~");
+
+    public static final SubLString $str462$m__ = makeString("m-~");
+
+
+
+    public static final SubLString $str464$Meta_Rubout = makeString("Meta-Rubout");
+
+    public static final SubLString $str465$m_Rubout = makeString("m-Rubout");
+
     static {
-	me = new character_names();
-	character_names.$character_names_table$ = null;
-	character_names.$name_character_table$ = null;
-	$int$256 = SubLObjectFactory.makeInteger(256);
-	$str1$Null = SubLObjectFactory.makeString("Null");
-	$str2$NUL = SubLObjectFactory.makeString("NUL");
-	$str3$Control_a = SubLObjectFactory.makeString("Control-a");
-	$str4$c_a = SubLObjectFactory.makeString("c-a");
-	$str5$Control_b = SubLObjectFactory.makeString("Control-b");
-	$str6$c_b = SubLObjectFactory.makeString("c-b");
-	$str7$Control_c = SubLObjectFactory.makeString("Control-c");
-	$str8$c_c = SubLObjectFactory.makeString("c-c");
-	$str9$Control_d = SubLObjectFactory.makeString("Control-d");
-	$str10$c_d = SubLObjectFactory.makeString("c-d");
-	$str11$Control_e = SubLObjectFactory.makeString("Control-e");
-	$str12$c_e = SubLObjectFactory.makeString("c-e");
-	$str13$Control_f = SubLObjectFactory.makeString("Control-f");
-	$str14$c_f = SubLObjectFactory.makeString("c-f");
-	$str15$Bell = SubLObjectFactory.makeString("Bell");
-	$str16$BEL = SubLObjectFactory.makeString("BEL");
-	$str17$Backspace = SubLObjectFactory.makeString("Backspace");
-	$str18$BS = SubLObjectFactory.makeString("BS");
-	$str19$Tab = SubLObjectFactory.makeString("Tab");
-	$str20$HT = SubLObjectFactory.makeString("HT");
-	$str21$Newline = SubLObjectFactory.makeString("Newline");
-	$str22$Linefeed = SubLObjectFactory.makeString("Linefeed");
-	$str23$Vertical_Tab = SubLObjectFactory.makeString("Vertical-Tab");
-	$str24$VT = SubLObjectFactory.makeString("VT");
-	$str25$Page = SubLObjectFactory.makeString("Page");
-	$str26$FF = SubLObjectFactory.makeString("FF");
-	$str27$Return = SubLObjectFactory.makeString("Return");
-	$str28$CR = SubLObjectFactory.makeString("CR");
-	$str29$Control_n = SubLObjectFactory.makeString("Control-n");
-	$str30$c_n = SubLObjectFactory.makeString("c-n");
-	$str31$Control_o = SubLObjectFactory.makeString("Control-o");
-	$str32$c_o = SubLObjectFactory.makeString("c-o");
-	$str33$Control_p = SubLObjectFactory.makeString("Control-p");
-	$str34$c_p = SubLObjectFactory.makeString("c-p");
-	$str35$Control_q = SubLObjectFactory.makeString("Control-q");
-	$str36$c_q = SubLObjectFactory.makeString("c-q");
-	$str37$Control_r = SubLObjectFactory.makeString("Control-r");
-	$str38$c_r = SubLObjectFactory.makeString("c-r");
-	$str39$Control_s = SubLObjectFactory.makeString("Control-s");
-	$str40$c_s = SubLObjectFactory.makeString("c-s");
-	$str41$Control_t = SubLObjectFactory.makeString("Control-t");
-	$str42$c_t = SubLObjectFactory.makeString("c-t");
-	$int$21 = SubLObjectFactory.makeInteger(21);
-	$str44$Control_u = SubLObjectFactory.makeString("Control-u");
-	$str45$c_u = SubLObjectFactory.makeString("c-u");
-	$int$22 = SubLObjectFactory.makeInteger(22);
-	$str47$Control_v = SubLObjectFactory.makeString("Control-v");
-	$str48$c_v = SubLObjectFactory.makeString("c-v");
-	$int$23 = SubLObjectFactory.makeInteger(23);
-	$str50$Control_w = SubLObjectFactory.makeString("Control-w");
-	$str51$c_w = SubLObjectFactory.makeString("c-w");
-	$int$24 = SubLObjectFactory.makeInteger(24);
-	$str53$Control_x = SubLObjectFactory.makeString("Control-x");
-	$str54$c_x = SubLObjectFactory.makeString("c-x");
-	$int$25 = SubLObjectFactory.makeInteger(25);
-	$str56$Control_y = SubLObjectFactory.makeString("Control-y");
-	$str57$c_y = SubLObjectFactory.makeString("c-y");
-	$int$26 = SubLObjectFactory.makeInteger(26);
-	$str59$Control_z = SubLObjectFactory.makeString("Control-z");
-	$str60$c_z = SubLObjectFactory.makeString("c-z");
-	$int$27 = SubLObjectFactory.makeInteger(27);
-	$str62$Escape = SubLObjectFactory.makeString("Escape");
-	$str63$ESC = SubLObjectFactory.makeString("ESC");
-	$int$28 = SubLObjectFactory.makeInteger(28);
-	$str65$Control__ = SubLObjectFactory.makeString("Control-\\");
-	$str66$c__ = SubLObjectFactory.makeString("c-\\");
-	$int$29 = SubLObjectFactory.makeInteger(29);
-	$str68$Control__ = SubLObjectFactory.makeString("Control-]");
-	$str69$c__ = SubLObjectFactory.makeString("c-]");
-	$int$30 = SubLObjectFactory.makeInteger(30);
-	$str71$Control__ = SubLObjectFactory.makeString("Control-^");
-	$str72$c__ = SubLObjectFactory.makeString("c-^");
-	$int$31 = SubLObjectFactory.makeInteger(31);
-	$str74$Control__ = SubLObjectFactory.makeString("Control-_");
-	$str75$c__ = SubLObjectFactory.makeString("c-_");
-	$int$32 = SubLObjectFactory.makeInteger(32);
-	$str77$Space = SubLObjectFactory.makeString("Space");
-	$str78$SP = SubLObjectFactory.makeString("SP");
-	$int$127 = SubLObjectFactory.makeInteger(127);
-	$str80$Rubout = SubLObjectFactory.makeString("Rubout");
-	$str81$DEL = SubLObjectFactory.makeString("DEL");
-	$int$128 = SubLObjectFactory.makeInteger(128);
-	$str83$Meta_Null = SubLObjectFactory.makeString("Meta-Null");
-	$str84$m_Null = SubLObjectFactory.makeString("m-Null");
-	$int$129 = SubLObjectFactory.makeInteger(129);
-	$str86$Control_Meta_a = SubLObjectFactory.makeString("Control-Meta-a");
-	$str87$c_m_a = SubLObjectFactory.makeString("c-m-a");
-	$int$130 = SubLObjectFactory.makeInteger(130);
-	$str89$Control_Meta_b = SubLObjectFactory.makeString("Control-Meta-b");
-	$str90$c_m_b = SubLObjectFactory.makeString("c-m-b");
-	$int$131 = SubLObjectFactory.makeInteger(131);
-	$str92$Control_Meta_c = SubLObjectFactory.makeString("Control-Meta-c");
-	$str93$c_m_c = SubLObjectFactory.makeString("c-m-c");
-	$int$132 = SubLObjectFactory.makeInteger(132);
-	$str95$Control_Meta_d = SubLObjectFactory.makeString("Control-Meta-d");
-	$str96$c_m_d = SubLObjectFactory.makeString("c-m-d");
-	$int$133 = SubLObjectFactory.makeInteger(133);
-	$str98$Control_Meta_e = SubLObjectFactory.makeString("Control-Meta-e");
-	$str99$c_m_e = SubLObjectFactory.makeString("c-m-e");
-	$int$134 = SubLObjectFactory.makeInteger(134);
-	$str101$Control_Meta_f = SubLObjectFactory.makeString("Control-Meta-f");
-	$str102$c_m_f = SubLObjectFactory.makeString("c-m-f");
-	$int$135 = SubLObjectFactory.makeInteger(135);
-	$str104$Meta_Bell = SubLObjectFactory.makeString("Meta-Bell");
-	$str105$m_Bell = SubLObjectFactory.makeString("m-Bell");
-	$int$136 = SubLObjectFactory.makeInteger(136);
-	$str107$Meta_Backspace = SubLObjectFactory.makeString("Meta-Backspace");
-	$str108$m_Backspace = SubLObjectFactory.makeString("m-Backspace");
-	$int$137 = SubLObjectFactory.makeInteger(137);
-	$str110$Meta_Tab = SubLObjectFactory.makeString("Meta-Tab");
-	$str111$m_Tab = SubLObjectFactory.makeString("m-Tab");
-	$int$138 = SubLObjectFactory.makeInteger(138);
-	$str113$Meta_Newline = SubLObjectFactory.makeString("Meta-Newline");
-	$str114$m_Newline = SubLObjectFactory.makeString("m-Newline");
-	$int$139 = SubLObjectFactory.makeInteger(139);
-	$str116$Meta_Vertical_Tab = SubLObjectFactory.makeString("Meta-Vertical-Tab");
-	$str117$m_Vertical_Tab = SubLObjectFactory.makeString("m-Vertical-Tab");
-	$int$140 = SubLObjectFactory.makeInteger(140);
-	$str119$Meta_Page = SubLObjectFactory.makeString("Meta-Page");
-	$str120$m_Page = SubLObjectFactory.makeString("m-Page");
-	$int$141 = SubLObjectFactory.makeInteger(141);
-	$str122$Meta_Return = SubLObjectFactory.makeString("Meta-Return");
-	$str123$m_Return = SubLObjectFactory.makeString("m-Return");
-	$int$142 = SubLObjectFactory.makeInteger(142);
-	$str125$Control_Meta_n = SubLObjectFactory.makeString("Control-Meta-n");
-	$str126$c_m_n = SubLObjectFactory.makeString("c-m-n");
-	$int$143 = SubLObjectFactory.makeInteger(143);
-	$str128$Control_Meta_o = SubLObjectFactory.makeString("Control-Meta-o");
-	$str129$c_m_o = SubLObjectFactory.makeString("c-m-o");
-	$int$144 = SubLObjectFactory.makeInteger(144);
-	$str131$Control_Meta_p = SubLObjectFactory.makeString("Control-Meta-p");
-	$str132$c_m_p = SubLObjectFactory.makeString("c-m-p");
-	$int$145 = SubLObjectFactory.makeInteger(145);
-	$str134$Control_Meta_q = SubLObjectFactory.makeString("Control-Meta-q");
-	$str135$c_m_q = SubLObjectFactory.makeString("c-m-q");
-	$int$146 = SubLObjectFactory.makeInteger(146);
-	$str137$Control_Meta_r = SubLObjectFactory.makeString("Control-Meta-r");
-	$str138$c_m_r = SubLObjectFactory.makeString("c-m-r");
-	$int$147 = SubLObjectFactory.makeInteger(147);
-	$str140$Control_Meta_s = SubLObjectFactory.makeString("Control-Meta-s");
-	$str141$c_m_s = SubLObjectFactory.makeString("c-m-s");
-	$int$148 = SubLObjectFactory.makeInteger(148);
-	$str143$Control_Meta_t = SubLObjectFactory.makeString("Control-Meta-t");
-	$str144$c_m_t = SubLObjectFactory.makeString("c-m-t");
-	$int$149 = SubLObjectFactory.makeInteger(149);
-	$str146$Control_Meta_u = SubLObjectFactory.makeString("Control-Meta-u");
-	$str147$c_m_u = SubLObjectFactory.makeString("c-m-u");
-	$int$150 = SubLObjectFactory.makeInteger(150);
-	$str149$Control_Meta_v = SubLObjectFactory.makeString("Control-Meta-v");
-	$str150$c_m_v = SubLObjectFactory.makeString("c-m-v");
-	$int$151 = SubLObjectFactory.makeInteger(151);
-	$str152$Control_Meta_w = SubLObjectFactory.makeString("Control-Meta-w");
-	$str153$c_m_w = SubLObjectFactory.makeString("c-m-w");
-	$int$152 = SubLObjectFactory.makeInteger(152);
-	$str155$Control_Meta_x = SubLObjectFactory.makeString("Control-Meta-x");
-	$str156$c_m_x = SubLObjectFactory.makeString("c-m-x");
-	$int$153 = SubLObjectFactory.makeInteger(153);
-	$str158$Control_Meta_y = SubLObjectFactory.makeString("Control-Meta-y");
-	$str159$c_m_y = SubLObjectFactory.makeString("c-m-y");
-	$int$154 = SubLObjectFactory.makeInteger(154);
-	$str161$Control_Meta_z = SubLObjectFactory.makeString("Control-Meta-z");
-	$str162$c_m_z = SubLObjectFactory.makeString("c-m-z");
-	$int$155 = SubLObjectFactory.makeInteger(155);
-	$str164$Meta_Escape = SubLObjectFactory.makeString("Meta-Escape");
-	$str165$m_Escape = SubLObjectFactory.makeString("m-Escape");
-	$int$156 = SubLObjectFactory.makeInteger(156);
-	$str167$Control_Meta__ = SubLObjectFactory.makeString("Control-Meta-\\");
-	$str168$c_m__ = SubLObjectFactory.makeString("c-m-\\");
-	$int$157 = SubLObjectFactory.makeInteger(157);
-	$str170$Control_Meta__ = SubLObjectFactory.makeString("Control-Meta-]");
-	$str171$c_m__ = SubLObjectFactory.makeString("c-m-]");
-	$int$158 = SubLObjectFactory.makeInteger(158);
-	$str173$Control_Meta__ = SubLObjectFactory.makeString("Control-Meta-^");
-	$str174$c_m__ = SubLObjectFactory.makeString("c-m-^");
-	$int$159 = SubLObjectFactory.makeInteger(159);
-	$str176$Control_Meta__ = SubLObjectFactory.makeString("Control-Meta-_");
-	$str177$c_m__ = SubLObjectFactory.makeString("c-m-_");
-	$int$160 = SubLObjectFactory.makeInteger(160);
-	$str179$Meta_Space = SubLObjectFactory.makeString("Meta-Space");
-	$str180$m_Space = SubLObjectFactory.makeString("m-Space");
-	$int$161 = SubLObjectFactory.makeInteger(161);
-	$str182$Meta__ = SubLObjectFactory.makeString("Meta-!");
-	$str183$m__ = SubLObjectFactory.makeString("m-!");
-	$int$162 = SubLObjectFactory.makeInteger(162);
-	$str185$Meta__ = SubLObjectFactory.makeString("Meta-\"");
-	$str186$m__ = SubLObjectFactory.makeString("m-\"");
-	$int$163 = SubLObjectFactory.makeInteger(163);
-	$str188$Meta__ = SubLObjectFactory.makeString("Meta-#");
-	$str189$m__ = SubLObjectFactory.makeString("m-#");
-	$int$164 = SubLObjectFactory.makeInteger(164);
-	$str191$Meta__ = SubLObjectFactory.makeString("Meta-$");
-	$str192$m__ = SubLObjectFactory.makeString("m-$");
-	$int$165 = SubLObjectFactory.makeInteger(165);
-	$str194$Meta__ = SubLObjectFactory.makeString("Meta-%");
-	$str195$m__ = SubLObjectFactory.makeString("m-%");
-	$int$166 = SubLObjectFactory.makeInteger(166);
-	$str197$Meta__ = SubLObjectFactory.makeString("Meta-&");
-	$str198$m__ = SubLObjectFactory.makeString("m-&");
-	$int$167 = SubLObjectFactory.makeInteger(167);
-	$str200$Meta__ = SubLObjectFactory.makeString("Meta-'");
-	$str201$m__ = SubLObjectFactory.makeString("m-'");
-	$int$168 = SubLObjectFactory.makeInteger(168);
-	$str203$Meta__ = SubLObjectFactory.makeString("Meta-(");
-	$str204$m__ = SubLObjectFactory.makeString("m-(");
-	$int$169 = SubLObjectFactory.makeInteger(169);
-	$str206$Meta__ = SubLObjectFactory.makeString("Meta-)");
-	$str207$m__ = SubLObjectFactory.makeString("m-)");
-	$int$170 = SubLObjectFactory.makeInteger(170);
-	$str209$Meta__ = SubLObjectFactory.makeString("Meta-*");
-	$str210$m__ = SubLObjectFactory.makeString("m-*");
-	$int$171 = SubLObjectFactory.makeInteger(171);
-	$str212$Meta__ = SubLObjectFactory.makeString("Meta-+");
-	$str213$m__ = SubLObjectFactory.makeString("m-+");
-	$int$172 = SubLObjectFactory.makeInteger(172);
-	$str215$Meta__ = SubLObjectFactory.makeString("Meta-,");
-	$str216$m__ = SubLObjectFactory.makeString("m-,");
-	$int$173 = SubLObjectFactory.makeInteger(173);
-	$str218$Meta__ = SubLObjectFactory.makeString("Meta--");
-	$str219$m__ = SubLObjectFactory.makeString("m--");
-	$int$174 = SubLObjectFactory.makeInteger(174);
-	$str221$Meta__ = SubLObjectFactory.makeString("Meta-.");
-	$str222$m__ = SubLObjectFactory.makeString("m-.");
-	$int$175 = SubLObjectFactory.makeInteger(175);
-	$str224$Meta__ = SubLObjectFactory.makeString("Meta-/");
-	$str225$m__ = SubLObjectFactory.makeString("m-/");
-	$int$176 = SubLObjectFactory.makeInteger(176);
-	$str227$Meta_0 = SubLObjectFactory.makeString("Meta-0");
-	$str228$m_0 = SubLObjectFactory.makeString("m-0");
-	$int$177 = SubLObjectFactory.makeInteger(177);
-	$str230$Meta_1 = SubLObjectFactory.makeString("Meta-1");
-	$str231$m_1 = SubLObjectFactory.makeString("m-1");
-	$int$178 = SubLObjectFactory.makeInteger(178);
-	$str233$Meta_2 = SubLObjectFactory.makeString("Meta-2");
-	$str234$m_2 = SubLObjectFactory.makeString("m-2");
-	$int$179 = SubLObjectFactory.makeInteger(179);
-	$str236$Meta_3 = SubLObjectFactory.makeString("Meta-3");
-	$str237$m_3 = SubLObjectFactory.makeString("m-3");
-	$int$180 = SubLObjectFactory.makeInteger(180);
-	$str239$Meta_4 = SubLObjectFactory.makeString("Meta-4");
-	$str240$m_4 = SubLObjectFactory.makeString("m-4");
-	$int$181 = SubLObjectFactory.makeInteger(181);
-	$str242$Meta_5 = SubLObjectFactory.makeString("Meta-5");
-	$str243$m_5 = SubLObjectFactory.makeString("m-5");
-	$int$182 = SubLObjectFactory.makeInteger(182);
-	$str245$Meta_6 = SubLObjectFactory.makeString("Meta-6");
-	$str246$m_6 = SubLObjectFactory.makeString("m-6");
-	$int$183 = SubLObjectFactory.makeInteger(183);
-	$str248$Meta_7 = SubLObjectFactory.makeString("Meta-7");
-	$str249$m_7 = SubLObjectFactory.makeString("m-7");
-	$int$184 = SubLObjectFactory.makeInteger(184);
-	$str251$Meta_8 = SubLObjectFactory.makeString("Meta-8");
-	$str252$m_8 = SubLObjectFactory.makeString("m-8");
-	$int$185 = SubLObjectFactory.makeInteger(185);
-	$str254$Meta_9 = SubLObjectFactory.makeString("Meta-9");
-	$str255$m_9 = SubLObjectFactory.makeString("m-9");
-	$int$186 = SubLObjectFactory.makeInteger(186);
-	$str257$Meta__ = SubLObjectFactory.makeString("Meta-:");
-	$str258$m__ = SubLObjectFactory.makeString("m-:");
-	$int$187 = SubLObjectFactory.makeInteger(187);
-	$str260$Meta__ = SubLObjectFactory.makeString("Meta-;");
-	$str261$m__ = SubLObjectFactory.makeString("m-;");
-	$int$188 = SubLObjectFactory.makeInteger(188);
-	$str263$Meta__ = SubLObjectFactory.makeString("Meta-<");
-	$str264$m__ = SubLObjectFactory.makeString("m-<");
-	$int$189 = SubLObjectFactory.makeInteger(189);
-	$str266$Meta__ = SubLObjectFactory.makeString("Meta-=");
-	$str267$m__ = SubLObjectFactory.makeString("m-=");
-	$int$190 = SubLObjectFactory.makeInteger(190);
-	$str269$Meta__ = SubLObjectFactory.makeString("Meta->");
-	$str270$m__ = SubLObjectFactory.makeString("m->");
-	$int$191 = SubLObjectFactory.makeInteger(191);
-	$str272$Meta__ = SubLObjectFactory.makeString("Meta-?");
-	$str273$m__ = SubLObjectFactory.makeString("m-?");
-	$int$192 = SubLObjectFactory.makeInteger(192);
-	$str275$Meta__ = SubLObjectFactory.makeString("Meta-@");
-	$str276$m__ = SubLObjectFactory.makeString("m-@");
-	$int$193 = SubLObjectFactory.makeInteger(193);
-	$str278$Meta_A = SubLObjectFactory.makeString("Meta-A");
-	$str279$m_A = SubLObjectFactory.makeString("m-A");
-	$int$194 = SubLObjectFactory.makeInteger(194);
-	$str281$Meta_B = SubLObjectFactory.makeString("Meta-B");
-	$str282$m_B = SubLObjectFactory.makeString("m-B");
-	$int$195 = SubLObjectFactory.makeInteger(195);
-	$str284$Meta_C = SubLObjectFactory.makeString("Meta-C");
-	$str285$m_C = SubLObjectFactory.makeString("m-C");
-	$int$196 = SubLObjectFactory.makeInteger(196);
-	$str287$Meta_D = SubLObjectFactory.makeString("Meta-D");
-	$str288$m_D = SubLObjectFactory.makeString("m-D");
-	$int$197 = SubLObjectFactory.makeInteger(197);
-	$str290$Meta_E = SubLObjectFactory.makeString("Meta-E");
-	$str291$m_E = SubLObjectFactory.makeString("m-E");
-	$int$198 = SubLObjectFactory.makeInteger(198);
-	$str293$Meta_F = SubLObjectFactory.makeString("Meta-F");
-	$str294$m_F = SubLObjectFactory.makeString("m-F");
-	$int$199 = SubLObjectFactory.makeInteger(199);
-	$str296$Meta_G = SubLObjectFactory.makeString("Meta-G");
-	$str297$m_G = SubLObjectFactory.makeString("m-G");
-	$int$200 = SubLObjectFactory.makeInteger(200);
-	$str299$Meta_H = SubLObjectFactory.makeString("Meta-H");
-	$str300$m_H = SubLObjectFactory.makeString("m-H");
-	$int$201 = SubLObjectFactory.makeInteger(201);
-	$str302$Meta_I = SubLObjectFactory.makeString("Meta-I");
-	$str303$m_I = SubLObjectFactory.makeString("m-I");
-	$int$202 = SubLObjectFactory.makeInteger(202);
-	$str305$Meta_J = SubLObjectFactory.makeString("Meta-J");
-	$str306$m_J = SubLObjectFactory.makeString("m-J");
-	$int$203 = SubLObjectFactory.makeInteger(203);
-	$str308$Meta_K = SubLObjectFactory.makeString("Meta-K");
-	$str309$m_K = SubLObjectFactory.makeString("m-K");
-	$int$204 = SubLObjectFactory.makeInteger(204);
-	$str311$Meta_L = SubLObjectFactory.makeString("Meta-L");
-	$str312$m_L = SubLObjectFactory.makeString("m-L");
-	$int$205 = SubLObjectFactory.makeInteger(205);
-	$str314$Meta_M = SubLObjectFactory.makeString("Meta-M");
-	$str315$m_M = SubLObjectFactory.makeString("m-M");
-	$int$206 = SubLObjectFactory.makeInteger(206);
-	$str317$Meta_N = SubLObjectFactory.makeString("Meta-N");
-	$str318$m_N = SubLObjectFactory.makeString("m-N");
-	$int$207 = SubLObjectFactory.makeInteger(207);
-	$str320$Meta_O = SubLObjectFactory.makeString("Meta-O");
-	$str321$m_O = SubLObjectFactory.makeString("m-O");
-	$int$208 = SubLObjectFactory.makeInteger(208);
-	$str323$Meta_P = SubLObjectFactory.makeString("Meta-P");
-	$str324$m_P = SubLObjectFactory.makeString("m-P");
-	$int$209 = SubLObjectFactory.makeInteger(209);
-	$str326$Meta_Q = SubLObjectFactory.makeString("Meta-Q");
-	$str327$m_Q = SubLObjectFactory.makeString("m-Q");
-	$int$210 = SubLObjectFactory.makeInteger(210);
-	$str329$Meta_R = SubLObjectFactory.makeString("Meta-R");
-	$str330$m_R = SubLObjectFactory.makeString("m-R");
-	$int$211 = SubLObjectFactory.makeInteger(211);
-	$str332$Meta_S = SubLObjectFactory.makeString("Meta-S");
-	$str333$m_S = SubLObjectFactory.makeString("m-S");
-	$int$212 = SubLObjectFactory.makeInteger(212);
-	$str335$Meta_T = SubLObjectFactory.makeString("Meta-T");
-	$str336$m_T = SubLObjectFactory.makeString("m-T");
-	$int$213 = SubLObjectFactory.makeInteger(213);
-	$str338$Meta_U = SubLObjectFactory.makeString("Meta-U");
-	$str339$m_U = SubLObjectFactory.makeString("m-U");
-	$int$214 = SubLObjectFactory.makeInteger(214);
-	$str341$Meta_V = SubLObjectFactory.makeString("Meta-V");
-	$str342$m_V = SubLObjectFactory.makeString("m-V");
-	$int$215 = SubLObjectFactory.makeInteger(215);
-	$str344$Meta_W = SubLObjectFactory.makeString("Meta-W");
-	$str345$m_W = SubLObjectFactory.makeString("m-W");
-	$int$216 = SubLObjectFactory.makeInteger(216);
-	$str347$Meta_X = SubLObjectFactory.makeString("Meta-X");
-	$str348$m_X = SubLObjectFactory.makeString("m-X");
-	$int$217 = SubLObjectFactory.makeInteger(217);
-	$str350$Meta_Y = SubLObjectFactory.makeString("Meta-Y");
-	$str351$m_Y = SubLObjectFactory.makeString("m-Y");
-	$int$218 = SubLObjectFactory.makeInteger(218);
-	$str353$Meta_Z = SubLObjectFactory.makeString("Meta-Z");
-	$str354$m_Z = SubLObjectFactory.makeString("m-Z");
-	$int$219 = SubLObjectFactory.makeInteger(219);
-	$str356$Meta__ = SubLObjectFactory.makeString("Meta-[");
-	$str357$m__ = SubLObjectFactory.makeString("m-[");
-	$int$220 = SubLObjectFactory.makeInteger(220);
-	$str359$Meta__ = SubLObjectFactory.makeString("Meta-\\");
-	$str360$m__ = SubLObjectFactory.makeString("m-\\");
-	$int$221 = SubLObjectFactory.makeInteger(221);
-	$str362$Meta__ = SubLObjectFactory.makeString("Meta-]");
-	$str363$m__ = SubLObjectFactory.makeString("m-]");
-	$int$222 = SubLObjectFactory.makeInteger(222);
-	$str365$Meta__ = SubLObjectFactory.makeString("Meta-^");
-	$str366$m__ = SubLObjectFactory.makeString("m-^");
-	$int$223 = SubLObjectFactory.makeInteger(223);
-	$str368$Meta__ = SubLObjectFactory.makeString("Meta-_");
-	$str369$m__ = SubLObjectFactory.makeString("m-_");
-	$int$224 = SubLObjectFactory.makeInteger(224);
-	$str371$Meta__ = SubLObjectFactory.makeString("Meta-`");
-	$str372$m__ = SubLObjectFactory.makeString("m-`");
-	$int$225 = SubLObjectFactory.makeInteger(225);
-	$str374$Meta_a = SubLObjectFactory.makeString("Meta-a");
-	$str375$m_a = SubLObjectFactory.makeString("m-a");
-	$int$226 = SubLObjectFactory.makeInteger(226);
-	$str377$Meta_b = SubLObjectFactory.makeString("Meta-b");
-	$str378$m_b = SubLObjectFactory.makeString("m-b");
-	$int$227 = SubLObjectFactory.makeInteger(227);
-	$str380$Meta_c = SubLObjectFactory.makeString("Meta-c");
-	$str381$m_c = SubLObjectFactory.makeString("m-c");
-	$int$228 = SubLObjectFactory.makeInteger(228);
-	$str383$Meta_d = SubLObjectFactory.makeString("Meta-d");
-	$str384$m_d = SubLObjectFactory.makeString("m-d");
-	$int$229 = SubLObjectFactory.makeInteger(229);
-	$str386$Meta_e = SubLObjectFactory.makeString("Meta-e");
-	$str387$m_e = SubLObjectFactory.makeString("m-e");
-	$int$230 = SubLObjectFactory.makeInteger(230);
-	$str389$Meta_f = SubLObjectFactory.makeString("Meta-f");
-	$str390$m_f = SubLObjectFactory.makeString("m-f");
-	$int$231 = SubLObjectFactory.makeInteger(231);
-	$str392$Meta_g = SubLObjectFactory.makeString("Meta-g");
-	$str393$m_g = SubLObjectFactory.makeString("m-g");
-	$int$232 = SubLObjectFactory.makeInteger(232);
-	$str395$Meta_h = SubLObjectFactory.makeString("Meta-h");
-	$str396$m_h = SubLObjectFactory.makeString("m-h");
-	$int$233 = SubLObjectFactory.makeInteger(233);
-	$str398$Meta_i = SubLObjectFactory.makeString("Meta-i");
-	$str399$m_i = SubLObjectFactory.makeString("m-i");
-	$int$234 = SubLObjectFactory.makeInteger(234);
-	$str401$Meta_j = SubLObjectFactory.makeString("Meta-j");
-	$str402$m_j = SubLObjectFactory.makeString("m-j");
-	$int$235 = SubLObjectFactory.makeInteger(235);
-	$str404$Meta_k = SubLObjectFactory.makeString("Meta-k");
-	$str405$m_k = SubLObjectFactory.makeString("m-k");
-	$int$236 = SubLObjectFactory.makeInteger(236);
-	$str407$Meta_l = SubLObjectFactory.makeString("Meta-l");
-	$str408$m_l = SubLObjectFactory.makeString("m-l");
-	$int$237 = SubLObjectFactory.makeInteger(237);
-	$str410$Meta_m = SubLObjectFactory.makeString("Meta-m");
-	$str411$m_m = SubLObjectFactory.makeString("m-m");
-	$int$238 = SubLObjectFactory.makeInteger(238);
-	$str413$Meta_n = SubLObjectFactory.makeString("Meta-n");
-	$str414$m_n = SubLObjectFactory.makeString("m-n");
-	$int$239 = SubLObjectFactory.makeInteger(239);
-	$str416$Meta_o = SubLObjectFactory.makeString("Meta-o");
-	$str417$m_o = SubLObjectFactory.makeString("m-o");
-	$int$240 = SubLObjectFactory.makeInteger(240);
-	$str419$Meta_p = SubLObjectFactory.makeString("Meta-p");
-	$str420$m_p = SubLObjectFactory.makeString("m-p");
-	$int$241 = SubLObjectFactory.makeInteger(241);
-	$str422$Meta_q = SubLObjectFactory.makeString("Meta-q");
-	$str423$m_q = SubLObjectFactory.makeString("m-q");
-	$int$242 = SubLObjectFactory.makeInteger(242);
-	$str425$Meta_r = SubLObjectFactory.makeString("Meta-r");
-	$str426$m_r = SubLObjectFactory.makeString("m-r");
-	$int$243 = SubLObjectFactory.makeInteger(243);
-	$str428$Meta_s = SubLObjectFactory.makeString("Meta-s");
-	$str429$m_s = SubLObjectFactory.makeString("m-s");
-	$int$244 = SubLObjectFactory.makeInteger(244);
-	$str431$Meta_t = SubLObjectFactory.makeString("Meta-t");
-	$str432$m_t = SubLObjectFactory.makeString("m-t");
-	$int$245 = SubLObjectFactory.makeInteger(245);
-	$str434$Meta_u = SubLObjectFactory.makeString("Meta-u");
-	$str435$m_u = SubLObjectFactory.makeString("m-u");
-	$int$246 = SubLObjectFactory.makeInteger(246);
-	$str437$Meta_v = SubLObjectFactory.makeString("Meta-v");
-	$str438$m_v = SubLObjectFactory.makeString("m-v");
-	$int$247 = SubLObjectFactory.makeInteger(247);
-	$str440$Meta_w = SubLObjectFactory.makeString("Meta-w");
-	$str441$m_w = SubLObjectFactory.makeString("m-w");
-	$int$248 = SubLObjectFactory.makeInteger(248);
-	$str443$Meta_x = SubLObjectFactory.makeString("Meta-x");
-	$str444$m_x = SubLObjectFactory.makeString("m-x");
-	$int$249 = SubLObjectFactory.makeInteger(249);
-	$str446$Meta_y = SubLObjectFactory.makeString("Meta-y");
-	$str447$m_y = SubLObjectFactory.makeString("m-y");
-	$int$250 = SubLObjectFactory.makeInteger(250);
-	$str449$Meta_z = SubLObjectFactory.makeString("Meta-z");
-	$str450$m_z = SubLObjectFactory.makeString("m-z");
-	$int$251 = SubLObjectFactory.makeInteger(251);
-	$str452$Meta__ = SubLObjectFactory.makeString("Meta-{");
-	$str453$m__ = SubLObjectFactory.makeString("m-{");
-	$int$252 = SubLObjectFactory.makeInteger(252);
-	$str455$Meta__ = SubLObjectFactory.makeString("Meta-|");
-	$str456$m__ = SubLObjectFactory.makeString("m-|");
-	$int$253 = SubLObjectFactory.makeInteger(253);
-	$str458$Meta__ = SubLObjectFactory.makeString("Meta-}");
-	$str459$m__ = SubLObjectFactory.makeString("m-}");
-	$int$254 = SubLObjectFactory.makeInteger(254);
-	$str461$Meta__ = SubLObjectFactory.makeString("Meta-~");
-	$str462$m__ = SubLObjectFactory.makeString("m-~");
-	$int$255 = SubLObjectFactory.makeInteger(255);
-	$str464$Meta_Rubout = SubLObjectFactory.makeString("Meta-Rubout");
-	$str465$m_Rubout = SubLObjectFactory.makeString("m-Rubout");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     @Override
     public void declareFunctions() {
-	declare_character_names_file();
+        declare_character_names_file();
     }
 
     @Override
     public void initializeVariables() {
-	init_character_names_file();
+        init_character_names_file();
     }
 
     @Override
     public void runTopLevelForms() {
-	setup_character_names_file();
+        setup_character_names_file();
     }
 }
+

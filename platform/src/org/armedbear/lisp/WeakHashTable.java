@@ -693,8 +693,8 @@ public class WeakHashTable
     ReferenceQueue<LispObject> queue 
         = new ReferenceQueue<LispObject>();
 
-    Map<Reference, HashEntry> entryLookup
-        = Collections.synchronizedMap(new HashMap<Reference, HashEntry>());
+    Map<Object, HashEntry> entryLookup
+        = Collections.synchronizedMap(new HashMap<Object, HashEntry>());
 
     class HashEntryWeakKey 
         extends HashEntry

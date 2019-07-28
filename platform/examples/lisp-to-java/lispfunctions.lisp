@@ -29,7 +29,7 @@
 ; unless we invoke the method
 ; with jcall-raw. 
 (defun void-function (param)
-  (let* ((class (jclass "Main"))
+  (let* ((class (jclass "MainJ2L"))
 	 (intclass (jclass "int"))
 	 (method (jmethod class "addTwoNumbers" intclass intclass))
 	 (result (jcall method param 2 4)))

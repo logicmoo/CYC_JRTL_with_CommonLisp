@@ -3953,7 +3953,7 @@ public final class kb_compare_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $sX40105_native.structDecl;
+      return $structDecl;
     }
 
     @Override
@@ -4063,7 +4063,7 @@ public final class kb_compare_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $sX40109_native.structDecl;
+      return $structDecl;
     }
 
     @Override

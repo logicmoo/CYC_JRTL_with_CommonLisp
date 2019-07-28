@@ -36,6 +36,7 @@ public class Filesys extends SubLTrampolineFile {
 		return SubLObjectFactory.makeString(result);
 	}
 
+	@SuppressWarnings("resource")
 	public static SubLObject copy_file(SubLObject oldFileName, SubLObject newFileName) {
 		FileChannel inChannel = null;
 		FileChannel outChannel = null;

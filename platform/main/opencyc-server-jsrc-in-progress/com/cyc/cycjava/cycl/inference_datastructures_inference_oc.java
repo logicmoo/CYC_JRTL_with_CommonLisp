@@ -8790,7 +8790,7 @@ public final class inference_datastructures_inference_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $sX25426_native.structDecl;
+      return $structDecl;
     }
 
     @Override
@@ -9592,7 +9592,7 @@ public final class inference_datastructures_inference_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $sX28211_native.structDecl;
+      return $structDecl;
     }
 
     @Override
@@ -9710,7 +9710,7 @@ public final class inference_datastructures_inference_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $sX28214_native.structDecl;
+      return $structDecl;
     }
 
     @Override

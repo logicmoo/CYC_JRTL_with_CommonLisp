@@ -2111,7 +2111,7 @@ public final class assertions_low_oc
     @Override
     public SubLStructDecl getStructDecl()
     {
-      return $sX13955_native.structDecl;
+      return $structDecl;
     }
 
     @Override

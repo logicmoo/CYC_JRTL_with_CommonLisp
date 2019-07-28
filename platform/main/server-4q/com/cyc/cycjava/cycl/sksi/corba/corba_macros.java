@@ -1,148 +1,157 @@
 package com.cyc.cycjava.cycl.sksi.corba;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
+
+import com.cyc.cycjava.cycl.sksi.corba.corba_macros;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-public final class corba_macros
-    extends
-      SubLTranslatedFile
-{
-  public static final SubLFile me;
-  public static final String myName = "com.cyc.cycjava.cycl.sksi.corba.corba_macros";
-  public static final String myFingerPrint = "4ec1400e1d3ba72ef4878621dbed9ef5558b9b2f9f942d17faa31d24f742a64c";
-  private static final SubLList $list0;
-  private static final SubLList $list1;
-  private static final SubLSymbol $kw2$ALLOW_OTHER_KEYS;
-  private static final SubLSymbol $kw3$CONNECTION_TIMEOUT;
-  private static final SubLSymbol $kw4$TRANSACTION_TIMEOUT;
-  private static final SubLSymbol $kw5$ACCESS_MODE;
-  private static final SubLSymbol $kw6$PUBLIC;
-  private static final SubLSymbol $sym7$TRANSACTION_TIMED_OUT;
-  private static final SubLSymbol $sym8$CLET;
-  private static final SubLSymbol $sym9$IGNORE;
-  private static final SubLSymbol $sym10$WITH_TIMEOUT;
-  private static final SubLSymbol $sym11$CUNWIND_PROTECT;
-  private static final SubLSymbol $sym12$PWHEN;
-  private static final SubLSymbol $sym13$CORBA_CONNECTION_OPEN;
-  private static final SubLSymbol $sym14$CORBA_CONNECTION_OPEN_P;
-  private static final SubLSymbol $sym15$CORBA_CONNECTION_CLOSE;
+import static com.cyc.cycjava.cycl.sksi.corba.corba_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-  @SubLTranslatedFile.SubL(source = "cycl/sksi/corba/corba-macros.lisp", position = 954L)
-  public static SubLObject with_open_corba_connection(final SubLObject macroform, final SubLObject environment)
-  {
-    SubLObject current;
-    final SubLObject datum = current = macroform.rest();
-    cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list0 );
-    final SubLObject temp = current.rest();
-    current = current.first();
-    SubLObject corba_connection = NIL;
-    cdestructuring_bind.destructuring_bind_must_consp( current, datum, $list0 );
-    corba_connection = current.first();
-    current = current.rest();
-    SubLObject allow_other_keys_p = NIL;
-    SubLObject rest = current;
-    SubLObject bad = NIL;
-    SubLObject current_$1 = NIL;
-    while ( NIL != rest)
-    {
-      cdestructuring_bind.destructuring_bind_must_consp( rest, datum, $list0 );
-      current_$1 = rest.first();
-      rest = rest.rest();
-      cdestructuring_bind.destructuring_bind_must_consp( rest, datum, $list0 );
-      if( NIL == conses_high.member( current_$1, $list1, UNPROVIDED, UNPROVIDED ) )
-      {
-        bad = T;
-      }
-      if( current_$1 == $kw2$ALLOW_OTHER_KEYS )
-      {
-        allow_other_keys_p = rest.first();
-      }
-      rest = rest.rest();
+
+public final class corba_macros extends SubLTranslatedFile {
+    public static final SubLFile me = new corba_macros();
+
+    public static final String myName = "com.cyc.cycjava.cycl.sksi.corba.corba_macros";
+
+    public static final String myFingerPrint = "4ec1400e1d3ba72ef4878621dbed9ef5558b9b2f9f942d17faa31d24f742a64c";
+
+    // Internal Constants
+    public static final SubLList $list0 = list(list(makeSymbol("CORBA-CONNECTION"), makeSymbol("&KEY"), makeSymbol("CONNECTION-TIMEOUT"), makeSymbol("TRANSACTION-TIMEOUT"), list(makeSymbol("ACCESS-MODE"), makeKeyword("PUBLIC"))), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    public static final SubLList $list1 = list(makeKeyword("CONNECTION-TIMEOUT"), makeKeyword("TRANSACTION-TIMEOUT"), makeKeyword("ACCESS-MODE"));
+
+    private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
+
+
+
+
+
+
+
+
+
+    public static final SubLSymbol $sym7$TRANSACTION_TIMED_OUT = makeUninternedSymbol("TRANSACTION-TIMED-OUT");
+
+
+
+
+
+
+
+
+
+
+
+    public static final SubLSymbol CORBA_CONNECTION_OPEN = makeSymbol("CORBA-CONNECTION-OPEN");
+
+    public static final SubLSymbol CORBA_CONNECTION_OPEN_P = makeSymbol("CORBA-CONNECTION-OPEN-P");
+
+    public static final SubLSymbol CORBA_CONNECTION_CLOSE = makeSymbol("CORBA-CONNECTION-CLOSE");
+
+    public static SubLObject with_open_corba_connection(final SubLObject macroform, final SubLObject environment) {
+        SubLObject current;
+        final SubLObject datum = current = macroform.rest();
+        destructuring_bind_must_consp(current, datum, $list0);
+        final SubLObject temp = current.rest();
+        current = current.first();
+        SubLObject corba_connection = NIL;
+        destructuring_bind_must_consp(current, datum, $list0);
+        corba_connection = current.first();
+        current = current.rest();
+        SubLObject allow_other_keys_p = NIL;
+        SubLObject rest = current;
+        SubLObject bad = NIL;
+        SubLObject current_$1 = NIL;
+        while (NIL != rest) {
+            destructuring_bind_must_consp(rest, datum, $list0);
+            current_$1 = rest.first();
+            rest = rest.rest();
+            destructuring_bind_must_consp(rest, datum, $list0);
+            if (NIL == member(current_$1, $list1, UNPROVIDED, UNPROVIDED)) {
+                bad = T;
+            }
+            if (current_$1 == $ALLOW_OTHER_KEYS) {
+                allow_other_keys_p = rest.first();
+            }
+            rest = rest.rest();
+        } 
+        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+            cdestructuring_bind_error(datum, $list0);
+        }
+        final SubLObject connection_timeout_tail = property_list_member($CONNECTION_TIMEOUT, current);
+        final SubLObject connection_timeout = (NIL != connection_timeout_tail) ? cadr(connection_timeout_tail) : NIL;
+        final SubLObject transaction_timeout_tail = property_list_member($TRANSACTION_TIMEOUT, current);
+        final SubLObject transaction_timeout = (NIL != transaction_timeout_tail) ? cadr(transaction_timeout_tail) : NIL;
+        final SubLObject access_mode_tail = property_list_member($ACCESS_MODE, current);
+        final SubLObject access_mode = (NIL != access_mode_tail) ? cadr(access_mode_tail) : $PUBLIC;
+        final SubLObject body;
+        current = body = temp;
+        final SubLObject transaction_timed_out = $sym7$TRANSACTION_TIMED_OUT;
+        return list(CLET, list(transaction_timed_out), list(IGNORE, transaction_timed_out), list(WITH_TIMEOUT, list(transaction_timeout, transaction_timed_out), list(CUNWIND_PROTECT, listS(PWHEN, list(CORBA_CONNECTION_OPEN, corba_connection, connection_timeout, access_mode), append(body, NIL)), list(PWHEN, list(CORBA_CONNECTION_OPEN_P, corba_connection), list(CORBA_CONNECTION_CLOSE, corba_connection)))));
     }
-    if( NIL != bad && NIL == allow_other_keys_p )
-    {
-      cdestructuring_bind.cdestructuring_bind_error( datum, $list0 );
+
+    public static SubLObject declare_corba_macros_file() {
+        declareMacro(me, "with_open_corba_connection", "WITH-OPEN-CORBA-CONNECTION");
+        return NIL;
     }
-    final SubLObject connection_timeout_tail = cdestructuring_bind.property_list_member( $kw3$CONNECTION_TIMEOUT, current );
-    final SubLObject connection_timeout = ( NIL != connection_timeout_tail ) ? conses_high.cadr( connection_timeout_tail ) : NIL;
-    final SubLObject transaction_timeout_tail = cdestructuring_bind.property_list_member( $kw4$TRANSACTION_TIMEOUT, current );
-    final SubLObject transaction_timeout = ( NIL != transaction_timeout_tail ) ? conses_high.cadr( transaction_timeout_tail ) : NIL;
-    final SubLObject access_mode_tail = cdestructuring_bind.property_list_member( $kw5$ACCESS_MODE, current );
-    final SubLObject access_mode = ( NIL != access_mode_tail ) ? conses_high.cadr( access_mode_tail ) : $kw6$PUBLIC;
-    final SubLObject body;
-    current = ( body = temp );
-    final SubLObject transaction_timed_out = $sym7$TRANSACTION_TIMED_OUT;
-    return ConsesLow.list( $sym8$CLET, ConsesLow.list( transaction_timed_out ), ConsesLow.list( $sym9$IGNORE, transaction_timed_out ), ConsesLow.list( $sym10$WITH_TIMEOUT, ConsesLow.list( transaction_timeout,
-        transaction_timed_out ), ConsesLow.list( $sym11$CUNWIND_PROTECT, ConsesLow.listS( $sym12$PWHEN, ConsesLow.list( $sym13$CORBA_CONNECTION_OPEN, corba_connection, connection_timeout, access_mode ), ConsesLow.append(
-            body, NIL ) ), ConsesLow.list( $sym12$PWHEN, ConsesLow.list( $sym14$CORBA_CONNECTION_OPEN_P, corba_connection ), ConsesLow.list( $sym15$CORBA_CONNECTION_CLOSE, corba_connection ) ) ) ) );
-  }
 
-  public static SubLObject declare_corba_macros_file()
-  {
-    SubLFiles.declareMacro( me, "with_open_corba_connection", "WITH-OPEN-CORBA-CONNECTION" );
-    return NIL;
-  }
+    public static SubLObject init_corba_macros_file() {
+        return NIL;
+    }
 
-  public static SubLObject init_corba_macros_file()
-  {
-    return NIL;
-  }
+    public static SubLObject setup_corba_macros_file() {
+        return NIL;
+    }
 
-  public static SubLObject setup_corba_macros_file()
-  {
-    return NIL;
-  }
+    @Override
+    public void declareFunctions() {
+        declare_corba_macros_file();
+    }
 
-  @Override
-  public void declareFunctions()
-  {
-    declare_corba_macros_file();
-  }
+    @Override
+    public void initializeVariables() {
+        init_corba_macros_file();
+    }
 
-  @Override
-  public void initializeVariables()
-  {
-    init_corba_macros_file();
-  }
+    @Override
+    public void runTopLevelForms() {
+        setup_corba_macros_file();
+    }
 
-  @Override
-  public void runTopLevelForms()
-  {
-    setup_corba_macros_file();
-  }
-  static
-  {
-    me = new corba_macros();
-    $list0 = ConsesLow.list( ConsesLow.list( makeSymbol( "CORBA-CONNECTION" ), makeSymbol( "&KEY" ), makeSymbol( "CONNECTION-TIMEOUT" ), makeSymbol( "TRANSACTION-TIMEOUT" ), ConsesLow.list( makeSymbol( "ACCESS-MODE" ),
-        makeKeyword( "PUBLIC" ) ) ), makeSymbol( "&BODY" ), makeSymbol( "BODY" ) );
-    $list1 = ConsesLow.list( makeKeyword( "CONNECTION-TIMEOUT" ), makeKeyword( "TRANSACTION-TIMEOUT" ), makeKeyword( "ACCESS-MODE" ) );
-    $kw2$ALLOW_OTHER_KEYS = makeKeyword( "ALLOW-OTHER-KEYS" );
-    $kw3$CONNECTION_TIMEOUT = makeKeyword( "CONNECTION-TIMEOUT" );
-    $kw4$TRANSACTION_TIMEOUT = makeKeyword( "TRANSACTION-TIMEOUT" );
-    $kw5$ACCESS_MODE = makeKeyword( "ACCESS-MODE" );
-    $kw6$PUBLIC = makeKeyword( "PUBLIC" );
-    $sym7$TRANSACTION_TIMED_OUT = makeUninternedSymbol( "TRANSACTION-TIMED-OUT" );
-    $sym8$CLET = makeSymbol( "CLET" );
-    $sym9$IGNORE = makeSymbol( "IGNORE" );
-    $sym10$WITH_TIMEOUT = makeSymbol( "WITH-TIMEOUT" );
-    $sym11$CUNWIND_PROTECT = makeSymbol( "CUNWIND-PROTECT" );
-    $sym12$PWHEN = makeSymbol( "PWHEN" );
-    $sym13$CORBA_CONNECTION_OPEN = makeSymbol( "CORBA-CONNECTION-OPEN" );
-    $sym14$CORBA_CONNECTION_OPEN_P = makeSymbol( "CORBA-CONNECTION-OPEN-P" );
-    $sym15$CORBA_CONNECTION_CLOSE = makeSymbol( "CORBA-CONNECTION-CLOSE" );
-  }
+    static {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
 }
-/*
- * 
+
+/**
  * Total time: 23 ms
- * 
  */
